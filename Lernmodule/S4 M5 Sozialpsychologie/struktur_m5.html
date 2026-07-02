@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · 🧩 Modell-Trainer — Strukturen aktiv abrufen</title>
+<!--
+  Modell-Trainer von build_struktur.py erzeugt (CSS = scaffold_lernmodul.py).
+  Zwei Modi: ① Recall (aufdecken) ② Test (eintippen + Lösung anzeigen) — beide mit SRS.
+  Storage-Key: lm-m5-vl90
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Modell-/Struktur-Trainer */
+.st-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.st-thema{font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.st-q{font-size:1rem;color:var(--text);font-weight:600;line-height:1.45;margin-bottom:12px}
+.st-anchor{background:var(--bg);border:1px dashed var(--border);border-radius:9px;padding:8px 12px;font-size:.9rem;color:var(--text2);margin-bottom:10px}
+.st-anchor strong{color:var(--text)}
+.st-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.st-in{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-size:.9rem}
+.st-in:focus{outline:none;border-color:var(--accent)}
+.st-ok{flex:0 0 22px;text-align:center;color:var(--text3);font-weight:700}
+.st-ok.hit{color:#34d399}
+.st-sum{font-size:.78rem;color:var(--text3);margin:6px 0 2px}
+.st-reveal{display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--text2);line-height:1.5;margin-top:10px}
+.st-reveal.shown{display:block}
+.st-list{margin:0;padding-left:20px}
+.st-list>li{margin:3px 0}
+.st-list ul{margin:3px 0;padding-left:18px}
+.st-list strong{color:var(--text)}
+.st-mnemo{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);color:var(--text2)}
+.st-rate{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+.st-rate.shown{display:flex}
+.st-rbtn{flex:1;min-width:120px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:9px 10px;cursor:pointer;font-size:.82rem}
+.st-rbtn.good:hover{border-color:#34d399}.st-rbtn.part:hover{border-color:#fbbf24}.st-rbtn.bad:hover{border-color:#f87171}
+.st-state{font-size:.72rem;color:var(--text3);margin-top:8px}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.qr-prog{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.qr-prog>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.st-chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.02em;margin-bottom:11px;border:1px solid}
+.st-filter{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.st-flabel{font-size:.74rem;color:var(--text3);width:100%;margin-bottom:2px}
+.st-fbtn{border:1px solid var(--border);background:var(--bg);color:var(--text2);border-radius:999px;padding:4px 11px;cursor:pointer;font-size:.74rem}
+.st-fbtn.on{font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · 🧩 Modell-Trainer — Strukturen aktiv abrufen</h1>
+<p class="page-sub">Sozialpsychologie · 50 gegliederte Modelle (Ober-/Unterpunkte) über alle 12 VL + Vertiefung · ① Lernen (Recall) + ② Test (eintippen) mit Spaced-Repetition</p>
+<div class="lf-bar">
+  <strong>🧩 Modell-Trainer — Strukturen aktiv abrufen.</strong> 50 prüfungsrelevante Modelle aus den M5-Lernmodulen (alle 12 VL + Vertiefung), faktentreu aus der Wissensbasis. ① Lernen: ganze Struktur frei abrufen → aufdecken → einschätzen. ② Test: ein Punkt ist vorgegeben, die übrigen selbst eintippen (✓ bei Treffer, „Lösung anzeigen“ als Hilfe). Die Selbsteinschätzung steuert die Spaced-Repetition.
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" data-sec="0" onclick="goToST(0)">① Lernen (Recall)</button>
+  <button class="nav-btn" data-sec="1" onclick="goToST(1)">② Test (eintippen)</button>
+</nav>
+
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Lernen — Struktur frei abrufen (50 Modelle)</div>
+    <div class="sec-lz">Modellname lesen, die ganze Gliederung im Kopf abrufen, dann aufdecken und ehrlich einschätzen.</div>
+  </div>
+  <div id="stRunnerRC"></div>
+</section>
+
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Test — Punkte selbst eintippen (50 Modelle)</div>
+    <div class="sec-lz">Ein Punkt ist vorgegeben — tippe die übrigen ein (✓ erscheint bei Treffer). „Lösung anzeigen", wenn du nicht weiterweißt.</div>
+  </div>
+  <div id="stRunnerTS"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl90';
+var ST = [{"id": "st1", "thema": "VL03 · Attribution", "modell": "Kelleys Kovariationsprinzip — die 3 Informationen", "anker": 0, "mnemo": "K-D-K: KonsenSus (andere?) · Distinktheit (nur dies Objekt?) · Konsistenz (immer?)", "punkte": [{"ober": "Konsensus", "unter": ["Verhalten anderer Personen — verhalten sich alle so?", "hoch → externe (Objekt-)Attribution"], "syn": ["konsens", "konsensus", "andere personen"]}, {"ober": "Distinktheit", "unter": ["Bezug zum Objekt — nur bei genau diesem Objekt?", "hoch → externe Attribution"], "syn": ["distinktheit", "unterscheidbarkeit", "objekt"]}, {"ober": "Konsistenz", "unter": ["über Zeit/Situationen — immer und überall so?", "muss hoch sein für eine klare Attribution"], "syn": ["konsistenz", "zeit", "stabilitaet"]}]}, {"id": "st2", "thema": "VL05 · Persuasion", "modell": "Elaboration-Likelihood-Modell (ELM) — die 2 Routen", "anker": 0, "mnemo": "Welche Route? hängt von Motivation × Fähigkeit (Elaborationswahrscheinlichkeit) ab", "punkte": [{"ober": "Zentrale Route", "unter": ["hohe Elaboration — Argumente werden geprüft", "stabile, verhaltenswirksame Einstellungsänderung"], "syn": ["zentrale route", "zentral", "hohe elaboration"]}, {"ober": "Periphere Route", "unter": ["geringe Elaboration — Heuristiken & periphere Hinweisreize (z. B. Attraktivität der Quelle)", "weniger stabile Änderung"], "syn": ["periphere route", "peripher", "heuristiken"]}]}, {"id": "st3", "thema": "VL02 · Soziale Kognition", "modell": "Die 3 zentralen Urteilsheuristiken (Tversky & Kahneman)", "anker": 0, "mnemo": "R-V-A: Repräsentativität · Verfügbarkeit · Anker", "punkte": [{"ober": "Repräsentativitätsheuristik", "unter": ["Urteil nach Ähnlichkeit mit einem Prototyp/einer Kategorie"], "syn": ["repraesentativitaet", "repräsentativität", "aehnlichkeit"]}, {"ober": "Verfügbarkeitsheuristik", "unter": ["Urteil danach, wie leicht Beispiele in den Sinn kommen"], "syn": ["verfuegbarkeit", "verfügbarkeit"]}, {"ober": "Ankerheuristik (Anker-Anpassung)", "unter": ["Urteil orientiert sich an einem Startwert (Anker)"], "syn": ["anker", "ankerheuristik", "anpassung"]}]}, {"id": "st4", "thema": "VL06 · Sozialer Einfluss", "modell": "Zwei Arten des sozialen Einflusses", "anker": 0, "mnemo": "Norm = dazugehören · Info = recht haben/Realität", "punkte": [{"ober": "Normativer Einfluss", "unter": ["Anpassung für Zugehörigkeit / um Ablehnung zu vermeiden", "man weiß oft, dass die Mehrheit falsch liegt"], "syn": ["normativer einfluss", "normativ"]}, {"ober": "Informationaler Einfluss", "unter": ["Anpassung bei Unsicherheit — andere als Informationsquelle über die Realität"], "syn": ["informationaler einfluss", "informational", "informativ"]}]}, {"id": "st5", "thema": "VL06 · Konformität", "modell": "Einflussfaktoren der Konformität (Asch)", "anker": 0, "mnemo": "Größe · Einstimmigkeit · Öffentlichkeit", "punkte": [{"ober": "Gruppengröße", "unter": ["Konformität steigt mit der Mehrheit, Sättigung ab ca. 3–4 Personen"], "syn": ["gruppengroesse", "gruppengröße", "groesse"]}, {"ober": "Einstimmigkeit der Mehrheit", "unter": ["ein einziger Abweichler senkt die Konformität stark"], "syn": ["einstimmigkeit", "unanimitaet", "abweichler"]}, {"ober": "Öffentlichkeit der Antwort", "unter": ["öffentlich > privat/anonym"], "syn": ["oeffentlichkeit", "öffentlichkeit", "oeffentlich"]}]}, {"id": "st6", "thema": "VL09 · Hilfeverhalten", "modell": "Fünfstufiges Entscheidungsmodell des Eingreifens (Darley & Latané)", "anker": 0, "mnemo": "Bemerken → Notfall → Verantwortung → Wissen-wie → Handeln", "punkte": [{"ober": "Ereignis bemerken", "unter": [], "syn": ["bemerken", "wahrnehmen", "ereignis bemerken"]}, {"ober": "Als Notfall interpretieren", "unter": [], "syn": ["notfall interpretieren", "als notfall deuten", "notfall"]}, {"ober": "Verantwortung übernehmen", "unter": [], "syn": ["verantwortung uebernehmen", "verantwortung"]}, {"ober": "Geeignete Hilfe kennen", "unter": [], "syn": ["wissen wie helfen", "hilfe kennen", "geeignete hilfe"]}, {"ober": "Hilfe leisten", "unter": [], "syn": ["hilfe leisten", "handeln", "eingreifen"]}]}, {"id": "st7", "thema": "VL09 · Hilfeverhalten", "modell": "Drei Hemmprozesse beim Nicht-Helfen", "anker": 0, "mnemo": "wirken auf je eine Stufe: 2 · 3 · 5", "punkte": [{"ober": "Pluralistische Ignoranz", "unter": ["Untätigkeit anderer → Situation gilt als nicht ernst (Stufe 2)"], "syn": ["pluralistische ignoranz", "pluralistisch"]}, {"ober": "Verantwortungsdiffusion", "unter": ["Verantwortung verteilt sich auf die Gruppe → jeder fühlt sich weniger zuständig (Stufe 3)"], "syn": ["verantwortungsdiffusion", "diffusion"]}, {"ober": "Bewertungsangst / Publikum", "unter": ["Angst vor Blamage vor anderen (Stufe 5)"], "syn": ["bewertungsangst", "publikum", "blamage"]}]}, {"id": "st8", "thema": "VL08 · Intergruppe", "modell": "Allports optimale Kontaktbedingungen", "anker": 0, "mnemo": "Status · Ziele · Kooperation · Unterstützung", "punkte": [{"ober": "Gleicher Status der Gruppen", "unter": [], "syn": ["gleicher status", "status"]}, {"ober": "Gemeinsame Ziele", "unter": [], "syn": ["gemeinsame ziele", "ziele"]}, {"ober": "Kooperation (Interdependenz, kein Wettbewerb)", "unter": [], "syn": ["kooperation", "kein wettbewerb", "interdependenz"]}, {"ober": "Institutionelle / normative Unterstützung", "unter": [], "syn": ["institutionelle unterstuetzung", "normen", "unterstuetzung"]}]}, {"id": "st9", "thema": "VL08 · Vorurteilsabbau", "modell": "Strategien zur Kategorienveränderung", "anker": 0, "mnemo": "Dekat. · Rekat. · Subkat. · Duale Identität", "punkte": [{"ober": "Dekategorisierung", "unter": ["die Person als Individuum sehen, Kategorien auflösen"], "syn": ["dekategorisierung"]}, {"ober": "Rekategorisierung", "unter": ["gemeinsame übergeordnete Gruppe bilden (Common Ingroup Identity)"], "syn": ["rekategorisierung", "common ingroup"]}, {"ober": "Subkategorisierung", "unter": ["Untergruppen bei erhaltener gemeinsamer Identität"], "syn": ["subkategorisierung"]}, {"ober": "Duale Identität", "unter": ["Eigengruppe UND übergeordnete Gruppe gleichzeitig salient"], "syn": ["duale identitaet", "dual"]}]}, {"id": "st10", "thema": "VL07 · Soziale Gruppen", "modell": "Theorie der sozialen Identität (Tajfel & Turner)", "anker": 0, "mnemo": "Kategorisieren → Identifizieren → Vergleichen (→ positive Distinktheit)", "punkte": [{"ober": "Soziale Kategorisierung", "unter": ["Einteilung in Eigen- und Fremdgruppe"], "syn": ["kategorisierung", "soziale kategorisierung"]}, {"ober": "Soziale Identifikation", "unter": ["Teil des Selbstkonzepts stammt aus der Gruppenmitgliedschaft"], "syn": ["identifikation", "soziale identifikation"]}, {"ober": "Sozialer Vergleich", "unter": ["Streben nach positiver Distinktheit der Eigengruppe"], "syn": ["sozialer vergleich", "vergleich", "positive distinktheit"]}]}, {"id": "st11", "thema": "VL08 · Intergruppe (Threat Theory)", "modell": "Zwei Arten der Intergruppen-Bedrohung", "anker": 0, "mnemo": "realistisch (Ressourcen) vs. symbolisch (Werte)", "punkte": [{"ober": "Realistische Bedrohung", "unter": ["um Ressourcen, Macht, Sicherheit der Eigengruppe"], "syn": ["realistische bedrohung", "realistisch", "ressourcen"]}, {"ober": "Symbolische Bedrohung", "unter": ["um Werte, Normen, Weltbild der Eigengruppe"], "syn": ["symbolische bedrohung", "symbolisch", "werte"]}]}, {"id": "st12", "thema": "VL10 · Aggression", "modell": "Allgemeines Aggressionsmodell (GAM)", "anker": 0, "mnemo": "Input → innere Zustände → Bewertung → Verhalten (zyklisch)", "punkte": [{"ober": "Input", "unter": ["Personenfaktoren (Traits, Einstellungen) + Situationsfaktoren (Provokation, Hinweisreize)"], "syn": ["input", "person und situation", "personen und situationsfaktoren"]}, {"ober": "Innere Zustände (Mediatoren)", "unter": ["Kognition, Affekt, Erregung/Arousal"], "syn": ["innere zustaende", "mediatoren", "kognition affekt erregung"]}, {"ober": "Bewertungs- und Entscheidungsprozesse", "unter": ["automatische und kontrollierte Bewertung (appraisal)"], "syn": ["bewertung", "appraisal", "entscheidung"]}, {"ober": "Verhalten", "unter": ["aggressiv oder nicht — Ergebnis speist sich zyklisch zurück"], "syn": ["verhalten", "ergebnis", "aggression"]}]}, {"id": "st13", "thema": "VT02 · Desinformation (Bad News, Roozenbeek & van der Linden)", "modell": "Die 6 Manipulationstechniken", "anker": 0, "mnemo": "I-E-P-V-D-T", "punkte": [{"ober": "Impersonation (Identitätsfälschung)", "unter": ["sich als seriöse Quelle/Person ausgeben"], "syn": ["impersonation", "identitaetsfaelschung", "imitation"]}, {"ober": "Emotion", "unter": ["bewusst Angst/Wut/Empörung auslösen"], "syn": ["emotion", "emotionen"]}, {"ober": "Polarisierung", "unter": ["Gruppen gegeneinander aufbringen"], "syn": ["polarisierung", "polarization"]}, {"ober": "Verschwörung", "unter": ["Verschwörungserzählungen streuen"], "syn": ["verschwoerung", "verschwörung", "conspiracy"]}, {"ober": "Diskreditierung", "unter": ["Kritiker/Quellen angreifen statt Inhalte"], "syn": ["diskreditierung", "discrediting"]}, {"ober": "Trolling", "unter": ["gezielt provozieren, um Reaktionen zu ernten"], "syn": ["trolling", "trollen"]}]}, {"id": "st14", "thema": "VT04 · Eingreifen", "modell": "Die 4 D's der Bystander-Intervention", "anker": 0, "mnemo": "Direct · Delegate · Distract · Delay", "punkte": [{"ober": "Direct", "unter": ["selbst direkt eingreifen (wenn sicher)"], "syn": ["direct", "direkt"]}, {"ober": "Delegate", "unter": ["Hilfe holen / an Dritte delegieren"], "syn": ["delegate", "delegieren", "hilfe holen"]}, {"ober": "Distract", "unter": ["ablenken, die Situation unterbrechen"], "syn": ["distract", "ablenken", "unterbrechen"]}, {"ober": "Delay", "unter": ["später nachfragen / die betroffene Person unterstützen"], "syn": ["delay", "spaeter", "nachfragen"]}]}, {"id": "st15", "thema": "VT05 · Online-Dating (Finkel et al. 2012)", "modell": "Drei Kernleistungen von Dating-Diensten", "anker": 0, "mnemo": "Access · Communication · Matching", "punkte": [{"ober": "Access", "unter": ["Zugang zu vielen potenziellen Partnern"], "syn": ["access", "zugang"]}, {"ober": "Communication", "unter": ["Kommunikation vor dem persönlichen Treffen"], "syn": ["communication", "kommunikation"]}, {"ober": "Matching", "unter": ["algorithmisches Zusammenführen — Wirksamkeit empirisch unbelegt"], "syn": ["matching", "zusammenfuehren"]}]}, {"id": "st16", "thema": "VL01 · Einführung", "modell": "Drei soziale Phänomene durch Anwesenheit anderer", "anker": 0, "mnemo": "leichter · gehemmt · fauler", "punkte": [{"ober": "Soziale Erleichterung", "unter": ["bei einfachen/gut gelernten Aufgaben → bessere Leistung vor anderen"], "syn": ["soziale erleichterung", "facilitation"]}, {"ober": "Soziale Hemmung", "unter": ["bei schwierigen/neuen Aufgaben → schlechtere Leistung vor anderen"], "syn": ["soziale hemmung", "inhibition"]}, {"ober": "Soziales Faulenzen", "unter": ["in der Gruppe sinkt die individuelle Anstrengung (social loafing)"], "syn": ["soziales faulenzen", "faulenzen", "social loafing"]}]}, {"id": "st17", "thema": "VL01 · Soziale Erleichterung", "modell": "Drei Erklärungsansätze der sozialen Erleichterung", "anker": 0, "mnemo": "Trieb · Bewertung · Aufmerksamkeit", "punkte": [{"ober": "Triebtheorie (Zajonc)", "unter": ["bloße Anwesenheit erhöht Erregung → dominante Reaktion wird verstärkt"], "syn": ["triebtheorie", "zajonc", "erregung"]}, {"ober": "Bewertungsangst", "unter": ["Erregung entsteht durch erwartete Bewertung/Beurteilung"], "syn": ["bewertungsangst", "bewertung"]}, {"ober": "Aufmerksamkeitskonflikt", "unter": ["Ablenkung durch andere konkurriert mit der Aufgabe"], "syn": ["aufmerksamkeitskonflikt", "ablenkung", "distraction"]}]}, {"id": "st18", "thema": "VL02 · Soziale Kognition", "modell": "Aktivierung mentaler Repräsentationen", "anker": 0, "mnemo": "Aktivierung = Zugänglichkeit × Passung", "punkte": [{"ober": "Zugänglichkeit (Accessibility)", "unter": ["chronisch (dauerhaft wichtig) oder temporär (Priming)"], "syn": ["zugaenglichkeit", "accessibility", "priming"]}, {"ober": "Passung (Fit)", "unter": ["passt die Repräsentation zu den Merkmalen der Situation/Person?"], "syn": ["passung", "fit"]}]}, {"id": "st19", "thema": "VL02 · Schemata", "modell": "Folgen von Schemata (Bestätigungsverzerrung)", "anker": 0, "mnemo": "Aufnahme → Deutung → Erinnerung → SEP", "punkte": [{"ober": "Informationsaufnahme", "unter": ["schemakonsistente Information wird eher beachtet"], "syn": ["informationsaufnahme", "aufnahme", "wahrnehmung"]}, {"ober": "Deutung/Interpretation", "unter": ["mehrdeutige Information wird schemakonform interpretiert"], "syn": ["deutung", "interpretation"]}, {"ober": "Erinnerung", "unter": ["schemakonsistente Inhalte werden besser erinnert"], "syn": ["erinnerung", "gedaechtnis"]}, {"ober": "Selbsterfüllende Prophezeiung", "unter": ["die Erwartung erzeugt das erwartete Verhalten beim Gegenüber"], "syn": ["selbsterfuellende prophezeiung", "sep", "self fulfilling"]}]}, {"id": "st20", "thema": "VL03 · Attribution", "modell": "Die vier Attributionsverzerrungen", "anker": 0, "mnemo": "Korrespondenz · Konsensus · Akteur-Beobachter · Selbstwert", "punkte": [{"ober": "Korrespondenzverzerrung (FAE)", "unter": ["Verhalten anderer zu stark auf Disposition zurückgeführt"], "syn": ["korrespondenzverzerrung", "fundamentaler attributionsfehler", "fae"]}, {"ober": "Falscher Konsensus", "unter": ["eigene Sicht/Verhalten als verbreiteter angenommen als sie sind"], "syn": ["falscher konsensus", "false consensus"]}, {"ober": "Akteur-Beobachter-Effekt", "unter": ["eigenes Verhalten situativ, fremdes dispositional attribuiert"], "syn": ["actor observer", "akteur beobachter"]}, {"ober": "Selbstwertdienliche Verzerrung", "unter": ["Erfolg intern, Misserfolg extern attribuiert"], "syn": ["selbstwertdienlich", "self serving"]}]}, {"id": "st21", "thema": "VL04 · Einstellungen", "modell": "Multikomponentenmodell der Einstellung (Zanna & Rempel)", "anker": 0, "mnemo": "Kopf · Herz · Hand", "punkte": [{"ober": "Kognitive Komponente", "unter": ["Überzeugungen/Gedanken über das Objekt (Erwartung-mal-Wert)"], "syn": ["kognitiv", "kognitive komponente"]}, {"ober": "Affektive Komponente", "unter": ["Gefühle gegenüber dem Objekt (z. B. Mere-Exposure)"], "syn": ["affektiv", "affektive komponente", "gefuehle"]}, {"ober": "Verhaltensbezogene Komponente", "unter": ["vergangenes/aktuelles Verhalten (Selbstwahrnehmung)"], "syn": ["verhalten", "verhaltensbezogen", "konativ"]}]}, {"id": "st22", "thema": "VL05 · Einstellung & Verhalten", "modell": "Theorie des geplanten Verhaltens (Ajzen)", "anker": 0, "mnemo": "3 Prädiktoren → Intention → Verhalten", "punkte": [{"ober": "Einstellung zum Verhalten", "unter": ["Bewertung des Verhaltens selbst"], "syn": ["einstellung"]}, {"ober": "Subjektive Norm", "unter": ["wahrgenommener sozialer Druck"], "syn": ["subjektive norm", "norm"]}, {"ober": "Wahrgenommene Verhaltenskontrolle", "unter": ["Glaube, das Verhalten ausführen zu können (Erweiterung ggü. TRA)"], "syn": ["verhaltenskontrolle", "kontrolle", "perceived behavioral control"]}]}, {"id": "st23", "thema": "VL05 · Einstellung & Verhalten", "modell": "Wann sagen Einstellungen Verhalten vorher? (4 Moderatoren)", "anker": 0, "mnemo": "Korrespondenz · Bereich · Struktur · Person", "punkte": [{"ober": "Korrespondenz/Spezifität", "unter": ["Einstellung und Verhalten gleich spezifisch gemessen"], "syn": ["korrespondenz", "spezifitaet"]}, {"ober": "Verhaltensbereich", "unter": ["aggregiertes Verhalten besser vorhersagbar als Einzelakt"], "syn": ["verhaltensbereich", "aggregation"]}, {"ober": "Struktur der Einstellung", "unter": ["stark, zugänglich, widerspruchsfrei → bessere Vorhersage"], "syn": ["struktur", "staerke", "zugaenglichkeit"]}, {"ober": "Persönlichkeit", "unter": ["z. B. Selbstüberwachung (self-monitoring)"], "syn": ["persoenlichkeit", "self monitoring", "selbstueberwachung"]}]}, {"id": "st24", "thema": "VL06 · Compliance", "modell": "Drei Compliance-Techniken", "anker": 0, "mnemo": "groß→klein · klein→groß · Köder", "punkte": [{"ober": "Door-in-the-Face", "unter": ["erst extreme Bitte (abgelehnt), dann maßvolle (das Ziel)"], "syn": ["door in the face", "tuer ins gesicht"]}, {"ober": "Foot-in-the-Door", "unter": ["erst kleine Bitte (akzeptiert), dann größere"], "syn": ["foot in the door", "fuss in der tuer"]}, {"ober": "Low-Ball (Den-Ball-flach-halten)", "unter": ["Zusage einholen, dann Kosten nachträglich erhöhen"], "syn": ["low ball", "lowball", "ball flach"]}]}, {"id": "st25", "thema": "VL06 · Werbung", "modell": "Cialdinis 6 Prinzipien der Persuasion", "anker": 0, "mnemo": "Reziprozität · Commitment · Soziale Bewährtheit · Sympathie · Autorität · Knappheit", "punkte": [{"ober": "Reziprozität", "unter": ["Bedürfnis, Gefälligkeiten zu erwidern"], "syn": ["reziprozitaet", "reciprocity"]}, {"ober": "Commitment & Konsistenz", "unter": ["einmal Gesagtes/Getanes beibehalten wollen"], "syn": ["commitment", "konsistenz", "consistency"]}, {"ober": "Soziale Bewährtheit", "unter": ["dem Verhalten Ähnlicher folgen (social proof)"], "syn": ["soziale bewaehrtheit", "social proof"]}, {"ober": "Sympathie", "unter": ["eher Personen zustimmen, die man mag/die ähnlich sind"], "syn": ["sympathie", "liking"]}, {"ober": "Autorität", "unter": ["Expert*innen/Autoritäten eher vertrauen"], "syn": ["autoritaet", "authority"]}, {"ober": "Knappheit", "unter": ["Knappes wirkt wertvoller (scarcity)"], "syn": ["knappheit", "scarcity"]}]}, {"id": "st26", "thema": "VL06 · Soziale Normen", "modell": "Zwei Arten sozialer Normen", "anker": 0, "mnemo": "ist vs. soll", "punkte": [{"ober": "Deskriptive Norm", "unter": ["was die meisten tatsächlich tun (das Übliche)"], "syn": ["deskriptive norm", "deskriptiv", "descriptive"]}, {"ober": "Präskriptive/injunktive Norm", "unter": ["was man tun sollte (gebilligtes Verhalten)"], "syn": ["praeskriptiv", "injunktiv", "injunctive", "gebot"]}]}, {"id": "st27", "thema": "VL07 · Soziale Gruppen", "modell": "Wozu Gruppen? Vier psychologische Funktionen", "anker": 0, "mnemo": "Sicherheit · Zugehörigkeit · Orientierung · Selbstwert", "punkte": [{"ober": "Sicherheit und Schutz", "unter": ["auch Terror-Management (Pufferung der Todesangst)"], "syn": ["sicherheit", "schutz", "terror management"]}, {"ober": "Zugehörigkeit", "unter": ["Bedürfnis dazuzugehören, Schmerz bei Ausschluss"], "syn": ["zugehoerigkeit", "belonging"]}, {"ober": "Orientierung und Sinn", "unter": ["Reduktion von Unsicherheit, Kontrolle"], "syn": ["orientierung", "sinn", "kontrolle"]}, {"ober": "Selbstwert und Identität", "unter": ["positive soziale Identität durch Gruppenmitgliedschaft"], "syn": ["selbstwert", "identitaet"]}]}, {"id": "st28", "thema": "VL08 · Stereotype", "modell": "Stereotype Content Model (Fiske) — 2 Dimensionen, 4 Felder", "anker": 0, "mnemo": "Wärme × Kompetenz → Bewunderung/Neid/Mitleid/Verachtung", "punkte": [{"ober": "Hohe Wärme + hohe Kompetenz", "unter": ["Bewunderung (z. B. Eigengruppe)"], "syn": ["bewunderung", "warm kompetent"]}, {"ober": "Geringe Wärme + hohe Kompetenz", "unter": ["Neid (z. B. Reiche)"], "syn": ["neid", "envy"]}, {"ober": "Hohe Wärme + geringe Kompetenz", "unter": ["Mitleid (z. B. ältere Menschen)"], "syn": ["mitleid", "paternalistisch", "pity"]}, {"ober": "Geringe Wärme + geringe Kompetenz", "unter": ["Verachtung (z. B. stigmatisierte Gruppen)"], "syn": ["verachtung", "contempt"]}]}, {"id": "st29", "thema": "VL08 · Intergruppe", "modell": "Stereotyp – Vorurteil – Diskriminierung (die drei Ebenen)", "anker": 0, "mnemo": "denken · fühlen · handeln", "punkte": [{"ober": "Stereotyp", "unter": ["kognitive Ebene: Überzeugung über eine Gruppe"], "syn": ["stereotyp", "kognitiv"]}, {"ober": "Vorurteil", "unter": ["affektive/evaluative Ebene: Bewertung/Gefühl"], "syn": ["vorurteil", "affektiv"]}, {"ober": "Diskriminierung", "unter": ["Verhaltensebene: benachteiligendes Handeln"], "syn": ["diskriminierung", "verhalten"]}]}, {"id": "st30", "thema": "VL08 · Vorurteile", "modell": "Vier Formen von Vorurteilen", "anker": 0, "mnemo": "offen/subtil × bewusst/unbewusst", "punkte": [{"ober": "Blatant (offen)", "unter": ["offen geäußerte, feindselige Vorurteile"], "syn": ["blatant", "offen"]}, {"ober": "Modern (subtil)", "unter": ["verdeckt, sozial erwünscht verpackt"], "syn": ["modern", "subtil"]}, {"ober": "Explizit", "unter": ["bewusst zugänglich, kontrollierbar"], "syn": ["explizit", "explicit"]}, {"ober": "Implizit", "unter": ["automatisch, unbewusst (z. B. IAT)"], "syn": ["implizit", "implicit", "iat"]}]}, {"id": "st31", "thema": "VL08 · Soziale Identität", "modell": "Bewältigung negativer sozialer Identität (Tajfel) — 3 Strategien", "anker": 0, "mnemo": "raus · umdeuten · kämpfen", "punkte": [{"ober": "Individuelle Mobilität", "unter": ["die Gruppe verlassen (bei durchlässigen Grenzen)"], "syn": ["individuelle mobilitaet", "mobilitaet", "verlassen"]}, {"ober": "Soziale Kreativität", "unter": ["neue Vergleichsdimension/-gruppe, Umdeutung"], "syn": ["soziale kreativitaet", "kreativitaet", "umdeuten"]}, {"ober": "Sozialer Wettbewerb", "unter": ["direkter Statuskampf gegen die Fremdgruppe"], "syn": ["sozialer wettbewerb", "wettbewerb", "competition"]}]}, {"id": "st32", "thema": "VL08 · Vorurteile", "modell": "Duales Prozessmodell der Vorurteile (Duckitt)", "anker": 0, "mnemo": "Persönlichkeit → Weltbild → Ideologie → Vorurteil", "punkte": [{"ober": "Persönlichkeit", "unter": ["z. B. geringe Offenheit / Hartherzigkeit"], "syn": ["persoenlichkeit"]}, {"ober": "Weltbild", "unter": ["gefährliche Welt ODER kompetitive Welt"], "syn": ["weltbild", "gefaehrliche welt", "kompetitive welt"]}, {"ober": "Ideologie", "unter": ["RWA (aus gefährlicher Welt) bzw. SDO (aus kompetitiver Welt)"], "syn": ["ideologie", "rwa", "sdo"]}, {"ober": "Vorurteil", "unter": ["das resultierende Vorurteil/diskriminierende Verhalten"], "syn": ["vorurteil"]}]}, {"id": "st33", "thema": "VL09 · Hilfeverhalten", "modell": "Drei evolutionäre Mechanismen prosozialen Verhaltens", "anker": 0, "mnemo": "Verwandte · Gegenseitigkeit · Gruppe", "punkte": [{"ober": "Verwandtenselektion", "unter": ["Hilfe für Verwandte sichert die eigenen Gene"], "syn": ["verwandtenselektion", "kin selection"]}, {"ober": "Reziproker Altruismus", "unter": ["Hilfe in Erwartung späterer Gegenleistung"], "syn": ["reziproker altruismus", "reziprozitaet", "gegenseitigkeit"]}, {"ober": "Gruppenselektion", "unter": ["prosoziale Gruppen setzen sich gegen andere durch"], "syn": ["gruppenselektion", "group selection"]}]}, {"id": "st34", "thema": "VL11 · Das Selbst", "modell": "Sechs Quellen des Selbstwissens", "anker": 0, "mnemo": "persönlich (2) + sozial (4)", "punkte": [{"ober": "Introspektion", "unter": ["Beobachtung eigener innerer Zustände (persönlich)"], "syn": ["introspektion"]}, {"ober": "Selbstwahrnehmung", "unter": ["Rückschluss vom eigenen Verhalten (persönlich)"], "syn": ["selbstwahrnehmung", "self perception"]}, {"ober": "Soziale Einschätzung", "unter": ["wie andere uns sehen (sozial)"], "syn": ["soziale einschaetzung", "spiegelbild"]}, {"ober": "Soziale Vergleiche", "unter": ["Vergleich mit anderen (sozial)"], "syn": ["soziale vergleiche", "social comparison"]}, {"ober": "Bedeutsame Andere", "unter": ["relationale Schemata aus engen Beziehungen (sozial)"], "syn": ["bedeutsame andere", "relationale schemata"]}, {"ober": "Soziale Identität", "unter": ["Selbstwissen aus Gruppenmitgliedschaft (sozial)"], "syn": ["soziale identitaet"]}]}, {"id": "st35", "thema": "VL11 · Das Selbst", "modell": "Drei Funktionen des Selbst", "anker": 0, "mnemo": "ordnen · motivieren · steuern", "punkte": [{"ober": "Organisatorische Funktion", "unter": ["Selbstkonzept/Selbstschemata, Selbstreferenzeffekt"], "syn": ["organisatorisch", "selbstkonzept"]}, {"ober": "Motivationale Funktion", "unter": ["selbstbezogene Motive, Selbstdarstellung"], "syn": ["motivational", "motive"]}, {"ober": "Regulatorische Funktion", "unter": ["Selbstregulation, objektive Selbstaufmerksamkeit"], "syn": ["regulatorisch", "selbstregulation"]}]}, {"id": "st36", "thema": "VL11 · Das Selbst", "modell": "Drei selbstbezogene Motive", "anker": 0, "mnemo": "genau · gut · gleich", "punkte": [{"ober": "Selbsteinschätzungsmotiv", "unter": ["akkurates Selbstbild (Genauigkeit)"], "syn": ["selbsteinschaetzung", "accuracy", "self assessment"]}, {"ober": "Selbstaufwertungsmotiv", "unter": ["positives Selbstbild (Enhancement), selbstwertdienliche Illusionen"], "syn": ["selbstaufwertung", "enhancement"]}, {"ober": "Selbstbestätigungsmotiv", "unter": ["stabiles, konsistentes Selbstbild (Consistency)"], "syn": ["selbstbestaetigung", "consistency", "verification"]}]}, {"id": "st37", "thema": "VL11 · Selbstregulation", "modell": "TOTE-Kreislauf der Selbstregulation", "anker": 0, "mnemo": "Test · Operate · Test · Exit", "punkte": [{"ober": "Test", "unter": ["Ist-Zustand mit Soll-Standard vergleichen"], "syn": ["test", "vergleich"]}, {"ober": "Operate", "unter": ["handeln, um die Diskrepanz zu verringern"], "syn": ["operate", "handeln"]}, {"ober": "Test", "unter": ["erneut vergleichen (Diskrepanz weg?)"], "syn": ["erneuter test", "test 2"]}, {"ober": "Exit", "unter": ["bei Übereinstimmung beenden"], "syn": ["exit", "beenden"]}]}, {"id": "st38", "thema": "VL12 · Beziehungen (Akhter-Khan)", "modell": "Social-Relationship-Expectations-Framework (6 Dimensionen)", "anker": 0, "mnemo": "Nähe · Unterstützung · Intimität · Spaß · Generativität · Respekt", "punkte": [{"ober": "Nähe (Proximity)", "unter": ["räumliche/zeitliche Verfügbarkeit von Bezugspersonen"], "syn": ["naehe", "proximity"]}, {"ober": "Unterstützung (Support)", "unter": ["instrumentelle und emotionale Hilfe"], "syn": ["unterstuetzung", "support"]}, {"ober": "Intimität (Intimacy)", "unter": ["Bindung, Selbstenthüllung, Liebe"], "syn": ["intimitaet", "intimacy"]}, {"ober": "Spaß (Fun)", "unter": ["gemeinsame positive Erlebnisse"], "syn": ["spass", "fun"]}, {"ober": "Generativität (Generativity)", "unter": ["etwas weitergeben, für andere sorgen"], "syn": ["generativitaet", "generativity"]}, {"ober": "Respekt (Respect)", "unter": ["Anerkennung, kein Ausschluss/Diskriminierung"], "syn": ["respekt", "respect"]}]}, {"id": "st39", "thema": "VL12 · Liebe", "modell": "Sternbergs Dreieckstheorie der Liebe", "anker": 0, "mnemo": "Intimität · Leidenschaft · Bindung", "punkte": [{"ober": "Intimität", "unter": ["Nähe, Verbundenheit, Vertrautheit"], "syn": ["intimitaet"]}, {"ober": "Leidenschaft", "unter": ["körperliche Anziehung, Verliebtheit"], "syn": ["leidenschaft", "passion"]}, {"ober": "Entscheidung/Bindung", "unter": ["Commitment, die Beziehung aufrechtzuerhalten"], "syn": ["bindung", "entscheidung", "commitment"]}]}, {"id": "st40", "thema": "VL10 · Aggression", "modell": "Formen von Aggression (Dimensionen)", "anker": 0, "mnemo": "warum · wie aktiv · welcher Kanal", "punkte": [{"ober": "Feindselig (affektiv) vs. instrumentell", "unter": ["Ziel: Schaden aus Wut vs. Mittel zum Zweck"], "syn": ["feindselig", "affektiv", "instrumentell", "hostile"]}, {"ober": "Aktiv vs. passiv", "unter": ["Schaden durch Handeln vs. durch Unterlassen"], "syn": ["aktiv", "passiv"]}, {"ober": "Physisch vs. verbal/relational", "unter": ["körperlich vs. über Worte/Beziehungen"], "syn": ["physisch", "verbal", "relational"]}]}, {"id": "st41", "thema": "VL10 · Aggression", "modell": "Biologische Ansätze der Aggression", "anker": 0, "mnemo": "Trieb · Gene · Hormone", "punkte": [{"ober": "Dampfkesselmodell (Lorenz)", "unter": ["aufgestaute Aggressionsenergie, die sich entladen muss (umstritten)"], "syn": ["dampfkesselmodell", "lorenz", "trieb"]}, {"ober": "Verhaltensgenetik", "unter": ["erblicher Anteil aggressiver Dispositionen"], "syn": ["verhaltensgenetik", "gene", "erblich"]}, {"ober": "Hormon: Testosteron", "unter": ["mit Aggression/Dominanz assoziiert (wechselseitig)"], "syn": ["testosteron"]}, {"ober": "Hormon: Kortisol", "unter": ["niedriges Kortisol mit Aggression assoziiert"], "syn": ["kortisol", "cortisol"]}]}, {"id": "st42", "thema": "VL08 · Vorurteilsabbau", "modell": "Pettigrews Drei-Phasen-Längsschnittmodell (1998)", "anker": 0, "mnemo": "Dekategorisierung → Kategorisierung → Rekategorisierung", "punkte": [{"ober": "Phase 1: Dekategorisierung", "unter": ["erst die Person als Individuum kennenlernen (Angst senken)"], "syn": ["dekategorisierung", "phase 1"]}, {"ober": "Phase 2: Kategorisierung (salient)", "unter": ["Gruppenzugehörigkeit salient halten → Generalisierung"], "syn": ["kategorisierung", "phase 2"]}, {"ober": "Phase 3: Rekategorisierung", "unter": ["gemeinsame übergeordnete Identität bilden"], "syn": ["rekategorisierung", "neukategorisierung", "phase 3"]}]}, {"id": "st43", "thema": "VL04 · Einstellungen", "modell": "Kognitive Dissonanz — Wege der Reduktion (Festinger)", "anker": 0, "mnemo": "Einstellung/Verhalten/Deutung ändern · Argumente ergänzen/umdeuten", "punkte": [{"ober": "Einstellung ändern", "unter": ["z. B. „Rauchen ist gar nicht so schlimm\""], "syn": ["einstellung aendern", "einstellung"]}, {"ober": "Verhalten ändern", "unter": ["z. B. mit dem Rauchen aufhören"], "syn": ["verhalten aendern", "verhalten"]}, {"ober": "Deutung des Verhaltens ändern", "unter": ["die Bedeutung umdeuten"], "syn": ["deutung aendern", "deutung"]}, {"ober": "Konsonante Argumente ergänzen", "unter": ["neue stützende Kognitionen hinzufügen"], "syn": ["argumente ergaenzen", "konsonant", "hinzufuegen"]}, {"ober": "Dissonante Argumente umdeuten/bagatellisieren", "unter": ["widersprechende Kognitionen abwerten"], "syn": ["umdeuten", "bagatellisieren", "dissonant"]}]}, {"id": "st44", "thema": "VL05 · Persuasion", "modell": "Informationsverarbeitungsmodell der Persuasion (McGuire)", "anker": 0, "mnemo": "Aufmerksamkeit → Verstehen → Akzeptieren → Beibehalten → Verhalten", "punkte": [{"ober": "Aufmerksamkeit", "unter": ["die Botschaft überhaupt wahrnehmen"], "syn": ["aufmerksamkeit", "attention"]}, {"ober": "Verstehen", "unter": ["den Inhalt verstehen (comprehension)"], "syn": ["verstehen", "comprehension"]}, {"ober": "Akzeptieren", "unter": ["dem Argument zustimmen (acceptance)"], "syn": ["akzeptieren", "acceptance", "yielding"]}, {"ober": "Beibehalten", "unter": ["die Einstellung über Zeit speichern (retention)"], "syn": ["beibehalten", "retention"]}, {"ober": "Verhalten", "unter": ["die Einstellung in Verhalten umsetzen (action)"], "syn": ["verhalten", "action"]}]}, {"id": "st45", "thema": "VL11 · Selbst", "modell": "Selbstdarstellungsstrategien (Jones & Pittman)", "anker": 0, "mnemo": "anpreisen · anbiedern · vorangehen · einschüchtern · flehen", "punkte": [{"ober": "Selbstanpreisung (Self-Promotion)", "unter": ["als kompetent erscheinen"], "syn": ["selbstanpreisung", "self promotion"]}, {"ober": "Anbiederung (Ingratiation)", "unter": ["als sympathisch erscheinen"], "syn": ["anbiederung", "ingratiation"]}, {"ober": "Mit gutem Beispiel vorangehen (Exemplification)", "unter": ["als moralisch/vorbildlich erscheinen"], "syn": ["exemplification", "vorangehen", "vorbild"]}, {"ober": "Einschüchterung (Intimidation)", "unter": ["als bedrohlich/mächtig erscheinen"], "syn": ["einschuechterung", "intimidation"]}, {"ober": "Um Hilfe flehen (Supplication)", "unter": ["als hilfsbedürftig erscheinen"], "syn": ["supplication", "flehen", "hilfsbeduerftig"]}]}, {"id": "st46", "thema": "VL08 · Soziale Identität", "modell": "Selbstkategorisierung — drei Abstraktionsebenen (Turner)", "anker": 0, "mnemo": "Mensch (inklusiv) → Gruppe (Intergruppen) → Ich (interpersonal)", "punkte": [{"ober": "Inklusives Level", "unter": ["Selbst als Mensch (Mensch vs. andere Spezies)"], "syn": ["inklusiv", "inklusives level", "mensch"]}, {"ober": "Intergruppen-Level", "unter": ["Selbst als Gruppenmitglied (Wir vs. Sie)"], "syn": ["intergruppen level", "gruppenmitglied", "wir sie"]}, {"ober": "Interpersonales Level", "unter": ["Selbst als Individuum (Ich vs. andere)"], "syn": ["interpersonal", "interpersonales level", "individuum"]}]}, {"id": "st47", "thema": "VL07 · Soziale Gruppen", "modell": "Arten von Gruppen nach Lickel et al.", "anker": 0, "mnemo": "Nähe · Aufgabe · Kategorie · lose Verbindung", "punkte": [{"ober": "Gruppen mit emotionaler Nähe (Intimitätsgruppen)", "unter": ["z. B. Familie, enge Freunde"], "syn": ["emotionale naehe", "intimitaetsgruppen"]}, {"ober": "Aufgabenbezogene Gruppen", "unter": ["z. B. Arbeitsteam, Komitee"], "syn": ["aufgabenbezogen", "aufgabengruppen"]}, {"ober": "Soziale Kategorien", "unter": ["z. B. Geschlecht, Nationalität"], "syn": ["soziale kategorien", "kategorien"]}, {"ober": "Lockere Verbindungen", "unter": ["z. B. Menschen an einer Bushaltestelle"], "syn": ["lockere verbindungen", "lose"]}]}, {"id": "st48", "thema": "VL08 · Vorurteile", "modell": "Rechter Autoritarismus (RWA) — drei Facetten (Altemeyer)", "anker": 0, "mnemo": "Konventionalismus · Unterwürfigkeit · Aggression", "punkte": [{"ober": "Konventionalismus", "unter": ["starkes Festhalten an traditionellen Normen/Werten"], "syn": ["konventionalismus"]}, {"ober": "Autoritäre Unterwürfigkeit", "unter": ["Unterordnung unter etablierte Autoritäten"], "syn": ["autoritaere unterwuerfigkeit", "unterwuerfigkeit"]}, {"ober": "Autoritäre Aggression", "unter": ["Aggression gegen Abweichler*innen (autoritätslegitimiert)"], "syn": ["autoritaere aggression", "aggression"]}]}, {"id": "st49", "thema": "VL10 · Aggression", "modell": "Aggressionsfragebogen (Buss & Perry) — vier Faktoren", "anker": 0, "mnemo": "physisch · verbal · Ärger · Feindseligkeit", "punkte": [{"ober": "Physische Aggression", "unter": ["körperliche Aggressionsneigung"], "syn": ["physische aggression", "physisch"]}, {"ober": "Verbale Aggression", "unter": ["aggressives Sprechen/Streiten"], "syn": ["verbale aggression", "verbal"]}, {"ober": "Ärger (Anger)", "unter": ["affektive Komponente, Erregbarkeit"], "syn": ["aerger", "anger"]}, {"ober": "Feindseligkeit (Hostility)", "unter": ["kognitive Komponente, Misstrauen/Groll"], "syn": ["feindseligkeit", "hostility"]}]}, {"id": "st50", "thema": "VL10 · Aggression", "modell": "Notwendige Voraussetzungen für Aggression", "anker": 0, "mnemo": "Absicht · Schädigungswissen · Opfer will vermeiden", "punkte": [{"ober": "Motivation / Absicht zu schädigen", "unter": ["nicht versehentlich, sondern intendiert"], "syn": ["absicht", "motivation", "intention"]}, {"ober": "Wissen, dass die Handlung schädigt", "unter": ["die Person weiß um das Schädigungspotenzial"], "syn": ["wissen um schaedigung", "schaedigungswissen"]}, {"ober": "Das Opfer will die Schädigung vermeiden", "unter": ["grenzt z. B. einvernehmliche Handlungen aus"], "syn": ["opfer will vermeiden", "vermeidungswunsch"]}]}];
+var DAY = 86400000;
+
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* SRS — identisches Karten-Format wie Lernmodule/Quiz-Runner; Store-Key = Karten-ID */
+function stSched(id, rating){
+  var p=load(), now=Date.now();
+  var c=p[id]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(rating==='good'){ c.stability=Math.max(1,c.stability*2.5); c.due=now+Math.max(DAY,c.stability*DAY); c.state='review'; }
+  else if(rating==='part'){ c.stability=Math.max(1,c.stability*1.2); c.due=now+DAY; c.state='review'; }
+  else { c.lapses++; c.stability=1; c.due=now+600000; c.state='learning'; }
+  c.reps++; p[id]=c; save(p);
+}
+function stStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ST.forEach(function(card){ var c=p[card.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ST.length};
+}
+function stIsOpen(id){ var c=load()[id]; return (!c||c.state==='new'||c.due<=Date.now()); }
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function _norm(s){ return (s||'').toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,' ').trim(); }
+function _cardById(id){ for(var i=0;i<ST.length;i++){ if(ST[i].id===id) return ST[i]; } return null; }
+function _stateLabel(id){
+  var c=load()[id];
+  if(!c||c.state==='new') return 'neu';
+  if(c.due<=Date.now()) return 'fällig';
+  var d=Math.round((c.due-Date.now())/DAY);
+  return 'gelernt · wieder in '+(d<1?'<1':d)+' T';
+}
+
+/* ── Themenbereich + Farbe (Feld card.bereich, sonst aus card.thema abgeleitet) ── */
+function stBereich(card){ if(card&&card.bereich) return card.bereich; var t=(card&&card.thema)||''; if(/^VT/i.test(t)) return 'Vertiefung'; var m=t.match(/^VL\d+/i); return m?m[0].toUpperCase():'Sonstige'; }
+function stChipLabel(thema){ return (thema||'').replace(/\s*\(.*$/,''); }
+var ST_BEREICHE=(function(){ var seen=[],o={}; ST.forEach(function(c){ var b=stBereich(c); if(!o[b]){o[b]=1;seen.push(b);} }); return seen; })();
+function stBereichColor(b){ var n=ST_BEREICHE.length||1; var i=ST_BEREICHE.indexOf(b); if(i<0)i=0; var h=Math.round(i*360/n); return {bg:'hsl('+h+',45%,20%)', fg:'hsl('+h+',75%,80%)', bd:'hsl('+h+',40%,40%)'}; }
+function stChip(card){ var c=stBereichColor(stBereich(card)); return '<span class="st-chip" style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'">'+stChipLabel(card.thema)+'</span>'; }
+function stCountBereich(b){ var n=0; ST.forEach(function(c){ if(stBereich(c)===b) n++; }); return n; }
+
+/* ── gemeinsame Bausteine ── */
+function stStructHTML(card){
+  var h='<ul class="st-list">';
+  card.punkte.forEach(function(p){
+    h+='<li><strong>'+p.ober+'</strong>';
+    if(p.unter&&p.unter.length){ h+='<ul>'+p.unter.map(function(u){return '<li>'+u+'</li>';}).join('')+'</ul>'; }
+    h+='</li>';
+  });
+  h+='</ul>';
+  if(card.mnemo) h+='<div class="st-mnemo">🧠 <strong>Merkhilfe:</strong> '+card.mnemo+'</div>';
+  return h;
+}
+function stRateRow(id, key, mode){
+  return '<div class="st-rate" id="rt'+key+'">'
+    + '<button class="st-rbtn good" onclick="stRate(\''+id+'\',\'good\',\''+key+'\',\''+mode+'\')">✅ sicher</button>'
+    + '<button class="st-rbtn part" onclick="stRate(\''+id+'\',\'part\',\''+key+'\',\''+mode+'\')">🟡 teilweise</button>'
+    + '<button class="st-rbtn bad" onclick="stRate(\''+id+'\',\'bad\',\''+key+'\',\''+mode+'\')">❌ nochmal</button>'
+  + '</div>';
+}
+function stReveal(btn,key){ var a=document.getElementById('rev'+key); var r=document.getElementById('rt'+key); if(a)a.classList.add('shown'); if(r)r.classList.add('shown'); btn.style.display='none'; }
+function stRate(id,rating,key,mode){
+  stSched(id,rating);
+  var s=document.getElementById('st'+key); if(s) s.textContent='Status: '+_stateLabel(id);
+  if(RUN[mode] && RUN[mode].active){ setTimeout(function(){ stNext(mode); }, 250); }
+}
+
+/* ── Karten ── */
+function stCardRecall(card, idx){
+  var key='rc'+idx;
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-q">Rufe die Struktur ab: <strong>'+card.modell+'</strong> — '+card.punkte.length+' Hauptpunkte. Nenne sie (mit Unterpunkten), dann aufdecken.</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Struktur aufdecken</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'rc')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCardTest(card, idx){
+  var key='ts'+idx;
+  var anchor=(card.anker!=null?card.anker:0);
+  if(anchor<0||anchor>=card.punkte.length) anchor=0;
+  var rows='', rn=0;
+  card.punkte.forEach(function(p,i){
+    if(i===anchor) return;
+    rows+='<div class="st-row"><input class="st-in" id="in'+key+'_'+rn+'" autocomplete="off" oninput="stCheck(\''+key+'\',\''+card.id+'\')" placeholder="Punkt eintippen …"><span class="st-ok" id="ok'+key+'_'+rn+'"></span></div>';
+    rn++;
+  });
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-q"><strong>'+card.modell+'</strong> — nenne die übrigen '+rn+' Punkte:</div>'
+    + '<div class="st-anchor">Vorgegeben: <strong>'+card.punkte[anchor].ober+'</strong></div>'
+    + rows
+    + '<div class="st-sum" id="sum'+key+'">0 / '+rn+' erkannt</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Lösung anzeigen</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'ts')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCheck(key, cardId){
+  var card=_cardById(cardId); if(!card) return;
+  var anchor=(card.anker!=null?card.anker:0); if(anchor<0||anchor>=card.punkte.length) anchor=0;
+  var pool=[]; card.punkte.forEach(function(p,i){ if(i===anchor) return; pool.push({acc:[p.ober].concat(p.syn||[]).map(_norm), used:false}); });
+  var got=0;
+  for(var r=0;r<pool.length;r++){
+    var el=document.getElementById('in'+key+'_'+r); var mark=document.getElementById('ok'+key+'_'+r);
+    var v=el?_norm(el.value):''; var hit=false;
+    if(v.length>=3){
+      for(var j=0;j<pool.length;j++){ if(pool[j].used) continue;
+        if(pool[j].acc.some(function(a){ return a && (a===v || (a.length>=4 && v.indexOf(a)>=0) || (v.length>=4 && a.indexOf(v)>=0)); })){ pool[j].used=true; hit=true; break; }
+      }
+    }
+    if(mark){ mark.textContent=hit?'✓':''; mark.className='st-ok'+(hit?' hit':''); }
+    if(hit) got++;
+  }
+  var sum=document.getElementById('sum'+key); if(sum) sum.textContent=got+' / '+pool.length+' erkannt';
+}
+
+/* ── Runner (zwei Modi: rc = Recall, ts = Test) ── */
+var RUN={ rc:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle'}, ts:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle'} };
+function stToggleShuffle(m){ RUN[m].shuffle=!RUN[m].shuffle; stStart(m); }
+function stToggleDue(m){ RUN[m].dueOnly=!RUN[m].dueOnly; stStart(m); }
+function stSetBereich(m,b){ RUN[m].bereich=b; if(RUN[m].active) stStart(m); else stRender(m); }
+function stResetAll(){ var p=load(); ST.forEach(function(c){delete p[c.id];}); save(p); RUN.rc.active=false; RUN.ts.active=false; stRender('rc'); stRender('ts'); }
+function stStart(m){
+  var idx=ST.map(function(_,i){return i;});
+  if(RUN[m].bereich && RUN[m].bereich!=='alle') idx=idx.filter(function(i){return stBereich(ST[i])===RUN[m].bereich;});
+  if(RUN[m].dueOnly) idx=idx.filter(function(i){return stIsOpen(ST[i].id);});
+  if(RUN[m].shuffle) idx=_shuffle(idx);
+  RUN[m].order=idx; RUN[m].pos=0; RUN[m].active=true; stRender(m);
+}
+function stNext(m){ var R=RUN[m]; if(R.pos<R.order.length-1){R.pos++; stRender(m);} else { R.active=false; stRender(m); } }
+function stPrev(m){ var R=RUN[m]; if(R.pos>0){R.pos--; stRender(m);} }
+function stRender(m){
+  var el=document.getElementById(m==='rc'?'stRunnerRC':'stRunnerTS'); if(!el) return;
+  var R=RUN[m], st=stStats();
+  var title=(m==='rc'?'① Lernen — Struktur frei abrufen':'② Test — Punkte selbst eintippen');
+  if(!R.active){
+    el.innerHTML='<div class="st-card"><div class="st-q">'+title+'</div>'
+      +'<div class="qr-stat">'+st.learned+'/'+st.total+' geübt · '+st.due+' offen/fällig'+((R.bereich&&R.bereich!=='alle')?' · Filter: '+R.bereich+' ('+stCountBereich(R.bereich)+' Modelle)':'')+'</div>'
+      +'<div class="st-filter"><span class="st-flabel">Themenbereich filtern:</span>'
+        +'<button class="st-fbtn'+(R.bereich==='alle'?' on':'')+'" onclick="stSetBereich(\''+m+'\',\'alle\')">Alle ('+ST.length+')</button>'
+        +ST_BEREICHE.map(function(b){var on=(R.bereich===b);var c=stBereichColor(b);return '<button class="st-fbtn'+(on?' on':'')+'"'+(on?' style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'"':'')+' onclick="stSetBereich(\''+m+'\',\''+b+'\')">'+b+' ('+stCountBereich(b)+')</button>';}).join('')
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(R.shuffle?' active':'')+'" onclick="stToggleShuffle(\''+m+'\')">🔀 Mischen: '+(R.shuffle?'AN':'aus')+'</button>'
+        +'<button class="nav-btn'+(R.dueOnly?' active':'')+'" onclick="stToggleDue(\''+m+'\')">🔁 Nur offene & fällige: '+(R.dueOnly?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="stStart(\''+m+'\')">▶ starten</button>'
+      +'<button class="btn btn-ghost" onclick="stResetAll()">↺ Fortschritt zurücksetzen</button></div></div>';
+    return;
+  }
+  if(!R.order.length){
+    el.innerHTML='<div class="st-card"><div class="st-q">🎉 Nichts offen!</div>'
+      +'<div class="qr-stat">Im Modus „nur offene & fällige" ist aktuell nichts fällig.</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-ghost" onclick="stToggleDue(\''+m+'\')">Alle Modelle zeigen</button></div></div>';
+    return;
+  }
+  var i=R.order[R.pos], card=ST[i]; var pct=Math.round(R.pos/R.order.length*100);
+  el.innerHTML='<div class="qr-stat">Modell '+(R.pos+1)+' / '+R.order.length+'</div>'
+    +'<div class="qr-prog"><div style="width:'+pct+'%"></div></div>'
+    + (m==='rc'?stCardRecall(card,R.pos):stCardTest(card,R.pos))
+    +'<div class="qr-ctrl">'
+      +(R.pos>0?'<button class="btn btn-ghost" onclick="stPrev(\''+m+'\')">← Zurück</button>':'')
+      +'<button class="btn btn-ghost" onclick="stNext(\''+m+'\')">Überspringen →</button>'
+      +'<button class="btn btn-ghost" onclick="RUN.'+m+'.active=false;stRender(\''+m+'\')">■ Beenden</button>'
+    +'</div>';
+}
+
+(function(){ stRender('rc'); stRender('ts'); })();
+
+function goToST(idx){
+  var secs=document.querySelectorAll('.section'); var btns=document.querySelectorAll('.nav-btn[data-sec]');
+  secs.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  btns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  window.scrollTo(0,0);
+}
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

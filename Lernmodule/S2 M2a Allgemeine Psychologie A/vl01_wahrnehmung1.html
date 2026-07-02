@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL01 Wahrnehmung I</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl01
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL01 Wahrnehmung I</h1>
+<p class="page-sub">Allgemeine Psychologie A · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Wahrnehmung von Sinnesempfindung abgrenzen · 2. Einflussfaktoren (bottom-up/top-down) · 3. Mechanismen der Farbwahrnehmung · 4. Problem der Tiefenwahrnehmung · 5. Wie das visuelle System Tiefe löst
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Empfindung & Wahrnehmung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Einflussfaktoren</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Farbe & Farbkonstanz</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Dreifarbentheorie</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Gegenfarbentheorie</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Tiefe: okulo & binokular</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Monokulare Tiefe</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Kombination & Wissen</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Empfindung & Wahrnehmung ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Sinnesempfindung vs. Wahrnehmung</div>
+    <div class="sec-lz">Sensation (Reizempfang) von Perception (Organisation/Interpretation) abgrenzen; Transduktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie betreten einen dunklen Raum: Sie „sehen“ kaum etwas, „spüren“ aber die kühle Luft. Was davon ist <strong>Sinnesempfindung</strong>, was schon <strong>Wahrnehmung</strong>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Beides startet als <strong>Sinnesempfindung</strong> (Reizempfang: wenig Licht, Kälte). Zur <strong>Wahrnehmung</strong> wird es erst, wenn das Gehirn die Information organisiert und interpretiert — z. B. „der Raum ist leer und kalt“. Empfindung liefert die Rohdaten, Wahrnehmung die Bedeutung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sinnesempfindung (sensation) vs. Wahrnehmung (perception)</div>
+    <strong>Sinnesempfindung</strong> = Empfang von Reizenergien aus der Umwelt durch Sinnesrezeptoren. <strong>Wahrnehmung</strong> = Prozess, bei dem diese sensorischen Informationen <strong>organisiert und interpretiert</strong> werden; ermöglicht, die Bedeutung von Gegenständen und Ereignissen zu erkennen.
+  </div>
+  <div class="card">
+    <div class="card-title">Transduktion</div>
+    Rezeptoren wandeln Reizenergie in <strong>neuronale Impulse</strong> um (Transduktion) und überbringen sie ans Gehirn. Merksatz: <em>Wir nehmen nur die Ausschnitte der Welt wahr, für die wir Sensoren haben.</em>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Nicht die Empfindung erkennt die <strong>Bedeutung</strong> eines Objekts — das leistet erst die Wahrnehmung. Die Rezeptoren reagieren auf Reizmerkmale, nicht auf ganze Gegenstände.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vergleich: zwei Stufen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="sens" onclick="switchTab(this,'sensperc')">Sinnesempfindung</button>
+      <button class="tab-btn" data-tab="perc" onclick="switchTab(this,'sensperc')">Wahrnehmung</button>
+    </div>
+    <div class="tab-group" data-group="sensperc">
+      <div class="tab-content active" data-tab="sens"><strong>Empfang</strong> von Reizenergie durch Rezeptoren; frühe, datengesteuerte Stufe; <strong>noch keine</strong> Bedeutungszuweisung.</div>
+      <div class="tab-content" data-tab="perc"><strong>Organisation & Interpretation</strong> der Information; spätere Stufe; erkennt die <strong>Bedeutung</strong> von Objekten/Ereignissen.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Einflussfaktoren ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Was beeinflusst unsere Wahrnehmung?</div>
+    <div class="sec-lz">Bottom-up vs. top-down, Adaptation und Aufmerksamkeit unterscheiden und zuordnen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie lesen „Ich li_be dich“ und ergänzen das fehlende „e“ mühelos. Ist das eher <strong>bottom-up</strong> oder <strong>top-down</strong>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1"><strong>Top-down</strong>: Ihr Wissen über Wörter ergänzt die fehlende sensorische Information. Bottom-up wäre die reine Buchstabenerkennung Zeichen für Zeichen. In der Praxis wirken beide zusammen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bottom-up vs. Top-down</div>
+    <strong>Bottom-up</strong> (datengesteuert): beginnt bei den Sinnesrezeptoren und arbeitet sich zu höheren Ebenen vor. <strong>Top-down</strong> (konzeptgesteuert): konstruiert die Wahrnehmung aus dem Input und greift dabei auf <strong>Erfahrungen und Erwartungen</strong> zurück — was wir wissen, beeinflusst, was wir wahrnehmen.
+  </div>
+  <div class="card">
+    <div class="card-title">Adaptation & Aufmerksamkeit</div>
+    <strong>Adaptation</strong>: Sensoren passen sich an Umgebungsreize an → erhöhte Empfindlichkeit für <strong>Abweichungen</strong> vom aktuellen Zustand. <strong>Aufmerksamkeit</strong>: wählt aus der Reizflut die bedeutsamen aus — der Rest geht verloren.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum Auswahl nötig ist</div>
+    Die Sensoren liefern enorm viel Information (~2 Gb/s). Das Gehirn <strong>fischt die relevanten Aspekte heraus</strong> und rückt sie in den Vordergrund.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: bottom-up oder top-down?</div>
+    <div class="corr-item" id="c1a">Dunkeladaptation der Stäbchen im dunklen Raum
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'bottomup')">Bottom-up</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'topdown')">Top-down</button>
+      </div><div class="corr-fb" id="c1a-fb"></div>
+    </div>
+    <div class="corr-item" id="c1b">Hohlmaske wird wegen Vorwissen als konvex gesehen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'bottomup')">Bottom-up</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'topdown')">Top-down</button>
+      </div><div class="corr-fb" id="c1b-fb"></div>
+    </div>
+    <div class="corr-item" id="c1c">Größenillusion im Ames'schen Raum
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'bottomup')">Bottom-up</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'topdown')">Top-down</button>
+      </div><div class="corr-fb" id="c1c-fb"></div>
+    </div>
+    <div class="corr-item" id="c1d">Verarbeitung von den Rezeptoren aufwärts zu höheren Ebenen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'bottomup')">Bottom-up</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'topdown')">Top-down</button>
+      </div><div class="corr-fb" id="c1d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Farbe & Farbkonstanz ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Farbe als Empfindung & Farbkonstanz</div>
+    <div class="sec-lz">Farbe als psychophysikalische Eigenschaft; Reflexion/Absorption; Farbkonstanz (Weißabgleich).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein weißes Blatt sieht im Sonnenlicht <em>und</em> im warmen Lampenlicht weiß aus — obwohl das reflektierte Licht physikalisch ganz unterschiedlich ist. Wie kommt das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Farbkonstanz</strong>: Das visuelle System rechnet den Beleuchtungseffekt heraus (Weißabgleich über das Gesichtsfeld), sodass die Objektfarbe stabil bleibt. Das Reflexionsspektrum verschiebt sich für alle Objekte gleichermaßen, seine <strong>Form bleibt charakteristisch</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Farbe ist eine Empfindung</div>
+    Farbe ist eine <strong>psychophysikalische Eigenschaft</strong>, keine Eigenschaft des Objekts selbst. Lichtquellen senden ein breites Spektrum (ca. <strong>400–700 nm</strong>); wahrgenommene Farbe = subjektive Verarbeitung der vom Objekt <strong>reflektierten Wellenlängen</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Reflexion & Absorption</div>
+    Ein Teil des Lichts wird reflektiert, der andere absorbiert. Der <strong>Absorptionsgrad über alle Wellenlängen</strong> ist charakteristisch für ein Objekt — unabhängig von der Beleuchtung. Daraus folgt die <strong>relative Konstanz</strong> von Farben.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Monochromatisches Licht</div>
+    Unter einlinigem Licht (z. B. Natriumdampflampe, „monochromatisches Gelb“) reflektieren alle Objekte nur <strong>dieselbe eine Wellenlänge</strong> → Orange und Zitrone sind farblich <strong>nicht mehr unterscheidbar</strong>. Farbunterscheidung braucht ein breites Spektrum.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Breites vs. monochromatisches Licht</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="breit" onclick="switchTab(this,'licht')">Breites Spektrum</button>
+      <button class="tab-btn" data-tab="mono" onclick="switchTab(this,'licht')">Monochromatisch</button>
+    </div>
+    <div class="tab-group" data-group="licht">
+      <div class="tab-content active" data-tab="breit">Objekte reflektieren ihr <strong>charakteristisches</strong> Wellenlängen-Muster → Farben unterscheidbar, Farbkonstanz möglich.</div>
+      <div class="tab-content" data-tab="mono">Nur <strong>eine</strong> Wellenlänge vorhanden → alle Objekte reflektieren dasselbe Licht, <strong>keine</strong> Farbunterscheidung.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Dreifarbentheorie ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Farbdetektion: Dreifarbentheorie (Young-Helmholtz)</div>
+    <div class="sec-lz">Drei Zapfentypen S/M/L; Farbe = Verhältnis dreier Antworten.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum genügen einem Bildschirm drei Grundfarben (RGB), um (fast) alle Farben darzustellen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Weil unser visuelles System Farbe ebenfalls über nur <strong>drei Zapfentypen</strong> (S, M, L) kodiert — die Farbe ergibt sich aus dem <strong>Verhältnis ihrer Antworten</strong>. Helmholtz (1852): drei Primärfarben reichen aus und sind nötig; zwei zu wenig, mehr als drei überflüssig.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Dreifarbentheorie (Young-Helmholtz)</div>
+    Von <strong>Thomas Young</strong> (1773–1829) und <strong>Hermann von Helmholtz</strong> (1821–1894) unabhängig entwickelt: Die Farbe eines Lichts wird durch das <strong>Verhältnis der Antworten dreier Photorezeptortypen</strong> bestimmt.
+  </div>
+  <div class="card">
+    <div class="card-title">Die drei Zapfentypen</div>
+    <strong>S</strong> ≈ 420 nm (kurzwellig/blau), <strong>M</strong> ≈ 535 nm (mittel/grün), <strong>L</strong> ≈ 565 nm (langwellig/rot). Die Stäbchen (≈ 498 nm) dienen dem Dämmerungssehen, <strong>nicht</strong> dem Farbensehen.
+  </div>
+  <div class="card">
+    <div class="card-title">Ebene</div>
+    Die Dreifarbentheorie erklärt die <strong>Farbdetektion auf Rezeptorebene</strong> — also die erste Stufe (Detektion → Unterscheidung → Erscheinung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Zapfentypen im Vergleich</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="s" onclick="switchTab(this,'zapfen')">S-Zapfen</button>
+      <button class="tab-btn" data-tab="m" onclick="switchTab(this,'zapfen')">M-Zapfen</button>
+      <button class="tab-btn" data-tab="l" onclick="switchTab(this,'zapfen')">L-Zapfen</button>
+    </div>
+    <div class="tab-group" data-group="zapfen">
+      <div class="tab-content active" data-tab="s">Maximum ≈ <strong>420 nm</strong> — kurzwelliges (blaues) Licht.</div>
+      <div class="tab-content" data-tab="m">Maximum ≈ <strong>535 nm</strong> — mittelwelliges (grünes) Licht.</div>
+      <div class="tab-content" data-tab="l">Maximum ≈ <strong>565 nm</strong> — langwelliges (rotes) Licht.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Gegenfarbentheorie ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Farberscheinung: Gegenfarbentheorie (Hering)</div>
+    <div class="sec-lz">Antagonistische Kanäle Rot-Grün/Blau-Gelb; Nachbilder; verbotene Farben.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum können Sie sich ein „bläuliches Grün“ vorstellen, aber kein „rötliches Grün“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Weil Rot und Grün <strong>Gegenfarben</strong> eines antagonistischen Kanals sind (ebenso Blau/Gelb): Ein Kanal kann nicht gleichzeitig „rot“ und „grün“ signalisieren. <strong>Hering</strong> erkannte diese Gesetzmäßigkeit; Gegenfarbenzellen bestätigen sie neuronal.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gegenfarbentheorie (Ewald Hering, 1834–1918)</div>
+    Antagonistische Kanäle <strong>Rot-Grün</strong> und <strong>Blau-Gelb</strong>. Möglich sind bläuliches Grün, rötliches Gelb (orange), bläuliches Rot (lila); <strong>unmöglich</strong> sind rötliches Grün und bläuliches Gelb.
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz</div>
+    <strong>Komplementäre Nachbilder</strong> (Rot erzeugt grüne, Blau gelbe Nachbilder) und der Nachweis von <strong>Gegenfarbenzellen</strong> (colour-opponent cells) in höheren visuellen Arealen, die auf die <strong>Differenz zweier Zapfentypen</strong> antworten.
+  </div>
+  <div class="card">
+    <div class="card-title">Kanäle & Funktion von Farbe</div>
+    Aus den Zapfensignalen entstehen drei Kanäle: <strong>R+G</strong> (Helligkeit), <strong>R−G</strong> (Rot-Grün), <strong>B−(R+G)</strong> (Blau-Gelb). Funktion: Farbe erlaubt die schnelle Trennung von Objekten vom Hintergrund und voneinander.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Theorie erklärt das? Dreifarben- oder Gegenfarbentheorie?</div>
+    <div class="corr-item" id="c4a">Jede Farbe lässt sich aus drei Grundfarben mischen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'dreifarben')">Dreifarbentheorie</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'gegenfarben')">Gegenfarbentheorie</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">Es gibt kein rötliches Grün
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'dreifarben')">Dreifarbentheorie</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'gegenfarben')">Gegenfarbentheorie</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">Drei Zapfentypen S, M und L
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'dreifarben')">Dreifarbentheorie</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'gegenfarben')">Gegenfarbentheorie</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+    <div class="corr-item" id="c4d">Ein rotes Bild erzeugt ein grünes Nachbild
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'dreifarben')">Dreifarbentheorie</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'gegenfarben')">Gegenfarbentheorie</button>
+      </div><div class="corr-fb" id="c4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Tiefe: okulo & binokular ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Okulomotorische & binokulare Tiefenhinweise</div>
+    <div class="sec-lz">Akkommodation, Konvergenz; binokuläre Disparität, Horopter, gekreuzte/ungekreuzte Disparation.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Halten Sie einen Finger nah vor die Nase und schließen abwechselnd ein Auge — der Finger „springt“. Welches Tiefenprinzip steckt dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Binokuläre Disparität</strong>: Beide Augen sehen wegen ihres Abstands leicht verschiedene Bilder. Aus der Verschiebung berechnet das Gehirn die Entfernung. Objekte <strong>vor</strong> dem Horopter erzeugen gekreuzte, <strong>hinter</strong> ihm ungekreuzte Disparation.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Okulomotorische Hinweise</div>
+    <strong>Akkommodation</strong>: die Linse wird dicker (Brechkraft ↑), um nahe Objekte zu fokussieren. <strong>Konvergenz</strong>: die Augen rotieren als Funktion der Distanz — bei nahen Objekten konvergieren sie, bei fernen stehen sie parallel.
+  </div>
+  <div class="card">
+    <div class="card-title">Binokuläre Disparität & Horopter</div>
+    Beide Augen liefern wegen ihres Abstands leicht <strong>verschiedene Netzhautbilder</strong>; nur der überlappende Bereich liefert Tiefe. <strong>Horopter</strong> (Vieth-Müller-Kreis) = Orte, deren Bilder auf <strong>korrespondierende</strong> Netzhautpunkte fallen und gleich weit entfernt erscheinen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Gekreuzt vs. ungekreuzt · Stereoblindness</div>
+    <strong>Gekreuzte</strong> Disparation = Objekte <strong>vor</strong> dem Horopter (temporale Netzhaut). <strong>Ungekreuzte</strong> = Objekte <strong>hinter</strong> dem Horopter (nasale Netzhaut). <strong>Stereoblindness</strong> = Unfähigkeit, Disparität als Tiefenkriterium zu nutzen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gekreuzte vs. ungekreuzte Disparation</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="gek" onclick="switchTab(this,'disp')">Gekreuzt</button>
+      <button class="tab-btn" data-tab="ung" onclick="switchTab(this,'disp')">Ungekreuzt</button>
+    </div>
+    <div class="tab-group" data-group="disp">
+      <div class="tab-content active" data-tab="gek">Objekt <strong>vor</strong> dem Horopter · <strong>temporale</strong> Netzhautseite · Naheindruck.</div>
+      <div class="tab-content" data-tab="ung">Objekt <strong>hinter</strong> dem Horopter · <strong>nasale</strong> Netzhautseite · Ferneindruck.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Monokulare Tiefe ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Monokulare Tiefenhinweise</div>
+    <div class="sec-lz">Verdeckung, Perspektiven, Größe, relative Höhe, Texturgradient, Bewegungsparallaxe; Reichweite nah/mittel/fern.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Foto entsteht mit nur <em>einem</em> „Auge“ (der Kamera) — und wirkt trotzdem räumlich. Welche Art von Tiefenhinweisen nutzt es?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Monokulare</strong> Hinweise — sie funktionieren mit einem Auge: Verdeckung, lineare/atmosphärische Perspektive, relative/vertraute Größe, relative Höhe, Texturgradient (statisch) und Bewegungsparallaxe (dynamisch). Die binokuläre Disparität fehlt im Foto.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Statische monokulare Hinweise</div>
+    <strong>Verdeckung</strong> (verdecktes Objekt = weiter hinten), <strong>lineare Perspektive</strong> (parallele Linien konvergieren in der Ferne), <strong>atmosphärische Perspektive</strong> (Ferne = unschärfer/blasser), <strong>vertraute/relative Größe</strong>, <strong>relative Höhe</strong> (näher am Horizont = ferner) und <strong>Texturgradient</strong> (mit Abstand feiner).
+  </div>
+  <div class="card">
+    <div class="card-title">Bewegungsparallaxe (dynamisch)</div>
+    Weiter entfernte Objekte legen auf der Netzhaut in gleicher Zeit <strong>kürzere</strong> Distanzen zurück — nahe Objekte ziehen schnell vorbei, ferne langsam.
+  </div>
+  <div class="card">
+    <div class="card-title">Reichweite der Kriterien</div>
+    Disparität, Akkommodation und Konvergenz wirken vor allem im <strong>Nahbereich</strong>; die <strong>atmosphärische Perspektive</strong> erst im Fernbereich; Verdeckung und relative Größe über <strong>alle</strong> Distanzen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: monokular, binokular oder okulomotorisch?</div>
+    <div class="corr-item" id="c6a">Verdeckung eines Objekts durch ein anderes
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'mono')">Monokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'bino')">Binokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'okulo')">Okulomotorisch</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Konvergenz der Augen bei nahen Objekten
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'mono')">Monokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'bino')">Binokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'okulo')">Okulomotorisch</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Binokuläre Disparität zwischen beiden Netzhautbildern
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'mono')">Monokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'bino')">Binokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'okulo')">Okulomotorisch</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Texturgradient einer Wiese in die Ferne
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'mono')">Monokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'bino')">Binokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'okulo')">Okulomotorisch</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+    <div class="corr-item" id="c6e">Akkommodation der Linse auf ein nahes Objekt
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'mono')">Monokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'bino')">Binokular</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'okulo')">Okulomotorisch</button>
+      </div><div class="corr-fb" id="c6e-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Kombination & Wissen ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Kombination von Tiefenkriterien & Wissen</div>
+    <div class="sec-lz">Cue-Kombination; Bayes'scher Ansatz; Ames'scher Raum als Wahrnehmungstäuschung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Ames'schen Raum scheint eine Person zu „wachsen“, während sie durch den Raum geht. Was überlistet hier wen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Unser <strong>Vorwissen</strong> (Räume haben rechtwinklige Wände) überlistet die korrekte Größenwahrnehmung: Wir nehmen die Wände als normal an und schließen <strong>falsch</strong> auf die Größe. Bayes: Wahrnehmung = Reiz × Vorwissen — stimmt der Prior nicht, entsteht eine Täuschung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kombination von Cues</div>
+    Tiefenwahrnehmung resultiert aus der <strong>Kombination vieler Hinweise</strong> zugleich und ist <strong>effizienter</strong>, wenn mehrere Cues kongruente Informationen liefern (z. B. relative Größe + relative Höhe).
+  </div>
+  <div class="card">
+    <div class="card-title">Bayes'scher Ansatz</div>
+    Wahrnehmung = Kombination des <strong>aktuellen Reizes</strong> mit <strong>Vorwissen über Wahrscheinlichkeiten</strong> (prior knowledge) → top-down gesteuert. Das Gehirn schätzt, was wahrscheinlich ist.
+  </div>
+  <div class="card">
+    <div class="card-title">Ames'scher Raum</div>
+    Die reale (schiefe) Geometrie widerspricht dem erwarteten <strong>rechtwinkligen</strong> Raum → groteske Größenillusion. Merke: top-down-Prozesse <strong>beschleunigen</strong> die Wahrnehmung in bekannten Umgebungen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Wenn der Prior stimmt — und wenn nicht</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ok" onclick="switchTab(this,'bayes')">Prior stimmt</button>
+      <button class="tab-btn" data-tab="fail" onclick="switchTab(this,'bayes')">Prior falsch</button>
+    </div>
+    <div class="tab-group" data-group="bayes">
+      <div class="tab-content active" data-tab="ok">Vorwissen passt zur Realität → schnelle, <strong>korrekte</strong> Wahrnehmung (z. B. in vertrauter Umgebung).</div>
+      <div class="tab-content" data-tab="fail">Vorwissen passt <strong>nicht</strong> (z. B. schiefer Ames-Raum) → <strong>Wahrnehmungstäuschung</strong>.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sinnesempfindung (sensation)</h4>
+      <p>Empfang von Reizenergie durch Rezeptoren</p>
+      <p>Frühe, datengesteuerte Stufe</p>
+      <p>Noch keine Bedeutungszuweisung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Wahrnehmung (perception)</h4>
+      <p>Organisation und Interpretation der Information</p>
+      <p>Spätere, integrative Stufe</p>
+      <p>Erkennt Bedeutung von Objekten/Ereignissen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Sinnesempfindung erkennt bereits die Bedeutung eines Objekts, bevor die Wahrnehmung einsetzt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bottom-up</h4>
+      <p>Datengesteuert</p>
+      <p>Von Rezeptoren aufwärts</p>
+      <p>Reizgetrieben</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Top-down</h4>
+      <p>Konzeptgesteuert</p>
+      <p>Nutzt Erfahrung/Erwartung</p>
+      <p>Konstruiert/ergänzt den Reiz</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bottom-up-Verarbeitung greift auf Vorwissen und Erwartungen zurück, um den Reiz zu ergänzen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Dreifarbentheorie (Young-Helmholtz)</h4>
+      <p>Drei Zapfentypen S/M/L</p>
+      <p>Farbe = Verhältnis dreier Antworten</p>
+      <p>Erklärt Farbdetektion auf Rezeptorebene</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gegenfarbentheorie (Hering)</h4>
+      <p>Antagonistische Kanäle Rot-Grün, Blau-Gelb</p>
+      <p>Erklärt Nachbilder & verbotene Farben</p>
+      <p>Wirkt auf höherer (post-rezeptorischer) Ebene</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Gegenfarbentheorie erklärt das Farbensehen durch drei unabhängige Zapfentypen auf Rezeptorebene.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gekreuzte Disparation</h4>
+      <p>Objekte VOR dem Horopter</p>
+      <p>Temporale Netzhautseite</p>
+      <p>Naheindruck</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Ungekreuzte Disparation</h4>
+      <p>Objekte HINTER dem Horopter</p>
+      <p>Nasale Netzhautseite</p>
+      <p>Ferneindruck</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ungekreuzte Disparation tritt bei Objekten vor dem Horopter auf der temporalen Netzhaut auf.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Lineare Perspektive</h4>
+      <p>Parallele Linien konvergieren in der Ferne</p>
+      <p>Geometrischer Hinweis</p>
+      <p>z. B. Schienen, Straße</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Atmosphärische Perspektive</h4>
+      <p>Ferne Objekte unschärfer/blasser</p>
+      <p>Streuung durch Luftpartikel</p>
+      <p>z. B. Berge im Dunst</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der atmosphärischen Perspektive konvergieren parallele Linien mit zunehmender Entfernung.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl01</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl01';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Worin unterscheiden sich Sinnesempfindung (sensation) und Wahrnehmung (perception)?",
+      "opts": [
+        "Beide bezeichnen denselben Vorgang, nur auf zwei verschiedenen Verarbeitungsstufen.",
+        "Wahrnehmung empfängt die Reizenergie, Sinnesempfindung interpretiert sie anschließend.",
+        "Sinnesempfindung ist der Empfang von Reizenergie durch Sensoren; Wahrnehmung organisiert und interpretiert diese Information.",
+        "Sinnesempfindung erkennt bereits die Bedeutung von Objekten, weil schon die Rezeptoren auf ganze Gegenstände statt auf einzelne Reizmerkmale reagieren."
+      ],
+      "c": 2,
+      "e": "Sensation = reiner Reizempfang, Perception = Organisation/Interpretation. Bedeutungszuweisung passiert erst in der Wahrnehmung, nicht schon im Rezeptor."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was geschieht bei der Transduktion?",
+      "opts": [
+        "Physikalische Reizenergie wird in neuronale Impulse umgewandelt.",
+        "Neuronale Impulse werden im Gehirn zu einer bewussten Wahrnehmung interpretiert.",
+        "Aufmerksamkeit wählt die bedeutsamen Reize aus dem sensorischen Strom aus.",
+        "Die Rezeptoren passen ihre Empfindlichkeit an das Umgebungsniveau an, weil dadurch Abweichungen vom aktuellen Zustand stärker hervortreten."
+      ],
+      "c": 0,
+      "e": "Transduktion = Umwandlung von Reizenergie in neuronale Erregung. Interpretation (b) ist Wahrnehmung, (d) beschreibt Adaptation."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche Verarbeitung ist datengesteuert (aufsteigend)?",
+      "opts": [
+        "Top-down-Verarbeitung, da sie bei den Sinnesrezeptoren beginnt.",
+        "Bottom-up-Verarbeitung: von den Rezeptoren aufwärts zu höheren Ebenen.",
+        "Adaptation, weil sie die Empfindlichkeit der Sensoren reguliert.",
+        "Top-down-Verarbeitung, weil das visuelle System Wahrnehmungen aus Erfahrungen und Erwartungen konstruiert und den Input dabei ergänzt."
+      ],
+      "c": 1,
+      "e": "Bottom-up = datengesteuert, von Rezeptoren aufwärts. Top-down ist gerade umgekehrt konzeptgesteuert; Adaptation ist kein Verarbeitungspfad."
+    },
+    {
+      "id": "s1q2",
+      "q": "Welches ist ein Beispiel für top-down-gesteuerte Wahrnehmung?",
+      "opts": [
+        "Die Dunkeladaptation der Stäbchen, weil die Netzhaut bei wenig Licht ihre Empfindlichkeit über Minuten hinweg steigert.",
+        "Die Transduktion von Licht in Nervenimpulse in den Zapfen.",
+        "Die hohe Informationsdichte der Sinnesorgane von ca. 2 Gb/s.",
+        "Die rotierende Hohlmaske, die wir wegen unseres Vorwissens stets als konvex wahrnehmen."
+      ],
+      "c": 3,
+      "e": "Die Hohlmaske wird durch erlerntes Wissen (Gesichter sind konvex) konzeptgesteuert interpretiert = top-down. (a) ist Adaptation, (b) bottom-up."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Warum lässt sich eine Orange unter monochromatischem gelbem Licht (Natriumdampflampe) nicht von einer Zitrone unterscheiden?",
+      "opts": [
+        "Beide reflektieren nur dieselbe eine Wellenlänge, sodass kein Farbunterschied entsteht.",
+        "Das reflektierte Spektrum wird zu breit, um noch eine Unterscheidung zu erlauben.",
+        "Das Verhältnis der absorbierten Wellenlängen bleibt bei beiden konstant.",
+        "Die Farbkonstanz rechnet die Beleuchtung heraus, weil das visuelle System den Weißabgleich über das gesamte Gesichtsfeld vornimmt und beide Früchte angleicht."
+      ],
+      "c": 0,
+      "e": "Monochromatisches Licht enthält nur eine Wellenlänge — beide Objekte können nur diese reflektieren, daher kein Farbkontrast. Farbunterscheidung braucht ein breites Spektrum."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was beschreibt Farbkonstanz?",
+      "opts": [
+        "Die Fähigkeit, zwei benachbarte Wellenlängen voneinander zu diskriminieren.",
+        "Die Umwandlung von Licht in die neuronalen Signale dreier Zapfentypen.",
+        "Objektfarben werden stabil wahrgenommen, indem der Beleuchtungseffekt herausgerechnet wird.",
+        "Farben verschieben sich mit der Beleuchtung, weil sich die spektrale Zusammensetzung des einfallenden Lichts für jedes Objekt unterschiedlich ändert."
+      ],
+      "c": 2,
+      "e": "Farbkonstanz hält die wahrgenommene Objektfarbe trotz wechselnder Beleuchtung stabil (Weißabgleich). (d) verneint gerade die Konstanz."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was besagt die Dreifarbentheorie (Young-Helmholtz)?",
+      "opts": [
+        "Dass Gegenfarbenzellen in höheren visuellen Arealen auf die Differenz zweier Zapfentypen antworten und so Rot-Grün- und Blau-Gelb-Kanal bilden.",
+        "Dass Nachbilder durch die Ermüdung der Stäbchen entstehen.",
+        "Dass vier Zapfentypen für das Farbensehen notwendig sind.",
+        "Dass die Farbe durch das Verhältnis der Antworten dreier Zapfentypen (S, M, L) bestimmt wird."
+      ],
+      "c": 3,
+      "e": "Trichromatische Theorie: drei Zapfentypen, deren Antwortverhältnis die Farbe kodiert. (a) ist die konkurrierende Gegenfarbentheorie."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie viele Grundfarben sind laut Helmholtz (1852) zur Farbmischung nötig?",
+      "opts": [
+        "Zwei Farben genügen, um jede beliebige Farbe zu mischen.",
+        "Drei Farben genügen; zwei reichen nicht, mehr als drei sind nicht nötig.",
+        "Vier Farben, je eine pro Zapfentyp plus Stäbchen.",
+        "Beliebig viele Farben, weil jede Wellenlänge einen eigenen Rezeptortyp zur korrekten Detektion erfordert."
+      ],
+      "c": 1,
+      "e": "Helmholtz: genau drei Primärfarben reichen aus und sind nötig — passend zu den drei Zapfentypen."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Welche Beobachtung stützt die Gegenfarbentheorie nach Hering?",
+      "opts": [
+        "Jede beliebige Farbe lässt sich aus drei Grundfarben mischen.",
+        "In der Retina existieren genau drei Zapfentypen.",
+        "Es gibt kein rötliches Grün und kein bläuliches Gelb; Nachbilder sind komplementär.",
+        "Die Linse erhöht ihre Brechkraft bei nahen Objekten, weil dadurch das Bild zweier Zapfentypen scharf auf die Fovea fällt."
+      ],
+      "c": 2,
+      "e": "Verbotene Farbkombinationen und komplementäre Nachbilder sind Kernbelege der Gegenfarbentheorie. (a)/(b) stützen die Dreifarbentheorie."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche Farbe hat das Nachbild nach längerem Fixieren eines roten Quadrats?",
+      "opts": [
+        "Grün — die komplementäre Gegenfarbe zu Rot.",
+        "Rot — dieselbe Farbe, nur etwas dunkler getönt.",
+        "Blau — die kurzwellige Komplementärfarbe.",
+        "Gelb, weil ermüdete L-Zapfen den Blau-Gelb-Kanal verschieben."
+      ],
+      "c": 0,
+      "e": "Rot und Grün sind Gegenfarben — die Ermüdung des Rot-Grün-Kanals erzeugt ein grünes Nachbild."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was kennzeichnet die binokuläre Disparität?",
+      "opts": [
+        "Die Linse wird dicker, um nahe Objekte zu fokussieren.",
+        "Beide Augen liefern wegen ihres Abstands leicht verschiedene Netzhautbilder.",
+        "Weiter entfernte Objekte legen auf der Netzhaut kürzere Wege zurück.",
+        "Die Augen rotieren als Funktion der Distanz, weil sie bei nahen Objekten konvergieren und bei fernen parallel stehen."
+      ],
+      "c": 1,
+      "e": "Disparität = Bilddifferenz beider Augen durch den Augenabstand. (a) ist Akkommodation, (c) Bewegungsparallaxe, (d) Konvergenz."
+    },
+    {
+      "id": "s5q2",
+      "q": "Bei welchen Objekten tritt ungekreuzte Disparation auf?",
+      "opts": [
+        "Bei Objekten vor dem Horopter, auf der temporalen Netzhaut.",
+        "Bei Objekten, die genau auf dem Horopter liegen.",
+        "Nur bei stereoblinden Personen, die die binokuläre Disparität nicht als Tiefenkriterium verwenden können.",
+        "Bei Objekten hinter dem Horopter, auf der nasalen Netzhaut."
+      ],
+      "c": 3,
+      "e": "Ungekreuzt = hinter dem Horopter (nasal). Gekreuzte Disparation tritt vor dem Horopter (temporal) auf — wichtige Verwechslung."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Welcher Tiefenhinweis ist monokular und statisch?",
+      "opts": [
+        "Verdeckung (Okklusion) eines Objekts durch ein anderes.",
+        "Konvergenz der beiden Augen bei nahen Objekten.",
+        "Binokuläre Disparität zwischen den beiden Netzhautbildern.",
+        "Die Bewegungsparallaxe, bei der entfernte Objekte auf der Netzhaut in gleicher Zeit kürzere Strecken zurücklegen als nahe."
+      ],
+      "c": 0,
+      "e": "Verdeckung ist monokular und statisch. (b)/(c) sind okulomotorisch/binokular, (d) ist monokular, aber dynamisch."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was beschreibt die atmosphärische Perspektive?",
+      "opts": [
+        "In der Ferne konvergieren eigentlich parallele Linien.",
+        "Texturen werden mit zunehmendem Abstand feiner und dichter.",
+        "Weiter entfernte Gegenstände erscheinen unschärfer und blasser.",
+        "Vertraute Objekte wirken entfernt, weil wir ihre typische Größe kennen und daraus auf die Distanz schließen."
+      ],
+      "c": 2,
+      "e": "Luftpartikel streuen das Licht entfernter Objekte → unschärfer/blasser. (a) ist lineare Perspektive, (b) Texturgradient, (d) vertraute Größe."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was besagt der Bayes'sche Ansatz der Wahrnehmung?",
+      "opts": [
+        "Dass ausschließlich bottom-up-Information die Wahrnehmung bestimmt.",
+        "Dass Tiefenkriterien stets nur einzeln wirken, weil das System immer dem zuletzt verarbeiteten Hinweis Vorrang gibt.",
+        "Dass Vorwissen für die Wahrnehmung irrelevant ist.",
+        "Dass der aktuelle Reiz mit Vorwissen über Wahrscheinlichkeiten kombiniert wird."
+      ],
+      "c": 3,
+      "e": "Bayes: Wahrnehmung = Reiz × Vorwissen (prior). Stimmt das Vorwissen nicht, entsteht eine Täuschung."
+    },
+    {
+      "id": "s7q2",
+      "q": "Warum erscheinen Personen im Ames'schen Raum unterschiedlich groß?",
+      "opts": [
+        "Weil die binokuläre Disparität in diesem Raum vollständig aufgehoben ist.",
+        "Weil wir fälschlich rechtwinklige Wände annehmen und die Größe daran ausrichten.",
+        "Weil monochromatisches Licht die Farbkonstanz im Raum stört.",
+        "Weil die Bewegungsparallaxe fehlt und entfernte Objekte dadurch größer auf die Netzhaut projiziert werden."
+      ],
+      "c": 1,
+      "e": "Top-down: das erwartete (falsche) Wissen über rechtwinklige Räume erzwingt eine falsche Größeneinschätzung."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Wirkung hat die Adaptation der Sensoren?",
+    "opts": [
+      "Eine erhöhte Empfindlichkeit für Abweichungen vom aktuellen Zustand.",
+      "Eine dauerhafte Umwandlung von Reizen in Nervenimpulse.",
+      "Die bewusste Interpretation der Reizbedeutung.",
+      "Eine konzeptgesteuerte Ergänzung des Bildes, weil gespeichertes Wissen fehlende Reizinformation auffüllt."
+    ],
+    "c": 0,
+    "e": "Adaptation kalibriert die Sensoren auf das Umgebungsniveau und macht so Veränderungen besser sichtbar. (d) beschreibt top-down."
+  },
+  {
+    "id": "bq2",
+    "q": "In welcher Reihenfolge laufen die drei Schritte der Farbwahrnehmung ab?",
+    "opts": [
+      "Erscheinung → Unterscheidung → Detektion.",
+      "Detektion → Unterscheidung → Erscheinung.",
+      "Unterscheidung → Detektion → Erscheinung.",
+      "Detektion → Erscheinung → Unterscheidung, weil die stabile Farbzuordnung der Diskrimination vorausgehen muss."
+    ],
+    "c": 1,
+    "e": "Erst Wellenlängen erkennen (Detektion), dann unterscheiden, dann stabil zuordnen (Erscheinung)."
+  },
+  {
+    "id": "bq3",
+    "q": "Bei welchen Wellenlängen liegen die Absorptionsmaxima der drei Zapfentypen ungefähr?",
+    "opts": [
+      "420, 498 und 535 nm für S, M und L.",
+      "498, 535 und 565 nm für die drei Zapfen.",
+      "420, 535 und 565 nm für S, M und L.",
+      "400, 500 und 700 nm, gleichmäßig über das Spektrum verteilt."
+    ],
+    "c": 2,
+    "e": "S≈420 (blau), M≈535 (grün), L≈565 (rot). 498 nm ist das Maximum der Stäbchen, nicht eines Zapfentyps."
+  },
+  {
+    "id": "bq4",
+    "q": "Was bedeutet Stereoblindness?",
+    "opts": [
+      "Eine Farbenblindheit für die Rot-Grün-Achse, weil die zugehörigen Gegenfarbenzellen im visuellen Kortex fehlen.",
+      "Den Verlust der Dunkeladaptation der Stäbchen.",
+      "Die Unfähigkeit, eine lineare Perspektive zu erkennen.",
+      "Die Unfähigkeit, binokuläre Disparität als Tiefenkriterium zu nutzen."
+    ],
+    "c": 3,
+    "e": "Stereoblindheit = kein Tiefensehen über Disparität; monokulare Hinweise bleiben aber nutzbar."
+  },
+  {
+    "id": "bq5",
+    "q": "Welcher Tiefenhinweis ist im Fernbereich (>30 m) relevant, im Nahbereich aber kaum?",
+    "opts": [
+      "Atmosphärische Perspektive (Dunst/Unschärfe).",
+      "Konvergenz der Augen, die nur im Nahbereich greift.",
+      "Binokuläre Disparität, die nur im Nahbereich greift.",
+      "Akkommodation der Linse, die nur bei nahen Objekten greift."
+    ],
+    "c": 0,
+    "e": "Atmosphärische Perspektive wirkt erst über große Distanzen. Konvergenz, Disparität und Akkommodation sind Nahbereichs-Hinweise."
+  },
+  {
+    "id": "bq6",
+    "q": "Was leisten top-down-Prozesse in der Wahrnehmung?",
+    "opts": [
+      "Sie beginnen ausschließlich bei den Sinnesrezeptoren.",
+      "Sie beschleunigen die Wahrnehmung in bekannten Umgebungen.",
+      "Sie sind identisch mit der sensorischen Transduktion.",
+      "Sie verlangsamen jede Wahrnehmung, weil der Abgleich mit dem Gedächtnis auf jeder Stufe zusätzliche Zeit kostet."
+    ],
+    "c": 1,
+    "e": "Erwartungen aus Vorwissen machen die Verarbeitung in vertrauten Kontexten schneller — nicht langsamer."
+  },
+  {
+    "id": "bq7",
+    "q": "Zu welchen Kanälen verrechnen Gegenfarbenzellen die Zapfensignale?",
+    "opts": [
+      "Zu nur einem einzigen Helligkeitskanal.",
+      "Zu einem Rot-Blau- und einem Grün-Gelb-Kanal.",
+      "Zu Helligkeit (R+G), Rot-Grün (R−G) und Blau-Gelb (B−(R+G)).",
+      "Zu je einem separaten Kanal pro Zapfentyp, weil jedes Signal unabhängig bis zum Kortex weitergeleitet wird."
+    ],
+    "c": 2,
+    "e": "Drei Gegenfarbkanäle: Helligkeit, Rot-Grün und Blau-Gelb — sie kodieren Differenzen, nicht einzelne Zapfen."
+  },
+  {
+    "id": "bq8",
+    "q": "Welcher Begriff bezeichnet den Vieth-Müller-Kreis?",
+    "opts": [
+      "Der Texturgradient, bei dem Muster mit der Entfernung feiner werden.",
+      "Die Akkommodation der Augenlinse.",
+      "Die Bewegungsparallaxe beim Vorbeifahren.",
+      "Der Horopter (Kreis gleicher Sehentfernung)."
+    ],
+    "c": 3,
+    "e": "Der Horopter (Vieth-Müller-Kreis) ist der Ort gleich weit erscheinender Punkte auf korrespondierenden Netzhautstellen."
+  }
+];
+
+var corrCorrect = {
+  "c1a": "bottomup",
+  "c1b": "topdown",
+  "c1c": "topdown",
+  "c1d": "bottomup",
+  "c4a": "dreifarben",
+  "c4b": "gegenfarben",
+  "c4c": "dreifarben",
+  "c4d": "gegenfarben",
+  "c6a": "mono",
+  "c6b": "okulo",
+  "c6c": "bino",
+  "c6d": "mono",
+  "c6e": "okulo"
+};
+var corrExpl = {
+  "c1a": "Dunkeladaptation läuft von den Rezeptoren aufwärts = bottom-up/datengesteuert.",
+  "c1b": "Die Hohlmasken-Illusion entsteht durch erlerntes Wissen (Gesichter sind konvex) = top-down.",
+  "c1c": "Der Ames'sche Raum täuscht über die Erwartung rechtwinkliger Wände = top-down.",
+  "c1d": "Verarbeitung von den Rezeptoren zu höheren Ebenen ist definitionsgemäß bottom-up.",
+  "c4a": "Mischung jeder Farbe aus drei Grundfarben ist das Kernargument der Dreifarbentheorie.",
+  "c4b": "Das Fehlen von rötlichem Grün belegt antagonistische Gegenfarbkanäle (Hering).",
+  "c4c": "Drei Zapfentypen S/M/L sind die rezeptorische Basis der Young-Helmholtz-Theorie.",
+  "c4d": "Komplementäre Nachbilder (rot → grün) entstehen durch Ermüdung der Gegenfarbkanäle.",
+  "c6a": "Verdeckung braucht nur ein Auge = monokular.",
+  "c6b": "Konvergenz ist eine Augenbewegung = okulomotorisch.",
+  "c6c": "Disparität entsteht erst aus dem Vergleich beider Augenbilder = binokular.",
+  "c6d": "Der Texturgradient ist mit einem Auge sichtbar = monokular.",
+  "c6e": "Akkommodation ist die Anpassung der Linse = okulomotorisch."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

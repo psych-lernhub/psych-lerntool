@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD11 Verhaltensbeobachtung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl11
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:8px}
+.sim-toggle{display:flex;flex-wrap:wrap;gap:6px}
+.sim-tbtn{border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2)}
+.sim-tbtn.on{border-color:var(--accent);background:rgba(129,140,248,.12);color:var(--text)}
+.sim-verdict{margin-top:10px;font-size:.86rem;color:var(--text);line-height:1.5}
+.kap-tbl{border-collapse:collapse;margin:2px 0}
+.kap-tbl td{border:1px solid var(--border);padding:4px 7px;text-align:center;font-size:.8rem;color:var(--text2)}
+.kap-in{width:48px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px;text-align:center;font-size:.82rem;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD11 Verhaltensbeobachtung</h1>
+<p class="page-sub">Psychologische Diagnostik I (Wedderhoff) · Klausur 23.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Verhaltensbeobachtung vs. Verhaltensbeurteilung · 2. Anwendungsspektrum & Beispielstudien (Marienthal, Klauer) · 3. Unterscheidungsmerkmale von Beobachtungen + EMA · 4. Selektion/Segmentierung/Quantifizierung · 5. Standardisierung (Zeichen-/Kategoriensystem/Ratingskala) · 6. Nicht-reaktive Verfahren · 7. Beurteilerübereinstimmung (Cohens κ) · 8. Fehlerquellen
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Definition & Abgrenzung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Anwendungsspektrum</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Beispielstudien</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Unterscheidungsmerkmale</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Selektion/Segm./Quant.</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Standardisierung</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Nicht-reaktive Verfahren</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Beurteilerübereinstimmung & Fehler</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Definition & Abgrenzung ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Verhaltensbeobachtung vs. Verhaltensbeurteilung</div>
+    <div class="sec-lz">Eine Verhaltensbeobachtung ist die freie oder systematische Beobachtung des Verhaltens einer oder mehrerer Personen in einer näher bestimmten Situation; die Beobachtungen werden so weit wie möglich frei von Wertungen und Schlussfolgerungen protokolliert (Schmidt-Atzert, Krumm & Amelang, 2021). Eine Verhaltensbeurteilung sind dagegen die Schlussfolgerungen, die aus der Beobachtung gezogen werden und sich auf Eigenschaften oder Verhaltensmuster beziehen. Baumeister, Vohs & Funder kritisieren in „Psychology as the Science of Self-Reports and Finger Movements — Whatever Happened to Actual Behavior?“, dass tatsächliches Verhalten zu selten direkt gemessen wird.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Praktikantin schreibt ins Protokoll: „Der Patient war den ganzen Tag aggressiv und völlig unsympathisch.“ Ist das schon eine Beobachtung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Nein – das ist bereits eine <strong>Verhaltensbeurteilung</strong> (Schlussfolgerung auf Eigenschaften). Eine <strong>Verhaltensbeobachtung</strong> hielte möglichst wertungsfrei fest, was konkret geschah, z.B. „schlug zweimal mit der flachen Hand auf den Tisch“.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Begriffe – sauber trennen</div>
+    <strong>Verhaltensbeobachtung:</strong> freie oder systematische Beobachtung des Verhaltens, so weit wie möglich <strong>frei von Wertungen und Schlussfolgerungen</strong> protokolliert. <strong>Verhaltensbeurteilung:</strong> die <strong>Schlussfolgerungen</strong>, die daraus gezogen werden – auf Eigenschaften oder Verhaltensmuster (Schmidt-Atzert, Krumm & Amelang, 2021).
+  </div>
+  <div class="card">
+    <div class="card-title">Warum das wichtig ist</div>
+    Baumeister, Vohs & Funder fragen in „Psychology as the Science of Self-Reports and Finger Movements – Whatever Happened to Actual Behavior?“ kritisch, ob die Psychologie <strong>tatsächliches Verhalten</strong> noch direkt misst – oder nur Selbstauskünfte und einfache Tastenreaktionen. Verhaltensbeobachtung setzt genau dort an.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Beobachtung, Beurteilung oder Kritik?</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g00" onclick="switchTab(this,'g0')">Beobachtung</button><button class="tab-btn" data-tab="g01" onclick="switchTab(this,'g0')">Beurteilung</button><button class="tab-btn" data-tab="g02" onclick="switchTab(this,'g0')">Kritik (Baumeister)</button></div>
+    <div class="tab-group" data-group="g0"><div class="tab-content active" data-tab="g00">„Schlägt zweimal mit der Hand auf den Tisch.“ – konkret, wertungsfrei, protokollierbar.</div><div class="tab-content" data-tab="g01">„Ist aggressiv und unsympathisch.“ – Schluss auf Eigenschaften/Muster = Beurteilung.</div><div class="tab-content" data-tab="g02">Zu viel Selbstbericht, zu wenig direkt gemessenes Verhalten – „Whatever Happened to Actual Behavior?“</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Anwendungsspektrum ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Breites Anwendungsspektrum</div>
+    <div class="sec-lz">Verhaltensbeobachtung wird in sehr unterschiedlichen Kontexten eingesetzt: verdecktes Einschleusen und Beobachtung der Verhaltensweisen von Mitgliedern selektiver Gruppen, Beobachtung der Mutter-Kind-Interaktion hinter einer Einwegscheibe, Verhalten von Bewerbern in Assessment-Center-Übungen, Messung der Laufzeit einer Ratte im Labyrinth oder Selbstbeobachtung (z.B. von Patient*innen über Tagebucheinträge).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Fallen dir drei möglichst <em>verschiedene</em> Situationen ein, in denen Psycholog*innen Verhalten beobachten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Z.B. Mutter-Kind-Interaktion hinter der Einwegscheibe, Bewerber*innen im Assessment-Center, die Laufzeit einer Ratte im Labyrinth, verdecktes Einschleusen in eine Gruppe oder die <strong>Selbstbeobachtung</strong> per Tagebuch – das Spektrum ist sehr breit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sehr breites Einsatzfeld</div>
+    Verhaltensbeobachtung reicht vom <strong>Labor</strong> (Einwegscheibe, Ratte im Labyrinth) über das <strong>Feld</strong> (verdecktes Einschleusen in selektive Gruppen) bis zur <strong>Eignungsdiagnostik</strong> (Bewerber*innen in Assessment-Center-Übungen).
+  </div>
+  <div class="card">
+    <div class="card-title">Auch Selbstbeobachtung zählt</div>
+    Selbst sich <strong>selbst</strong> zu beobachten – z.B. Patient*innen, die per <strong>Tagebucheintrag</strong> ihr eigenes Verhalten erfassen – ist eine Form der Verhaltensbeobachtung (Fremd- vs. Selbstbeobachtung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei Beispiel-Settings</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g10" onclick="switchTab(this,'g1')">Labor</button><button class="tab-btn" data-tab="g11" onclick="switchTab(this,'g1')">Feld / verdeckt</button><button class="tab-btn" data-tab="g12" onclick="switchTab(this,'g1')">Selbstbeobachtung</button></div>
+    <div class="tab-group" data-group="g1"><div class="tab-content active" data-tab="g10">Mutter-Kind hinter der Einwegscheibe, Ratte im Labyrinth – hergestellte, kontrollierte Bedingungen.</div><div class="tab-content" data-tab="g11">Verdecktes Einschleusen in eine selektive Gruppe – natürliche Bedingungen, aber Ethikfrage.</div><div class="tab-content" data-tab="g12">Patient*in führt Tagebuch über das eigene Verhalten – Selbst- statt Fremdbeobachtung.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Beispielstudien ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Beispielstudien: Marienthal & Klauer</div>
+    <div class="sec-lz">Die Arbeitslosen von Marienthal (Jahoda, Lazarsfeld & Zeisel, 1933) sind eine Beobachtungs-Feldstudie zu den Reaktionen auf Arbeitslosigkeit (Apathie vs. Radikalisierung): Sie kombinierte statistische Daten, schriftliche Befragungen und Interviews mit Beobachtung — u.a. strukturierter Beobachtung der Wohnverhältnisse und verdeckter Zeitmessung der Gehgeschwindigkeit auf standardisierter Strecke; Ergebnis war eine Familien-Typologie (ungebrochen, resigniert, verzweifelt, apathisch). Klauer et al. (2006) operationalisierten die Unaufmerksamkeit beim Fahren über vier Kategorien mit quantitativen Abstufungen; AV war die Auftretenshäufigkeit eines (Beinahe-)Unfalls (Odds Ratios).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Marienthal (1933): Wie misst man die „Apathie“ einer ganzen Gemeinde, <em>ohne</em> die Leute danach zu fragen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">U.a. durch <strong>verdeckte Zeitmessung der Gehgeschwindigkeit</strong> auf einer standardisierten Strecke – ergänzt um Bibliotheksausleihen, Vereinsmitgliedschaften, Wahlergebnisse und Ernährungsprotokolle. Beobachtung statt Selbstauskunft.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Marienthal (Jahoda, Lazarsfeld & Zeisel, 1933)</div>
+    Beobachtungs-<strong>Feldstudie</strong> zu den Reaktionen auf Arbeitslosigkeit (Apathie vs. Radikalisierung). <strong>Methodenmix:</strong> statistische Daten, schriftliche Befragungen, Interviews UND Beobachtung (Wohnverhältnisse, verdeckte Zeitmessung der Gehgeschwindigkeit). Ergebnis: Typologie in ungebrochene, resignierte, verzweifelte und apathische Familien.
+  </div>
+  <div class="card">
+    <div class="card-title">Klauer et al. (2006)</div>
+    Einfluss von <strong>Unaufmerksamkeit</strong> auf das Unfallrisiko. Operationalisiert über <strong>vier Kategorien</strong> (sekundäre Tätigkeiten, fahrbezogene Unaufmerksamkeit, Müdigkeit, Abwendung der Blickrichtung) mit quantitativen Abstufungen. AV: Auftretenshäufigkeit eines (Beinahe-)Unfalls → Berechnung von <strong>Odds Ratios</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwei Beobachtungsstudien im Vergleich</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g20" onclick="switchTab(this,'g2')">Marienthal 1933</button><button class="tab-btn" data-tab="g21" onclick="switchTab(this,'g2')">Klauer 2006</button></div>
+    <div class="tab-group" data-group="g2"><div class="tab-content active" data-tab="g20">Feldstudie, viele Methoden kombiniert, verdeckte Beobachtung (Gehgeschwindigkeit) → Familien-Typologie.</div><div class="tab-content" data-tab="g21">Vier Kategorien der Unaufmerksamkeit mit Abstufungen, AV = (Beinahe-)Unfall, Auswertung über Odds Ratios.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Unterscheidungsmerkmale ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Unterscheidungsmerkmale von Beobachtungen</div>
+    <div class="sec-lz">Beobachtungen lassen sich auf mehreren Dimensionen einordnen: Ort (Feld vs. Labor, offline vs. virtuell), frei vs. systematisch, direkt vs. vermittelt (z.B. Video) vs. indirekt (Verhaltensspuren), natürlich vs. hergestellt, offen (Problem: Reaktivität) vs. verdeckt (Problem: ethische Vertretbarkeit), bei offener Beobachtung teilnehmend (z.B. Ethnographie) vs. nicht-teilnehmend, Zeitstichprobe (z.B. alle 10 Min. notieren) vs. Ereignisstichprobe (Auftreten von Verhalten X), sowie Fremd- vs. Selbstbeobachtung. Drei Formen des Ecological Momentary Assessment (EMA): Experience Sampling (Csikszentmihalyi & Larson, 1987), Day Reconstruction (Kahneman et al., 2004) und Event Reconstruction Method (Grube et al., 2008).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Forscher schaut sich heimlich an, wie Menschen im Wartezimmer sitzen, und notiert alle 5 Minuten den Stand. Wie lässt sich diese Beobachtung einordnen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Verdeckt</strong> (→ ethische Frage), im <strong>Feld</strong>, <strong>Fremdbeobachtung</strong> und – wegen der festen 5-Minuten-Intervalle – eine <strong>Zeitstichprobe</strong> (nicht Ereignisstichprobe).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Dimensionen</div>
+    Ort (Feld vs. Labor, offline vs. virtuell) · frei vs. systematisch · <strong>direkt vs. vermittelt</strong> (Video) <strong>vs. indirekt</strong> (Verhaltensspuren) · natürlich vs. hergestellt · <strong>offen</strong> (Problem: Reaktivität) <strong>vs. verdeckt</strong> (Problem: Ethik) · bei offener: teilnehmend (Ethnographie) vs. nicht-teilnehmend · <strong>Zeit- vs. Ereignisstichprobe</strong> · Fremd- vs. Selbstbeobachtung.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Formen des EMA (Selbstbeobachtung)</div>
+    <strong>Experience Sampling Method</strong> (Csikszentmihalyi & Larson, 1987) · <strong>Day Reconstruction Method</strong> (Kahneman et al., 2004) · <strong>Event Reconstruction Method</strong> (Grube et al., 2008). Ecological Momentary Assessment = Erfassung im Alltag, nahe am Moment.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei zentrale Achsen</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g30" onclick="switchTab(this,'g3')">offen / verdeckt</button><button class="tab-btn" data-tab="g31" onclick="switchTab(this,'g3')">Zeit / Ereignis</button><button class="tab-btn" data-tab="g32" onclick="switchTab(this,'g3')">EMA</button></div>
+    <div class="tab-group" data-group="g3"><div class="tab-content active" data-tab="g30">Offen → Problem der Reaktivität (Verhalten ändert sich). Verdeckt → Problem der ethischen Vertretbarkeit.</div><div class="tab-content" data-tab="g31">Zeitstichprobe: in festen Intervallen notieren, was geschieht. Ereignisstichprobe: zählen, wie oft Verhalten X auftritt – egal wann.</div><div class="tab-content" data-tab="g32">Drei EMA-Formen: Experience Sampling, Day Reconstruction, Event Reconstruction Method.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Selektion/Segm./Quant. ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Selektion · Segmentierung · Quantifizierung</div>
+    <div class="sec-lz">Die Verhaltensbeobachtung ist kein Abbild der physikalischen Welt, sondern zeichnet sich durch drei Prozesse aus: Selektion (es werden nur bestimmte Aspekte beachtet), Segmentierung (der Verhaltensfluss wird in Abschnitte unterteilt und diesen eine Bedeutung zugeschrieben) und Quantifizierung (Aussage zu Intensität, Dauer und Häufigkeit). Bei standardisierten Beobachtungen sollen alle diese Aspekte möglichst standardisiert werden, damit mehrere Beobachter zu gleichen Ergebnissen kommen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum ist selbst eine Videoaufzeichnung nie ein vollständiges „Abbild“ des Verhaltens?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Weil jede Beobachtung <strong>selegiert</strong> (nur bestimmte Aspekte werden beachtet), <strong>segmentiert</strong> (Verhaltensfluss → Abschnitte mit Bedeutung) und <strong>quantifiziert</strong> (Intensität, Dauer, Häufigkeit). Es entsteht immer eine Auswahl, kein 1:1-Abbild.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Prozesse – kein Abbild der Welt</div>
+    <strong>Selektion:</strong> es werden nur bestimmte Aspekte beachtet. <strong>Segmentierung:</strong> der Verhaltensfluss wird in Abschnitte unterteilt, denen eine Bedeutung zugeschrieben wird. <strong>Quantifizierung:</strong> Aussage zu Intensität, Dauer und Häufigkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum standardisieren?</div>
+    Bei <strong>standardisierten</strong> Beobachtungen werden alle drei Aspekte möglichst festgelegt, damit <strong>mehrere Beobachter zu gleichen Ergebnissen</strong> kommen (Grundlage für die spätere Beurteilerübereinstimmung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Prozesse unterscheiden</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g40" onclick="switchTab(this,'g4')">Selektion</button><button class="tab-btn" data-tab="g41" onclick="switchTab(this,'g4')">Segmentierung</button><button class="tab-btn" data-tab="g42" onclick="switchTab(this,'g4')">Quantifizierung</button></div>
+    <div class="tab-group" data-group="g4"><div class="tab-content active" data-tab="g40">Es werden nur bestimmte Aspekte beachtet – die übrigen bleiben außen vor.</div><div class="tab-content" data-tab="g41">Der Verhaltensfluss wird in Abschnitte zerlegt und diesen eine Bedeutung zugeschrieben.</div><div class="tab-content" data-tab="g42">Es wird angegeben, wie intensiv, wie lange und wie häufig ein Verhalten auftritt.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Standardisierung ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Standardisierung: Zeichen-/Kategoriensystem & Ratingskala</div>
+    <div class="sec-lz">Drei Formen standardisierter Erfassung: Zeichensysteme = Verhaltensklassen, in die das Vorkommen eines konkreten Verhaltens eingeordnet wird (z.B. Lovaas et al., 1973: Selbststimulation, Echolalie, angepasste Sprache, soziales nonverbales Verhalten, angemessenes Spiel). Kategoriensysteme = jedes auftretende Verhalten wird einer vorgegebenen Kategorie zugeordnet (Gütekriterien: Genauigkeit, Exklusivität, Exhaustivität; z.B. Bales, 1975). Ratingskalen = Bewertung der Verhaltensweisen auf Skalen (z.B. Charlton et al., 1974: gehemmt ↔ gelöst von −3 bis +3).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Drei Werkzeuge der Standardisierung: feste Verhaltens<em>klassen</em>, exklusive <em>Kategorien</em> und Bewertungs<em>skalen</em>. Wie heißen sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Zeichensystem</strong> (Verhaltensklassen für das Vorkommen konkreter Verhaltensweisen), <strong>Kategoriensystem</strong> (jedes Verhalten → eine vorgegebene Kategorie) und <strong>Ratingskala</strong> (Bewertung auf Skalen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zeichensystem (Lovaas et al., 1973)</div>
+    Verhaltensklassen, in die das Vorkommen eines konkreten Verhaltens eingeordnet wird – z.B. kindlicher Autismus: Selbststimulation, Echolalie, angepasste Sprache, soziales nonverbales Verhalten, angemessenes Spiel.
+  </div>
+  <div class="card">
+    <div class="card-title">Kategoriensystem (Bales, 1975)</div>
+    Jedes auftretende Verhalten wird einer vorgegebenen Kategorie zugeordnet. <strong>Gütekriterien:</strong> Genauigkeit (klar definiert), Exklusivität (nur EINER Kategorie zuordenbar), Exhaustivität (erschöpfend).
+  </div>
+  <div class="card">
+    <div class="card-title">Ratingskala (Charlton et al., 1974)</div>
+    Bewertung der Verhaltensweisen auf Skalen, z.B. gehemmt ↔ gelöst, schweigsam ↔ gesprächig, ruhig ↔ erregt (jeweils −3 bis +3).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne das Beispiel der Standardisierungsform zu</div>
+    <div class="corr-item" id="w11a">Fünf Verhaltensklassen für kindlichen Autismus: Selbststimulation, Echolalie … (Lovaas)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w11a',this,'zeichensystem')">Zeichensystem</button><button class="corr-btn" onclick="checkCorr('w11a',this,'kategoriensystem')">Kategoriensystem</button><button class="corr-btn" onclick="checkCorr('w11a',this,'ratingskala')">Ratingskala</button></div><div class="corr-fb" id="w11a-fb"></div>
+    </div>
+    <div class="corr-item" id="w11b">Jedes Interaktionsverhalten wird genau einer vorgegebenen, exklusiven Kategorie zugeordnet (Bales)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w11b',this,'zeichensystem')">Zeichensystem</button><button class="corr-btn" onclick="checkCorr('w11b',this,'kategoriensystem')">Kategoriensystem</button><button class="corr-btn" onclick="checkCorr('w11b',this,'ratingskala')">Ratingskala</button></div><div class="corr-fb" id="w11b-fb"></div>
+    </div>
+    <div class="corr-item" id="w11c">Gruppenverhalten auf den Polen gehemmt ↔ gelöst von −3 bis +3 bewerten (Charlton)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w11c',this,'zeichensystem')">Zeichensystem</button><button class="corr-btn" onclick="checkCorr('w11c',this,'kategoriensystem')">Kategoriensystem</button><button class="corr-btn" onclick="checkCorr('w11c',this,'ratingskala')">Ratingskala</button></div><div class="corr-fb" id="w11c-fb"></div>
+    </div>
+    <div class="corr-item" id="w11d">Verhaltensklassen, in die das Vorkommen eines konkreten Verhaltens eingeordnet wird
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w11d',this,'zeichensystem')">Zeichensystem</button><button class="corr-btn" onclick="checkCorr('w11d',this,'kategoriensystem')">Kategoriensystem</button><button class="corr-btn" onclick="checkCorr('w11d',this,'ratingskala')">Ratingskala</button></div><div class="corr-fb" id="w11d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Nicht-reaktive Verfahren ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Nicht-reaktive Verfahren</div>
+    <div class="sec-lz">Nicht-reaktive Verfahren nehmen keinen Einfluss auf die untersuchten Personen oder Prozesse. Beispiele: verdeckte Beobachtung; Lost-Letter-Technik (Milgram et al., 1965 — Häufigkeit des Zurückschickens eines „verlorenen“ Briefes); Verwähltechnik; sowie Verhaltensspuren (physische Spuren wie Fingerabdrücke, Schilder, Kommentare in Medien, Verkaufsstatistiken). Fortschreitende Technologien erweitern die Anwendungskontexte nicht-reaktiver Untersuchungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie misst man die Beliebtheit einer Schaufenster-Auslage, <em>ohne</em> irgendjemanden zu befragen oder sichtbar zu beobachten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Über <strong>Verhaltensspuren</strong> – z.B. die Anzahl der Fingerabdrücke an der Scheibe. Ein <strong>nicht-reaktives Verfahren</strong>: es nimmt keinen Einfluss auf die Untersuchten, also keine Reaktivität.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was heißt „nicht-reaktiv“?</div>
+    Nicht-reaktive Verfahren <strong>nehmen keinen Einfluss</strong> auf die untersuchten Personen oder Prozesse. Damit entfällt das Problem der <strong>Reaktivität</strong> (anders als bei offener Beobachtung).
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiele</div>
+    <strong>Verdeckte Beobachtung</strong> · <strong>Lost-Letter-Technik</strong> (Milgram et al., 1965 – wie oft wird ein „verlorener“ Brief zurückgeschickt) · <strong>Verwähltechnik</strong> · <strong>Verhaltensspuren</strong> (Fingerabdrücke, „Bissiger Hund“-Schilder, Kommentare in Medien, Verkaufsstatistiken).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei nicht-reaktive Verfahren</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g60" onclick="switchTab(this,'g6')">Lost-Letter</button><button class="tab-btn" data-tab="g61" onclick="switchTab(this,'g6')">Verwähltechnik</button><button class="tab-btn" data-tab="g62" onclick="switchTab(this,'g6')">Verhaltensspuren</button></div>
+    <div class="tab-group" data-group="g6"><div class="tab-content active" data-tab="g60">Milgram et al. (1965): Häufigkeit, mit der ein adressierter, „verlorener“ Brief von Findern zurückgeschickt wird.</div><div class="tab-content" data-tab="g61">Anrufer bittet (angeblich mittellos) die Person, für ihn bei einer Werkstatt anzurufen – gemessen wird das Hilfeverhalten.</div><div class="tab-content" data-tab="g62">Indirekte Spuren: Fingerabdrücke an der Scheibe, Schilder, Online-Kommentare, Verkaufszahlen als Indikatoren.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Beurteilerübereinstimmung & Fehler ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Beurteilerübereinstimmung (Cohens κ) & Fehlerquellen</div>
+    <div class="sec-lz">Die Quantifizierung der Beurteilerübereinstimmung hängt vom Skalenniveau ab: bei kategorialen (nominalen) Beobachtungen z.B. Cohens κ, bei metrischen z.B. Intraklassenkorrelationen. Cohens Kappa: K = (p_o − p_e)/(1 − p_e), mit p_o = beobachtete und p_e = zufallserwartete Übereinstimmung (Folienbeispiel: p_o = 0.70, p_e = 0.43, K = 0.47; Daumenregel K > .70 = gute Übereinstimmung). Fehlerquellen: Halo-Effekt, logische Fehler, Primacy-/Recency-Effekte, Beobachterdrift, Reaktivität und Antworttendenzen (Strenge/Milde-Effekt, Tendenz zur Mitte).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Beurteiler stimmen in 70 % der Fälle überein. Ist das schon eine „gute“ Übereinstimmung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Nicht unbedingt – ein Teil der Übereinstimmung ist <strong>Zufall</strong>. Cohens κ korrigiert die beobachtete Übereinstimmung p_o um die zufallserwartete p_e. Im Folienbeispiel sinkt 0.70 auf <strong>κ = 0.47</strong> (Daumenregel: gut erst ab κ > .70).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Welcher Koeffizient? – Skalenniveau entscheidet</div>
+    Bei <strong>kategorialen (nominalen)</strong> Beobachtungen z.B. <strong>Cohens κ</strong>; bei <strong>metrischen (intervallskalierten)</strong> z.B. <strong>Intraklassenkorrelationen (ICC)</strong>. κ-Formel: κ = (p_o − p_e) / (1 − p_e), mit p_o = beobachtete und p_e = zufallserwartete Übereinstimmung. Daumenregel: <strong>κ > .70 = gute Übereinstimmung</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Fehlerquellen der Beurteilung</div>
+    <strong>Halo-Effekt</strong> (Schluss von sichtbaren auf unbekannte Merkmale) · <strong>logische Fehler</strong> · <strong>Primacy-/Recency-Effekte</strong> · <strong>Beobachterdrift</strong> (Genauigkeit ändert sich) · <strong>Reaktivität</strong> · <strong>Antworttendenzen</strong> (Strenge/Milde-Effekt, Tendenz zur Mitte).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🧪 Simulator: Cohens κ live berechnen</div>
+    <p style="font-size:.84rem;color:var(--text2);margin:2px 0 8px">Trage die Häufigkeiten zweier Urteiler ein (Kategorien I/II/III) – die <strong>Diagonale</strong> sind die Übereinstimmungen. p_o, p_e und κ rechnen live mit. Probier die Voreinstellungen.</p>
+    <div class="sim-box">
+      <table class="kap-tbl">
+        <tr><td></td><td>A: I</td><td>A: II</td><td>A: III</td></tr>
+        <tr><td>B: I</td><td><input type="number" min="0" class="kap-in" id="k00" value="15" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k01" value="2" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k02" value="3" oninput="kapCalc()"></td></tr>
+        <tr><td>B: II</td><td><input type="number" min="0" class="kap-in" id="k10" value="1" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k11" value="3" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k12" value="2" oninput="kapCalc()"></td></tr>
+        <tr><td>B: III</td><td><input type="number" min="0" class="kap-in" id="k20" value="0" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k21" value="1" oninput="kapCalc()"></td><td><input type="number" min="0" class="kap-in" id="k22" value="3" oninput="kapCalc()"></td></tr>
+      </table>
+      <div class="sim-toggle" style="margin-top:8px">
+        <button class="sim-tbtn" onclick="kapPreset('folie')">Folien-Beispiel</button>
+        <button class="sim-tbtn" onclick="kapPreset('perfekt')">Perfekt</button>
+        <button class="sim-tbtn" onclick="kapPreset('gut')">Gut (κ&gt;.70)</button>
+        <button class="sim-tbtn" onclick="kapPreset('zufall')">Nur Zufall</button>
+      </div>
+      <div class="sim-verdict" id="kap-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus PD11 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verhaltensbeobachtung</h4>
+      <p>möglichst wertungsfrei</p>
+      <p>Verhalten protokollieren</p>
+      <p>Rohdaten/Registrierung</p>
+      <p>frei oder systematisch</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verhaltensbeurteilung</h4>
+      <p>zieht Schlussfolgerungen</p>
+      <p>auf Eigenschaften/Muster</p>
+      <p>interpretierender Schritt</p>
+      <p>baut auf Beobachtung auf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Verhaltensbeobachtung zieht bereits Schlussfolgerungen auf Eigenschaften, die Verhaltensbeurteilung hält nur Rohdaten fest.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Zeitstichprobe</h4>
+      <p>feste Intervalle</p>
+      <p>z.B. alle 10 Min. notieren</p>
+      <p>was gerade geschieht</p>
+      <p>zeitgesteuert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Ereignisstichprobe</h4>
+      <p>ereignisgesteuert</p>
+      <p>Auftreten von Verhalten X</p>
+      <p>unabhängig vom Zeitpunkt</p>
+      <p>wie oft, nicht wann</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der Zeitstichprobe zählt man, wie oft ein bestimmtes Verhalten auftritt – unabhängig von der zeitlichen Abfolge.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Zeichensystem</h4>
+      <p>Verhaltensklassen</p>
+      <p>Vorkommen konkreter Verhalten</p>
+      <p>z.B. Lovaas-Autismus</p>
+      <p>nicht zwingend erschöpfend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kategoriensystem</h4>
+      <p>jedes Verhalten → 1 Kategorie</p>
+      <p>Genauigkeit/Exklusivität/Exhaustivität</p>
+      <p>z.B. Bales</p>
+      <p>erschöpfend</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Zeichensystem verlangt, dass jedes auftretende Verhalten genau einer exklusiven und erschöpfenden Kategorie zugeordnet wird.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Reaktive (offene) Verfahren</h4>
+      <p>Person weiß um Beobachtung</p>
+      <p>Problem: Reaktivität</p>
+      <p>Verhalten kann sich ändern</p>
+      <p>ethisch unkritischer</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Nicht-reaktive Verfahren</h4>
+      <p>kein Einfluss auf Untersuchte</p>
+      <p>z.B. Lost-Letter, Spuren</p>
+      <p>keine Reaktivität</p>
+      <p>Problem: Ethik (verdeckt)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Nicht-reaktive Verfahren verändern das Verhalten der Untersuchten besonders stark.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>p_o (beobachtete Übereinstimmung)</h4>
+      <p>Anteil direkter Übereinstimmung</p>
+      <p>Σ der Diagonale / n</p>
+      <p>im Beispiel 0.70</p>
+      <p>ignoriert den Zufall</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Cohens κ</h4>
+      <p>zufallskorrigiert</p>
+      <p>(p_o − p_e)/(1 − p_e)</p>
+      <p>im Beispiel 0.47</p>
+      <p>Daumenregel > .70</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Cohens Kappa entspricht direkt der beobachteten Übereinstimmung p_o und korrigiert nichts.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl11</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl11';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Worin unterscheiden sich Verhaltensbeobachtung und Verhaltensbeurteilung?",
+      "opts": [
+        "Die Beobachtung protokolliert Verhalten möglichst wertungsfrei, die Beurteilung zieht daraus Schlussfolgerungen auf Eigenschaften oder Muster.",
+        "Die Beobachtung zieht Schlussfolgerungen auf Eigenschaften, die Beurteilung hält nur unbewertete Rohdaten fest.",
+        "Beide bezeichnen exakt denselben Vorgang und sind in der Diagnostik austauschbar.",
+        "Die Beobachtung ist stets verdeckt und die Beurteilung stets offen, weil nur so die ethische Vertretbarkeit beider Schritte gewährleistet werden kann."
+      ],
+      "c": 0,
+      "e": "Verhaltensbeobachtung = möglichst wertungsfreies Protokollieren des Verhaltens; Verhaltensbeurteilung = daraus gezogene Schlussfolgerungen auf Eigenschaften/Verhaltensmuster (Schmidt-Atzert, Krumm & Amelang, 2021)."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was kritisieren Baumeister, Vohs & Funder mit dem Titel „Psychology as the Science of Self-Reports and Finger Movements“?",
+      "opts": [
+        "Dass die Psychologie zu viel echtes Verhalten und zu wenig Selbstauskünfte erhebt.",
+        "Dass tatsächliches Verhalten zu selten direkt gemessen wird – zugunsten von Selbstberichten und einfachen Tastenreaktionen.",
+        "Dass die Verhaltensbeobachtung als Methode grundsätzlich unwissenschaftlich sei.",
+        "Dass Fingerbewegungen am Touchscreen das einzig valide Maß seien und klassische Selbstberichte daher vollständig ersetzt werden müssten."
+      ],
+      "c": 1,
+      "e": "Der Untertitel „Whatever Happened to Actual Behavior?“ kritisiert, dass reales Verhalten zu selten direkt beobachtet wird – zugunsten von Selbstberichten und einfachen Reaktionen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welches Beispiel passt NICHT zum genannten Anwendungsspektrum der Verhaltensbeobachtung?",
+      "opts": [
+        "Beobachtung der Mutter-Kind-Interaktion hinter einer Einwegscheibe.",
+        "Beobachtung des Verhaltens von Bewerbern in Assessment-Center-Übungen.",
+        "Ausfüllen eines Persönlichkeitsfragebogens zur Selbstauskunft über typische Eigenschaften.",
+        "Verdecktes Einschleusen in eine selektive Gruppe, um die Verhaltensweisen ihrer Mitglieder über längere Zeit systematisch zu protokollieren."
+      ],
+      "c": 2,
+      "e": "Das Spektrum umfasst u.a. Einwegscheibe, Assessment-Center, Labyrinth-Laufzeit, verdecktes Einschleusen und Selbstbeobachtung – nicht aber den Selbstauskunfts-Fragebogen, der kein Beobachtungsverfahren ist."
+    },
+    {
+      "id": "s1q2",
+      "q": "Auch die Selbstbeobachtung (z.B. per Tagebuch) zählt laut Vorlesung zum Anwendungsspektrum. Welche Aussage trifft zu?",
+      "opts": [
+        "Selbstbeobachtung ist grundsätzlich keine Verhaltensbeobachtung, weil eine Person ihr eigenes Verhalten ohne ein standardisiertes Fremdbeobachtungssystem niemals erfassen kann.",
+        "Selbstbeobachtung ist ausschließlich im Tierversuch (Ratte im Labyrinth) möglich.",
+        "Selbstbeobachtung setzt zwingend eine Einwegscheibe voraus.",
+        "Selbstbeobachtung ist eine Form der Verhaltensbeobachtung – die Person erfasst ihr eigenes Verhalten, z.B. über Tagebucheinträge."
+      ],
+      "c": 3,
+      "e": "Das breite Anwendungsspektrum nennt ausdrücklich die Selbstbeobachtung (z.B. Patient*innen über Tagebucheinträge) als Variante der Verhaltensbeobachtung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Die Marienthal-Studie (Jahoda, Lazarsfeld & Zeisel, 1933) ist ein Beispiel für …",
+      "opts": [
+        "… ein reines Laborexperiment mit zufälliger Zuteilung der Familien zu Versuchsbedingungen.",
+        "… eine Beobachtungs-Feldstudie, die viele Methoden kombinierte (u.a. verdeckte Zeitmessung der Gehgeschwindigkeit).",
+        "… eine reine Fragebogenstudie ganz ohne jede Beobachtung.",
+        "… eine Einzelfallstudie an einer Familie, in der ausschließlich die Lebensgeschichte per Interview und keinerlei statistische oder beobachtende Daten erhoben wurden."
+      ],
+      "c": 1,
+      "e": "Marienthal kombinierte statistische Daten, schriftliche Befragungen, Interviews UND Beobachtung (z.B. verdeckte Messung der Gehgeschwindigkeit auf standardisierter Strecke); Ergebnis war eine Familien-Typologie."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie operationalisierte Klauer et al. (2006) die „Unaufmerksamkeit“ beim Autofahren?",
+      "opts": [
+        "Über vier Kategorien (sekundäre Tätigkeiten, fahrbezogene Unaufmerksamkeit, Müdigkeit, Abwendung der Blickrichtung) mit quantitativen Abstufungen.",
+        "Über eine einzige Ja/Nein-Frage an die Fahrer nach der Fahrt.",
+        "Allein über die gefahrene Durchschnittsgeschwindigkeit.",
+        "Ausschließlich über die nachträgliche Selbsteinschätzung der Fahrer auf einer Ratingskala, ganz ohne Videoaufzeichnung oder Verhaltensregistrierung im Fahrzeug."
+      ],
+      "c": 0,
+      "e": "Unaufmerksamkeit wurde über vier Kategorien mit quantitativen Abstufungen erfasst; AV war die Auftretenshäufigkeit eines (Beinahe-)Unfalls, ausgewertet über Odds Ratios."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Eine Forscherin notiert alle 10 Minuten, was ein Kind gerade tut. Welches Merkmal beschreibt das?",
+      "opts": [
+        "Eine Ereignisstichprobe, weil unabhängig von festen Zeitintervallen nur gezählt wird, wie oft ein vorab definiertes Zielverhalten insgesamt auftritt.",
+        "Eine verdeckte Beobachtung.",
+        "Eine indirekte Beobachtung über Verhaltensspuren.",
+        "Eine Zeitstichprobe."
+      ],
+      "c": 3,
+      "e": "Bei der Zeitstichprobe wird in festen Intervallen (z.B. alle 10 Min.) notiert, was geschieht. Die Ereignisstichprobe zählt dagegen ein Zielverhalten unabhängig von der zeitlichen Abfolge."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche drei Formen des Ecological Momentary Assessment (EMA) nennt die Vorlesung?",
+      "opts": [
+        "Alertness, selektive und geteilte Aufmerksamkeit.",
+        "Zeichensystem, Kategoriensystem und Ratingskala.",
+        "Experience Sampling Method, Day Reconstruction Method und Event Reconstruction Method.",
+        "Lost-Letter-Technik, Verwähltechnik und die Auswertung physischer Verhaltensspuren wie Fingerabdrücke oder Verkaufsstatistiken."
+      ],
+      "c": 2,
+      "e": "Die drei EMA-Formen sind Experience Sampling Method (Csikszentmihalyi & Larson, 1987), Day Reconstruction Method (Kahneman et al., 2004) und Event Reconstruction Method (Grube et al., 2008)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Verhaltensbeobachtung ist „kein Abbild der physikalischen Welt“. Welche drei Kennzeichen nennt die Vorlesung?",
+      "opts": [
+        "Selektion, Segmentierung und Quantifizierung.",
+        "Objektivität, Reliabilität und Validität.",
+        "Genauigkeit, Exklusivität und Exhaustivität.",
+        "Reaktivität, Beobachterdrift und der Halo-Effekt, da diese drei Prozesse jede Beobachtung von vornherein vollständig determinieren."
+      ],
+      "c": 0,
+      "e": "Die Verhaltensbeobachtung zeichnet sich durch Selektion (nur bestimmte Aspekte), Segmentierung (Verhaltensfluss in bedeutungstragende Abschnitte) und Quantifizierung (Intensität/Dauer/Häufigkeit) aus."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was bedeutet „Segmentierung“ in diesem Zusammenhang?",
+      "opts": [
+        "Es werden – um den Verhaltensfluss vollständig abzubilden – grundsätzlich alle beobachtbaren Aspekte gleichzeitig und ungefiltert erfasst und keine Auswahl getroffen.",
+        "Es wird eine Aussage zu Intensität, Dauer und Häufigkeit des Verhaltens gemacht.",
+        "Mehrere Beobachter werden zufällig auf verschiedene Situationen verteilt.",
+        "Der Verhaltensfluss wird in Abschnitte unterteilt, denen eine Bedeutung zugeschrieben wird."
+      ],
+      "c": 3,
+      "e": "Segmentierung = Unterteilung des Verhaltensflusses in bedeutungstragende Abschnitte. Selektion = Auswahl bestimmter Aspekte; Quantifizierung = Intensität/Dauer/Häufigkeit."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche drei Gütekriterien soll ein Kategoriensystem erfüllen?",
+      "opts": [
+        "Objektivität, Reliabilität und Validität.",
+        "Selektion, Segmentierung und Quantifizierung.",
+        "Genauigkeit, Exklusivität und Exhaustivität.",
+        "Reliabilität, Sensitivität und Spezifität, weil ein Kategoriensystem letztlich wie ein diagnostischer Test mit Cut-Off bewertet werden muss."
+      ],
+      "c": 2,
+      "e": "Gütekriterien eines Kategoriensystems: Genauigkeit (klar definierte Kategorien), Exklusivität (jedes Verhalten nur EINER Kategorie zuordenbar) und Exhaustivität (erschöpfende Abdeckung des Verhaltensspektrums)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Ein Kind rollt mit den Augen → „Selbststimulation“; spricht Sätze nach → „Echolalie“. Welche Standardisierungsform ist das (Lovaas et al., 1973)?",
+      "opts": [
+        "Eine Ratingskala.",
+        "Ein Zeichensystem.",
+        "Ein Kategoriensystem nach Bales.",
+        "Eine Intraklassenkorrelation, mit der die Übereinstimmung zweier Beurteiler bei intervallskalierten Verhaltensmaßen quantifiziert wird."
+      ],
+      "c": 1,
+      "e": "Ein Zeichensystem definiert Verhaltensklassen, in die das Vorkommen konkreter Verhaltensweisen eingeordnet wird (Lovaas' fünf Klassen). Ratingskalen bewerten auf Skalen, Kategoriensysteme ordnen jedes Verhalten einer Kategorie zu."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was kennzeichnet „nicht-reaktive Verfahren“?",
+      "opts": [
+        "Sie verändern das Verhalten der Untersuchten besonders stark, weil die Personen das Wissen um die Messung dauerhaft verinnerlichen und ihr Verhalten anpassen.",
+        "Sie sind ausschließlich unter Laborbedingungen durchführbar.",
+        "Sie erfordern immer das ausdrückliche Einverständnis der beobachteten Person.",
+        "Sie nehmen keinen Einfluss auf die untersuchten Personen oder Prozesse."
+      ],
+      "c": 3,
+      "e": "Nicht-reaktive Verfahren (z.B. verdeckte Beobachtung, Lost-Letter-Technik, Verhaltensspuren) nehmen definitionsgemäß keinen Einfluss auf die Untersuchten – es tritt keine Reaktivität auf."
+    },
+    {
+      "id": "s6q2",
+      "q": "Die Lost-Letter-Technik (Milgram et al., 1965) misst …",
+      "opts": [
+        "… wie häufig ein „verlorener“, adressierter Brief von Findern zurückgeschickt wird.",
+        "… die Reaktionszeit auf ein am Bildschirm erscheinendes Kreuz.",
+        "… die Übereinstimmung zweier Urteiler per Cohens Kappa.",
+        "… die Gehgeschwindigkeit von Passanten auf einer standardisierten Strecke, um per verdeckter Zeitmessung auf Apathie zu schließen."
+      ],
+      "c": 0,
+      "e": "Die Lost-Letter-Technik registriert, wie oft ein gefundener (scheinbar verlorener) Brief zurückgeschickt wird – ein nicht-reaktives Maß für ein bestimmtes Verhalten."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Bei nominalskalierten (kategorialen) Urteilen zweier Beurteiler eignet sich zur Quantifizierung der Übereinstimmung …",
+      "opts": [
+        "… der Intraklassenkorrelationskoeffizient.",
+        "… Cohens Kappa.",
+        "… Cronbachs Alpha.",
+        "… ausschließlich die prozentuale Übereinstimmung p_o, da diese im Gegensatz zu Kappa die zufällig erwartete Übereinstimmung bereits vollständig herausrechnet."
+      ],
+      "c": 1,
+      "e": "Die Wahl des Koeffizienten hängt vom Skalenniveau ab: bei nominalen Urteilen Cohens κ, bei metrischen z.B. Intraklassenkorrelationen. Kappa korrigiert p_o um die zufallserwartete Übereinstimmung p_e."
+    },
+    {
+      "id": "s7q2",
+      "q": "Ein Beurteiler schließt vom sichtbaren Merkmal „gepflegtes Äußeres“ auf „hohe Gewissenhaftigkeit“. Welche Fehlerquelle ist das?",
+      "opts": [
+        "Beobachterdrift.",
+        "Tendenz zur Mitte.",
+        "Halo-Effekt.",
+        "Ein Primacy-Effekt, weil der Beurteiler sich übermäßig stark von den ganz zu Beginn der Beobachtungsphase gezeigten Verhaltensweisen leiten lässt."
+      ],
+      "c": 2,
+      "e": "Der Halo-Effekt ist der Schluss von bekannten (sichtbaren) Merkmalen auf unbekannte. Beobachterdrift = Veränderung der Genauigkeit über die Zeit; Primacy/Recency = Übergewicht früher/später Beobachtungen."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zu offener vs. verdeckter Beobachtung trifft zu?",
+    "opts": [
+      "Offene Beobachtung hat das Problem der Reaktivität, verdeckte das Problem der ethischen Vertretbarkeit.",
+      "Offene Beobachtung ist immer reaktivitätsfrei, verdeckte immer ethisch unbedenklich.",
+      "Verdeckte Beobachtung verursacht Reaktivität, offene dagegen nicht.",
+      "Offene und verdeckte Beobachtung unterscheiden sich nur im Ort (Feld vs. Labor) und haben keine methodischen oder ethischen Implikationen für die Datengültigkeit."
+    ],
+    "c": 0,
+    "e": "Bei offener Beobachtung droht Reaktivität (Verhalten ändert sich durch das Wissen um die Beobachtung); verdeckte Beobachtung umgeht das, wirft aber das Problem der ethischen Vertretbarkeit auf."
+  },
+  {
+    "id": "bq2",
+    "q": "Was meint „teilnehmende Beobachtung“ (z.B. Ethnographie)?",
+    "opts": [
+      "Der Beobachter wertet ausschließlich Videoaufzeichnungen der Szene aus.",
+      "Der Beobachter nimmt selbst über längere Zeit am sozialen Leben der untersuchten Gruppe teil.",
+      "Mehrere Beobachter beurteilen unabhängig voneinander dieselbe Szene.",
+      "Die beobachtete Person füllt im Anschluss selbst einen standardisierten Fragebogen aus und nimmt damit aktiv an der Auswertung ihrer eigenen Daten teil."
+    ],
+    "c": 1,
+    "e": "Teilnehmende Beobachtung (z.B. Ethnographie): Der Beobachter nimmt selbst – meist über längere Zeit – am sozialen Leben der zu erforschenden Gruppe teil. Sie ist eine Unterform der offenen Beobachtung."
+  },
+  {
+    "id": "bq3",
+    "q": "„Direkt vs. vermittelt vs. indirekt“ — welche Zuordnung stimmt?",
+    "opts": [
+      "Vermittelt = unmittelbare Live-Beobachtung ganz ohne Hilfsmittel.",
+      "Indirekt = Beobachtung per Live-Videoübertragung in einen Nebenraum.",
+      "Indirekt = Schluss über Verhaltensspuren; vermittelt = z.B. per Videoaufzeichnung.",
+      "Direkt und indirekt sind identisch, weil in beiden Fällen das Verhalten in Echtzeit und ohne jede technische oder zeitliche Verzögerung registriert wird."
+    ],
+    "c": 2,
+    "e": "Direkt = unmittelbare Beobachtung; vermittelt = über ein Medium wie Videoaufzeichnung; indirekt = Rückschluss aus Verhaltensspuren."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Aussage zu Zeichen- und Kategoriensystem ist KORREKT?",
+    "opts": [
+      "Beim Zeichensystem wird jedes überhaupt auftretende Verhalten lückenlos genau einer einzigen, vorab klar definierten und exklusiven Kategorie zugeordnet.",
+      "Das Kategoriensystem verzichtet bewusst auf das Kriterium der Exklusivität.",
+      "Ratingskalen und Zeichensysteme sind dasselbe.",
+      "Ein Zeichensystem ordnet konkrete Verhaltensweisen Verhaltensklassen zu; ein Kategoriensystem ordnet jedes Verhalten einer vorgegebenen Kategorie zu."
+    ],
+    "c": 3,
+    "e": "Zeichensystem = Verhaltensklassen für das Vorkommen konkreter Verhaltensweisen. Kategoriensystem = jedes auftretende Verhalten wird einer vorgegebenen, exklusiven, erschöpfenden Kategorie zugeordnet."
+  },
+  {
+    "id": "bq5",
+    "q": "Cohens Kappa: Im Folienbeispiel ist p_o = 0.70 und p_e = 0.43. Wie hoch ist K?",
+    "opts": [
+      "K = (0.70 − 0.43) / (1 − 0.43) ≈ 0.47.",
+      "K = 0.70 − 0.43 = 0.27.",
+      "K = 0.70, also gleich der beobachteten Übereinstimmung.",
+      "K ≈ 0.91, weil die beobachtete Übereinstimmung p_o durch die zufallserwartete Übereinstimmung p_e geteilt werden muss, um Kappa zu erhalten."
+    ],
+    "c": 0,
+    "e": "Kappa korrigiert p_o um die Zufallsübereinstimmung: K = (p_o − p_e)/(1 − p_e) = (0.70 − 0.43)/(1 − 0.43) ≈ 0.47. Laut Daumenregel (K > .70) ist das noch keine gute Übereinstimmung."
+  },
+  {
+    "id": "bq6",
+    "q": "Was besagt die Daumenregel zur Interpretation von Cohens Kappa?",
+    "opts": [
+      "K > .30 gilt bereits als sehr gute Übereinstimmung.",
+      "K > .70 spricht für eine gute Übereinstimmung.",
+      "Je näher K an 0 liegt, desto besser die Übereinstimmung.",
+      "Ein negativer Kappa-Wert bedeutet eine perfekte Übereinstimmung, weil das Vorzeichen lediglich die Richtung der Korrelation zwischen den Urteilern angibt."
+    ],
+    "c": 1,
+    "e": "Daumenregel: K > .70 → gute Übereinstimmung. Höhere Werte bedeuten bessere Übereinstimmung; der Beispielwert 0.47 liegt darunter."
+  },
+  {
+    "id": "bq7",
+    "q": "Zwei Beurteiler bewerten anfangs sehr genau, gegen Ende lässt ihre Genauigkeit nach. Welche Fehlerquelle ist das?",
+    "opts": [
+      "Halo-Effekt.",
+      "Logischer Fehler.",
+      "Beobachterdrift.",
+      "Die Tendenz zur Mitte, weil beide Beurteiler extreme Urteile vermeiden und ihre Einschätzungen systematisch zur Skalenmitte verschieben."
+    ],
+    "c": 2,
+    "e": "Beobachterdrift = die Genauigkeit der Beurteiler verändert sich (nimmt ab oder zu) über die Beobachtungsphase. Die Tendenz zur Mitte ist dagegen eine Antworttendenz."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche der folgenden ist KEINE der in der Vorlesung genannten Fehlerquellen/Antworttendenzen bei der Beurteilung?",
+    "opts": [
+      "Der Strenge- bzw. Milde-Effekt, bei dem ein Beurteiler durchgängig zu strenge oder durchgängig zu milde Urteile über alle Personen hinweg abgibt.",
+      "Die Tendenz zur Mitte.",
+      "Primacy- und Recency-Effekte.",
+      "Der Sleeper-Effekt verzögerter Einstellungsänderung."
+    ],
+    "c": 3,
+    "e": "Genannt werden Halo-Effekt, logische Fehler, Primacy/Recency, Beobachterdrift, Reaktivität und Antworttendenzen (Strenge/Milde, Tendenz zur Mitte). Der Sleeper-Effekt stammt aus der Persuasionsforschung und gehört nicht dazu."
+  }
+];
+
+var corrCorrect = {
+  "w11a": "zeichensystem",
+  "w11b": "kategoriensystem",
+  "w11c": "ratingskala",
+  "w11d": "zeichensystem"
+};
+var corrExpl = {
+  "w11a": "Lovaas' fünf Verhaltensklassen (Selbststimulation, Echolalie …) sind ein Zeichensystem: Klassen, in die das Vorkommen konkreter Verhaltensweisen eingeordnet wird.",
+  "w11b": "Wenn jedes auftretende Verhalten genau einer vorgegebenen, exklusiven und erschöpfenden Kategorie zugeordnet wird (Bales), ist es ein Kategoriensystem.",
+  "w11c": "Das Bewerten auf Polen wie gehemmt ↔ gelöst von −3 bis +3 (Charlton et al., 1974) ist eine Ratingskala.",
+  "w11d": "Verhaltensklassen, in die das Vorkommen eines konkreten Verhaltens eingeordnet wird, sind das definierende Merkmal eines Zeichensystems."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── Cohens-Kappa-Rechner (bespoke) ── */
+function kapVal(i,j){var e=document.getElementById('k'+i+j);var v=e?parseInt(e.value,10):0;return (isNaN(v)||v<0)?0:v;}
+function kapPreset(p){
+  var M={folie:[[15,2,3],[1,3,2],[0,1,3]],perfekt:[[20,0,0],[0,6,0],[0,0,4]],gut:[[18,1,1],[1,5,0],[1,0,3]],zufall:[[7,7,6],[2,2,2],[3,3,2]]};
+  var m=M[p]; if(!m) return;
+  for(var i=0;i<3;i++)for(var j=0;j<3;j++){var e=document.getElementById('k'+i+j); if(e) e.value=m[i][j];}
+  kapCalc();
+}
+function kapCalc(){
+  var out=document.getElementById('kap-out'); if(!out) return;
+  var n=0,diag=0,row=[0,0,0],col=[0,0,0],i,j;
+  for(i=0;i<3;i++)for(j=0;j<3;j++){var v=kapVal(i,j);n+=v;row[i]+=v;col[j]+=v;if(i===j)diag+=v;}
+  if(n===0){out.innerHTML='Bitte Häufigkeiten eintragen.';return;}
+  var po=diag/n, pe=(row[0]*col[0]+row[1]*col[1]+row[2]*col[2])/(n*n);
+  var k=(1-pe)===0?1:(po-pe)/(1-pe);
+  var c=k>=0.70?'#34d399':(k>=0.40?'#fbbf24':'#f87171');
+  var note=k>=0.70?'gute Übereinstimmung (Daumenregel κ > .70)':(k>=0?'noch unter der Daumenregel κ > .70':'schlechter als der Zufall (κ < 0)');
+  out.innerHTML='n = '+n+' · p_o = <strong>'+po.toFixed(2)+'</strong> · p_e = <strong>'+pe.toFixed(2)+'</strong><br>κ = (p_o − p_e)/(1 − p_e) = <strong style="color:'+c+'">'+k.toFixed(2)+'</strong> — '+note;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  kapCalc();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

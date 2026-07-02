@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL04 Demenz & Demenzdiagnostik</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl04
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Kontinuum-Simulator (VL04) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL04 Demenz & Demenzdiagnostik</h1>
+<p class="page-sub">Entwicklungspsychologie B (Erwachsenenalter und Alter) · Prof. Dr. Kerstin Jost · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Demenz definieren, primär vs. sekundär · 2. Epidemiologie (~60 % Alzheimer) & Erscheinungsbild · 3. Alzheimer vs. Vaskuläre Demenz (schleichend vs. plötzlich) · 4. Neuropathologie & Braak-Stadien (subhippocampal vor hippocampal) · 5. Kontinuum SCD → MCI → Demenz · 6. Screening (MMSE/DemTect/MoCA) vs. Testbatterie (CERAD) · 7. Binding & Alzheimer-Früherkennung (Item vs. Assoziation) · 8. Sensitivität, Spezifität, ROC & Cut-off
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Definition</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Epidemiologie</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Alzheimer vs. Vaskulär</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Neuropathologie</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ SCD → MCI → Demenz</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Screening vs. Batterie</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Binding & Früherkennung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Sensitivität & ROC</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Definition ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Demenz: Definition & primär/sekundär</div>
+    <div class="sec-lz">Demenz als erworbene Störung intellektueller Fähigkeiten; primäre (im Gehirn) vs. sekundäre (durch andere Erkrankungen/Medikamente) Demenz; Abgrenzung zu Intelligenzminderung/Delir</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was unterscheidet eine Demenz von einer angeborenen Intelligenzminderung oder einem vorübergehenden Verwirrtheitszustand (Delir)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Demenz ist <strong>erworben</strong> (anders als angeborene Intelligenzminderung) und <strong>chronisch/fortschreitend</strong> (anders als das reversible Delir) — eine durch Hirnerkrankung bedingte Störung intellektueller Fähigkeiten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Demenz — Definition</div>
+    Eine mit meist chronischen oder fortschreitenden Hirnerkrankungen einhergehende <strong>Störung der intellektuellen Fähigkeiten</strong> und Persönlichkeitsfunktionen — insbesondere von Lernen, Gedächtnis und Denken. Sie ist <strong>erworben</strong> (≠ angeborene Intelligenzminderung) und nicht nur vorübergehend (≠ Delir).
+  </div>
+  <div class="card">
+    <div class="card-title">Primäre vs. sekundäre Demenz</div>
+    <strong>Primär:</strong> Ursprung im Gehirn selbst (Alzheimer, vaskulär, frontotemporal, Lewy-Körperchen).<br>
+    <strong>Sekundär:</strong> ausgelöst durch andere Erkrankungen oder Medikamente (Depression, Alkoholismus, Schilddrüsenerkrankungen, Vitaminmangel) — oft (teil-)reversibel.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Sekundäre Demenzen sind klinisch besonders wichtig, weil sie sich bei Behandlung der Grunderkrankung <strong>bessern können</strong>. Primäre Demenzen sind in der Regel nicht ursächlich heilbar.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: primäre oder sekundäre Demenz?</div>
+    <div class="corr-item" id="m0a">Alzheimer-Demenz
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0a',this,'primaer')">Primär</button>
+        <button class="corr-btn" onclick="checkCorr('m0a',this,'sekundaer')">Sekundär</button>
+      </div><div class="corr-fb" id="m0a-fb"></div>
+    </div>
+    <div class="corr-item" id="m0b">Demenz infolge einer Schilddrüsenerkrankung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0b',this,'primaer')">Primär</button>
+        <button class="corr-btn" onclick="checkCorr('m0b',this,'sekundaer')">Sekundär</button>
+      </div><div class="corr-fb" id="m0b-fb"></div>
+    </div>
+    <div class="corr-item" id="m0c">Vaskuläre Demenz
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0c',this,'primaer')">Primär</button>
+        <button class="corr-btn" onclick="checkCorr('m0c',this,'sekundaer')">Sekundär</button>
+      </div><div class="corr-fb" id="m0c-fb"></div>
+    </div>
+    <div class="corr-item" id="m0d">Demenz bei Alkoholismus / Vitaminmangel
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0d',this,'primaer')">Primär</button>
+        <button class="corr-btn" onclick="checkCorr('m0d',this,'sekundaer')">Sekundär</button>
+      </div><div class="corr-fb" id="m0d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Epidemiologie ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Epidemiologie & Erscheinungsbild</div>
+    <div class="sec-lz">Prävalenz steigt mit Alter (1 % bei 65–69, >40 % bei 90+); 2050 ca. 3 Mio (D); Frauen häufiger; irreversibel, 3–6 Jahre; kognitive Reserve</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie viele Menschen sind von Demenz betroffen — und wer trägt das höchste Risiko?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die Prävalenz steigt steil mit dem Alter (~1 % bei 65–69, > 40 % bei 90+); bis 2050 ca. 3 Mio in Deutschland. <strong>Frauen</strong> sind häufiger betroffen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Häufigkeit & Zahlen</div>
+    2015: ca. <strong>1,6 Mio</strong> Betroffene in Deutschland (46,8 Mio weltweit). Ohne Durchbruch in Prävention/Therapie bis <strong>2050: ca. 3 Mio</strong> in Deutschland. Alzheimer zählt in den USA zu den 10 führenden Todesursachen.
+  </div>
+  <div class="card">
+    <div class="card-title">Alter, Geschlecht & Kosten</div>
+    Prävalenz: <strong>1 %</strong> bei 65–69 Jahren → <strong>> 40 %</strong> bei 90-Jährigen. <strong>Frauen</strong> häufiger betroffen (Lebenserwartung + Risiko). Versorgungskosten: ~24.000 €/Jahr (leicht) bis ~50.000 €/Jahr (schwer).
+  </div>
+  <div class="card">
+    <div class="card-title">Verlauf & kognitive Reserve</div>
+    Verlauf <strong>irreversibel</strong>, Dauer im Mittel 3–6 Jahre (Alzheimer etwas länger als vaskulär). Bildung, soziales Engagement und kardiovaskuläre Gesundheit bilden eine <strong>kognitive Reserve</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Zahlen Schritt für Schritt</div>
+    <div id="epi">
+      <div class="step-item"><strong>65–69 Jahre:</strong> Prävalenz ≈ 1 %.</div>
+      <div class="step-item"><strong>90 Jahre:</strong> Prävalenz > 40 % — steiler Anstieg mit dem Alter.</div>
+      <div class="step-item"><strong>2050 (D):</strong> ca. 3 Millionen Betroffene ohne Durchbruch in Prävention/Therapie.</div>
+      <div class="step-item"><strong>Geschlecht:</strong> Frauen häufiger betroffen.</div>
+      <div class="step-item"><strong>Schutz:</strong> Bildung, soziales Engagement, kardiovaskuläre Gesundheit → kognitive Reserve.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'epi')">Nächste Zahl ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Alzheimer vs. Vaskulär ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Alzheimer-Demenz vs. Vaskuläre Demenz</div>
+    <div class="sec-lz">Alzheimer ~60 % (schleichend, kein Schlaganfall, beide Geschlechter) vs. vaskulär ~17 % (plötzlich/sprunghaft, Schlaganfälle, Männer häufiger, Lähmungen)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Demenz beginnt plötzlich nach einem Schlaganfall, eine andere schleichend ohne Vorerkrankung. Welche ist welche?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Plötzlich + Schlaganfall = <strong>vaskuläre</strong> Demenz; schleichend + kein Schlaganfall = <strong>Alzheimer</strong>-Demenz.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Häufigkeit der Demenzformen</div>
+    <strong>Alzheimer ~60 %</strong> (häufigste Form) · Vaskulär ~17 % · Gemischt ~10 % · Lewy-Körper ~4 % · Frontotemporal ~2 % · Parkinson-Demenz ~2 %.
+  </div>
+  <div class="card">
+    <div class="card-title">Alzheimer vs. Vaskulär — die Unterscheidungsmerkmale</div>
+    <strong>Beginn:</strong> Alzheimer schleichend / vaskulär plötzlich.<br>
+    <strong>Verlauf:</strong> Alzheimer langsam / vaskulär sprunghaft.<br>
+    <strong>Schlaganfall:</strong> Alzheimer meist keiner / vaskulär häufig.<br>
+    <strong>Neurologie:</strong> Alzheimer keine Lähmungen / vaskulär häufig Lähmungen + Taubheit.<br>
+    <strong>Geschlecht:</strong> Alzheimer beide / vaskulär Männer häufiger.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Klausur-Klassiker</div>
+    Merke: <strong>Vaskulär = plötzlich</strong>, <strong>Alzheimer = schleichend</strong>. Vaskuläre Demenz ist mit Schlaganfällen und fokal-neurologischen Ausfällen (Lähmungen/Taubheit) assoziiert, Alzheimer nicht.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die zwei häufigsten Formen im Vergleich</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="alz" onclick="switchTab(this,'av')">Alzheimer</button>
+      <button class="tab-btn" data-tab="vask" onclick="switchTab(this,'av')">Vaskulär</button>
+    </div>
+    <div class="tab-group" data-group="av">
+      <div class="tab-content active" data-tab="alz">
+        <strong>Beginn:</strong> schleichend, langsame Zunahme. <strong>Schlaganfall:</strong> meist keiner. <strong>Neurologie:</strong> keine Lähmungen. <strong>Geschlecht:</strong> beide. <strong>Anteil:</strong> ~60 %.
+      </div>
+      <div class="tab-content" data-tab="vask">
+        <strong>Beginn:</strong> plötzlich, sprunghaft. <strong>Schlaganfall:</strong> häufig in der Vorgeschichte. <strong>Neurologie:</strong> oft Lähmungen/Taubheit. <strong>Geschlecht:</strong> Männer häufiger. <strong>Anteil:</strong> ~17 %.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Neuropathologie ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Neuropathologie & Braak-Stadien</div>
+    <div class="sec-lz">Amyloid-Plaques + Neurofibrillen; Braak I–II transentorhinal → III–IV limbisch (Hippocampus) → V–VI neokortikal; subhippocampale Phase VOR hippocampaler</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wo im Gehirn beginnt die Alzheimer-Pathologie — und wohin breitet sie sich aus?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Sie beginnt in den <strong>subhippocampalen</strong> (transentorhinalen/rhinalen) Arealen, erreicht dann den <strong>Hippocampus</strong> (limbisch) und zuletzt den <strong>Neokortex</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Neuropathologische Merkmale</div>
+    Erstbeschreibung durch Alois Alzheimer (1906). Kennzeichen: <strong>Amyloid-Plaques</strong> und <strong>Neurofibrillen</strong> mit regionalspezifischer Verteilung — zuerst v.a. im Hippocampus, entorhinalen Kortex und Assoziationskortex. Folge: neuronale Dysfunktion → Zelltod → kognitive Einbußen.
+  </div>
+  <div class="card">
+    <div class="card-title">Stadieneinteilung nach Braak & Braak (1991)</div>
+    <strong>I–II (transentorhinal):</strong> Schläfenlappen / rhinaler Cortex.<br>
+    <strong>III–IV (limbisch):</strong> Hippocampus, limbisches System.<br>
+    <strong>V–VI (neokortikal):</strong> Hirnrinde (Neokortex).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Zwei Phasen (Didic et al., 2011)</div>
+    Die Alzheimer-Erkrankung entwickelt sich in einer <strong>subhippocampalen</strong> Phase (rhinaler Cortex; kontextfreies Gedächtnis / Vertrautheit) und einer nachfolgenden <strong>hippocampalen</strong> Phase (Hippocampus; kontextreiches, episodisches Gedächtnis). <strong>Subhippocampal ist früher betroffen als hippocampal.</strong>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Ausbreitung Schritt für Schritt</div>
+    <div id="braak">
+      <div class="step-item"><strong>Braak I–II (transentorhinal):</strong> rhinaler Cortex / Schläfenlappen — subhippocampal, beginnt vor dem MCI.</div>
+      <div class="step-item"><strong>Braak III–IV (limbisch):</strong> Hippocampus und limbisches System.</div>
+      <div class="step-item"><strong>Braak V–VI (neokortikal):</strong> Hirnrinde — Phase der manifesten Demenz.</div>
+      <div class="step-item"><strong>Merke:</strong> subhippocampal (rhinal) VOR hippocampal.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'braak')">Nächstes Stadium ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ SCD → MCI → Demenz ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Kontinuum: SCD → MCI → Demenz</div>
+    <div class="sec-lz">SCD (subjektiv, objektiv unauffällig) → MCI (objektivierbares Defizit, ADL erhalten, keine Demenz; amnestisch/nonamnestisch) → Demenz (ADL beeinträchtigt)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwischen normalem Altern und Demenz gibt es Zwischenstufen. Wie heißen sie und wie unterscheiden sie sich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>SCD</strong> (subjektiv, objektiv unauffällig) → <strong>MCI</strong> (objektivierbares Defizit, Alltag erhalten, keine Demenz) → <strong>Demenz</strong> (Alltag beeinträchtigt).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Subjective Cognitive Decline (SCD)</div>
+    Subjektiv erlebte Verschlechterung der kognitiven Leistung bei <strong>(noch) objektiv unauffälligen</strong> Testbefunden (Jessen et al., 2020). Frühe, unspezifische Stufe.
+  </div>
+  <div class="card">
+    <div class="card-title">Mild Cognitive Impairment (MCI)</div>
+    <strong>Objektivierbares</strong> (meist episodisches) Gedächtnisdefizit, allgemeine kognitive Leistung im Wesentlichen erhalten, Alltagsaktivitäten weitgehend intakt, (noch) <strong>keine Demenz</strong>. Subtypen: amnestisch vs. nonamnestisch (Petersen, 2004).
+  </div>
+  <div class="card">
+    <div class="card-title">Demenz & das Kontinuum</div>
+    Demenz = kognitive Beeinträchtigung <strong>mit</strong> Einschränkung der Alltagsaktivitäten. Alzheimer hat eine ~12-jährige präklinische Phase; klinisch geht häufig ein amnestisches MCI voraus.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Kontinuum-Simulator — schiebe entlang SCD → MCI → Demenz</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ko-scd" onclick="koSet('scd')">SCD</button>
+        <button class="sim-tbtn" id="ko-mci" onclick="koSet('mci')">MCI</button>
+        <button class="sim-tbtn" id="ko-dem" onclick="koSet('dem')">Demenz</button>
+      </div>
+      <div class="sim-verdict" id="ko-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Die entscheidende Grenze zwischen MCI und Demenz ist die <strong>Alltagskompetenz (ADL)</strong>: Erst wenn der Alltag beeinträchtigt ist, spricht man von Demenz.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Screening vs. Batterie ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Diagnostik: Screening vs. Testbatterie</div>
+    <div class="sec-lz">Kurz-Screenings MMSE/DemTect/MoCA/Uhrentest (schnell, grob) vs. umfassende neuropsychologische Testbatterie CERAD; MMSE wenig MCI-sensitiv, DemTect/MoCA gut</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In der Demenzdiagnostik gibt es kurze Tests und umfangreiche Verfahren. Wann nutzt man was — und welches ist KEIN bloßes Screening?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Kurze <strong>Screenings</strong> (MMSE, DemTect, MoCA, Uhrentest) geben einen schnellen Überblick; das <strong>CERAD</strong> ist dagegen eine umfassende neuropsychologische <strong>Testbatterie</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kurz-Screenings</div>
+    <strong>MMSE</strong> (5–10 min, breite Abdeckung, aber im MCI-Bereich wenig sensitiv, keine Parallelform). <strong>DemTect</strong> (6–8 min, sehr gut bei MCI, Parallelform). <strong>MoCA</strong> (~10 min, sensitiv bei MCI). Dazu der <strong>Uhrentest</strong>. Schnell, aber grob.
+  </div>
+  <div class="card">
+    <div class="card-title">CERAD — die Testbatterie</div>
+    <strong>C</strong>onsortium to <strong>E</strong>stablish a <strong>R</strong>egistry for <strong>A</strong>lzheimer's <strong>D</strong>isease: umfassende neuropsychologische Testbatterie (verbale Flüssigkeit, Boston Naming, MMSE, Wortliste lernen/abrufen/wiedererkennen, Figuren) — zur Früherkennung und Schweregradeinschätzung. <strong>Kein bloßes Screening.</strong>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Klausur-Klassiker</div>
+    <strong>CERAD = Testbatterie</strong> (nicht Screening). Der MMSE trennt gesund/dement gut, ist aber im MCI-Bereich <strong>weniger sensitiv</strong> als DemTect und MoCA.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Kurz-Screening oder Testbatterie?</div>
+    <div class="corr-item" id="m5a">MMSE — Mini-Mental-Status-Test
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5a',this,'screening')">Screening</button>
+        <button class="corr-btn" onclick="checkCorr('m5a',this,'batterie')">Testbatterie</button>
+      </div><div class="corr-fb" id="m5a-fb"></div>
+    </div>
+    <div class="corr-item" id="m5b">CERAD
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5b',this,'screening')">Screening</button>
+        <button class="corr-btn" onclick="checkCorr('m5b',this,'batterie')">Testbatterie</button>
+      </div><div class="corr-fb" id="m5b-fb"></div>
+    </div>
+    <div class="corr-item" id="m5c">MoCA — Montreal Cognitive Assessment
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5c',this,'screening')">Screening</button>
+        <button class="corr-btn" onclick="checkCorr('m5c',this,'batterie')">Testbatterie</button>
+      </div><div class="corr-fb" id="m5c-fb"></div>
+    </div>
+    <div class="corr-item" id="m5d">DemTect
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5d',this,'screening')">Screening</button>
+        <button class="corr-btn" onclick="checkCorr('m5d',this,'batterie')">Testbatterie</button>
+      </div><div class="corr-fb" id="m5d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Binding & Früherkennung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Binding & Alzheimer-Früherkennung</div>
+    <div class="sec-lz">Episodisches Gedächtnis & Binding (Hippocampus); Item- vs. Assoziationsgedächtnis (Liang 2016); Früherkennungs-Tests (FNAME, MBT, EEG)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Gedächtnistests erkennen eine beginnende Alzheimer-Erkrankung am frühesten — und warum?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Binding-/Assoziationstests</strong> (Objekt-Ort, Name-Gesicht), weil das hippocampusabhängige Verknüpfen früh leidet — sie sind sensitiver als reine Item-Tests.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Episodisches Gedächtnis & Binding</div>
+    Das <strong>episodische</strong> Gedächtnis (raumzeitliche Einordnung) leidet bei Alzheimer früh. <strong>Binding</strong> = Verknüpfung der Elemente einer Episode (Objekt + Ort, Name + Gesicht) zu einer kohärenten Repräsentation — zentral: der <strong>Hippocampus</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Item vs. Assoziation (Liang et al., 2016)</div>
+    Der reine <strong>Item</strong>-Test (Objekt erkennen) ist NICHT alterssensitiv. Der <strong>Assoziations</strong>-/Lokalisierungstest (Objekt + Ort) ist alterssensitiv und bei familiärer Alzheimer-Erkrankung selektiv beeinträchtigt.
+  </div>
+  <div class="card">
+    <div class="card-title">Früherkennungs-Verfahren</div>
+    Konkrete Binding-Tests: <strong>FNAME</strong> (Face-Name Associative Memory), <strong>Memory Binding Test (MBT)</strong> (Buschke et al., 2017), Oxford Memory Test. Ergänzend wird das <strong>Resting-State-EEG</strong> als Biomarker erforscht (ADEEG-Projekt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Item- vs. Assoziationsgedächtnis</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="item" onclick="switchTab(this,'bind')">Item-Test</button>
+      <button class="tab-btn" data-tab="asso" onclick="switchTab(this,'bind')">Assoziations-/Binding-Test</button>
+    </div>
+    <div class="tab-group" data-group="bind">
+      <div class="tab-content active" data-tab="item">
+        <strong>Aufgabe:</strong> ein einzelnes Objekt wiedererkennen (Identifikation). <strong>Alterssensitiv?</strong> Nein. <strong>Alzheimer-Frühmarker?</strong> Schwach.
+      </div>
+      <div class="tab-content" data-tab="asso">
+        <strong>Aufgabe:</strong> Objekt + Ort bzw. Name + Gesicht verknüpfen (Hippocampus). <strong>Alterssensitiv?</strong> Ja. <strong>Alzheimer-Frühmarker?</strong> Stark (FNAME, MBT).
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Sensitivität & ROC ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Sensitivität, Spezifität & ROC</div>
+    <div class="sec-lz">Sensitivität (Kranke erkennen) vs. Spezifität (Gesunde erkennen); ROC-Kurve (Sens vs. 1−Spez); liberales vs. konservatives Cut-off-Kriterium; AUC</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Demenztest soll möglichst viele Erkrankte erkennen. Was passiert dabei mit den fälschlich als krank eingestuften Gesunden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Mehr Sensitivität (Erkrankte erkennen) geht auf Kosten der <strong>Spezifität</strong> — es gibt mehr <strong>Fehlalarme</strong> (Gesunde als krank). Beides zugleich zu maximieren geht nicht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sensitivität & Spezifität</div>
+    <strong>Sensitivität</strong> = Wahrscheinlichkeit, tatsächlich Kranke als krank zu erkennen (P(positiv | krank)).<br>
+    <strong>Spezifität</strong> = Wahrscheinlichkeit, Gesunde als gesund zu erkennen (P(negativ | gesund)).
+  </div>
+  <div class="card">
+    <div class="card-title">ROC-Kurve & AUC</div>
+    Die <strong>ROC-Kurve</strong> trägt die Sensitivität gegen die Fehlerrate (1 − Spezifität) für verschiedene Cut-offs auf. Je näher die Kurve der <strong>oberen linken Ecke</strong>, desto besser der Test; die <strong>Winkelhalbierende</strong> = uninformativ. Die <strong>AUC</strong> (Fläche unter der Kurve) fasst die Güte in einer Zahl zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Der Trade-off</div>
+    Es gibt <strong>keinen</strong> Cut-off mit gleichzeitig maximaler Sensitivität UND Spezifität. Ein <strong>liberales</strong> Kriterium erhöht die Sensitivität (mehr Treffer, aber mehr Fehlalarme), ein <strong>konservatives</strong> die Spezifität (wenige Fehlalarme, aber mehr verpasste Fälle).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Liberales vs. konservatives Cut-off-Kriterium</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="lib" onclick="switchTab(this,'krit')">Liberal (niedriger Cut-off)</button>
+      <button class="tab-btn" data-tab="kons" onclick="switchTab(this,'krit')">Konservativ (hoher Cut-off)</button>
+    </div>
+    <div class="tab-group" data-group="krit">
+      <div class="tab-content active" data-tab="lib">
+        <strong>Ziel:</strong> möglichst alle Kranken erfassen → <strong>hohe Sensitivität</strong>. <strong>Kosten:</strong> viele Fehlalarme → <strong>niedrige Spezifität</strong> (Gesunde werden fälschlich als krank eingestuft).
+      </div>
+      <div class="tab-content" data-tab="kons">
+        <strong>Ziel:</strong> möglichst wenige Fehlalarme → <strong>hohe Spezifität</strong>. <strong>Kosten:</strong> wenige Treffer → <strong>niedrige Sensitivität</strong> (Kranke werden übersehen).
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL04 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Alzheimer-Demenz</h4>
+      <p>Beginnt schleichend, langsame Zunahme</p>
+      <p>Meist kein Schlaganfall, keine Lähmungen</p>
+      <p>Beide Geschlechter</p>
+      <p>Häufigste Form (~60 %)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Vaskuläre Demenz</h4>
+      <p>Beginnt plötzlich, sprunghafte Zunahme</p>
+      <p>Schlaganfälle in der Vorgeschichte, Lähmungen/Taubheit</p>
+      <p>Männer häufiger</p>
+      <p>~17 %</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Alzheimer-Demenz beginnt plötzlich nach einem Schlaganfall, während die vaskuläre Demenz schleichend verläuft.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Primäre Demenz</h4>
+      <p>Ursprung im Gehirn selbst</p>
+      <p>Alzheimer, vaskulär, FTD, Lewy</p>
+      <p>Neurodegenerativ/vaskulär</p>
+      <p>Meist nicht ursächlich heilbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Sekundäre Demenz</h4>
+      <p>Durch andere Erkrankung/Medikamente ausgelöst</p>
+      <p>Depression, Alkohol, Schilddrüse, Vitaminmangel</p>
+      <p>Oft (teil-)reversibel</p>
+      <p>Behandlung der Ursache kann bessern</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine sekundäre Demenz hat ihren Ursprung direkt im Gehirn und ist grundsätzlich irreversibel.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>MCI (Mild Cognitive Impairment)</h4>
+      <p>Objektivierbares kognitives Defizit</p>
+      <p>Alltagsaktivitäten weitgehend erhalten</p>
+      <p>(Noch) keine Demenz</p>
+      <p>Risikostadium / Vorstufe</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Demenz</h4>
+      <p>Deutliche kognitive Beeinträchtigung</p>
+      <p>Alltagsaktivitäten eingeschränkt</p>
+      <p>Erfüllt Demenzkriterien</p>
+      <p>Meist fortschreitend</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei MCI sind die Alltagsaktivitäten bereits deutlich eingeschränkt und die Demenzkriterien voll erfüllt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sensitivität</h4>
+      <p>Kranke als krank erkennen</p>
+      <p>P(positiv | krank)</p>
+      <p>Hoch bei liberalem Cut-off</p>
+      <p>Wenige Misses (Verpasste)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Spezifität</h4>
+      <p>Gesunde als gesund erkennen</p>
+      <p>P(negativ | gesund)</p>
+      <p>Hoch bei konservativem Cut-off</p>
+      <p>Wenige False Alarms (Fehlalarme)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Sensitivität gibt an, wie viele Gesunde korrekt als gesund klassifiziert werden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Screening-Verfahren (MMSE, MoCA, DemTect)</h4>
+      <p>Kurz (5–10 min)</p>
+      <p>Grobe Einschätzung / Verdachtsabklärung</p>
+      <p>Einzeltest</p>
+      <p>MMSE wenig MCI-sensitiv</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Testbatterie (CERAD)</h4>
+      <p>Umfangreich, mehrere Subtests</p>
+      <p>Differenzierte neuropsychologische Diagnostik</p>
+      <p>Mehrere Domänen systematisch</p>
+      <p>Früherkennung + Schweregrad</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das CERAD ist ein einzelnes Kurz-Screening, während der MMSE eine umfassende neuropsychologische Testbatterie darstellt.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl04</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl04';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wie ist Demenz definiert?",
+      "opts": [
+        "Eine erworbene, meist fortschreitende Störung intellektueller Fähigkeiten (v.a. Gedächtnis/Denken) infolge einer Hirnerkrankung.",
+        "Eine von Geburt an bestehende Intelligenzminderung, die über die Lebensspanne stabil bleibt und nicht auf eine fortschreitende Hirnerkrankung zurückgeht.",
+        "Eine vorübergehende, voll reversible Bewusstseinsstörung (Delir).",
+        "Eine normale, altersentsprechende Gedächtnisleistung."
+      ],
+      "c": 0,
+      "e": "Demenz = erworbene, meist chronisch-fortschreitende Störung intellektueller Fähigkeiten (Lernen/Gedächtnis, Denken) durch Hirnerkrankung. Abzugrenzen von angeborener Intelligenzminderung und reversiblem Delir."
+    },
+    {
+      "id": "s0q2",
+      "q": "Worin unterscheiden sich primäre und sekundäre Demenz?",
+      "opts": [
+        "Primäre Demenz wird durch Medikamente oder andere Erkrankungen ausgelöst.",
+        "Primäre Demenz hat ihren Ursprung im Gehirn selbst (z.B. Alzheimer), sekundäre wird durch andere Faktoren ausgelöst.",
+        "Sekundäre Demenz bezeichnet die zweite, spätere Phase jeder Alzheimer-Erkrankung, während die primäre Demenz die frühe präklinische Phase meint.",
+        "Es gibt keinen inhaltlichen Unterschied zwischen beiden."
+      ],
+      "c": 1,
+      "e": "Primär = Ursache im Gehirn (Alzheimer, vaskulär, FTD, Lewy). Sekundär = durch andere Erkrankungen/Medikamente (Depression, Alkohol, Schilddrüse, Vitaminmangel) — oft (teil-)reversibel."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie verändert sich die Demenzprävalenz mit dem Alter?",
+      "opts": [
+        "Sie ist in allen Altersgruppen etwa gleich hoch.",
+        "Sie sinkt mit zunehmendem Alter.",
+        "Sie steigt stark mit dem Alter (≈ 1 % bei 65–69, > 40 % bei 90+).",
+        "Sie ist bei den 65- bis 69-Jährigen am höchsten und nimmt danach kontinuierlich ab, weil die ältesten Kohorten besonders gesund sind."
+      ],
+      "c": 2,
+      "e": "Die Prävalenz steigt steil mit dem Alter: ~1 % bei 65–69 Jahren, über 40 % bei 90-Jährigen. Bis 2050 ohne Durchbruch ca. 3 Mio Betroffene in Deutschland."
+    },
+    {
+      "id": "s1q2",
+      "q": "Welche Aussage zu Geschlecht und Verlauf der Demenz trifft zu?",
+      "opts": [
+        "Männer sind aufgrund ihrer höheren Lebenserwartung insgesamt deutlich häufiger von Demenz betroffen als Frauen, über alle Demenzformen hinweg.",
+        "Demenz ist in der Regel reversibel.",
+        "Bildung und soziales Engagement erhöhen das Demenzrisiko.",
+        "Frauen sind häufiger betroffen; Bildung und soziale Aktivität bilden eine kognitive Reserve."
+      ],
+      "c": 3,
+      "e": "Frauen sind insgesamt häufiger betroffen (u.a. höhere Lebenserwartung). Bildung, soziales Engagement und kardiovaskuläre Gesundheit fördern die kognitive Reserve. Demenz ist meist irreversibel."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie unterscheidet sich der Verlauf von Alzheimer- und Vaskulärer Demenz?",
+      "opts": [
+        "Alzheimer beginnt schleichend (langsame Zunahme), vaskuläre Demenz plötzlich/sprunghaft.",
+        "Beide Demenzformen beginnen typischerweise abrupt nach einem akuten Schlaganfall und schreiten danach in identischem, sprunghaftem Muster voran.",
+        "Alzheimer beginnt plötzlich, die vaskuläre Demenz schleichend.",
+        "Beide beginnen und verlaufen immer exakt gleich."
+      ],
+      "c": 0,
+      "e": "Alzheimer: schleichender Beginn, langsame Zunahme. Vaskulär: plötzlicher Beginn, sprunghafte Verschlechterung (an Gefäßereignisse gekoppelt)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welche weiteren Merkmale unterscheiden die beiden Formen?",
+      "opts": [
+        "Bei Alzheimer treten typischerweise häufig Lähmungen und Schlaganfälle in der Vorgeschichte auf.",
+        "Vaskuläre Demenz: häufig Schlaganfälle/Lähmungen, Männer häufiger; Alzheimer: meist ohne Schlaganfall, beide Geschlechter.",
+        "Die vaskuläre Demenz betrifft beide Geschlechter exakt gleich häufig und geht nie mit neurologischen Ausfällen wie Lähmungen oder Taubheitsgefühlen einher.",
+        "Alzheimer ist die seltenste aller Demenzformen."
+      ],
+      "c": 1,
+      "e": "Vaskulär: Schlaganfälle in der Vorgeschichte, Lähmungen/Taubheit, Männer häufiger. Alzheimer: meist kein Schlaganfall, keine fokal-neurologischen Ausfälle, beide Geschlechter."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was sind die neuropathologischen Kernmerkmale der Alzheimer-Demenz?",
+      "opts": [
+        "Eine altersbedingte Vergrößerung der Neurone durch Eiweißmangel.",
+        "Ausschließlich vaskuläre Schädigungen durch viele kleine Schlaganfälle.",
+        "Amyloid-Plaques und Neurofibrillen, zuerst v.a. im Hippocampus und entorhinalen Kortex.",
+        "Eine reversible Ansammlung von Dopamin in den Basalganglien, die sich durch medikamentöse Behandlung vollständig zurückbilden kann."
+      ],
+      "c": 2,
+      "e": "Alzheimer (Erstbeschreibung Alois Alzheimer 1906): Amyloid-Plaques + Neurofibrillen mit regionalspezifischer Verteilung (zuerst Hippocampus/entorhinaler Kortex) → neuronaler Zelltod."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche Reihenfolge der Ausbreitung beschreibt die Stadieneinteilung nach Braak & Braak?",
+      "opts": [
+        "Die Pathologie beginnt in der Hirnrinde (Neokortex) und breitet sich von dort über den Hippocampus zuletzt in den rhinalen Cortex aus.",
+        "Hippocampale Strukturen sind früher betroffen als subhippocampale (rhinale) Areale.",
+        "Alle Regionen sind von Beginn an gleichzeitig und gleich stark betroffen.",
+        "Subhippocampale (rhinale) Areale sind früher betroffen als der Hippocampus (Braak I–II vor III–IV)."
+      ],
+      "c": 3,
+      "e": "Braak: I–II transentorhinal (rhinaler Cortex, subhippocampal) → III–IV limbisch (Hippocampus) → V–VI neokortikal. Die subhippocampale Phase liegt VOR der hippocampalen."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wie ist Mild Cognitive Impairment (MCI) definiert?",
+      "opts": [
+        "Objektivierbares kognitives Defizit, aber Alltagsaktivitäten weitgehend erhalten und (noch) keine Demenz.",
+        "Eine bereits manifeste Demenz mit deutlichen Einschränkungen der Alltagsaktivitäten, die jedoch noch nicht medikamentös behandelt wird.",
+        "Rein subjektive Beschwerden ohne jedes objektivierbare Defizit.",
+        "Normales Altern ganz ohne Beeinträchtigung."
+      ],
+      "c": 0,
+      "e": "MCI = objektivierbares (meist episodisches) Gedächtnisdefizit, allgemeine kognitive Leistung im Wesentlichen erhalten, Alltagsaktivitäten weitgehend intakt, (noch) keine Demenz. Amnestischer vs. nonamnestischer Subtyp."
+    },
+    {
+      "id": "s4q2",
+      "q": "Worin unterscheiden sich SCD und MCI?",
+      "opts": [
+        "Bei SCD ist das Defizit bereits objektiv messbar, bei MCI nur subjektiv.",
+        "SCD = subjektive Klagen ohne objektives Defizit; MCI = objektivierbares Defizit.",
+        "SCD bezeichnet das Endstadium der Demenz, in dem die Betroffenen ihre eigenen kognitiven Einbußen subjektiv gar nicht mehr wahrnehmen können.",
+        "SCD und MCI sind exakt dasselbe."
+      ],
+      "c": 1,
+      "e": "SCD (Subjective Cognitive Decline): subjektiv erlebte Verschlechterung, objektiv (noch) unauffällig. MCI: bereits objektivierbares Defizit. Kontinuum: SCD → MCI → Demenz."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist das CERAD?",
+      "opts": [
+        "Ein einzelnes, 5-minütiges Kurz-Screening.",
+        "Ein Verfahren, das ausschließlich die zeitliche Orientierung erfasst.",
+        "Eine umfassende neuropsychologische Testbatterie mit mehreren Subtests.",
+        "Ein reines Selbstbeurteilungs-Fragebogenverfahren, das die subjektiv erlebte Gedächtnisleistung ganz ohne Leistungstests erfasst."
+      ],
+      "c": 2,
+      "e": "CERAD = umfassende neuropsychologische Testbatterie (verbale Flüssigkeit, Boston Naming, MMSE, Wortliste, Figuren …) — kein bloßes Kurz-Screening."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche Aussage zur MCI-Sensitivität der Screenings trifft zu?",
+      "opts": [
+        "Der MMSE ist das mit Abstand sensitivste Verfahren zur Erkennung leichter kognitiver Störungen (MCI) und übertrifft darin DemTect und MoCA deutlich.",
+        "DemTect und MoCA sind gar keine Screeningverfahren.",
+        "Alle Screenings sind für MCI exakt gleich sensitiv.",
+        "Der MMSE ist im MCI-Bereich weniger sensitiv; DemTect und MoCA erkennen leichte Störungen besser."
+      ],
+      "c": 3,
+      "e": "Der MMSE differenziert gesund/dement gut, ist aber im MCI-Bereich weniger sensitiv. DemTect und MoCA erfassen leichte kognitive Störungen besser."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Welche Gedächtnisleistung ist bei Alzheimer früh betroffen?",
+      "opts": [
+        "Das episodische Gedächtnis (Binding über den Hippocampus).",
+        "Das semantische Faktenwissen bricht als allererste Funktion zusammen, während das episodische Gedächtnis bis ins Spätstadium vollständig erhalten bleibt.",
+        "Ausschließlich die Motorik und das Gleichgewicht.",
+        "Das Binding findet im Kleinhirn statt und ist daher nicht betroffen."
+      ],
+      "c": 0,
+      "e": "Das episodische Gedächtnis (raumzeitliche Einordnung, Binding über den Hippocampus) ist bei Alzheimer früh betroffen; semantisches Wissen bleibt länger erhalten."
+    },
+    {
+      "id": "s6q2",
+      "q": "Welche Tests eignen sich besser für die Alzheimer-Früherkennung?",
+      "opts": [
+        "Item-Tests (ein einzelnes Objekt wiedererkennen) sind besonders alzheimer-sensitiv.",
+        "Assoziations-/Binding-Tests (z.B. Objekt-Ort, Name-Gesicht) sind sensitiver als reine Item-Tests.",
+        "Reine Item-Wiedererkennung ist der empfindlichste Frühmarker der Alzheimer-Erkrankung, während Assoziations- und Bindingleistungen erst im Endstadium betroffen sind.",
+        "Item- und Assoziationstests sind exakt gleich sensitiv."
+      ],
+      "c": 1,
+      "e": "Binding-/Assoziationsleistungen (Objekt-Ort, Name-Gesicht; z.B. FNAME, MBT, Liang 2016) sind sensitiver für die Alzheimer-Pathologie als reines Item-Erkennen."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was bezeichnet die Sensitivität eines diagnostischen Tests?",
+      "opts": [
+        "Den Anteil korrekt als gesund erkannter Gesunder.",
+        "Die Gesamtzahl aller durchgeführten Tests.",
+        "Die Wahrscheinlichkeit, tatsächlich Kranke als krank zu erkennen.",
+        "Die Fläche unter der ROC-Kurve, mit der die Sensitivität definitionsgemäß identisch ist."
+      ],
+      "c": 2,
+      "e": "Sensitivität = P(positiv | krank), also tatsächlich Kranke als krank erkennen. Spezifität = Gesunde als gesund erkennen. AUC ist die Fläche unter der ROC, nicht die Sensitivität."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was kennzeichnet ein liberales Entscheidungskriterium (niedriger Cut-off)?",
+      "opts": [
+        "Ein liberales Kriterium maximiert gleichzeitig sowohl die Sensitivität als auch die Spezifität, sodass keinerlei Abwägung zwischen Treffern und Fehlalarmen mehr nötig ist.",
+        "Ein konservatives Kriterium erzeugt besonders viele Fehlalarme.",
+        "Das Kriterium hat keinen Einfluss auf Sensitivität und Spezifität.",
+        "Es erhöht die Sensitivität, aber auf Kosten der Spezifität (mehr Fehlalarme)."
+      ],
+      "c": 3,
+      "e": "Liberal (niedriger Cut-off): hohe Sensitivität (mehr Treffer), aber niedrige Spezifität (mehr Fehlalarme). Es gibt keinen Cut-off mit gleichzeitig maximaler Sensitivität UND Spezifität."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Ein Patient entwickelte seine kognitiven Symptome plötzlich und sprunghaft und hatte zuvor mehrere Schlaganfälle. Welche Demenzform ist am wahrscheinlichsten?",
+    "opts": [
+      "Vaskuläre Demenz.",
+      "Alzheimer-Demenz, da deren typisches Kennzeichen der abrupte, an Schlaganfälle gekoppelte und sprunghaft fortschreitende Symptombeginn ist.",
+      "Eine sekundäre Demenz durch Vitaminmangel.",
+      "Frontotemporale Demenz."
+    ],
+    "c": 0,
+    "e": "Plötzlicher, sprunghafter Beginn + Schlaganfälle in der Vorgeschichte = typisch vaskuläre Demenz. Alzheimer beginnt schleichend ohne Schlaganfall."
+  },
+  {
+    "id": "bq2",
+    "q": "Welche ist die häufigste Demenzform?",
+    "opts": [
+      "Vaskuläre Demenz (~60 %).",
+      "Alzheimer-Demenz (~60 %).",
+      "Die gemischte Demenz, die mit rund 60 % aller Fälle alle anderen Formen einschließlich der Alzheimer-Demenz deutlich übertrifft.",
+      "Lewy-Körper-Demenz (~60 %)."
+    ],
+    "c": 1,
+    "e": "Alzheimer ist mit rund 60 % die häufigste Form, gefolgt von vaskulärer (~17 %) und gemischter Demenz (~10 %)."
+  },
+  {
+    "id": "bq3",
+    "q": "Eine kognitive Störung bessert sich vollständig, nachdem eine Schilddrüsenerkrankung behandelt wurde. Was lag am ehesten vor?",
+    "opts": [
+      "Eine primäre Alzheimer-Demenz.",
+      "Eine primäre vaskuläre Demenz.",
+      "Eine sekundäre Demenz.",
+      "Eine neurodegenerative primäre Demenz, deren Amyloid-Plaques sich durch die Schilddrüsenbehandlung vollständig zurückgebildet haben."
+    ],
+    "c": 2,
+    "e": "Durch eine andere (behandelbare) Erkrankung ausgelöst und reversibel → sekundäre Demenz. Primäre Demenzen (Alzheimer, vaskulär) sind nicht durch Schilddrüsentherapie heilbar."
+  },
+  {
+    "id": "bq4",
+    "q": "In welcher Reihenfolge breitet sich die Alzheimer-Pathologie laut Braak & Braak aus?",
+    "opts": [
+      "Neokortex → Hippocampus → rhinaler Cortex.",
+      "Kleinhirn → Pons → Cortex.",
+      "Gleichzeitig und gleich stark in allen Hirnregionen, ohne erkennbare zeitliche oder räumliche Ausbreitungsrichtung.",
+      "Transentorhinal (rhinal) → limbisch (Hippocampus) → neokortikal."
+    ],
+    "c": 3,
+    "e": "Braak-Stadien: I–II transentorhinal/rhinal → III–IV limbisch (Hippocampus) → V–VI neokortikal. Subhippocampal vor hippocampal."
+  },
+  {
+    "id": "bq5",
+    "q": "Eine Person hat ein objektiv messbares Gedächtnisdefizit, bewältigt aber ihren Alltag noch selbstständig und erfüllt nicht die Demenzkriterien. Was liegt vor?",
+    "opts": [
+      "Mild Cognitive Impairment (MCI).",
+      "Eine bereits manifeste Alzheimer-Demenz im mittleren Stadium mit deutlicher Beeinträchtigung der Alltagskompetenz.",
+      "Subjective Cognitive Decline (SCD) ganz ohne objektives Defizit.",
+      "Normales Altern."
+    ],
+    "c": 0,
+    "e": "Objektivierbares Defizit + erhaltene Alltagskompetenz + keine Demenz = MCI. (SCD hätte kein objektives Defizit; Demenz würde die ADL beeinträchtigen.)"
+  },
+  {
+    "id": "bq6",
+    "q": "Welches Verfahren eignet sich am besten zur frühen Erkennung einer leichten kognitiven Störung (MCI)?",
+    "opts": [
+      "Der MMSE, da er im MCI-Bereich am sensitivsten ist.",
+      "DemTect oder MoCA (sensitiver im MCI-Bereich).",
+      "Ausschließlich ein unstrukturiertes Anamnesegespräch ohne jeden standardisierten Test, da Screenings bei MCI grundsätzlich versagen.",
+      "Keiner der genannten Tests kann MCI überhaupt erfassen."
+    ],
+    "c": 1,
+    "e": "DemTect und MoCA differenzieren im MCI-Bereich besser als der MMSE, der dort weniger sensitiv ist."
+  },
+  {
+    "id": "bq7",
+    "q": "Was gilt für eine ROC-Kurve, die nahe der oberen linken Ecke verläuft?",
+    "opts": [
+      "Der Test ist uninformativ (er verläuft entlang der Winkelhalbierenden).",
+      "Der Test hat eine durchgehend sehr niedrige Sensitivität.",
+      "Der Test diskriminiert sehr gut (hohe Sensitivität bei zugleich hoher Spezifität).",
+      "Der Test ist genau dann optimal, wenn seine Kurve möglichst exakt auf der Diagonalen (Winkelhalbierenden) des Quadrats verläuft."
+    ],
+    "c": 2,
+    "e": "Je näher die ROC der oberen linken Ecke, desto besser die Diskrimination (hohe Sensitivität + hohe Spezifität, große AUC). Die Winkelhalbierende = uninformativ."
+  },
+  {
+    "id": "bq8",
+    "q": "Man senkt den Cut-off, um mehr Erkrankte zu erfassen. Welche Folge hat das?",
+    "opts": [
+      "Mehr Spezifität und weniger Fehlalarme.",
+      "Sensitivität und Spezifität steigen gleichzeitig an.",
+      "Die Sensitivität bleibt unverändert, während ausschließlich die Spezifität steigt, weil weniger Gesunde fälschlich als krank eingestuft werden.",
+      "Höhere Sensitivität, aber niedrigere Spezifität (mehr Fehlalarme)."
+    ],
+    "c": 3,
+    "e": "Niedrigerer Cut-off = liberaleres Kriterium: mehr Treffer (höhere Sensitivität), aber auch mehr Fehlalarme (niedrigere Spezifität)."
+  }
+];
+
+var corrCorrect = {
+  "m0a": "primaer",
+  "m0b": "sekundaer",
+  "m0c": "primaer",
+  "m0d": "sekundaer",
+  "m5a": "screening",
+  "m5b": "batterie",
+  "m5c": "screening",
+  "m5d": "screening"
+};
+var corrExpl = {
+  "m0a": "Alzheimer = neurodegenerativ, Ursprung im Gehirn → primäre Demenz.",
+  "m0b": "Schilddrüsenerkrankung als Auslöser → sekundäre (oft reversible) Demenz.",
+  "m0c": "Vaskuläre Demenz = Ursprung im Gehirn (Gefäßschäden) → primäre Demenz.",
+  "m0d": "Alkoholismus/Vitaminmangel als Auslöser → sekundäre Demenz.",
+  "m5a": "MMSE = Kurz-Screening (5–10 min).",
+  "m5b": "CERAD = umfassende neuropsychologische Testbatterie.",
+  "m5c": "MoCA = Kurz-Screening (~10 min), sensitiv für MCI.",
+  "m5d": "DemTect = Kurz-Screening (6–8 min), gut im MCI-Bereich."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Kontinuum-Simulator (Sektion ⑤): SCD → MCI → Demenz */
+var koData = {
+  scd: {d:'Nur subjektiv erlebte Verschlechterung', t:'Objektiver Test: unauffällig', a:'Alltag intakt', e:'Frühe, unspezifische Stufe (Jessen et al. 2020)'},
+  mci: {d:'Objektiv messbares (meist episodisches) Gedächtnisdefizit', t:'Allgemeine Leistung im Wesentlichen erhalten', a:'Alltag weitgehend erhalten', e:'Noch KEINE Demenz; Subtypen amnestisch/nonamnestisch'},
+  dem: {d:'Deutliches Defizit, oft mehrere Domänen', t:'Kognitive Beeinträchtigung gesichert', a:'Alltag (ADL) eingeschränkt', e:'Demenz-Kriterien erfüllt'}
+};
+function koSet(k){
+  ['scd','mci','dem'].forEach(function(x){ var b=document.getElementById('ko-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('ko-out'); if(!o) return;
+  var d=koData[k];
+  o.innerHTML='<strong>Defizit:</strong> '+d.d+'<br><strong>Leistung/Test:</strong> '+d.t+'<br><strong>Alltag (ADL):</strong> '+d.a+'<br><strong>Einordnung:</strong> '+d.e;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  koSet('scd');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD04 Explorative Faktorenanalyse (EFA)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl04
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Faktorzahl-Simulator (pd04) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD04 Explorative Faktorenanalyse (EFA)</h1>
+<p class="page-sub">Psychologische Diagnostik I (Wedderhoff) · Klausur 23.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Grundidee der EFA · 2. Eignung der Korrelationsmatrix · 3. Kommunalitätenproblem (PCA vs. PFA) · 4. Faktorenextraktion (Eigenwert & Kommunalität) · 5. Extraktionsproblem (Faktorenzahl) · 6. Rotation & Einfachstruktur · 7. Orthogonal vs. oblique & Matrizen · 8. Interpretation, Itemselektion & Faktorwerte
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Grundidee</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Eignung Korr.-Matrix</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ PCA vs. PFA</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Extraktion</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Faktorenzahl</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Rotation</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Orthogonal vs. oblique</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Interpretation</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Grundidee ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Grundidee der Faktorenanalyse</div>
+    <div class="sec-lz">EFA prüft die Dimensionalität (wie viele latente Faktoren stecken hinter den Items?) und dient der Datenreduktion; setzt bedeutsame Interkorrelationen voraus; Analysestichprobe muss groß genug sein (Mindestgröße)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Grundfrage beantwortet eine explorative Faktorenanalyse?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0"><strong>Wie viele latente Faktoren stecken hinter den Items?</strong> Die EFA prüft die <strong>Dimensionalität</strong> und dient der <strong>Datenreduktion</strong>. Voraussetzung: bedeutsame Interkorrelationen + ausreichend große Stichprobe.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Grundidee</div>
+    Die Faktorenanalyse fasst viele korrelierte Items auf wenige <strong>latente Faktoren</strong> zurück (Datenreduktion) und prüft so die <strong>Dimensionalität</strong> eines Konstrukts (uni- vs. multidimensional).
+  </div>
+  <div class="card">
+    <div class="card-title">Voraussetzungen</div>
+    <strong>Bedeutsame Interkorrelationen</strong> zwischen den Variablen (ohne Zusammenhänge keine gemeinsamen Faktoren) und eine <strong>ausreichend große Analysestichprobe</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Einordnung im Testbau</div>
+    Die EFA steht im Schritt der <strong>Dimensionalitätsprüfung</strong> der Testkonstruktion — sie zeigt, welche Items zu welchem Faktor (späterer Skala) gehören.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Wozu dient die EFA?</div>
+    <div id="efa-zweck">
+      <div class="step-item"><strong>Dimensionalität</strong> — wie viele Faktoren liegen den Items zugrunde?</div>
+      <div class="step-item"><strong>Datenreduktion</strong> — viele Items → wenige Faktoren.</div>
+      <div class="step-item"><strong>Voraussetzung</strong> — bedeutsame Interkorrelationen + große Stichprobe.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'efa-zweck')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Eignung Korr.-Matrix ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Eignung der Korrelationsmatrix</div>
+    <div class="sec-lz">Bartlett-Test (Matrix ≠ Einheitsmatrix?, stark stichprobenabhängig); Anti-Image-Korrelationsmatrix (Guttman 1953); KMO/MSA = bestes Kriterium (≥.90 erstaunlich, ≥.80 verdienstvoll, ≥.70 ziemlich gut, ≥.60 mittelmäßig, ≥.50 kläglich, <.50 untragbar)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Mit welchem Kennwert prüft man am zuverlässigsten, ob sich eine Korrelationsmatrix für eine EFA eignet?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Mit dem <strong>KMO-Kriterium</strong> (Kaiser-Meyer-Olkin, Prüfgröße <strong>MSA</strong>) — es gilt als das beste Kriterium. Der Bartlett-Test und Einzelkorrelationen sind stark <strong>stichprobenabhängig</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Prüfwege</div>
+    <strong>Signifikanz einzelner Korrelationen</strong> (cor.test) · <strong>Bartlett-Test</strong> (unterscheidet sich die Matrix signifikant von der Einheitsmatrix?) · <strong>Anti-Image-Korrelationsmatrix</strong> (Guttman 1953) → Basis des KMO.
+  </div>
+  <div class="card">
+    <div class="card-title">KMO / MSA (bestes Kriterium)</div>
+    Das <strong>Kaiser-Meyer-Olkin-Kriterium</strong> berechnet die Prüfgröße <strong>MSA</strong> (measure of sampling adequacy): ≥.90 erstaunlich · ≥.80 verdienstvoll · ≥.70 ziemlich gut · ≥.60 mittelmäßig · ≥.50 kläglich · &lt;.50 untragbar. MSA gibt es auch pro Variable (vorab eliminieren).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bartlett vs. KMO</div>
+    Der <strong>Bartlett-Test</strong> ist stark <strong>stichprobenabhängig</strong> (bei großem n fast immer signifikant) → das <strong>KMO-Kriterium</strong> gilt als zuverlässiger.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">MSA-Stufen aufdecken</div>
+    <div id="msa">
+      <div class="step-item"><strong>≥ .90</strong> — erstaunlich.</div>
+      <div class="step-item"><strong>≥ .80</strong> — verdienstvoll.</div>
+      <div class="step-item"><strong>≥ .70</strong> — ziemlich gut.</div>
+      <div class="step-item"><strong>≥ .60</strong> — mittelmäßig; <strong>&lt; .50</strong> — untragbar.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'msa')">Stufen aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ PCA vs. PFA ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Kommunalitätenproblem: PCA vs. PFA</div>
+    <div class="sec-lz">Initiale Kommunalität: PCA (Hauptkomponentenanalyse) setzt sie = 1 (gesamte Varianz erklärbar); PFA (Hauptachsenanalyse) < 1 (nur gemeinsame Varianz, Items haben Uniqueness/itemspezifische Varianz)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>PCA und PFA unterscheiden sich in einem Startwert. Wie behandeln sie die initiale Kommunalität?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>PCA</strong> setzt die initiale Kommunalität = <strong>1</strong> (gesamte Varianz erklärbar, Diagonale = Einsen). <strong>PFA</strong> setzt sie <strong>&lt; 1</strong> (nur gemeinsame Varianz; Items haben <strong>Uniqueness</strong>/itemspezifische Varianz).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kommunalitätenproblem</div>
+    Wie viel Varianz jedes Items soll durch die Faktoren erklärt werden? Es geht um die <strong>initiale Kommunalität</strong> (Startwert vor der Extraktion) — nicht zu verwechseln mit der finalen Kommunalität h² (nach Schätzung der Ladungen).
+  </div>
+  <div class="card">
+    <div class="card-title">PCA vs. PFA</div>
+    <strong>PCA</strong> (Hauptkomponentenanalyse): initiale Kommunalität = 1, gesamte Varianz geht ein (Annahme: vollständig durch Faktoren erklärbar). <strong>PFA</strong> (Hauptachsenanalyse): &lt; 1, nur die gemeinsame Varianz (Items haben Uniqueness).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ initiale ≠ finale Kommunalität</div>
+    <strong>Initial</strong> = Startwert (PCA=1, PFA&lt;1). <strong>Final (h²)</strong> = nach der Extraktion: tatsächlich aufgeklärte Varianz des Items.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">PCA oder PFA?</div>
+    <div class="corr-item" id="c2a">Initiale Kommunalität = 1, gesamte Varianz geht ein
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'pca')">PCA</button>
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'pfa')">PFA</button>
+      </div><div class="corr-fb" id="c2a-fb"></div>
+    </div>
+    <div class="corr-item" id="c2b">Initiale Kommunalität &lt; 1, nur gemeinsame Varianz (Uniqueness)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'pca')">PCA</button>
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'pfa')">PFA</button>
+      </div><div class="corr-fb" id="c2b-fb"></div>
+    </div>
+    <div class="corr-item" id="c2c">Annahme: Gesamtvarianz vollständig durch Faktoren erklärbar (Diagonale = Einsen)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'pca')">PCA</button>
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'pfa')">PFA</button>
+      </div><div class="corr-fb" id="c2c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Extraktion ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Faktorenextraktion: Eigenwert & Kommunalität</div>
+    <div class="sec-lz">Eigenwert λ = Varianz, die EIN Faktor aufklärt (Σ quadr. Ladungen einer Spalte; Σλ = m); Kommunalität h² = Varianz EINES Items durch die Faktoren (Σ quadr. Ladungen einer Zeile); proportionale Varianz v = λ/m; Faktorladung = Korr. Variable–Faktor (orthogonal)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eigenwert vs. Kommunalität — beide sind Summen quadrierter Ladungen. Worin liegt der Unterschied?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Richtung der Summe</strong>: Der <strong>Eigenwert λ</strong> ist die Varianz, die EIN Faktor aufklärt (Summe über eine <strong>Spalte</strong>; Σλ = m). Die <strong>Kommunalität h²</strong> ist die Varianz EINES Items durch alle Faktoren (Summe über eine <strong>Zeile</strong>).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Eigenwert λ</div>
+    Die Varianz, die <strong>ein Faktor</strong> aufklärt = Summe der quadrierten Ladungen einer <strong>Spalte</strong>. Die Summe aller Eigenwerte = Gesamtvarianz <strong>m</strong> (bei standardisierten Variablen). Proportionale Varianz eines Faktors: <strong>v = λ/m</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Kommunalität h²</div>
+    Wie viel Varianz <strong>eines Items</strong> durch die Faktoren aufgeklärt wird = Summe der quadrierten Ladungen einer <strong>Zeile</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Faktorladung</div>
+    Bei <strong>orthogonaler</strong> Rotation entspricht die Faktorladung der <strong>Korrelation</strong> zwischen Variable und Faktor.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Eigenwert oder Kommunalität?</div>
+    <div class="corr-item" id="c3a">Varianz, die EIN Faktor aufklärt (Summe quadr. Ladungen einer Spalte)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'eigenwert')">Eigenwert λ</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'kommunalitaet')">Kommunalität h²</button>
+      </div><div class="corr-fb" id="c3a-fb"></div>
+    </div>
+    <div class="corr-item" id="c3b">Varianz EINES Items durch die Faktoren (Summe quadr. Ladungen einer Zeile)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'eigenwert')">Eigenwert λ</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'kommunalitaet')">Kommunalität h²</button>
+      </div><div class="corr-fb" id="c3b-fb"></div>
+    </div>
+    <div class="corr-item" id="c3c">Die Summe aller dieser Werte entspricht der Gesamtvarianz m
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'eigenwert')">Eigenwert λ</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'kommunalitaet')">Kommunalität h²</button>
+      </div><div class="corr-fb" id="c3c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Faktorenzahl ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Extraktionsproblem: Wie viele Faktoren?</div>
+    <div class="sec-lz">Kaiser-Guttman-Kriterium (Eigenwerte > 1; Minimalkriterium, oft zu viele Faktoren); Scree-Test (Cattell, Knick im Eigenwerteverlauf, subjektiv); Parallelanalyse (Horn 1965, Vergleich mit Zufallsdaten — Faktoren über dem Zufallseigenwert behalten)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie viele Faktoren soll man behalten? Drei Kriterien — welches gilt als das beste?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Die <strong>Parallelanalyse</strong> (Horn 1965) gilt als sehr gut (Vergleich mit Zufallsdaten). <strong>Kaiser-Guttman</strong> (Eigenwert &gt; 1) ist nur ein Minimalkriterium (oft zu viele Faktoren); der <strong>Scree-Test</strong> (Knick) ist subjektiv.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kaiser-Guttman-Kriterium</div>
+    Behalte alle Faktoren mit <strong>Eigenwert &gt; 1</strong>. Gilt als <strong>Minimalkriterium</strong> und extrahiert häufig <strong>zu viele</strong> Faktoren.
+  </div>
+  <div class="card">
+    <div class="card-title">Scree-Test (Cattell)</div>
+    Visuelle Inspektion des Eigenwerteverlaufs: man sucht den <strong>Knick</strong> im Scree-Plot. Sehr <strong>subjektiv</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Parallelanalyse (Horn, 1965)</div>
+    Vergleich der empirischen Eigenwerte mit denen <strong>zufällig erzeugter Daten</strong> (viele Simulationen). Behalten werden Faktoren, deren Eigenwert <strong>über</strong> dem der Zufallsdaten liegt. Gilt als <strong>sehr gutes</strong> Kriterium.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Faktorzahl-Simulator — wähle ein Extraktionskriterium</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="fz-kg" onclick="fzSet('kg')">Kaiser-Guttman</button>
+        <button class="sim-tbtn" id="fz-scree" onclick="fzSet('scree')">Scree-Test</button>
+        <button class="sim-tbtn" id="fz-pa" onclick="fzSet('pa')">Parallelanalyse</button>
+      </div>
+      <div class="sim-verdict" id="fz-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Faustregel zur Güte: Kaiser-Guttman (grob, oft zu viele) → Scree (subjektiv) → <strong>Parallelanalyse (am besten)</strong>.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Rotation ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Rotation & Einfachstruktur</div>
+    <div class="sec-lz">Rotation = (zulässige) Drehung der Faktorlösung zur besseren Interpretierbarkeit; erklärte Gesamtvarianz bleibt exakt gleich; Ziel = Einfachstruktur (jedes Item lädt nur auf EINEM Faktor hoch, auf den anderen nahe 0)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Erhöht die Rotation die durch die Faktoren erklärte Gesamtvarianz?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Nein</strong> — die erklärte Gesamtvarianz bleibt <strong>exakt gleich</strong>; die Rotation verteilt sie nur anders, um die <strong>Interpretierbarkeit</strong> zu verbessern. Ziel ist die <strong>Einfachstruktur</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Rotation (Drehung)</div>
+    Die unrotierte Lösung (Faktoren mit maximalen Eigenwerten) ist schlecht interpretierbar. Die <strong>Rotation</strong> ist eine zulässige Transformation der Faktorlösung zur besseren Interpretierbarkeit. <strong>Die insgesamt erklärte Varianz bleibt gleich</strong> — nur ihre Verteilung auf die Faktoren ändert sich.
+  </div>
+  <div class="card">
+    <div class="card-title">Einfachstruktur</div>
+    Ziel der Rotation: jedes Item lädt nur auf <strong>einem</strong> Faktor (betragsmäßig) <strong>hoch</strong> und auf allen anderen <strong>nahe null</strong> — das macht die Faktoren inhaltlich deutbar.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Häufige Falle</div>
+    Rotation <strong>erhöht nicht</strong> die Gesamtvarianzaufklärung — sie verbessert nur die Interpretierbarkeit.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rotation: wahr oder falsch?</div>
+    <div id="rotation">
+      <div class="step-item"><strong>Ziel:</strong> bessere Interpretierbarkeit (Einfachstruktur).</div>
+      <div class="step-item"><strong>Einfachstruktur:</strong> jedes Item lädt nur auf einem Faktor hoch.</div>
+      <div class="step-item"><strong>Gesamtvarianz:</strong> bleibt durch die Rotation exakt gleich.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'rotation')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Orthogonal vs. oblique ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Orthogonale vs. oblique Rotation & Matrizen</div>
+    <div class="sec-lz">Orthogonal (Varimax/Quartimax): Faktoren unkorreliert, Ladung = Korrelation, Mustermatrix = Strukturmatrix; oblique (Oblimin/Promax): Faktoren korreliert, Muster ≠ Struktur; Mustermatrix = Regressionsgewichte (bereinigt), Strukturmatrix = Korrelationen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bei welcher Rotation dürfen die Faktoren miteinander korrelieren — und was folgt für Muster-/Strukturmatrix?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Bei der <strong>obliquen</strong> Rotation (Oblimin/Promax): Faktoren korreliert (schiefwinklig) → <strong>Mustermatrix ≠ Strukturmatrix</strong>. Bei der <strong>orthogonalen</strong> (Varimax): Faktoren unkorreliert → Ladung = Korrelation, <strong>Muster = Struktur</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Orthogonal vs. oblique</div>
+    <strong>Orthogonal</strong> (Varimax, Quartimax): Faktoren bleiben <strong>unkorreliert</strong> (senkrecht); Ladung = Korrelation; keine redundanten Informationen. <strong>Oblique</strong> (Oblimin, Promax): Faktoren dürfen <strong>korrelieren</strong> (schiefwinklig); oft bessere Einfachstruktur.
+  </div>
+  <div class="card">
+    <div class="card-title">Muster- vs. Strukturmatrix</div>
+    <strong>Mustermatrix</strong> = Ladungen als <strong>Regressionsgewichte</strong> (um andere Faktoren bereinigt). <strong>Strukturmatrix</strong> = <strong>Korrelationen</strong> Variable–Faktor. Bei orthogonaler Rotation <strong>identisch</strong>; bei obliquer <strong>verschieden</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Oblique Falle</div>
+    Bei obliquer Rotation ist die Ladung in der Mustermatrix <strong>nicht</strong> die Korrelation Variable–Faktor (das ist die Strukturmatrix).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Orthogonal oder oblique?</div>
+    <div class="corr-item" id="c6a">Faktoren bleiben unkorreliert (senkrecht); Muster = Strukturmatrix; Varimax
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'orthogonal')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'oblique')">Oblique</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Faktoren dürfen korrelieren (schiefwinklig); Muster ≠ Strukturmatrix; Oblimin
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'orthogonal')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'oblique')">Oblique</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Die Faktorladung entspricht der Korrelation Variable–Faktor
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'orthogonal')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'oblique')">Oblique</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Interpretation ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Interpretation, Itemselektion & Faktorwerte</div>
+    <div class="sec-lz">Hohe Ladung: Daumenregel ≥ .50 oder Fürntratt-Kriterium (quadr. Ladung ≥ 50 % der Kommunalität); Itemselektion: hoch auf Zielfaktor UND niedrig (nahe 0) auf den anderen; Faktorwerte = Ausprägungen der Personen auf den Faktoren (meist werden Summen-/Mittelwerte verwendet)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Reicht für die Zuordnung eines Items zu einem Faktor eine hohe Ladung auf diesem Faktor?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Nein</strong> — das Item muss <strong>zusätzlich auf allen anderen Faktoren niedrig (nahe 0)</strong> laden (Einfachstruktur). Daumenregeln: Ladung ≥ .50 oder <strong>Fürntratt-Kriterium</strong> (quadr. Ladung ≥ 50 % der Kommunalität).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Wann lädt ein Item „hoch"?</div>
+    Daumenregeln: <strong>Ladung ≥ .50</strong> oder <strong>Fürntratt-Kriterium</strong> (die quadrierte Ladung soll mindestens <strong>50 % der Kommunalität</strong> der Variablen ausmachen).
+  </div>
+  <div class="card">
+    <div class="card-title">Itemselektion</div>
+    Ein Item wird einem Faktor zugeordnet, wenn es darauf <strong>hoch (positiv)</strong> UND auf allen anderen Faktoren <strong>niedrig (nahe 0)</strong> lädt. Eine hohe Ladung auf dem Zielfaktor allein reicht <strong>nicht</strong> (Items mit Doppelladungen werden aussortiert).
+  </div>
+  <div class="card">
+    <div class="card-title">Faktorwerte</div>
+    <strong>Faktorwerte</strong> = Ausprägungen der Personen auf den Faktoren (z. B. zur Korrelation mit Außenkriterien). In der Praxis werden meist <strong>Summen-/Mittelwerte</strong> über die zugeordneten Items als Personenscores verwendet.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Itemselektion: Kriterien aufdecken</div>
+    <div id="itemsel">
+      <div class="step-item"><strong>Hoch laden</strong> auf dem Zielfaktor (≥ .50 / Fürntratt).</div>
+      <div class="step-item"><strong>Niedrig laden</strong> (nahe 0) auf allen anderen Faktoren.</div>
+      <div class="step-item"><strong>Doppelladungen</strong> → Item aussortieren (keine Einfachstruktur).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'itemsel')">Kriterien aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus PD04 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>PCA (Hauptkomponentenanalyse)</h4>
+      <p>Initiale Kommunalität = 1</p>
+      <p>Gesamte Varianz geht ein</p>
+      <p>Diagonale = Einsen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>PFA (Hauptachsenanalyse)</h4>
+      <p>Initiale Kommunalität < 1</p>
+      <p>Nur gemeinsame Varianz</p>
+      <p>Items haben Uniqueness</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der PCA werden die Kommunalitäten geschätzt und sind daher kleiner als 1.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eigenwert (λ)</h4>
+      <p>Varianz, die EIN Faktor aufklärt</p>
+      <p>Spalte: Σ quadr. Ladungen</p>
+      <p>Σ aller λ = m (Gesamtvarianz)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kommunalität (h²)</h4>
+      <p>Varianz EINES Items durch Faktoren</p>
+      <p>Zeile: Σ quadr. Ladungen</p>
+      <p>Pro Variable</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eigenwert und Kommunalität sind dasselbe und nehmen stets denselben Wert an.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Orthogonale Rotation (z. B. Varimax)</h4>
+      <p>Faktoren bleiben unkorreliert (senkrecht)</p>
+      <p>Ladung = Korrelation</p>
+      <p>Mustermatrix = Strukturmatrix</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Oblique Rotation (z. B. Oblimin)</h4>
+      <p>Faktoren dürfen korrelieren (schiefwinklig)</p>
+      <p>Ladung ≠ Korrelation</p>
+      <p>Mustermatrix ≠ Strukturmatrix</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei obliquen Rotationen entspricht die Faktorladung in der Mustermatrix der Korrelation zwischen Variable und Faktor.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kaiser-Guttman-Kriterium</h4>
+      <p>Eigenwerte > 1 behalten</p>
+      <p>Minimalkriterium</p>
+      <p>Extrahiert oft ZU VIELE Faktoren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Parallelanalyse (Horn, 1965)</h4>
+      <p>Vergleich mit Eigenwerten aus Zufallsdaten</p>
+      <p>Faktoren über dem Zufallswert behalten</p>
+      <p>Gilt als sehr gutes Kriterium</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Kaiser-Guttman-Kriterium ist das zuverlässigste Verfahren und extrahiert nie zu viele Faktoren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Mustermatrix (pattern matrix)</h4>
+      <p>Ladungen = Regressionsgewichte</p>
+      <p>Um andere Faktoren bereinigt</p>
+      <p>Standardausgabe in R</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Strukturmatrix (structure matrix)</h4>
+      <p>Korrelationen Variable–Faktor</p>
+      <p>Bei oblique ≠ Mustermatrix</p>
+      <p>Bei orthogonal = Mustermatrix</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Mustermatrix und Strukturmatrix sind auch bei obliquer Rotation immer identisch.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl04</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl04';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wozu dient die explorative Faktorenanalyse (EFA)?",
+      "opts": [
+        "Zur Prüfung der Dimensionalität — wie viele latente Faktoren stecken hinter den Items? — und zur Datenreduktion.",
+        "Zur Berechnung der Retest-Reliabilität eines Tests über zwei Messzeitpunkte.",
+        "Zur Bestimmung der Ratewahrscheinlichkeit von Auswahlaufgaben.",
+        "Die explorative Faktorenanalyse dient nach der dargestellten Konzeption ausschließlich dazu, für eine bereits vollständig bekannte und theoretisch festgelegte Faktorenstruktur die exakte Anzahl der pro Faktor benötigten Items rechnerisch zu bestätigen, ohne dabei die Dimensionalität selbst zu untersuchen."
+      ],
+      "c": 0,
+      "e": "Die EFA prüft die Dimensionalität (wie viele Faktoren liegen den Items zugrunde?) und reduziert Daten. Sie setzt bedeutsame Interkorrelationen der Variablen voraus."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Voraussetzung muss die Datengrundlage für eine EFA erfüllen?",
+      "opts": [
+        "Die Variablen müssen vollständig unkorreliert sein, damit jeder Faktor genau ein Item abbildet.",
+        "Es müssen bedeutsame Interkorrelationen zwischen den Variablen bestehen; die Analysestichprobe muss ausreichend groß sein.",
+        "Die Stichprobe darf höchstens 30 Personen umfassen, um Überanpassung zu vermeiden.",
+        "Für eine explorative Faktorenanalyse ist es nach der dargestellten Konzeption zwingend erforderlich, dass sämtliche Variablen vollkommen unkorreliert vorliegen und die untersuchte Stichprobe so klein wie möglich gehalten wird, da andernfalls keine eindeutige Faktorenlösung bestimmt werden kann."
+      ],
+      "c": 1,
+      "e": "Die FA setzt bedeutsame Interkorrelationen voraus (ohne Zusammenhänge keine gemeinsamen Faktoren) und benötigt eine ausreichend große Analysestichprobe."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welches ist das beste/zuverlässigste Kriterium für die Eignung der Korrelationsmatrix?",
+      "opts": [
+        "Die Signifikanz der einzelnen Korrelationen über cor.test().",
+        "Der Bartlett-Test (Abweichung von der Einheitsmatrix).",
+        "Das Kaiser-Meyer-Olkin-Kriterium (KMO/MSA).",
+        "Als bestes und zuverlässigstes Kriterium zur Beurteilung der Eignung einer Korrelationsmatrix für die Faktorenanalyse gilt nach der dargestellten Konzeption ausschließlich der Bartlett-Test, da dieser im Gegensatz zu allen anderen Verfahren völlig unabhängig von der jeweiligen Stichprobengröße zuverlässige Ergebnisse liefert."
+      ],
+      "c": 2,
+      "e": "Das KMO-Kriterium (Kaiser-Meyer-Olkin, Prüfgröße MSA, auf Basis der Anti-Image-Korrelationsmatrix) gilt als das beste Kriterium. Bartlett-Test und Einzelkorrelationen sind stark stichprobenabhängig."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wie ist ein MSA-Wert (KMO) von ≥ .90 zu beurteilen?",
+      "opts": [
+        "„Untragbar“ — die Matrix ist für eine Faktorenanalyse ungeeignet. Ein derart hoher MSA-Wert tritt nach der dargestellten Konzeption ausschließlich dann auf, wenn sämtliche Variablen vollkommen unkorreliert sind.",
+        "„Kläglich“ — die Matrix ist nur eingeschränkt geeignet.",
+        "„Mittelmäßig“ — eine Faktorenanalyse ist grenzwertig vertretbar.",
+        "„Erstaunlich“ — die Korrelationsmatrix ist hervorragend für die Faktorenanalyse geeignet."
+      ],
+      "c": 3,
+      "e": "MSA-Stufen (KMO): ≥.90 „erstaunlich“, ≥.80 „verdienstvoll“, ≥.70 „ziemlich gut“, ≥.60 „mittelmäßig“, ≥.50 „kläglich“, <.50 „untragbar“. Variablen mit niedrigem MSA können vorab eliminiert werden."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was unterscheidet die PCA von der PFA bei der initialen Kommunalität?",
+      "opts": [
+        "PCA setzt die initiale Kommunalität = 1 (gesamte Varianz geht ein); PFA setzt sie < 1 (nur die gemeinsame Varianz, Items haben Uniqueness).",
+        "PCA setzt die initiale Kommunalität < 1, PFA setzt sie = 1 (genau umgekehrt).",
+        "Beide Verfahren setzen die initiale Kommunalität grundsätzlich auf 0.",
+        "Die Hauptkomponentenanalyse und die Hauptachsenanalyse unterscheiden sich nach der dargestellten Konzeption ausschließlich in der verwendeten Software und im Namen, behandeln die initiale Kommunalität jedoch vollkommen identisch, indem beide stets sämtliche itemspezifischen Varianzanteile vollständig aus der Analyse ausschließen."
+      ],
+      "c": 0,
+      "e": "PCA (Hauptkomponentenanalyse): initiale Kommunalität = 1 — die gesamte Varianz wird als durch Faktoren erklärbar unterstellt (Diagonale = Einsen). PFA (Hauptachsenanalyse): < 1 — nur die gemeinsame Varianz, Items haben Uniqueness (itemspezifische Varianz)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was ist die „finale Kommunalität“ h² (im Unterschied zur initialen)?",
+      "opts": [
+        "Der Startwert, der vor der Extraktion in die Diagonale der Korrelationsmatrix eingesetzt wird.",
+        "Die nach Schätzung der Faktorladungen bestimmte tatsächlich aufgeklärte Varianz eines Items (Σ quadrierter Ladungen).",
+        "Der Eigenwert des ersten extrahierten Faktors.",
+        "Die finale Kommunalität eines Items entspricht nach der dargestellten Konzeption ausschließlich dem unveränderten initialen Startwert, der bereits vor der gesamten Faktorenextraktion festgelegt wurde, und bleibt daher über den kompletten Analyseprozess hinweg in jedem Fall exakt konstant."
+      ],
+      "c": 1,
+      "e": "Initiale Kommunalität = Startwert vor der Extraktion (PCA=1, PFA<1). Finale Kommunalität h² = nach Schätzung der Faktorladungen: die durch die Faktoren tatsächlich aufgeklärte Varianz des Items (Summe der quadrierten Ladungen einer Zeile)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist ein „Eigenwert“ λ in der Faktorenanalyse?",
+      "opts": [
+        "Die Varianz EINES Items, die durch alle Faktoren aufgeklärt wird.",
+        "Die Korrelation zweier Items untereinander.",
+        "Die Varianz, die EIN Faktor aufklärt (Summe der quadrierten Ladungen einer Spalte); Σ aller λ = m.",
+        "Der Eigenwert eines Faktors gibt nach der dargestellten Konzeption ausschließlich die Anzahl der Items an, die diesem Faktor bei der Itemselektion endgültig zugeordnet wurden, und steht mit der durch den Faktor aufgeklärten Varianz in keinerlei rechnerischem Zusammenhang."
+      ],
+      "c": 2,
+      "e": "Eigenwert λ = die Varianz, die ein Faktor aufklärt (Summe der quadrierten Faktorladungen einer Spalte). Die Summe aller Eigenwerte = Gesamtvarianz m (bei standardisierten Variablen). Proportionale Varianz = λ/m."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was gibt die Kommunalität h² eines Items an?",
+      "opts": [
+        "Die Gesamtzahl der extrahierten Faktoren. Dieser Wert wird nach der dargestellten Konzeption für jeden Faktor getrennt als Anzahl der ihm zugeordneten Items bestimmt und ist von den Ladungen unabhängig.",
+        "Den Anteil der Varianz, den ein einzelner Faktor an der Gesamtvarianz aufklärt.",
+        "Die Stichprobengröße, ab der eine Faktorenanalyse zulässig ist.",
+        "Wie viel Varianz eines Items durch die extrahierten Faktoren aufgeklärt wird (Summe der quadrierten Ladungen einer Zeile)."
+      ],
+      "c": 3,
+      "e": "Kommunalität h² = wie viel Varianz EINES Items durch die Faktoren aufgeklärt wird (Summe der quadrierten Ladungen einer Variablen/Zeile). ⚠ Eigenwert bezieht sich auf einen Faktor (Spalte), Kommunalität auf ein Item (Zeile)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was besagt das Kaiser-Guttman-Kriterium zur Faktorenzahl?",
+      "opts": [
+        "Es werden alle Faktoren mit einem Eigenwert > 1 als bedeutsam angesehen (Minimalkriterium; extrahiert oft zu viele Faktoren).",
+        "Es werden genau so viele Faktoren extrahiert, wie es Items gibt.",
+        "Es werden nur Faktoren mit einer Kommunalität > 1 behalten.",
+        "Nach dem Kaiser-Guttman-Kriterium werden ausschließlich diejenigen Faktoren als bedeutsam angesehen, deren zugehörige Eigenwerte exakt und punktgenau den Wert null annehmen, da nur in diesem Fall sichergestellt ist, dass der betreffende Faktor keinerlei redundante Varianz mehr enthält."
+      ],
+      "c": 0,
+      "e": "Kaiser-Guttman-Kriterium: nur Faktoren mit Eigenwert > 1 gelten als bedeutsam. Es ist ein Minimalkriterium und führt häufig zur Extraktion ZU VIELER Faktoren."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie funktioniert die Parallelanalyse (Horn, 1965)?",
+      "opts": [
+        "Sie sucht subjektiv nach dem „Knick“ im Eigenwerteverlauf des Scree-Plots.",
+        "Die empirischen Eigenwerte werden mit denen aus zufällig erzeugten Daten verglichen; behalten werden Faktoren, deren Eigenwert über dem der Zufallsdaten liegt.",
+        "Sie behält alle Faktoren mit einem Eigenwert über 1.",
+        "Die Parallelanalyse nach Horn besteht nach der dargestellten Konzeption ausschließlich darin, zwei voneinander unabhängige reale Stichproben parallel zu erheben und anschließend zu prüfen, ob beide Stichproben exakt dieselbe Anzahl an Items pro Faktor aufweisen."
+      ],
+      "c": 1,
+      "e": "Parallelanalyse (Horn 1965): per Simulation werden viele Zufallsdatensätze (n×m) erzeugt und faktorenanalysiert; man behält die Faktoren, deren empirischer Eigenwert über dem der Zufallsdaten liegt. Gilt als sehr gutes Kriterium. (Scree = Knick, subjektiv; Kaiser-Guttman = Eigenwert>1.)"
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist das Ziel der Rotation in der Faktorenanalyse?",
+      "opts": [
+        "Die durch die Faktoren erklärte Gesamtvarianz zu erhöhen.",
+        "Die Anzahl der bedeutsamen Faktoren nachträglich zu reduzieren.",
+        "Eine besser interpretierbare Faktorstruktur zu erreichen — möglichst eine Einfachstruktur.",
+        "Das Ziel der Rotation einer Faktorlösung besteht nach der dargestellten Konzeption ausschließlich darin, die insgesamt durch die Faktoren aufgeklärte Varianz nachträglich und gezielt deutlich zu erhöhen, sodass nach der Drehung mehr Gesamtvarianz erklärt wird als zuvor in der unrotierten Ausgangslösung."
+      ],
+      "c": 2,
+      "e": "Rotation = (zulässige) Drehung der Faktorlösung zur besseren Interpretierbarkeit. Ziel: Einfachstruktur (jedes Item lädt nur auf EINEM Faktor hoch). ⚠ Die insgesamt erklärte Varianz bleibt durch die Rotation EXAKT gleich."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was kennzeichnet eine „Einfachstruktur“?",
+      "opts": [
+        "Jedes Item lädt auf möglichst vielen Faktoren gleichzeitig hoch. Eine solche Lösung gilt nach der dargestellten Konzeption als besonders erstrebenswert, weil sie die Gesamtzahl der zu interpretierenden Faktoren maximiert.",
+        "Alle Items laden auf allen Faktoren gleich hoch.",
+        "Es wird nur ein einziger Faktor extrahiert.",
+        "Jedes Item lädt nur auf einem einzigen Faktor (betragsmäßig) hoch und auf allen anderen Faktoren möglichst nahe null."
+      ],
+      "c": 3,
+      "e": "Einfachstruktur: jedes Item lädt auf genau EINEM Faktor hoch und auf allen anderen nahe null — das macht die Faktoren inhaltlich interpretierbar. Ziel der Rotation."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was unterscheidet orthogonale von obliquer Rotation?",
+      "opts": [
+        "Orthogonal: Faktoren bleiben unkorreliert (senkrecht), Ladung = Korrelation, Muster = Strukturmatrix (z. B. Varimax); oblique: Faktoren korreliert (schiefwinklig), Muster ≠ Struktur (z. B. Oblimin).",
+        "Orthogonal: Faktoren korreliert; oblique: Faktoren unkorreliert (genau umgekehrt).",
+        "Beide erzeugen stets identische Muster- und Strukturmatrizen.",
+        "Orthogonale und oblique Rotationen unterscheiden sich nach der dargestellten Konzeption ausschließlich in der Anzahl der dabei extrahierten Faktoren, wobei orthogonale Rotationen stets genau zwei und oblique Rotationen stets genau drei Faktoren erzeugen, während Faktorkorrelation und Interpretierbarkeit in beiden Fällen vollkommen identisch sind."
+      ],
+      "c": 0,
+      "e": "Orthogonal (Varimax/Quartimax): Faktoren bleiben unkorreliert; Ladung = Korrelation Variable–Faktor; Mustermatrix = Strukturmatrix. Oblique (Oblimin/Promax): Faktoren dürfen korrelieren; Mustermatrix ≠ Strukturmatrix (oft bessere Einfachstruktur)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was enthält die „Mustermatrix“ (pattern matrix) — im Unterschied zur Strukturmatrix?",
+      "opts": [
+        "Die Mustermatrix enthält nach der dargestellten Konzeption ausschließlich die Eigenwerte sämtlicher extrahierter Faktoren in absteigender Reihenfolge, während die Strukturmatrix umgekehrt nur die zugehörigen Kommunalitäten der einzelnen Items in aufsteigender Reihenfolge auflistet.",
+        "Die Ladungen (= Regressionsgewichte, um den Einfluss der anderen Faktoren bereinigt); die Strukturmatrix enthält die Korrelationen Variable–Faktor.",
+        "Die Korrelationen der Variablen mit den Faktoren; die Strukturmatrix enthält die Regressionsgewichte.",
+        "Ausschließlich die Stichprobenkennwerte (Mittelwert, Standardabweichung) der einzelnen Items."
+      ],
+      "c": 1,
+      "e": "Mustermatrix = Ladungen als Regressionsgewichte (um den Einfluss der anderen Faktoren bereinigt). Strukturmatrix = Korrelationen Variable–Faktor. Bei orthogonaler Rotation identisch; bei obliquer verschieden."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wann ordnet man bei der Itemselektion ein Item einem Faktor zu?",
+      "opts": [
+        "Sobald das Item auf irgendeinem Faktor eine Ladung ≥ .50 aufweist — unabhängig von den übrigen Ladungen.",
+        "Sobald das Item auf möglichst vielen Faktoren gleichzeitig hoch lädt.",
+        "Wenn es auf dem Zielfaktor hoch (positiv) UND auf allen anderen Faktoren niedrig (nahe 0) lädt.",
+        "Ein Item wird einem Faktor bei der Itemselektion nach der dargestellten Konzeption bereits dann eindeutig zugeordnet, wenn es auf diesem Faktor irgendeine von null verschiedene Ladung aufweist, wobei die Höhe dieser Ladung sowie die Ladungen auf allen übrigen Faktoren dabei vollkommen unbeachtet bleiben."
+      ],
+      "c": 2,
+      "e": "Itemselektion: ein Item wird einem Faktor zugeordnet, wenn es darauf hoch (positiv) UND auf allen anderen Faktoren niedrig (nahe 0) lädt (Einfachstruktur). Eine hohe Ladung auf dem Zielfaktor allein reicht NICHT. Daumenregeln: ≥ .50 oder Fürntratt-Kriterium."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was sind „Faktorwerte“?",
+      "opts": [
+        "Die Eigenwerte der einzelnen extrahierten Faktoren. Diese Werte werden nach der dargestellten Konzeption stets unmittelbar als endgültige Personenscores verwendet und niemals durch Summen- oder Mittelwerte ersetzt.",
+        "Die Korrelationen der Items mit den Faktoren.",
+        "Die Ladungen der Items in der Mustermatrix.",
+        "Die Ausprägungen der Personen auf den Faktoren (z. B. zur Korrelation mit Außenkriterien); meist werden stattdessen Summen-/Mittelwerte verwendet."
+      ],
+      "c": 3,
+      "e": "Faktorwerte = Ausprägungen der Personen auf den Faktoren (können z. B. mit Außenkriterien korreliert werden). In der Praxis werden meist die Summen-/Mittelwerte über die einem Faktor zugeordneten Items als Personenscores verwendet."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was prüft der Bartlett-Test im Rahmen der EFA?",
+    "opts": [
+      "Ob sich die Korrelationsmatrix signifikant von der Einheitsmatrix unterscheidet (stark stichprobenabhängig).",
+      "Ob die Faktoren nach der Rotation noch unkorreliert sind.",
+      "Ob die Kommunalität jedes Items über 1 liegt.",
+      "Der Bartlett-Test prüft im Rahmen der explorativen Faktorenanalyse nach der dargestellten Konzeption ausschließlich, ob die Anzahl der zuvor extrahierten Faktoren exakt mit der inhaltlich erwarteten Faktorenzahl übereinstimmt, und trifft keinerlei Aussage über die Korrelationsmatrix selbst."
+    ],
+    "c": 0,
+    "e": "Bartlett-Test: prüft, ob sich die Korrelationsmatrix signifikant von der Einheitsmatrix (= keine Korrelationen) unterscheidet. Stark stichprobenabhängig → das KMO-Kriterium gilt als zuverlässiger."
+  },
+  {
+    "id": "bq2",
+    "q": "Welche Aussage zur PCA ist korrekt?",
+    "opts": [
+      "Bei der PCA werden die initialen Kommunalitäten geschätzt und sind daher kleiner als 1.",
+      "Bei der PCA geht die gesamte Varianz aller Items ein; die initialen Kommunalitäten werden auf 1 gesetzt (Diagonale = Einsen).",
+      "Die PCA analysiert ausschließlich die itemspezifische Uniqueness.",
+      "Die Hauptkomponentenanalyse setzt nach der dargestellten Konzeption für jedes Item eine individuelle initiale Kommunalität deutlich unterhalb von 1 an, da sie im Gegensatz zur Hauptachsenanalyse davon ausgeht, dass ein erheblicher Teil der Itemvarianz grundsätzlich nicht durch gemeinsame Faktoren erklärbar ist."
+    ],
+    "c": 1,
+    "e": "PCA: die gesamte Varianz geht ein, initiale Kommunalitäten = 1 (Diagonale der Korrelationsmatrix = Einsen). Annahme: Gesamtvarianz durch Faktoren erklärbar. (PFA: initiale Kommunalität < 1, berücksichtigt Uniqueness.)"
+  },
+  {
+    "id": "bq3",
+    "q": "Was gilt für die durch Rotation erklärte Gesamtvarianz?",
+    "opts": [
+      "Sie steigt durch die Rotation deutlich an.",
+      "Sie sinkt durch die Rotation systematisch.",
+      "Sie bleibt durch die Rotation exakt gleich — nur die Verteilung der Varianz auf die Faktoren ändert sich.",
+      "Die insgesamt durch die Faktoren aufgeklärte Varianz hängt nach der dargestellten Konzeption ausschließlich von der zufällig gewählten Rotationsmethode ab und kann daher je nach eingesetztem Verfahren beliebig zwischen 0 % und 100 % schwanken, ohne dass dies inhaltlich interpretierbar wäre."
+    ],
+    "c": 2,
+    "e": "Alle durch Drehung hervorgehenden Faktorlösungen erklären insgesamt GENAU gleich viel Varianz — die Rotation verteilt die Varianz nur anders auf die Faktoren (bessere Interpretierbarkeit), erhöht sie aber nicht."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Aussage zur obliquen Rotation ist korrekt?",
+    "opts": [
+      "Bei der obliquen Rotation entspricht die Faktorladung in der Mustermatrix der Korrelation zwischen Variable und Faktor. Aus diesem Grund liefern oblique und orthogonale Rotationen nach der dargestellten Konzeption stets vollkommen identische Muster- und Strukturmatrizen.",
+      "Bei obliquer Rotation bleiben die Faktoren stets vollständig unkorreliert.",
+      "Oblique Rotation ist mit orthogonaler Rotation vollständig identisch.",
+      "Bei obliquer Rotation dürfen die Faktoren korrelieren; Mustermatrix (Regressionsgewichte) und Strukturmatrix (Korrelationen) unterscheiden sich."
+    ],
+    "c": 3,
+    "e": "Oblique Rotation (Oblimin/Promax): Faktoren dürfen korrelieren (schiefwinklig). Dann sind Mustermatrix (Ladungen = Regressionsgewichte) und Strukturmatrix (Korrelationen Variable–Faktor) NICHT mehr identisch. (Bei orthogonaler Rotation sind sie gleich.)"
+  },
+  {
+    "id": "bq5",
+    "q": "Welches Kriterium gilt als das beste zur Bestimmung der Faktorenzahl?",
+    "opts": [
+      "Die Parallelanalyse (Horn, 1965) — Vergleich der empirischen Eigenwerte mit Zufallsdaten.",
+      "Das Kaiser-Guttman-Kriterium, da es als Minimalkriterium nie zu viele Faktoren liefert.",
+      "Der Scree-Test, da seine visuelle Auswertung vollkommen objektiv ist.",
+      "Als bestes Kriterium zur Bestimmung der Faktorenzahl gilt nach der dargestellten Konzeption ausschließlich die Anzahl der Items im Datensatz, da grundsätzlich stets genauso viele Faktoren extrahiert werden sollten, wie ursprünglich Variablen in die Analyse eingegangen sind."
+    ],
+    "c": 0,
+    "e": "Die Parallelanalyse (Horn 1965) gilt als sehr gutes Kriterium (Vergleich mit Zufallsdaten). Kaiser-Guttman (Eigenwert>1) ist nur ein Minimalkriterium (oft zu viele Faktoren); der Scree-Test (Knick) ist subjektiv."
+  },
+  {
+    "id": "bq6",
+    "q": "Wie hängt die Faktorladung bei ORTHOGONALER Rotation mit der Korrelation zusammen?",
+    "opts": [
+      "Die Faktorladung ist bei orthogonaler Rotation ausschließlich ein reines Regressionsgewicht und steht nach der dargestellten Konzeption mit der Korrelation zwischen der jeweiligen Variablen und dem Faktor in keinerlei rechnerischem oder inhaltlichem Zusammenhang.",
+      "Die Faktorladung entspricht (bei orthogonaler Rotation) der Korrelation zwischen Variable und Faktor; Muster- und Strukturmatrix sind identisch.",
+      "Die Faktorladung ist bei orthogonaler Rotation immer null.",
+      "Die Faktorladung ist das Quadrat der Korrelation zwischen zwei Faktoren."
+    ],
+    "c": 1,
+    "e": "Bei orthogonaler Rotation entspricht die Faktorladung der Korrelation zwischen Variable und Faktor — Mustermatrix und Strukturmatrix sind identisch. (Bei obliquer Rotation gilt das nicht mehr.)"
+  },
+  {
+    "id": "bq7",
+    "q": "Was besagt das Fürntratt-Kriterium für die Itemselektion?",
+    "opts": [
+      "Ein Item muss auf mindestens zwei Faktoren gleichzeitig hoch laden.",
+      "Die Stichprobe muss mindestens 1000 Personen umfassen.",
+      "Die quadrierte Ladung soll mindestens 50 % der Kommunalität der Variablen ausmachen.",
+      "Das Fürntratt-Kriterium legt nach der dargestellten Konzeption ausschließlich fest, dass die Gesamtzahl der extrahierten Faktoren stets mindestens der Hälfte der Anzahl der untersuchten Items entsprechen muss, und trifft dabei keinerlei Aussage über die Ladung einzelner Items."
+    ],
+    "c": 2,
+    "e": "Fürntratt-Kriterium: die quadrierte Ladung eines Items auf dem Zielfaktor soll mindestens 50 % seiner Kommunalität ausmachen. (Alternative Daumenregel: Ladung ≥ .50.)"
+  },
+  {
+    "id": "bq8",
+    "q": "Was unterscheidet den Eigenwert von der Kommunalität?",
+    "opts": [
+      "Eigenwert und Kommunalität sind nach der dargestellten Konzeption vollständig identische Kennwerte, die sich ausschließlich im Namen unterscheiden und in jeder Faktorenanalyse zwangsläufig stets denselben numerischen Wert annehmen.",
+      "Der Eigenwert bezieht sich auf ein Item (Zeile), die Kommunalität auf einen Faktor (Spalte).",
+      "Beide beziehen sich auf dieselbe Zeile der Ladungsmatrix und sind austauschbar.",
+      "Der Eigenwert λ ist die durch EINEN Faktor aufgeklärte Varianz (Spalte: Σ quadr. Ladungen); die Kommunalität h² ist die durch alle Faktoren aufgeklärte Varianz EINES Items (Zeile)."
+    ],
+    "c": 3,
+    "e": "Eigenwert λ = Varianz, die ein FAKTOR aufklärt (Summe quadrierter Ladungen einer SPALTE). Kommunalität h² = Varianz eines ITEMS, die durch alle Faktoren aufgeklärt wird (Summe quadrierter Ladungen einer ZEILE)."
+  }
+];
+
+var corrCorrect = {
+  "c2a": "pca",
+  "c2b": "pfa",
+  "c2c": "pca",
+  "c3a": "eigenwert",
+  "c3b": "kommunalitaet",
+  "c3c": "eigenwert",
+  "c6a": "orthogonal",
+  "c6b": "oblique",
+  "c6c": "orthogonal"
+};
+var corrExpl = {
+  "c2a": "Initiale Kommunalität = 1, gesamte Varianz, Diagonale = Einsen = PCA.",
+  "c2b": "Initiale Kommunalität < 1, nur gemeinsame Varianz (Uniqueness) = PFA.",
+  "c2c": "Annahme: Gesamtvarianz vollständig durch Faktoren erklärbar = PCA.",
+  "c3a": "Varianz, die EIN Faktor aufklärt (Σ quadr. Ladungen einer Spalte) = Eigenwert λ.",
+  "c3b": "Varianz EINES Items durch die Faktoren (Σ quadr. Ladungen einer Zeile) = Kommunalität h².",
+  "c3c": "Summe aller = Gesamtvarianz m = Eigenwerte (Σλ = m).",
+  "c6a": "Faktoren unkorreliert (senkrecht), Muster = Struktur, Varimax = orthogonale Rotation.",
+  "c6b": "Faktoren korreliert (schiefwinklig), Muster ≠ Struktur, Oblimin = oblique Rotation.",
+  "c6c": "Ladung = Korrelation Variable–Faktor → orthogonale Rotation."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Faktorzahl-Simulator (Sektion ④, EFA-Extraktionskriterien) */
+var fzData = {
+  kg:   {t:'Kaiser-Guttman-Kriterium', d:'Behalte Faktoren mit Eigenwert > 1. Minimalkriterium — extrahiert oft zu viele Faktoren.'},
+  scree:{t:'Scree-Test (Cattell)', d:'Behalte Faktoren bis zum „Knick" im Eigenwerteverlauf. Anschaulich, aber subjektiv.'},
+  pa:   {t:'Parallelanalyse (Horn)', d:'Vergleich der Eigenwerte mit denen von Zufallsdaten — behalte nur Faktoren über dem Zufall. Methode der Wahl.'}
+};
+function fzSet(k){
+  ['kg','scree','pa'].forEach(function(x){ var b=document.getElementById('fz-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('fz-out'); if(!o) return;
+  var d=fzData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  fzSet('kg');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

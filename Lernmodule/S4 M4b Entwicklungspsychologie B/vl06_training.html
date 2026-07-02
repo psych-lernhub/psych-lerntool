@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL06 Training kognitiver Funktionen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl06
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Transfer-Simulator (VL06) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL06 Training kognitiver Funktionen</h1>
+<p class="page-sub">Entwicklungspsychologie B (Erwachsenenalter und Alter) · Prof. Dr. Kerstin Jost · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Warum trainieren? Mechanik vs. Pragmatik · 2. Hirnjogging & mangelnde Evidenz (Memorandum 2009) · 3. Trainingseffekt vs. Transfer · 4. Near vs. Far Transfer · 5. Methodik: aktive vs. passive Kontrollgruppe · 6. Magnification vs. Compensation · 7. Kapazität vs. Effizienz · 8. Plastizität & Testing the Limits
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Warum trainieren?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Hirnjogging & Evidenz</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Effekt vs. Transfer</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Near vs. Far</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Kontrollgruppen</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Wer profitiert?</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Kapazität vs. Effizienz</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Plastizität & Limits</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Warum trainieren? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Warum trainieren? Mechanik vs. Pragmatik</div>
+    <div class="sec-lz">Kognitive Kontrolle (≈ fluide Intelligenz/Mechanik) nimmt im Alter ab; Pragmatik (kristallin) bleibt; Training soll Defizite verringern</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Komponente der Intelligenz nimmt im Alter ab — und ist damit der eigentliche Grund, kognitives Training zu erproben?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die <strong>Mechanik</strong> (≈ fluide Intelligenz / kognitive Kontrolle) fällt ab; die <strong>Pragmatik</strong> (≈ kristallin) bleibt. Training zielt auf die abnehmende kognitive Kontrolle.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mechanik vs. Pragmatik (Baltes-Modell)</div>
+    <strong>Mechanik</strong> (fluid, „Intelligence as Basic Information Processing“): früh Maximum, deutlicher Abfall. <strong>Pragmatik</strong> (kristallin, „Cultural Knowledge“): längerer, flacherer Anstieg, bleibt länger erhalten.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum trainieren?</div>
+    Kognitive Kontrollfunktionen (≈ fluide Intelligenz) sind Kernfunktionen vieler Alltagsaufgaben und <strong>nehmen über die Lebensspanne ab</strong>. Training soll diese Defizite verringern — relevant auch bei ADHS, Lernschwächen, in der klinischen Neuropsychologie.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Es ist die <strong>Mechanik/fluide Intelligenz</strong>, die abnimmt — nicht die Pragmatik. Eine Verwechslung der Richtung ist ein klassischer Distraktor.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Mechanik vs. Pragmatik über die Lebensspanne</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="mech" onclick="switchTab(this,'mp6')">Mechanik</button>
+      <button class="tab-btn" data-tab="prag" onclick="switchTab(this,'mp6')">Pragmatik</button>
+    </div>
+    <div class="tab-group" data-group="mp6">
+      <div class="tab-content active" data-tab="mech">
+        <strong>≈ fluide Intelligenz.</strong> Frühes Maximum, danach deutlicher Abfall. Ziel des Trainings (kognitive Kontrolle).
+      </div>
+      <div class="tab-content" data-tab="prag">
+        <strong>≈ kristalline Intelligenz.</strong> Längerer, flacherer Anstieg; bleibt bis ins hohe Alter weitgehend erhalten.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Hirnjogging & Evidenz ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Hirnjogging & seine wissenschaftliche Evidenz</div>
+    <div class="sec-lz">Kommerzielle Apps (Lumosity etc.); Studien Jaeggi/Owen; Memorandum 2009 (MPIB): verbessert v.a. das Geübte, kaum Transfer; kein Demenzschutz belegt</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Apps wie Lumosity versprechen ein „fitteres Gehirn“. Was sagt die unabhängige Wissenschaft dazu?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Ernüchternd: Die Programme verbessern vor allem die <strong>geübte</strong> Aufgabe; ein <strong>Transfer</strong> auf allgemeine Fähigkeiten oder den Alltag ist selten belegt. Ein Demenzschutz ist nicht nachgewiesen (Memorandum 2009).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kommerzielles Hirnjogging</div>
+    Zahlreiche Apps (Lumosity >85 Mio Nutzer, Peak, NeuroNation, Memorado) versprechen kognitive Verbesserung. Studien wie Jaeggi et al. (2008) berichteten Transfer auf fluide Intelligenz — die große Replikation Owen et al. (2010, n=11.430) fand jedoch kaum Transfer.
+  </div>
+  <div class="card">
+    <div class="card-title">Memorandum (2009, MPIB) — Kernaussagen</div>
+    Programme verbessern v.a. das <strong>Geübte</strong>; Transfer auf Alltag/allgemeine Fähigkeiten ist selten. <strong>Kein</strong> Beleg, dass sie Demenz vorbeugen. Auf <em>unabhängige</em> Wirksamkeitsprüfung achten. <strong>Körperliche Bewegung</strong> ist eine wirksame, kostengünstige Alternative.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ „Versteckte Kosten“</div>
+    Jede Stunde am Bildschirm-Training ist eine Stunde weniger für Bewegung, Sprachenlernen, Kochen oder soziale Kontakte — Aktivitäten, deren Nutzen besser belegt ist.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Das Memorandum Schritt für Schritt</div>
+    <div id="memo">
+      <div class="step-item"><strong>1.</strong> Trainingsprogramme verbessern die Fertigkeiten, die sie trainieren.</div>
+      <div class="step-item"><strong>2.</strong> Nur sehr wenige zeigen Transfer auf allgemeine Fähigkeiten oder Alltag.</div>
+      <div class="step-item"><strong>3.</strong> Kein wissenschaftlicher Beleg für Vorbeugung/Verzögerung von Demenz.</div>
+      <div class="step-item"><strong>4.</strong> Auf unabhängige Wirksamkeitsprüfungen achten (nicht auf Hersteller-Studien).</div>
+      <div class="step-item"><strong>5.</strong> Körperliche Bewegung steigert nachweislich Hirndurchblutung und kognitive Leistung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'memo')">Nächster Punkt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Effekt vs. Transfer ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Trainingseffekt vs. Transfer</div>
+    <div class="sec-lz">Zentrale Frage ist nicht, ob die Testleistung steigt, sondern ob Gewinne auf untrainierte Aufgaben/Alltag transferieren</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Dass man in der geübten Aufgabe besser wird, ist erwartbar. Was ist die eigentlich entscheidende Frage beim kognitiven Training?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Ob die Gewinne <strong>transferieren</strong> — also auf untrainierte Aufgaben oder den Alltag übergehen. Der bloße <strong>Trainingseffekt</strong> in der geübten Aufgabe ist trivial.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Trainingseffekt</div>
+    <strong>Trainingseffekt</strong> = Verbesserung in der <em>geübten</em> Aufgabe. Tritt fast immer ein (man wird besser in dem, was man übt) und ist daher ein trivialer Befund.
+  </div>
+  <div class="card">
+    <div class="card-title">Transfer</div>
+    <strong>Transfer</strong> = Übertragung der Gewinne auf <em>untrainierte</em> Aufgaben (Near/Far) bzw. den Alltag. Selten — und genau das eigentliche Ziel und der Prüfstein eines Trainings.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Ein Trainingseffekt in der geübten Aufgabe bedeutet <strong>nicht</strong> automatisch Transfer. „Die Wortlisten-Technik hilft beim Wortlisten-Merken, aber nicht beim Wiederfinden des Autoschlüssels.“
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Trainingseffekt vs. Transfer</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="te" onclick="switchTab(this,'eff')">Trainingseffekt</button>
+      <button class="tab-btn" data-tab="tr" onclick="switchTab(this,'eff')">Transfer</button>
+    </div>
+    <div class="tab-group" data-group="eff">
+      <div class="tab-content active" data-tab="te">
+        <strong>Was:</strong> Verbesserung in der geübten Aufgabe. <strong>Häufigkeit:</strong> fast immer. <strong>Aussagekraft:</strong> trivial.
+      </div>
+      <div class="tab-content" data-tab="tr">
+        <strong>Was:</strong> Übertragung auf untrainierte Aufgaben/Alltag. <strong>Häufigkeit:</strong> selten. <strong>Aussagekraft:</strong> das eigentliche Ziel.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Near vs. Far ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Near vs. Far Transfer</div>
+    <div class="sec-lz">Near = strukturell ähnliche Aufgaben (Switching A–B → C–D); Far = unähnliche Aufgaben/fluide Intelligenz; Far eher bei Älteren (Karbach & Kray)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Transfer gibt es in zwei „Reichweiten“. Was unterscheidet einen Transfer auf eine ähnliche von einem auf eine ganz andere Aufgabe?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Near Transfer</strong> = auf strukturell ähnliche Aufgaben (z.B. Switching A–B → C–D). <strong>Far Transfer</strong> = auf strukturell unähnliche Aufgaben (z.B. WM-Training → fluide Intelligenz).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Near Transfer</div>
+    Verbesserung in <strong>strukturell ähnlichen</strong> Aufgaben. Beispiel: Training des Aufgabenwechsels A–B verbessert auch den Wechsel C–D. Relativ leicht und altersübergreifend belegt.
+  </div>
+  <div class="card">
+    <div class="card-title">Far Transfer</div>
+    Verbesserung in <strong>strukturell unähnlichen</strong> Aufgaben (z.B. Arbeitsgedächtnistraining → allgemeine fluide Intelligenz). Selten und umstritten — laut Task-Switching-Forschung (Karbach &amp; Kray) eher bei älteren Erwachsenen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    <strong>Near = nah/ähnlich</strong>, <strong>Far = fern/unähnlich</strong>. Far Transfer ist der schwierige, aber wertvolle Fall (z.B. Training B mit n-back → WCST).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Near oder Far Transfer?</div>
+    <div class="corr-item" id="t3a">Training des Aufgabenwechsels A–B verbessert den Wechsel C–D
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t3a',this,'near')">Near</button>
+        <button class="corr-btn" onclick="checkCorr('t3a',this,'far')">Far</button>
+      </div><div class="corr-fb" id="t3a-fb"></div>
+    </div>
+    <div class="corr-item" id="t3b">Gedächtnistraining verbessert die allgemeine fluide Intelligenz
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t3b',this,'near')">Near</button>
+        <button class="corr-btn" onclick="checkCorr('t3b',this,'far')">Far</button>
+      </div><div class="corr-fb" id="t3b-fb"></div>
+    </div>
+    <div class="corr-item" id="t3c">Eine geübte Wortlisten-Technik hilft beim Merken anderer Wortlisten
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t3c',this,'near')">Near</button>
+        <button class="corr-btn" onclick="checkCorr('t3c',this,'far')">Far</button>
+      </div><div class="corr-fb" id="t3c-fb"></div>
+    </div>
+    <div class="corr-item" id="t3d">Arbeitsgedächtnistraining verbessert das Lösen ganz neuartiger Denkaufgaben
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t3d',this,'near')">Near</button>
+        <button class="corr-btn" onclick="checkCorr('t3d',this,'far')">Far</button>
+      </div><div class="corr-fb" id="t3d-fb"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Transfer-Simulator — wie weit reicht der Trainingseffekt?</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="tf-near" onclick="tfSet('near')">Near Transfer</button>
+        <button class="sim-tbtn" id="tf-far" onclick="tfSet('far')">Far Transfer</button>
+      </div>
+      <div class="sim-verdict" id="tf-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Merke: <strong>Near = nah/ähnlich</strong> (gut belegt), <strong>Far = fern/unähnlich</strong> (selten, der wertvolle aber schwierige Fall). Genau hier scheitern viele „Gehirnjogging“-Versprechen.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Kontrollgruppen ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Methodik: aktive vs. passive Kontrollgruppe</div>
+    <div class="sec-lz">Prätest-Posttest-Design; aktive KG (Kontrollaufgabe) kontrolliert unspezifische Effekte, passive KG (keine Aufgabe); Stichprobe, Spezifität, Transfer</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Trainingsstudie zeigt einen Prä-Post-Anstieg. Warum reicht das allein nicht als Wirksamkeitsnachweis?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Weil ohne <strong>Kontrollgruppe</strong> Übungs-, Erwartungs- und Testwiederholungseffekte den scheinbaren Trainingseffekt erzeugen können. Eine <strong>aktive</strong> KG kontrolliert dafür am besten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Studiendesign</div>
+    Typisch: gemeinsamer <strong>Prätest</strong> → drei Gruppen: Trainingsgruppe (Trainingsaufgaben), <strong>aktive</strong> Kontrollgruppe (Kontrollaufgaben), <strong>passive</strong> Kontrollgruppe (keine Aufgabe) → <strong>Posttest</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Aktive vs. passive Kontrollgruppe</div>
+    Die <strong>aktive</strong> KG ist unter vergleichbaren Bedingungen beschäftigt (Scheinaufgabe) und kontrolliert so für unspezifische Effekte (Erwartung, Zuwendung, Übung). Die <strong>passive</strong> KG bekommt keine Aufgabe und kontrolliert diese Effekte nicht.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Weitere Gütekriterien</div>
+    Stichprobengröße, Stabilität der Effekte, Spezifität, Generalisierbarkeit und Transfer. Ohne diese (v.a. ohne aktive KG) ist ein Wirksamkeitsschluss nicht zulässig.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Aktive vs. passive Kontrollgruppe</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="akt" onclick="switchTab(this,'kg')">Aktive KG</button>
+      <button class="tab-btn" data-tab="pas" onclick="switchTab(this,'kg')">Passive KG</button>
+    </div>
+    <div class="tab-group" data-group="kg">
+      <div class="tab-content active" data-tab="akt">
+        <strong>Tätigkeit:</strong> bearbeitet Kontroll-/Scheinaufgaben. <strong>Kontrolliert:</strong> unspezifische Effekte (Erwartung, Zuwendung, Übung). <strong>Aussagekraft:</strong> hoch.
+      </div>
+      <div class="tab-content" data-tab="pas">
+        <strong>Tätigkeit:</strong> keine Aufgabe (nur Prä-/Posttest). <strong>Kontrolliert:</strong> unspezifische Effekte NICHT. <strong>Aussagekraft:</strong> schwächer.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Wer profitiert? ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Wer profitiert? Magnification vs. Compensation</div>
+    <div class="sec-lz">Magnification: Hohe profitieren mehr → Unterschiede vergrößern sich. Compensation: Niedrige profitieren mehr → Angleichung (oft bei Älteren)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Profitieren vom selben Training eher die ohnehin Starken oder die Schwachen? Und wie heißen die beiden Muster?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Magnification</strong>: Starke profitieren mehr → Unterschiede wachsen. <strong>Compensation</strong>: Schwache profitieren mehr → Unterschiede gleichen sich an (oft bei Älteren).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Magnification-Effekt</div>
+    Personen mit <strong>höherem</strong> Ausgangsniveau profitieren stärker vom Training → die Leistungsunterschiede zwischen den Personen <strong>vergrößern</strong> sich („die Schere geht auf“).
+  </div>
+  <div class="card">
+    <div class="card-title">Compensation-Effekt</div>
+    Personen mit <strong>niedrigerem</strong> Ausgangsniveau profitieren stärker → bestehende Unterschiede <strong>gleichen sich an</strong>. Besonders relevant bei älteren Erwachsenen (Plastizitätsinduktion, Kompensation).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Frage immer: „Wer profitiert mehr?“ <strong>Magnification = Starke</strong> (Schere auf), <strong>Compensation = Schwache</strong> (Angleichung). Individuelle Unterschiede (Ausgangsniveau, Motivation, Erwartung) bestimmen den Gewinn.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Magnification oder Compensation?</div>
+    <div class="corr-item" id="t5a">Personen mit hohem Ausgangsniveau profitieren stärker → Unterschiede vergrößern sich
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t5a',this,'magnification')">Magnification</button>
+        <button class="corr-btn" onclick="checkCorr('t5a',this,'compensation')">Compensation</button>
+      </div><div class="corr-fb" id="t5a-fb"></div>
+    </div>
+    <div class="corr-item" id="t5b">Personen mit niedrigem Ausgangsniveau profitieren stärker → Unterschiede gleichen sich an
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t5b',this,'magnification')">Magnification</button>
+        <button class="corr-btn" onclick="checkCorr('t5b',this,'compensation')">Compensation</button>
+      </div><div class="corr-fb" id="t5b-fb"></div>
+    </div>
+    <div class="corr-item" id="t5c">Ältere Erwachsene holen durch Training zum Niveau Jüngerer auf
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('t5c',this,'magnification')">Magnification</button>
+        <button class="corr-btn" onclick="checkCorr('t5c',this,'compensation')">Compensation</button>
+      </div><div class="corr-fb" id="t5c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Kapazität vs. Effizienz ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Kapazität vs. Effizienz (von Bastian)</div>
+    <div class="sec-lz">Capacity-Efficiency-Model: wenig Evidenz für mehr Kapazität, viel Evidenz für bessere Effizienz (Strategien, Aufgabenwissen, Automatisierung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Macht Training das Gehirn „größer“ (mehr Ressourcen) — oder nur „klüger im Umgang“ mit den vorhandenen Ressourcen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Eher Letzteres: Das Capacity-Efficiency-Model (von Bastian) findet <strong>wenig</strong> Evidenz für mehr <strong>Kapazität</strong>, aber <strong>viel</strong> Evidenz für bessere <strong>Effizienz</strong> (Strategien, Automatisierung).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kognitive Kapazität</div>
+    Die insgesamt verfügbaren kognitiven Ressourcen (obere Grenze). Es gibt <strong>wenig</strong> Evidenz, dass Training diese Kapazität tatsächlich erhöht.
+  </div>
+  <div class="card">
+    <div class="card-title">Kognitive Effizienz</div>
+    Optimierte Leistung <strong>innerhalb</strong> der bestehenden Kapazitätsgrenzen — durch verbessertes Aufgabenwissen, Strategienutzung und Automatisierung. Hierfür gibt es <strong>substanzielle</strong> Evidenz (von Bastian et al., 2022).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Trainingsgewinne beruhen überwiegend auf <strong>mehr Effizienz</strong>, nicht auf mehr Kapazität. „Mehr Effizienz“ ≠ „mehr Ressourcen“.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Kapazität vs. Effizienz</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="kap" onclick="switchTab(this,'ke')">Kapazität</button>
+      <button class="tab-btn" data-tab="eff" onclick="switchTab(this,'ke')">Effizienz</button>
+    </div>
+    <div class="tab-group" data-group="ke">
+      <div class="tab-content active" data-tab="kap">
+        <strong>Was:</strong> insgesamt verfügbare Ressourcen (obere Grenze). <strong>Trainierbar?</strong> Wenig Evidenz.
+      </div>
+      <div class="tab-content" data-tab="eff">
+        <strong>Was:</strong> bessere Nutzung vorhandener Ressourcen (Strategien, Automatisierung). <strong>Trainierbar?</strong> Substanzielle Evidenz.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Plastizität & Limits ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Plastizität & Testing the Limits</div>
+    <div class="sec-lz">Baseline, Ausgangs- und Entwicklungsreserve; Testing the Limits macht latente Plastizität/Entwicklungsgrenzen sichtbar (Methode der Orte)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie viel kann sich Entwicklung im Alter überhaupt noch ändern — und wie misst man dieses verborgene Potential?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Über <strong>Plastizität</strong> (intraindividuelle Veränderbarkeit). Das Paradigma <strong>Testing the Limits</strong> reizt die Leistung durch intensives Training aus und macht so Bandbreite und Grenzen der Entwicklung sichtbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Plastizität</div>
+    <strong>Plastizität</strong> = intraindividuelle Variabilität und das Potential, das Entwicklung ermöglicht (als Funktion von Reifung, Alterung, Lernen). Eine <strong>Kapazitätsreserve</strong> zeigt sich z.B., wenn trainierte Ältere das Niveau untrainierter Jüngerer erreichen.
+  </div>
+  <div class="card">
+    <div class="card-title">Testing the Limits</div>
+    Forschungsparadigma zur Erkundung der <strong>Grenzen</strong> der Entwicklungsmöglichkeiten. Im normalen Leistungsbereich bleiben Altersunterschiede oft verborgen — erst an den Grenzen (intensives Training) werden sie sichtbar.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Reserve-Begriffe</div>
+    <strong>Ausgangsleistung</strong> (vor Intervention) · <strong>Ausgangsreserve</strong> (obere Grenze bei voller Ressourcennutzung) · <strong>Entwicklungsreserve</strong> (wenn sich die Ausgangsreserve durch Training erhöhen lässt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Von der Ausgangsleistung zur Entwicklungsreserve</div>
+    <div id="limit">
+      <div class="step-item"><strong>Ausgangsleistung:</strong> die Leistung einer Person vor jeder Intervention.</div>
+      <div class="step-item"><strong>Ausgangsreserve:</strong> die obere Leistungsgrenze, wenn alle verfügbaren Ressourcen aktiviert werden.</div>
+      <div class="step-item"><strong>Entwicklungsreserve:</strong> wenn sich diese Grenze durch Training/Intervention noch weiter anheben lässt.</div>
+      <div class="step-item"><strong>Befund (Methode der Orte):</strong> erst an den Leistungsgrenzen werden Altersunterschiede in der Plastizität sichtbar.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'limit')">Nächster Begriff ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL06 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Trainingseffekt</h4>
+      <p>Verbesserung in der GEÜBTEN Aufgabe</p>
+      <p>Tritt fast immer ein</p>
+      <p>Trivialer Befund</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Transfer</h4>
+      <p>Übertragung auf UNTRAINIERTE Aufgaben</p>
+      <p>Selten, das eigentliche Ziel</p>
+      <p>Near vs. Far</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Trainingseffekt in der geübten Aufgabe bedeutet automatisch auch einen Transfer auf andere, untrainierte Aufgaben.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Near Transfer</h4>
+      <p>Strukturell ähnliche Aufgaben</p>
+      <p>z.B. Switching A–B → C–D</p>
+      <p>Altersübergreifend belegt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Far Transfer</h4>
+      <p>Strukturell unähnliche Aufgaben</p>
+      <p>z.B. WM-Training → fluide Intelligenz</p>
+      <p>Selten; eher bei Älteren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Near Transfer bezeichnet die Übertragung von Trainingsgewinnen auf strukturell völlig unähnliche Aufgaben.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kognitive Kapazität</h4>
+      <p>Insgesamt verfügbare Ressourcen</p>
+      <p>Wenig Evidenz für Erhöhung durch Training</p>
+      <p>Obere Grenze</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kognitive Effizienz</h4>
+      <p>Optimierte Nutzung bestehender Ressourcen</p>
+      <p>Viel Evidenz für Trainingsgewinne</p>
+      <p>Strategien, Automatisierung, Aufgabenwissen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kognitives Training erhöht in erster Linie die kognitive Kapazität, während die Effizienz davon unberührt bleibt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Magnification-Effekt</h4>
+      <p>Hohes Ausgangsniveau profitiert stärker</p>
+      <p>Unterschiede vergrößern sich</p>
+      <p>„Schere geht auf“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Compensation-Effekt</h4>
+      <p>Niedriges Ausgangsniveau profitiert stärker</p>
+      <p>Unterschiede gleichen sich an</p>
+      <p>Oft bei älteren Erwachsenen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim Compensation-Effekt profitieren die ohnehin leistungsstarken Personen am meisten, sodass die Unterschiede größer werden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Aktive Kontrollgruppe</h4>
+      <p>Bearbeitet Kontroll-/Scheinaufgaben</p>
+      <p>Kontrolliert unspezifische Effekte</p>
+      <p>Gleiche Rahmenbedingungen wie Training</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Passive Kontrollgruppe</h4>
+      <p>Bekommt keine Aufgabe</p>
+      <p>Nur Prä- und Posttest</p>
+      <p>Kontrolliert unspezifische Effekte NICHT</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine passive Kontrollgruppe bearbeitet anspruchsvolle Kontrollaufgaben und kontrolliert dadurch besser für Erwartungseffekte als eine aktive Kontrollgruppe.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl06</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl06';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Warum will man kognitive Funktionen im Alter überhaupt trainieren?",
+      "opts": [
+        "Weil kognitive Kontrollfunktionen (≈ fluide Intelligenz/Mechanik) über die Lebensspanne abnehmen.",
+        "Weil die kristalline Intelligenz, also das kulturelle Erfahrungswissen, im Alter besonders rasch und vollständig verloren geht und daher dringend trainiert werden muss.",
+        "Weil die Pragmatik im Alter abrupt zusammenbricht.",
+        "Weil Training die angeborene kognitive Kapazität sicher und dauerhaft erhöht."
+      ],
+      "c": 0,
+      "e": "Trainiert wird, weil die kognitive Kontrolle (≈ fluide Intelligenz/Mechanik) über die Lebensspanne abnimmt. Die Pragmatik (kristallin) bleibt dagegen stabil."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie verlaufen Mechanik und Pragmatik über das Lebensalter?",
+      "opts": [
+        "Die Pragmatik fällt nach frühem Maximum besonders steil ab.",
+        "Die Mechanik (fluid) fällt nach frühem Maximum ab; die Pragmatik (kristallin) bleibt länger erhalten.",
+        "Mechanik und Pragmatik verlaufen exakt identisch, erreichen im frühen Erwachsenenalter ihr gemeinsames Maximum und fallen danach gleich schnell ab.",
+        "Beide steigen über die gesamte Lebensspanne kontinuierlich an."
+      ],
+      "c": 1,
+      "e": "Mechanik (fluid): frühes Maximum, deutlicher Abfall. Pragmatik (kristallin): längerer, flacherer Anstieg, bleibt länger erhalten."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was ist aus wissenschaftlicher Perspektive das Bedenkliche an Hirnjogging-Produkten?",
+      "opts": [
+        "Die durchweg hohen Anschaffungskosten der Programme.",
+        "Dass sie fast immer computerbasiert sind.",
+        "Die oft mangelnde empirische Evidenz für ihre (transfer-)Wirksamkeit.",
+        "Dass sie nachweislich die trainierten Aufgaben verschlechtern und so das allgemeine kognitive Niveau der Nutzer dauerhaft senken."
+      ],
+      "c": 2,
+      "e": "Hauptproblem ist die mangelnde empirische Evidenz für die Wirksamkeit, insbesondere für Transfer auf andere Fähigkeiten/Alltag."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was besagt das Memorandum (2009, MPIB) zum Hirnjogging?",
+      "opts": [
+        "Kommerzielle Hirnjogging-Programme beugen nachweislich der Alzheimer-Demenz vor und können deren Auftreten zuverlässig verzögern.",
+        "Trainingsprogramme verbessern überhaupt keine einzige Fähigkeit.",
+        "Körperliche Bewegung ist für die Hirnfitness wirkungslos.",
+        "Programme verbessern v.a. die trainierte Fertigkeit; Transfer auf Alltag/allgemeine Fähigkeiten ist selten."
+      ],
+      "c": 3,
+      "e": "Memorandum: Programme verbessern meist nur das Geübte; Transfer ist selten; kein Beleg für Demenzschutz; körperliche Bewegung ist eine wirksame, kostengünstige Alternative."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was ist die zentrale wissenschaftliche Frage beim kognitiven Training?",
+      "opts": [
+        "Nicht ob die Leistung in der Testaufgabe steigt, sondern ob die Gewinne auf untrainierte Aufgaben transferieren.",
+        "Ausschließlich, ob sich die Leistung in der trainierten Aufgabe selbst verbessert, da der Transfer auf andere Aufgaben für die Bewertung eines Trainings völlig irrelevant ist.",
+        "Nur, wie teuer das Trainingsprogramm ist.",
+        "Nur, wie viele Nutzer ein Programm hat."
+      ],
+      "c": 0,
+      "e": "Dass die geübte Aufgabe besser wird, ist trivial. Entscheidend ist der Transfer auf untrainierte Aufgaben bzw. eine allgemeine Leistungssteigerung."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie unterscheiden sich Trainingseffekt und Transfer?",
+      "opts": [
+        "Trainingseffekt und Transfer bezeichnen exakt dasselbe.",
+        "Trainingseffekt = Verbesserung in der geübten Aufgabe; Transfer = Übertragung auf untrainierte Aufgaben.",
+        "Ein Trainingseffekt bezeichnet ausschließlich die Übertragung der Gewinne auf völlig andere, nie geübte Alltagsaufgaben.",
+        "Transfer tritt grundsätzlich automatisch zusammen mit jedem Trainingseffekt ein."
+      ],
+      "c": 1,
+      "e": "Trainingseffekt = Verbesserung in der geübten Aufgabe (fast immer). Transfer = Übertragung auf untrainierte Aufgaben (selten, das eigentliche Ziel)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist Near Transfer?",
+      "opts": [
+        "Die Verbesserung in inhaltlich völlig unähnlichen Aufgaben wie der allgemeinen fluiden Intelligenz.",
+        "Near und Far Transfer bezeichnen dasselbe Phänomen.",
+        "Die Verbesserung in strukturell ähnlichen Aufgaben (z.B. Switching A–B → Switching C–D).",
+        "Die Übertragung von Trainingsgewinnen auf strukturell maximal unähnliche Alltagskompetenzen und Reasoning-Aufgaben."
+      ],
+      "c": 2,
+      "e": "Near Transfer = Verbesserung in strukturell ähnlichen Aufgaben. Far Transfer = Übertragung auf unähnliche Aufgaben (z.B. fluide Intelligenz)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welcher Befund gilt für Task-Switching-Training (Karbach & Kray)?",
+      "opts": [
+        "Far Transfer tritt grundsätzlich nur bei jüngeren Erwachsenen auf, während Ältere ausschließlich Near Transfer zeigen können.",
+        "Task-Switching-Training zeigt überhaupt keine Effekte.",
+        "Far Transfer ist generell besonders leicht und zuverlässig zu erreichen.",
+        "Near Transfer ist in allen Altersgruppen belegt; Far Transfer zeigt sich eher bei älteren Erwachsenen."
+      ],
+      "c": 3,
+      "e": "Near Transfer ist altersübergreifend belegt; Far Transfer fällt eher bei älteren als bei jüngeren Erwachsenen auf (Karbach & Kray)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wie unterscheiden sich aktive und passive Kontrollgruppe?",
+      "opts": [
+        "Eine aktive Kontrollgruppe bearbeitet Kontrollaufgaben; eine passive Kontrollgruppe bekommt keine Aufgabe.",
+        "Eine passive Kontrollgruppe bearbeitet anspruchsvolle Kontrollaufgaben, während die aktive Gruppe das eigentliche kognitive Training absolviert, sodass beide Gruppen gefordert sind.",
+        "Beide Gruppen erhalten das vollständige Training.",
+        "Es gibt zwischen beiden keinen relevanten Unterschied."
+      ],
+      "c": 0,
+      "e": "Aktive KG: bearbeitet Kontroll-/Scheinaufgaben (gleiche Rahmenbedingungen). Passive KG: keine Aufgabe (nur Prä-/Posttest)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Warum ist eine aktive Kontrollgruppe wichtig?",
+      "opts": [
+        "Sie ist methodisch überflüssig.",
+        "Sie kontrolliert für unspezifische Effekte (Erwartung, Aufmerksamkeit, Engagement, Testwiederholung).",
+        "Sie dient ausschließlich dazu, die Stichprobengröße zu erhöhen, hat aber keinerlei Einfluss auf die Aussagekraft der Trainingseffekte.",
+        "Sie ersetzt den Prätest vollständig."
+      ],
+      "c": 1,
+      "e": "Die aktive KG kontrolliert unspezifische Effekte (Erwartung, Zuwendung, Übung), sodass spezifische Trainingseffekte sauber isoliert werden können."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was beschreibt der Compensation-Effekt?",
+      "opts": [
+        "Personen mit hohem Ausgangsniveau profitieren stärker.",
+        "Alle Personen profitieren exakt gleich stark vom Training.",
+        "Personen mit niedrigem Ausgangsniveau profitieren stärker → Unterschiede gleichen sich an.",
+        "Training verbessert die ohnehin leistungsstarken Personen weiter und vergrößert dadurch die Leistungsunterschiede zwischen den Personen systematisch."
+      ],
+      "c": 2,
+      "e": "Compensation: Personen mit niedrigem Ausgangsniveau profitieren stärker → Unterschiede gleichen sich an (oft bei älteren Erwachsenen, Plastizitätsinduktion)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was beschreibt der Magnification-Effekt?",
+      "opts": [
+        "Die schwächsten Personen holen am stärksten auf, sodass sich die Unterschiede zwischen den Trainierten weitgehend angleichen.",
+        "Magnification betrifft ausschließlich ältere Erwachsene.",
+        "Magnification und Compensation bezeichnen dasselbe.",
+        "Personen mit höherem Ausgangsniveau profitieren stärker → die Unterschiede vergrößern sich."
+      ],
+      "c": 3,
+      "e": "Magnification: Personen mit höherem Ausgangsniveau profitieren stärker → die Leistungsunterschiede werden durch das Training vergrößert."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was besagt das Capacity-Efficiency-Model (von Bastian et al., 2022)?",
+      "opts": [
+        "Es gibt wenig Evidenz für eine Erhöhung der kognitiven Kapazität, aber viel Evidenz für eine verbesserte Effizienz.",
+        "Es gibt substanzielle Evidenz, dass Training die grundlegende kognitive Kapazität dauerhaft und deutlich erhöht, aber kaum Belege für Effizienzgewinne.",
+        "Training verändert weder Kapazität noch Effizienz.",
+        "Kapazität und Effizienz sind dasselbe Konstrukt."
+      ],
+      "c": 0,
+      "e": "Wenig Evidenz, dass Training die Kapazität erhöht; substanzielle Evidenz für verbesserte Effizienz (Strategien, Aufgabenwissen, Automatisierung)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was ist mit kognitiver Effizienz gemeint?",
+      "opts": [
+        "Eine Steigerung der Effizienz durch Vergrößerung der absoluten Hirnkapazität.",
+        "Die optimierte Nutzung bestehender Ressourcen (Strategien, Aufgabenwissen, Automatisierung).",
+        "Die insgesamt verfügbare Menge an kognitiven Ressourcen, die durch Training nachweislich und dauerhaft vergrößert wird.",
+        "Effizienz ist grundsätzlich nicht trainierbar."
+      ],
+      "c": 1,
+      "e": "Kognitive Effizienz = optimierte Leistung innerhalb der bestehenden Kapazitätsgrenzen (bessere Strategien, mehr Automatisierung) — das ist gut trainierbar."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was ist der Testing-the-Limits-Ansatz?",
+      "opts": [
+        "Ein Verfahren, das nur die durchschnittliche Alltagsleistung gesunder Erwachsener misst.",
+        "Ein Medikament zur kurzfristigen Leistungssteigerung.",
+        "Ein Forschungsparadigma, das durch intensives Training die Grenzen des Entwicklungspotentials sichtbar macht.",
+        "Ein Verfahren, das Altersunterschiede ausschließlich im normalen, untrainierten Leistungsbereich erfasst und dabei jede Form von intensivem Training bewusst vermeidet."
+      ],
+      "c": 2,
+      "e": "Testing the Limits erkundet durch intensives Training die Grenzen der Entwicklungsmöglichkeiten und macht latentes Potential sichtbar."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was zeigen Testing-the-Limits-Befunde zur Plastizität episodischer Gedächtnisleistung?",
+      "opts": [
+        "Im normalen, untrainierten Leistungsbereich sind die Altersunterschiede bereits maximal sichtbar, und ein intensives Mnemotechnik-Training (Methode der Orte) lässt diese Unterschiede anschließend vollständig und dauerhaft verschwinden.",
+        "Plastizität gibt es im höheren Alter nicht mehr.",
+        "Training verändert die Leistungsgrenzen grundsätzlich nicht.",
+        "Erst intensives Training (z.B. Methode der Orte) macht Altersunterschiede in der Entwicklungsreserve sichtbar — Bandbreite UND Grenzen der Plastizität."
+      ],
+      "c": 3,
+      "e": "Im normalen Bereich sind Altersunterschiede kaum sichtbar; erst an den Leistungsgrenzen (intensives Mnemotechnik-Training) zeigt sich, wie weit die Plastizität reicht."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was ist aus wissenschaftlicher Perspektive das zentrale Problem kommerzieller Hirnjogging-Produkte?",
+    "opts": [
+      "Die oft mangelnde empirische Evidenz für ihre Wirksamkeit.",
+      "Dass sie ihre Nutzer nachweislich kognitiv verschlechtern und das allgemeine Leistungsniveau dauerhaft absenken, weshalb sie verboten gehören.",
+      "Die durchweg sehr hohen Anschaffungskosten.",
+      "Dass sie ausschließlich computerbasiert angeboten werden."
+    ],
+    "c": 0,
+    "e": "Das Kernproblem ist die fehlende belastbare Evidenz für (transfer-)Wirksamkeit — nicht Kosten oder Format."
+  },
+  {
+    "id": "bq2",
+    "q": "Training A (Aufgabenwechsel) verbessert Switching + Stop-Signal-Aufgabe. Training B (n-back) verbessert n-back + Wisconsin Card Sorting Test. Bei welchem spricht man von Far Transfer?",
+    "opts": [
+      "Bei Training A.",
+      "Bei Training B.",
+      "Bei beiden gleichermaßen, da jede Leistungsverbesserung in einer zweiten Aufgabe definitionsgemäß ein Far Transfer ist.",
+      "Bei keinem von beiden."
+    ],
+    "c": 1,
+    "e": "Training B: vom Arbeitsgedächtnis (n-back) auf eine strukturell unähnliche Reasoning-Aufgabe (WCST) = Far Transfer. Training A bleibt im ähnlichen Kontrollbereich (eher Near)."
+  },
+  {
+    "id": "bq3",
+    "q": "Ein Switching-Training A–B verbessert auch das Switching in der nie geübten Aufgabe C–D. Welcher Transfer liegt vor?",
+    "opts": [
+      "Far Transfer.",
+      "Gar kein Transfer.",
+      "Near Transfer.",
+      "Far Transfer, weil die Aufgaben C–D nie zuvor geübt wurden und damit per Definition strukturell maximal unähnlich sind."
+    ],
+    "c": 2,
+    "e": "Strukturell ähnliche Aufgabe (Switching → Switching) = Near Transfer."
+  },
+  {
+    "id": "bq4",
+    "q": "Eine Trainingsstudie ohne Kontrollgruppe schließt aus einem Prä-Post-Anstieg auf Wirksamkeit. Warum ist das problematisch?",
+    "opts": [
+      "Die Stichprobe ist dadurch automatisch zu groß.",
+      "Es fehlt zwingend der Posttest.",
+      "Es ist überhaupt nicht problematisch — ein Prätest-Posttest-Vergleich ohne Kontrollgruppe erbringt einen vollständigen und eindeutigen Wirksamkeitsnachweis.",
+      "Ohne Kontrollgruppe lassen sich Übungs- und Erwartungseffekte nicht vom eigentlichen Trainingseffekt trennen."
+    ],
+    "c": 3,
+    "e": "Ohne (aktive) Kontrollgruppe können Testwiederholungs-, Übungs- und Erwartungseffekte den vermeintlichen Trainingseffekt vortäuschen."
+  },
+  {
+    "id": "bq5",
+    "q": "Ältere Erwachsene mit niedrigem Ausgangsniveau holen durch Training zum Niveau jüngerer auf. Welcher Effekt?",
+    "opts": [
+      "Compensation-Effekt.",
+      "Magnification-Effekt, da Training stets die ohnehin leistungsstärksten Personen am meisten fördert und Unterschiede vergrößert.",
+      "Gar kein systematischer Effekt.",
+      "Ein reiner Near-Transfer-Effekt."
+    ],
+    "c": 0,
+    "e": "Niedriges Ausgangsniveau profitiert stärker, Unterschiede gleichen sich an = Compensation-Effekt (typisch bei Älteren)."
+  },
+  {
+    "id": "bq6",
+    "q": "Wodurch entstehen Trainingsgewinne laut Capacity-Efficiency-Model am ehesten?",
+    "opts": [
+      "Durch eine nachgewiesene Vergrößerung der kognitiven Grundkapazität.",
+      "Durch effizientere Nutzung bestehender Ressourcen (Strategien, Automatisierung).",
+      "Durch eine dauerhafte Vergrößerung der absoluten Menge verfügbarer kognitiver Ressourcen, die das Modell als Hauptmechanismus benennt.",
+      "Gar nicht — Trainingsgewinne sind grundsätzlich ein Messartefakt."
+    ],
+    "c": 1,
+    "e": "Belegt ist v.a. eine verbesserte Effizienz (Strategien, Aufgabenwissen, Automatisierung); für eine Kapazitätserhöhung gibt es wenig Evidenz."
+  },
+  {
+    "id": "bq7",
+    "q": "Worauf zielt der Testing-the-Limits-Ansatz in der Entwicklungspsychologie?",
+    "opts": [
+      "Auf die Untersuchung von Kohorteneffekten.",
+      "Auf die Wirksamkeit einer medikamentösen Maßnahme.",
+      "Auf die Bandbreite und die Grenzen der Entwicklungsplastizität.",
+      "Auf die durchschnittliche Alltagsleistung gesunder Erwachsener im untrainierten Zustand, ausdrücklich ohne jede Intervention."
+    ],
+    "c": 2,
+    "e": "Testing the Limits untersucht die Bandbreite und Grenzen der Entwicklungsplastizität — durch Ausreizen der Leistung mittels intensiven Trainings."
+  },
+  {
+    "id": "bq8",
+    "q": "Was meint das Memorandum (2009) mit den „versteckten Kosten“ von Hirnjogging?",
+    "opts": [
+      "Die monatlichen Abo-Gebühren der Apps.",
+      "Die Stromkosten des Computers.",
+      "Die langfristigen Gesundheitskosten durch die nachgewiesene schädliche Wirkung der Programme auf das Gehirn.",
+      "Jede Stunde am Bildschirm ist eine Stunde weniger für Bewegung, Sprachenlernen oder soziale Aktivitäten."
+    ],
+    "c": 3,
+    "e": "„Versteckte Kosten“: die am Bildschirm verbrachte Zeit fehlt für nachweislich wirksame Aktivitäten (Bewegung, Lernen, soziale Kontakte)."
+  }
+];
+
+var corrCorrect = {
+  "t3a": "near",
+  "t3b": "far",
+  "t3c": "near",
+  "t3d": "far",
+  "t5a": "magnification",
+  "t5b": "compensation",
+  "t5c": "compensation"
+};
+var corrExpl = {
+  "t3a": "Switching A–B → Switching C–D: strukturell ähnlich → Near Transfer.",
+  "t3b": "Gedächtnistraining → allgemeine fluide Intelligenz: strukturell unähnlich → Far Transfer.",
+  "t3c": "Wortlisten-Technik → andere Wortlisten: ähnliche Aufgabe → Near Transfer.",
+  "t3d": "Arbeitsgedächtnistraining → ganz neuartige Denkaufgaben: unähnlich → Far Transfer.",
+  "t5a": "Hohes Ausgangsniveau profitiert stärker → Unterschiede vergrößern sich = Magnification.",
+  "t5b": "Niedriges Ausgangsniveau profitiert stärker → Angleichung = Compensation.",
+  "t5c": "Ältere holen durch Training auf → Angleichung = Compensation."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Transfer-Simulator (Sektion ④): Near vs. Far Transfer */
+var tfData = {
+  near: {d:'Verbesserung in strukturell ÄHNLICHEN Aufgaben', e:'Relativ leicht und altersübergreifend belegt', b:'Training des Aufgabenwechsels A–B → auch C–D wird besser'},
+  far:  {d:'Verbesserung in strukturell UNÄHNLICHEN Aufgaben', e:'Selten und umstritten; laut Task-Switching-Forschung (Karbach & Kray) eher bei älteren Erwachsenen', b:'Arbeitsgedächtnistraining → allgemeine fluide Intelligenz'}
+};
+function tfSet(k){
+  ['near','far'].forEach(function(x){ var b=document.getElementById('tf-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('tf-out'); if(!o) return;
+  var d=tfData[k];
+  o.innerHTML='<strong>Definition:</strong> '+d.d+'<br><strong>Evidenzlage:</strong> '+d.e+'<br><strong>Beispiel:</strong> '+d.b;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  tfSet('near');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD13 Leistungsmessung (Leistungstests)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl13
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:8px}
+.sim-toggle{display:flex;flex-wrap:wrap;gap:6px}
+.sim-tbtn{border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2)}
+.sim-tbtn.on{border-color:var(--accent);background:rgba(129,140,248,.12);color:var(--text)}
+.sim-verdict{margin-top:10px;font-size:.86rem;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD13 Leistungsmessung (Leistungstests)</h1>
+<p class="page-sub">Psychologische Diagnostik I (Wedderhoff) · Klausur 23.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Was ist ein Leistungstest? (Testleistung, Fähigkeit/Fertigkeit/Wissen) · 2. Einflussfaktoren auf die Testleistung · 3. Motivation & Testleistung · 4. Übungs- & Trainingseffekte (Hausknecht 2007) · 5. Testangst (Angst- vs. Defizithypothese) · 6. Arten von Leistungstests & SW-Bilanz · 7. Aufmerksamkeit vs. Konzentration (Prozessmodell) · 8. Aufmerksamkeits- & Konzentrationstests
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Was ist ein Leistungstest?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Einflussfaktoren (Überblick)</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Motivation</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Übung & Training</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Testangst</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Arten & SW-Bilanz</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Aufmerksamkeit vs. Konzentration</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Aufmerksamkeits- & Konzentrationstests</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Was ist ein Leistungstest? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Leistungstests: Testleistung & Konstrukte</div>
+    <div class="sec-lz">Die in Leistungstests geleistete Arbeit heißt Testleistung und ist quantifizierbar: wie viele Aufgaben in fester Bearbeitungszeit gelöst werden bzw. wie viel Zeit die Bearbeitung braucht. Testleistung ist Indikator für eine Fähigkeit (z.B. fluide Intelligenz – Potenzial zum Erwerb), eine Fertigkeit (z.B. Beherrschen der Grundrechenarten) oder Wissen; die Übergänge sind fließend. Leistungstests messen maximal mögliches Verhalten, Persönlichkeitstests typisches Verhalten.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Misst ein Leistungstest dein <em>typisches</em> oder dein <em>maximal mögliches</em> Verhalten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0"><strong>Maximal mögliches Verhalten.</strong> Die geleistete Arbeit (= Testleistung) ist quantifizierbar und Indikator für eine <strong>Fähigkeit</strong>, <strong>Fertigkeit</strong> oder <strong>Wissen</strong> (Persönlichkeitstests messen dagegen typisches Verhalten).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Testleistung</div>
+    Die in Leistungstests geleistete Arbeit ist <strong>quantifizierbar</strong>: Wie viele Aufgaben werden in fester Zeit gelöst – oder wie viel Zeit braucht die Bearbeitung?
+  </div>
+  <div class="card">
+    <div class="card-title">Fähigkeit · Fertigkeit · Wissen</div>
+    Testleistung ist Indikator für eine <strong>Fähigkeit</strong> (Potenzial, z.B. fluide Intelligenz), eine <strong>Fertigkeit</strong> (erlernte Tätigkeit, z.B. Grundrechenarten) oder <strong>Wissen</strong>. Fähigkeit = Potenzial zum Fertigkeits-/Wissenserwerb; die Übergänge sind fließend.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g00" onclick="switchTab(this,'g0')">Fähigkeit</button><button class="tab-btn" data-tab="g01" onclick="switchTab(this,'g0')">Fertigkeit</button><button class="tab-btn" data-tab="g02" onclick="switchTab(this,'g0')">Wissen</button></div>
+    <div class="tab-group" data-group="g0"><div class="tab-content active" data-tab="g00"><strong>Potenzial</strong> zum Erwerb, z.B. fluide Intelligenz. Nicht direkt „gelernt", sondern Grundlage.</div><div class="tab-content" data-tab="g01">Konkret <strong>erlernte Tätigkeit</strong>, z.B. Grundrechenarten – baut auf Fähigkeit auf, durch Übung erworben.</div><div class="tab-content" data-tab="g02">Erworbene Inhalte. Übergänge zwischen Fähigkeit, Fertigkeit und Wissen sind <strong>fließend</strong>.</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Einflussfaktoren (Überblick) ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Einflussfaktoren auf die Testleistung</div>
+    <div class="sec-lz">Personen mit gleichen Fähigkeiten/Fertigkeiten/Wissen zeigen nicht zwangsläufig die gleiche Testleistung – neben dem zu messenden Konstrukt wirken weitere Faktoren: (1) mangelnde Reliabilität des Tests, (2) unterschiedliche Motivation der Teilnehmenden, (3) Übungs- und Trainingseffekte, (4) Testangst. Diese werden im Folgenden einzeln betrachtet.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Personen mit gleicher Fähigkeit erzielen unterschiedliche Testwerte – woran kann das liegen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Neben dem zu messenden Konstrukt wirken vier Faktoren: <strong>mangelnde Reliabilität</strong>, unterschiedliche <strong>Motivation</strong>, <strong>Übungs-/Trainingseffekte</strong> und <strong>Testangst</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Konstrukt ≠ Testleistung</div>
+    Mit Leistungstests soll <strong>maximal mögliches</strong> Verhalten gemessen werden. Gleiche Fähigkeiten führen aber nicht zwingend zur gleichen Testleistung – weitere Faktoren mischen mit.
+  </div>
+  <div class="card">
+    <div class="card-title">Die vier Einflussfaktoren</div>
+    (1) mangelnde <strong>Reliabilität</strong> des Tests, (2) unterschiedliche <strong>Motivation</strong> der Teilnehmenden, (3) <strong>Übungs-/Trainingseffekte</strong>, (4) <strong>Testangst</strong>.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g10" onclick="switchTab(this,'g1')">Reliabilität</button><button class="tab-btn" data-tab="g11" onclick="switchTab(this,'g1')">Motivation</button><button class="tab-btn" data-tab="g12" onclick="switchTab(this,'g1')">Übung</button><button class="tab-btn" data-tab="g13" onclick="switchTab(this,'g1')">Testangst</button></div>
+    <div class="tab-group" data-group="g1"><div class="tab-content active" data-tab="g10">Mangelnde Messgenauigkeit des Tests erzeugt Abweichungen unabhängig vom Konstrukt.</div><div class="tab-content" data-tab="g11">Unterschiedlich motivierte Personen zeigen unterschiedliche Testleistung.</div><div class="tab-content" data-tab="g12">Vorerfahrung/Coaching hebt die Leistung.</div><div class="tab-content" data-tab="g13">Angst kann die Leistung mindern.</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Motivation ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Motivation & Testleistung</div>
+    <div class="sec-lz">Zusammenhang zwischen Testleistung und (allgemeiner wie testspezifischer) Motivation. Allgemeine Leistungsmotivation: Leistung in den Standard Progressive Matrices (SPM) ↔ Objektiver Leistungsmotivationstest (OLMT) r = .35 (n = 100). Aktuelle, testspezifische Motivation: r = .37 bzw. .40 (Chan, 1997). Bei 1750 Bewerber*innen um einen Medizinstudienplatz nur r = .19 (McCarthy et al., 2013) – in realen Auswahlsettings fällt der Zusammenhang wegen Range Restriction in der Testmotivation geringer aus.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie stark hängt die Testleistung mit der Motivation zusammen – und warum oft schwächer in Auswahltests?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Nur <strong>moderat</strong> (r ≈ .35–.40). In realen Auswahlsettings schwächer (r = .19) wegen <strong>Range Restriction</strong>: fast alle Bewerber*innen sind hochmotiviert, die Streuung fehlt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Allgemeine vs. testspezifische Motivation</div>
+    Allgemeine Leistungsmotivation: SPM ↔ OLMT <strong>r = .35</strong> (n = 100). Aktuelle, testspezifische Motivation (Item „Ich war extrem motiviert…"): <strong>r = .37 bzw. .40</strong> (Chan, 1997).
+  </div>
+  <div class="card">
+    <div class="card-title">Range Restriction</div>
+    Bei 1750 Bewerber*innen um einen Medizinstudienplatz nur <strong>r = .19</strong> (McCarthy et al., 2013): In Auswahlsettings sind fast alle hochmotiviert → eingeschränkte Streuung senkt den Zusammenhang.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g20" onclick="switchTab(this,'g2')">Allgemein</button><button class="tab-btn" data-tab="g21" onclick="switchTab(this,'g2')">Testspezifisch</button><button class="tab-btn" data-tab="g22" onclick="switchTab(this,'g2')">Auswahlsetting</button></div>
+    <div class="tab-group" data-group="g2"><div class="tab-content active" data-tab="g20">SPM ↔ OLMT: r = .35 (n = 100) – allgemeine Leistungsmotivation.</div><div class="tab-content" data-tab="g21">Aktuelle Motivation für genau diesen Test: r = .37 / .40 (Chan, 1997).</div><div class="tab-content" data-tab="g22">Bewerber*innen Medizin: r = .19 (McCarthy et al., 2013) – Range Restriction.</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Übung & Training ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Übungs- und Trainingseffekte</div>
+    <div class="sec-lz">Frage: Inwieweit verändern gezielte Testvorbereitung (Coaching: Internet, Bücher, kommerzielle Kurse) und/oder einschlägige Testerfahrung die Testleistung? Metaanalyse Hausknecht et al. (2007), k = 50 Studien, n = 130 000: gemittelter Effekt d = .24 (klein). Größer u.a. bei: vorheriger Durchführung DESSELBEN Tests (d = .40) vs. nur ähnlichem (d = .22); mit Zahl der Durchgänge (2. Durchführung d = .24, 3. Durchführung d = .51); gezieltes Coaching (d = .64) > reine Testwiederholung (d = .21). Coaching verbessert die Testleistung im Schnitt um 6.4 Standardwertpunkte.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was steigert die Testleistung mehr: denselben Test nochmal machen oder gezieltes Coaching?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Coaching (d = .64)</strong> wirkt deutlich stärker als reine Testwiederholung (d = .21). Der Gesamteffekt ist klein (d = .24), steigt aber mit der Zahl der Durchgänge und bei demselben Test.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Hausknecht et al. (2007)</div>
+    Metaanalyse über <strong>k = 50</strong> Studien (<strong>n = 130 000</strong>): gemittelter Übungseffekt <strong>d = .24</strong> (klein). Frage: verändern Coaching und/oder Testerfahrung die Leistung?
+  </div>
+  <div class="card">
+    <div class="card-title">Moderatoren</div>
+    Derselbe Test (d = .40) > ähnlicher Test (d = .22); 3. Durchführung (d = .51) > 2. (d = .24); gezieltes <strong>Coaching d = .64</strong> > reine Wiederholung d = .21 → Coaching = im Schnitt <strong>+6,4 Standardwertpunkte</strong>.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g30" onclick="switchTab(this,'g3')">Coaching</button><button class="tab-btn" data-tab="g31" onclick="switchTab(this,'g3')">Wiederholung</button><button class="tab-btn" data-tab="g32" onclick="switchTab(this,'g3')">Durchgänge</button></div>
+    <div class="tab-group" data-group="g3"><div class="tab-content active" data-tab="g30">Gezielte Vorbereitung (Internet/Bücher/Kurse): d = .64 ≈ +6,4 SW – der stärkste Effekt.</div><div class="tab-content" data-tab="g31">Reine Testwiederholung: d = .21; derselbe Test (.40) > ähnlicher (.22).</div><div class="tab-content" data-tab="g32">Effekt wächst: 2. Durchführung d = .24, 3. Durchführung d = .51.</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Testangst ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Testangst</div>
+    <div class="sec-lz">Mehrere Metaanalysen zeigen schwache bis moderate Effekte, z.B. Ackermann & Heggestad r = −.28 (je größer die Angst, desto schwächer die Leistung) – die Kausalität ist aber unklar. Zwei Erklärungen: Angsthypothese (Angst wirkt leistungsmindernd bei der Bearbeitung) vs. Defizithypothese (Angst ist nur Ausdruck einer selbst erkannten niedrigen Leistungsfähigkeit). Empirie gemischt: Sommer & Arendasy (2015) – bei 1700 Bewerber*innen passte das 1PL-Modell gut, Parameterschätzungen invariant gegenüber Testangst. Hembree (1988): systematische Desensibilisierung d = .32, kognitiv-behaviorale Ansätze d = .52 zur Angstreduktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Macht Angst die Leistung schlechter – oder haben ängstliche Personen einfach eine niedrigere Fähigkeit?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Beide Erklärungen gibt es: die <strong>Angsthypothese</strong> (Angst mindert die Leistung) und die <strong>Defizithypothese</strong> (Angst ist nur Symptom). Der Zusammenhang ist schwach–moderat (r = −.28), die Kausalität unklar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Befundlage</div>
+    Mehrere Metaanalysen: schwache–moderate Effekte, z.B. Ackermann & Heggestad <strong>r = −.28</strong> (mehr Angst → schwächere Leistung), Kausalität unklar. Sommer & Arendasy (2015): bei 1700 Bewerber*innen passte das 1PL-Modell gut – Schätzungen <strong>invariant</strong> gegenüber Testangst.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Hypothesen & Interventionen</div>
+    <strong>Angsthypothese</strong>: Angst wirkt leistungsmindernd bei der Bearbeitung. <strong>Defizithypothese</strong>: Angst ist nur Ausdruck einer ohnehin niedrigen Leistungsfähigkeit. Hembree (1988): systematische Desensibilisierung d = .32, kognitiv-behaviorale Ansätze d = .52 reduzieren Angst.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g40" onclick="switchTab(this,'g4')">Angsthypothese</button><button class="tab-btn" data-tab="g41" onclick="switchTab(this,'g4')">Defizithypothese</button><button class="tab-btn" data-tab="g42" onclick="switchTab(this,'g4')">Interventionen</button></div>
+    <div class="tab-group" data-group="g4"><div class="tab-content active" data-tab="g40">Angst wirkt <strong>kausal leistungsmindernd</strong> während der Bearbeitung.</div><div class="tab-content" data-tab="g41">Angst ist nur <strong>Symptom</strong> einer ohnehin niedrigen Leistungsfähigkeit.</div><div class="tab-content" data-tab="g42">Desensibilisierung d = .32, kognitiv-behaviorale Ansätze d = .52 (Hembree, 1988).</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Arten & SW-Bilanz ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Arten von Leistungstests & die SW-Bilanz</div>
+    <div class="sec-lz">Im deutschen Sprachraum sind mehrere hundert Leistungstests verfügbar, einteilbar in: allgemeine Leistungstests, Intelligenztests, spezielle Funktions- oder Eignungstests, Entwicklungstests, Schultests. Bedeutung der Einflussfaktoren auf die Testleistung (in Standardwertpunkten SW): hohe Leistungs-/Testmotivation im Forschungskontext +8, hohe Testmotivation bei Auswahltests +4, Test früher schon einmal durchgeführt +3, intensive Übung (10 Durchgänge) bei Konzentrationstests +26, gezielte Testvorbereitung (Coaching) +6, hohe Testangst (bei Intelligenztests) −6, Faking bad (bei Konzentrationstests) −19.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welcher Einflussfaktor verschiebt die Testleistung am stärksten (in Standardwertpunkten)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Intensive Übung (10 Durchgänge) bei Konzentrationstests: +26 SW</strong> ist der stärkste positive, <strong>Faking bad: −19 SW</strong> der stärkste negative Faktor.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Arten von Leistungstests</div>
+    Mehrere hundert verfügbar, einteilbar in: <strong>allgemeine Leistungstests, Intelligenztests, spezielle Funktions-/Eignungstests, Entwicklungstests, Schultests</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Bilanz der Einflussfaktoren (in SW)</div>
+    +26 intensive Übung (Konz.) · +8 hohe Motivation (Forschung) · +6 Coaching · +4 Motivation (Auswahltest) · +3 Test wiederholt · −6 hohe Testangst (Intell.) · −19 Faking bad (Konz.). Probier den Simulator unten.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="card-title">🧪 Simulator: Einflussfaktor → Testleistung (Standardwertpunkte)</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sw-uebung" onclick="swSet('uebung')">Intensive Übung (Konz.)</button>
+        <button class="sim-tbtn" id="sw-motivf" onclick="swSet('motivf')">Motivation (Forschung)</button>
+        <button class="sim-tbtn" id="sw-coaching" onclick="swSet('coaching')">Coaching</button>
+        <button class="sim-tbtn" id="sw-motiva" onclick="swSet('motiva')">Motivation (Auswahl)</button>
+        <button class="sim-tbtn" id="sw-wieder" onclick="swSet('wieder')">Test wiederholt</button>
+        <button class="sim-tbtn" id="sw-angst" onclick="swSet('angst')">Hohe Testangst (Intell.)</button>
+        <button class="sim-tbtn" id="sw-faking" onclick="swSet('faking')">Faking bad (Konz.)</button>
+      </div>
+      <div class="sim-verdict" id="sw-out"></div>
+    </div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Aufmerksamkeit vs. Konzentration ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Aufmerksamkeit & Konzentration: Abgrenzung</div>
+    <div class="sec-lz">Viele Leistungen verlangen nicht nur Intelligenz/Wissen/Fertigkeiten, sondern eine Grundfähigkeit, sich Aufgaben effizient zuzuwenden (Aufmerksamkeit und Konzentration). Die Leistung fällt stark ab, wenn diese eingeschränkt ist – vorübergehend (z.B. Alkohol) oder dauerhaft (Hirnverletzung/-erkrankung). Relevant in klinischer, neuro-, pädagogischer Psychologie und Berufseignungsdiagnostik. Beide Konzepte fallen unter die allgemeinen Leistungstests, sind aber NICHT gleichzusetzen. Prozessmodell: Reiz → Wahrnehmung → Weiterverarbeitung → Reaktion (Aufmerksamkeit setzt v.a. an der Wahrnehmung an, Konzentration an Wahrnehmung und Weiterverarbeitung).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind Aufmerksamkeit und Konzentration einfach dasselbe?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Nein. Beide fallen unter die <strong>allgemeinen Leistungstests</strong>, sind aber <strong>nicht gleichzusetzen</strong>. Prozessmodell: Reiz → Wahrnehmung → Weiterverarbeitung → Reaktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Grundfähigkeit</div>
+    Viele Leistungen verlangen eine Grundfähigkeit, sich Aufgaben <strong>effizient zuzuwenden</strong> (Aufmerksamkeit + Konzentration). Sie fällt stark ab bei <strong>vorübergehender</strong> (z.B. Alkohol) oder <strong>dauerhafter</strong> Einschränkung (Hirnverletzung/-erkrankung).
+  </div>
+  <div class="card">
+    <div class="card-title">Prozessmodell & Relevanz</div>
+    <strong>Reiz → Wahrnehmung → Weiterverarbeitung → Reaktion.</strong> Aufmerksamkeit setzt v.a. an der Wahrnehmung an, Konzentration an Wahrnehmung und Weiterverarbeitung. Relevant in klinischer, neuro-, pädagogischer Psychologie und Berufseignungsdiagnostik.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g60" onclick="switchTab(this,'g6')">Aufmerksamkeit</button><button class="tab-btn" data-tab="g61" onclick="switchTab(this,'g6')">Konzentration</button><button class="tab-btn" data-tab="g62" onclick="switchTab(this,'g6')">Prozessmodell</button></div>
+    <div class="tab-group" data-group="g6"><div class="tab-content active" data-tab="g60">Fähigkeit, bestimmte Reize unter vielen wirksam zu betrachten – setzt v.a. an der <strong>Wahrnehmung</strong> an.</div><div class="tab-content" data-tab="g61">Sich über Zeit einer Tätigkeit effizient zuwenden – wirkt auf <strong>Wahrnehmung und Weiterverarbeitung</strong>.</div><div class="tab-content" data-tab="g62">Reiz → Wahrnehmung → Weiterverarbeitung → Reaktion. Beide Konzepte verwandt, aber nicht identisch.</div></div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Aufmerksamkeits- & Konzentrationstests ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Aufmerksamkeits- & Konzentrationstests</div>
+    <div class="sec-lz">Aufmerksamkeit (Schmidt-Atzert, Krumm & Amelang, 2021): Fähigkeit, bestimmte Reize/Ereignisse unter vielen willentlich oder nicht willentlich wirksam zu betrachten. Formen: Alertness (basale Ansprechbarkeit, z.B. TAP), selektive/geteilte Aufmerksamkeit (selektiv = kritische Reize aus EINER Reizklasse, geteilt = je mind. ein Reiz aus ZWEI Reizklassen, z.B. akustisch+visuell), Daueraufmerksamkeit (über längeren Zeitraum), konzentrierte Aufmerksamkeit (self-paced statt other-paced), Vigilanz (seltene Reize über lange Zeit, z.B. VIGIL). Konzentration: sich über Zeit einer Tätigkeit effizient zuwenden (Quantität × Qualität). Konzentrationstests: Leistung über Geschwindigkeit und Sorgfalt; einfache, klar wahrnehmbare Reize; einfache Regeln; absichtsvolle Teilhandlungen; Quantität und Qualität geeignet verrechnen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du musst gleichzeitig auf Töne UND Bilder achten – welche Aufmerksamkeitsform ist das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Geteilte Aufmerksamkeit</strong> (Reize aus zwei Reizklassen). Es gibt fünf Formen: Alertness, selektive/geteilte, Dauer-, konzentrierte Aufmerksamkeit und Vigilanz.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+    <div class="card">
+    <div class="card-title">Fünf Aufmerksamkeitsformen</div>
+    <strong>Alertness</strong> (basale Ansprechbarkeit, z.B. TAP), <strong>selektiv/geteilt</strong> (eine vs. zwei Reizklassen), <strong>Daueraufmerksamkeit</strong> (über lange Zeit), <strong>konzentrierte Aufmerksamkeit</strong> (self-paced statt other-paced), <strong>Vigilanz</strong> (seltene Reize über lange Zeit, z.B. VIGIL).
+  </div>
+  <div class="card">
+    <div class="card-title">Konzentrationstests</div>
+    Konzentration = sich über Zeit einer Tätigkeit effizient zuwenden (Quantität × Qualität). Anforderungen: Leistung über <strong>Geschwindigkeit und Sorgfalt</strong>; einfache, klar wahrnehmbare Reize; leicht erinnerbare Regeln; absichtsvolle Teilhandlungen; <strong>Quantität und Qualität geeignet verrechnen</strong>.
+  </div>
+
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+    <div class="card">
+    <div class="card-title">Ordne das Testszenario der Aufmerksamkeitsform zu</div>
+    <div class="corr-item" id="w13a">Nur auf rote Zielreize unter vielen achten (eine Reizklasse)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13a',this,'alertness')">Alertness</button><button class="corr-btn" onclick="checkCorr('w13a',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('w13a',this,'geteilt')">Geteilt</button><button class="corr-btn" onclick="checkCorr('w13a',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="w13a-fb"></div>
+    </div>
+    <div class="corr-item" id="w13b">Gleichzeitig auf akustische UND visuelle Zielreize achten
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13b',this,'alertness')">Alertness</button><button class="corr-btn" onclick="checkCorr('w13b',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('w13b',this,'geteilt')">Geteilt</button><button class="corr-btn" onclick="checkCorr('w13b',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="w13b-fb"></div>
+    </div>
+    <div class="corr-item" id="w13c">Über 30–70 Min auf sehr seltene „Doppelsprünge" reagieren (VIGIL)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13c',this,'alertness')">Alertness</button><button class="corr-btn" onclick="checkCorr('w13c',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('w13c',this,'geteilt')">Geteilt</button><button class="corr-btn" onclick="checkCorr('w13c',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="w13c-fb"></div>
+    </div>
+    <div class="corr-item" id="w13d">So schnell wie möglich auf ein erscheinendes Kreuz reagieren (TAP)
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13d',this,'alertness')">Alertness</button><button class="corr-btn" onclick="checkCorr('w13d',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('w13d',this,'geteilt')">Geteilt</button><button class="corr-btn" onclick="checkCorr('w13d',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="w13d-fb"></div>
+    </div>
+  </div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus PD13 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Fähigkeit</h4>
+      <p>Potenzial zum Erwerb</p>
+      <p>z.B. fluide Intelligenz</p>
+      <p>Grundlage für Fertigkeit/Wissen</p>
+      <p>nicht direkt „gelernt"</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fertigkeit</h4>
+      <p>konkret erlernte Tätigkeit</p>
+      <p>z.B. Grundrechenarten</p>
+      <p>baut auf Fähigkeit auf</p>
+      <p>durch Übung erworben</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Fähigkeit und Fertigkeit sind exakt dasselbe und scharf voneinander trennbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Leistungstest</h4>
+      <p>misst maximal mögliches Verhalten</p>
+      <p>Testleistung quantifizierbar</p>
+      <p>z.B. Intelligenz, Konzentration</p>
+      <p>Aufgaben mit richtig/falsch</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Persönlichkeitstest</h4>
+      <p>misst typisches Verhalten</p>
+      <p>kein „maximal"</p>
+      <p>z.B. Big Five</p>
+      <p>kein objektiv Richtig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Leistungstests erfassen typisches Verhalten, Persönlichkeitstests maximales Verhalten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gezieltes Coaching</h4>
+      <p>d = .64 (stärker)</p>
+      <p>+6 SW Testleistung</p>
+      <p>Internet/Bücher/Kurse</p>
+      <p>inhaltliche Vorbereitung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Reine Testwiederholung</h4>
+      <p>d = .21 (schwächer)</p>
+      <p>wächst mit Durchgängen</p>
+      <p>derselbe Test > ähnlicher</p>
+      <p>kein gezieltes Üben</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Reine Testwiederholung hat einen stärkeren Effekt (d = .64) als gezieltes Coaching (d = .21).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Angsthypothese</h4>
+      <p>Angst mindert Leistung</p>
+      <p>wirkt bei der Bearbeitung</p>
+      <p>kausale Wirkung angenommen</p>
+      <p>Ansatzpunkt für Interventionen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Defizithypothese</h4>
+      <p>Angst ist Symptom</p>
+      <p>Ausdruck niedriger Fähigkeit</p>
+      <p>keine kausale Minderung</p>
+      <p>Leistung wäre auch ohne Angst niedrig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Defizithypothese besagt, dass Angst die Leistung während der Bearbeitung kausal mindert.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Selektive Aufmerksamkeit</h4>
+      <p>EINE Reizklasse</p>
+      <p>kritische Reize auswählen</p>
+      <p>z.B. nur visuell</p>
+      <p>Filtern relevanter Reize</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Geteilte Aufmerksamkeit</h4>
+      <p>ZWEI Reizklassen</p>
+      <p>z.B. akustisch + visuell</p>
+      <p>parallel beachten</p>
+      <p>höhere Anforderung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Selektive Aufmerksamkeit bedeutet, Reize aus zwei unterschiedlichen Reizklassen gleichzeitig zu beachten.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl13</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl13';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was bezeichnet die „Testleistung\" in einem Leistungstest?",
+      "opts": [
+        "Die quantifizierbare geleistete Arbeit, z.B. wie viele Aufgaben in fester Zeit gelöst werden.",
+        "Das typische Alltagsverhalten der Person, das unabhängig von konkreten Aufgaben gezeigt wird.",
+        "Ausschließlich die benötigte Bearbeitungszeit, nie die Anzahl gelöster Aufgaben.",
+        "Die subjektive Selbsteinschätzung der eigenen Fähigkeit durch die Testperson."
+      ],
+      "c": 0,
+      "e": "Die in Leistungstests geleistete Arbeit heißt Testleistung und ist quantifizierbar: Anzahl gelöster Aufgaben in fester Bearbeitungszeit bzw. benötigte Zeit pro Aufgabe."
+    },
+    {
+      "id": "s0q2",
+      "q": "Eine Person beherrscht die Grundrechenarten sicher. Wie wird dies eingeordnet?",
+      "opts": [
+        "Als eine Fähigkeit, also das bloße Potenzial zum Erwerb von Wissen und Können.",
+        "Als eine Fertigkeit, da eine konkret erlernte Tätigkeit beherrscht wird.",
+        "Als reines Wissen ohne jeden Tätigkeitsbezug.",
+        "Als typisches Verhalten, das nur ein Persönlichkeitstest erfasst."
+      ],
+      "c": 1,
+      "e": "Das Beherrschen der Grundrechenarten ist eine Fertigkeit. Eine Fähigkeit (z.B. fluide Intelligenz) ist demgegenüber das Potenzial zum Fertigkeits- und Wissenserwerb; die Übergänge sind fließend."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Worin unterscheiden sich Leistungs- und Persönlichkeitstests grundsätzlich?",
+      "opts": [
+        "Leistungstests erfassen typisches, Persönlichkeitstests maximales Verhalten.",
+        "Beide erfassen ausschließlich maximal mögliches Verhalten unter Idealbedingungen.",
+        "Leistungstests erfassen maximal mögliches, Persönlichkeitstests typisches Verhalten.",
+        "Leistungstests sind grundsätzlich völlig unbeeinflussbar von Motivation, Übung oder Testangst und liefern stets fehlerfreie Werte."
+      ],
+      "c": 2,
+      "e": "Mit Leistungstests soll maximal mögliches Verhalten gemessen werden, mit Persönlichkeitstests typisches Verhalten."
+    },
+    {
+      "id": "s1q2",
+      "q": "Zwei Personen mit gleicher Fähigkeit zeigen unterschiedliche Testleistung. Welche Erklärung passt NICHT in die Liste der bekannten Einflussfaktoren?",
+      "opts": [
+        "Unterschiedliche Motivation der Testteilnehmenden, etwa die allgemeine Leistungsmotivation oder die aktuelle, testspezifische Motivation.",
+        "Übungs- und Trainingseffekte.",
+        "Testangst.",
+        "Die im Test verwendete Schriftart und Papierfarbe als zentrale Leistungsdeterminante."
+      ],
+      "c": 3,
+      "e": "Neben dem zu messenden Konstrukt nennt die Vorlesung als Einflussfaktoren: mangelnde Reliabilität, unterschiedliche Motivation, Übungs-/Trainingseffekte und Testangst – nicht Schriftart/Papierfarbe."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie hoch war der Zusammenhang zwischen allgemeiner Leistung (SPM) und allgemeiner Leistungsmotivation (OLMT) in der genannten Studie?",
+      "opts": [
+        "r = .35 – ein erkennbarer, aber moderater Zusammenhang.",
+        "r = .90 – ein nahezu perfekter Zusammenhang zwischen Leistung und Motivation.",
+        "r = .00 – kein Zusammenhang.",
+        "r = −.50 – ein starker negativer Zusammenhang."
+      ],
+      "c": 0,
+      "e": "Die Korrelation zwischen Standard Progressive Matrices (SPM) und Objektivem Leistungsmotivationstest (OLMT) betrug in einer Studie mit 100 Studierenden r = .35."
+    },
+    {
+      "id": "s2q2",
+      "q": "Bei 1750 Bewerber*innen um einen Medizinstudienplatz lag die Korrelation Testleistung–Testmotivation nur bei r = .19. Wie wird dies erklärt?",
+      "opts": [
+        "Bewerber*innen sind generell unmotivierter als Studienteilnehmende.",
+        "Range Restriction in der Testmotivation senkt den Zusammenhang in realen Auswahlsettings.",
+        "Motivation spielt für die Leistung in Auswahlsituationen überhaupt keine Rolle.",
+        "Der Test war für die Bewerber*innen viel zu leicht, weshalb alle dieselbe maximale Leistung zeigten und gar nicht mehr differenziert werden konnten."
+      ],
+      "c": 1,
+      "e": "In realen Auswahlsettings sind fast alle Bewerber*innen hochmotiviert (eingeschränkte Streuung = Range Restriction), wodurch der Zusammenhang geringer ausfällt (McCarthy et al., 2013)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welcher Übungs-/Trainingseffekt war in der Metaanalyse von Hausknecht et al. (2007) am größten?",
+      "opts": [
+        "Die reine Wiederholung eines nur ähnlichen Tests (d = .22).",
+        "Die zweite Testdurchführung gegenüber gar keiner (d = .24).",
+        "Ein gezieltes Coaching (d = .64).",
+        "Der über alle 50 Studien gemittelte Gesamteffekt (d = .24)."
+      ],
+      "c": 2,
+      "e": "Gezieltes Coaching hatte mit d = .64 den stärksten Effekt – deutlich mehr als reine Testwiederholung (d = .21). Der gemittelte Gesamteffekt lag bei d = .24 (klein)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie verändert sich der Übungseffekt mit der Anzahl der Durchgänge bzw. der Testähnlichkeit?",
+      "opts": [
+        "Er bleibt über alle Bedingungen hinweg vollkommen konstant, unabhängig von Durchgangszahl, Coaching-Intensität und Testähnlichkeit.",
+        "Er sinkt mit jedem weiteren Durchgang gegen null.",
+        "Er ist bei nur ähnlichem Test stets größer als bei demselben Test.",
+        "Er wächst mit der Zahl der Durchgänge (3. d = .51 > 2. d = .24) und ist bei demselben Test (d = .40) größer als bei einem ähnlichen (d = .22)."
+      ],
+      "c": 3,
+      "e": "Der Effekt steigt mit der Zahl der Übungsdurchgänge (2. Durchführung d = .24, 3. d = .51) und ist bei vorheriger Durchführung desselben Tests (d = .40) größer als bei nur ähnlichem (d = .22)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was besagt die „Angsthypothese\" zum Zusammenhang von Testangst und Leistung?",
+      "opts": [
+        "Angst wirkt leistungsmindernd bei der Testbearbeitung selbst.",
+        "Angst ist nur ein Ausdruck einer bereits erkannten niedrigen Leistungsfähigkeit.",
+        "Angst steigert die Leistung durch erhöhte Aktivierung.",
+        "Angst und Leistung sind grundsätzlich unkorreliert."
+      ],
+      "c": 0,
+      "e": "Die Angsthypothese nimmt an, dass die Angst selbst während der Bearbeitung leistungsmindernd wirkt. Die Defizithypothese sieht Angst dagegen nur als Symptom einer ohnehin niedrigen Leistungsfähigkeit."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche Aussage zu Testangst und ihrer Reduktion entspricht der Vorlesung?",
+      "opts": [
+        "Testangst zeigt durchweg sehr starke, eindeutig kausale und über sämtliche Studien hinweg vollkommen einheitliche Effekte auf die Leistung.",
+        "Schwache bis moderate Effekte (r = −.28); Desensibilisierung (d = .32) und kognitiv-behaviorale Ansätze (d = .52) reduzieren die Angst.",
+        "Interventionen gegen Testangst sind nachweislich wirkungslos.",
+        "Testangst lässt sich grundsätzlich nicht von der Leistungsfähigkeit trennen."
+      ],
+      "c": 1,
+      "e": "Ackermann & Heggestad: r = −.28 (schwach–moderat, Kausalität unklar). Hembree (1988): systematische Desensibilisierung d = .32, kognitiv-behaviorale Ansätze d = .52 reduzieren Testangst deutlich."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welcher der genannten Einflussfaktoren verändert die Testleistung am stärksten (in Standardwertpunkten)?",
+      "opts": [
+        "Intensive Übung (10 Durchgänge) bei Konzentrationstests: +26 SW.",
+        "Gezielte Testvorbereitung (Coaching): +6 SW.",
+        "Test früher schon einmal durchgeführt: +3 SW.",
+        "Hohe Testmotivation bei Auswahltests: +4 SW."
+      ],
+      "c": 0,
+      "e": "Intensive Übung (10 Durchgänge) bei Konzentrationstests hat mit +26 SW den größten positiven Effekt der Tabelle; Faking bad bei Konzentrationstests (−19 SW) ist der größte negative."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche Aufzählung gibt die in der Vorlesung genannten Arten von Leistungstests korrekt wieder?",
+      "opts": [
+        "Projektive Tests, Fragebögen, Interviews, Beobachtung, Verhaltenstests.",
+        "Allgemeine Leistungstests, Intelligenztests, spezielle Funktions-/Eignungstests, Entwicklungstests, Schultests.",
+        "Nur Intelligenztests und Schultests.",
+        "Speed-Tests, Power-Tests, adaptive Tests, Niveautests, Gütetests."
+      ],
+      "c": 1,
+      "e": "Genannte Kategorien: allgemeine Leistungstests, Intelligenztests, spezielle Funktions- oder Eignungstests, Entwicklungstests und Schultests."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie verhalten sich Aufmerksamkeit und Konzentration laut Vorlesung zueinander?",
+      "opts": [
+        "Sie sind synonym und beschreiben exakt dasselbe Konstrukt.",
+        "Konzentration ist ein Spezialfall der Intelligenz, Aufmerksamkeit dagegen nicht.",
+        "Beide fallen unter die allgemeinen Leistungstests, sind aber nicht gleichzusetzen.",
+        "Aufmerksamkeit ist ein Persönlichkeitsmerkmal, Konzentration ein Leistungsmerkmal."
+      ],
+      "c": 2,
+      "e": "Aufmerksamkeits- und Konzentrationstests fallen beide unter den Oberbegriff der allgemeinen Leistungstests, die beiden Konzepte sind aber nicht gleichzusetzen."
+    },
+    {
+      "id": "s6q2",
+      "q": "In welchem Anwendungsbereich sind Aufmerksamkeits-/Konzentrationsleistungen laut Vorlesung NICHT als relevant genannt?",
+      "opts": [
+        "Klinische Psychologie (Hinweis auf psychische Störungen).",
+        "Neuropsychologie (bei hirnorganischen Störungen oft eingeschränkt).",
+        "Pädagogische Psychologie (Leistungsprobleme in der Schule).",
+        "Marktforschung zur Vorhersage von Kaufentscheidungen."
+      ],
+      "c": 3,
+      "e": "Genannt werden klinische, neuro- und pädagogische Psychologie sowie Berufseignungsdiagnostik – nicht die Marktforschung."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Eine Testperson muss kritische Reize aus ZWEI unterschiedlichen Reizklassen (akustisch UND visuell) gleichzeitig beachten. Welche Aufmerksamkeitsform ist das?",
+      "opts": [
+        "Alertness (basale Ansprechbarkeit auf einen einzelnen Reiz).",
+        "Vigilanz (Beachtung sehr seltener Reize über lange Zeit).",
+        "Geteilte Aufmerksamkeit.",
+        "Selektive Aufmerksamkeit (kritische Reize aus nur einer Reizklasse)."
+      ],
+      "c": 2,
+      "e": "Geteilte Aufmerksamkeit = Beachtung von mindestens je einem Reiz aus zwei unterschiedlichen Reizklassen; selektive Aufmerksamkeit bezieht sich dagegen auf kritische Reize aus nur einer Reizklasse."
+    },
+    {
+      "id": "s7q2",
+      "q": "Worin unterscheidet sich „konzentrierte Aufmerksamkeit\" von der Daueraufmerksamkeit?",
+      "opts": [
+        "Sie verwendet grundsätzlich völlig andere Items als sämtliche übrigen Aufmerksamkeits- und Konzentrationstests zusammengenommen.",
+        "Sie misst seltene statt häufige Reize.",
+        "Sie ist immer kürzer als jede Daueraufmerksamkeitsaufgabe.",
+        "Die Items ähneln der Daueraufmerksamkeit, aber die Person bestimmt ihr Arbeitstempo selbst (self-paced statt other-paced)."
+      ],
+      "c": 3,
+      "e": "Konzentrierte Aufmerksamkeit nutzt Items wie die Daueraufmerksamkeit, jedoch dürfen Proband*innen ihr Arbeitstempo selbst bestimmen (self-paced), während bei other-paced der Computer taktet."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zur Quantifizierung der Testleistung ist KORREKT?",
+    "opts": [
+      "Testleistung wird quantifiziert über die Zahl gelöster Aufgaben in fester Zeit oder die benötigte Bearbeitungszeit.",
+      "Testleistung lässt sich grundsätzlich nicht in Zahlen ausdrücken und ist ausschließlich qualitativ über freie Verhaltensbeobachtung bestimmbar.",
+      "Testleistung ist nur über die Selbstauskunft der Person bestimmbar.",
+      "Testleistung meint allein das typische Verhalten im Alltag."
+    ],
+    "c": 0,
+    "e": "Die geleistete Arbeit ist quantifizierbar: wie viele Aufgaben in fester Bearbeitungszeit gelöst werden bzw. wie viel Zeit die Bearbeitung benötigt."
+  },
+  {
+    "id": "bq2",
+    "q": "Aktuelle, testspezifische Motivation (Beispielitem „Ich war extrem motiviert, gut abzuschneiden\"). Welche Korrelationen mit der Leistung wurden berichtet?",
+    "opts": [
+      "r = .90, also in praktisch allen bisher veröffentlichten Studien ein nahezu perfekter und kontextunabhängiger Zusammenhang.",
+      "r = .37 bzw. .40 (Chan, 1997) – ein moderater Zusammenhang.",
+      "r = .00, also gar kein Zusammenhang.",
+      "r = −.28 als negativer Zusammenhang."
+    ],
+    "c": 1,
+    "e": "Der Zusammenhang zwischen der Leistung in zwei kognitiven Tests und der testspezifischen Motivation betrug r = .37 bzw. .40 (Chan, 1997). r = −.28 gehört zur Testangst."
+  },
+  {
+    "id": "bq3",
+    "q": "Was zeigte die Metaanalyse von Hausknecht et al. (2007) als gemittelten Übungseffekt über alle Studien?",
+    "opts": [
+      "Einen großen Effekt von d = .80.",
+      "Gar keinen Effekt (d = .00).",
+      "Einen kleinen Effekt von d = .24.",
+      "Einen negativen Effekt, d.h. Übung verschlechtert die Leistung."
+    ],
+    "c": 2,
+    "e": "Über k = 50 Studien (n = 130 000) lag der gemittelte Effekt bei d = .24 (kleiner Effekt); unter bestimmten Bedingungen (Coaching, mehr Durchgänge, derselbe Test) wird er größer."
+  },
+  {
+    "id": "bq4",
+    "q": "Sommer & Arendasy (2015) prüften bei 1700 Bewerber*innen, ob das 1PL-Modell trotz Testangst gut passt. Was war das Ergebnis?",
+    "opts": [
+      "Das Modell passte überhaupt nicht, weil die Testangst die geschätzten Itemparameter massiv und systematisch verzerrte.",
+      "Testangst machte eine Auswertung unmöglich.",
+      "Nur das 3PL-Modell passte.",
+      "Das 1PL-Modell passte gut; die Parameterschätzungen waren invariant gegenüber der Testangst."
+    ],
+    "c": 3,
+    "e": "Das 1PL-(Rasch-)Modell passte gut zu den Daten – die Parameterschätzungen waren invariant gegenüber der Testangst (ein Beleg gegen eine starke verzerrende Wirkung)."
+  },
+  {
+    "id": "bq5",
+    "q": "Welcher Einflussfaktor senkt laut SW-Tabelle die Testleistung am stärksten?",
+    "opts": [
+      "Faking bad bei Konzentrationstests (−19 SW).",
+      "Hohe Testangst bei Intelligenztests (−6 SW).",
+      "Eine zweite Testdurchführung (−3 SW).",
+      "Gezieltes Coaching (−6 SW)."
+    ],
+    "c": 0,
+    "e": "Faking bad bei Konzentrationstests (−19 SW) ist der stärkste negative Faktor; hohe Testangst bei Intelligenztests liegt bei −6 SW. Coaching wirkt positiv (+6 SW)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was beschreibt „Alertness\" als Aufmerksamkeitsform?",
+    "opts": [
+      "Das gleichzeitige Beachten zweier Reizklassen über lange Zeit.",
+      "Die basale Ansprechbarkeit auf Reize (z.B. Reaktion auf ein Kreuz am Bildschirm, TAP).",
+      "Das Erkennen sehr seltener Reize über 30–70 Minuten.",
+      "Das selbstbestimmte Arbeitstempo bei Konzentrationsaufgaben."
+    ],
+    "c": 1,
+    "e": "Alertness = basale Ansprechbarkeit auf Reize, erfasst z.B. über einen Subtest der TAP (Reaktion auf ein Kreuz auf dem Bildschirm)."
+  },
+  {
+    "id": "bq7",
+    "q": "Welche Anforderung an Konzentrationstests wird in der Vorlesung NICHT genannt?",
+    "opts": [
+      "Leistung wird über Geschwindigkeit und Sorgfalt abgebildet.",
+      "Einfache, klar und eindeutig wahrnehmbare Reize.",
+      "Die Items müssen mehrdeutig und absichtlich verwirrend gestaltet sein.",
+      "Quantität und Qualität müssen in geeigneter Form verrechnet werden."
+    ],
+    "c": 2,
+    "e": "Gefordert sind u.a. einfache, klar wahrnehmbare Reize, leicht erinnerbare Regeln, absichtsvolle Teilhandlungen sowie eine Verrechnung von Quantität und Qualität – Reize sollen gerade NICHT mehrdeutig sein."
+  },
+  {
+    "id": "bq8",
+    "q": "Im Prozessmodell Reiz → Wahrnehmung → Weiterverarbeitung → Reaktion: woran setzt die Aufmerksamkeit primär an?",
+    "opts": [
+      "Erst an der motorischen Reaktion ganz am Ende der Kette.",
+      "Ausschließlich an der Weiterverarbeitung, nie an der Wahrnehmung.",
+      "An der Wahrnehmung (während die Konzentration auf Wahrnehmung und Weiterverarbeitung wirkt).",
+      "Am Reiz selbst, noch bevor er wahrgenommen wird."
+    ],
+    "c": 2,
+    "e": "Im Modell wirkt die Aufmerksamkeit v.a. auf die Wahrnehmung, die Konzentration auf Wahrnehmung UND Weiterverarbeitung; beide Konzepte sind daher verwandt, aber nicht identisch."
+  }
+];
+
+var corrCorrect = {
+  "w13a": "selektiv",
+  "w13b": "geteilt",
+  "w13c": "vigilanz",
+  "w13d": "alertness"
+};
+var corrExpl = {
+  "w13a": "Selektive Aufmerksamkeit: kritische Reize aus nur EINER Reizklasse beachten.",
+  "w13b": "Geteilte Aufmerksamkeit: je mindestens ein Reiz aus ZWEI unterschiedlichen Reizklassen (z.B. akustisch + visuell).",
+  "w13c": "Vigilanz: Beachtung sehr seltener Reize über lange Zeit (z.B. VIGIL, „Doppelsprung\", 30–70 Min).",
+  "w13d": "Alertness: basale Ansprechbarkeit auf Reize (z.B. Reaktion auf ein Kreuz am Bildschirm, TAP)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+function swSet(k){
+  var F={uebung:["Intensive Übung (10 Durchgänge) bei Konzentrationstests","+26 SW","pos"],
+   motivf:["Hohe Leistungs-/Testmotivation (Forschungskontext)","+8 SW","pos"],
+   coaching:["Gezielte Testvorbereitung (Coaching)","+6 SW","pos"],
+   motiva:["Hohe Testmotivation bei Auswahltests","+4 SW","pos"],
+   wieder:["Test früher schon einmal durchgeführt","+3 SW","pos"],
+   angst:["Hohe Testangst (bei Intelligenztests)","−6 SW","neg"],
+   faking:["Faking bad (bei Konzentrationstests)","−19 SW","neg"]};
+  Object.keys(F).forEach(function(x){var b=document.getElementById("sw-"+x); if(b)b.classList.toggle("on",x===k);});
+  var f=F[k],o=document.getElementById("sw-out");
+  if(o)o.innerHTML="<strong>"+f[0]+"</strong><br>Veränderung der Testleistung: <strong style=\"color:"+(f[2]==="pos"?"#34d399":"#f87171")+"\">"+f[1]+"</strong>";
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  swSet('uebung');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

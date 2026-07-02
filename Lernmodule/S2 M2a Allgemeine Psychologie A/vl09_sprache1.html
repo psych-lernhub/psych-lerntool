@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL09 Sprache I (Perzeption)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl09
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL09 Sprache I (Perzeption)</h1>
+<p class="page-sub">Sprachstruktur · Sprachwahrnehmung · Worterkennung · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Grundmerkmale & Struktur der Sprache · 2. Sprache & Denken (Whorf) · 3. Sprachwahrnehmung & Kontexteffekte · 4. Mentales Lexikon · 5. Modelle der Worterkennung
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Was ist Sprache?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Sprache & Denken</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Symbol & Regel</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Sprachwahrnehmung</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Dekodierung & Top-down</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Mentales Lexikon</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Worterkennung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Syntax</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Was ist Sprache? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Was ist Sprache? Merkmale & Zugänge</div>
+    <div class="sec-lz">Symbol-/Regelsystem, generativ/produktiv/verschiebbar; Sprachkompetenz vs. -performanz.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie haben dieses Wort vermutlich noch nie gehört: „flauscheln“. Trotzdem verstehen Sie sofort ungefähr, was gemeint sein könnte. Welche Grundeigenschaft von Sprache zeigt das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die <strong>Produktivität</strong> (neue Wörter erfinden) und <strong>Generativität</strong> (aus endlichem Inventar unendlich viele Äußerungen). Sprache ist ein <strong>Symbol- und Regelsystem</strong>, das unabhängig vom Medium (Sprechen, Schreiben, Gebärden) funktioniert.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition</div>
+    <p>Im Allgemeinen bezeichnet <strong>Sprache</strong> ein komplexes Zeichen- und Regelsystem zur Kommunikation; auch die Fähigkeit zur Kommunikation („faculty of language“). Sie ist ein <strong>Kommunikationsmittel</strong> und ein <strong>Symbol- und Regelsystem</strong>, das nicht von einem bestimmten Medium abhängt (Sprechen, Schreiben, Gebärden).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Eigenschaften als Kommunikationsmittel</div>
+    <ul>
+      <li>Ermöglicht <strong>Aufzeichnung und Weitergabe</strong> von Wissen und unterstützt Denkprozesse</li>
+      <li><strong>Verschiebbarkeit:</strong> unabhängig von der Gegenwart — über Vergangenes/Zukünftiges sprechen</li>
+      <li>Hohe <strong>Ausdruckskraft</strong>: über beliebige Inhalte sprechen</li>
+      <li><strong>Produktiv:</strong> neue Wörter erfinden, um Neues auszudrücken</li>
+      <li><strong>Generativ:</strong> mit endlich vielen Wörtern + Regeln unendlich viele Sätze bilden</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung — Kompetenz vs. Performanz</div>
+    <p><strong>Sprachkompetenz</strong> (Linguistik) = Wissen über grammatische Regeln. <strong>Sprachperformanz</strong> (Psychologie) = die tatsächlichen Prozesse des Sprachverstehens und der Produktion. Nicht verwechseln.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — die vier Zugänge zu Sprache</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Linguistik</h4><p>Theorien der Sprachkompetenz — Wissen über grammatische Regeln.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Psychologie</h4><p>Sprachperformanz — Prozesse und Strukturen von Verstehen und Produktion.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Informatik</h4><p>Entwicklung künstlicher Systeme, die Sprache verwenden können.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Kogn. Neurowissenschaft</h4><p>Neurobiologische Grundlagen und neurologisch bedingte Sprachstörungen.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Sprache & Denken ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Sprache und Denken (linguistischer Relativismus)</div>
+    <div class="sec-lz">Whorf 1956; Rosch (Dani); Roberson (Berinmo); kategoriale Wahrnehmung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die Inuit haben angeblich zahlreiche Wörter für Schnee. Sehen sie deshalb mehr Schneearten als wir — oder ist das ein Mythos?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Das ist die Frage des <strong>linguistischen Relativismus</strong> (Whorf): Determiniert Sprache das Denken? Die starke These ist empirisch kaum haltbar (Rosch bei den Dani). Aber eine <strong>moderate Variante</strong> stimmt: Sprache <em>beeinflusst</em> Kategorisierung und Gedächtnis (Roberson, kategoriale Wahrnehmung).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — linguistischer Relativismus (Whorf 1956)</div>
+    <p>Die These: <strong>Sprache determiniert</strong> Wahrnehmung und Denken (Sprachdeterminismus). Vermeintliche Evidenz: Unterschiede zwischen Sprachen (Hanuxoo: 92 Reis-Namen; Inuit: viele Schneewörter). Kritik: feine Unterschiede lassen sich auch in anderen Sprachen ausdrücken (mit mehreren Wörtern); Sprachen spiegeln eher die <em>kulturelle Relevanz</em> von Unterscheidungen.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Empirische Prüfung</div>
+    <p><strong>Rosch (1972/73) — Dani:</strong> nur zwei Farbworte (mola/mili), aber vergleichbare Farbgedächtnis-Fehler wie US-VPn und in beiden Gruppen bessere Erinnerung für fokale Farben → keine Evidenz für den starken Determinismus.</p>
+    <p><strong>Roberson et al. (2000) — Berinmo:</strong> kategoriale Wahrnehmung — Farben derselben Sprachkategorie gelten als ähnlicher; besseres Farbgedächtnis über Kategoriegrenzen hinweg → stützt eine <strong>moderate Variante</strong>.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    <p>Der <strong>starke</strong> Determinismus (Sprache <em>bestimmt</em> Denken) ist widerlegt; haltbar ist nur die <strong>moderate</strong> Variante: Sprache <em>beeinflusst</em> Kategorisierung/Gedächtnis unter bestimmten Bedingungen.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Whorf-Debatte — Schritt für Schritt aufdecken</div>
+    <div id="s1steps">
+      <div class="step-item"><div class="step-label">These</div><strong>Whorf 1956:</strong> Sprache determiniert das Denken (Sprachdeterminismus).</div>
+      <div class="step-item"><div class="step-label">Test 1</div><strong>Rosch (Dani):</strong> nur 2 Farbworte, aber gleiche Gedächtnisleistung → keine Evidenz für den starken Determinismus.</div>
+      <div class="step-item"><div class="step-label">Test 2</div><strong>Roberson (Berinmo):</strong> kategoriale Wahrnehmung — Muttersprache beeinflusst die Farbklassifikation.</div>
+      <div class="step-item"><div class="step-label">Fazit</div>→ Der starke Determinismus fällt; haltbar ist die <strong>moderate Variante</strong>: Sprache beeinflusst (nicht determiniert) das Denken.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s1steps')" style="margin-top:10px">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Symbol & Regel ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Sprache als Symbol- und Regelsystem</div>
+    <div class="sec-lz">Phoneme, Grapheme, Morpheme, Allophone; Semantik & Syntax.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„danken“ und „tanken“ unterscheiden sich nur in einem Laut — und doch in der Bedeutung. „Un-“ in „Unglück“ kann nicht allein stehen, trägt aber Bedeutung. Welche Sprach-Einheiten sind das jeweils?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">/d/ vs. /t/ sind <strong>Phoneme</strong> (kleinste lautliche, bedeutungs<em>unterscheidende</em> Einheiten). „Un-“ ist ein <strong>gebundenes Morphem</strong> (kleinste bedeutungs<em>tragende</em> Einheit, hier nicht allein stehfähig). Wörter sind willkürliche Symbole, Grammatik (Semantik & Syntax) das Regelsystem.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Symbol- und Regelsystem</div>
+    <p><strong>Symbolsystem = Wörter:</strong> willkürliche Symbole für Konzepte, ohne Ähnlichkeit zum bezeichneten Gegenstand. <strong>Regelsystem = Grammatik:</strong> <strong>Semantik</strong> (Regeln zur Bedeutungsableitung) und <strong>Syntax</strong> (Regeln zur Kombination von Wörtern zu Sätzen).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Die Einheiten</div>
+    <ul>
+      <li><strong>Phoneme</strong> — kleinste lautliche Segmente; bedeutungsunterscheidend, nicht bedeutungstragend (/d/ vs. /t/). <strong>Allophone</strong>: Lautvariationen ohne Bedeutungsänderung (/l/, /r/ im Japanischen).</li>
+      <li><strong>Grapheme</strong> — Schriftzeichen; Systeme: logographisch (Chinesisch), syllabisch (Kana), alphabetisch. Kein 1:1-Mapping (boot/blue/two → /oo/).</li>
+      <li><strong>Morpheme</strong> — kleinste bedeutungstragende Einheiten; <strong>frei</strong> (Hund) oder <strong>gebunden</strong> (Un-, -lich, be-).</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <p><strong>Phonem</strong> unterscheidet Bedeutung, trägt sie aber nicht. <strong>Morphem</strong> trägt Bedeutung. <strong>Graphem</strong> ist das Schriftzeichen. Drei verschiedene Ebenen.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Phonem oder Morphem?</div>
+    <div class="corr-item" id="c2a">Kleinste lautliche Einheit, bedeutungsunterscheidend, aber nicht bedeutungstragend.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'phonem')">Phonem</button>
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'morphem')">Morphem</button>
+      </div><div class="corr-fb" id="c2a-fb"></div>
+    </div>
+    <div class="corr-item" id="c2b">Kleinste bedeutungstragende Einheit.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'phonem')">Phonem</button>
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'morphem')">Morphem</button>
+      </div><div class="corr-fb" id="c2b-fb"></div>
+    </div>
+    <div class="corr-item" id="c2c">/d/ vs. /t/ in danken–tanken.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'phonem')">Phonem</button>
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'morphem')">Morphem</button>
+      </div><div class="corr-fb" id="c2c-fb"></div>
+    </div>
+    <div class="corr-item" id="c2d">„Un-“ in „Unglück“.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'phonem')">Phonem</button>
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'morphem')">Morphem</button>
+      </div><div class="corr-fb" id="c2d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Sprachwahrnehmung ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Sprachwahrnehmung: Probleme & Prozesse</div>
+    <div class="sec-lz">Segmentierungs- & Variabilitätsproblem, Koartikulation; 4 serielle Prozesse.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Sonagramm eines gesprochenen Satzes sieht man kaum Pausen an den Wortgrenzen — aber oft Stille mitten im Wort. Warum hören wir trotzdem klar getrennte Wörter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Das ist das <strong>Segmentierungsproblem</strong>: Das physikalische Signal ist ein kontinuierlicher Lautstrom; das Gehörte sind getrennte Wörter. Hinzu kommt das <strong>Variabilitätsproblem</strong> (Koartikulation). Beide werden über Hinweisreize und top-down-Prozesse gelöst.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Segmentierungsproblem</div>
+    <p>Physikalisch ist Sprache ein <strong>kontinuierlicher Lautstrom</strong> (keine klaren Pausen zwischen Wörtern, oft Pausen innerhalb), gehört werden aber getrennte Wörter. Hinweise auf Wortgrenzen: bestimmte Lautfolgen kommen nie in einer Silbe vor; Lautfolgen ohne Vokal können kein Wort sein; <strong>Betonung</strong> (im Englischen meist erste Silbe von Substantiven).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Das Variabilitätsproblem & Koartikulation</div>
+    <p>Variabilität durch inter-/intraindividuelle Unterschiede (Tonhöhe, Tempo, Akzent, Dialekt, Sorgfalt). <strong>Koartikulation:</strong> die Aussprache eines Phonems variiert durch die umgebenden Laute — bei „Boot“ sind die Lippen beim /b/ bereits für /o/ gerundet, bei „Bad“ nicht.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Vier serielle Prozesse</div>
+    <ol>
+      <li><strong>Dekodierung</strong> des Sprachsignals (Diskrimination; Echtzeit ~10 Phoneme/Sek.)</li>
+      <li><strong>Segmentierung</strong> in diskrete Einheiten (Phoneme, Silben, Wörter)</li>
+      <li><strong>Erkennung/Verstehen</strong>: lexikalische Selektion + semantische Interpretation</li>
+      <li><strong>Integration</strong> in ein mentales Modell der Sprachintention</li>
+    </ol>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die vier seriellen Prozesse — nacheinander aufdecken</div>
+    <div id="s3steps">
+      <div class="step-item"><div class="step-label">Schritt 1</div><strong>Dekodierung:</strong> Sprachsignal von irrelevantem Input trennen, in Echtzeit (~10 Phoneme/Sek.).</div>
+      <div class="step-item"><div class="step-label">Schritt 2</div><strong>Segmentierung:</strong> diskrete Einheiten (Phoneme, Silben, Wörter) aus dem Lautstrom extrahieren.</div>
+      <div class="step-item"><div class="step-label">Schritt 3</div><strong>Erkennung/Verstehen:</strong> lexikalische Selektion aus dem mentalen Lexikon + semantische Interpretation.</div>
+      <div class="step-item"><div class="step-label">Schritt 4</div><strong>Integration:</strong> Einbettung in ein mentales Modell der Sprachintention.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s3steps')" style="margin-top:10px">Nächsten Prozess zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Dekodierung & Top-down ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Dekodierung & Top-down-Kontexteffekte</div>
+    <div class="sec-lz">Miller & Isard; Warren & Warren (Restauration); McGurk-Effekt.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Man ersetzt in einem Satz ein Phonem durch ein Husten — und niemand bemerkt das Fehlen, alle „hören“ den vollständigen Laut. Wie ist das möglich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Das ist der <strong>phonemische Restaurationseffekt</strong> (Warren & Warren): top-down-Prozesse ergänzen das fehlende Phonem aus dem Bedeutungskontext — je nach Satzende sogar zu verschiedenen Wörtern. Auch der <strong>McGurk-Effekt</strong> zeigt: Kontext (hier visuell) formt die Wahrnehmung des Sprachsignals.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kontext hilft bei der Dekodierung</div>
+    <p><strong>Miller & Isard (1963):</strong> Wörter werden trotz Lärm in syntaktisch UND semantisch korrekten Sätzen am besten erkannt (63 %), schlechter in nur syntaktisch korrekten (22 %) oder sinnlosen Wortfolgen (3 %). <strong>Salasoo & Pisoni (1985):</strong> verrauschte Wörter werden in bedeutungsvollen Sätzen besser erkannt als isoliert — besonders, wenn der Wortanfang hörbar ist.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Phonemischer Restaurationseffekt (Warren & Warren 1970)</div>
+    <p>Ein durch Geräusch (Husten) ersetztes Phonem wird nicht vermisst, sondern <strong>halluziniert</strong>. Bei gleichem Input („*eel“) wird je nach Satzende ein anderes Wort restauriert: axle → wheel, table → meal, orange → peel. → Gleicher akustischer Input, je nach Bedeutungskontext andere Wahrnehmung (<strong>top-down</strong>).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">McGurk-Effekt (McGurk & MacDonald 1976)</div>
+    <p>Lippenbewegung „gaga“ + Ton „baba“ → wahrgenommen wird „dada“. Bei geschlossenen Augen: korrekt „baba“. → <strong>Visueller Kontext beeinflusst die Wahrnehmung</strong> des auditiven Sprachsignals. (Auch: Phoneme werden in Wörtern schneller erkannt als in Nicht-Wörtern — Rubin et al. 1976.)</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Restaurationseffekt oder McGurk-Effekt?</div>
+    <div class="corr-item" id="c4a">Ein fehlendes (durch Husten ersetztes) Phonem wird halluziniert.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'restauration')">Restaurationseffekt</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'mcgurk')">McGurk-Effekt</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">Lippe „gaga“ + Ton „baba“ → Wahrnehmung „dada“.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'restauration')">Restaurationseffekt</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'mcgurk')">McGurk-Effekt</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">Gleicher Input, je nach Satzende anderes Wort (wheel/meal/peel).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'restauration')">Restaurationseffekt</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'mcgurk')">McGurk-Effekt</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+    <div class="corr-item" id="c4d">Visueller Kontext verändert das gehörte Sprachsignal.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'restauration')">Restaurationseffekt</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'mcgurk')">McGurk-Effekt</button>
+      </div><div class="corr-fb" id="c4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Mentales Lexikon ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Sprachverstehen: Das mentale Lexikon (Levelt 1994)</div>
+    <div class="sec-lz">Lexeme/Lemma/Conceptual; Worthäufigkeit; Nachbarschaft/Wettbewerb.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie kennen rund 75.000 Wörter und finden das richtige in Sekundenbruchteilen. Wie ist dieses „Wörterbuch im Kopf“ organisiert — alphabetisch wie ein Duden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Nein — das <strong>mentale Lexikon</strong> (Levelt 1994) ist <em>nicht</em> alphabetisch organisiert. Zugriff über mehrere Wege (Klang, visuelle Form, Kontext); häufige Wörter sind schneller (<strong>Worthäufigkeitseffekt</strong>), Wörter mit vielen Nachbarn langsamer (<strong>Wettbewerb</strong>). Drei Ebenen: Lexeme, Lemma, Conceptual.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — mentales Lexikon (Levelt 1994)</div>
+    <p>Das <strong>Langzeitgedächtnis für Wissen über Wörter</strong> (Standardsprache ca. 75.000 Wörter). Drei Ebenen: <strong>Lexeme-Level</strong> (phonologische Info = Klang; orthographische Info = visuelle Wortform), <strong>Lemma-Level</strong> (syntaktische Info: Wortklasse, grammatisches Geschlecht, Kombination), <strong>Conceptual Level</strong> (semantische Info = Bedeutung).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Funktionsmerkmale</div>
+    <ul>
+      <li><strong>Nicht alphabetisch</strong> organisiert</li>
+      <li><strong>Worthäufigkeitseffekt:</strong> auf häufige Wörter wird schneller zugegriffen</li>
+      <li><strong>Wettbewerb/Nachbarschaft:</strong> Wörter mit mehr Nachbarn werden langsamer erkannt (MAUS, RAUS, MAUT)</li>
+      <li>Zugriff über mehrere Wege (Klang, visuelle Wortform, Kontext)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    <p>Lemma ≠ Lexeme: das <strong>Lemma</strong> trägt die syntaktische Information (Wortklasse, Genus), das <strong>Lexeme</strong> die Form (Klang + Schriftbild). Die Bedeutung liegt auf dem <strong>Conceptual Level</strong>.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — die drei Ebenen (Levelt)</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Lexeme-Level</h4><p>Form des Wortes: phonologisch (Klang) + orthographisch (visuelle Wortform).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Lemma-Level</h4><p>Syntaktische Information: Wortklasse, grammatisches Geschlecht, Kombination zu Sätzen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Conceptual Level</h4><p>Semantische Information: die Bedeutung des Wortes.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Zugriff</h4><p>Nicht alphabetisch; Worthäufigkeit beschleunigt, viele Nachbarn (Wettbewerb) verlangsamen.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Worterkennung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Modelle der Worterkennung: Kohorten & TRACE</div>
+    <div class="sec-lz">Kohorten (Marslen-Wilson, uniqueness point); TRACE (McClelland & Elman).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sobald Sie „Kapi…“ hören, sind im Kopf noch Kapitän, Kapital, Kapitel aktiv. Ab welchem Laut steht das Wort eindeutig fest — und beeinflusst der Satzkontext diesen Prozess?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Im <strong>Kohorten-Modell</strong> (Marslen-Wilson) schrumpft die Kandidatenmenge bis zum <strong>uniqueness point</strong> (nur noch ein Wort) — anfangs rein bottom-up (Zwitserlood). Das <strong>TRACE-Modell</strong> (McClelland & Elman) ist dagegen interaktiv: top-down-Verbindungen und laterale Hemmung wirken mit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kohorten-Modell (Marslen-Wilson & Tyler)</div>
+    <p>(1) Aktivierung aller Kandidaten mit gleichem <strong>Anfangsphonem</strong>; (2) schrittweise Einschränkung der Kohorte; (3) Erkennung am <strong>uniqueness point</strong> (nur noch ein Wort übrig). → reines <strong>bottom-up</strong>-Modell. Evidenz <strong>Zwitserlood et al. (1989)</strong>: früh werden auch Konkurrenten aktiviert (KAPITÄN + KAPITAL), Kontext wirkt erst spät (top-down).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Gegenevidenz & revidiertes Modell</div>
+    <p><strong>Magnuson et al. (2008):</strong> ein Konkurrent anderer Wortklasse wird extrem schnell ignoriert → gegen eine top-down-freie Initialkohorte. <strong>Revidiertes Modell (Marslen-Wilson 1990):</strong> Kandidaten variieren im Aktivierungsgrad (statt Alles-oder-Nichts), häufige Wörter stärker aktiviert, mehr Gewicht auf top-down.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">TRACE-Modell (McClelland & Elman 1986)</div>
+    <p>Drei Ebenen: <strong>Merkmale → Phoneme → Worte</strong>. <strong>Laterale Hemmung</strong> innerhalb einer Ebene, <strong>bahnende (exzitatorische)</strong> Verbindungen zwischen Ebenen — bidirektional, also auch <strong>top-down</strong> (Worteinheiten aktivieren Phonemeinheiten). Evidenz: Wortüberlegenheitseffekt (Cutler 1987), Lexical Identification Shift (Ganong 1980).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Kohorten- oder TRACE-Modell?</div>
+    <div class="corr-item" id="c6a">Reines bottom-up-Modell mit uniqueness point.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'kohorte')">Kohorten-Modell</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'trace')">TRACE-Modell</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Interaktiv, mit lateraler Hemmung und top-down-Verbindungen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'kohorte')">Kohorten-Modell</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'trace')">TRACE-Modell</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Lexikalische Aktivierung aller Kandidaten mit gleichem Anfangsphonem.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'kohorte')">Kohorten-Modell</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'trace')">TRACE-Modell</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Drei Ebenen (Merkmale, Phoneme, Worte) mit bidirektionaler Aktivierung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'kohorte')">Kohorten-Modell</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'trace')">TRACE-Modell</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Syntax ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Syntax: Struktur & Störungen</div>
+    <div class="sec-lz">Phrasenstruktur, Tiefen-/Oberflächenstruktur, Rekursion; Broca-Aphasie.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„David verfolgt den Dieb mit dem Skateboard.“ — Wer hat das Skateboard? Der Satz ist mehrdeutig, obwohl die Wörter dieselben sind. Was steckt dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Dieselbe <strong>Oberflächenstruktur</strong> kann zwei <strong>Tiefenstrukturen</strong> (Bedeutungen/Phrasengliederungen) haben. Syntax = Regeln, nach denen Wörter zu Phrasen/Sätzen kombiniert werden; <strong>Rekursion</strong> erlaubt unendlich viele Sätze. Störung der Syntax zeigt sich z. B. bei <strong>Broca-Aphasie</strong> (Agrammatismus).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Syntax & Phrasenstruktur</div>
+    <p>Teil der Grammatik mit den Regeln, nach denen Wörter zu größeren funktionellen Einheiten (<strong>Phrasen, Sätze</strong>) zusammengestellt werden — ein hierarchisches System. <strong>Phrasenstrukturregeln</strong> (z. B. S → NP VP) gliedern den Satz.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Tiefen- vs. Oberflächenstruktur</div>
+    <p><strong>Tiefenstruktur:</strong> abstraktes Regelsystem = Bedeutung des Satzes + Struktur seiner Phrasen (Aktiv/Passiv teilen sie). <strong>Oberflächenstruktur:</strong> wie der Satz tatsächlich aussieht. Gleiche Oberflächenstruktur kann verschiedene Tiefenstrukturen haben (Ambiguität: „David verfolgt den Dieb mit dem Skateboard“).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Rekursion & Broca-Aphasie</div>
+    <p><strong>Rekursion:</strong> wiederholte Anwendung einer Regel auf ihr eigenes Ergebnis ([Hans glaubt, [dass sie klug ist]] …) → unendlich viele Sätze mit endlichem Inventar. <strong>Broca-Aphasie (Agrammatismus):</strong> Inhaltswörter ohne Funktionswörter, weggelassene Flexionen — „Telegrammstil“ („Bus … kommen … nein“).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rekursion — Schritt für Schritt verschachteln</div>
+    <div id="s7steps">
+      <div class="step-item"><div class="step-label">Ebene 0</div>[dass sie klug ist]</div>
+      <div class="step-item"><div class="step-label">Ebene 1</div>[Hans glaubt, [dass sie klug ist]]</div>
+      <div class="step-item"><div class="step-label">Ebene 2</div>[Maria sagt, [dass Hans glaubt, [dass sie klug ist]]]</div>
+      <div class="step-item"><div class="step-label">Prinzip</div>Dieselbe Regel wird auf ihr eigenes Ergebnis angewendet → mit endlich vielen Wörtern und Regeln <strong>unendlich viele Sätze</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s7steps')" style="margin-top:10px">Nächste Verschachtelung zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare zu Sprache & Perzeption sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Phonem</h4>
+      <p>Kleinste lautliche Einheit</p>
+      <p>Bedeutungsunterscheidend, nicht -tragend</p>
+      <p>/d/ vs. /t/ in danken–tanken</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Morphem</h4>
+      <p>Kleinste bedeutungstragende Einheit</p>
+      <p>Frei (Hund) oder gebunden (Un-)</p>
+      <p>Trägt Bedeutung, nicht nur Laut</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Phonem ist die kleinste bedeutungstragende Einheit der Sprache.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Starker Relativismus (Whorf 1956)</h4>
+      <p>Sprache determiniert das Denken</p>
+      <p>Sprachdeterminismus</p>
+      <p>Empirisch kaum haltbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Moderate Variante (Roberson 2000)</h4>
+      <p>Sprache beeinflusst (nicht determiniert)</p>
+      <p>Kategoriale Wahrnehmung</p>
+      <p>Gilt unter bestimmten Bedingungen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Befunde von Rosch und Roberson belegen den starken Sprachdeterminismus Whorfs vollständig.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kohorten-Modell (Marslen-Wilson)</h4>
+      <p>Reines bottom-up</p>
+      <p>Aktivierung aller Kandidaten mit gleichem Anfang</p>
+      <p>Erkennung am uniqueness point</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>TRACE-Modell (McClelland & Elman)</h4>
+      <p>Interaktiv (bidirektional)</p>
+      <p>Laterale Hemmung innerhalb der Ebene</p>
+      <p>Top-down Wort → Phonem</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Kohorten-Modell nimmt eine top-down-Aktivierung von der Wort- zur Phonemebene an.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Tiefenstruktur</h4>
+      <p>Bedeutung des Satzes</p>
+      <p>Struktur der Phrasen</p>
+      <p>Aktiv und Passiv teilen sie</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Oberflächenstruktur</h4>
+      <p>Wie der Satz wirklich aussieht</p>
+      <p>Konkrete Satzform</p>
+      <p>Kann mehrdeutig sein</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Oberflächenstruktur enthält die abstrakte Bedeutung, die Tiefenstruktur nur die konkrete Wortabfolge.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Segmentierungsproblem</h4>
+      <p>Kontinuierlicher Lautstrom</p>
+      <p>Keine klaren Wortgrenzen</p>
+      <p>Gehört: getrennte Wörter</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Variabilitätsproblem</h4>
+      <p>Aussprache variiert</p>
+      <p>Koartikulation</p>
+      <p>Inter-/intraindividuell</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim Segmentierungsproblem geht es darum, dass dasselbe Phonem je nach Sprecher unterschiedlich klingt.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl09</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl09';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was bedeutet es, dass Sprache „generativ“ ist?",
+      "opts": [
+        "Sprache ist von einem bestimmten Medium (dem Sprechen) abhängig.",
+        "Wörter ähneln den Gegenständen, die sie bezeichnen.",
+        "Mit endlich vielen Wörtern und Regeln lassen sich unendlich viele Sätze bilden.",
+        "Sprache kann ausschließlich über die unmittelbare Gegenwart Auskunft geben, niemals über Vergangenes oder Zukünftiges."
+      ],
+      "c": 2,
+      "e": "Generativität: aus endlichem Inventar (Wörter + grammatische Regeln) entsteht eine unendliche Menge möglicher Sätze. (d) widerspricht der Verschiebbarkeit."
+    },
+    {
+      "id": "s0q2",
+      "q": "Womit befasst sich die Psychologie beim Zugang zu Sprache (anders als die Linguistik)?",
+      "opts": [
+        "Mit der Sprachperformanz — den Prozessen des Sprachverstehens und der Produktion.",
+        "Mit der Entwicklung künstlicher, sprachfähiger Systeme.",
+        "Mit der Sprachkompetenz — dem Wissen über grammatische Regeln.",
+        "Ausschließlich mit der neurobiologischen Lokalisation von Sprachzentren und neurologisch bedingten Sprachstörungen."
+      ],
+      "c": 0,
+      "e": "Psychologie untersucht die Sprachperformanz (Prozesse/Strukturen). Sprachkompetenz (c) ist die Linguistik, (b) die Informatik, (d) die kognitive Neurowissenschaft."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was besagt die These des linguistischen Relativismus (Whorf 1956)?",
+      "opts": [
+        "Denken ist vollständig unabhängig von der Sprache.",
+        "Sprache determiniert die Wahrnehmung und das Denken.",
+        "Alle Sprachen kodieren die Welt auf identische Weise.",
+        "Die Zahl der Farbwörter einer Sprache hat nachweislich keinerlei Einfluss auf das Farbgedächtnis ihrer Sprecher."
+      ],
+      "c": 1,
+      "e": "Whorfs Sprachdeterminismus: die Struktur der Sprache prägt Wahrnehmung/Denken. Empirisch nur in einer moderaten Variante haltbar."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was ergab die Replikationsstudie von Roberson et al. (2000) mit den Berinmo?",
+      "opts": [
+        "Farbwahrnehmung ist völlig unabhängig von der Muttersprache.",
+        "Die Berinmo konnten Farben generell schlechter unterscheiden.",
+        "Die Sprache hatte nur bei englischen, nicht bei Berinmo-VPn einen Effekt, weil Englisch mehr Farbwörter besitzt.",
+        "Kategoriale Wahrnehmung: die Muttersprache beeinflusste die Farbklassifikation in beiden Gruppen."
+      ],
+      "c": 3,
+      "e": "Roberson: kategoriale Wahrnehmung — Farben derselben Sprachkategorie gelten als ähnlicher; besseres Gedächtnis über Kategoriegrenzen hinweg → moderate Whorf-Variante."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was kennzeichnet ein Phonem?",
+      "opts": [
+        "Die kleinste lautliche Einheit, bedeutungsunterscheidend, aber nicht bedeutungstragend.",
+        "Die kleinste bedeutungstragende Einheit der Sprache.",
+        "Ein Schriftzeichen einer alphabetischen Sprache.",
+        "Eine Lautvariation, die — wie /l/ und /r/ im Japanischen — keinerlei Bedeutungsänderung anzeigt."
+      ],
+      "c": 0,
+      "e": "Phonem = kleinste bedeutungsUNTERscheidende Lauteinheit (/d/ vs. /t/). (b) ist ein Morphem, (c) ein Graphem, (d) ein Allophon."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was ist ein gebundenes Morphem?",
+      "opts": [
+        "Ein Morphem, das allein als Wort stehen kann (z. B. Hund).",
+        "Die kleinste lautliche Einheit ohne eigene Bedeutung.",
+        "Ein Morphem, das nicht allein stehen kann (meist Präfix/Suffix, z. B. Un- in Unglück).",
+        "Ein Schriftzeichen eines logographischen Systems, das ein ganzes Wort oder Morphem repräsentiert."
+      ],
+      "c": 2,
+      "e": "Gebundene Morpheme (Un-, -lich, be-) tragen Bedeutung, können aber nicht allein stehen. (a) ist ein freies Morphem."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Worin besteht das Segmentierungsproblem der Sprachwahrnehmung?",
+      "opts": [
+        "Phoneme werden je nach Sprecher und Sprechtempo unterschiedlich ausgesprochen, was die Zuordnung zu einem festen Lautmuster erschwert.",
+        "Das Sprachsignal enthält zu viele klar getrennte Pausen.",
+        "Visuelle Information stört die auditive Verarbeitung.",
+        "Das physikalische Signal ist ein kontinuierlicher Lautstrom ohne klare Wortgrenzen."
+      ],
+      "c": 3,
+      "e": "Segmentierungsproblem: im kontinuierlichen Lautstrom fehlen verlässliche Pausen an Wortgrenzen; gehört werden trotzdem getrennte Wörter. (a) ist das Variabilitätsproblem."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was beschreibt die Koartikulation?",
+      "opts": [
+        "Die bewusste Betonung der ersten Silbe eines Wortes.",
+        "Die Aussprache eines Phonems variiert durch die umgebenden Laute.",
+        "Die Aufteilung des Lautstroms in einzelne Silben.",
+        "Die feste Zuordnung jedes einzelnen Graphems zu genau einem Phonem in alphabetischen Schriftsystemen."
+      ],
+      "c": 1,
+      "e": "Koartikulation: benachbarte Laute beeinflussen die Lautproduktion (antizipatorisch) — bei „Boot“ sind die Lippen beim /b/ schon für /o/ gerundet. Trägt zum Variabilitätsproblem bei."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was zeigte der phonemische Restaurationseffekt (Warren & Warren 1970)?",
+      "opts": [
+        "VPn bemerkten sofort, dass ein Phonem durch ein Geräusch ersetzt war.",
+        "Phoneme werden in Nicht-Wörtern schneller erkannt als in Wörtern.",
+        "Ein durch Geräusch ersetztes Phonem wird je nach Satzkontext unterschiedlich „gehört“.",
+        "Visuelle Lippenbewegungen verändern, welches Phonem bei identischem akustischem Input wahrgenommen wird."
+      ],
+      "c": 2,
+      "e": "Warren & Warren: das fehlende (durch Husten ersetzte) Phonem wird halluziniert, je nach Satzende als anderes Wort (wheel/meal/peel) → top-down. (d) ist der McGurk-Effekt."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was demonstriert der McGurk-Effekt (McGurk & MacDonald 1976)?",
+      "opts": [
+        "Visueller Kontext (Lippenbewegung) beeinflusst die Wahrnehmung des auditiven Sprachsignals.",
+        "Bei geschlossenen Augen wird das Sprachsignal grundsätzlich falsch wahrgenommen.",
+        "Wörter in sinnvollen Sätzen werden schlechter erkannt als isoliert.",
+        "Ein fehlendes Phonem wird allein auf Basis des nachfolgenden Satzkontexts korrekt rekonstruiert und ergänzt."
+      ],
+      "c": 0,
+      "e": "McGurk: Lippe „gaga“ + Ton „baba“ → „dada“; bei geschlossenen Augen korrekt „baba“ → audiovisuelle Integration. (d) ist der Restaurationseffekt."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche Information ist im mentalen Lexikon auf der Lemma-Ebene gespeichert (Levelt 1994)?",
+      "opts": [
+        "Die semantische Bedeutung des Wortes.",
+        "Syntaktische Information wie Wortklasse und grammatisches Geschlecht.",
+        "Der phonologische Klang des Wortes.",
+        "Die orthographische, also die visuelle Wortform, mit der das Wort geschrieben wird."
+      ],
+      "c": 1,
+      "e": "Lemma-Level: syntaktische Info (Wortklasse, Genus, Kombination). Klang/visuelle Form = Lexeme-Level, Bedeutung = Conceptual Level."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was besagt der Worthäufigkeitseffekt beim Lexikonzugriff?",
+      "opts": [
+        "Wörter mit mehr Nachbarn werden schneller erkannt.",
+        "Das mentale Lexikon ist alphabetisch organisiert.",
+        "Auf jedes Wort wird unabhängig von seiner Gebrauchshäufigkeit gleich schnell zugegriffen, da das Lexikon stets parallel durchsucht wird.",
+        "Auf häufiger benutzte Wörter wird schneller zugegriffen."
+      ],
+      "c": 3,
+      "e": "Worthäufigkeitseffekt: häufige Wörter sind schneller verfügbar. (a) ist falsch — mehr Nachbarn (Wettbewerb) verlangsamen (MAUS/RAUS/MAUT)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was ist der „uniqueness point“ im Kohorten-Modell (Marslen-Wilson & Tyler)?",
+      "opts": [
+        "Der Punkt, an dem nur noch ein Kandidat in der Kohorte übrig ist.",
+        "Der Moment, in dem alle Kandidaten gleichzeitig aktiviert werden.",
+        "Die top-down-Aktivierung der Phonemebene durch die Wortebene.",
+        "Der Zeitpunkt, an dem der semantische Satzkontext die initiale Wort-Kohorte bereits vor dem ersten Phonem festlegt."
+      ],
+      "c": 0,
+      "e": "Uniqueness point: ab hier ist das Wort eindeutig erkannt, weil die Kohorte auf einen Kandidaten geschrumpft ist (bottom-up)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wodurch unterscheidet sich das TRACE-Modell (McClelland & Elman 1986) vom Kohorten-Modell?",
+      "opts": [
+        "Es verzichtet vollständig auf eine Phonemebene.",
+        "Es ist ein reines bottom-up-Modell ohne jeden Kontexteinfluss.",
+        "Es ist interaktiv: mit lateraler Hemmung und top-down-Verbindungen von der Wort- zur Phonemebene.",
+        "Es nimmt an, dass die Worterkennung erst nach dem vollständigen Hören des gesamten Satzes einsetzen kann."
+      ],
+      "c": 2,
+      "e": "TRACE: drei Ebenen (Merkmale/Phoneme/Worte), laterale Hemmung innerhalb der Ebene, exzitatorische bidirektionale Verbindungen (auch top-down). Das Kohorten-Modell ist bottom-up."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was unterscheidet Tiefen- von Oberflächenstruktur?",
+      "opts": [
+        "Die Oberflächenstruktur enthält die abstrakte Bedeutung, während die Tiefenstruktur nur die konkrete lautliche Realisierung eines Satzes abbildet.",
+        "Beide Strukturen sind stets vollständig identisch.",
+        "Die Tiefenstruktur beschreibt ausschließlich die Betonung eines Satzes.",
+        "Die Tiefenstruktur ist die Bedeutung/Phrasenstruktur, die Oberflächenstruktur die konkrete Satzform."
+      ],
+      "c": 3,
+      "e": "Tiefenstruktur = Bedeutung + Phrasenstruktur (Aktiv/Passiv teilen sie); Oberflächenstruktur = wie der Satz tatsächlich aussieht. Eine Oberflächenstruktur kann mehrere Tiefenstrukturen haben (Ambiguität)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was kennzeichnet die Spontansprache bei Broca-Aphasie?",
+      "opts": [
+        "Flüssige, grammatisch korrekte, aber inhaltsleere Sprache.",
+        "Agrammatismus: Inhaltswörter ohne Funktionswörter, „Telegrammstil“.",
+        "Eine vollständig erhaltene Syntax bei gestörtem Wortverständnis.",
+        "Eine selektive Unfähigkeit, einzelne Phoneme im kontinuierlichen Lautstrom überhaupt voneinander zu segmentieren."
+      ],
+      "c": 1,
+      "e": "Broca-Aphasie: Agrammatismus — Aneinanderreihung von Inhaltswörtern ohne Funktionswörter, weggelassene Flexionen (Telegrammstil): „Bus … kommen … nein“."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was zeigte die Studie von Miller & Isard (1963) zur Sprachwahrnehmung?",
+    "opts": [
+      "Wörter in syntaktisch und semantisch korrekten Sätzen werden trotz Lärm am besten erkannt.",
+      "Isolierte Wörter werden immer besser erkannt als Wörter in Sätzen.",
+      "Hintergrundgeräusche haben keinerlei Einfluss auf die Worterkennung.",
+      "Sinnlose Wortfolgen wurden ebenso gut wiedergegeben wie vollständig korrekte, grammatikalische Sätze."
+    ],
+    "c": 0,
+    "e": "Miller & Isard: 63 % (korrekt) vs. 22 % (nur syntaktisch) vs. 3 % (sinnlos) → semantisch-syntaktischer Kontext hilft (top-down)."
+  },
+  {
+    "id": "bq2",
+    "q": "Was sind Allophone?",
+    "opts": [
+      "Die kleinsten bedeutungstragenden Einheiten einer Sprache.",
+      "Lautvariationen, die keine Bedeutungsänderung anzeigen.",
+      "Schriftzeichen eines syllabischen Schriftsystems.",
+      "Die Regeln, nach denen Wörter zu grammatikalisch korrekten und sinnvollen Sätzen kombiniert werden."
+    ],
+    "c": 1,
+    "e": "Allophone: verschiedene Lautrealisierungen ohne Bedeutungsunterschied (z. B. /l/ und /r/ im Japanischen). (a) Morpheme, (d) Syntax."
+  },
+  {
+    "id": "bq3",
+    "q": "Wie viele Ebenen unterscheidet das mentale Lexikon nach Levelt (1994)?",
+    "opts": [
+      "Eine einzige, rein semantische Ebene.",
+      "Zwei: nur Klang und visuelle Wortform.",
+      "Drei: Lexeme- (Form), Lemma- (Syntax) und Conceptual Level (Bedeutung).",
+      "Vier Ebenen, die exakt den vier seriellen Prozessen der Sprachwahrnehmung entsprechen."
+    ],
+    "c": 2,
+    "e": "Levelt: Lexeme-Level (Klang/visuelle Form), Lemma-Level (syntaktische Info), Conceptual Level (Bedeutung)."
+  },
+  {
+    "id": "bq4",
+    "q": "Was ergab das Experiment von Zwitserlood et al. (1989) zum Kohorten-Modell?",
+    "opts": [
+      "Der semantische Satzkontext beeinflusste die lexikalische Aktivierung bereits vor dem Einsetzen des ersten Phonems vollständig und ausschließlich.",
+      "Nur das Zielwort wurde zu jedem Zeitpunkt aktiviert.",
+      "Konkurrenten wurden zu keinem Zeitpunkt aktiviert.",
+      "Früh werden auch Konkurrenten aktiviert (bottom-up), erst spät wirkt der Kontext (top-down)."
+    ],
+    "c": 3,
+    "e": "Zwitserlood: zu frühen Zeitpunkten Aktivierung von Ziel + Konkurrent ohne Kontexteffekt (bottom-up), zu späten Zeitpunkten Kontexteffekt (top-down)."
+  },
+  {
+    "id": "bq5",
+    "q": "Welches Prinzip erklärt im TRACE-Modell die kategoriale Wahrnehmung von Phonemen?",
+    "opts": [
+      "Laterale Hemmung zwischen Einheiten derselben Ebene („winner-takes-all“).",
+      "Bottom-up-Aktivierung gänzlich ohne Hemmung.",
+      "Der uniqueness point der Wort-Kohorte.",
+      "Die antizipatorische Anpassung der Artikulation an die jeweils nachfolgenden Laute (Koartikulation)."
+    ],
+    "c": 0,
+    "e": "Kategoriale Wahrnehmung = Nebeneffekt der lateralen Hemmung zwischen Phonem-Units (gewinnende Einheit unterdrückt Konkurrenten)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was besagt der Lexical Identification Shift (Ganong 1980)?",
+    "opts": [
+      "Phoneme werden in Nichtworten schneller erkannt als in Worten.",
+      "Ein ambiges Phonem wird so wahrgenommen, dass ein sinnvolles Wort entsteht.",
+      "Wortgrenzen werden ausschließlich über Pausen erkannt.",
+      "Die Aktivierung eines Wortes hemmt dauerhaft alle phonologisch ähnlichen Nachbarwörter im mentalen Lexikon."
+    ],
+    "c": 1,
+    "e": "Ganong: bei mehrdeutigem Phonem entscheidet die Wortebene top-down zugunsten eines existierenden Wortes → top-down-Aktivierung Wort→Phonem."
+  },
+  {
+    "id": "bq7",
+    "q": "Was ermöglicht Rekursion in der Syntax?",
+    "opts": [
+      "Die eindeutige Zuordnung jedes Graphems zu genau einem Phonem.",
+      "Die Vermeidung jeglicher mehrdeutiger Sätze.",
+      "Mit endlich vielen Wörtern und Regeln unendlich viele Sätze zu bilden.",
+      "Die parallele Aktivierung aller mit dem Anfangsphonem übereinstimmenden Wortkandidaten im Lexikon."
+    ],
+    "c": 2,
+    "e": "Rekursion = wiederholte Regelanwendung auf das eigene Ergebnis ([…[dass sie klug ist]]) → unendliche Produktivität trotz endlichem Inventar."
+  },
+  {
+    "id": "bq8",
+    "q": "Was zeigte die Blickbewegungsstudie von Magnuson et al. (2008) zum Kohorten-Modell?",
+    "opts": [
+      "Die initiale Wort-Kohorte ist vollständig und ausnahmslos unbeeinflusst von top-down-Effekten der syntaktischen Wortklasse.",
+      "Konkurrenten gleicher Wortklasse werden besonders schnell ignoriert.",
+      "Worterkennung beginnt erst lange nach dem uniqueness point.",
+      "Ein Konkurrent anderer Wortklasse wird extrem schnell ignoriert — gegen eine rein bottom-up-Initialkohorte."
+    ],
+    "c": 3,
+    "e": "Magnuson: ein Adjektiv-Konkurrent (andere Wortklasse) wurde sehr schnell aussortiert → die Initialkohorte ist doch top-down beeinflusst (Gegenevidenz zum reinen bottom-up)."
+  }
+];
+
+var corrCorrect = {
+  "c2a": "phonem",
+  "c2b": "morphem",
+  "c2c": "phonem",
+  "c2d": "morphem",
+  "c4a": "restauration",
+  "c4b": "mcgurk",
+  "c4c": "restauration",
+  "c4d": "mcgurk",
+  "c6a": "kohorte",
+  "c6b": "trace",
+  "c6c": "kohorte",
+  "c6d": "trace"
+};
+var corrExpl = {
+  "c2a": "Kleinste lautliche Einheit, bedeutungsunterscheidend, aber nicht bedeutungstragend = Phonem.",
+  "c2b": "Kleinste bedeutungstragende Einheit = Morphem.",
+  "c2c": "/d/ vs. /t/ in danken–tanken unterscheidet Bedeutung, trägt sie aber nicht = Phonem.",
+  "c2d": "Un- (in Unglück) trägt Bedeutung, ist aber gebunden = Morphem.",
+  "c4a": "Ein fehlendes (durch Husten ersetztes) Phonem wird halluziniert = phonemischer Restaurationseffekt (Warren & Warren).",
+  "c4b": "Lippe „gaga“ + Ton „baba“ → „dada“ = McGurk-Effekt (audiovisuelle Integration).",
+  "c4c": "Gleicher Input, je nach Satzende anderes Wort (wheel/meal/peel) = Restaurationseffekt.",
+  "c4d": "Visueller Kontext verändert das gehörte Signal = McGurk-Effekt.",
+  "c6a": "Reines bottom-up-Modell mit uniqueness point = Kohorten-Modell.",
+  "c6b": "Interaktiv, laterale Hemmung, top-down-Verbindungen = TRACE-Modell.",
+  "c6c": "Aktivierung aller Kandidaten mit gleichem Anfangsphonem = Kohorten-Modell.",
+  "c6d": "Drei Ebenen (Merkmale/Phoneme/Worte) mit bidirektionaler Aktivierung = TRACE-Modell."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

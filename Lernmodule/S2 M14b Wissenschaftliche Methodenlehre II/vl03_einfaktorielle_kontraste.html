@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14b · VL03 Einfaktorielle Kontraste</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m14b-vl03
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Simulator (M14b) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-axis{font-size:.78rem;color:var(--text2);margin:8px 0 4px}
+.sim-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.82rem}
+.sim-row > span.lab{flex:0 0 160px;color:var(--text2)}
+.sim-row input[type=range]{flex:1}
+.sim-row > span.val{flex:0 0 76px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M14b · VL03 Einfaktorielle Kontraste</h1>
+<p class="page-sub">Wissenschaftliche Methodenlehre II (Statistik 2) · Dirk Lubbe · Klausur Sept 2026 (WH) · Freitext/Rechnen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Omnibustest vs. Kontraste · 2. Kontrast definieren (Σc=0) · 3. Quadratsumme & F-Test des Kontrasts · 4. Orthogonale Kontraste · 5. A priori vs. a posteriori · 6. Korrektur-Empfehlung · 7. Bonferroni-Korrektur · 8. Scheffé-Korrektur
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Omnibustest</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Kontrast definieren</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ QS & F-Test</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Orthogonalität</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ A priori / a posteriori</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Korrektur?</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Bonferroni</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Scheffé</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Omnibustest ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Vom Omnibustest zum Kontrast</div>
+    <div class="sec-lz">Der F-Test prüft simultan alle Mittel (Omnibustest); Kontraste prüfen danach spezifische Gruppenvergleiche.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Der F-Test einer Varianzanalyse über vier Lehrmethoden wird signifikant. Was weiß man jetzt — und was noch nicht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Man weiß: <strong>irgendwo</strong> unterscheiden sich die Gruppen (der Omnibustest verwirft H0: μ1 = … = μp). Man weiß <strong>nicht</strong>, <em>welche</em>. Dafür prüft man anschließend gezielte Vergleiche — <strong>Kontraste</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Omnibustest</div>
+    Der F-Test der Varianzanalyse heißt <strong>Omnibustest</strong>, weil seine Nullhypothese die <strong>simultane Gleichheit aller</strong> Gruppenmittel annimmt (H0: μ1 = μ2 = … = μp). Er sagt nur, <em>dass</em> ein Unterschied besteht.
+  </div>
+  <div class="card">
+    <div class="card-title">Kontraste</div>
+    Wird der Omnibustest signifikant, interessiert meist ein <strong>spezifischer Gruppenvergleich</strong>. Solche Vergleiche heißen <strong>Kontraste</strong> und werden typischerweise im Anschluss geprüft.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Reihenfolge des Testvorgehens</div>
+    <div id="step0">
+      <div class="step-item"><strong>Schritt 1:</strong> Omnibustest (globaler F-Test) rechnen.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Ist er <em>nicht</em> signifikant → stopp (keine bedeutsamen Gruppenunterschiede).</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Ist er signifikant → gezielte <strong>Kontraste</strong> aufstellen und prüfen.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Kontrast definieren ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Kontrast definieren — und wann er gültig ist</div>
+    <div class="sec-lz">D = c1·Ā1 + … + cp·Āp; Gültigkeitsbedingung Σc_i = 0; H0: Σc_iμ_i = 0.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie wollen Gruppe 1+2 gemeinsam gegen Gruppe 3 vergleichen. Welche Koeffizienten c codieren das — und woran erkennt man, dass es ein gültiger Kontrast ist?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">c = (1, 1, −2): die Linearkombination D = 1·Ā1 + 1·Ā2 − 2·Ā3. Gültig, weil die <strong>Summe der Koeffizienten null</strong> ist: 1 + 1 − 2 = 0.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kontrast als Linearkombination</div>
+    Ein Kontrast ist eine gewichtete Summe der Gruppenmittel: <strong>D = c1·Ā1 + c2·Ā2 + … + cp·Āp</strong>. Die <strong>Kontrastkoeffizienten c_i</strong> codieren, welche Gruppen wie verglichen werden.
+  </div>
+  <div class="card">
+    <div class="card-title">Gültigkeitsbedingung</div>
+    Damit eine Gewichtung ein gültiger Kontrast ist, muss gelten: <strong>Σ c_i = 0</strong>. Beispiel: (1, 1, 1, −3) → 1+1+1−3 = 0 (Gruppen 1–3 gegen Gruppe 4).
+  </div>
+  <div class="card">
+    <div class="card-title">Nullhypothese des Kontrasts</div>
+    Mit jedem Kontrast ist eine H0 verbunden — man ersetzt die Mittelwerte durch die Populationsparameter: <strong>H0: Σ c_i·μ_i = 0</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gültiger Kontrast? (prüfe Σc_i = 0)</div>
+    <div class="corr-item" id="ga">c = (1, −1, 0)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ga',this,'gueltig')">Gültig</button>
+        <button class="corr-btn" onclick="checkCorr('ga',this,'ungueltig')">Ungültig</button>
+      </div><div class="corr-fb" id="ga-fb"></div>
+    </div>
+    <div class="corr-item" id="gb">c = (1, 1, −2)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gb',this,'gueltig')">Gültig</button>
+        <button class="corr-btn" onclick="checkCorr('gb',this,'ungueltig')">Ungültig</button>
+      </div><div class="corr-fb" id="gb-fb"></div>
+    </div>
+    <div class="corr-item" id="gc">c = (1, 1, 1)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gc',this,'gueltig')">Gültig</button>
+        <button class="corr-btn" onclick="checkCorr('gc',this,'ungueltig')">Ungültig</button>
+      </div><div class="corr-fb" id="gc-fb"></div>
+    </div>
+    <div class="corr-item" id="gd">c = (2, −1, 0)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gd',this,'gueltig')">Gültig</button>
+        <button class="corr-btn" onclick="checkCorr('gd',this,'ungueltig')">Ungültig</button>
+      </div><div class="corr-fb" id="gd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ QS & F-Test ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Quadratsumme & F-Test eines Kontrasts</div>
+    <div class="sec-lz">QS_D = n·D²/Σc_i² (immer df = 1); Prüfgröße F = QS_D/MQ_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Kontrast hat D = 4, n = 5, Σc_i² = 2, und es ist MQ_e = 1,88. Wie groß sind QS_D und die Prüfgröße F?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>QS_D = n·D²/Σc_i² = 5·16/2 = 40</strong>; <strong>F = QS_D/MQ_e = 40/1,88 ≈ 21,3</strong>. Der Zähler hat 1 Freiheitsgrad, der Nenner df_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Quadratsumme des Kontrasts</div>
+    Jeder Kontrast ist mit einer Quadratsumme verbunden: <strong>QS_D = n·D² / Σ c_i²</strong>. Diese Quadratsumme besitzt <strong>immer genau einen Freiheitsgrad</strong> (ein Kontrast = ein gerichteter Vergleich).
+  </div>
+  <div class="card">
+    <div class="card-title">F-Test des Kontrasts</div>
+    Die Signifikanzprüfung erfolgt über <strong>F = QS_D / MQ_e</strong>, mit Zähler-df = 1 und Nenner-df = df_e. Vergleich mit dem kritischen F-Wert → Entscheidung.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Im Nenner steht die <strong>mittlere Fehlerquadratsumme MQ_e</strong> (nicht QS_A oder MQ_A). MQ_e liegt aus der ANOVA-Tabelle bereits vor.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg: Kontrast prüfen (D = 4, n = 5, Σc² = 2)</div>
+    <div id="step2">
+      <div class="step-item"><strong>Schritt 1:</strong> Kontrastwert aus den Mitteln: D = 4 (gegeben).</div>
+      <div class="step-item"><strong>Schritt 2:</strong> QS_D = n·D²/Σc_i² = 5·4²/2 = 80/2 = <strong>40</strong>.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> F = QS_D/MQ_e = 40/1,88 ≈ <strong>21,3</strong> (df: 1 und df_e).</div>
+      <div class="step-item"><strong>Schritt 4:</strong> F mit dem kritischen Wert vergleichen → Entscheidung über H0: Σc_iμ_i = 0.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step2')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Orthogonalität ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Orthogonale Kontraste</div>
+    <div class="sec-lz">Orthogonal ⇔ Σc_ij·c_ik = 0; p Stufen → p−1 orthogonale Kontraste, die QS_A zerlegen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Kontraste: D₁ = (1, −1, 0) und D₂ = (½, ½, −1). Sind sie orthogonal?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Ja. Die Produktsumme der Koeffizienten ist null: 1·½ + (−1)·½ + 0·(−1) = ½ − ½ + 0 = <strong>0</strong> → <strong>orthogonal</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Orthogonalität</div>
+    Zwei Kontraste D_j und D_k sind <strong>orthogonal</strong>, wenn die <strong>Produktsumme ihrer Koeffizienten null</strong> ist: <strong>Σ_i c_ij·c_ik = 0</strong>. Praktisch: ihre Ergebnisse sind voneinander unabhängig (wie zwei getrennte Studien).
+  </div>
+  <div class="card">
+    <div class="card-title">Anzahl & Zerlegung</div>
+    Bei p Faktorstufen gibt es genau <strong>p − 1</strong> wechselseitig orthogonale Kontraste. Ein vollständiger Satz <strong>zerlegt QS_A</strong>: QS_A = QS_D1 + QS_D2 + … + QS_D(p−1).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <strong>Gültigkeit</strong> (Σc_i = 0) betrifft <em>einen</em> Kontrast; <strong>Orthogonalität</strong> (Σc_ij·c_ik = 0) betrifft das Verhältnis <em>zweier</em> Kontraste. Auch ein gültiger Kontrast kann zu einem anderen nicht-orthogonal sein.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Orthogonal zu D₁ = (1, −1, 0)? (prüfe Σ c₁ᵢ·c₂ᵢ = 0)</div>
+    <div class="corr-item" id="oa">(½, ½, −1)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('oa',this,'ortho')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('oa',this,'nicht')">Nicht orthogonal</button>
+      </div><div class="corr-fb" id="oa-fb"></div>
+    </div>
+    <div class="corr-item" id="ob">(0, 1, −1)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ob',this,'ortho')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('ob',this,'nicht')">Nicht orthogonal</button>
+      </div><div class="corr-fb" id="ob-fb"></div>
+    </div>
+    <div class="corr-item" id="oc">(2, −2, 0)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('oc',this,'ortho')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('oc',this,'nicht')">Nicht orthogonal</button>
+      </div><div class="corr-fb" id="oc-fb"></div>
+    </div>
+    <div class="corr-item" id="od">(1, 1, −2)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('od',this,'ortho')">Orthogonal</button>
+        <button class="corr-btn" onclick="checkCorr('od',this,'nicht')">Nicht orthogonal</button>
+      </div><div class="corr-fb" id="od-fb"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Kontrast-Simulator — gültig &amp; orthogonal?</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ko-gueltig" onclick="koSet('gueltig')">Gültiger Kontrast</button>
+        <button class="sim-tbtn" id="ko-ortho" onclick="koSet('ortho')">Orthogonales Paar</button>
+        <button class="sim-tbtn" id="ko-nichtortho" onclick="koSet('nichtortho')">Nicht-orthogonal</button>
+      </div>
+      <div class="sim-verdict" id="ko-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Zwei Bedingungen: ein Kontrast ist <strong>gültig</strong>, wenn Σc<sub>i</sub> = 0; zwei Kontraste sind <strong>orthogonal</strong>, wenn Σ(c<sub>1i</sub>·c<sub>2i</sub>) = 0 (bei gleichen n).</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ A priori / a posteriori ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">A priori vs. a posteriori</div>
+    <div class="sec-lz">A priori = vor der Untersuchung geplant; a posteriori = nach dem Datenblick gewählt; Umdeklarieren ist unzulässig.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Beim Durchsehen der Daten fällt ein überraschender Gruppenunterschied auf. Darf man ihn als „von Anfang an geplante“ Hypothese testen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Nein. Ein erst <strong>nach</strong> dem Datenblick gewählter Vergleich ist <strong>a posteriori</strong> und darf <strong>auf keinen Fall</strong> nachträglich zu einer scheinbar a priori formulierten Hypothese gemacht werden.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">A priori</div>
+    <strong>A-priori-Kontraste</strong> werden <strong>vor</strong> der Durchführung der Untersuchung aufgestellt — also als echte, theoriegeleitete Hypothesen.
+  </div>
+  <div class="card">
+    <div class="card-title">A posteriori</div>
+    <strong>A-posteriori-Kontraste</strong> werden erst <strong>nach</strong> dem Betrachten der Daten gewählt (explorativ, „post hoc“).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Goldene Regel</div>
+    A posteriori gefundene Ergebnisse dürfen <strong>nie</strong> nachträglich zu scheinbar a priori formulierten Hypothesen umdeklariert werden — das unterläuft die Fehlerkontrolle.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">A priori oder a posteriori?</div>
+    <div id="step4">
+      <div class="step-item"><strong>Frage:</strong> Stand der Vergleich VOR der Datenerhebung fest?</div>
+      <div class="step-item"><strong>Ja</strong> → <em>a priori</em> (geplant). Weiter: orthogonal oder nicht? (entscheidet über die Korrektur)</div>
+      <div class="step-item"><strong>Nein</strong>, erst nach dem Datenblick gewählt → <em>a posteriori</em> (explorativ).</div>
+      <div class="step-item"><strong>Konsequenz:</strong> a posteriori erfordert immer eine Korrektur (Scheffé) und darf nicht zu a priori umetikettiert werden.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Korrektur? ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Wann muss korrigiert werden?</div>
+    <div class="sec-lz">Empfehlung: orthogonal a priori → keine Korrektur; nicht-orthogonal a priori → Bonferroni; a posteriori → Scheffé.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie haben vor der Studie zwei orthogonale Kontraste geplant. Müssen Sie das Signifikanzniveau korrigieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Nein.</strong> A priori geplante <em>und</em> orthogonale Kontraste dürfen <strong>ohne Korrektur</strong> getestet werden. Erst nicht-orthogonale a-priori- oder a-posteriori-Vergleiche brauchen eine Anpassung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Warum überhaupt korrigieren?</div>
+    Jeder zusätzliche Vergleich erhöht den Fehler 1. Art für das Experiment: <strong>α = 1 − (1 − α′)^m</strong> (α′ = Einzelfehler, α = aggregierter Experimentfehler, m = Anzahl Vergleiche).
+  </div>
+  <div class="card">
+    <div class="card-title">Die drei Empfehlungen</div>
+    <strong>1.</strong> A priori + orthogonal → <strong>ohne</strong> Korrektur. <strong>2.</strong> A priori + nicht-orthogonal → <strong>Bonferroni</strong>. <strong>3.</strong> A posteriori (beliebige Kontraste) → <strong>Scheffé</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Korrektur nötig? Ordne zu</div>
+    <div class="corr-item" id="ka">A priori geplant UND orthogonal
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ka',this,'keine')">Keine Korrektur</button>
+        <button class="corr-btn" onclick="checkCorr('ka',this,'korrektur')">Korrektur nötig</button>
+      </div><div class="corr-fb" id="ka-fb"></div>
+    </div>
+    <div class="corr-item" id="kb">A priori geplant, aber nicht-orthogonal
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kb',this,'keine')">Keine Korrektur</button>
+        <button class="corr-btn" onclick="checkCorr('kb',this,'korrektur')">Korrektur nötig</button>
+      </div><div class="corr-fb" id="kb-fb"></div>
+    </div>
+    <div class="corr-item" id="kc">A posteriori (nach dem Datenblick gewählt)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kc',this,'keine')">Keine Korrektur</button>
+        <button class="corr-btn" onclick="checkCorr('kc',this,'korrektur')">Korrektur nötig</button>
+      </div><div class="corr-fb" id="kc-fb"></div>
+    </div>
+    <div class="corr-item" id="kd">Mehrere nicht-orthogonale, vorab geplante Vergleiche
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kd',this,'keine')">Keine Korrektur</button>
+        <button class="corr-btn" onclick="checkCorr('kd',this,'korrektur')">Korrektur nötig</button>
+      </div><div class="corr-fb" id="kd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Bonferroni ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Bonferroni-Korrektur</div>
+    <div class="sec-lz">α' = α/m; einfach und auch bei abhängigen Tests anwendbar; für nicht-orthogonale a-priori-Vergleiche.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie testen m = 4 nicht-orthogonale a-priori-Vergleiche und wollen insgesamt α = 0,05 einhalten. Welches Einzelniveau α′ nach Bonferroni?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>α′ = α/m = 0,05/4 = 0,0125.</strong> Jeder einzelne Kontrast wird also gegen das strengere Niveau 0,0125 geprüft.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bonferroni-Korrektur</div>
+    Statt α′ aufwändig aus der Kumulierungsformel zu bestimmen, teilt man einfach: <strong>α′ = α / m</strong> (m = Anzahl der Vergleiche). Geeignet v. a. für <strong>nicht-orthogonale a-priori-Vergleiche</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Vorteile</div>
+    <strong>1.</strong> Sie ist einfach (nur das Niveau ändert sich, nicht die Berechnung der Prüfgröße). <strong>2.</strong> Sie ist <strong>auch bei nicht-unabhängigen</strong> Tests anwendbar.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg: Bonferroni (α = 0,05; m = 4)</div>
+    <div id="step6">
+      <div class="step-item"><strong>Schritt 1:</strong> gewünschter Experimentfehler α = 0,05; Anzahl Vergleiche m = 4.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> α′ = α/m = 0,05/4 = <strong>0,0125</strong>.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> jeden Kontrast gegen das Niveau α′ = 0,0125 prüfen (höherer kritischer F-Wert).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Scheffé ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Scheffé-Korrektur</div>
+    <div class="sec-lz">S = (p−1)·F_krit; für beliebig viele a-posteriori-Kontraste; Vergleich zu Bonferroni.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Nach einer signifikanten ANOVA (p = 4, df_e = 16) wollen Sie a posteriori beliebige Kontraste prüfen. Wie lautet der kritische Wert nach Scheffé bei α = 0,01 (F_(3,16;0,99) = 5,29)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>S = (p − 1)·F_(p−1, N−p; 1−α) = 3 · 5,29 = 15,87.</strong> Jeder a-posteriori-Kontrast muss diesen Wert überschreiten, um signifikant zu sein.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Scheffé für a-posteriori-Vergleiche</div>
+    Der Scheffé-Test garantiert, dass der Fehler 1. Art für <strong>jeden beliebigen Kontrast</strong> ≤ α bleibt — und erlaubt <strong>beliebig viele</strong> a-posteriori-Tests, ohne das Experimentniveau zu überschreiten.
+  </div>
+  <div class="card">
+    <div class="card-title">Kritischer Wert</div>
+    <strong>S = (p − 1) · F_(p−1, N−p; 1−α)</strong>, wobei F_(p−1, N−p; 1−α) der kritische F-Wert des Omnibustests ist. Ein Kontrast ist signifikant, wenn sein F-Wert S übersteigt.
+  </div>
+  <div class="card">
+    <div class="card-title">Bonferroni vs. Scheffé</div>
+    Bei <strong>wenigen</strong> Vergleichen ist der kritische Wert nach Bonferroni kleiner (schärfer). Bei <strong>vielen</strong> Vergleichen wird Scheffé günstiger. Für rein paarweise a-posteriori-Vergleiche nimmt man oft Tukey HSD.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg: Scheffé (p = 4, df_e = 16, α = 0,01)</div>
+    <div id="step7">
+      <div class="step-item"><strong>Schritt 1:</strong> kritischer F-Wert des Omnibustests: F_(3,16;0,99) = 5,29.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> S = (p − 1)·F = 3 · 5,29 = <strong>15,87</strong>.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> jeden a-posteriori-Kontrast nur dann signifikant nennen, wenn sein F-Wert &gt; 15,87.</div>
+      <div class="step-item"><strong>Vergleich:</strong> Bonferroni (m = 2) ergäbe hier den kleineren Wert 10,58 — bei wenigen Vergleichen also schärfer.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step7')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Omnibustest (globaler F-Test)</h4>
+      <p>H0: μ1 = … = μp (alle gleich)</p>
+      <p>sagt nur DASS ein Unterschied besteht</p>
+      <p>ein Test über alle Gruppen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kontrast (Einzelvergleich)</h4>
+      <p>prüft einen spezifischen Vergleich</p>
+      <p>sagt WO der Unterschied liegt</p>
+      <p>im Anschluss an signifikanten Omnibustest</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Omnibustest gibt bereits an, welche einzelnen Gruppen sich voneinander unterscheiden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gültigkeitsbedingung (ein Kontrast)</h4>
+      <p>Σc_i = 0</p>
+      <p>betrifft die Koeffizienten EINES Kontrasts</p>
+      <p>macht den Kontrast überhaupt zulässig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Orthogonalität (zwei Kontraste)</h4>
+      <p>Σc_ij·c_ik = 0 (Produktsumme)</p>
+      <p>betrifft das Verhältnis ZWEIER Kontraste</p>
+      <p>Ergebnisse voneinander unabhängig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Kontrast ist orthogonal, sobald die Summe seiner eigenen Koeffizienten null ergibt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>A priori</h4>
+      <p>vor der Untersuchung aufgestellt</p>
+      <p>geplante Hypothesen</p>
+      <p>orthogonal → ohne Korrektur, sonst Bonferroni</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>A posteriori</h4>
+      <p>nach dem Betrachten der Daten gewählt</p>
+      <p>explorativ</p>
+      <p>immer Korrektur nötig (Scheffé)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> A-posteriori-Vergleiche dürfen nachträglich zu a-priori-Hypothesen erklärt werden, um die Korrektur zu sparen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bonferroni</h4>
+      <p>α' = α/m</p>
+      <p>für nicht-orthogonale a-priori-Vergleiche</p>
+      <p>bei wenigen Vergleichen schärfer</p>
+      <p>auch bei abhängigen Tests anwendbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Scheffé</h4>
+      <p>S = (p−1)·F_krit</p>
+      <p>für a-posteriori-Vergleiche</p>
+      <p>beliebig viele Kontraste</p>
+      <p>bei vielen Vergleichen günstiger</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Scheffé-Test ist das Verfahren der Wahl für genau zwei vorab geplante, orthogonale Kontraste.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Keine Korrektur nötig</h4>
+      <p>a priori geplant</p>
+      <p>UND orthogonal</p>
+      <p>Einzelfehler = Experimentfehler</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Korrektur nötig</h4>
+      <p>nicht-orthogonal (a priori) oder a posteriori</p>
+      <p>α kumuliert über die Vergleiche</p>
+      <p>Bonferroni bzw. Scheffé</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Orthogonale a-priori-Kontraste müssen zwingend per Bonferroni korrigiert werden.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m14b-vl03</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m14b-vl03';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was ist der ‚Omnibustest‘ der Varianzanalyse?",
+      "opts": [
+        "Der F-Test, der simultan die Gleichheit aller Gruppenmittel prüft (H0: μ1 = … = μp).",
+        "Ein einzelner Vergleich zweier ausgewählter Faktorstufen.",
+        "Der Test, der vorab die Varianzhomogenität der Gruppen absichert.",
+        "Ein Sammelverfahren, das für jede einzelne Faktorstufe getrennt prüft, ob deren Mittelwert signifikant vom theoretisch erwarteten Populationswert abweicht."
+      ],
+      "c": 0,
+      "e": "Omnibustest = der globale F-Test auf Gleichheit ALLER Mittel. Welche Gruppen sich unterscheiden, sagt er nicht — dafür dienen Kontraste."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wozu dienen Kontraste typischerweise?",
+      "opts": [
+        "Um die Varianzhomogenität vor der Varianzanalyse zu prüfen.",
+        "Um nach einem signifikanten Omnibustest spezifische Gruppenvergleiche zu prüfen.",
+        "Um die Stichprobengröße für die Untersuchung festzulegen.",
+        "Um die abhängige Variable so zu transformieren, dass die Normalverteilungsannahme der Varianzanalyse in jeder einzelnen Faktorstufe sicher erfüllt ist."
+      ],
+      "c": 1,
+      "e": "Kontraste prüfen gezielte Vergleiche im Anschluss an einen signifikanten Omnibustest."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie ist ein Kontrast D definiert?",
+      "opts": [
+        "Als Differenz von QS_A und QS_e.",
+        "Als Verhältnis MQ_A / MQ_e.",
+        "Als Linearkombination der Gruppenmittel: D = c1·Ā1 + … + cp·Āp.",
+        "Als gewichtetes Produkt aller Gruppenmittelwerte, das genau dann gültig ist, wenn das Produkt der zugehörigen Kontrastkoeffizienten den Wert eins ergibt."
+      ],
+      "c": 2,
+      "e": "Kontrast = Linearkombination der Mittel mit Koeffizienten c_i. (d) verwechselt Linearkombination (Summe) mit Produkt."
+    },
+    {
+      "id": "s1q2",
+      "q": "Welche Bedingung muss erfüllt sein, damit eine Gewichtung ein gültiger Kontrast ist?",
+      "opts": [
+        "Die Summe der quadrierten Koeffizienten muss eins sein.",
+        "Alle Koeffizienten müssen positiv sein.",
+        "Es dürfen höchstens zwei Koeffizienten von null verschieden sein, da ein Kontrast grundsätzlich immer nur zwei einzelne Gruppen miteinander vergleichen kann.",
+        "Die Summe der Kontrastkoeffizienten muss null sein (Σc_i = 0)."
+      ],
+      "c": 3,
+      "e": "Gültiger Kontrast: Σc_i = 0. (a) ist eine Standardisierung mancher Kontraste, keine Gültigkeitsbedingung; (c) ist falsch — Kontraste können mehrere Gruppen bündeln."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie viele Freiheitsgrade hat die Quadratsumme eines Kontrasts (QS_D)?",
+      "opts": [
+        "Immer genau einen.",
+        "p − 1, wie die Treatmentquadratsumme.",
+        "N − 1, wie die totale Quadratsumme.",
+        "So viele, wie der Kontrast von null verschiedene Koeffizienten besitzt, abzüglich der Zahl der Gruppen, die mit dem Gewicht null in den Vergleich eingehen."
+      ],
+      "c": 0,
+      "e": "Die QS eines Kontrasts hat IMMER df = 1 — ein Kontrast ist ein einzelner, gerichteter Vergleich."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie lautet die Prüfgröße (der F-Bruch) für einen Kontrast?",
+      "opts": [
+        "F = QS_D / QS_A.",
+        "F = QS_D / MQ_e.",
+        "F = MQ_e / QS_D.",
+        "F = QS_D geteilt durch die mittlere Treatmentquadratsumme MQ_A, da der Kontrast einen Teil des Treatmenteffekts isoliert und daran relativiert werden muss."
+      ],
+      "c": 1,
+      "e": "F = QS_D / MQ_e (Kontrast-QS relativ zur Fehlervarianz). QS_D = n·D²/Σc_i², Zähler-df = 1, Nenner-df = df_e."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wann sind zwei Kontraste D_j und D_k orthogonal?",
+      "opts": [
+        "Wenn beide dieselben Gruppen miteinander vergleichen.",
+        "Wenn die Summe ihrer Koeffizienten jeweils null ist.",
+        "Wenn die Produktsumme ihrer Koeffizienten null ist: Σ_i c_ij·c_ik = 0.",
+        "Wenn beide Kontraste zusammen genau die gesamte Treatmentquadratsumme aufklären und darüber hinaus jeweils nur einen einzigen Freiheitsgrad besitzen."
+      ],
+      "c": 2,
+      "e": "Orthogonal ⇔ Σ c_ij·c_ik = 0 (Produktsumme der Koeffizienten). (b) ist nur die Gültigkeitsbedingung jedes einzelnen Kontrasts."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie viele wechselseitig orthogonale Kontraste gibt es bei p Faktorstufen — und was leisten sie?",
+      "opts": [
+        "p Kontraste, die gemeinsam die Fehlerquadratsumme QS_e in unabhängige Einzelkomponenten mit je einem Freiheitsgrad zerlegen.",
+        "p + 1 Kontraste, die zusammen die totale Quadratsumme QS_tot aufklären.",
+        "Genau einen, der QS_A vollständig ersetzt.",
+        "p − 1 Kontraste; ein vollständiger Satz zerlegt QS_A (QS_A = QS_D1 + … + QS_D(p−1))."
+      ],
+      "c": 3,
+      "e": "Es gibt p−1 orthogonale Kontraste; ein vollständiger Satz zerlegt die Treatmentquadratsumme QS_A (nicht QS_e oder QS_tot)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Worin unterscheiden sich a-priori- und a-posteriori-Kontraste?",
+      "opts": [
+        "A priori werden vor der Untersuchung aufgestellt, a posteriori erst nach dem Betrachten der Daten gewählt.",
+        "A priori sind immer orthogonal, a posteriori grundsätzlich nie.",
+        "A priori betreffen nur zwei Gruppen, a posteriori stets alle Gruppen.",
+        "A priori bezeichnet Kontraste, die mit dem Bonferroni-Verfahren getestet werden, a posteriori solche, die grundsätzlich ohne jede Korrektur des Signifikanzniveaus auskommen."
+      ],
+      "c": 0,
+      "e": "A priori = vor der Datenerhebung geplant; a posteriori = nach dem Datenblick gewählt. (d) verwechselt das mit den Korrekturverfahren."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was ist beim Umgang mit a-posteriori-Vergleichen unzulässig?",
+      "opts": [
+        "Sie mit dem Scheffé-Verfahren abzusichern.",
+        "Sie nachträglich als scheinbar a priori formulierte Hypothesen auszugeben.",
+        "Beliebig viele von ihnen zu prüfen.",
+        "Für sie überhaupt eine Korrektur des Signifikanzniveaus vorzunehmen, da nachträglich gewählte Vergleiche grundsätzlich keiner Anpassung des Fehlerniveaus bedürfen."
+      ],
+      "c": 1,
+      "e": "A-posteriori-Effekte dürfen nie nachträglich zu a-priori-Hypothesen umdeklariert werden. Sie brauchen gerade eine Korrektur (Scheffé) — (d) ist falsch."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche Kontraste dürfen OHNE Korrektur des Signifikanzniveaus getestet werden?",
+      "opts": [
+        "Alle a-posteriori-Vergleiche.",
+        "Nicht-orthogonale a-priori-Vergleiche.",
+        "A priori geplante Kontraste, die orthogonal sind.",
+        "Grundsätzlich alle Kontraste, solange ihre Quadratsummen zusammen die gesamte Treatmentquadratsumme der Varianzanalyse vollständig ausschöpfen."
+      ],
+      "c": 2,
+      "e": "Nur a priori + orthogonal → keine Korrektur. Nicht-orthogonale a priori → Bonferroni; a posteriori → Scheffé."
+    },
+    {
+      "id": "s5q2",
+      "q": "Sie planen schon vor der Studie drei nicht-orthogonale Vergleiche. Was ist nötig?",
+      "opts": [
+        "Keine Korrektur, da die Vergleiche a priori geplant sind.",
+        "Der Scheffé-Test, da bei mehr als zwei geplanten Vergleichen ausschließlich dieses Verfahren ein gültiges Gesamt-Signifikanzniveau garantieren kann.",
+        "Der Wechsel zu einem gewöhnlichen t-Test pro Vergleich.",
+        "Eine Korrektur des Signifikanzniveaus — für nicht-orthogonale a-priori-Vergleiche per Bonferroni."
+      ],
+      "c": 3,
+      "e": "Nicht-orthogonale a-priori-Vergleiche brauchen eine Korrektur (Bonferroni). A priori allein genügt nur bei Orthogonalität."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie lautet die Bonferroni-Korrektur des Signifikanzniveaus?",
+      "opts": [
+        "α' = α / m (m = Anzahl der Vergleiche).",
+        "α' = α · m.",
+        "α' = 1 − (1 − α)^m.",
+        "α' = α geteilt durch die Zahl der Faktorstufen abzüglich eins, also durch die Freiheitsgrade des Treatments der zugrunde liegenden Varianzanalyse."
+      ],
+      "c": 0,
+      "e": "Bonferroni: α' = α/m. (c) ist die exakte Kumulierungsformel; Bonferroni ist die einfachere Näherung."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was ist ein Vorteil der Bonferroni-Korrektur?",
+      "opts": [
+        "Sie erhöht stets die Teststärke gegenüber dem unkorrigierten Test.",
+        "Sie ist einfach und auch dann anwendbar, wenn die Kontrast-Tests nicht unabhängig sind.",
+        "Sie macht eine Korrektur des Signifikanzniveaus vollständig überflüssig.",
+        "Sie liefert bei beliebig vielen a-posteriori-Vergleichen stets einen kleineren kritischen Wert als das Scheffé-Verfahren und ist diesem damit immer überlegen."
+      ],
+      "c": 1,
+      "e": "Bonferroni ist einfach (α' = α/m) und auch bei abhängigen Tests nutzbar. Bei sehr vielen Vergleichen wird Scheffé aber günstiger."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wofür ist der Scheffé-Test gedacht?",
+      "opts": [
+        "Für orthogonale a-priori-Kontraste, die ohnehin ohne Korrektur getestet werden.",
+        "Für die vorgelagerte Prüfung der Varianzhomogenität.",
+        "Für a-posteriori-Vergleiche beliebig vieler Kontraste.",
+        "Ausschließlich für den paarweisen Vergleich von genau zwei vorab festgelegten Einzelgruppen, für den sonst kein anderes Korrekturverfahren zur Verfügung stünde."
+      ],
+      "c": 2,
+      "e": "Scheffé sichert beliebig viele a-posteriori-Kontraste ab. Für rein paarweise a-posteriori-Vergleiche nimmt man oft Tukey HSD."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wie lautet der kritische Wert nach Scheffé?",
+      "opts": [
+        "S = α / m.",
+        "S = F_(p−1, N−p; 1−α) allein, also exakt der unveränderte kritische Wert des Omnibus-F-Tests ohne jeden zusätzlichen Faktor.",
+        "S = QS_D / MQ_e.",
+        "S = (p − 1) · F_(p−1, N−p; 1−α)."
+      ],
+      "c": 3,
+      "e": "Scheffé: S = (p−1)·F_krit des Omnibustests. Garantiert den Fehler 1. Art ≤ α für jeden beliebigen Kontrast."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Der Kontrast soll bei p = 4 Gruppen die Gruppe 1 mit Gruppe 3 vergleichen. Welche Koeffizienten passen?",
+    "opts": [
+      "c = (1, 0, −1, 0).",
+      "c = (1, 0, 1, 0).",
+      "c = (1, 1, 1, 1).",
+      "c = (1, 1, 1, −3), weil bei einem Einzelvergleich zweier Gruppen stets alle übrigen Gruppen mit dem negativen Gesamtgewicht in den Kontrast eingehen müssen."
+    ],
+    "c": 0,
+    "e": "Gruppe 1 vs. 3: (1, 0, −1, 0) — Σc = 0, nur die beiden verglichenen Gruppen tragen bei. (b) hat Σc = 2 (ungültig), (d) vergliche 1+2+3 vs. 4."
+  },
+  {
+    "id": "bq2",
+    "q": "Ein Kontrast hat D = 1, n = 5 und Σc_i² = 2. Wie groß ist QS_D?",
+    "opts": [
+      "0,4.",
+      "2,5 — denn QS_D = n·D²/Σc_i² = 5·1/2.",
+      "10.",
+      "5, weil die Quadratsumme eines Kontrasts dem Produkt aus Stichprobengröße pro Gruppe und dem quadrierten Kontrastwert entspricht und die Koeffizientensumme dabei unberücksichtigt bleibt."
+    ],
+    "c": 1,
+    "e": "QS_D = n·D²/Σc_i² = 5·1²/2 = 2,5. (d) vergisst die Division durch Σc_i²."
+  },
+  {
+    "id": "bq3",
+    "q": "Warum hat ein Kontrast oft mehr Teststärke als ein t-Test für denselben Vergleich?",
+    "opts": [
+      "Weil er die abhängige Variable vor dem Test normalisiert.",
+      "Weil er stets zweiseitig statt einseitig testet.",
+      "Weil als Fehlervarianz die Varianz innerhalb ALLER Faktorstufen (MQ_e) eingeht.",
+      "Weil der Kontrast die Mittelwertdifferenz künstlich vergrößert und dadurch die Wahrscheinlichkeit eines Fehlers erster Art systematisch über das nominale Niveau anhebt."
+    ],
+    "c": 2,
+    "e": "Der Kontrast nutzt MQ_e (aus allen Gruppen) als Fehlerschätzer → mehr df, oft kleinere Fehlervarianz → größere Teststärke (Fehler 2. Art seltener)."
+  },
+  {
+    "id": "bq4",
+    "q": "Bei m = 2 geplanten Vergleichen und gewünschtem α = 0,05: welches Einzelniveau α' nach Bonferroni?",
+    "opts": [
+      "0,10.",
+      "0,0975, also die tatsächliche Wahrscheinlichkeit für mindestens einen Fehler erster Art, wenn man beide Vergleiche unkorrigiert auf je 5 % testet.",
+      "0,05.",
+      "0,025 — denn α' = α/m = 0,05/2."
+    ],
+    "c": 3,
+    "e": "Bonferroni α' = α/m = 0,05/2 = 0,025. (b) wäre die kumulierte Fehlerwahrscheinlichkeit ohne Korrektur."
+  },
+  {
+    "id": "bq5",
+    "q": "Was gilt für orthogonale Kontraste in Bezug auf QS_A?",
+    "opts": [
+      "Ein vollständiger Satz orthogonaler Kontraste zerlegt QS_A additiv (QS_A = Σ QS_D).",
+      "Sie sind in der Summe immer größer als QS_A.",
+      "Sie haben gemeinsam p − 1 Freiheitsgrade weniger als QS_A.",
+      "Sie können QS_A grundsätzlich nicht zerlegen, da jeder einzelne Kontrast nur einen Freiheitsgrad besitzt und die Treatmentquadratsumme stets mehr als einen aufweist."
+    ],
+    "c": 0,
+    "e": "p−1 orthogonale Kontraste zerlegen QS_A vollständig (jede QS_D hat 1 df, zusammen p−1 = df_A)."
+  },
+  {
+    "id": "bq6",
+    "q": "Welches Korrekturverfahren passt zu nicht-orthogonalen a-priori-Vergleichen?",
+    "opts": [
+      "Scheffé.",
+      "Bonferroni.",
+      "Keines — a priori geplante Vergleiche brauchen nie eine Korrektur.",
+      "Tukeys Honestly Significant Difference, da dieser Test speziell für vorab geplante, voneinander abhängige nicht-orthogonale Mittelwertvergleiche entwickelt wurde."
+    ],
+    "c": 1,
+    "e": "Nicht-orthogonale a priori → Bonferroni. Scheffé ist für a posteriori; Tukey HSD für paarweise a-posteriori-Vergleiche."
+  },
+  {
+    "id": "bq7",
+    "q": "Wann ist Scheffé gegenüber Bonferroni vorteilhaft?",
+    "opts": [
+      "Bei nur einem einzigen geplanten Vergleich.",
+      "Bei genau zwei orthogonalen a-priori-Kontrasten.",
+      "Wenn beliebig (sehr) viele a-posteriori-Kontraste geprüft werden sollen.",
+      "Immer, weil der kritische Wert nach Scheffé unabhängig von der Anzahl der Vergleiche grundsätzlich kleiner ausfällt als der nach der Bonferroni-Korrektur."
+    ],
+    "c": 2,
+    "e": "Bei wenigen Vergleichen ist Bonferroni schärfer; bei vielen a-posteriori-Kontrasten wird Scheffé günstiger (konstanter kritischer Wert)."
+  },
+  {
+    "id": "bq8",
+    "q": "Was besagt die Korrektur-Empfehlung kompakt?",
+    "opts": [
+      "Immer korrigieren, unabhängig davon, ob die Kontraste vorab geplant oder erst nach dem Betrachten der Daten gewählt wurden und ob sie orthogonal sind.",
+      "Nie korrigieren, solange ein signifikanter Omnibustest vorausgegangen ist.",
+      "Nur bei orthogonalen Kontrasten überhaupt korrigieren.",
+      "Orthogonale a priori → keine Korrektur; nicht-orthogonale a priori → Bonferroni; a posteriori → Scheffé."
+    ],
+    "c": 3,
+    "e": "Die drei Fälle: a priori + orthogonal ohne Korrektur, a priori nicht-orthogonal → Bonferroni, a posteriori → Scheffé."
+  }
+];
+
+var corrCorrect = {
+  "ga": "gueltig",
+  "gb": "gueltig",
+  "gc": "ungueltig",
+  "gd": "ungueltig",
+  "oa": "ortho",
+  "ob": "nicht",
+  "oc": "nicht",
+  "od": "ortho",
+  "ka": "keine",
+  "kb": "korrektur",
+  "kc": "korrektur",
+  "kd": "korrektur"
+};
+var corrExpl = {
+  "ga": "c = (1, −1, 0): Σc_i = 0 → gültiger Kontrast.",
+  "gb": "c = (1, 1, −2): Σc_i = 0 → gültiger Kontrast (bündelt Gruppe 1+2 gegen Gruppe 3).",
+  "gc": "c = (1, 1, 1): Σc_i = 3 ≠ 0 → kein gültiger Kontrast.",
+  "gd": "c = (2, −1, 0): Σc_i = 1 ≠ 0 → kein gültiger Kontrast.",
+  "oa": "Mit D1 = (1, −1, 0): Produktsumme 1·½ + (−1)·½ + 0·(−1) = 0 → orthogonal.",
+  "ob": "Mit D1 = (1, −1, 0): Produktsumme 1·0 + (−1)·1 + 0·(−1) = −1 ≠ 0 → nicht orthogonal.",
+  "oc": "Mit D1 = (1, −1, 0): Produktsumme 1·2 + (−1)·(−2) + 0·0 = 4 ≠ 0 → nicht orthogonal (Vielfaches von D1).",
+  "od": "Mit D1 = (1, −1, 0): Produktsumme 1·1 + (−1)·1 + 0·(−2) = 0 → orthogonal.",
+  "ka": "A priori geplant UND orthogonal → keine Korrektur des Signifikanzniveaus nötig.",
+  "kb": "A priori geplant, aber nicht-orthogonal → Korrektur nötig (Bonferroni).",
+  "kc": "A posteriori (nach Datenblick gewählt) → Korrektur nötig (Scheffé).",
+  "kd": "Mehrere nicht-orthogonale, vorab geplante Vergleiche → Korrektur nötig (Bonferroni)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Kontrast-Simulator (vl03): Gültigkeit & Orthogonalität */
+var koData = {
+  gueltig:   {t:'Gültiger Kontrast', d:'Beispiel c = (1, −1, 0): Σci = 0 → der Kontrast vergleicht Gruppe 1 mit Gruppe 2 und ist zulässig.'},
+  ortho:     {t:'Orthogonales Paar', d:'c1 = (1, −1, 0) und c2 = (1, 1, −2): Σ(c1i·c2i) = 1−1+0 = 0 → die beiden Kontraste sind unabhängig (zerlegen die Treatment-Quadratsumme additiv).'},
+  nichtortho:{t:'Nicht-orthogonal', d:'c1 = (1, −1, 0) und c2 = (1, 0, −1): Σ(c1i·c2i) = 1+0+0 = 1 ≠ 0 → die Kontraste überlappen sich inhaltlich (Information wird doppelt genutzt).'}
+};
+function koSet(k){
+  ['gueltig','ortho','nichtortho'].forEach(function(x){ var b=document.getElementById('ko-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('ko-out'); if(!o) return;
+  var d=koData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  koSet('gueltig');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

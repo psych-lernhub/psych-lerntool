@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL03 Neurobiologische Grundlagen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl03
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Bildgebungs-Simulator (VL03) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL03 Neurobiologische Grundlagen</h1>
+<p class="page-sub">Entwicklungspsychologie B (Erwachsenenalter und Alter) · Prof. Dr. Kerstin Jost · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Bildgebungsmethoden (Morphometrie/VBM, DTI, fMRT, PET) unterscheiden · 2. Volumetrische Befunde: präfrontal stärkster Abbau, posterior/Pons gering · 3. fMRT-Interpretation: Kompensation vs. Effizienz · 4. Neurobiologie der allgemeinen Verlangsamung (Myelin, Dopamin/Striatum, ERP-P3) · 5. WM & Exekutivfunktionen (präfronto-striatal) · 6. episodisch vs. semantisch & Binding (Hippocampus) · 7. medialer Temporallappen · 8. Alterungsresistenz (Pragmatik) & Variabilität
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Bildgebungsmethoden</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Volumetrie</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ fMRT-Deutung</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Verlangsamung</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ WM & Exekutiv</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Gedächtnis & Binding</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Med. Temporallappen</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Alterungsresistenz</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Bildgebungsmethoden ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Methoden der Hirnbildgebung</div>
+    <div class="sec-lz">Morphometrie (manuell & VBM), Diffusion Tensor Imaging (DTI), funktionelle Bildgebung (fMRT), biochemische PET/SPECT — Prinzip und Einsatz</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Mit welchen Verfahren kann man altersbedingte Veränderungen des Gehirns überhaupt sichtbar machen — und was misst jedes davon?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Vier Methoden: <strong>Morphometrie/VBM</strong> (Volumen/Gewebedichte), <strong>DTI</strong> (Faserbahnen/weiße Substanz), <strong>fMRT</strong> (Aktivierung/Blutfluss) und <strong>PET/SPECT</strong> (Neurotransmitter).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Morphometrie & VBM (Struktur)</div>
+    Erfassen das <strong>Volumen</strong> neuroanatomischer Strukturen in vivo aus hochauflösendem MRT — manuell (Ausmessen durch geübte Betrachter) oder per <strong>voxelbasierter Morphometrie (VBM)</strong>, die aus der Grauwert-Intensität jedes Voxels die lokale Gewebedichte ermittelt.
+  </div>
+  <div class="card">
+    <div class="card-title">Diffusion Tensor Imaging — DTI (Struktur)</div>
+    Erfasst die <strong>gerichtete Diffusion</strong> von Wassermolekülen → Integrität der <strong>weißen Substanz</strong> (Faserbahnen). Intakte Bahnen zeigen starke Direktionalität. Auch geeignet, um trainingsabhängige Plastizität sichtbar zu machen (Lövdén et al., 2010).
+  </div>
+  <div class="card">
+    <div class="card-title">Funktionelle Bildgebung — fMRT (Funktion)</div>
+    Registriert <strong>Blutflussänderungen</strong> bei sensorischer oder kognitiver Verarbeitung — zeigt, <em>wo</em> das Gehirn aktiv ist. Die Interpretation im Altersvergleich ist aber heikel (siehe ③).
+  </div>
+  <div class="card">
+    <div class="card-title">PET & SPECT (Neurochemie)</div>
+    Über radioaktive Marker mit kurzer Halbwertszeit wird die Verfügbarkeit von <strong>Neurotransmittern</strong> registriert. Befund: Die Dopaminbindung an D1-/D2-Rezeptoren im Striatum korreliert stark negativ mit dem Alter (Bäckman, 2005).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: strukturelles oder funktionelles Verfahren?</div>
+    <div class="corr-item" id="m0a">DTI — Diffusion Tensor Imaging
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0a',this,'struktur')">Struktur</button>
+        <button class="corr-btn" onclick="checkCorr('m0a',this,'funktion')">Funktion</button>
+      </div><div class="corr-fb" id="m0a-fb"></div>
+    </div>
+    <div class="corr-item" id="m0b">fMRT — funktionelle Bildgebung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0b',this,'struktur')">Struktur</button>
+        <button class="corr-btn" onclick="checkCorr('m0b',this,'funktion')">Funktion</button>
+      </div><div class="corr-fb" id="m0b-fb"></div>
+    </div>
+    <div class="corr-item" id="m0c">VBM — voxelbasierte Morphometrie
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0c',this,'struktur')">Struktur</button>
+        <button class="corr-btn" onclick="checkCorr('m0c',this,'funktion')">Funktion</button>
+      </div><div class="corr-fb" id="m0c-fb"></div>
+    </div>
+    <div class="corr-item" id="m0d">PET — Positronenemissionstomografie
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m0d',this,'struktur')">Struktur</button>
+        <button class="corr-btn" onclick="checkCorr('m0d',this,'funktion')">Funktion</button>
+      </div><div class="corr-fb" id="m0d-fb"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Bildgebungs-Simulator — wähle ein Verfahren</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="bg-vbm" onclick="bgSet('vbm')">Morphometrie/VBM</button>
+        <button class="sim-tbtn" id="bg-dti" onclick="bgSet('dti')">DTI</button>
+        <button class="sim-tbtn" id="bg-fmrt" onclick="bgSet('fmrt')">fMRT</button>
+        <button class="sim-tbtn" id="bg-pet" onclick="bgSet('pet')">PET/SPECT</button>
+      </div>
+      <div class="sim-verdict" id="bg-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Merke: VBM &amp; DTI = <strong>strukturell</strong>, fMRT = <strong>funktionell</strong>, PET/SPECT = <strong>biochemisch</strong> (Neurotransmitter).</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Volumetrie ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Volumetrische Befunde: präfrontal vs. posterior</div>
+    <div class="sec-lz">Raz et al. (2005): stärkste Volumenreduktion präfrontal (r = −.56), Putamen, Hippocampus; gering bei Pons (−.07), okzipital, parietal</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Altert das ganze Gehirn gleichmäßig — oder schrumpfen manche Regionen viel stärker als andere?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Sehr ungleich: Am stärksten schrumpft der <strong>präfrontale Kortex</strong> (r ≈ −.56), am wenigsten der <strong>Pons</strong> (−.07). Es gibt einen anterior-posterioren Gradienten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Längsschnittbefund (Raz et al., 2005)</div>
+    Das Volumen mehrerer Kortexregionen nimmt mit dem Alter ab — <strong>frontale</strong> Regionen deutlich stärker als <strong>posteriore</strong>. Individuelle Längsschnittverläufe bestätigen diese Abnahme konsistent.
+  </div>
+  <div class="card">
+    <div class="card-title">Volumen-Alters-Korrelationen (Raz, 2000/2005)</div>
+    Präfrontal <strong>−.56</strong> · Putamen −.43 · Hippocampus −.40 · Temporal −.37 · Nucleus caudatus −.36 · Cerebellum −.34 · Amygdala/Thalamus −.26 · Parietal −.20 · Okzipital/Globus pallidus −.19 · <strong>Pons −.07</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kernaussage</div>
+    <strong>Anterior-posteriorer Gradient:</strong> vorne (frontal) viel Abbau, hinten (posterior) und im Hirnstamm wenig. Klausurrelevant: <strong>präfrontal = stärkste</strong>, <strong>Pons = geringste</strong> altersabhängige Volumenveränderung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Rangreihe der Volumenreduktion — aufdecken</div>
+    <div id="rank">
+      <div class="step-item"><strong>Platz 1 — Präfrontaler Kortex:</strong> r ≈ −.56, stärkster Abbau.</div>
+      <div class="step-item"><strong>Platz 2 — Putamen:</strong> −.43 (subkortikal, motoriknah).</div>
+      <div class="step-item"><strong>Platz 3 — Hippocampus:</strong> −.40 (Gedächtnis).</div>
+      <div class="step-item"><strong>Posterior:</strong> Okzipital nur ≈ −.19 — deutlich weniger betroffen.</div>
+      <div class="step-item"><strong>Schlusslicht — Pons:</strong> −.07, am wenigsten betroffen.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'rank')">Nächster Platz ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ fMRT-Deutung ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ fMRT-Interpretation: Kompensation oder Effizienz?</div>
+    <div class="sec-lz">Mehr Aktivierung = härtere Arbeit ODER Kompensation? Richtung des Zusammenhangs unklar; kardiovaskuläre Konfundierung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ältere zeigen bei einer Aufgabe MEHR Hirnaktivierung als Jüngere. Heißt das, ihr Gehirn arbeitet besser?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Nicht eindeutig. Mehr Aktivierung kann <strong>Kompensation</strong> (zusätzliche Areale werden rekrutiert) ODER <strong>geringere Effizienz</strong> („härtere Arbeit“) bedeuten — die Richtung ist unklar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was fMRT misst</div>
+    Funktionelle Bildgebung registriert <strong>Blutflussänderungen</strong> (BOLD-Signal) als indirektes Maß neuronaler Aktivität bei sensorischer oder kognitiver Verarbeitung.
+  </div>
+  <div class="card">
+    <div class="card-title">Das Interpretationsproblem</div>
+    Bedeutet mehr Aktivierung eine <em>effizientere</em> Funktion — oder „härtere Arbeit“ (also <em>geringere</em> Effizienz)? Heißt keine Aktivierung „Ausfall“? Die Richtung des Zusammenhangs zwischen Aktivierungsausmaß und Effizienz ist bislang <strong>unklar</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zusätzliche Falle: kardiovaskuläre Konfundierung</div>
+    Mit dem Alter ändert sich die Responsivität des kardiovaskulären Systems. Dadurch kann das BOLD-Signal selbst verzerrt sein — unabhängig von der eigentlichen Neuronenaktivität.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    „Mehr Aktivierung = bessere Funktion“ ist eine <strong>unsichere</strong> Annahme. Eine häufige Deutung ist Kompensation — sie bleibt aber interpretationsoffen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwei Deutungen derselben Mehraktivierung</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="komp" onclick="switchTab(this,'fmrt')">Kompensation</button>
+      <button class="tab-btn" data-tab="eff" onclick="switchTab(this,'fmrt')">Effizienzminderung</button>
+    </div>
+    <div class="tab-group" data-group="fmrt">
+      <div class="tab-content active" data-tab="komp">
+        <strong>Lesart 1:</strong> Ältere rekrutieren <em>zusätzliche</em> (z.B. frontale) Areale, um die Leistung aufrechtzuerhalten → Mehraktivierung als <strong>Kompensation</strong>.
+      </div>
+      <div class="tab-content" data-tab="eff">
+        <strong>Lesart 2:</strong> Dieselbe Aufgabe kostet mehr neuronalen „Aufwand“ → Mehraktivierung als Zeichen <strong>geringerer Effizienz</strong> („härtere Arbeit“).
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Verlangsamung ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Neurobiologie der allgemeinen Verlangsamung</div>
+    <div class="sec-lz">Myelinabbau, Dopaminreduktion im Striatum, neural noise, Zellverlust; ERP: späte Komponenten (P3, Reaktionsauswahl) alterssensitiv</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum werden ältere Menschen bei fast allen Aufgaben langsamer? Welche neurobiologischen Ursachen kommen infrage?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Mehrere: <strong>Myelinabbau</strong> (langsamere Leitung), <strong>Dopaminreduktion</strong> (synaptische Verzögerung, v.a. Striatum), <strong>neural noise</strong> und <strong>Zellverlust</strong>. ERP zeigt: betroffen sind die <strong>späten</strong> Komponenten (P3, Reaktionsauswahl).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mögliche Ursachen der Verlangsamung</div>
+    Langsamere Leitgeschwindigkeit durch <strong>Myelinabbau</strong>; Verzögerungen an Synapsen durch <strong>Reduktion kritischer Neurotransmitter</strong> (v.a. Dopamin); Zunahme von <strong>neural noise</strong> (Spontanaktivität); <strong>Verlust von Nervenzellen</strong>. Je komplexer die Aufgabe, desto mehr Systeme sind beteiligt.
+  </div>
+  <div class="card">
+    <div class="card-title">ERP-Befund</div>
+    Bei den ereigniskorrelierten Potenzialen betreffen Alterseffekte vor allem die <strong>späten</strong> Komponenten (P3 = Reaktionsauswahl), kaum die <strong>frühen</strong> (Stimulusevaluation). Die Selektion zwischen Handlungsalternativen ist also besonders verlangsamt.
+  </div>
+  <div class="card">
+    <div class="card-title">Schlüsselrolle Striatum/Dopamin</div>
+    Volumenreduktion im Striatum (Basalganglien) und Dopaminreduktion, die mit der Leistung in Geschwindigkeitsaufgaben korreliert, gelten als zentral für die allgemeine Verlangsamung (Mayr, 2012, in Karnath &amp; Thier).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Nicht alle Verarbeitungsstufen sind gleich betroffen: die <strong>späte</strong> Reaktionsauswahl deutlich, die <strong>frühe</strong> sensorische Verarbeitung kaum.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Ursachen Schritt für Schritt</div>
+    <div id="vlsg">
+      <div class="step-item"><strong>Myelin:</strong> Abbau der isolierenden Schicht → langsamere Leitgeschwindigkeit.</div>
+      <div class="step-item"><strong>Neurotransmitter:</strong> Reduktion v.a. von Dopamin → Verzögerung an den Synapsen.</div>
+      <div class="step-item"><strong>Neural noise:</strong> mehr Spontanaktivität → schlechteres Signal-Rausch-Verhältnis.</div>
+      <div class="step-item"><strong>Zellverlust:</strong> Verlust von Nervenzellen.</div>
+      <div class="step-item"><strong>Lokalisation:</strong> Striatum/Basalganglien (Reaktionsauswahl) — sichtbar in den späten ERP-Komponenten (P3).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'vlsg')">Nächste Ursache ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ WM & Exekutiv ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Working Memory & Exekutive Funktionen</div>
+    <div class="sec-lz">Präfronto-striatales System; WCST; nicht alle Exekutivfunktionen gleich betroffen (Task Switching stabiler); Interferenz</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind im Alter ALLE „Steuerungs“-Funktionen des Denkens (Exekutivfunktionen) gleichermaßen beeinträchtigt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Nein. Manche (Auswahl/Aufrechterhaltung unter <strong>Interferenz</strong>) sind deutlich beeinträchtigt, andere (z.B. <strong>Task Switching</strong>) bleiben relativ stabil. Größte Altersunterschiede im <strong>präfronto-striatalen</strong> System.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Exekutive Funktionen</div>
+    Funktionen, die die kognitive Verarbeitung <strong>steuern</strong>: Wechsel zwischen Aufgabenformen, Hemmung dominanter (aber unpassender) Reaktionen, Koordination bei Mehrfachtätigkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Befundlage</div>
+    Working Memory zeigt Altersunterschiede. Bei den Exekutivfunktionen gibt es <strong>beides</strong>: deutliche Beeinträchtigung einerseits, Stabilität andererseits. Besonders betroffen: Aufrechterhalten und Auswählen von Handlungsanweisungen <strong>unter Interferenz</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Neurobiologische Grundlage</div>
+    Größte Altersunterschiede im <strong>präfronto-striatalen</strong> System. Das präfrontale Volumen korreliert −.56 mit dem Alter und +.42 mit der WCST-Leistung. Dopaminreduktion im präfrontalen Kortex = Grundlage der Interferenzverarbeitung.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Nicht alle exekutiven Funktionen sind im Alter gleich stark beeinträchtigt: Auswahl unter Interferenz deutlich, <strong>Task Switching</strong> eher stabil.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Exekutivfunktionen: betroffen vs. stabil</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="betr" onclick="switchTab(this,'exek')">Deutlich betroffen</button>
+      <button class="tab-btn" data-tab="stab" onclick="switchTab(this,'exek')">Eher stabil</button>
+    </div>
+    <div class="tab-group" data-group="exek">
+      <div class="tab-content active" data-tab="betr">
+        <strong>Auswahl/Aufrechterhaltung unter Interferenz</strong> (z.B. dominante Reaktion hemmen, WCST). Neurobiologisch: präfronto-striatales System, präfrontale Dopaminreduktion.
+      </div>
+      <div class="tab-content" data-tab="stab">
+        <strong>Task Switching</strong> (Wechsel zwischen Aufgaben) zeigt Befunde für Stabilität über die Lebensspanne — nicht jede Exekutivfunktion baut gleich ab.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Gedächtnis & Binding ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Gedächtnis im Alter: episodisch, semantisch & Binding</div>
+    <div class="sec-lz">Semantisch intakt, episodisch beeinträchtigt; Binding (Hippocampus); Item- vs. Assoziationsgedächtnis (Liang et al., 2016)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Gedächtnisform leidet im normalen Alter — das Faktenwissen oder das Erinnern konkreter Erlebnisse?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Das <strong>episodische</strong> Gedächtnis (raumzeitlich eingeordnete Erlebnisse, Binding über den Hippocampus) leidet; das <strong>semantische</strong> (Faktenwissen) bleibt weitgehend intakt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Episodisch vs. semantisch</div>
+    Intakt bleibt das generelle Faktenwissen (<strong>semantisch</strong>). Betroffen ist die Reproduktion neu gelernter Information mit raumzeitlicher Einordnung (<strong>episodisch</strong>). Beide sind deklarativ, aber unterschiedlich alterssensitiv.
+  </div>
+  <div class="card">
+    <div class="card-title">Binding</div>
+    <strong>Binding</strong> = Verknüpfung verschiedener Elemente einer Episode (z.B. Objekt + Ort, Name + Gesicht) zu einer kohärenten Repräsentation. Zentrale Struktur: der <strong>Hippocampus</strong>. Bei Alzheimer selektiv beeinträchtigt.
+  </div>
+  <div class="card">
+    <div class="card-title">„What was where?“ (Liang et al., 2016)</div>
+    Der <strong>Item</strong>-Test (Objekt erkennen) ist NICHT alterssensitiv. Der <strong>Assoziations</strong>-Test (Objekt + Ort, Lokalisierung) ist alterssensitiv und bei familiärer Alzheimer-Erkrankung beeinträchtigt → spezifisches Binding-Defizit.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    Itemgedächtnis ≠ Assoziationsgedächtnis: Das Erkennen einzelner Objekte bleibt erhalten, das Objekt-Ort-<strong>Binding</strong> leidet.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Item- oder Assoziationsleistung (Binding)?</div>
+    <div class="corr-item" id="m5a">Ein gezeigtes Objekt unter Distraktoren wiedererkennen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5a',this,'item')">Item</button>
+        <button class="corr-btn" onclick="checkCorr('m5a',this,'assoziation')">Assoziation</button>
+      </div><div class="corr-fb" id="m5a-fb"></div>
+    </div>
+    <div class="corr-item" id="m5b">Erinnern, an welchem Ort ein Objekt lag
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5b',this,'item')">Item</button>
+        <button class="corr-btn" onclick="checkCorr('m5b',this,'assoziation')">Assoziation</button>
+      </div><div class="corr-fb" id="m5b-fb"></div>
+    </div>
+    <div class="corr-item" id="m5c">Welcher Name gehört zu welchem Gesicht?
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('m5c',this,'item')">Item</button>
+        <button class="corr-btn" onclick="checkCorr('m5c',this,'assoziation')">Assoziation</button>
+      </div><div class="corr-fb" id="m5c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Med. Temporallappen ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Medialer Temporallappen (MTL)</div>
+    <div class="sec-lz">Hippocampus, entorhinaler/perirhinaler/parahippocampaler Cortex; Informationsfluss; Speicherung deklarativen Gedächtnisses</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Hirnstruktur ist das „Tor“ zum deklarativen Langzeitgedächtnis — und wie gelangt eine Erinnerung dorthin?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Der <strong>mediale Temporallappen</strong> mit dem <strong>Hippocampus</strong>. Sensorische Information läuft über Assoziations- und rhinale Cortices zum Hippocampus und über den Fornix weiter.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Strukturen des MTL</div>
+    Der mediale Temporallappen enthält die Strukturen für die Speicherung im <strong>deklarativen</strong> Gedächtnis: <strong>Hippocampus (H)</strong>, entorhinaler (ERC), perirhinaler (PRC) und parahippocampaler (PHC) Cortex.
+  </div>
+  <div class="card">
+    <div class="card-title">Informationsfluss (Bear, 2018)</div>
+    Sensorische Information → kortikale Assoziationsregionen → parahippocampaler/rhinaler Cortex → <strong>Hippocampus</strong> → Fornix → Thalamus/Hypothalamus. Eine Rückprojektion führt vom Hippocampus zurück zu den Assoziationsregionen.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Informationsströme (Didic et al., 2011)</div>
+    <strong>Context Information stream</strong> (parahippocampal, räumlich/Kontext) und <strong>Object Information stream</strong> (perirhinal, Objekt). Der Hippocampus integriert beide → das ist die anatomische Basis des <strong>Binding</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Der Weg einer Erinnerung — Schritt für Schritt</div>
+    <div id="mtl">
+      <div class="step-item"><strong>1.</strong> Sensorische Information aus den Sinnessystemen.</div>
+      <div class="step-item"><strong>2.</strong> → kortikale Assoziationsregionen (Integration der Modalitäten).</div>
+      <div class="step-item"><strong>3.</strong> → parahippocampaler &amp; rhinaler Cortex (Eingangstor des MTL).</div>
+      <div class="step-item"><strong>4.</strong> → Hippocampus (Binding der Elemente zu einer Episode).</div>
+      <div class="step-item"><strong>5.</strong> → Fornix → Thalamus/Hypothalamus; Rückprojektion zum Cortex.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'mtl')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Alterungsresistenz ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Alterungsresistenz & Variabilität der Hirnalterung</div>
+    <div class="sec-lz">Pragmatik/posterior weniger betroffen, Myelinisierung; spät reifende Regionen stärker betroffen; Altern als Nebeneffekt der Plastizität; Bluthochdruck/Fitness</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn frontale Regionen so stark altern — warum bleibt das semantische Wissen (kristalline Intelligenz) stabil? Und warum altern manche Regionen überhaupt stärker?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Weil <strong>posteriore</strong> Regionen (Träger der Pragmatik/kristallinen Intelligenz) weniger schrumpfen und sogar weiter myelinisieren. Stärker altern die <strong>spät reifenden, plastischen</strong> Regionen — Altern als Nebeneffekt der Plastizität.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was erhalten bleibt</div>
+    Kristalline Intelligenz / <strong>Pragmatik</strong> (semantisches Wissen, Zugriffsgeschwindigkeit) bleibt erhalten. Neurobiologisch: posteriore Regionen zeigen geringere Volumenreduktion; Temporal- und Parietallappen myelinisieren bis ins höhere Erwachsenenalter weiter (Plastizität).
+  </div>
+  <div class="card">
+    <div class="card-title">Warum altern manche Regionen stärker?</div>
+    Ontogenetisch und phylogenetisch <strong>späte</strong> Regionen (relevant für flexibles Neulernen) zeigen mehr Abbau als frühe/alte. These: Das Ausmaß des Abbaus hängt vom Ausmaß der neuronalen <strong>Plastizität</strong> ab — <em>Altern als negativer Nebeneffekt der Plastizität</em>.
+  </div>
+  <div class="card">
+    <div class="card-title">Interindividuelle Variabilität</div>
+    Die Hirnalterung verläuft sehr unterschiedlich: <strong>Bluthochdruck</strong> und Stress beschleunigen sie (v.a. im Hippocampus), <strong>körperliche Fitness</strong> und ein aktiver Lebensstil verlangsamen sie (Raz &amp; Nagel, 2007).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr</div>
+    <strong>Pragmatik (kristallin) bleibt — Mechanik (fluid) baut ab.</strong> Beide altern NICHT gleich; der posteriore Erhalt erklärt die Stabilität der kristallinen Intelligenz.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Resistent vs. anfällig — neurobiologisch</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="res" onclick="switchTab(this,'resist')">Alterungsresistent</button>
+      <button class="tab-btn" data-tab="anf" onclick="switchTab(this,'resist')">Alterungsanfällig</button>
+    </div>
+    <div class="tab-group" data-group="resist">
+      <div class="tab-content active" data-tab="res">
+        <strong>Posteriore Regionen</strong> (temporal/parietal/okzipital): geringe Volumenreduktion, fortschreitende Myelinisierung. Tragen <strong>Pragmatik / kristalline Intelligenz</strong> → bleibt erhalten.
+      </div>
+      <div class="tab-content" data-tab="anf">
+        <strong>Frontale &amp; spät reifende, plastische Regionen</strong> (präfronto-striatal): stärkste Volumenreduktion. Tragen <strong>Mechanik / fluide Intelligenz</strong> → deutlicher Abbau.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL03 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Mehr fMRT-Aktivierung</h4>
+      <p>BOLD-Signal steigt</p>
+      <p>Kann „härtere Arbeit“ (geringere Effizienz) sein</p>
+      <p>Kann zusätzliche Rekrutierung (Kompensation) sein</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bessere/effizientere Funktion</h4>
+      <p>Wäre die naheliegende, aber unsichere Deutung</p>
+      <p>Richtung des Zusammenhangs unklar</p>
+      <p>Kardiovaskuläre Konfundierung möglich</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Mehr Aktivierung im fMRT bedeutet immer eine bessere oder effizientere Funktion der entsprechenden Hirnregion.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Frühe ERP-Komponenten</h4>
+      <p>Stimulusevaluation</p>
+      <p>Frühe sensorische Verarbeitung</p>
+      <p>Weniger alterssensitiv</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Späte ERP-Komponenten (P3)</h4>
+      <p>Reaktionsauswahl</p>
+      <p>Striatum/Basalganglien beteiligt</p>
+      <p>Deutlich alterssensitiv</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Altersbedingte Verlangsamung betrifft gleichmäßig alle Stufen der Informationsverarbeitung, also auch die frühen ERP-Komponenten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Semantisches Gedächtnis</h4>
+      <p>Generelles Faktenwissen</p>
+      <p>Bleibt im Alter weitgehend intakt</p>
+      <p>Deklaratives Gedächtnis</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Episodisches Gedächtnis</h4>
+      <p>Raumzeitlich eingeordnete Erlebnisse</p>
+      <p>Beeinträchtigt im Alter</p>
+      <p>Binding über den Hippocampus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im normalen Altern sind semantisches und episodisches Gedächtnis gleichermaßen beeinträchtigt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Item-Gedächtnis (Identifikation)</h4>
+      <p>Einzelnes Objekt wiedererkennen</p>
+      <p>NICHT alterssensitiv</p>
+      <p>Kein Binding nötig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Assoziationsgedächtnis (Binding)</h4>
+      <p>Objekt + Ort verknüpfen</p>
+      <p>Alterssensitiv, bei Alzheimer beeinträchtigt</p>
+      <p>Hippocampus zentral</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Altersbedingte Gedächtnisdefizite betreffen das Erkennen einzelner Objekte genauso stark wie das Erinnern von Objekt-Ort-Assoziationen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kristalline Intelligenz (Pragmatik)</h4>
+      <p>Semantisches Wissen</p>
+      <p>Posterior, fortschreitende Myelinisierung</p>
+      <p>Bleibt im Alter erhalten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fluide Intelligenz (Mechanik)</h4>
+      <p>Basisprozesse, Tempo</p>
+      <p>Präfrontal, stärkste Volumenreduktion</p>
+      <p>Deutlicher Abbau im Alter</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kristalline und fluide Intelligenz nehmen im Alter gleichermaßen ab.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl03</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl03';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was erfasst Diffusion Tensor Imaging (DTI)?",
+      "opts": [
+        "Die Integrität von Axonverbindungen (weiße Substanz) über die gerichtete Diffusion von Wassermolekülen.",
+        "Die Verfügbarkeit spezifischer Neurotransmitter über radioaktiv markierte Liganden mit kurzer Halbwertszeit im Gehirn.",
+        "Blutflussänderungen in Reaktion auf kognitive Verarbeitung.",
+        "Das Volumen grauer Substanz pro Bildpunkt."
+      ],
+      "c": 0,
+      "e": "DTI misst die direktionale Diffusion von Wasser → Integrität der Faserbahnen (weiße Substanz). Neurotransmitter = PET/SPECT, Blutfluss = fMRT, Gewebedichte = VBM."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was kennzeichnet die voxelbasierte Morphometrie (VBM)?",
+      "opts": [
+        "Sie misst Blutflussänderungen bei sensorischer oder kognitiver Stimulation.",
+        "Sie ermittelt die lokale Gewebedichte aus der Grauwert-Intensität jedes Voxels (MRT).",
+        "Sie erfasst über radioaktive Marker die Dopaminbindung an D1- und D2-Rezeptoren im Striatum und deren Alterskorrelation.",
+        "Sie misst die Diffusionsrichtung von Wassermolekülen entlang der Faserbahnen."
+      ],
+      "c": 1,
+      "e": "VBM ermittelt aus der Grauwert-Intensität jedes Voxels die lokale Gewebedichte (strukturelle MRT). Blutfluss = fMRT, Dopaminbindung = PET, Diffusion = DTI."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche Hirnregion zeigt die stärkste altersabhängige Volumenreduktion (Raz et al., 2005)?",
+      "opts": [
+        "Der Pons zeigt die stärkste Volumenreduktion über das Alter.",
+        "Der okzipitale Kortex ist am stärksten betroffen.",
+        "Der präfrontale Kortex (r ≈ −.56).",
+        "Alle Hirnregionen verlieren im Alter exakt gleich stark an Volumen, sodass sich kein regionaler Gradient des Hirnabbaus bestimmen lässt."
+      ],
+      "c": 2,
+      "e": "Stärkste Volumen-Alters-Korrelation: präfrontal (r ≈ −.56), dann Putamen (−.43) und Hippocampus (−.40). Es gibt also einen klaren anterior-posterioren Gradienten."
+    },
+    {
+      "id": "s1q2",
+      "q": "Welche Region ist am wenigsten von altersabhängiger Volumenreduktion betroffen?",
+      "opts": [
+        "Der präfrontale Kortex, dessen Volumen am schwächsten mit dem Alter korreliert und der daher die größte Alterungsresistenz aller Hirnregionen aufweist.",
+        "Der Hippocampus.",
+        "Das Putamen.",
+        "Der Pons (r ≈ −.07) — posteriore/subkortikale Regionen sind weniger betroffen."
+      ],
+      "c": 3,
+      "e": "Geringste Korrelation: Pons (−.07), gefolgt von okzipital/Globus pallidus (−.19). Der präfrontale Kortex ist im Gegenteil am stärksten betroffen."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie ist mehr fMRT-Aktivierung bei älteren Personen zu interpretieren?",
+      "opts": [
+        "Mehrdeutig: Sie kann Kompensation ODER geringere Effizienz bedeuten — die Richtung ist unklar.",
+        "Eindeutig als effizientere, bessere Funktion, da das BOLD-Signal die kognitive Leistung direkt und verzerrungsfrei abbildet.",
+        "Immer als vollständigen Funktionsausfall der Region.",
+        "Das Aktivierungsausmaß ist von der Funktion unabhängig."
+      ],
+      "c": 0,
+      "e": "Mehr Aktivierung kann Kompensation (zusätzliche Rekrutierung) ODER „härtere Arbeit“ (geringere Effizienz) sein; die Richtung des Zusammenhangs ist bislang unklar."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welches Problem erschwert die Interpretation von fMRT-Daten im Altersvergleich?",
+      "opts": [
+        "fMRT kann bei älteren Personen technisch gar nicht eingesetzt werden.",
+        "Altersveränderungen der kardiovaskulären Responsivität verzerren das BOLD-Signal.",
+        "Das fMRT misst die Dopaminbindung, die im Alter zunimmt und so die gemessene neuronale Aktivität systematisch überschätzt.",
+        "fMRT erfasst ausschließlich die weiße Substanz und nicht die graue."
+      ],
+      "c": 1,
+      "e": "Das BOLD-Signal beruht auf Blutfluss; altersbedingte Änderungen der kardiovaskulären Responsivität konfundieren den Altersvergleich. fMRT misst keine Dopaminbindung (das ist PET)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Faktoren werden als neurobiologische Grundlage der allgemeinen Verlangsamung diskutiert?",
+      "opts": [
+        "Eine Zunahme der isolierenden Myelinschicht.",
+        "Eine Erhöhung der Verfügbarkeit kritischer Neurotransmitter.",
+        "Myelinabbau, Dopaminreduktion, neuronales Rauschen und Zellverlust.",
+        "Ausschließlich der Verlust von Synapsen im okzipitalen Kortex, während Myelin, Neurotransmitter und neuronales Rauschen keinerlei Rolle spielen."
+      ],
+      "c": 2,
+      "e": "Diskutiert werden: langsamere Leitgeschwindigkeit durch Myelinabbau, synaptische Verzögerung durch Neurotransmitter-Reduktion (v.a. Dopamin), Zunahme von neural noise und Zellverlust."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche ERP-Komponenten sind besonders alterssensitiv?",
+      "opts": [
+        "Vor allem die frühen Komponenten der sensorischen Stimulusevaluation, während die späten Komponenten der Reaktionsauswahl im Alter weitgehend unverändert bleiben.",
+        "Alle ERP-Komponenten gleichermaßen.",
+        "Nur die allerersten 50 ms nach Reizbeginn.",
+        "Vor allem die späten Komponenten (P3, Reaktionsauswahl); Striatum/Dopamin sind beteiligt."
+      ],
+      "c": 3,
+      "e": "Alterseffekte zeigen sich v.a. in späten ERP-Komponenten (P3 = Reaktionsauswahl), weniger in frühen (Stimulusevaluation). Die Selektion zwischen Handlungsalternativen (Striatum) ist betroffen."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wo zeigen sich die größten Altersunterschiede bei Working Memory und Exekutivfunktionen?",
+      "opts": [
+        "Im präfronto-striatalen System; das präfrontale Volumen korreliert mit der WCST-Leistung.",
+        "Im okzipitalen Kortex, dessen Volumen eng mit der Leistung im Wisconsin Card Sorting Test zusammenhängt und die Exekutivfunktionen maßgeblich bestimmt.",
+        "Exekutivfunktionen sind im Alter völlig unverändert.",
+        "Das Working Memory verbessert sich mit zunehmendem Alter."
+      ],
+      "c": 0,
+      "e": "Größte Altersunterschiede im präfronto-striatalen System; präfrontales Volumen korreliert −.56 mit Alter und +.42 mit der WCST-Leistung."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche Aussage zu exekutiven Funktionen im Alter trifft zu?",
+      "opts": [
+        "Alle exekutiven Funktionen sind im Alter gleich stark beeinträchtigt.",
+        "Manche Bereiche (z.B. Task Switching) sind relativ stabil, andere (Auswahl unter Interferenz) deutlich beeinträchtigt.",
+        "Exekutive Funktionen sind im Alter generell stabil; einzig die Verarbeitungsgeschwindigkeit in rein sensorischen Aufgaben nimmt nachweislich ab.",
+        "Nur das semantische Gedächtnis ist betroffen, nicht die Exekutivfunktionen."
+      ],
+      "c": 1,
+      "e": "Nicht alle Exekutivfunktionen sind gleich betroffen: Aufrechterhaltung/Auswahl unter Interferenz sind beeinträchtigt, Task Switching zeigt eher Stabilität."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie verändern sich episodisches und semantisches Gedächtnis im normalen Altern?",
+      "opts": [
+        "Das semantische Gedächtnis ist stärker betroffen als das episodische.",
+        "Beide sind gleich stark und gleich früh beeinträchtigt.",
+        "Das episodische Gedächtnis ist beeinträchtigt, das semantische bleibt weitgehend intakt.",
+        "Sowohl das semantische Faktenwissen als auch das episodische, raumzeitlich eingeordnete Gedächtnis sind im normalen Altern gleichermaßen und gleich früh beeinträchtigt."
+      ],
+      "c": 2,
+      "e": "Semantisches Gedächtnis (Faktenwissen) bleibt intakt; episodisches Gedächtnis (raumzeitliche Einordnung, Binding über Hippocampus) ist beeinträchtigt."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was zeigt die „What was where?“-Studie (Liang et al., 2016) zum Binding?",
+      "opts": [
+        "Der reine Itemtest (Erkennen eines einzelnen Objekts) ist besonders alterssensitiv, während die Verknüpfung von Objekt und Ort im Alter völlig unbeeinträchtigt bleibt.",
+        "Binding findet im okzipitalen Kortex statt.",
+        "Binding betrifft ausschließlich das semantische Gedächtnis.",
+        "Der Assoziationstest (Objekt-Ort-Binding, Hippocampus) ist alterssensitiv und bei Alzheimer beeinträchtigt; der Itemtest nicht."
+      ],
+      "c": 3,
+      "e": "Das Binding (Verknüpfung Objekt+Ort, Hippocampus) ist alterssensitiv und bei familiärer Alzheimer-Erkrankung selektiv beeinträchtigt; das reine Item-Erkennen ist es nicht."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Welche Strukturen gehören zum medialen Temporallappen (MTL)?",
+      "opts": [
+        "Hippocampus, entorhinaler, perirhinaler und parahippocampaler Cortex.",
+        "Ausschließlich der präfrontale Kortex und das Striatum, die gemeinsam die zentrale Struktur für die Speicherung deklarativer Gedächtnisinhalte bilden.",
+        "Nur der okzipitale Kortex.",
+        "Pons und Cerebellum."
+      ],
+      "c": 0,
+      "e": "Zum MTL gehören Hippocampus sowie entorhinaler, perirhinaler und parahippocampaler Cortex — zentral für die Speicherung im deklarativen Gedächtnis."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wie verläuft der Informationsfluss im medialen Temporallappen (vereinfacht)?",
+      "opts": [
+        "Direkt vom Hippocampus in den sensorischen Cortex, ohne jede Zwischenstation.",
+        "Sensorische Information → Assoziationscortex → rhinaler/parahippocampaler Cortex → Hippocampus → Fornix.",
+        "Die Information gelangt zunächst über Pons und Cerebellum in den Thalamus und erst von dort, unter vollständiger Umgehung des Hippocampus, in den entorhinalen Cortex.",
+        "Es gibt ausschließlich einen Hinweg, aber keinen Rückweg vom Hippocampus zum Cortex."
+      ],
+      "c": 1,
+      "e": "Fluss: sensorische Info → kortikale Assoziationsregionen → parahippocampaler/rhinaler Cortex → Hippocampus → Fornix → Thalamus/Hypothalamus; mit Rückprojektion zum Cortex."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Welche Aussage zur Alterungsresistenz trifft zu?",
+      "opts": [
+        "Posteriore Regionen sind stärker betroffen als frontale.",
+        "Kristalline Intelligenz nimmt im Alter genauso stark ab wie fluide.",
+        "Kristalline Intelligenz (Pragmatik) bleibt erhalten; posteriore Regionen zeigen geringere Volumenreduktion.",
+        "Die kristalline Intelligenz nimmt im Alter am stärksten ab, weil die posterioren Regionen, die sie tragen, früher und deutlicher schrumpfen als die frontalen Areale der fluiden Intelligenz."
+      ],
+      "c": 2,
+      "e": "Kristalline Intelligenz (Pragmatik, semantisches Wissen) bleibt erhalten — neurobiologisch gestützt durch geringere Volumenreduktion posterior und fortschreitende Myelinisierung."
+    },
+    {
+      "id": "s7q2",
+      "q": "Warum sind manche Hirnregionen stärker von der Alterung betroffen als andere?",
+      "opts": [
+        "Weil phylogenetisch besonders alte Regionen am stärksten betroffen sind.",
+        "Regionen, die ontogenetisch besonders früh reifen und phylogenetisch alt sind, zeigen den stärksten altersbedingten Abbau, weil sie über die Lebensspanne am längsten beansprucht wurden.",
+        "Alle Regionen altern gleich stark, unabhängig vom Zeitpunkt ihrer Reifung.",
+        "Spät reifende, plastische Regionen sind stärker betroffen — Altern als Nebeneffekt der Plastizität."
+      ],
+      "c": 3,
+      "e": "These: Ontogenetisch und phylogenetisch späte (= besonders plastische) Regionen zeigen mehr Abbau. Altern erscheint als negativer Nebeneffekt hoher neuronaler Plastizität."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Eine Studie findet, dass das Volumen einer Region am stärksten negativ mit dem Alter korreliert UND mit der WCST-Leistung zusammenhängt. Um welche Region geht es am ehesten?",
+    "opts": [
+      "Präfrontaler Kortex.",
+      "Der Pons, der als am stärksten alternde Struktur die Leistung in Exekutivtests wie dem Wisconsin Card Sorting Test maßgeblich bestimmt.",
+      "Okzipitaler Kortex.",
+      "Cerebellum."
+    ],
+    "c": 0,
+    "e": "Der präfrontale Kortex: stärkste Volumen-Alters-Korrelation (−.56) und Zusammenhang mit der WCST-Leistung (präfronto-striatales System)."
+  },
+  {
+    "id": "bq2",
+    "q": "Womit macht man am besten sichtbar, ob ein kognitives Training die Integrität von Faserbahnen verändert hat?",
+    "opts": [
+      "Mit PET.",
+      "Mit Diffusion Tensor Imaging (DTI).",
+      "Mit der manuellen Morphometrie, die das Volumen grauer Substanz anhand interindividuell invarianter Landmarken durch geübte Betrachter ausmisst.",
+      "Mit dem EEG der frühen sensorischen Komponenten."
+    ],
+    "c": 1,
+    "e": "DTI erfasst die Integrität weißer Substanz (Faserbahnen) und ist auch für trainingsabhängige Plastizität geeignet (Lövdén et al., 2010)."
+  },
+  {
+    "id": "bq3",
+    "q": "Ein Patient erkennt einzelne Objekte gut, kann sich aber nicht merken, WO sie lagen. Welches System ist am ehesten betroffen?",
+    "opts": [
+      "Das semantische Gedächtnis (Faktenwissen).",
+      "Die frühe sensorische Verarbeitung (frühe ERP-Komponenten).",
+      "Das hippocampale Binding (Objekt-Ort-Assoziation).",
+      "Die kristalline Intelligenz, die für das Behalten räumlicher Objekt-Ort-Beziehungen über die gesamte Lebensspanne hinweg verantwortlich ist."
+    ],
+    "c": 2,
+    "e": "Item-Erkennen intakt, aber Objekt-Ort-Verknüpfung gestört = hippocampales Binding-Defizit (typisch für episodisches Gedächtnis / Alzheimer)."
+  },
+  {
+    "id": "bq4",
+    "q": "Eine ältere Gruppe zeigt bei einer Aufgabe MEHR frontale Aktivierung als eine jüngere. Wie ist das zu deuten?",
+    "opts": [
+      "Eindeutig als bessere, effizientere Funktion.",
+      "Eindeutig als vollständiger Funktionsausfall.",
+      "Eindeutig als Messartefakt der kardiovaskulären Alterung, das keinerlei Rückschluss auf die zugrunde liegende neuronale Verarbeitung erlaubt.",
+      "Mehrdeutig — möglich sind Kompensation oder geringere Effizienz."
+    ],
+    "c": 3,
+    "e": "Mehr Aktivierung ist interpretationsoffen: Kompensation (zusätzliche Rekrutierung) oder geringere Effizienz. Eine eindeutige Deutung ist nicht zulässig."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche neurochemische Veränderung wird am ehesten mit der allgemeinen Verlangsamung verbunden?",
+    "opts": [
+      "Dopaminreduktion im Striatum bzw. präfrontalen Kortex.",
+      "Eine altersbedingte Zunahme der Dopaminbindung an D1- und D2-Rezeptoren im Striatum, die die Reaktionsauswahl beschleunigt.",
+      "Eine Zunahme der Myelinschicht in subkortikalen Bahnen.",
+      "Ein deutlicher Anstieg der Synapsendichte im Hippocampus."
+    ],
+    "c": 0,
+    "e": "Die Dopaminbindung im Striatum NIMMT mit dem Alter ab (hohe negative Korrelation) und hängt mit der Leistung in Geschwindigkeitsaufgaben zusammen."
+  },
+  {
+    "id": "bq6",
+    "q": "Eine 75-Jährige hat hervorragendes Allgemeinwissen, vergisst aber zunehmend, was sie gestern erlebt hat. Welche Dissoziation zeigt sich?",
+    "opts": [
+      "Episodisch intakt, semantisch beeinträchtigt.",
+      "Semantisch intakt, episodisch beeinträchtigt.",
+      "Beide Gedächtnissysteme sind gleichermaßen beeinträchtigt, was für eine globale, unspezifische Gedächtnisstörung im normalen Alter spricht.",
+      "Ausschließlich das Arbeitsgedächtnis ist betroffen."
+    ],
+    "c": 1,
+    "e": "Allgemeinwissen = semantisch (intakt); Erlebnisse von gestern = episodisch (beeinträchtigt). Klassische Dissoziation im normalen Altern."
+  },
+  {
+    "id": "bq7",
+    "q": "Bei welcher Verarbeitungsstufe zeigen sich altersbedingte Latenzverzögerungen am deutlichsten?",
+    "opts": [
+      "Bei der frühen sensorischen Stimulusevaluation.",
+      "Bei der Verarbeitung in den ersten 50 ms nach Reizbeginn.",
+      "Bei der späten Reaktionsauswahl (P3).",
+      "Gleichmäßig über alle Verarbeitungsstufen hinweg, von der frühen sensorischen Registrierung bis zur späten Reaktionsauswahl."
+    ],
+    "c": 2,
+    "e": "Latenzverzögerungen v.a. in der späten P3 (Reaktionsauswahl), nicht in den frühen sensorischen Komponenten."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche These erklärt, warum spät reifende Hirnregionen stärker altern?",
+    "opts": [
+      "Weil sie phylogenetisch besonders alt sind.",
+      "Weil sie ausschließlich kristalline Intelligenz tragen.",
+      "Weil sie früh im Leben vollständig ausgereift sind und danach über Jahrzehnte hinweg keinerlei plastische Veränderung mehr durchlaufen.",
+      "Weil Altern ein negativer Nebeneffekt hoher neuronaler Plastizität ist."
+    ],
+    "c": 3,
+    "e": "Spät reifende, hochplastische Regionen (flexibles Neulernen) zeigen mehr Abbau — Altern als Schattenseite der Plastizität."
+  }
+];
+
+var corrCorrect = {
+  "m0a": "struktur",
+  "m0b": "funktion",
+  "m0c": "struktur",
+  "m0d": "funktion",
+  "m5a": "item",
+  "m5b": "assoziation",
+  "m5c": "assoziation"
+};
+var corrExpl = {
+  "m0a": "DTI bildet die Integrität der Faserbahnen (weiße Substanz) ab → strukturelles Verfahren.",
+  "m0b": "fMRT misst Blutflussänderungen bei kognitiver Verarbeitung → funktionelles Verfahren.",
+  "m0c": "VBM misst die lokale Gewebedichte (graue Substanz) → strukturelles Verfahren.",
+  "m0d": "PET/SPECT erfassen Neurotransmitter-Verfügbarkeit → (neurochemisch-)funktionelles Verfahren.",
+  "m5a": "Ein einzelnes Objekt wiedererkennen = Item-/Identifikationsgedächtnis (nicht alterssensitiv).",
+  "m5b": "Objekt UND Ort verknüpfen = Assoziations-/Binding-Gedächtnis (Hippocampus, alterssensitiv).",
+  "m5c": "Name zu Gesicht verknüpfen = Assoziations-/Binding-Leistung (alterssensitiv)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Bildgebungs-Simulator (Sektion ①): Verfahren → was es misst, Typ, Beispielbefund */
+var bgData = {
+  vbm:  {m:'Volumen / Gewebedichte von Hirnstrukturen (Grauwert pro Voxel, aus hochauflösendem MRT)', t:'strukturell', b:'Volumenabnahme im Alter sichtbar machen'},
+  dti:  {m:'Gerichtete Diffusion von Wasser → Integrität der weißen Substanz (Faserbahnen)', t:'strukturell', b:'Abbau bzw. trainingsabhängige Plastizität der Bahnen'},
+  fmrt: {m:'Blutflussänderungen bei Verarbeitung → wo das Gehirn aktiv ist', t:'funktionell', b:'Aktivierungsmuster (Altersvergleich ist heikel zu deuten)'},
+  pet:  {m:'Verfügbarkeit von Neurotransmittern über radioaktive Marker', t:'biochemisch', b:'Dopamin-Bindung (D1/D2) im Striatum sinkt mit dem Alter'}
+};
+function bgSet(k){
+  ['vbm','dti','fmrt','pet'].forEach(function(x){ var b=document.getElementById('bg-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('bg-out'); if(!o) return;
+  var d=bgData[k];
+  o.innerHTML='<strong>Misst:</strong> '+d.m+'<br><strong>Typ:</strong> '+d.t+'<br><strong>Beispielbefund:</strong> '+d.b;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  bgSet('vbm');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

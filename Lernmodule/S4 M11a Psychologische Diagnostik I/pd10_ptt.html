@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD10 Probabilistische Testtheorie (IRT)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl10
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD10 Probabilistische Testtheorie (IRT)</h1>
+<p class="page-sub">Psychologische Diagnostik I (Wedderhoff) · Klausur 23.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Grenzen der KTT & PTT/IRT-Familie · 2. Rasch-Modell: Grundidee (θ, δ) · 3. ICC & logistische Funktion · 4. Eigenschaften des Rasch-Modells · 5. Modellannahmen (Eindimensionalität, lokale stoch. Unabhängigkeit, suffiziente Statistik, spezifische Objektivität) · 6. Likelihood-Schätzung & Reliabilität (Informationsfunktion) · 7. Modelltests in R (Andersen-LR-Test, Waldtest, In-/Outfit) · 8. 2PL-Modell (Birnbaum), 3PL & Modellvergleich
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Grenzen der KTT → PTT</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Rasch-Modell: Grundidee</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ ICC & logistische Funktion</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Eigenschaften</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Modellannahmen</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Schätzung & Reliabilität</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Modelltests in R</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ 2PL-Modell & Vergleich</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Grenzen der KTT → PTT ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Grenzen der KTT & die PTT/IRT-Familie</div>
+    <div class="sec-lz">Kritik an der KTT: Axiome streng, nicht testbar, teils unplausibel; Intervallskalenniveau wird vorausgesetzt (Prüfung bleibt aus); Kennwerte sind stichprobenabhängig. Alternativen = probabilistische Testtheorien (PTT) / Item-Response-Theorien (IRT): dichotome Rasch-Modelle (dichotomes Format), ordinale IRT-Modelle (Ratingskalen), Latent-Class-Analysen (Klassifikation). Fokus hier: dichotomes Rasch-Modell.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die klassische Testtheorie (KTT) wird seit Jahrzehnten erfolgreich eingesetzt — warum braucht es überhaupt eine Alternative wie die probabilistische Testtheorie (IRT)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">An der KTT wird kritisiert: ihre <strong>Axiome/Annahmen sind streng, nicht testbar und teils unplausibel</strong>; für die Testwerte wird <strong>Intervallskalenniveau vorausgesetzt</strong> (eine Prüfung bleibt aber aus); die <strong>Kennwerte sind stichprobenabhängig</strong>. Die PTT/IRT modelliert stattdessen direkt die Lösungswahrscheinlichkeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Grenzen der KTT</div>
+    Drei wiederkehrende Kritikpunkte: (1) Axiome und Annahmen sind sehr <strong>streng, nicht testbar</strong> und teilweise unplausibel; (2) für die Testwerte wird <strong>Intervallskalenniveau vorausgesetzt</strong>, ohne dass dies geprüft wird; (3) die gewonnenen <strong>Kennwerte sind stichprobenabhängig</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Die PTT/IRT-Familie</div>
+    Alternativen = <strong>probabilistische Testtheorien (PTT)</strong> bzw. <strong>Item-Response-Theorien (IRT)</strong>. Je nach Art des Tests und der diagnostischen Entscheidung: <strong>dichotome Rasch-Modelle</strong> (dichotomes Format), <strong>ordinale IRT-Modelle</strong> (Ratingskalen) und <strong>Latent-Class-Analysen</strong> (Klassifikation). Im Folgenden: das dichotome Rasch-Modell.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">KTT vs. PTT/IRT</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ktt" onclick="switchTab(this,'gr')">KTT</button>
+      <button class="tab-btn" data-tab="ptt" onclick="switchTab(this,'gr')">PTT/IRT</button>
+    </div>
+    <div class="tab-group" data-group="gr">
+      <div class="tab-content active" data-tab="ktt"><strong>Annahmen:</strong> streng, nicht testbar, teils unplausibel. <strong>Skala:</strong> Intervallniveau vorausgesetzt (ungeprüft). <strong>Kennwerte:</strong> stichprobenabhängig.</div>
+      <div class="tab-content" data-tab="ptt"><strong>Idee:</strong> modelliert die Lösungswahrscheinlichkeit aus Personenfähigkeit und Itemschwierigkeit. <strong>Varianten:</strong> dichotomes Rasch, ordinale IRT, Latent-Class. <strong>Vorteil:</strong> Modellannahmen werden testbar.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Rasch-Modell: Grundidee ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Rasch-Modell: Grundidee</div>
+    <div class="sec-lz">Interesse gilt der Lösungswahrscheinlichkeit eines Items in Abhängigkeit von (a) der Fähigkeit der Person und (b) der Schwierigkeit des Items. Beide liegen auf demselben latenten Kontinuum (Analogie: Elo-Wertung im Schach). Personenfähigkeit θᵢ, Itemschwierigkeit δⱼ.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Schachspieler unterschiedlicher Stärke treffen aufeinander — wie wahrscheinlich gewinnt der eine? Und was hat das mit dem Lösen eines Testitems zu tun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Wie bei der <strong>Elo-Wertung</strong> im Schach hängt der Ausgang von der <strong>Differenz</strong> zweier Größen auf demselben Kontinuum ab. Beim Item: von der <strong>Fähigkeit der Person (θᵢ)</strong> und der <strong>Schwierigkeit des Items (δⱼ)</strong> — sie bestimmen gemeinsam die Lösungswahrscheinlichkeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Grundidee</div>
+    Das Rasch-Modell interessiert sich für die <strong>Lösungswahrscheinlichkeit eines Items</strong> in Abhängigkeit von der <strong>Fähigkeit der Person</strong> und der <strong>Schwierigkeit des Items</strong>. Beide liegen auf <strong>demselben latenten Kontinuum</strong> — wie Spielstärken auf der Elo-Skala (z.B. Keymer 2743, Carlsen 2882).
+  </div>
+  <div class="card">
+    <div class="card-title">Die zwei Parameter</div>
+    <strong>θᵢ</strong> = individueller <strong>Personenfähigkeitsparameter</strong> (Person i). <strong>δⱼ</strong> = <strong>Aufgaben-/Itemschwierigkeitsparameter</strong> (Item j). Je größer θᵢ relativ zu δⱼ, desto wahrscheinlicher wird die Lösung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">θ (Person) vs. δ (Item)</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="theta" onclick="switchTab(this,'pa')">θᵢ</button>
+      <button class="tab-btn" data-tab="delta" onclick="switchTab(this,'pa')">δⱼ</button>
+    </div>
+    <div class="tab-group" data-group="pa">
+      <div class="tab-content active" data-tab="theta"><strong>θᵢ — Personenfähigkeit:</strong> Position der Person i auf dem latenten Kontinuum. Hohe θᵢ → höhere Lösungswahrscheinlichkeit über alle Items hinweg.</div>
+      <div class="tab-content" data-tab="delta"><strong>δⱼ — Itemschwierigkeit:</strong> Position des Items j auf demselben Kontinuum (der Punkt mit Lösungswahrscheinlichkeit .50). Hohe δⱼ → das Item ist schwerer.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ ICC & logistische Funktion ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Item Characteristic Curve & logistische Funktion</div>
+    <div class="sec-lz">Die ICC stellt den Zusammenhang latente Merkmalsdimension ↔ Lösungswahrscheinlichkeit grafisch dar; eine logistische Funktion beschreibt den Verlauf am besten. (1) asymptotische Annäherung an 0 und 1; (2) Differenz θᵢ−δⱼ steuert die Erfolgswahrscheinlichkeit; (3) bei θᵢ=δⱼ ist die Lösungswahrscheinlichkeit .50 (exp(0)=1) → die Itemschwierigkeit ist der Punkt mit p=.50. P(1|θ,δ)=exp(θ−δ)/(1+exp(θ−δ)).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Person hat genau die Fähigkeit, die der Schwierigkeit des Items entspricht (θᵢ = δⱼ). Wie wahrscheinlich löst sie es?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Genau <strong>.50</strong> — der Scheitelpunkt der ICC. Denn bei θᵢ−δⱼ = 0 ist <strong>exp(0) = 1</strong>, also p = 1/(1+1) = .50. Die Itemschwierigkeit ist gerade als der Punkt definiert, an dem die Lösungswahrscheinlichkeit .50 beträgt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Item Characteristic Curve (ICC)</div>
+    Die <strong>ICC</strong> stellt den Zusammenhang zwischen der latenten Merkmalsdimension und der Lösungswahrscheinlichkeit eines Items grafisch dar. Eine <strong>logistische (S-förmige) Funktion</strong> beschreibt diesen Verlauf am besten.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Eigenschaften der ICC</div>
+    (1) <strong>asymptotische Annäherung</strong> der Erfolgswahrscheinlichkeit an 0 und 1; (2) die <strong>Differenz θᵢ − δⱼ</strong> steuert die Erfolgswahrscheinlichkeit; (3) bei <strong>θᵢ = δⱼ</strong> sind Erfolgs- und Misserfolgswahrscheinlichkeit gleich groß (p = .50).
+  </div>
+  <div class="card">
+    <div class="card-title">Die logistische Funktion (Rasch)</div>
+    Erfolg (x = 1): <strong>P(1 | θᵢ, δⱼ) = exp(θᵢ − δⱼ) / (1 + exp(θᵢ − δⱼ))</strong>. Misserfolg (x = 0): P(0 | θᵢ, δⱼ) = 1 / (1 + exp(θᵢ − δⱼ)). Nur die Differenz θᵢ − δⱼ geht ein.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🎛 Simulator: Differenz θ − δ → Lösungswahrscheinlichkeit</div>
+    <div style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle die Differenz aus Personenfähigkeit und Itemschwierigkeit — beobachte, wie die logistische Funktion die Erfolgswahrscheinlichkeit liefert (bei 0 genau .50).</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn" id="lf--2" onclick="lfSet('-2')">θ−δ = −2</button>
+        <button class="sim-tbtn" id="lf--1" onclick="lfSet('-1')">−1</button>
+        <button class="sim-tbtn on" id="lf-0" onclick="lfSet('0')">0</button>
+        <button class="sim-tbtn" id="lf-1" onclick="lfSet('1')">+1</button>
+        <button class="sim-tbtn" id="lf-2" onclick="lfSet('2')">+2</button>
+      </div>
+      <div class="sim-verdict" id="lf-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Eigenschaften ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Eigenschaften des Rasch-Modells</div>
+    <div class="sec-lz">Monotonie: höhere Fähigkeit → monoton höhere Lösungswahrscheinlichkeit. Bei θᵢ−δⱼ=0 beträgt p=0.5. Items unterscheiden sich NUR durch die Schwierigkeit und haben ALLE die gleiche Trennschärfe → die ICCs gehen durch reine Verschiebung entlang der x-Achse auseinander hervor (sie schneiden sich nicht).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im (dichotomen) Rasch-Modell sehen alle ICCs gleich aus, nur entlang der x-Achse verschoben. Warum schneiden sie sich nie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Weil alle Items <strong>dieselbe Trennschärfe</strong> haben — sie unterscheiden sich <strong>nur in der Schwierigkeit</strong>. Die ICCs gehen daher durch <strong>reine Verschiebung</strong> entlang der x-Achse auseinander hervor und können sich nicht schneiden. (Das ändert sich erst im 2PL-Modell.)</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Monotonie</div>
+    Eine <strong>höhere Fähigkeit</strong> führt <strong>monoton</strong> zu einer höheren Lösungswahrscheinlichkeit — die ICC steigt überall und fällt nirgends.
+  </div>
+  <div class="card">
+    <div class="card-title">Scheitelpunkt bei θ = δ</div>
+    Entspricht die Personenfähigkeit der Itemschwierigkeit (<strong>θᵢ − δⱼ = 0</strong>), beträgt die Lösungswahrscheinlichkeit <strong>0.5</strong> (da exp(0) = 1).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Gleiche Trennschärfen</div>
+    Die Items unterscheiden sich <strong>nur durch die Schwierigkeit</strong> und haben <strong>alle dieselbe Trennschärfe</strong>: alle ICCs gehen durch Verschiebung entlang der x-Achse auseinander hervor — sie <strong>schneiden sich nicht</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Eigenschaften des Rasch-Modells — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Monotonie:</strong> mehr Fähigkeit → durchgehend höhere Lösungswahrscheinlichkeit.</div>
+    <div class="step-item"><strong>② θ = δ:</strong> Lösungswahrscheinlichkeit genau 0.5 (exp(0) = 1).</div>
+    <div class="step-item"><strong>③ Gleiche Trennschärfe:</strong> Items unterscheiden sich nur in der Schwierigkeit.</div>
+    <div class="step-item"><strong>④ Parallele ICCs:</strong> nur entlang der x-Achse verschoben, sie schneiden sich nie.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'eig')">Nächster Punkt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Modellannahmen ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Modellannahmen des Rasch-Modells</div>
+    <div class="sec-lz">(1) Eindimensionalität/Rasch-Homogenität: nur eine latente Fähigkeit erzeugt das Antwortverhalten. (2) Lokale stochastische Unabhängigkeit: bei konstanter Personenfähigkeit sagt die Lösung eines Items nichts über die anderen. (3) Suffiziente Statistik: alle Information über die Person steckt im Summenwert (egal welche, nur wie viele Items). (4) Spezifische Objektivität: Personenschätzung unabhängig von der Itemauswahl (gilt in der KTT NICHT) → Grundlage des adaptiven Testens.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum reicht im Rasch-Modell die bloße ANZAHL gelöster Items, um eine Person zu charakterisieren — ganz gleich, welche Items sie gelöst hat?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Weil der <strong>Summenwert eine erschöpfende (suffiziente) Statistik</strong> ist: alle Information über die Person steckt darin. Das ist eine von vier Annahmen — neben <strong>Eindimensionalität</strong>, <strong>lokaler stochastischer Unabhängigkeit</strong> und <strong>spezifischer Objektivität</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Eindimensionalität & lokale Unabhängigkeit</div>
+    <strong>Eindimensionalität (Rasch-Homogenität):</strong> das Antwortverhalten kommt nur aufgrund <strong>einer</strong> latenten Fähigkeit zustande (in der Praxis oft überambitioniert). <strong>Lokale stochastische Unabhängigkeit:</strong> bei konstant gehaltener Fähigkeit sagt die Lösung eines Items nichts über die anderen aus.
+  </div>
+  <div class="card">
+    <div class="card-title">Suffiziente Statistik & spezifische Objektivität</div>
+    <strong>Suffiziente Statistik:</strong> alle Information steckt im Summenwert (nur <em>wie viele</em>, nicht <em>welche</em> Items). <strong>Spezifische Objektivität:</strong> die Personenschätzung ist unabhängig von der Itemauswahl — das gilt in der KTT <strong>nicht</strong> und ist die Grundlage des <strong>adaptiven Testens</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die vier Modellannahmen — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Eindimensionalität:</strong> nur eine latente Fähigkeit erzeugt das Antwortverhalten.</div>
+    <div class="step-item"><strong>② Lokale stoch. Unabhängigkeit:</strong> bei konstanter Fähigkeit kein Zusammenhang zwischen Items.</div>
+    <div class="step-item"><strong>③ Suffiziente Statistik:</strong> der Summenwert enthält alle Information (nur wie viele, nicht welche).</div>
+    <div class="step-item"><strong>④ Spezifische Objektivität:</strong> Personenschätzung unabhängig von der Itemauswahl → adaptives Testen.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'ann')">Nächster Punkt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Schätzung & Reliabilität ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Likelihood-Schätzung & Reliabilität</div>
+    <div class="sec-lz">Die Parameter werden per Likelihood-Funktion geschätzt: so, dass das beobachtete Datenmuster unter Geltung des Rasch-Modells möglichst wahrscheinlich ist (große Likelihood = guter Fit). Da L sehr klein wird, berichtet man log(L) (Werte nahe 0 = hoher Fit). Reliabilität: statt eines Koeffizienten die Informationsfunktion (Item Information Function); an den Rändern des Kontinuums weniger Information → mehr Messfehler. Standardmessfehler = 1/√Information.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Das Rasch-Modell liefert keinen einzelnen Reliabilitätskoeffizienten wie die KTT. Wie beschreibt es dann die Messgenauigkeit?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Über die <strong>Informationsfunktion</strong>: sie gibt die Messgenauigkeit in Abhängigkeit von der Position auf dem Kontinuum an. An den <strong>Rändern</strong> steht weniger Information zur Verfügung → mehr Messfehler. Es gilt <strong>Standardmessfehler = 1/√Information</strong>. Die Parameter selbst werden per <strong>Likelihood</strong> geschätzt (log(L) nahe 0 = guter Fit).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Likelihood-Schätzung</div>
+    Die Parameter werden per <strong>Likelihood-Funktion</strong> geschätzt: so, dass das beobachtete Datenmuster unter Geltung des Rasch-Modells <strong>möglichst wahrscheinlich</strong> ist (große Likelihood = guter Fit). Da L sehr klein wird, berichtet man <strong>log(L)</strong> — Werte nahe 0 sprechen für hohen Fit.
+  </div>
+  <div class="card">
+    <div class="card-title">Reliabilität: die Informationsfunktion</div>
+    Statt eines Koeffizienten bestimmt die PTT eine <strong>Informationsfunktion</strong> (Item Information Function): wie genau ein Item — bzw. summiert der ganze Test — an einer Position des Kontinuums misst. An den Extremen weniger Information → mehr Messfehler. <strong>Standardmessfehler = 1/√Information</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Von der Schätzung zur Messgenauigkeit — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Likelihood:</strong> Parameter so wählen, dass das Datenmuster möglichst wahrscheinlich wird.</div>
+    <div class="step-item"><strong>② log(L):</strong> L wird sehr klein → logarithmieren; Werte nahe 0 = hoher Fit.</div>
+    <div class="step-item"><strong>③ Informationsfunktion:</strong> Messgenauigkeit je Position auf dem Kontinuum.</div>
+    <div class="step-item"><strong>④ Standardmessfehler = 1/√Information:</strong> an den Rändern groß (weniger Information).</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'rel')">Nächster Punkt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Modelltests in R ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Modellgeltung prüfen (R)</div>
+    <div class="sec-lz">Rasch liefert nur Schwierigkeitsparameter — Nutzen: man kann die Modellgeltung prüfen. Schätzung z.B. RM() im Paket eRm (CML); ausgegeben wird die Leichtigkeit beta (eta = −1·beta). Andersen-LR-Test (LRtest, split z.B. nach Geschlecht): Itemparameter zweier Subgruppen vergleichen — signifikant = Modell passt nicht. Waldtest: setzt an einzelnen Items an. In-/Outfit (auf Residuen): Outfit = ausreißersensibel (extreme Schwierigkeit/Leichtigkeit), Infit = Passung der Response-Muster; MSQ 0.5–1.5 = gute Passung. personfit prüft einzelne Personen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Inhaltlich interessieren oft gar nicht die Itemschwierigkeiten — und genau die liefert das Rasch-Modell. Wozu ist es dann überhaupt nützlich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Man kann <strong>prüfen, ob das Modell auf die Daten passt</strong> — und damit, ob die wichtigen Eigenschaften (Eindimensionalität, suffiziente Statistik, spezifische Objektivität) tatsächlich vorliegen. Dazu dienen <strong>Modelltests</strong>: Andersen-LR-Test, Waldtest, In-/Outfit. Schätzung z.B. mit <strong>RM()</strong> (Paket eRm, CML).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Grundidee der Modelltests</div>
+    Viele Modelltests bestimmen die <strong>Itemparameter getrennt für zwei Subgruppen</strong> (z.B. Frauen/Männer) und vergleichen sie — bei Modellgeltung sollten sie (annähernd) gleich sein. Geschätzt wird z.B. mit <strong>RM()</strong> aus dem Paket <strong>eRm</strong> (Conditional Maximum Likelihood). Ausgegeben wird die Leichtigkeit <strong>beta</strong> (eta = −1·beta).
+  </div>
+  <div class="card">
+    <div class="card-title">Globaler Test, Item-Test, Fit</div>
+    <strong>Andersen-LR-Test</strong> (global, z.B. <code>LRtest</code>): signifikant → Modell passt nicht. <strong>Waldtest</strong>: setzt an <strong>einzelnen Items</strong> an. <strong>In-/Outfit</strong> (auf Residuen): <strong>Outfit</strong> ausreißersensibel (Maß für „Extremheit"), <strong>Infit</strong> für die Passung der Response-Muster — MSQ 0.5–1.5 = gute Passung. <code>personfit</code> prüft einzelne <strong>Personen</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei Wege, die Modellgeltung zu prüfen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="lr" onclick="switchTab(this,'mt')">Andersen-LR</button>
+      <button class="tab-btn" data-tab="wald" onclick="switchTab(this,'mt')">Waldtest</button>
+      <button class="tab-btn" data-tab="fit" onclick="switchTab(this,'mt')">In-/Outfit</button>
+    </div>
+    <div class="tab-group" data-group="mt">
+      <div class="tab-content active" data-tab="lr"><strong>Globaler Test:</strong> Itemparameter zweier Subgruppen getrennt schätzen und vergleichen. Ein <strong>signifikanter</strong> LR-Test spricht gegen die Modellgeltung.</div>
+      <div class="tab-content" data-tab="wald"><strong>Item-Ebene:</strong> vergleicht die Parameter ebenfalls über Subgruppen, setzt aber an den <strong>einzelnen Items</strong> an (identifiziert problematische Items).</div>
+      <div class="tab-content" data-tab="fit"><strong>Residuen-basiert:</strong> <strong>Outfit</strong> = Extremheit/ausreißersensibel, <strong>Infit</strong> = Passung der Response-Muster. MSQ 0.5–1.5 gut, &gt;2 ungenügend, &lt;0.5 überangepasst.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ 2PL-Modell & Vergleich ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ 2PL-Modell (Birnbaum), 3PL & Modellvergleich</div>
+    <div class="sec-lz">Das Rasch-Modell = 1PL (ein Parameter: Schwierigkeit). Birnbaum (1968) ergänzt die Trennschärfe βⱼ als zweiten Parameter → 2PL. Dann können die ICCs unterschiedlich steil sein und sich SCHNEIDEN; die spezifische Objektivität gilt NICHT mehr. βⱼ liegt meist bei 0.5–2.0. 3PL ergänzt zusätzlich die Ratewahrscheinlichkeit. Schätzung 2PL: Paket ltm (MML). Modellvergleich 1PL vs. 2PL per anova() (Likelihood-Ratio-Test): hier ist das komplexere 2PL signifikant besser.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Rasch-Modell haben alle Items dieselbe Trennschärfe. Was ändert sich, wenn man genau diese Annahme aufgibt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Birnbaum (1968) nimmt die <strong>Trennschärfe βⱼ</strong> als zweiten Itemparameter auf → das <strong>2PL-Modell</strong>. Die ICCs können nun <strong>unterschiedlich steil</strong> sein und sich <strong>schneiden</strong>; die <strong>spezifische Objektivität gilt nicht mehr</strong>. Das <strong>3PL</strong> ergänzt zusätzlich die Ratewahrscheinlichkeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vom 1PL zum 2PL (Birnbaum)</div>
+    Das Rasch-Modell heißt auch <strong>1PL-Modell</strong> (ein Parameter: die Schwierigkeit). Birnbaum (1968) ergänzt die <strong>Trennschärfe βⱼ</strong> als zweiten Parameter → <strong>2PL</strong>: pᵢⱼ = exp[βⱼ·(θᵢ−δⱼ)] / (1 + exp[βⱼ·(θᵢ−δⱼ)]). βⱼ liegt meist bei <strong>0.5–2.0</strong>; geringe Trennschärfe = kaum geeignet, zwischen Personen zu unterscheiden.
+  </div>
+  <div class="card">
+    <div class="card-title">Folgen & das 3PL-Modell</div>
+    Die ICCs können nun unterschiedlich steil verlaufen und sich <strong>schneiden</strong>; Eigenschaften wie die <strong>spezifische Objektivität gelten nicht mehr</strong>. Das <strong>3PL-Modell</strong> ergänzt zusätzlich die <strong>Ratewahrscheinlichkeit</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Modellvergleich 1PL vs. 2PL</div>
+    Das 2PL wird nicht mit eRm, sondern mit dem Paket <strong>ltm</strong> (Marginal Maximum Likelihood) geschätzt. Der Vergleich beider Modelle erfolgt per <strong>anova()</strong> (Likelihood-Ratio-Test): im Folienbeispiel ist das komplexere <strong>2PL signifikant besser</strong> (LRT 39.98, df 23, p = 0.015).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🔗 Ordne jeden Begriff seiner Bedeutung zu</div>
+    <div class="corr-item" id="w8a">θᵢ
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w8a',this,'person')">Personenfähigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8a',this,'item')">Itemschwierigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8a',this,'trenn')">Trennschärfe</button>
+        <button class="corr-btn" onclick="checkCorr('w8a',this,'messfehler')">Standardmessfehler</button>
+      </div><div class="corr-fb" id="w8a-fb"></div>
+    </div>
+    <div class="corr-item" id="w8b">δⱼ
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w8b',this,'person')">Personenfähigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8b',this,'item')">Itemschwierigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8b',this,'trenn')">Trennschärfe</button>
+        <button class="corr-btn" onclick="checkCorr('w8b',this,'messfehler')">Standardmessfehler</button>
+      </div><div class="corr-fb" id="w8b-fb"></div>
+    </div>
+    <div class="corr-item" id="w8c">βⱼ (2PL)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w8c',this,'person')">Personenfähigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8c',this,'item')">Itemschwierigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8c',this,'trenn')">Trennschärfe</button>
+        <button class="corr-btn" onclick="checkCorr('w8c',this,'messfehler')">Standardmessfehler</button>
+      </div><div class="corr-fb" id="w8c-fb"></div>
+    </div>
+    <div class="corr-item" id="w8d">1 / √Information
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w8d',this,'person')">Personenfähigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8d',this,'item')">Itemschwierigkeit</button>
+        <button class="corr-btn" onclick="checkCorr('w8d',this,'trenn')">Trennschärfe</button>
+        <button class="corr-btn" onclick="checkCorr('w8d',this,'messfehler')">Standardmessfehler</button>
+      </div><div class="corr-fb" id="w8d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus PD10 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Klassische Testtheorie (KTT)</h4>
+      <p>Kennwerte stichprobenabhängig</p>
+      <p>Intervallskalenniveau vorausgesetzt</p>
+      <p>ein Reliabilitätskoeffizient</p>
+      <p>keine spezifische Objektivität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Probabilistische Testtheorie (Rasch)</h4>
+      <p>Lösungswahrscheinlichkeit aus θ und δ</p>
+      <p>Modellannahmen testbar (Modelltest)</p>
+      <p>Informationsfunktion statt Koeffizient</p>
+      <p>spezifische Objektivität</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die im Rahmen der KTT gewonnenen Kennwerte sind stichprobenunabhängig — genau das ist die spezifische Objektivität der KTT.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Rasch-Modell (1PL)</h4>
+      <p>ein Itemparameter: Schwierigkeit δⱼ</p>
+      <p>alle Items gleiche Trennschärfe</p>
+      <p>ICCs nur verschoben, schneiden sich nicht</p>
+      <p>spezifische Objektivität gilt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>2PL-Modell (Birnbaum)</h4>
+      <p>zweiter Parameter: Trennschärfe βⱼ</p>
+      <p>Trennschärfen können sich unterscheiden</p>
+      <p>ICCs können sich schneiden</p>
+      <p>spezifische Objektivität gilt NICHT mehr</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Auch im 2PL-Modell haben alle Items dieselbe Trennschärfe und die ICCs schneiden sich nie.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Outfit</h4>
+      <p>beruht auf Residuen</p>
+      <p>Maß für „Extremheit“</p>
+      <p>ausreißersensibel</p>
+      <p>bei Items: extreme Schwierigkeit/Leichtigkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Infit</h4>
+      <p>beruht auf Residuen</p>
+      <p>Maß für Passung der Response-Muster</p>
+      <p>informationsgewichtet</p>
+      <p>deckt nicht modell-konforme Muster auf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Outfit ist das Maß für die Passung von Response-Mustern, Infit hingegen das ausreißersensible Maß für die Extremheit.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eindimensionalität</h4>
+      <p>nur EINE latente Fähigkeit</p>
+      <p>erzeugt das gesamte Antwortverhalten</p>
+      <p>ein gemeinsames Kontinuum</p>
+      <p>in der Praxis oft überambitioniert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Lokale stochastische Unabhängigkeit</h4>
+      <p>bezieht sich auf das Verhältnis der Items</p>
+      <p>bei konstanter Fähigkeit kein Zusammenhang</p>
+      <p>Item sagt nichts über andere Items</p>
+      <p>Zusammenhang nur über die latente Variable</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Eindimensionalität besagt, dass bei konstant gehaltener Personenfähigkeit die Lösung eines Items nichts über die anderen Items aussagt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Summenwert (suffiziente Statistik)</h4>
+      <p>enthält alle Information über die Person</p>
+      <p>nur WIE VIELE, nicht WELCHE Items</p>
+      <p>Grundlage der CML-Schätzung</p>
+      <p>Eigenschaft des Rasch-Modells</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>log(L) (Modell-Fit)</h4>
+      <p>logarithmierte Likelihood</p>
+      <p>L selbst wird sehr klein</p>
+      <p>Werte nahe 0 = hoher Fit</p>
+      <p>sagt etwas über die Modellpassung aus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Für den Summenwert einer Person im Rasch-Modell ist entscheidend, WELCHE Items sie gelöst hat, nicht wie viele.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl10</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl10';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Welcher Kritikpunkt wird an der klassischen Testtheorie (KTT) angeführt?",
+      "opts": [
+        "Ihre Axiome und Annahmen sind sehr streng, nicht testbar und teilweise unplausibel, und die Kennwerte sind stichprobenabhängig.",
+        "Sie verzichtet als einziges Testmodell vollständig auf Annahmen über die Daten und benötigt insbesondere kein Intervallskalenniveau.",
+        "Sie liefert grundsätzlich keine Reliabilitätsschätzung.",
+        "Sie setzt zwingend ein dichotomes Antwortformat voraus."
+      ],
+      "c": 0,
+      "e": "An der KTT wird u.a. kritisiert: ihre Axiome/Annahmen sind streng, nicht testbar und teils unplausibel; für die Testwerte wird Intervallskalenniveau vorausgesetzt (Prüfung bleibt aus); die Kennwerte sind stichprobenabhängig."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Verfahren gehören zur Familie der probabilistischen Testtheorien (PTT/IRT)?",
+      "opts": [
+        "Ausschließlich die klassische Reliabilitätsanalyse mit Cronbachs Alpha, da nur sie probabilistische Lösungswahrscheinlichkeiten modelliert.",
+        "Dichotome Rasch-Modelle, ordinale IRT-Modelle (bei Ratingskalen) und Latent-Class-Analysen.",
+        "Nur die explorative Faktorenanalyse.",
+        "Nur Normierungsverfahren wie die Standardwert-Transformation."
+      ],
+      "c": 1,
+      "e": "Zur PTT/IRT zählen u.a. dichotome Rasch-Modelle (dichotomes Format), ordinale IRT-Modelle (Ratingskalen) und Latent-Class-Analysen (Klassifikation von Personen). Sie unterscheiden sich nach Art des Tests und der diagnostischen Entscheidung."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wovon hängt im Rasch-Modell die Lösungswahrscheinlichkeit eines Items ab?",
+      "opts": [
+        "Allein von der Tagesform und Motivation der Person am Testtag.",
+        "Allein von der Reliabilität des Gesamttests.",
+        "Von der Fähigkeit der Person und der Schwierigkeit des Items.",
+        "Allein von der Anzahl der Antwortoptionen des Items."
+      ],
+      "c": 2,
+      "e": "Das Rasch-Modell interessiert sich für die Lösungswahrscheinlichkeit eines Items in Abhängigkeit von der Fähigkeit der untersuchten Person UND der Schwierigkeit des Items — beide auf demselben latenten Kontinuum (Analogie: Elo-Wertung im Schach)."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wie werden die beiden zentralen Parameter im Rasch-Modell bezeichnet?",
+      "opts": [
+        "θᵢ als Itemschwierigkeit und δⱼ als Personenfähigkeit — die Person wird also über das Item und das Item über die Person definiert.",
+        "θᵢ und δⱼ stehen beide für die Trennschärfe desselben Items.",
+        "θᵢ und δⱼ bezeichnen Mittelwert und Streuung der Rohwertverteilung.",
+        "θᵢ = individueller Personenfähigkeitsparameter, δⱼ = Aufgabenschwierigkeitsparameter."
+      ],
+      "c": 3,
+      "e": "θᵢ ist der individuelle Personenfähigkeitsparameter (Person i), δⱼ der Aufgaben-/Itemschwierigkeitsparameter (Item j). Beide liegen auf demselben latenten Merkmalskontinuum."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Welche Funktion beschreibt den Verlauf der Item Characteristic Curve (ICC) am besten?",
+      "opts": [
+        "Eine logistische (S-förmige) Funktion.",
+        "Eine fallende Gerade.",
+        "Eine U-förmige (parabolische) Funktion.",
+        "Eine konstante (waagerechte) Funktion."
+      ],
+      "c": 0,
+      "e": "Eine logistische Funktion beschreibt den Verlauf der Lösungswahrscheinlichkeit in Abhängigkeit von der Fähigkeit der Person und der Schwierigkeit des Items am besten — die ICC ist S-förmig und nähert sich asymptotisch 0 und 1."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was gilt am Punkt, an dem Personenfähigkeit und Itemschwierigkeit gleich sind (θᵢ = δⱼ)?",
+      "opts": [
+        "Die Lösungswahrscheinlichkeit ist 1.0.",
+        "Die Lösungswahrscheinlichkeit beträgt .50 (Scheitelpunkt der ICC; exp(0)=1).",
+        "Die Lösungswahrscheinlichkeit ist 0.0.",
+        "Das Item ist für diese Person nicht definiert und liefert daher überhaupt keine Lösungswahrscheinlichkeit."
+      ],
+      "c": 1,
+      "e": "Bei θᵢ−δⱼ=0 ist exp(0)=1, also p = 1/(1+1) = .50. Die Itemschwierigkeit ist definiert als der Punkt auf dem Merkmalskontinuum, an dem die Lösungswahrscheinlichkeit gerade .50 beträgt."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was besagt die Monotonie-Eigenschaft des Rasch-Modells?",
+      "opts": [
+        "Dass alle Items exakt dieselbe Schwierigkeit besitzen müssen.",
+        "Dass die Lösungswahrscheinlichkeit mit steigender Fähigkeit zunächst steigt und dann wieder fällt.",
+        "Eine höhere Fähigkeit führt monoton zu einer höheren Lösungswahrscheinlichkeit.",
+        "Dass die Lösungswahrscheinlichkeit unabhängig von der Fähigkeit der Person konstant bleibt."
+      ],
+      "c": 2,
+      "e": "Monotonie: eine höhere Personenfähigkeit führt monoton (durchgehend) zu einer höheren Lösungswahrscheinlichkeit — die ICC steigt überall, sie fällt nirgends."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie unterscheiden sich die Items im (dichotomen) Rasch-Modell voneinander?",
+      "opts": [
+        "Sowohl in der Schwierigkeit als auch in der Trennschärfe, weshalb sich ihre Itemcharakteristiken an verschiedenen Stellen des Kontinuums schneiden.",
+        "Nur in der Trennschärfe; ihre Schwierigkeit ist für alle Items gleich.",
+        "Sie sind in allen Parametern identisch und damit austauschbar.",
+        "Nur in der Schwierigkeit; sie haben alle die gleiche Trennschärfe, ihre ICCs gehen durch Verschiebung entlang der x-Achse auseinander hervor."
+      ],
+      "c": 3,
+      "e": "Im Rasch-Modell unterscheiden sich die Items NUR durch die Schwierigkeit und haben ALLE die gleiche Trennschärfe; die ICCs gehen rein durch Verschiebung entlang der x-Achse auseinander hervor (sie schneiden sich nicht)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was besagt die Annahme der Eindimensionalität (Rasch-Homogenität)?",
+      "opts": [
+        "Das Antwortverhalten kommt nur aufgrund einer einzigen (latenten) Fähigkeit zustande.",
+        "Jedes Item misst eine eigene, von den übrigen Items unabhängige latente Fähigkeitsdimension.",
+        "Der Test darf nur eine einzige Aufgabe enthalten.",
+        "Alle Personen müssen dieselbe Fähigkeitsausprägung besitzen."
+      ],
+      "c": 0,
+      "e": "Eindimensionalität/Rasch-Homogenität: um das Antwortverhalten anhand eines einzigen Kontinuums zu beschreiben, muss das Verhalten auch nur aufgrund einer (latenten) Fähigkeit zustande kommen (in der Praxis oft etwas überambitioniert)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was meint die lokale stochastische Unabhängigkeit?",
+      "opts": [
+        "Dass jede Person die vorgelegten Items in einer zufällig randomisierten und voneinander vollständig unabhängigen Reihenfolge bearbeitet.",
+        "Bei konstant gehaltener Personenfähigkeit sagt die Lösungswahrscheinlichkeit eines Items nichts über die der anderen Items aus.",
+        "Dass die Items lokal (am Testort) unabhängig voneinander entwickelt wurden.",
+        "Dass die Stichprobe lokal, also nur regional, gezogen werden darf."
+      ],
+      "c": 1,
+      "e": "Lokale stochastische Unabhängigkeit: der Zusammenhang zwischen den Antworten auf zwei Items soll ausschließlich durch die Fähigkeitsunterschiede in der latenten Variablen zustande kommen — bei konstant gehaltener Fähigkeit sagt ein Item nichts über die anderen."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Warum bezeichnet man den Summenwert im Rasch-Modell als erschöpfende (suffiziente) Statistik?",
+      "opts": [
+        "Weil er nur dann gilt, wenn alle Personen alle Items vollständig beantwortet haben.",
+        "Weil er ausschließlich aus den schwierigsten Items des Tests gebildet wird.",
+        "Weil alle Information über eine Person in ihrem Summenwert enthalten ist — es kommt nicht darauf an, welche Items gelöst wurden, sondern nur wie viele.",
+        "Weil er die Trennschärfe und die Schwierigkeit jedes einzelnen Items vollständig abbildet und damit jede gesonderte Itemanalyse des gesamten Tests ersetzt."
+      ],
+      "c": 2,
+      "e": "Alle Information über eine Person steckt im Summenwert: für den Score spielt es keine Rolle, WELCHE Items gelöst wurden, sondern nur WIE VIELE. Daher heißt der Summenwert erschöpfende (suffiziente) Statistik."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was bedeutet die spezifische Objektivität (Stichprobenunabhängigkeit) des Rasch-Modells?",
+      "opts": [
+        "Dass auch die Genauigkeit der Schätzungen völlig unabhängig von der gewählten Personen- und Itemstichprobe bleibt und keinen Stichprobeneinfluss zeigt.",
+        "Dass dieselbe Eigenschaft in genau gleicher Form auch für die KTT gilt.",
+        "Dass jede Person objektiv dieselbe Anzahl an Items lösen muss.",
+        "Die Schätzung der Personenfähigkeit ist unabhängig davon, welche Items zur Messung gewählt werden — Grundlage des adaptiven Testens."
+      ],
+      "c": 3,
+      "e": "Spezifische Objektivität: die Schätzung der Personenfähigkeit ist unabhängig von der Auswahl der Items (und umgekehrt) — jede Teilmenge führt im Allgemeinen zu gleichen Personenscores. Das gilt in der KTT NICHT und ist die Grundlage des adaptiven Testens. (Die Genauigkeit hängt aber sehr wohl von den Stichproben ab.)"
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie werden die Personen- und Itemparameter im Rasch-Modell geschätzt?",
+      "opts": [
+        "Per Likelihood-Funktion: die Parameter werden so geschätzt, dass das beobachtete Datenmuster unter Geltung des Modells möglichst wahrscheinlich ist.",
+        "Durch einfaches Auszählen der richtigen Antworten, da der Summenwert im Rasch-Modell ein eigentliches Schätzverfahren der Parameter überflüssig macht.",
+        "Über die Retest-Korrelation des Gesamttests.",
+        "Durch Gleichsetzen aller Itemschwierigkeiten mit dem Mittelwert."
+      ],
+      "c": 0,
+      "e": "Zur Schätzung wird eine Likelihood-Funktion herangezogen: die Parameter werden so bestimmt, dass das vorliegende Datenmuster unter Annahme des Rasch-Modells möglichst wahrscheinlich ist. Eine große Likelihood spricht für einen guten Fit; berichtet wird meist log(L) (nahe 0 = hoher Fit)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wie wird die Messgenauigkeit (Reliabilität) in der PTT abgebildet?",
+      "opts": [
+        "Durch einen einzigen Reliabilitätskoeffizienten wie in der KTT, der über das gesamte latente Merkmalskontinuum hinweg unverändert gleich gilt.",
+        "Über die Informationsfunktion; der Standardmessfehler ergibt sich als 1/√Information und ist an den Rändern des Kontinuums größer.",
+        "Allein über die Itemschwierigkeit δⱼ.",
+        "Sie kann in der PTT grundsätzlich nicht bestimmt werden."
+      ],
+      "c": 1,
+      "e": "Statt eines Koeffizienten bestimmt die PTT eine Informationsfunktion (Item Information Function) — abhängig von der Position auf dem Kontinuum. An den Extremen steht weniger Information zur Verfügung → mehr Messfehler. Es gilt: Standardmessfehler = 1/√Information."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wozu dient der Andersen-Likelihood-Ratio-Test (LRtest) beim Rasch-Modell?",
+      "opts": [
+        "Zur direkten Schätzung der Personenfähigkeit unmittelbar aus dem Summenwert, wobei die Position der Person auf dem Kontinuum ganz ohne jede Itemschätzung bestimmt wird.",
+        "Zur Normierung der Rohwerte in T-Werte.",
+        "Zum globalen Modelltest: die Itemparameter werden für zwei Subgruppen getrennt geschätzt und verglichen — ein signifikanter Test spricht GEGEN die Modellgeltung.",
+        "Zur Bestimmung der Ratewahrscheinlichkeit eines Items."
+      ],
+      "c": 2,
+      "e": "Viele Modelltests bestimmen die Itemparameter getrennt für zwei Subgruppen (z.B. Frauen/Männer) und vergleichen sie; bei Modellgeltung sollten sie (annähernd) gleich sein. Der Andersen-LR-Test ist ein solcher globaler Test — wird er signifikant, passt das Modell nicht gut."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wie unterscheiden sich Outfit und Infit als Fit-Statistiken?",
+      "opts": [
+        "Outfit und Infit sind nur zwei Namen für exakt denselben Kennwert.",
+        "Outfit prüft ausschließlich Personen, Infit ausschließlich Items.",
+        "Beide messen ausschließlich die Schwierigkeit eines Items, sind voneinander unabhängig und beruhen anders als üblich angenommen gerade nicht auf Residuen.",
+        "Outfit ist ausreißersensibel (Maß für „Extremheit“, z.B. extreme Schwierigkeit/Leichtigkeit); Infit misst die Passung der Response-Muster."
+      ],
+      "c": 3,
+      "e": "Beide beruhen auf Residuen. Outfit ist ein Maß für „Extremheit“ (ausreißersensibel — bei Items extreme Schwierigkeit/Leichtigkeit); Infit misst die Passung der Response-Muster. Faustregel MSQ: 0.5–1.5 gute Passung, >2 ungenügend, <0.5 überangepasst."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zum Verhältnis von KTT und PTT/IRT ist KORREKT?",
+    "opts": [
+      "Die PTT/IRT entstand als Alternative zur KTT, deren Axiome als streng, nicht testbar und teils unplausibel kritisiert werden.",
+      "Die PTT hat die KTT vollständig und in allen Anwendungen abgelöst.",
+      "KTT und PTT sind exakt dasselbe Modell unter zwei Namen.",
+      "Die PTT verzichtet im Gegensatz zur KTT als einziges Testmodell vollständig auf jegliche Modellannahmen über die zugrundeliegenden Daten."
+    ],
+    "c": 0,
+    "e": "Die probabilistischen Testtheorien (PTT/IRT) sind als Alternative zur KTT entstanden, weil deren Axiome streng, nicht testbar, teils unplausibel und die Kennwerte stichprobenabhängig sind. Abgelöst hat die PTT die KTT aber nicht."
+  },
+  {
+    "id": "bq2",
+    "q": "Eine Person hat genau die Fähigkeit, die der Schwierigkeit eines Items entspricht. Wie hoch ist ihre Lösungswahrscheinlichkeit?",
+    "opts": [
+      "1.0, weil Fähigkeit und Schwierigkeit übereinstimmen.",
+      "Genau .50 (Scheitelpunkt der ICC, da exp(0)=1).",
+      "0.0, weil das Item dann zu schwer ist.",
+      "Sie ist nicht bestimmbar, solange die Trennschärfe des Items unbekannt bleibt."
+    ],
+    "c": 1,
+    "e": "Bei θᵢ−δⱼ=0 gilt exp(0)=1, also p=1/(1+1)=.50. Die Itemschwierigkeit ist gerade der Punkt, an dem die Lösungswahrscheinlichkeit .50 beträgt."
+  },
+  {
+    "id": "bq3",
+    "q": "Wie hängen die ICCs zweier Items im dichotomen Rasch-Modell zusammen?",
+    "opts": [
+      "Sie schneiden sich, weil die Items unterschiedliche Trennschärfen haben.",
+      "Sie verlaufen waagerecht und unabhängig von der Fähigkeit.",
+      "Sie sind nur entlang der x-Achse gegeneinander verschoben (gleiche Trennschärfe) und schneiden sich nicht.",
+      "Sie sind völlig identisch, weil im Rasch-Modell alle Items dieselbe Schwierigkeit und dieselbe Trennschärfe besitzen und sich daher exakt decken."
+    ],
+    "c": 2,
+    "e": "Im Rasch-Modell haben alle Items dieselbe Trennschärfe; sie unterscheiden sich nur in der Schwierigkeit. Die ICCs gehen daher durch reine Verschiebung entlang der x-Achse auseinander hervor und schneiden sich nicht."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Eigenschaft des Rasch-Modells gilt in der KTT NICHT und ist die Grundlage des adaptiven Testens?",
+    "opts": [
+      "Die Eindimensionalität des erfassten Merkmals.",
+      "Die Monotonie der Itemcharakteristik.",
+      "Die asymptotische Annäherung der ICC an 0 und 1, die in der klassischen Testtheorie bekanntlich nicht gilt und das adaptive Testen erst ermöglicht.",
+      "Die spezifische Objektivität: die Personenschätzung ist unabhängig davon, welche Items aus der Population vorgegeben werden."
+    ],
+    "c": 3,
+    "e": "Die spezifische Objektivität (Stichprobenunabhängigkeit der Schätzung) gilt in der KTT nicht — dort werden Personenscores bei leichteren Items systematisch größer. Sie ist die besonders hervorzuhebende Eigenschaft des Rasch-Modells und Grundlage des adaptiven Testens."
+  },
+  {
+    "id": "bq5",
+    "q": "Wie ist der Standardmessfehler in der PTT mit der Informationsfunktion verknüpft?",
+    "opts": [
+      "Standardmessfehler = 1/√Information — je mehr Information, desto kleiner der Messfehler.",
+      "Standardmessfehler = Information², er wächst also mit steigender Information.",
+      "Standardmessfehler = Information − 1.",
+      "Es gibt in der PTT keinen Standardmessfehler, da dort nur Reliabilitätskoeffizienten berichtet werden."
+    ],
+    "c": 0,
+    "e": "Es gilt Standardmessfehler = 1/√Information. An den Rändern des Merkmalskontinuums steht oft weniger Information zur Verfügung, daher sind Personenscores dort mit größeren Messfehlern behaftet."
+  },
+  {
+    "id": "bq6",
+    "q": "Das Paket eRm gibt für die Items „Easiness“-Parameter (beta) aus. Wie hängen Leichtigkeit (beta) und Schwierigkeit (eta) zusammen?",
+    "opts": [
+      "eta = beta², die Schwierigkeit ist also stets positiv.",
+      "eta = −1 · beta (Leichtigkeit und Schwierigkeit sind das Vorzeichen-gespiegelte Gegenstück).",
+      "eta = beta, beide Werte sind identisch.",
+      "eta und beta sind voneinander unabhängig und lassen sich grundsätzlich nicht ineinander umrechnen."
+    ],
+    "c": 1,
+    "e": "RM() im Paket eRm berichtet die Leichtigkeit (beta), nicht die Schwierigkeit (eta). Beide lassen sich leicht umrechnen: eta = −1 · beta."
+  },
+  {
+    "id": "bq7",
+    "q": "Der Andersen-LR-Test einer Skala fällt signifikant aus (p < .05). Was folgt daraus?",
+    "opts": [
+      "Die Skala ist perfekt Rasch-konform.",
+      "Das Ergebnis ist nicht interpretierbar, da der Andersen-Test ausschließlich die interne Konsistenz und nicht die Modellgeltung der Skala prüft.",
+      "Die Itemparameter unterscheiden sich zwischen den Subgruppen — das Rasch-Modell passt für die Daten nicht gut.",
+      "Es liegt zwingend ein 3PL-Modell mit Ratewahrscheinlichkeit vor."
+    ],
+    "c": 2,
+    "e": "Ein signifikanter Andersen-LR-Test zeigt, dass sich die separat geschätzten Itemparameter der Subgruppen unterscheiden — also passt das Rasch-Modell nicht gut (im Folienbeispiel: LR-value 70.693, df 23, p=0)."
+  },
+  {
+    "id": "bq8",
+    "q": "Wodurch unterscheidet sich das 2PL-Modell (Birnbaum) vom Rasch-Modell (1PL)?",
+    "opts": [
+      "Das 2PL-Modell schätzt gar keine Itemschwierigkeit mehr.",
+      "Das 2PL-Modell setzt anders als das Rasch-Modell für sämtliche Items zwingend dieselbe, fest vorgegebene Trennschärfe voraus und schätzt nur deren Schwierigkeit.",
+      "Das 2PL-Modell ist nur für Ratingskalen, das 1PL nur für dichotome Items definiert.",
+      "Das 2PL-Modell nimmt die Trennschärfe βⱼ als zweiten Itemparameter auf — die ICCs können sich dann schneiden, und die spezifische Objektivität gilt nicht mehr."
+    ],
+    "c": 3,
+    "e": "Birnbaum (1968) ergänzt im 2PL-Modell die Trennschärfe βⱼ als zweiten Parameter. Die ICCs können nun unterschiedlich steil verlaufen und sich schneiden; Eigenschaften wie die spezifische Objektivität gelten nicht mehr. Das 3PL ergänzt zusätzlich die Ratewahrscheinlichkeit."
+  }
+];
+
+var corrCorrect = {
+  "w8a": "person",
+  "w8b": "item",
+  "w8c": "trenn",
+  "w8d": "messfehler"
+};
+var corrExpl = {
+  "w8a": "θᵢ = individueller Personenfähigkeitsparameter (Position der Person i auf dem latenten Kontinuum).",
+  "w8b": "δⱼ = Aufgaben-/Itemschwierigkeitsparameter (Punkt mit Lösungswahrscheinlichkeit .50).",
+  "w8c": "βⱼ im 2PL-Modell = Trennschärfe-/Diskriminierbarkeitsparameter (Steilheit der ICC, meist 0.5–2.0).",
+  "w8d": "1/√Information = Standardmessfehler; an den Rändern des Kontinuums größer."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Simulator (Sektion ③): Differenz θ−δ → Lösungswahrscheinlichkeit p = exp(θ−δ)/(1+exp(θ−δ)) */
+var lfData = {
+  '-2': {p:'.12', txt:'Das Item ist deutlich zu schwer für die Person — Lösung unwahrscheinlich.'},
+  '-1': {p:'.27', txt:'Das Item ist etwas zu schwer — Lösung eher unwahrscheinlich.'},
+  '0':  {p:'.50', txt:'Fähigkeit = Schwierigkeit → genau .50 (Scheitelpunkt der ICC, exp(0)=1). Hier ist die Itemschwierigkeit definiert.'},
+  '1':  {p:'.73', txt:'Die Person ist etwas fähiger als das Item schwer — Lösung wahrscheinlich.'},
+  '2':  {p:'.88', txt:'Die Person ist deutlich fähiger als das Item schwer — Lösung sehr wahrscheinlich.'}
+};
+function lfSet(k){
+  ['-2','-1','0','1','2'].forEach(function(x){ var b=document.getElementById('lf-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('lf-out'); if(!o) return;
+  var d=lfData[k];
+  var sign = (k.charAt(0)==='-') ? k : '+'+k;
+  o.innerHTML='<strong>θ − δ = '+sign+'</strong>'+
+    '<div class="sim-curve">P(richtig) = exp('+sign+') / (1 + exp('+sign+')) = '+d.p+'</div>'+
+    d.txt;
+}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  lfSet('0');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a · 🧩 Modell-Trainer — Strukturen aktiv abrufen</title>
+<!--
+  Modell-Trainer von build_struktur.py erzeugt (CSS = scaffold_lernmodul.py).
+  Zwei Modi: ① Recall (aufdecken) ② Test (eintippen + Lösung anzeigen) — beide mit SRS.
+  Storage-Key: lm-m12a-vl90
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Modell-/Struktur-Trainer */
+.st-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.st-thema{font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.st-q{font-size:1rem;color:var(--text);font-weight:600;line-height:1.45;margin-bottom:12px}
+.st-anchor{background:var(--bg);border:1px dashed var(--border);border-radius:9px;padding:8px 12px;font-size:.9rem;color:var(--text2);margin-bottom:10px}
+.st-anchor strong{color:var(--text)}
+.st-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.st-in{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-size:.9rem}
+.st-in:focus{outline:none;border-color:var(--accent)}
+.st-ok{flex:0 0 22px;text-align:center;color:var(--text3);font-weight:700}
+.st-ok.hit{color:#34d399}
+.st-sum{font-size:.78rem;color:var(--text3);margin:6px 0 2px}
+.st-reveal{display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--text2);line-height:1.5;margin-top:10px}
+.st-reveal.shown{display:block}
+.st-list{margin:0;padding-left:20px}
+.st-list>li{margin:3px 0}
+.st-list ul{margin:3px 0;padding-left:18px}
+.st-list strong{color:var(--text)}
+.st-mnemo{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);color:var(--text2)}
+.st-rate{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+.st-rate.shown{display:flex}
+.st-rbtn{flex:1;min-width:120px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:9px 10px;cursor:pointer;font-size:.82rem}
+.st-rbtn.good:hover{border-color:#34d399}.st-rbtn.part:hover{border-color:#fbbf24}.st-rbtn.bad:hover{border-color:#f87171}
+.st-state{font-size:.72rem;color:var(--text3);margin-top:8px}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.qr-prog{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.qr-prog>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.st-chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.02em;margin-bottom:11px;border:1px solid}
+.st-filter{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.st-flabel{font-size:.74rem;color:var(--text3);width:100%;margin-bottom:2px}
+.st-fbtn{border:1px solid var(--border);background:var(--bg);color:var(--text2);border-radius:999px;padding:4px 11px;cursor:pointer;font-size:.74rem}
+.st-fbtn.on{font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a · 🧩 Modell-Trainer — Strukturen aktiv abrufen</h1>
+<p class="page-sub">Allgemeine Verfahrenslehre I · 49 gegliederte Modelle (Verfahrenslehre + Verhaltenstherapie) · ① Lernen (Recall) + ② Test (eintippen) mit Spaced-Repetition</p>
+<div class="lf-bar">
+  <strong>🧩 Modell-Trainer — Strukturen aktiv abrufen.</strong> 49 prüfungsrelevante Modelle aus den M12a-Lernmodulen (12 Verfahrenslehre + 14 Verhaltenstherapie), faktentreu aus der Wissensbasis. Themenbereich-Chip + Filter (Verfahrenslehre / Verhaltenstherapie). ① Lernen: ganze Struktur frei abrufen → aufdecken → einschätzen. ② Test: ein Punkt vorgegeben, die übrigen selbst eintippen (✓ bei Treffer, „Lösung anzeigen“ als Hilfe). Die Selbsteinschätzung steuert die Spaced-Repetition.
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" data-sec="0" onclick="goToST(0)">① Lernen (Recall)</button>
+  <button class="nav-btn" data-sec="1" onclick="goToST(1)">② Test (eintippen)</button>
+</nav>
+
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Lernen — Struktur frei abrufen (49 Modelle)</div>
+    <div class="sec-lz">Modellname lesen, die ganze Gliederung im Kopf abrufen, dann aufdecken und ehrlich einschätzen.</div>
+  </div>
+  <div id="stRunnerRC"></div>
+</section>
+
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Test — Punkte selbst eintippen (49 Modelle)</div>
+    <div class="sec-lz">Ein Punkt ist vorgegeben — tippe die übrigen ein (✓ erscheint bei Treffer). „Lösung anzeigen", wenn du nicht weiterweißt.</div>
+  </div>
+  <div id="stRunnerTS"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a-vl90';
+var ST = [{"id": "st1", "thema": "VL01 · Überblick", "bereich": "Verfahrenslehre", "modell": "Die vier Grundorientierungen der Psychotherapie", "anker": 0, "mnemo": "psychodynamisch · humanistisch · (kognitiv-)verhaltenstherapeutisch · systemisch", "punkte": [{"ober": "Psychodynamische Ansätze", "unter": ["unbewusste Konflikte, Übertragung"], "syn": ["psychodynamisch", "psychoanalytisch"]}, {"ober": "Humanistische Ansätze", "unter": ["Selbstaktualisierung, Klientenzentrierung (Rogers)"], "syn": ["humanistisch"]}, {"ober": "Kognitiv-verhaltenstherapeutische Ansätze", "unter": ["Lernen, Kognitionen, Verhalten"], "syn": ["kognitiv verhaltenstherapeutisch", "verhaltenstherapie", "kvt"]}, {"ober": "Systemische Ansätze", "unter": ["Beziehungen/Familiensystem"], "syn": ["systemisch"]}]}, {"id": "st2", "thema": "VL01 · Modelle", "bereich": "Verfahrenslehre", "modell": "Allgemeines Modell der Psychotherapie (Orlinsky & Howard)", "anker": 0, "mnemo": "Rahmen · Personen · Prozesse · Ergebnisse", "punkte": [{"ober": "Rahmenbedingungen", "unter": ["Setting, Vertrag, Kontext"], "syn": ["rahmenbedingungen", "rahmen"]}, {"ober": "Beteiligte Personen", "unter": ["Therapeut*in, Patient*in und ihre Merkmale"], "syn": ["beteiligte personen", "personen"]}, {"ober": "Therapeutische Prozesse", "unter": ["was in der Therapie geschieht (z. B. Allianz, Interventionen)"], "syn": ["therapeutische prozesse", "prozesse"]}, {"ober": "Ergebnisse / Auswirkungen", "unter": ["unmittelbare und langfristige Outcomes"], "syn": ["ergebnisse", "outcome", "auswirkungen"]}]}, {"id": "st3", "thema": "VL03 · Prüfphasen", "bereich": "Verfahrenslehre", "modell": "Phasen der Psychotherapieprüfung (I–IV)", "anker": 0, "mnemo": "Konzept → Pilot → Efficacy → Effectiveness", "punkte": [{"ober": "Phase I: Konzeptentwicklung", "unter": ["theoretische Begründung des Vorgehens"], "syn": ["phase i", "konzeptentwicklung"]}, {"ober": "Phase II: Exploration / Pilotstudien", "unter": ["erste Erprobung, Machbarkeit"], "syn": ["phase ii", "exploration", "pilot"]}, {"ober": "Phase III: Wirksamkeitsprüfung (Efficacy)", "unter": ["RCTs unter kontrollierten Bedingungen"], "syn": ["phase iii", "efficacy", "wirksamkeit"]}, {"ober": "Phase IV: Klinische Nützlichkeit (Effectiveness)", "unter": ["Wirksamkeit unter Alltagsbedingungen"], "syn": ["phase iv", "effectiveness", "nuetzlichkeit"]}]}, {"id": "st4", "thema": "VL03 · Wirksamkeit", "bereich": "Verfahrenslehre", "modell": "Efficacy vs. Effectiveness", "anker": 0, "mnemo": "Labor vs. Alltag", "punkte": [{"ober": "Efficacy (interne Validität)", "unter": ["Wirksamkeit unter kontrollierten Idealbedingungen (RCT)"], "syn": ["efficacy", "interne validitaet", "labor"]}, {"ober": "Effectiveness (externe Validität)", "unter": ["Wirksamkeit in der Routineversorgung/Alltag"], "syn": ["effectiveness", "externe validitaet", "alltag"]}]}, {"id": "st5", "thema": "VL03 · Analyse", "bereich": "Verfahrenslehre", "modell": "ITT vs. PP (Datenanalyse)", "anker": 0, "mnemo": "alle Randomisierten vs. nur Protokolltreue", "punkte": [{"ober": "Intention-to-Treat (ITT)", "unter": ["alle randomisierten Personen werden ausgewertet (konservativ, realistisch)"], "syn": ["itt", "intention to treat"]}, {"ober": "Per-Protocol (PP)", "unter": ["nur protokolltreue Completer (überschätzt eher die Wirkung)"], "syn": ["pp", "per protocol", "completer"]}]}, {"id": "st6", "thema": "VL03 · Effektstärke", "bereich": "Verfahrenslehre", "modell": "Effektstärke Cohens d (Konventionen)", "anker": 0, "mnemo": ".20 · .50 · .80", "punkte": [{"ober": "Kleiner Effekt", "unter": ["d ≈ 0,20"], "syn": ["klein", "0.2", "0,20"]}, {"ober": "Mittlerer Effekt", "unter": ["d ≈ 0,50"], "syn": ["mittel", "0.5", "0,50"]}, {"ober": "Großer Effekt", "unter": ["d ≈ 0,80 (Psychotherapie liegt oft hier)"], "syn": ["gross", "0.8", "0,80"]}]}, {"id": "st7", "thema": "VL04 · Leitlinien", "bereich": "Verfahrenslehre", "modell": "S-Klassifikation der Leitlinien", "anker": 0, "mnemo": "Evidenz beginnt ab S2e; S3 ist höchste", "punkte": [{"ober": "S1", "unter": ["Handlungsempfehlung einer Expertengruppe (kein formales Verfahren)"], "syn": ["s1"]}, {"ober": "S2k", "unter": ["konsensbasiert (strukturierter Konsens)"], "syn": ["s2k", "konsensbasiert"]}, {"ober": "S2e", "unter": ["evidenzbasiert (systematische Recherche)"], "syn": ["s2e", "evidenzbasiert"]}, {"ober": "S3", "unter": ["Evidenz UND Konsens — höchste Qualitätsstufe"], "syn": ["s3"]}]}, {"id": "st8", "thema": "VL07/09 · Wirkfaktoren", "bereich": "Verfahrenslehre", "modell": "Gemeinsame vs. spezifische Faktoren (Dodo-Bird)", "anker": 0, "mnemo": "schulenübergreifend vs. verfahrensspezifisch", "punkte": [{"ober": "Gemeinsame Faktoren", "unter": ["wirken über alle Verfahren (Allianz, Erwartung, Erklärung) — Dodo-Bird-Verdikt"], "syn": ["gemeinsame faktoren", "common factors", "allianz"]}, {"ober": "Spezifische Faktoren", "unter": ["verfahrensspezifische Wirkbestandteile (z. B. Exposition)"], "syn": ["spezifische faktoren", "spezifisch"]}]}, {"id": "st9", "thema": "VL11 · Richtlinienverfahren", "bereich": "Verfahrenslehre", "modell": "Die vier Richtlinienverfahren (Deutschland)", "anker": 0, "mnemo": "VT · TP · AP · ST", "punkte": [{"ober": "Verhaltenstherapie (VT)", "unter": [], "syn": ["verhaltenstherapie", "vt"]}, {"ober": "Tiefenpsychologisch fundierte Psychotherapie (TP)", "unter": [], "syn": ["tiefenpsychologisch", "tp"]}, {"ober": "Analytische Psychotherapie (AP)", "unter": [], "syn": ["analytische psychotherapie", "ap"]}, {"ober": "Systemische Therapie (ST)", "unter": ["zuletzt anerkannt"], "syn": ["systemische therapie", "st"]}]}, {"id": "st10", "thema": "VL10 · Ethik", "bereich": "Verfahrenslehre", "modell": "Ethische Grundprinzipien (Beauchamp & Childress)", "anker": 0, "mnemo": "Autonomie · Wohltun · Nicht-Schaden · Gerechtigkeit", "punkte": [{"ober": "Respekt vor Autonomie", "unter": ["Selbstbestimmung der Patient*in"], "syn": ["autonomie", "selbstbestimmung"]}, {"ober": "Benefizienz (Wohltun)", "unter": ["zum Wohl der Patient*in handeln"], "syn": ["benefizienz", "wohltun", "fuersorge"]}, {"ober": "Non-Malefizienz (Nicht-Schaden)", "unter": ["keinen Schaden zufügen"], "syn": ["non malefizienz", "nicht schaden", "schadensvermeidung"]}, {"ober": "Gerechtigkeit", "unter": ["faire Verteilung, Gleichbehandlung"], "syn": ["gerechtigkeit", "justice"]}]}, {"id": "st11", "thema": "VL10 · Misserfolg", "bereich": "Verfahrenslehre", "modell": "Klassifikation von Misserfolg in der Therapie", "anker": 0, "mnemo": "kein Ansprechen · Rückfall · Abbruch", "punkte": [{"ober": "Nichtreagierer", "unter": ["zeigen keine relevante Verbesserung"], "syn": ["nichtreagierer", "non responder"]}, {"ober": "Rückfallpatient*innen", "unter": ["anfängliche Besserung, dann Rückfall"], "syn": ["rueckfall", "relapse"]}, {"ober": "Abbrecher*innen", "unter": ["beenden die Therapie vorzeitig (Drop-out)"], "syn": ["abbrecher", "drop out", "dropout"]}]}, {"id": "st12", "thema": "VL10 · Risiken", "bereich": "Verfahrenslehre", "modell": "Negative Therapiefolgen (Systematik nach Linden)", "anker": 0, "mnemo": "korrekt → Nebenwirkung · falsch → Kunstfehler · unethisch → Schädigung", "punkte": [{"ober": "Nebenwirkungen", "unter": ["unerwünschte Wirkungen trotz korrekter Behandlung"], "syn": ["nebenwirkungen"]}, {"ober": "Kunstfehlerfolgen", "unter": ["Schaden durch fehlerhafte/inkorrekte Behandlung"], "syn": ["kunstfehler", "behandlungsfehler"]}, {"ober": "Schädigung durch unethisches Verhalten", "unter": ["z. B. Grenzverletzungen (Slippery Slope)"], "syn": ["unethisch", "grenzverletzung", "schaedigung"]}]}, {"id": "st13", "thema": "VL12 · Versorgung", "bereich": "Verfahrenslehre", "modell": "Neue Versorgungsmodelle (Quo Vadis)", "anker": 0, "mnemo": "delegieren · stufen · koordinieren · NET", "punkte": [{"ober": "Task Shifting", "unter": ["Aufgaben an geschulte Laien/nicht-spezialisierte Kräfte verlagern"], "syn": ["task shifting", "task sharing"]}, {"ober": "Stepped Care", "unter": ["gestufte Versorgung: niederschwellig beginnen, bei Bedarf intensivieren"], "syn": ["stepped care", "gestufte versorgung"]}, {"ober": "Collaborative / SCCM", "unter": ["koordinierte, gemeindenahe Versorgung im Team"], "syn": ["collaborative care", "sccm", "kollaborativ"]}, {"ober": "Narrative Expositionstherapie (NET)", "unter": ["disseminierbares Kurzverfahren (z. B. bei Trauma)"], "syn": ["net", "narrative expositionstherapie"]}]}, {"id": "st14", "thema": "VT1 · Konditionierung", "bereich": "Verhaltenstherapie", "modell": "Klassische vs. operante Konditionierung", "anker": 0, "mnemo": "Reiz-Reaktion vs. Verhalten-Konsequenz", "punkte": [{"ober": "Klassische Konditionierung", "unter": ["Lernen durch Reizkopplung (Pawlow); Reaktion folgt auf Reiz"], "syn": ["klassische konditionierung", "klassisch", "pawlow"]}, {"ober": "Operante Konditionierung", "unter": ["Lernen durch Konsequenzen (Skinner); Verhalten wird verstärkt/bestraft"], "syn": ["operante konditionierung", "operant", "skinner"]}]}, {"id": "st15", "thema": "VT1 · Konditionierung", "bereich": "Verhaltenstherapie", "modell": "Operante Konsequenzen (Vier-Felder)", "anker": 0, "mnemo": "Reiz dazu (+) / weg (−) × angenehm/aversiv", "punkte": [{"ober": "Positive Verstärkung", "unter": ["angenehmer Reiz hinzu → Verhalten ↑"], "syn": ["positive verstaerkung", "c+"]}, {"ober": "Negative Verstärkung", "unter": ["aversiver Reiz entfällt → Verhalten ↑"], "syn": ["negative verstaerkung"]}, {"ober": "Positive Bestrafung", "unter": ["aversiver Reiz hinzu → Verhalten ↓"], "syn": ["positive bestrafung", "bestrafung typ 1"]}, {"ober": "Negative Bestrafung", "unter": ["angenehmer Reiz entfällt → Verhalten ↓"], "syn": ["negative bestrafung", "bestrafung typ 2"]}]}, {"id": "st16", "thema": "VT2 · Verhaltensanalyse", "bereich": "Verhaltenstherapie", "modell": "SORKC-Schema (Kanfer & Saslow)", "anker": 0, "mnemo": "S-O-R-K-C", "punkte": [{"ober": "S — Stimulus", "unter": ["auslösende Situation/Reiz"], "syn": ["stimulus", "situation", "s"]}, {"ober": "O — Organismus", "unter": ["überdauernde biologisch-psychische Merkmale"], "syn": ["organismus", "o variable", "o"]}, {"ober": "R — Reaktion", "unter": ["Verhalten auf 4 Ebenen (kognitiv/emotional/physiologisch/motorisch)"], "syn": ["reaktion", "r"]}, {"ober": "K — Kontingenz", "unter": ["Regelmäßigkeit Reaktion–Konsequenz (z. B. kontinuierlich/intermittierend)"], "syn": ["kontingenz", "k"]}, {"ober": "C — Konsequenz", "unter": ["kurz-/langfristige Folgen, die das Verhalten aufrechterhalten"], "syn": ["konsequenz", "c"]}]}, {"id": "st17", "thema": "VT2 · Verhaltensanalyse", "bereich": "Verhaltenstherapie", "modell": "Mikro- vs. Makroanalyse", "anker": 0, "mnemo": "Einzelsituation vs. Gesamtbild", "punkte": [{"ober": "Mikroanalyse", "unter": ["konkrete Einzelsituation (SORKC einer Situation)"], "syn": ["mikroanalyse", "mikro"]}, {"ober": "Makroanalyse", "unter": ["übergeordnete Funktionalität, Problembereiche und Pläne im Gesamtbild"], "syn": ["makroanalyse", "makro"]}]}, {"id": "st18", "thema": "VT3 · Plananalyse", "bereich": "Verhaltenstherapie", "modell": "Vier Grundbedürfnisse (Grawe)", "anker": 0, "mnemo": "Bindung · Orientierung/Kontrolle · Selbstwert · Lust/Unlust", "punkte": [{"ober": "Bindung / Zugehörigkeit", "unter": [], "syn": ["bindung", "zugehoerigkeit"]}, {"ober": "Orientierung / Kontrolle", "unter": [], "syn": ["orientierung", "kontrolle"]}, {"ober": "Selbstwerterhöhung und -schutz", "unter": [], "syn": ["selbstwert", "selbstwerterhoehung"]}, {"ober": "Lustgewinnung und Unlustvermeidung", "unter": [], "syn": ["lustgewinnung", "unlustvermeidung", "lust"]}]}, {"id": "st19", "thema": "VT3 · Plananalyse", "bereich": "Verhaltenstherapie", "modell": "Assimilation vs. Akkomodation", "anker": 0, "mnemo": "einpassen vs. anpassen", "punkte": [{"ober": "Assimilation", "unter": ["neue Erfahrung in bestehende Schemata einpassen"], "syn": ["assimilation"]}, {"ober": "Akkomodation", "unter": ["bestehende Schemata an neue Erfahrung anpassen (schwieriger, dosieren!)"], "syn": ["akkomodation", "akkommodation"]}]}, {"id": "st20", "thema": "VT4 · Selbstmanagement", "bereich": "Verhaltenstherapie", "modell": "7-Phasen-Modell der Selbstmanagement-Therapie (Kanfer)", "anker": 0, "mnemo": "Beziehung → Motivation → Analyse → Ziele → Durchführung → Evaluation → Abschluss", "punkte": [{"ober": "Eingangsphase: Beziehung & Rollenstrukturierung", "unter": [], "syn": ["eingangsphase", "beziehung", "rollenstrukturierung"]}, {"ober": "Aufbau von Änderungsmotivation", "unter": [], "syn": ["aenderungsmotivation", "motivation"]}, {"ober": "Verhaltensanalyse & vorläufige Zielauswahl", "unter": [], "syn": ["verhaltensanalyse", "zielauswahl"]}, {"ober": "Vereinbarung therapeutischer Ziele", "unter": [], "syn": ["vereinbarung", "therapeutische ziele"]}, {"ober": "Planung, Auswahl & Durchführung der Methoden", "unter": [], "syn": ["planung", "durchfuehrung", "methoden"]}, {"ober": "Evaluation der Fortschritte", "unter": [], "syn": ["evaluation", "fortschritte"]}, {"ober": "Endphase: Stabilisierung & Abschluss", "unter": [], "syn": ["endphase", "stabilisierung", "abschluss"]}]}, {"id": "st21", "thema": "VT5 · MI", "bereich": "Verhaltenstherapie", "modell": "Vier Prozessphasen des Motivational Interviewing", "anker": 0, "mnemo": "Engagieren → Fokussieren → Evozieren → Planen", "punkte": [{"ober": "Kontaktbildung (Engaging)", "unter": ["tragfähige Beziehung aufbauen"], "syn": ["engaging", "kontaktbildung", "engagieren"]}, {"ober": "Themenfokussierung (Focusing)", "unter": ["Anliegen/Veränderungsziel herausschälen"], "syn": ["focusing", "fokussieren", "themenfokussierung"]}, {"ober": "Evozieren (Evoking)", "unter": ["Change Talk und eigene Veränderungsgründe hervorrufen"], "syn": ["evoking", "evozieren"]}, {"ober": "Planen (Planning)", "unter": ["konkreten Veränderungsplan entwickeln"], "syn": ["planning", "planen"]}]}, {"id": "st22", "thema": "VT5 · MI", "bereich": "Verhaltenstherapie", "modell": "OARS-Strategien (MI-Basisfertigkeiten)", "anker": 0, "mnemo": "O-A-R-S", "punkte": [{"ober": "Open Questions (offene Fragen)", "unter": [], "syn": ["open questions", "offene fragen"]}, {"ober": "Affirmations (Bestätigungen/Würdigung)", "unter": [], "syn": ["affirmations", "bestaetigung", "wuerdigung"]}, {"ober": "Reflective Listening (aktives/reflektierendes Zuhören)", "unter": [], "syn": ["reflective listening", "reflektieren", "zuhoeren"]}, {"ober": "Summaries (Zusammenfassungen)", "unter": [], "syn": ["summaries", "zusammenfassen", "zusammenfassung"]}]}, {"id": "st23", "thema": "VT5 · MI", "bereich": "Verhaltenstherapie", "modell": "Vier Modi der Klientenäußerung (MI)", "anker": 0, "mnemo": "Veränderung vs. Beibehalten · Absicht vs. Beziehung", "punkte": [{"ober": "Change Talk", "unter": ["Äußerungen für Veränderung (DARN: Desire/Ability/Reasons/Need)"], "syn": ["change talk", "veraenderungsrede"]}, {"ober": "Commitment Talk", "unter": ["Selbstverpflichtung zur Veränderung"], "syn": ["commitment talk"]}, {"ober": "Sustain Talk", "unter": ["Äußerungen für das Beibehalten des Status quo"], "syn": ["sustain talk"]}, {"ober": "Resistance / Discord", "unter": ["Beziehungsstörung/Dissonanz mit der therapeutischen Person"], "syn": ["resistance", "discord", "dissonanz"]}]}, {"id": "st24", "thema": "VT7 · Exposition", "bereich": "Verhaltenstherapie", "modell": "Expositionsformen (Setting)", "anker": 0, "mnemo": "Vorstellung · virtuell · real", "punkte": [{"ober": "In sensu", "unter": ["in der Vorstellung (z. B. bei Trauma)"], "syn": ["in sensu", "vorstellung"]}, {"ober": "In virtuo", "unter": ["in virtueller Realität"], "syn": ["in virtuo", "virtuell"]}, {"ober": "In vivo", "unter": ["in der realen Situation"], "syn": ["in vivo", "real"]}]}, {"id": "st25", "thema": "VT8 · Kognitive Umstrukturierung", "bereich": "Verhaltenstherapie", "modell": "ABC-Modell der RET (Ellis)", "anker": 0, "mnemo": "A → B → C (nicht A → C!)", "punkte": [{"ober": "A — Activating Event", "unter": ["auslösendes Ereignis/Situation"], "syn": ["activating event", "ereignis", "a"]}, {"ober": "B — Beliefs", "unter": ["Bewertungen/Überzeugungen (rational oder irrational)"], "syn": ["beliefs", "ueberzeugungen", "bewertung", "b"]}, {"ober": "C — Consequences", "unter": ["emotionale und Verhaltensfolgen"], "syn": ["consequences", "konsequenzen", "c"]}]}, {"id": "st26", "thema": "VT8 · Kognitive Umstrukturierung", "bereich": "Verhaltenstherapie", "modell": "Becks kognitive Triade der Depression", "anker": 0, "mnemo": "Selbst · Welt · Zukunft", "punkte": [{"ober": "Negatives Selbstbild", "unter": ["„ich bin wertlos/unfähig\""], "syn": ["selbst", "selbstbild"]}, {"ober": "Negative Sicht der Welt/Umwelt", "unter": ["„alles ist gegen mich\""], "syn": ["welt", "umwelt"]}, {"ober": "Negative Sicht der Zukunft", "unter": ["„es wird nie besser\" (Hoffnungslosigkeit)"], "syn": ["zukunft", "hoffnungslosigkeit"]}]}, {"id": "st27", "thema": "VT8 · Kognitive Umstrukturierung", "bereich": "Verhaltenstherapie", "modell": "Fünf Phasen der kognitiven Umstrukturierung", "anker": 0, "mnemo": "Modell → aufdecken → disputieren → neu → einüben", "punkte": [{"ober": "Vermittlung des kognitiven Modells", "unter": [], "syn": ["kognitives modell vermitteln", "modell vermitteln"]}, {"ober": "Aufdecken dysfunktionaler Kognitionen", "unter": [], "syn": ["aufdecken", "dysfunktionale kognitionen"]}, {"ober": "Sokratischer Dialog / Disputation", "unter": ["Überprüfen und Hinterfragen der Gedanken"], "syn": ["sokratischer dialog", "disputation"]}, {"ober": "Entwicklung funktionaler Kognitionen", "unter": [], "syn": ["funktionale kognitionen", "alternative gedanken"]}, {"ober": "Spalten-Technik & Einübung", "unter": ["Transfer in den Alltag"], "syn": ["spalten technik", "einuebung", "transfer"]}]}, {"id": "st28", "thema": "VT13 · Problemlösen", "bereich": "Verhaltenstherapie", "modell": "Fünf Phasen des Problemlösens (D'Zurilla/Nezu)", "anker": 0, "mnemo": "Orientierung → Definition → Alternativen → Auswahl → Überprüfung", "punkte": [{"ober": "Allgemeine Orientierung", "unter": ["Problem erkennen, Haltung „Probleme sind normal\""], "syn": ["orientierung"]}, {"ober": "Problembeschreibung/-definition", "unter": ["Problem konkret und lösbar formulieren"], "syn": ["problembeschreibung", "definition"]}, {"ober": "Aufstellen von Lösungsalternativen", "unter": ["Brainstorming, Quantität vor Qualität"], "syn": ["loesungsalternativen", "brainstorming", "alternativen"]}, {"ober": "Auswahl & Planung", "unter": ["Bewertung der Alternativen, Entscheidung, Umsetzungsplan"], "syn": ["auswahl", "planung", "entscheidung"]}, {"ober": "Überprüfung", "unter": ["Umsetzung evaluieren, ggf. anpassen"], "syn": ["ueberpruefung", "evaluation"]}]}, {"id": "st29", "thema": "VT12 · Kompetenztraining", "bereich": "Verhaltenstherapie", "modell": "Vier-Ohren-Modell (Schulz von Thun)", "anker": 0, "mnemo": "Sache · Selbstkundgabe · Beziehung · Appell", "punkte": [{"ober": "Sachinhalt", "unter": ["worüber ich informiere"], "syn": ["sachinhalt", "sache", "sachebene"]}, {"ober": "Selbstkundgabe", "unter": ["was ich von mir preisgebe"], "syn": ["selbstkundgabe", "selbstoffenbarung"]}, {"ober": "Beziehung", "unter": ["was ich von dir halte / wie wir zueinander stehen"], "syn": ["beziehung", "beziehungsebene"]}, {"ober": "Appell", "unter": ["wozu ich dich veranlassen will"], "syn": ["appell"]}]}, {"id": "st30", "thema": "VT9 · Paartherapie", "bereich": "Verhaltenstherapie", "modell": "Bausteine der VT-Paartherapie", "anker": 0, "mnemo": "Reziprozität · Kommunikation · kontrollierter Dialog", "punkte": [{"ober": "Reziprozitätstraining", "unter": ["positive Austauschprozesse erhöhen (Verstärkung)"], "syn": ["reziprozitaetstraining", "reziprozitaet"]}, {"ober": "Kommunikationstraining", "unter": ["Sender-/Empfängerfertigkeiten verbessern"], "syn": ["kommunikationstraining", "kommunikation"]}, {"ober": "Kontrollierter Dialog", "unter": ["strukturiertes Sprecher-/Zuhörer-Vorgehen"], "syn": ["kontrollierter dialog", "dialog"]}, {"ober": "Emotionsfokussierte Paartherapie (EFT)", "unter": ["bindungsorientierte Alternative/Ergänzung"], "syn": ["eft", "emotionsfokussiert"]}]}, {"id": "st31", "thema": "VT14 · 3 Wellen", "bereich": "Verhaltenstherapie", "modell": "Die drei Wellen der Verhaltenstherapie", "anker": 0, "mnemo": "Verhalten → Kognition → Akzeptanz", "punkte": [{"ober": "1. Welle", "unter": ["klassische/operante Konditionierung; offenes Verhalten"], "syn": ["erste welle", "1 welle", "konditionierung"]}, {"ober": "2. Welle", "unter": ["kognitive Wende: Kognitionen verändern (Beck, Ellis)"], "syn": ["zweite welle", "2 welle", "kognitiv"]}, {"ober": "3. Welle", "unter": ["Akzeptanz, Achtsamkeit, Metakognition (Funktion statt Inhalt)"], "syn": ["dritte welle", "3 welle", "akzeptanz", "achtsamkeit"]}]}, {"id": "st32", "thema": "VT14 · 3. Welle", "bereich": "Verhaltenstherapie", "modell": "Verfahren der dritten Welle", "anker": 0, "mnemo": "DBT · ACT · MCT · CBASP · Schematherapie · Achtsamkeit", "punkte": [{"ober": "DBT (Dialektisch-Behaviorale Therapie)", "unter": ["v. a. Borderline; Skills + Akzeptanz/Veränderung"], "syn": ["dbt", "dialektisch behaviorale"]}, {"ober": "ACT (Akzeptanz- und Commitment-Therapie)", "unter": ["psychologische Flexibilität, Werte"], "syn": ["act", "akzeptanz commitment"]}, {"ober": "MCT (Metakognitive Therapie)", "unter": ["Umgang mit Grübeln/Sorgen, metakognitive Überzeugungen"], "syn": ["mct", "metakognitive therapie"]}, {"ober": "CBASP", "unter": ["bei chronischer Depression"], "syn": ["cbasp"]}, {"ober": "Schematherapie", "unter": ["Schemata & Modi (Young)"], "syn": ["schematherapie", "schema"]}, {"ober": "Achtsamkeitsbasierte Verfahren (MBCT/MBSR)", "unter": ["Achtsamkeit als Kern"], "syn": ["mbct", "mbsr", "achtsamkeit"]}]}, {"id": "st33", "thema": "VL01 · Definition", "bereich": "Verfahrenslehre", "modell": "Definition von Psychotherapie (Strotzka)", "anker": 0, "mnemo": "bewusst-geplant · Konsensus · psychol. Mittel · Ziel · lehrbare Technik", "punkte": [{"ober": "Bewusster und geplanter Prozess", "unter": ["interaktioneller, absichtsvoller Prozess"], "syn": ["bewusst geplant", "geplant"]}, {"ober": "Beeinflussung von Verhalten/Erleben", "unter": ["bei Störungen mit Krankheitswert"], "syn": ["beeinflussung", "verhalten erleben"]}, {"ober": "Konsensus über das Ziel", "unter": ["Patient*in und Therapeut*in einig (möglichst)"], "syn": ["konsensus", "konsens"]}, {"ober": "Psychologische Mittel", "unter": ["v. a. Kommunikation, verbal/nonverbal"], "syn": ["psychologische mittel", "kommunikation"]}, {"ober": "Lehrbare Technik auf Theoriebasis", "unter": ["definierte, lehr-/lernbare Verfahren mit Theorie"], "syn": ["lehrbare technik", "theorie"]}]}, {"id": "st34", "thema": "VL04 · Leitlinien", "bereich": "Verfahrenslehre", "modell": "Empfehlungsgrade in Leitlinien", "anker": 0, "mnemo": "soll (A) · sollte (B) · kann (0) · KKP", "punkte": [{"ober": "Grad A", "unter": ["starke Empfehlung — „soll\""], "syn": ["grad a", "soll", "starke empfehlung"]}, {"ober": "Grad B", "unter": ["Empfehlung — „sollte\""], "syn": ["grad b", "sollte"]}, {"ober": "Grad 0", "unter": ["offene Empfehlung — „kann\""], "syn": ["grad 0", "kann", "offen"]}, {"ober": "KKP (Klinischer Konsenspunkt)", "unter": ["Good Clinical Practice, per Expertenkonsens"], "syn": ["kkp", "konsenspunkt", "good clinical practice"]}]}, {"id": "st35", "thema": "VL11 · Aufklärung", "bereich": "Verfahrenslehre", "modell": "Partizipative Entscheidungsfindung (PEF) — Prozessschritte", "anker": 0, "mnemo": "Problem → Optionen gleichwertig → Möglichkeiten → Verständnis → Rolle → Vereinbarung", "punkte": [{"ober": "Problemdefinition", "unter": ["Entscheidungsbedarf benennen"], "syn": ["problemdefinition"]}, {"ober": "Gleichwertigkeit der Optionen", "unter": ["mehrere Optionen, Equipoise kommunizieren"], "syn": ["gleichwertigkeit", "equipoise"]}, {"ober": "Behandlungsmöglichkeiten darstellen", "unter": ["Vor-/Nachteile der Optionen"], "syn": ["behandlungsmoeglichkeiten", "optionen"]}, {"ober": "Verständnis & Erwartungen erfragen", "unter": ["Gedanken/Befürchtungen der Patient*in"], "syn": ["verstaendnis", "erwartungen"]}, {"ober": "Rollenpräferenz klären", "unter": ["wie viel will die Person mitentscheiden?"], "syn": ["rollenpraeferenz", "rolle"]}, {"ober": "Vereinbarung treffen", "unter": ["gemeinsame Entscheidung dokumentieren"], "syn": ["vereinbarung", "entscheidung"]}]}, {"id": "st36", "thema": "VL08 · Therapeuteneffekte", "bereich": "Verfahrenslehre", "modell": "Facilitative Interpersonal Skills (FIS, Anderson)", "anker": 0, "mnemo": "Sprachfluss · Hoffnung · Überzeugungskraft · Ausdruck · Wärme · Empathie · Bindung", "punkte": [{"ober": "Verbal Fluency", "unter": ["sprachliche Gewandtheit"], "syn": ["verbal fluency", "sprachfluss"]}, {"ober": "Hope & Positive Expectations", "unter": ["Hoffnung/positive Erwartung vermitteln"], "syn": ["hope", "hoffnung"]}, {"ober": "Persuasiveness", "unter": ["Überzeugungskraft"], "syn": ["persuasiveness", "ueberzeugungskraft"]}, {"ober": "Emotional Expression", "unter": ["emotionaler Ausdruck"], "syn": ["emotional expression", "ausdruck"]}, {"ober": "Warmth/Acceptance", "unter": ["Wärme, Akzeptanz, Verständnis"], "syn": ["warmth", "waerme", "akzeptanz"]}, {"ober": "Empathy", "unter": ["Empathie"], "syn": ["empathy", "empathie"]}, {"ober": "Alliance Bond Capacity", "unter": ["Fähigkeit, eine tragfähige Allianz aufzubauen"], "syn": ["alliance bond", "allianz"]}]}, {"id": "st37", "thema": "VL10 · Gruppentherapie", "bereich": "Verfahrenslehre", "modell": "VT-Wirkfaktoren in der Gruppentherapie", "anker": 0, "mnemo": "Selbsterkenntnis · Emotion · soziale Skills · Altruismus · Verpflichtung", "punkte": [{"ober": "Selbsterkenntnis und -veränderung", "unter": ["Einsicht durch Gruppenrückmeldung"], "syn": ["selbsterkenntnis"]}, {"ober": "Emotionsmanagement (Skills)", "unter": ["Emotionsregulation lernen"], "syn": ["emotionsmanagement", "skills"]}, {"ober": "Erwerb sozialer Fertigkeiten", "unter": ["Üben im sozialen Mikrokosmos"], "syn": ["soziale fertigkeiten"]}, {"ober": "Altruismus / Empathie", "unter": ["anderen helfen wirkt therapeutisch"], "syn": ["altruismus", "empathie"]}, {"ober": "Soziale (Selbst-)Verpflichtung", "unter": ["Commitment vor der Gruppe"], "syn": ["selbstverpflichtung", "commitment"]}]}, {"id": "st38", "thema": "VT5 · MI", "bereich": "Verhaltenstherapie", "modell": "Die vier Interventionsprinzipien des MI", "anker": 0, "mnemo": "Empathie · Diskrepanz · Widerstand geschmeidig · Selbstwirksamkeit", "punkte": [{"ober": "Empathie ausdrücken", "unter": ["akzeptierende, reflektierende Grundhaltung"], "syn": ["empathie"]}, {"ober": "Diskrepanz entwickeln", "unter": ["zwischen Ist-Verhalten und Zielen/Werten"], "syn": ["diskrepanz"]}, {"ober": "Geschmeidiger Umgang mit Widerstand", "unter": ["nicht argumentieren, „mit dem Widerstand gehen\" (roll with resistance)"], "syn": ["widerstand", "roll with resistance"]}, {"ober": "Selbstwirksamkeit stärken", "unter": ["Änderungszuversicht fördern"], "syn": ["selbstwirksamkeit", "zuversicht"]}]}, {"id": "st39", "thema": "VT8 · Kognitive Umstrukturierung", "bereich": "Verhaltenstherapie", "modell": "Drei „Muss\"-Forderungen / Musturbation (Ellis)", "anker": 0, "mnemo": "ich muss · Welt muss · andere müssen", "punkte": [{"ober": "Forderung an sich selbst", "unter": ["„Ich muss (perfekt) Leistung bringen / geliebt werden\""], "syn": ["ich muss", "selbst", "perfekt"]}, {"ober": "Forderung an die Welt", "unter": ["„Die Welt/Bedingungen müssen gerecht/angenehm sein\""], "syn": ["welt muss", "gerecht"]}, {"ober": "Forderung an andere", "unter": ["„Andere müssen mich zuvorkommend/fair behandeln\""], "syn": ["andere muessen", "zuvorkommend"]}]}, {"id": "st40", "thema": "VT8 · Kognitive Umstrukturierung", "bereich": "Verhaltenstherapie", "modell": "Kognitive Verzerrungen (Denkfehler nach Beck)", "anker": 0, "mnemo": "übergeneralisieren · katastrophisieren · willkürlich · sollte · selektiv", "punkte": [{"ober": "Übergeneralisieren", "unter": ["aus Einzelfall generelle Regel ableiten"], "syn": ["uebergeneralisieren", "uebergeneralisierung"]}, {"ober": "Katastrophisieren", "unter": ["schlimmsten Ausgang annehmen"], "syn": ["katastrophisieren"]}, {"ober": "Willkürliche Schlussfolgerung", "unter": ["Schluss ohne/gegen Evidenz (willkürliche Inferenz)"], "syn": ["willkuerliche schlussfolgerung", "willkuerliche attribution", "inferenz"]}, {"ober": "Imperativisches Denken („darf nicht / sollte\")", "unter": ["starre Muss-/Soll-Regeln"], "syn": ["sollte", "darf nicht", "imperativ"]}, {"ober": "Einseitige/selektive Wahrnehmung", "unter": ["selektive Abstraktion, nur Negatives sehen"], "syn": ["einseitige wahrnehmung", "selektive abstraktion"]}]}, {"id": "st41", "thema": "VT7 · Exposition", "bereich": "Verhaltenstherapie", "modell": "Wirkprinzipien der Expositionsbehandlung", "anker": 0, "mnemo": "Habituation · Löschung · Coping · Mastery", "punkte": [{"ober": "Habituation", "unter": ["Abnahme der Reaktion bei anhaltender Konfrontation"], "syn": ["habituation"]}, {"ober": "Löschung (Extinktion)", "unter": ["neue Lernerfahrung überschreibt die Angstassoziation"], "syn": ["loeschung", "extinktion"]}, {"ober": "Coping", "unter": ["Bewältigungserfahrung in der Situation"], "syn": ["coping", "bewaeltigung"]}, {"ober": "Mastery", "unter": ["Selbstwirksamkeit/Kontrollerleben"], "syn": ["mastery", "selbstwirksamkeit"]}]}, {"id": "st42", "thema": "VT7 · Exposition", "bereich": "Verhaltenstherapie", "modell": "Symptomebenen der Angst (Kreislaufmodell)", "anker": 0, "mnemo": "Körper → Erwartung → sekundäre Gefühle → Gedanken → Vermeidung", "punkte": [{"ober": "Körperliche Reaktionen", "unter": ["Herzrasen, Schwitzen, Zittern"], "syn": ["koerperliche reaktionen", "koerper"]}, {"ober": "Erwartungsgefühle", "unter": ["Angst vor der Angst, Befürchtungen"], "syn": ["erwartungsgefuehle", "erwartung"]}, {"ober": "Sekundäre Gefühle", "unter": ["z. B. Scham, Ärger über die Angst"], "syn": ["sekundaere gefuehle", "scham"]}, {"ober": "Automatisierte Gedanken", "unter": ["katastrophisierende Kognitionen"], "syn": ["automatisierte gedanken", "gedanken"]}, {"ober": "Vermeidungsverhalten", "unter": ["Flucht/Vermeidung erhält die Angst aufrecht"], "syn": ["vermeidungsverhalten", "vermeidung"]}]}, {"id": "st43", "thema": "VT11 · Rückfallprävention", "bereich": "Verhaltenstherapie", "modell": "Sozialkognitives Rückfallmodell (Marlatt)", "anker": 0, "mnemo": "Risikosituation → Bewältigung? → Lapse → AVE → Relapse", "punkte": [{"ober": "Risikosituation", "unter": ["oft nach scheinbar harmlosen Entscheidungen"], "syn": ["risikosituation", "hochrisikosituation"]}, {"ober": "Bewältigungsfertigkeiten (oder ihr Fehlen)", "unter": ["vorhanden → Selbstwirksamkeit↑; fehlend → Gefahr"], "syn": ["bewaeltigungsfertigkeiten", "coping"]}, {"ober": "Lapse (Ausrutscher)", "unter": ["einmaliger erster Konsum/Rückschritt"], "syn": ["lapse", "ausrutscher"]}, {"ober": "Abstinenzverletzungssyndrom (AVE)", "unter": ["Schuld/Kontrollverlust-Attribution verstärkt"], "syn": ["abstinenzverletzungssyndrom", "ave", "aenderungsverletzung"]}, {"ober": "Relapse (Rückfall)", "unter": ["vollständiger Rückfall ins alte Muster"], "syn": ["relapse", "rueckfall"]}]}, {"id": "st44", "thema": "VT3 · Plananalyse", "bereich": "Verhaltenstherapie", "modell": "Sachses sechs Beziehungsmotive", "anker": 0, "mnemo": "Anerkennung · Wichtigkeit · Verlässlichkeit · Solidarität · Autonomie · Grenzen", "punkte": [{"ober": "Anerkennung", "unter": [], "syn": ["anerkennung"]}, {"ober": "Wichtigkeit", "unter": [], "syn": ["wichtigkeit"]}, {"ober": "Verlässlichkeit", "unter": [], "syn": ["verlaesslichkeit"]}, {"ober": "Solidarität", "unter": [], "syn": ["solidaritaet"]}, {"ober": "Autonomie", "unter": [], "syn": ["autonomie"]}, {"ober": "Grenzen / Territorialität", "unter": [], "syn": ["grenzen", "territorialitaet"]}]}, {"id": "st45", "thema": "VT3 · Plananalyse", "bereich": "Verhaltenstherapie", "modell": "Planhierarchie (Plananalyse)", "anker": 0, "mnemo": "Bedürfnis → Ziel → Mittel → Verhalten", "punkte": [{"ober": "Bedürfnisse", "unter": ["oberste, allgemeine Ebene (Oberpläne)"], "syn": ["beduerfnisse", "oberplaene"]}, {"ober": "Ziele", "unter": ["abgeleitete Zielsetzungen"], "syn": ["ziele", "ziel"]}, {"ober": "Mittel (Pläne)", "unter": ["Strategien zur Zielerreichung; Plan ist Mittel für Oberplan"], "syn": ["mittel", "plaene"]}, {"ober": "Verhalten", "unter": ["konkretes, beobachtbares Verhalten (unterste Ebene)"], "syn": ["verhalten"]}]}, {"id": "st46", "thema": "VT4 · Selbstmanagement", "bereich": "Verhaltenstherapie", "modell": "Modell der Selbstregulation (Kanfer)", "anker": 0, "mnemo": "beobachten → bewerten → verstärken/bestrafen", "punkte": [{"ober": "Selbstbeobachtung", "unter": ["Ist-Zustand des eigenen Verhaltens erfassen"], "syn": ["selbstbeobachtung", "ist"]}, {"ober": "Selbstbewertung", "unter": ["Ist mit Standard/Soll vergleichen"], "syn": ["selbstbewertung", "standard", "soll"]}, {"ober": "Selbstverstärkung / -bestrafung", "unter": ["Konsequenz je nach Soll-Ist-Vergleich"], "syn": ["selbstverstaerkung", "selbstbestrafung"]}]}, {"id": "st47", "thema": "VT12 · Kompetenztraining", "bereich": "Verhaltenstherapie", "modell": "Erklärungsmodelle sozialer Kompetenzdefizite", "anker": 0, "mnemo": "Affekt · Skill · Kognition · multifaktoriell", "punkte": [{"ober": "Affektive Interferenz", "unter": ["Angst blockiert vorhandene Fertigkeiten"], "syn": ["affektive interferenz", "affekt"]}, {"ober": "Skilldefizit", "unter": ["Fertigkeiten wurden nie gelernt"], "syn": ["skilldefizit", "fertigkeitsdefizit"]}, {"ober": "Kognitive Interferenz", "unter": ["ungünstige Bewertungen/Erwartungen stören"], "syn": ["kognitive interferenz", "kognition"]}, {"ober": "Multifaktorielles Modell", "unter": ["Zusammenspiel der obigen Faktoren"], "syn": ["multifaktoriell"]}]}, {"id": "st48", "thema": "VT14 · Schematherapie", "bereich": "Verhaltenstherapie", "modell": "Bewältigungsstile der Schematherapie (Young)", "anker": 0, "mnemo": "Vermeidung · Unterwerfung · Überkompensation", "punkte": [{"ober": "Schemavermeidung", "unter": ["dem schema-auslösenden Erleben ausweichen"], "syn": ["schemavermeidung", "vermeidung"]}, {"ober": "Schemaunterwerfung", "unter": ["sich dem Schema fügen, es bestätigen"], "syn": ["unterwerfung", "schemaunterwerfung"]}, {"ober": "Überkompensation", "unter": ["entgegengesetzt überreagieren"], "syn": ["ueberkompensation"]}]}, {"id": "st49", "thema": "VT9 · Paartherapie", "bereich": "Verhaltenstherapie", "modell": "Liebesstile nach Lee", "anker": 0, "mnemo": "Eros · Ludus · Storge · Agape · Pragma · Mania", "punkte": [{"ober": "Eros", "unter": ["leidenschaftliche, romantische Liebe"], "syn": ["eros"]}, {"ober": "Ludus", "unter": ["spielerische, unverbindliche Liebe"], "syn": ["ludus"]}, {"ober": "Storge", "unter": ["freundschaftliche, vertraute Liebe"], "syn": ["storge"]}, {"ober": "Agape", "unter": ["selbstlose, aufopfernde Liebe"], "syn": ["agape"]}, {"ober": "Pragma", "unter": ["pragmatische, vernunftbetonte Liebe"], "syn": ["pragma"]}, {"ober": "Mania", "unter": ["besitzergreifende, obsessive Liebe"], "syn": ["mania"]}]}];
+var DAY = 86400000;
+
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* SRS — identisches Karten-Format wie Lernmodule/Quiz-Runner; Store-Key = Karten-ID */
+function stSched(id, rating){
+  var p=load(), now=Date.now();
+  var c=p[id]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(rating==='good'){ c.stability=Math.max(1,c.stability*2.5); c.due=now+Math.max(DAY,c.stability*DAY); c.state='review'; }
+  else if(rating==='part'){ c.stability=Math.max(1,c.stability*1.2); c.due=now+DAY; c.state='review'; }
+  else { c.lapses++; c.stability=1; c.due=now+600000; c.state='learning'; }
+  c.reps++; p[id]=c; save(p);
+}
+function stStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ST.forEach(function(card){ var c=p[card.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ST.length};
+}
+function stIsOpen(id){ var c=load()[id]; return (!c||c.state==='new'||c.due<=Date.now()); }
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function _norm(s){ return (s||'').toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,' ').trim(); }
+function _cardById(id){ for(var i=0;i<ST.length;i++){ if(ST[i].id===id) return ST[i]; } return null; }
+function _stateLabel(id){
+  var c=load()[id];
+  if(!c||c.state==='new') return 'neu';
+  if(c.due<=Date.now()) return 'fällig';
+  var d=Math.round((c.due-Date.now())/DAY);
+  return 'gelernt · wieder in '+(d<1?'<1':d)+' T';
+}
+
+/* ── Themenbereich + Farbe (Feld card.bereich, sonst aus card.thema abgeleitet) ── */
+function stBereich(card){ if(card&&card.bereich) return card.bereich; var t=(card&&card.thema)||''; if(/^VT/i.test(t)) return 'Vertiefung'; var m=t.match(/^VL\d+/i); return m?m[0].toUpperCase():'Sonstige'; }
+function stChipLabel(thema){ return (thema||'').replace(/\s*\(.*$/,''); }
+var ST_BEREICHE=(function(){ var seen=[],o={}; ST.forEach(function(c){ var b=stBereich(c); if(!o[b]){o[b]=1;seen.push(b);} }); return seen; })();
+function stBereichColor(b){ var n=ST_BEREICHE.length||1; var i=ST_BEREICHE.indexOf(b); if(i<0)i=0; var h=Math.round(i*360/n); return {bg:'hsl('+h+',45%,20%)', fg:'hsl('+h+',75%,80%)', bd:'hsl('+h+',40%,40%)'}; }
+function stChip(card){ var c=stBereichColor(stBereich(card)); return '<span class="st-chip" style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'">'+stChipLabel(card.thema)+'</span>'; }
+function stCountBereich(b){ var n=0; ST.forEach(function(c){ if(stBereich(c)===b) n++; }); return n; }
+
+/* ── gemeinsame Bausteine ── */
+function stStructHTML(card){
+  var h='<ul class="st-list">';
+  card.punkte.forEach(function(p){
+    h+='<li><strong>'+p.ober+'</strong>';
+    if(p.unter&&p.unter.length){ h+='<ul>'+p.unter.map(function(u){return '<li>'+u+'</li>';}).join('')+'</ul>'; }
+    h+='</li>';
+  });
+  h+='</ul>';
+  if(card.mnemo) h+='<div class="st-mnemo">🧠 <strong>Merkhilfe:</strong> '+card.mnemo+'</div>';
+  return h;
+}
+function stRateRow(id, key, mode){
+  return '<div class="st-rate" id="rt'+key+'">'
+    + '<button class="st-rbtn good" onclick="stRate(\''+id+'\',\'good\',\''+key+'\',\''+mode+'\')">✅ sicher</button>'
+    + '<button class="st-rbtn part" onclick="stRate(\''+id+'\',\'part\',\''+key+'\',\''+mode+'\')">🟡 teilweise</button>'
+    + '<button class="st-rbtn bad" onclick="stRate(\''+id+'\',\'bad\',\''+key+'\',\''+mode+'\')">❌ nochmal</button>'
+  + '</div>';
+}
+function stReveal(btn,key){ var a=document.getElementById('rev'+key); var r=document.getElementById('rt'+key); if(a)a.classList.add('shown'); if(r)r.classList.add('shown'); btn.style.display='none'; }
+function stRate(id,rating,key,mode){
+  stSched(id,rating);
+  var s=document.getElementById('st'+key); if(s) s.textContent='Status: '+_stateLabel(id);
+  if(RUN[mode] && RUN[mode].active){ setTimeout(function(){ stNext(mode); }, 250); }
+}
+
+/* ── Karten ── */
+function stCardRecall(card, idx){
+  var key='rc'+idx;
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-q">Rufe die Struktur ab: <strong>'+card.modell+'</strong> — '+card.punkte.length+' Hauptpunkte. Nenne sie (mit Unterpunkten), dann aufdecken.</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Struktur aufdecken</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'rc')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCardTest(card, idx){
+  var key='ts'+idx;
+  var anchor=(card.anker!=null?card.anker:0);
+  if(anchor<0||anchor>=card.punkte.length) anchor=0;
+  var rows='', rn=0;
+  card.punkte.forEach(function(p,i){
+    if(i===anchor) return;
+    rows+='<div class="st-row"><input class="st-in" id="in'+key+'_'+rn+'" autocomplete="off" oninput="stCheck(\''+key+'\',\''+card.id+'\')" placeholder="Punkt eintippen …"><span class="st-ok" id="ok'+key+'_'+rn+'"></span></div>';
+    rn++;
+  });
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-q"><strong>'+card.modell+'</strong> — nenne die übrigen '+rn+' Punkte:</div>'
+    + '<div class="st-anchor">Vorgegeben: <strong>'+card.punkte[anchor].ober+'</strong></div>'
+    + rows
+    + '<div class="st-sum" id="sum'+key+'">0 / '+rn+' erkannt</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Lösung anzeigen</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'ts')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCheck(key, cardId){
+  var card=_cardById(cardId); if(!card) return;
+  var anchor=(card.anker!=null?card.anker:0); if(anchor<0||anchor>=card.punkte.length) anchor=0;
+  var pool=[]; card.punkte.forEach(function(p,i){ if(i===anchor) return; pool.push({acc:[p.ober].concat(p.syn||[]).map(_norm), used:false}); });
+  var got=0;
+  for(var r=0;r<pool.length;r++){
+    var el=document.getElementById('in'+key+'_'+r); var mark=document.getElementById('ok'+key+'_'+r);
+    var v=el?_norm(el.value):''; var hit=false;
+    if(v.length>=3){
+      for(var j=0;j<pool.length;j++){ if(pool[j].used) continue;
+        if(pool[j].acc.some(function(a){ return a && (a===v || (a.length>=4 && v.indexOf(a)>=0) || (v.length>=4 && a.indexOf(v)>=0)); })){ pool[j].used=true; hit=true; break; }
+      }
+    }
+    if(mark){ mark.textContent=hit?'✓':''; mark.className='st-ok'+(hit?' hit':''); }
+    if(hit) got++;
+  }
+  var sum=document.getElementById('sum'+key); if(sum) sum.textContent=got+' / '+pool.length+' erkannt';
+}
+
+/* ── Runner (zwei Modi: rc = Recall, ts = Test) ── */
+var RUN={ rc:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle'}, ts:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle'} };
+function stToggleShuffle(m){ RUN[m].shuffle=!RUN[m].shuffle; stStart(m); }
+function stToggleDue(m){ RUN[m].dueOnly=!RUN[m].dueOnly; stStart(m); }
+function stSetBereich(m,b){ RUN[m].bereich=b; if(RUN[m].active) stStart(m); else stRender(m); }
+function stResetAll(){ var p=load(); ST.forEach(function(c){delete p[c.id];}); save(p); RUN.rc.active=false; RUN.ts.active=false; stRender('rc'); stRender('ts'); }
+function stStart(m){
+  var idx=ST.map(function(_,i){return i;});
+  if(RUN[m].bereich && RUN[m].bereich!=='alle') idx=idx.filter(function(i){return stBereich(ST[i])===RUN[m].bereich;});
+  if(RUN[m].dueOnly) idx=idx.filter(function(i){return stIsOpen(ST[i].id);});
+  if(RUN[m].shuffle) idx=_shuffle(idx);
+  RUN[m].order=idx; RUN[m].pos=0; RUN[m].active=true; stRender(m);
+}
+function stNext(m){ var R=RUN[m]; if(R.pos<R.order.length-1){R.pos++; stRender(m);} else { R.active=false; stRender(m); } }
+function stPrev(m){ var R=RUN[m]; if(R.pos>0){R.pos--; stRender(m);} }
+function stRender(m){
+  var el=document.getElementById(m==='rc'?'stRunnerRC':'stRunnerTS'); if(!el) return;
+  var R=RUN[m], st=stStats();
+  var title=(m==='rc'?'① Lernen — Struktur frei abrufen':'② Test — Punkte selbst eintippen');
+  if(!R.active){
+    el.innerHTML='<div class="st-card"><div class="st-q">'+title+'</div>'
+      +'<div class="qr-stat">'+st.learned+'/'+st.total+' geübt · '+st.due+' offen/fällig'+((R.bereich&&R.bereich!=='alle')?' · Filter: '+R.bereich+' ('+stCountBereich(R.bereich)+' Modelle)':'')+'</div>'
+      +'<div class="st-filter"><span class="st-flabel">Themenbereich filtern:</span>'
+        +'<button class="st-fbtn'+(R.bereich==='alle'?' on':'')+'" onclick="stSetBereich(\''+m+'\',\'alle\')">Alle ('+ST.length+')</button>'
+        +ST_BEREICHE.map(function(b){var on=(R.bereich===b);var c=stBereichColor(b);return '<button class="st-fbtn'+(on?' on':'')+'"'+(on?' style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'"':'')+' onclick="stSetBereich(\''+m+'\',\''+b+'\')">'+b+' ('+stCountBereich(b)+')</button>';}).join('')
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(R.shuffle?' active':'')+'" onclick="stToggleShuffle(\''+m+'\')">🔀 Mischen: '+(R.shuffle?'AN':'aus')+'</button>'
+        +'<button class="nav-btn'+(R.dueOnly?' active':'')+'" onclick="stToggleDue(\''+m+'\')">🔁 Nur offene & fällige: '+(R.dueOnly?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="stStart(\''+m+'\')">▶ starten</button>'
+      +'<button class="btn btn-ghost" onclick="stResetAll()">↺ Fortschritt zurücksetzen</button></div></div>';
+    return;
+  }
+  if(!R.order.length){
+    el.innerHTML='<div class="st-card"><div class="st-q">🎉 Nichts offen!</div>'
+      +'<div class="qr-stat">Im Modus „nur offene & fällige" ist aktuell nichts fällig.</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-ghost" onclick="stToggleDue(\''+m+'\')">Alle Modelle zeigen</button></div></div>';
+    return;
+  }
+  var i=R.order[R.pos], card=ST[i]; var pct=Math.round(R.pos/R.order.length*100);
+  el.innerHTML='<div class="qr-stat">Modell '+(R.pos+1)+' / '+R.order.length+'</div>'
+    +'<div class="qr-prog"><div style="width:'+pct+'%"></div></div>'
+    + (m==='rc'?stCardRecall(card,R.pos):stCardTest(card,R.pos))
+    +'<div class="qr-ctrl">'
+      +(R.pos>0?'<button class="btn btn-ghost" onclick="stPrev(\''+m+'\')">← Zurück</button>':'')
+      +'<button class="btn btn-ghost" onclick="stNext(\''+m+'\')">Überspringen →</button>'
+      +'<button class="btn btn-ghost" onclick="RUN.'+m+'.active=false;stRender(\''+m+'\')">■ Beenden</button>'
+    +'</div>';
+}
+
+(function(){ stRender('rc'); stRender('ts'); })();
+
+function goToST(idx){
+  var secs=document.querySelectorAll('.section'); var btns=document.querySelectorAll('.nav-btn[data-sec]');
+  secs.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  btns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  window.scrollTo(0,0);
+}
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

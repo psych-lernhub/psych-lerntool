@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL10 Entwicklungsaufgaben</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl10
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* bespoke Simulator (Sektion ③): social clock — on time / off time */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+.sim-curve{font-size:1.3rem;letter-spacing:1px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL10 Entwicklungsaufgaben</h1>
+<p class="page-sub">Entwicklungspsychologie B (Erwachsenenalter und Alter) · Prof. Dr. Kerstin Jost · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Phasen des Erwachsenenalters & Entwicklungsbegriff · 2. Havighurst-Modell der Entwicklungsaufgaben (Def. + Kritik) · 3. Soziale Erwartungen & social clock (Neugarten) · 4. Entwicklungsfristen & Handlungsphasenmodell (Heckhausen) · 5. Primäre vs. sekundäre Kontrolle (Schulz & Heckhausen) + Rubikon-Modell · 6. Emerging Adulthood (Arnett) & Rushhour · 7. Midlife-Crisis (Levinson) & Befunde · 8. Sandwich-Generation, gewonnene Jahre & Ziele im Alter (Freund)
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Phasen & Entwicklungsbegriff</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Havighurst-Modell</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Social clock</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Entwicklungsfristen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Kontrolle & Rubikon</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Emerging Adulthood</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Midlife-Crisis</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Sandwich & Ziele</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Phasen & Entwicklungsbegriff ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Phasen des Erwachsenenalters & Entwicklungsbegriff</div>
+    <div class="sec-lz">Phasen: Emerging Adulthood (~18–25), frühes/mittleres/spätes Erwachsenenalter („junge“ / „alte Alte“ ab ~80). Kriterienbündel: chronolog. Alter, biologische Faktoren, Entwicklungsaufgaben, Transitionen. Klassischer Entwicklungsbegriff: im Erwachsenenalter wenig/langsame Entwicklung; Multidimensionalität/-direktionalität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Mit 18 ist man erwachsen.“ Warum lässt sich das Erwachsenenalter nicht einfach an einer Zahl festmachen — und findet im klassischen Sinn überhaupt noch viel „Entwicklung“ statt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Phasen ergeben sich aus einem <strong>Kriterienbündel</strong> (Alter, Biologie, Entwicklungsaufgaben, Transitionen) und variieren historisch/kulturell. Im <strong>klassischen</strong> Sinn (Reifung, Kompetenzzuwachs) gibt es im Erwachsenenalter relativ wenig/langsame Entwicklung — dafür Multidirektionalität.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Klassischer vs. Lebensspannen-Entwicklungsbegriff</div>
+    Klassisch: fortschreitende Differenzierung, Reifung, Kompetenzzuwachs, höhere Funktionsstufen. Diesbezüglich im Erwachsenenalter <strong>relativ wenig</strong> Entwicklung (langsam, große interindividuelle Unterschiede). Lebensspanne: <strong>Multidimensionalität & Multidirektionalität</strong> (Gewinne + Verluste).
+  </div>
+  <div class="card">
+    <div class="card-title">Kriterienbündel der Phasen</div>
+    Chronologisches Alter · biologische Faktoren · Bewältigung von Entwicklungsaufgaben · Transitionen. Beginn/Ende der Phasen unterliegen historischen Veränderungen und kulturellen Variationen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Das Erwachsenenalter ist <strong>nicht</strong> die Phase höchster Entwicklungsrate — im klassischen Sinn ist sie gering. „Junge Alte“ vs. „alte Alte“ trennt man etwa ab 80 J.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Phasen des Erwachsenenalters — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Emerging Adulthood (~18–25):</strong> verlängerter Übergang Adoleszenz↔Erwachsenenalter (Arnett).</div>
+    <div class="step-item"><strong>② Frühes Erwachsenenalter (~25–40):</strong> Aufbau (Beruf, Familie), Orientierung an Zuwachs.</div>
+    <div class="step-item"><strong>③ Mittleres Erwachsenenalter (~40–60/65):</strong> Stabilisierung, Aufrechterhalten des Funktionsniveaus.</div>
+    <div class="step-item"><strong>④ Spätes Erwachsenenalter (ab ~60–65):</strong> „junge Alte“, ab ~80 J. „alte Alte“.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'phasen')">Nächste Phase ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Havighurst-Modell ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Havighurst-Modell der Entwicklungsaufgaben</div>
+    <div class="sec-lz">Entwicklung als Lösen von Entwicklungsaufgaben (Havighurst 1972). Def.: Aufgabe in einer Lebensperiode → erfolgreiche Bewältigung = Wohlbefinden + Gelingen späterer Aufgaben. Frühe Phasen biologische Reifung, spätere gesellschaftliche Anforderungen + selbst gesetzte Ziele. Kritik: Normalbiografie US-Mittelschicht 1950er, starr/normativ.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was genau ist eine „Entwicklungsaufgabe“ — und warum kann ihr Misslingen spätere Aufgaben erschweren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Nach <strong>Havighurst (1972)</strong> ist eine Entwicklungsaufgabe eine Aufgabe, die in einer bestimmten Lebensperiode hervortritt: erfolgreiche Bewältigung → Wohlbefinden + Gelingen <em>späterer</em> Aufgaben; Misslingen → Unzufriedenheit, gesellschaftliche Missbilligung und Schwierigkeiten bei späteren Aufgaben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Havighurst-Modell</div>
+    Entwicklung als <strong>Lösen von Entwicklungsaufgaben</strong>. Aufgaben sind in einem Lebensabschnitt zentral; ihre Bewältigung trägt zu subjektivem Wohlbefinden und zum Gelingen späterer Aufgaben bei.
+  </div>
+  <div class="card">
+    <div class="card-title">Quellen der Aufgaben</div>
+    Frühe Lebensphasen: Aufgaben durch <strong>biologische Reifung</strong> ausgelöst. Spätere Phasen: <strong>gesellschaftliche Anforderungen</strong> und selbst gesetzte Ziele. Orientierung an der „Normalbiografie“ der Mittelschicht der 1950er.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kritik</div>
+    An der Normalbiografie mittelständischer US-Amerikaner orientiert (kaum verallgemeinerbar); die <strong>hierarchische Aufeinanderfolge</strong> wirkt starr; das Normative widerspricht offeneren modernen Biografien.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Havighurst — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Definition:</strong> Aufgabe, die in einer Lebensperiode hervortritt.</div>
+    <div class="step-item"><strong>② Bei Gelingen:</strong> Wohlbefinden + Erfolg bei späteren Aufgaben.</div>
+    <div class="step-item"><strong>③ Bei Misslingen:</strong> Unzufriedenheit, Missbilligung, Schwierigkeiten später.</div>
+    <div class="step-item"><strong>④ Kritik:</strong> normativ, an Mittelschicht-Normalbiografie der 1950er orientiert, starr.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'havi')">Nächster Punkt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Social clock ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Soziale Erwartungen & normative Zeitpläne (social clock)</div>
+    <div class="sec-lz">Entwicklungsaufgaben als geteilte soziale Erwartungen; Erwachsenenalter weniger biologisch/extern bestimmt → mehr Freiheit. Social clock (Neugarten 1972): normativer Zeitplan; on time → unterstützt/verstärkt, off time → negative Sanktionen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum erntet jemand, der mit 16 Eltern wird oder mit 50 erstmals studiert, oft kritische Reaktionen — während dieselben Ereignisse „zur rechten Zeit“ Zuspruch bekommen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Wegen der <strong>social clock</strong> (Neugarten 1972): geteilte soziale Erwartungen bilden einen normativen Zeitplan. <strong>„On time“</strong> (im Plan) → soziale Unterstützung/Verstärkung; <strong>„off time“</strong> (außerhalb) → negative Sanktionen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Entwicklungsaufgaben als soziale Erwartungen</div>
+    In einem sozial-kulturellen Kontext geteilte Erwartungen, was man zu welchem Alter tun/erreichen sollte. Das Erwachsenenalter ist <strong>weniger</strong> von biologischer Reifung und externen Regulationsprozessen bestimmt → mehr Freiheit bei der Gestaltung.
+  </div>
+  <div class="card">
+    <div class="card-title">Social clock (Neugarten, 1972)</div>
+    Normative Zeitpläne bieten einen zeitlichen/kontextuellen Orientierungsrahmen und leiten Lebensplanung und persönliche Zielsetzung. Vergleich mit dem normativen Zeitplan: <strong>on time</strong> → unterstützt; <strong>off time</strong> → negative Sanktionen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🎛 Simulator: social clock — on time oder off time?</div>
+    <div style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle ein Lebensereignis mit Zeitpunkt — der Simulator zeigt die soziale Reaktion nach der social clock.</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sc-kind16" onclick="scSet('kind16')">Erstes Kind mit 16</button>
+        <button class="sim-tbtn" id="sc-kind30" onclick="scSet('kind30')">Erstes Kind mit 30</button>
+        <button class="sim-tbtn" id="sc-beruf25" onclick="scSet('beruf25')">Berufseinstieg mit 25</button>
+        <button class="sim-tbtn" id="sc-stud55" onclick="scSet('stud55')">Erststudium mit 55</button>
+        <button class="sim-tbtn" id="sc-rente67" onclick="scSet('rente67')">Pensionierung mit 67</button>
+      </div>
+      <div class="sim-verdict" id="sc-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Entwicklungsfristen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Entwicklungsfristen & Handlungsphasenmodell</div>
+    <div class="sec-lz">Fristen (sozial/institutionell/biologisch, „biologische Uhr“) wirken motivierend; Engagement steigt mit nahender Frist; Überschreiten → Zielablösung. Handlungsphasenmodell (Heckhausen, Wrosch & Fleeson 2001): pre-deadline verstärktes Engagement, post-deadline (Misserfolg) kompensatorische sekundäre Kontrolle/Disengagement.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum strengt man sich kurz vor einer Frist (z.B. „biologische Uhr“) besonders an — und was passiert, wenn die Frist verstrichen ist?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Entwicklungsfristen</strong> wirken motivierend: das Engagement steigt mit nahender Frist. Nach Überschreiten folgt <strong>Zielablösung</strong>. Im Handlungsphasenmodell (Heckhausen): pre-deadline verstärktes Engagement, post-deadline (Misserfolg) kompensatorische sekundäre Kontrolle/Disengagement.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Entwicklungsfristen (deadlines)</div>
+    Soziale Vorstellungen, institutionelle Regelungen oder biologische Bedingtheiten, wann eine Aufgabe begonnen/erreicht sein sollte (z.B. Rentenalter, „biologische Uhr“). Sie wirken motivierend und regulieren Zielengagement und Zielablösung.
+  </div>
+  <div class="card">
+    <div class="card-title">Handlungsphasenmodell (Heckhausen, Wrosch & Fleeson 2001)</div>
+    Vor der Frist (urgent): verstärkte selektive primäre/sekundäre Kontrolle (Zielengagement). Nach der Frist bei Misserfolg: <strong>kompensatorische sekundäre Kontrolle</strong>, Goal Disengagement und Schutz der Motivation.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Frist und Motivation — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Frist naht:</strong> Engagement für die Zielerreichung steigt.</div>
+    <div class="step-item"><strong>② Pre-deadline:</strong> verstärkte selektive primäre & sekundäre Kontrolle.</div>
+    <div class="step-item"><strong>③ Post-deadline (Erfolg):</strong> Aufbau auf dem Erfolg, neuer Handlungszyklus.</div>
+    <div class="step-item"><strong>④ Post-deadline (Misserfolg):</strong> kompensatorische sekundäre Kontrolle, Zielablösung, Selbstschutz.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'frist')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Kontrolle & Rubikon ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Primäre vs. sekundäre Kontrolle & Rubikon-Modell</div>
+    <div class="sec-lz">Lebenslauftheorie der Kontrolle (Schulz & Heckhausen 1995): primär = Umwelt an eigene Bedürfnisse anpassen; sekundär = Selbst verändern. Über die Lebensspanne Verschiebung primär → sekundär (primäres Streben bleibt Triebfeder). Rubikon-Modell (Heckhausen & Gollwitzer 1987): Wünschen/Abwägen → Wollen/Planen → Tun → Bewerten.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein älterer Mann kann ein Ziel nicht mehr direkt erreichen und passt stattdessen seine Erwartungen an. Welche Art von Kontrolle ist das — und wie verschiebt sich das mit dem Alter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Das ist <strong>sekundäre Kontrolle</strong> (Veränderung des Selbst). <strong>Primäre Kontrolle</strong> richtet sich nach außen (Umwelt an eigene Bedürfnisse anpassen). Über die Lebensspanne verschiebt sich das Verhältnis von primär → sekundär — das primäre Kontrollstreben bleibt aber Triebfeder.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Lebenslauftheorie der Kontrolle (Schulz & Heckhausen 1995)</div>
+    Motivationstheorie: Der Mensch strebt nach Wirksamkeit/Kontrolle. <strong>Primär</strong> = nach außen (Umwelt an Bedürfnisse anpassen, Zielerreichung). <strong>Sekundär</strong> = Veränderung des Selbst (Ziele an Gegebenheiten anpassen). Über die Lebensspanne: Verschiebung primär → sekundär.
+  </div>
+  <div class="card">
+    <div class="card-title">Rubikon-Modell der Handlungsphasen (Heckhausen & Gollwitzer 1987)</div>
+    Vier Phasen: <strong>Wünschen/Abwägen → [Rubikon] → Wollen/Planen → Tun/Ausführen → Ergebnis/Bewerten</strong>. Übergänge: Entscheiden, Beginnen, Aufhören, sich Lösen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: primäre oder sekundäre Kontrolle?</div>
+    <div class="corr-item" id="w4a">Die Umwelt an die eigenen Bedürfnisse anpassen (auf Zielerreichung)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w4a',this,'primaer')">Primäre Kontrolle</button>
+        <button class="corr-btn" onclick="checkCorr('w4a',this,'sekundaer')">Sekundäre Kontrolle</button>
+      </div><div class="corr-fb" id="w4a-fb"></div>
+    </div>
+    <div class="corr-item" id="w4b">Die Veränderung des Selbst; eigene Ziele an Gegebenheiten anpassen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w4b',this,'primaer')">Primäre Kontrolle</button>
+        <button class="corr-btn" onclick="checkCorr('w4b',this,'sekundaer')">Sekundäre Kontrolle</button>
+      </div><div class="corr-fb" id="w4b-fb"></div>
+    </div>
+    <div class="corr-item" id="w4c">Nach außen, auf die Umwelt gerichtet
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w4c',this,'primaer')">Primäre Kontrolle</button>
+        <button class="corr-btn" onclick="checkCorr('w4c',this,'sekundaer')">Sekundäre Kontrolle</button>
+      </div><div class="corr-fb" id="w4c-fb"></div>
+    </div>
+    <div class="corr-item" id="w4d">Kompensatorisch bei Verlust von Gelegenheiten; Ziele loslösen/Selbstschutz
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w4d',this,'primaer')">Primäre Kontrolle</button>
+        <button class="corr-btn" onclick="checkCorr('w4d',this,'sekundaer')">Sekundäre Kontrolle</button>
+      </div><div class="corr-fb" id="w4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Emerging Adulthood ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Emerging Adulthood (Arnett) & Rushhour</div>
+    <div class="sec-lz">Emerging Adulthood: verlängerter, eigenständiger Übergang Adoleszenz↔Erwachsenenalter; Exploration, biologische (nicht soziale) Reife; Selbstfokus; v.a. höher Gebildete; Abgrenzung psychosoziales Moratorium (Erikson). Rushhour: Transitionen (Beruf, Elternschaft) verdichtet auf ~27–35 J.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum „verschiebt“ sich das Erwachsenwerden heute nach hinten — und warum gilt das junge Erwachsenenalter trotzdem als besonders dicht gedrängt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Emerging Adulthood</strong> (Arnett): ein verlängerter, eigenständiger Übergang (Exploration, biologische aber nicht soziale Reife). Trotzdem <strong>Rushhour</strong>: weil die zentralen Transitionen (Beruf, Elternschaft) ins schmale Fenster ~27–35 J. rücken → wenig Zeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Emerging Adulthood (Jeffrey Arnett)</div>
+    Verlängerter Übergang zwischen Adoleszenz und Erwachsenenalter, eigenständige Phase. Exploration und biologische, aber noch nicht soziale Reife. Hauptcharakteristika: intensiver Selbstfokus, breite Beziehungsvielfalt, Vermeidung von Verpflichtungen — v.a. bei höher Gebildeten. <strong>Abgrenzung</strong> vom psychosozialen Moratorium (Erikson).
+  </div>
+  <div class="card">
+    <div class="card-title">Rushhour des Lebens</div>
+    Transitionen wie Berufseinstieg und Elternschaft erfordern enorme Anpassungsleistungen. Durch zeitliche Verschiebung (ca. 27–35 J.) bleibt für die wichtigen Aufgaben des jungen Erwachsenenalters relativ wenig Zeit.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Emerging Adulthood vs. Rushhour</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ea" onclick="switchTab(this,'jea')">Emerging Adulthood</button>
+      <button class="tab-btn" data-tab="rh" onclick="switchTab(this,'jea')">Rushhour</button>
+    </div>
+    <div class="tab-group" data-group="jea">
+      <div class="tab-content active" data-tab="ea"><strong>Kern:</strong> eigenständige Übergangsphase, Exploration, Selbstfokus, Vermeidung fester Verpflichtungen. Abgrenzung zum Erikson'schen Moratorium.</div>
+      <div class="tab-content" data-tab="rh"><strong>Kern:</strong> Verdichtung der Transitionen (Beruf + Elternschaft) auf ~27–35 J. → Zeitdruck für die zentralen Aufgaben des jungen Erwachsenenalters.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Midlife-Crisis ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Midlife-Crisis (Levinson) & empirische Befunde</div>
+    <div class="sec-lz">Levinson (1978): universelle, normative Übergangskrise (anfangs Männer). Konzeptualisierungen: streng (Normativität + zeitlich + strukturelle Marker), moderat, schwach. Empirie: KEINE Evidenz; Ziele flexibel; mittleres Alter eher Phase von Zufriedenheit/Höhepunkten.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist die „Midlife-Crisis“ eine universelle, gesetzmäßige Lebenskrise — oder eher ein populärer Mythos?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Levinson (1978) <em>postulierte</em> eine universelle Krise — empirisch hält sich das aber <strong>nicht</strong>: Ziele sind flexibel, es gibt keine Krise bei der Mehrheit, selbst die schwache Konzeptualisierung lässt sich nicht halten. Das mittlere Alter ist eher eine Phase von Zufriedenheit/Höhepunkten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Midlife-Crisis (Levinson 1978)</div>
+    Annahme einer <strong>universellen Krise</strong> als normative Übergangsphase vom jungen zum mittleren Erwachsenenalter (anfangs für Männer formuliert). Kennzeichen: Identitätskrise, Bewusstheit des Verrinnens der Lebenszeit, Fokus auf verlorene Chancen.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Konzeptualisierungen</div>
+    <strong>Streng:</strong> (1) Normativität + (2) zeitlich ans mittlere Alter gebunden + (3) eigene strukturelle Marker. <strong>Moderat:</strong> (1)+(2). <strong>Schwach:</strong> nur (2).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Empirie</div>
+    <strong>Keine Evidenz:</strong> Erwachsene messen sich nicht an früh gesetzten Zielen; Ziele sind flexibel (keine festen Standards); keine Krise bei der Mehrheit. Über-65-Jährige wählen frei am liebsten das mittlere Erwachsenenalter.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vom Anspruch zum Befund — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Anspruch (Levinson):</strong> universelle, normative Krise im mittleren Alter.</div>
+    <div class="step-item"><strong>② Abstufung:</strong> strenge / moderate / schwache Konzeptualisierung.</div>
+    <div class="step-item"><strong>③ Befund:</strong> keine Evidenz — Ziele flexibel, keine Krise bei der Mehrheit.</div>
+    <div class="step-item"><strong>④ Gegenteil:</strong> mittleres Alter eher Phase von Zufriedenheit und sozialen/beruflichen Höhepunkten.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'mlc')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Sandwich & Ziele ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Sandwich-Generation, gewonnene Jahre & Ziele im Alter</div>
+    <div class="sec-lz">Sandwich-Generation: zwischen Kindern und alternden Eltern, Balance Geben/Nehmen. Gewonnene Jahre: Lebenserwartung ↑ → Zeit nach Auszug der Kinder (meist positiv; empty nest als Risiko). Ziele im Alter (Freund): Verschiebung von Gewinn-/Wachstumsorientierung zu Maintenance/Verlustvermeidung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Das mittlere Erwachsenenalter bringt zwei gegensätzliche Erfahrungen: doppelte Verpflichtung und neu gewonnene Freiheit. Wie heißen die beiden Phänomene?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Sandwich-Generation</strong> (zwischen eigenen Kindern und alternden Eltern, Balance Geben/Nehmen) und das <strong>Phänomen der gewonnenen Jahre</strong> (mehr Zeit nach Auszug der Kinder, meist positiv; „empty nest“ als Risiko bei reiner Eltern-Identität). Zugleich verschieben sich Ziele von Gewinn zu Erhalt (Freund).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sandwich-Generation</div>
+    In der Mitte verschiedener Generationen: zugleich Vater/Mutter der eigenen Kinder UND Kind der alternden Eltern. Verpflichtungen gegenüber zwei Generationen, Balance zwischen Geben und Nehmen — sehr beanspruchend (zeitlich/emotional), aber auch emotional befriedigend.
+  </div>
+  <div class="card">
+    <div class="card-title">Gewonnene Jahre & Ziele im Alter</div>
+    Gestiegene Lebenserwartung → mehr Zeit nach Auszug der Kinder; meist positiv (hinzugewonnene Freiheit). „Empty nest“ wird zur Gefahr, wenn man sich v.a. als Eltern definiert. <strong>Freund:</strong> Verschiebung von Gewinn-/Wachstumszielen (jung) zu Maintenance/Verlustvermeidung (alt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Sandwich-Generation vs. gewonnene Jahre</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="sw" onclick="switchTab(this,'me')">Sandwich-Generation</button>
+      <button class="tab-btn" data-tab="gj" onclick="switchTab(this,'me')">Gewonnene Jahre</button>
+    </div>
+    <div class="tab-group" data-group="me">
+      <div class="tab-content active" data-tab="sw"><strong>Kern:</strong> doppelte Verpflichtung (Kinder + alternde Eltern), Balance Geben/Nehmen, beanspruchend, aber befriedigend.</div>
+      <div class="tab-content" data-tab="gj"><strong>Kern:</strong> mehr verbleibende Zeit nach Auszug der Kinder, meist positiv (neue Freiheit, Interessen); „empty nest“ als Risiko bei reiner Eltern-Identität.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL10 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Primäre Kontrolle</h4>
+      <p>Nach außen, auf die Umwelt gerichtet</p>
+      <p>Umwelt an eigene Bedürfnisse anpassen</p>
+      <p>Auf Zielerreichung</p>
+      <p>Potenzial sinkt im Alter</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Sekundäre Kontrolle</h4>
+      <p>Veränderung des Selbst</p>
+      <p>Eigene Ziele an Gegebenheiten anpassen</p>
+      <p>Kompensatorisch bei Verlust</p>
+      <p>Nimmt über die Lebensspanne zu</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Primäre Kontrolle bedeutet, die eigenen Ziele an die unveränderlichen äußeren Gegebenheiten anzupassen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>„On time“</h4>
+      <p>Im normativen Zeitplan</p>
+      <p>Erwartungskonform</p>
+      <p>Sozial unterstützt und verstärkt</p>
+      <p>positive Reaktion</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>„Off time“</h4>
+      <p>Außerhalb des Zeitplans</p>
+      <p>Erwartungswidrig</p>
+      <p>Negative Sanktionen</p>
+      <p>social clock verletzt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Off time“ zu sein (z.B. sehr frühe Elternschaft) führt nach der social clock zu sozialer Unterstützung und Verstärkung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Emerging Adulthood (Arnett)</h4>
+      <p>Eigenständige Übergangsphase</p>
+      <p>Exploration, biolog. (nicht soziale) Reife</p>
+      <p>Selbstfokus, Beziehungsvielfalt</p>
+      <p>v.a. höher Gebildete</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Psychosoziales Moratorium (Erikson)</h4>
+      <p>Aufschub von Verpflichtungen</p>
+      <p>Zur Identitätsfindung</p>
+      <p>Konzept der Adoleszenz</p>
+      <p>Erikson-Begriff</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Emerging Adulthood ist exakt dasselbe Konzept wie Eriksons psychosoziales Moratorium und davon nicht abzugrenzen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Midlife-Crisis: Anspruch (Levinson)</h4>
+      <p>Universelle Krise</p>
+      <p>Normative Übergangsphase</p>
+      <p>Desillusionierung/Enttäuschung</p>
+      <p>Identitätskrise, Innenwendung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Midlife-Crisis: empirischer Befund</h4>
+      <p>Keine Evidenz für universelle Krise</p>
+      <p>Ziele flexibel, keine festen Standards</p>
+      <p>Mittleres Alter eher zufrieden</p>
+      <p>selbst schwache Konzeption hält nicht</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Empirisch ist die universelle Midlife-Crisis bei nahezu allen Männern eindeutig belegt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sandwich-Generation</h4>
+      <p>Mitte zwischen Generationen</p>
+      <p>Eltern der Kinder + Kind der Eltern</p>
+      <p>Balance Geben/Nehmen</p>
+      <p>beanspruchend, aber befriedigend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gewonnene Jahre / empty nest</h4>
+      <p>Zeit nach Auszug der Kinder</p>
+      <p>Gestiegene Lebenserwartung</p>
+      <p>Meist positiv (neue Freiheit)</p>
+      <p>empty nest als Risiko</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Sandwich-Generation bezeichnet die gewonnene freie Zeit nach dem Auszug der Kinder.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl10</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl10';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was kennzeichnet den klassischen Entwicklungsbegriff (Reifung, Zuwachs an Kompetenzen) im Erwachsenenalter?",
+      "opts": [
+        "Diesbezüglich gibt es im Erwachsenenalter relativ wenig Entwicklung; sie ist langsam (geringe Rate) mit großen interindividuellen Unterschieden.",
+        "Der klassische Entwicklungsbegriff beschreibt das Erwachsenenalter als die Lebensphase mit der höchsten Entwicklungsrate, da fortschreitende Differenzierung und Reifung hier ihren absoluten Höhepunkt erreichen.",
+        "Im Erwachsenenalter findet gar keine Entwicklung statt.",
+        "Entwicklung verläuft nur unidirektional."
+      ],
+      "c": 0,
+      "e": "Klassisch (Differenzierung, Reifung, Kompetenzzuwachs, höhere Funktionsstufen): diesbezüglich relativ WENIG Entwicklung im Erwachsenenalter — langsam, große interindividuelle Unterschiede, Multidimensionalität/-direktionalität."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Kriterien bündelt man, um Phasen des Erwachsenenalters abzugrenzen?",
+      "opts": [
+        "Ausschließlich das chronologische Alter in vollen Lebensjahren — alle anderen Kriterien gelten dabei als entwicklungspsychologisch irrelevant und werden zur Phasenabgrenzung nicht herangezogen.",
+        "Chronologisches Alter, biologische Faktoren, Bewältigung von Entwicklungsaufgaben und Transitionen.",
+        "Nur die Schulbildung.",
+        "Allein die genetische Ausstattung."
+      ],
+      "c": 1,
+      "e": "Kriterienbündel: chronologisches Alter, biologische Faktoren, Bewältigung von Entwicklungsaufgaben, Transitionen. Beginn/Ende der Phasen unterliegen historischen/kulturellen Variationen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie definiert Havighurst (1972) eine Entwicklungsaufgabe?",
+      "opts": [
+        "Als eine rein biologisch ausgelöste Reifungssequenz, die bei jedem Menschen kulturübergreifend in exakt gleicher Reihenfolge und zum exakt gleichen Zeitpunkt abläuft — soziale Anforderungen und selbst gesetzte Ziele spielen als Quelle der Aufgaben dabei keinerlei Rolle.",
+        "Als eine ausschließlich von der Gesellschaft auferlegte Pflicht ohne Bezug zum individuellen Wohlbefinden.",
+        "Als Aufgabe, die in einer bestimmten Lebensperiode hervortritt; erfolgreiche Bewältigung → Wohlbefinden + Gelingen späterer Aufgaben, Misslingen → Unzufriedenheit/Missbilligung.",
+        "Als eine Aufgabe ohne jede Konsequenz für die weitere Entwicklung."
+      ],
+      "c": 2,
+      "e": "Havighurst (1972): Aufgabe, die in einer Lebensperiode hervortritt; erfolgreiche Bewältigung → Wohlbefinden und Gelingen späterer Aufgaben; Misslingen → Unzufriedenheit, Missbilligung der Gesellschaft, Schwierigkeiten bei späteren Aufgaben."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was ist ein zentraler Kritikpunkt am Havighurst-Modell?",
+      "opts": [
+        "Es ignoriert biologische Reifung vollständig.",
+        "Es beschreibt ausschließlich das hohe Alter.",
+        "Es enthält keine konkreten Entwicklungsaufgaben, weshalb es in der Forschung ausschließlich als rein theoretisches Rahmenmodell ohne jede inhaltliche Aussage über konkrete Lebensphasen verstanden wird.",
+        "Es orientiert sich an der „Normalbiografie“ der US-Mittelschicht der 1950er und ist normativ/starr (hierarchische Abfolge), passt schlecht zu modernen Biografien."
+      ],
+      "c": 3,
+      "e": "Kritik: an der Normalbiografie der mittelständischen Amerikaner der 1950er orientiert (kaum verallgemeinerbar); hierarchische Aufeinanderfolge → starr; das Normative widerspricht offeneren modernen Biografien."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was beschreibt die „social clock“ (Neugarten, 1972)?",
+      "opts": [
+        "Einen geteilten normativen Zeitplan: soziale Erwartungen, was man in welchem Alter tun/erreichen sollte.",
+        "Eine rein biologische innere Uhr, die unabhängig von jeder sozialen Erwartung allein über Hormonzyklen den optimalen Zeitpunkt für Entwicklungsschritte bestimmt.",
+        "Die Tageszeit, zu der man am produktivsten ist.",
+        "Einen genetischen Marker des Alterns."
+      ],
+      "c": 0,
+      "e": "Social clock (Neugarten 1972): geteilte soziale Normen/Erwartungen stellen einen normativen Zeitplan des Lebenslaufs dar — Orientierungsrahmen, was man wann tun/erreichen sollte."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welche Folge hat es laut Modell, „off time“ (außerhalb des normativen Zeitplans) zu sein?",
+      "opts": [
+        "Soziale Unterstützung und Verstärkung.",
+        "Gar keine Folgen, da der normative Zeitplan rein individuell ist.",
+        "Negative Sanktionen.",
+        "Eine automatische Beschleunigung der biologischen Reifung."
+      ],
+      "c": 2,
+      "e": "„On time“ → sozial unterstützt/verstärkt; „off time“ → negative Sanktionen. Normative Zeitpläne leiten Lebensplanung und persönliche Zielsetzung."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wie wirken Entwicklungsfristen (developmental deadlines) auf die Motivation?",
+      "opts": [
+        "Sie wirken motivierend; das Engagement für die Zielerreichung steigt mit nahender Frist.",
+        "Sie wirken grundsätzlich demotivierend und führen unabhängig vom Zeitpunkt stets zur sofortigen und vollständigen Aufgabe jedes anstehenden Entwicklungsziels.",
+        "Sie haben keinen Einfluss auf die Motivation.",
+        "Sie verlangsamen die biologische Reifung."
+      ],
+      "c": 0,
+      "e": "Entwicklungsfristen wirken motivierend, regulieren Zielengagement UND Zielablösung; das Engagement steigt mit nahender Frist; Überschreiten → Lösen von nicht mehr erreichbaren Zielen."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was unterscheidet im Handlungsphasenmodell (Heckhausen et al. 2001) die Phase VOR von der NACH der Frist?",
+      "opts": [
+        "Vor der Frist erfolgt ausschließlich Zielablösung, nach der Frist ausschließlich verstärktes Zielengagement — die Richtung des Kontrollverhaltens ist vor und nach der Frist also genau umgekehrt wie im Handlungsphasenmodell beschrieben.",
+        "Es gibt keinen Unterschied.",
+        "Beide Phasen sind identisch im Kontrollverhalten.",
+        "Vor der Frist: verstärktes (selektiv primäres/sekundäres) Zielengagement; nach der Frist (bei Misserfolg): kompensatorische sekundäre Kontrolle, Zielablösung/Selbstschutz."
+      ],
+      "c": 3,
+      "e": "Pre-deadline: verstärkte selektive primäre/sekundäre Kontrolle (Zielengagement). Post-deadline bei Misserfolg: kompensatorische sekundäre Kontrolle, Goal Disengagement und Schutz der Motivation (Heckhausen, Wrosch & Fleeson 2001)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was ist primäre Kontrolle (Schulz & Heckhausen, 1995)?",
+      "opts": [
+        "Ein Synonym für die rein biologische Reifung des Organismus.",
+        "Das alleinige Anpassen der eigenen inneren Bedürfnisse, Erwartungen und Lebensziele an die als unveränderlich erlebten äußeren kontextuellen Gegebenheiten.",
+        "Ein anderer Begriff für die Inhibitionsfunktion des Arbeitsgedächtnisses.",
+        "Nach außen, auf die Umwelt gerichtet: die Umwelt an die eigenen Bedürfnisse anpassen (auf Zielerreichung)."
+      ],
+      "c": 3,
+      "e": "Primäre Kontrolle = nach außen auf die Umwelt gerichtet (Umwelt an eigene Bedürfnisse anpassen, auf Zielerreichung). Sekundäre Kontrolle = Veränderung des Selbst (eigene Ziele an Gegebenheiten anpassen)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie verschiebt sich das Verhältnis von primärer und sekundärer Kontrolle über die Lebensspanne?",
+      "opts": [
+        "Verschiebung von primären hin zu sekundären Kontrollstrategien (primäres Kontrollstreben bleibt aber Triebfeder).",
+        "Verschiebung von sekundären hin zu primären Strategien, sodass im hohen Alter die direkte Umweltkontrolle vollständig dominiert und sekundäre Strategien verschwinden.",
+        "Das Verhältnis bleibt über das ganze Leben exakt konstant.",
+        "Beide Kontrollformen verschwinden im Alter."
+      ],
+      "c": 0,
+      "e": "Über die Lebensspanne: Verschiebung von primären zu sekundären Kontrollstrategien (das primäre KontrollPOTENZIAL sinkt im Alter); das primäre KontrollSTREBEN bleibt jedoch Triebfeder des Handelns."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was meint „Emerging Adulthood“ (Jeffrey Arnett)?",
+      "opts": [
+        "Das hohe Erwachsenenalter ab der Pensionierung, also die Lebensphase nach dem Erwerbsleben, die durch den Rückzug aus sozialen Rollen und eine abgeschlossene Identitätsentwicklung gekennzeichnet ist.",
+        "Einen verlängerten, eigenständigen Übergang zwischen Adoleszenz und Erwachsenenalter (Exploration, biologische, aber noch nicht soziale Reife).",
+        "Ein Synonym für die Midlife-Crisis.",
+        "Die früheste Phase der Kindheit."
+      ],
+      "c": 1,
+      "e": "Emerging Adulthood (Arnett): verlängerter Übergang Adoleszenz↔Erwachsenenalter, eigenständige Phase; Exploration und biologische, aber nicht soziale Reife; Selbstfokus, Beziehungsvielfalt; v.a. bei höher Gebildeten. Abgrenzung vom psychosozialen Moratorium (Erikson)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Warum gilt das junge Erwachsenenalter als „Rushhour“?",
+      "opts": [
+        "Weil in dieser Phase besonders viel Freizeit zur Verfügung steht.",
+        "Weil es die Phase mit der geringsten Anzahl an Entwicklungsaufgaben ist.",
+        "Weil zentrale Transitionen (Berufseinstieg, Elternschaft) in ein schmales Zeitfenster (ca. 27–35 J.) zusammenfallen → wenig Zeit.",
+        "Weil in dieser Phase keinerlei tiefgreifende Veränderungen der Lebensführung stattfinden und daher kaum Anpassungsleistungen nötig sind."
+      ],
+      "c": 2,
+      "e": "Rushhour: durch zeitliche Verschiebung fallen Transitionen wie Berufseinstieg und Elternschaft ins Alter ~27–35 J. zusammen → für die wichtigen Aufgaben des jungen Erwachsenenalters bleibt relativ wenig Zeit."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was postulierte Levinson (1978) zur Midlife-Crisis?",
+      "opts": [
+        "Dass die Midlife-Crisis ausschließlich Frauen betrifft, bei Männern empirisch nie nachweisbar ist und somit kein universelles Phänomen des mittleren Erwachsenenalters darstellt.",
+        "Eine universelle, normative Übergangsphase vom jungen zum mittleren Erwachsenenalter (anfangs für Männer formuliert).",
+        "Dass es keine Übergangsphasen im Erwachsenenalter gibt.",
+        "Dass die Midlife-Crisis erst nach dem 80. Lebensjahr eintritt."
+      ],
+      "c": 1,
+      "e": "Levinson (1978): Annahme einer UNIVERSELLEN Krise als normative Übergangsphase vom jungen zum mittleren Erwachsenenalter; anfangs für Männer, später auch für Frauen formuliert."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was zeigen die empirischen Befunde zur Midlife-Crisis?",
+      "opts": [
+        "Eine universelle Krise bei nahezu allen Männern ist eindeutig belegt.",
+        "Die Krise tritt zuverlässig bei allen Menschen zum exakt gleichen Zeitpunkt auf — und zwar als biologisch fest verankerter, über alle Kulturen hinweg identischer Übergang.",
+        "Das mittlere Erwachsenenalter ist die unglücklichste Lebensphase.",
+        "Keine Evidenz für eine Krise; Ziele sind flexibel/werden angepasst — selbst die schwache Konzeptualisierung lässt sich nicht halten."
+      ],
+      "c": 3,
+      "e": "Empirisch: keine Evidenz, dass man sich im mittleren Alter an früh gesetzten Zielen misst; Ziele sind flexibel (keine festen Standards); keine Krise bei der Mehrheit — nicht einmal die schwache Konzeptualisierung hält. Mittleres Alter eher Phase von Zufriedenheit/Höhepunkten."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was kennzeichnet die „Sandwich-Generation“?",
+      "opts": [
+        "Eine Generation, die ausschließlich für die eigenen Kinder verantwortlich ist.",
+        "Personen in der Mitte zwischen Generationen: zugleich Eltern eigener Kinder UND Kind der alternden Eltern — Balance zwischen Geben und Nehmen.",
+        "Eine Generation ohne familiäre Verpflichtungen.",
+        "Personen, die ausschließlich ihre alternden Eltern pflegen und selbst keine Kinder haben — die gleichzeitige Doppelbelastung durch eigene, noch zu versorgende Kinder ist für dieses Konzept ausdrücklich nicht kennzeichnend."
+      ],
+      "c": 1,
+      "e": "Sandwich-Generation: in der Mitte verschiedener Generationen (Eltern der eigenen Kinder + Kind der alternden Eltern); Verpflichtungen gegenüber zwei Generationen, Balance Geben/Nehmen — beanspruchend, aber auch befriedigend."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wie verändert sich laut Freund die Zielorientierung über das Erwachsenenalter?",
+      "opts": [
+        "Von Verlustvermeidung (jung) hin zu reiner Gewinnorientierung (alt).",
+        "Die Zielorientierung bleibt über die gesamte Lebensspanne unverändert auf maximalen Zuwachs ausgerichtet.",
+        "Von Gewinn-/Wachstumsorientierung (jung) hin zu Maintenance und Verlustvermeidung (alt).",
+        "Ziele spielen im Alter keine Rolle mehr."
+      ],
+      "c": 2,
+      "e": "Freund: deutliche Verschiebung von einer Orientierung an Gewinnen/Wachstum (junges Erwachsenenalter) hin zu Erhalt (maintenance) und Vermeidung von Verlusten (höheres Alter) — adaptiv: Ältere berichten höheres Wohlbefinden bei Maintenance-/Verlustvermeidungs-Zielen."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zum Entwicklungsbegriff im Erwachsenenalter ist FALSCH?",
+    "opts": [
+      "Im klassischen Sinn (Reifung, Kompetenzzuwachs) findet im Erwachsenenalter sehr viel und sehr schnelle Entwicklung statt.",
+      "Entwicklung ist im Erwachsenenalter multidimensional und multidirektional — Gewinne und Verluste treten über die gesamte Lebensspanne in mehreren Funktionsbereichen nebeneinander auf.",
+      "Es bestehen große interindividuelle Unterschiede.",
+      "Die Entwicklungsrate ist im klassischen Sinn eher gering."
+    ],
+    "c": 0,
+    "e": "FALSCH ist a: im klassischen Sinn findet im Erwachsenenalter relativ WENIG/langsame Entwicklung statt. b, c, d sind korrekt."
+  },
+  {
+    "id": "bq2",
+    "q": "Eine Frau bekommt mit 19 ihr erstes Kind und erntet kritische Reaktionen aus dem Umfeld. Welches Konzept passt?",
+    "opts": [
+      "Primäre Kontrolle.",
+      "„Off time“ im Sinne der social clock (Abweichung vom normativen Zeitplan → negative Sanktionen).",
+      "Emerging Adulthood.",
+      "Das Rubikon-Modell der vier aufeinanderfolgenden Handlungsphasen vom Abwägen bis zum Bewerten und beschreibt die Handlung in genau vier aufeinanderfolgenden, klar abgegrenzten Phasen."
+    ],
+    "c": 1,
+    "e": "Ein Lebensereignis außerhalb des normativen Zeitplans = „off time“ (social clock, Neugarten) → tendenziell negative soziale Sanktionen."
+  },
+  {
+    "id": "bq3",
+    "q": "Welche Phase liegt nach gängiger Untergliederung zwischen Jugend und frühem Erwachsenenalter?",
+    "opts": [
+      "Das späte Erwachsenenalter („alte Alte“).",
+      "Das mittlere Erwachsenenalter.",
+      "Emerging Adulthood (ca. ab 18, „grauer Übergang“ bis ca. 25).",
+      "Die frühe Kindheit, die als eigenständige Übergangsphase unmittelbar an die Adoleszenz anschließt und bis etwa zum 25. Lebensjahr reicht."
+    ],
+    "c": 2,
+    "e": "Emerging Adulthood (Arnett) liegt als verlängerter, eigenständiger Übergang zwischen Jugend/Adoleszenz und frühem Erwachsenenalter (ca. 18 bis ~25 J.)."
+  },
+  {
+    "id": "bq4",
+    "q": "Was meint sekundäre Kontrolle?",
+    "opts": [
+      "Die Umwelt aktiv an die eigenen Bedürfnisse anpassen, um die äußeren Bedingungen aktiv im Sinne der eigenen Ziele und Bedürfnisse zu verändern.",
+      "Ein Synonym für primäres Kontrollpotenzial.",
+      "Die rein biologische Reifung des Organismus.",
+      "Die Veränderung des Selbst — Anpassung eigener Bedürfnisse/Ziele an kontextuelle Gegebenheiten."
+    ],
+    "c": 3,
+    "e": "Sekundäre Kontrolle = Veränderung des Selbst (eigene Ziele/Bedürfnisse an Gegebenheiten anpassen). Über die Lebensspanne verschiebt sich das Verhältnis von primärer zu sekundärer Kontrolle."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche Reihenfolge hat das Rubikon-Modell der Handlungsphasen (Heckhausen & Gollwitzer)?",
+    "opts": [
+      "Wünschen/Abwägen → Wollen/Planen → Tun/Ausführen → Ergebnis/Bewerten.",
+      "Tun → Wünschen → Bewerten → Planen — und damit in einer bewusst vom Originalmodell abweichenden, vertauschten Reihenfolge.",
+      "Planen → Bewerten → Wünschen → Tun.",
+      "Bewerten → Tun → Planen → Wünschen."
+    ],
+    "c": 0,
+    "e": "Rubikon-Modell: (I) Wünschen/Abwägen → [Rubikon: Entscheiden] → (II) Wollen/Planen → (III) Tun/Ausführen → (IV) Ergebnis/Bewerten."
+  },
+  {
+    "id": "bq6",
+    "q": "Eine 50-Jährige pflegt ihre Mutter und unterstützt zugleich ihre studierenden Kinder. Welches Konzept passt?",
+    "opts": [
+      "Empty-Nest-Syndrom.",
+      "Sandwich-Generation (Verpflichtungen gegenüber zwei Generationen, Balance Geben/Nehmen).",
+      "Emerging Adulthood.",
+      "Das psychosoziale Moratorium nach Erikson, also der bewusste Aufschub von Verpflichtungen zur Identitätsfindung im jungen Erwachsenenalter."
+    ],
+    "c": 1,
+    "e": "Sandwich-Generation: gleichzeitig Verantwortung für die eigenen Kinder UND die alternden Eltern → Balance zwischen Geben und Nehmen, beanspruchend, aber auch befriedigend."
+  },
+  {
+    "id": "bq7",
+    "q": "Wie ist das „Phänomen der gewonnenen Jahre“ einzuordnen?",
+    "opts": [
+      "Als überwiegend negatives Ereignis ohne neue Möglichkeiten, das von den Betroffenen durchweg als reiner Verlust erlebt wird und mit dem endgültigen Rückzug aus allen aktiven Lebensbereichen einhergeht.",
+      "Als Synonym für die Midlife-Crisis.",
+      "Gestiegene Lebenserwartung → mehr verbleibende Zeit nach Auszug der Kinder; meist positiv (neue Freiheit), „empty nest“ als Risiko v.a. bei Eltern-Identität.",
+      "Als rein biologischer Reifungsschritt."
+    ],
+    "c": 2,
+    "e": "Gewonnene Jahre: durch gestiegene Lebenserwartung mehr Zeit nach dem Auszug der Kinder; meist positiv (hinzugewonnene Freiheit, neue Interessen). „Empty nest“ wird zur Gefahr, wenn man sich v.a. als Eltern definiert."
+  },
+  {
+    "id": "bq8",
+    "q": "Was sagen die strenge, moderate und schwache Konzeptualisierung der Midlife-Crisis aus?",
+    "opts": [
+      "Alle drei behaupten dasselbe in identischer Form und unterscheiden sich weder in der angenommenen Normativität noch in der zeitlichen Bindung an das mittlere Erwachsenenalter noch in den postulierten strukturellen Markern.",
+      "Sie unterscheiden sich nur im Namen.",
+      "Sie betreffen ausschließlich das hohe Alter.",
+      "Sie stufen die Annahmen ab: streng = Normativität + zeitlich gebunden + eigene strukturelle Marker; moderat = Normativität + zeitlich gebunden; schwach = nur zeitlich gebunden."
+    ],
+    "c": 3,
+    "e": "Streng: (1) Normativität, (2) zeitlich ans mittlere Erwachsenenalter gebunden, (3) eigene strukturelle Marker. Moderat: (1)+(2). Schwach: nur (2). Empirisch hält selbst die schwache Konzeptualisierung nicht."
+  }
+];
+
+var corrCorrect = {
+  "w4a": "primaer",
+  "w4b": "sekundaer",
+  "w4c": "primaer",
+  "w4d": "sekundaer"
+};
+var corrExpl = {
+  "w4a": "Die Umwelt an die eigenen Bedürfnisse anpassen (auf Zielerreichung) = primäre Kontrolle.",
+  "w4b": "Veränderung des Selbst; eigene Ziele an Gegebenheiten anpassen = sekundäre Kontrolle.",
+  "w4c": "Nach außen, auf die Umwelt gerichtet = primäre Kontrolle.",
+  "w4d": "Kompensatorisch bei Verlust von Gelegenheiten, Ziele loslösen/Selbstschutz = (kompensatorische) sekundäre Kontrolle."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Simulator (Sektion ③): social clock — on time / off time (Neugarten) */
+var scData = {
+  kind16:  {typ:'OFF TIME', curve:'🔴 negative Sanktionen', b:'Erstes Kind mit 16 ist deutlich vor dem normativen Zeitplan → erwartungswidrig, tendenziell soziale Missbilligung.'},
+  kind30:  {typ:'ON TIME', curve:'🟢 sozial unterstützt', b:'Erstes Kind mit 30 liegt im erwarteten Zeitfenster → erwartungskonform, soziale Unterstützung/Verstärkung.'},
+  beruf25: {typ:'ON TIME', curve:'🟢 sozial unterstützt', b:'Berufseinstieg mit 25 entspricht dem normativen Zeitplan → on time.'},
+  stud55:  {typ:'OFF TIME', curve:'🔴 negative Sanktionen', b:'Erststudium mit 55 liegt weit nach dem normativen Zeitplan → off time, erwartungswidrig.'},
+  rente67: {typ:'ON TIME', curve:'🟢 sozial unterstützt', b:'Pensionierung mit 67 entspricht dem institutionell geregelten Rentenalter → on time.'}
+};
+function scSet(k){
+  ['kind16','kind30','beruf25','stud55','rente67'].forEach(function(x){ var b=document.getElementById('sc-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('sc-out'); if(!o) return;
+  var d=scData[k];
+  o.innerHTML='<strong>Einordnung:</strong> '+d.typ+'<div class="sim-curve">'+d.curve+'</div>'+d.b;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  scSet('kind16');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

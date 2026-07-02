@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL06 Sozialer Einfluss</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl06
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Konformitäts-Simulator (VL06) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL06 Sozialer Einfluss</h1>
+<p class="page-sub">Sozialpsychologie · Prof. Dr. Susanne Veit · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 2. Was ist Compliance, und wie kann sie erreicht werden (drei Strategien)? · 3. Was ist Konformität, und welche situativen Merkmale schwächen sie? · 4. Welcher kausale Effekt wurde im Milgram-Experiment untersucht, und wie wurde er umgesetzt?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Sozialer Einfluss & Normen</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Compliance & Techniken</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Cialdini & Werbung</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Konformität: Asch</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Warum konform?</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Minderheiteneinfluss</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Gehorsam: Milgram</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Ungehorsam & Schutz</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Sozialer Einfluss & Normen ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Sozialer Einfluss & soziale Normen</div>
+    <div class="sec-lz">deskriptiv vs. präskriptiv · Müll-/Graffiti-Studien</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In einer bereits vermüllten Ecke wirfst du eher selbst etwas weg als in einer sauberen. Warum steuert die Umgebung dein Verhalten so stark?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Wegen <strong>sozialer Normen</strong>: Der Müll signalisiert, was andere <em>tun</em> (<strong>deskriptive</strong> Norm). Davon zu unterscheiden ist die <strong>präskriptive</strong> Norm — was man tun <em>soll</em>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sozialer Einfluss & Normen</div>
+    Sozialer Einfluss = die Veränderung von Denken, Fühlen, Verhalten durch andere. <strong>Soziale Normen</strong> sind dabei zentrale Steuergrößen.
+  </div>
+  <div class="card">
+    <div class="card-title">Deskriptiv vs. präskriptiv</div>
+    <strong>Deskriptiv:</strong> was Menschen tatsächlich tun (Ist; herumliegender Müll). <strong>Präskriptiv/injunktiv:</strong> was man tun soll (Soll; „Müll gehört in den Eimer“).
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Studien: Müll & Graffiti</div>
+    Sichtbarer Müll erhöht das Wegwerfen (deskriptive Norm). Spannend: Wo eine Norm sichtbar gebrochen wird (Graffiti), sinkt auch die Beachtung <em>anderer</em> Regeln.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Norm wirkt?</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>Deskriptiv:</strong> „Alle werfen hier Müll hin“ → ich auch.</div>
+    <div class="step-item"><strong>Präskriptiv:</strong> „Man soll keinen Müll wegwerfen“ → moralischer Appell.</div>
+    <div class="step-item"><strong>Müll-Studie:</strong> sichtbarer Müll = deskriptive Norm „hier wird vermüllt“.</div>
+    <div class="step-item"><strong>Graffiti-Studie:</strong> ein sichtbarer Regelbruch senkt die Beachtung weiterer Regeln.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'norm')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Compliance & Techniken ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Compliance & Techniken</div>
+    <div class="sec-lz">Lernfrage 2: Door-in-the-Face · Foot-in-the-Door · Low-Ball</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Verkäufer fragt erst nach einer riesigen Spende, und als du ablehnst, nach einer kleinen — und du sagst zu. Warum funktioniert das? <em>(Lernfrage 2)</em></p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Das ist <strong>Compliance</strong> (Verhaltensanpassung ohne innere Überzeugung) über die <strong>Door-in-the-Face</strong>-Technik. Daneben gibt es <strong>Foot-in-the-Door</strong> und <strong>Low-Ball</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Compliance</div>
+    Anpassung des <strong>Verhaltens</strong> an eine Bitte — <strong>ohne</strong> innere Überzeugung. Davon zu trennen: echte Einstellungsänderung (Persuasion) und Gehorsam gegenüber Autorität.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Techniken</div>
+    <strong>Door-in-the-Face:</strong> groß → (Ablehnung) → klein (Reziprozität). <strong>Foot-in-the-Door:</strong> klein → groß (Konsistenz). <strong>Low-Ball:</strong> Zusage → Bedingungen verschlechtern.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Compliance-Technik?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Beispiel der Technik zu</div>
+    <div class="corr-item" id="ct0">Erst um eine riesige Spende bitten; nach der Ablehnung um eine kleine.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ct0',this,'Door-in-the-Face')">Door-in-the-Face</button>
+        <button class="corr-btn" onclick="checkCorr('ct0',this,'Foot-in-the-Door')">Foot-in-the-Door</button>
+        <button class="corr-btn" onclick="checkCorr('ct0',this,'Low-Ball')">Low-Ball</button>
+      </div><div class="corr-fb" id="ct0-fb"></div>
+    </div>
+    <div class="corr-item" id="ct1">Erst um einen kleinen Gefallen bitten, dann um einen großen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ct1',this,'Door-in-the-Face')">Door-in-the-Face</button>
+        <button class="corr-btn" onclick="checkCorr('ct1',this,'Foot-in-the-Door')">Foot-in-the-Door</button>
+        <button class="corr-btn" onclick="checkCorr('ct1',this,'Low-Ball')">Low-Ball</button>
+      </div><div class="corr-fb" id="ct1-fb"></div>
+    </div>
+    <div class="corr-item" id="ct2">Eine Zusage einholen und danach die Kosten oder Bedingungen verschlechtern.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ct2',this,'Door-in-the-Face')">Door-in-the-Face</button>
+        <button class="corr-btn" onclick="checkCorr('ct2',this,'Foot-in-the-Door')">Foot-in-the-Door</button>
+        <button class="corr-btn" onclick="checkCorr('ct2',this,'Low-Ball')">Low-Ball</button>
+      </div><div class="corr-fb" id="ct2-fb"></div>
+    </div>
+    <div class="corr-item" id="ct3">Nach einer bewusst überzogenen, sicher abgelehnten Forderung eine moderate nachschieben.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ct3',this,'Door-in-the-Face')">Door-in-the-Face</button>
+        <button class="corr-btn" onclick="checkCorr('ct3',this,'Foot-in-the-Door')">Foot-in-the-Door</button>
+        <button class="corr-btn" onclick="checkCorr('ct3',this,'Low-Ball')">Low-Ball</button>
+      </div><div class="corr-fb" id="ct3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Cialdini & Werbung ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Cialdinis Prinzipien & verdeckte Werbung</div>
+    <div class="sec-lz">6 Prinzipien · subliminal (Vicary-Mythos, Karremans)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Angeblich ließen versteckte „Iss Popcorn“-Bilder im Kino den Umsatz explodieren. Stimmt diese berühmte Geschichte zu subliminaler Werbung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Nein — der <strong>Vicary-Fall war ein Schwindel</strong>. Subliminale Effekte sind allenfalls minimal. Wirksamer sind offene Prinzipien wie <strong>Cialdinis sechs</strong> (z. B. Reziprozität, Knappheit).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Cialdinis 6 Prinzipien</div>
+    Reziprozität · Commitment/Konsistenz · soziale Bewährtheit · Sympathie · Autorität · Knappheit — bewährte Hebel der Beeinflussung in Werbung und Verkauf.
+  </div>
+  <div class="card">
+    <div class="card-title">Verdeckte Beeinflussung</div>
+    <strong>Behavioral Targeting</strong> (Werbung nach digitalem Fußabdruck), <strong>Produktplatzierung</strong> und <strong>subliminale</strong> Reize — Letztere wirken laut Forschung nur schwach.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Vicary-Mythos</div>
+    Die spektakulären Zahlen waren <strong>erfunden</strong>. Spätere seriöse Studien (Karremans et al.) fanden allenfalls schwache, stark kontextabhängige Effekte – keine „Gedankenkontrolle“.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Offene vs. verdeckte Beeinflussung</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>Reziprozität:</strong> Gratisprobe → Kaufdruck.</div>
+    <div class="step-item"><strong>Knappheit:</strong> „Nur noch 2 verfügbar!“ → höherer wahrgenommener Wert.</div>
+    <div class="step-item"><strong>Behavioral Targeting:</strong> Werbung passt verdächtig genau zu deinen Interessen.</div>
+    <div class="step-item"><strong>Subliminal:</strong> berühmt, aber wissenschaftlich allenfalls minimal wirksam (Vicary = Mythos).</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'cial')">Nächstes Prinzip ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Konformität: Asch ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Konformität: Asch</div>
+    <div class="sec-lz">Mehrheitseinfluss</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Alle in der Gruppe nennen dieselbe offensichtlich falsche Antwort. Sagst du, was du wirklich siehst — oder schließt du dich an?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Erstaunlich viele schließen sich an: Das ist <strong>Konformität</strong> (Mehrheitseinfluss), wie im klassischen <strong>Asch</strong>-Linienexperiment gezeigt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Asch-Experiment</div>
+    Versuchspersonen sollen Linienlängen vergleichen — eine einstimmige Gruppe nennt absichtlich die falsche. Ein erheblicher Teil <strong>passt sich an</strong>, obwohl die richtige Antwort offensichtlich ist.
+  </div>
+  <div class="card">
+    <div class="card-title">Konformität</div>
+    Die Anpassung des eigenen Verhaltens/Urteils an eine Gruppe — auch ohne direkte Aufforderung. Sie kann öffentlich (Verhalten) oder auch privat (Überzeugung) erfolgen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Aschs Befund</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>Aufgabe:</strong> objektiv leichter Linienvergleich.</div>
+    <div class="step-item"><strong>Manipulation:</strong> eingeweihte Mehrheit nennt einstimmig die falsche Linie.</div>
+    <div class="step-item"><strong>Befund:</strong> viele schließen sich der falschen Mehrheit an.</div>
+    <div class="step-item"><strong>Schluss:</strong> Konformität entsteht auch bei eindeutiger Aufgabe — durch Gruppendruck.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'asch')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Warum konform? ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Warum konform? Normativ vs. informational</div>
+    <div class="sec-lz">Lernfrage 3: Einflussfaktoren, die Konformität stärken/schwächen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Bedingungen lassen Konformität ansteigen — und welche eine schwinden? <em>(Lernfrage 3)</em></p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Konformität steigt bei <strong>einstimmiger</strong> Mehrheit und <strong>öffentlicher</strong> Antwort. Sie bricht ein, sobald <strong>ein einziger Verbündeter</strong> abweicht oder man <strong>privat</strong> antwortet. Dahinter: <strong>normativer</strong> vs. <strong>informationaler</strong> Einfluss.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Normativer vs. informationaler Einfluss</div>
+    <strong>Normativ:</strong> anpassen, um <em>dazuzugehören</em> (obwohl man es besser weiß). <strong>Informational:</strong> die anderen für <em>sachlich richtig</em> halten (v. a. in mehrdeutigen Lagen).
+  </div>
+  <div class="card">
+    <div class="card-title">Einflussfaktoren (Lernfrage 3)</div>
+    Konformität ↑ bei Einstimmigkeit, öffentlicher Antwort, größerer Gruppe. Konformität ↓ durch <strong>einen Verbündeten</strong> (bricht Einstimmigkeit) und <strong>private</strong> Antwort.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Konformitäts-Simulator</div>
+  <div class="card">
+    <div class="card-title">Stell die Bedingungen ein — wie hoch ist die Konformität?</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Mehrheit</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="kf-unan-yes" onclick="kfSet('unan','yes')">einstimmig</button>
+        <button class="sim-tbtn" id="kf-unan-no" onclick="kfSet('unan','no')">ein Verbündeter weicht ab</button>
+      </div>
+      <div class="sim-lbl">Antwort</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="kf-pub-pub" onclick="kfSet('pub','pub')">öffentlich</button>
+        <button class="sim-tbtn" id="kf-pub-priv" onclick="kfSet('pub','priv')">privat</button>
+      </div>
+      <div class="sim-lbl">Gruppengröße</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="kf-size-big" onclick="kfSet('size','big')">groß</button>
+        <button class="sim-tbtn" id="kf-size-small" onclick="kfSet('size','small')">klein (1–2)</button>
+      </div>
+      <div class="sim-verdict" id="kf-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Minderheiteneinfluss ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Minderheiteneinfluss</div>
+    <div class="sec-lz">Moscovici: Konsistenz, langsames Umdenken</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann eine kleine Minderheit jemals die große Mehrheit umstimmen — und wenn ja, wie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Ja, aber anders: <strong>Minderheiteneinfluss</strong> (Moscovici) wirkt <strong>langsam und über Konsistenz</strong> — er regt echtes, privates Umdenken an, während Mehrheitseinfluss schnell und oft nur oberflächlich wirkt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Minderheiteneinfluss (Moscovici)</div>
+    Eine Minderheit kann die Mehrheit beeinflussen, wenn sie ihre Position <strong>konsistent</strong> vertritt. Die Wirkung ist <strong>langsam</strong> und führt eher zu tiefem, privatem Umdenken.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Mehrheit vs. Minderheit</div>
+    <strong>Mehrheit:</strong> schnell, oft normativer Druck, öffentliche Anpassung. <strong>Minderheit:</strong> langsam, über Konsistenz, echte (private) Einstellungsänderung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Wie Minderheiten überzeugen</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>1:</strong> Eine Minderheit vertritt eine abweichende Position.</div>
+    <div class="step-item"><strong>2:</strong> Konsistenz: Sie bleibt beharrlich und einheitlich dabei.</div>
+    <div class="step-item"><strong>3:</strong> Die Mehrheit beginnt nachzudenken (statt nur nachzugeben).</div>
+    <div class="step-item"><strong>4:</strong> Langsam entsteht echtes, oft privates Umdenken.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'mino')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Gehorsam: Milgram ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Gehorsam: Milgram</div>
+    <div class="sec-lz">Lernfrage 4: kausaler Effekt (Autorität → Gehorsam) + Operationalisierung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Auf Anweisung eines Versuchsleiters „Stromschläge“ verabreichen, obwohl die andere Person schreit? Die meisten sagen: niemals. <em>(Lernfrage 4)</em></p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Im Milgram-Experiment gehorchte trotzdem ein erschreckend hoher Anteil. Untersucht wurde der <strong>kausale Einfluss von Autorität auf Gehorsam</strong>; gemessen an der <strong>Stärke der „verabreichten“ Schocks</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Milgram-Paradigma</div>
+    Eine Autoritätsperson weist an, bei Fehlern die „Stromstärke“ zu erhöhen. <strong>Kausaler Effekt:</strong> Autorität → Gehorsam. <strong>Operationalisierung:</strong> wie weit jemand geht (Schockstärke).
+  </div>
+  <div class="card">
+    <div class="card-title">Erklärungen & Einflussfaktoren</div>
+    Gehorsam steigt u. a. bei <strong>physischer Nähe der Autorität</strong>, <strong>institutionellem Rahmen</strong> und <strong>Distanz zum Opfer</strong>; er sinkt, wenn Verbündete ungehorsam sind.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Die Kernidee (M5-4)</div>
+    Prüfungsrelevant ist die Grundidee: Die <strong>Situationsmacht</strong> (Autorität) überwiegt die Persönlichkeit — nicht Namen oder Jahreszahlen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Milgram Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>Setup:</strong> „Lehrer“ soll dem „Schüler“ bei Fehlern Schocks geben (Autorität weist an).</div>
+    <div class="step-item"><strong>UV:</strong> Anweisung/Druck der Autoritätsperson.</div>
+    <div class="step-item"><strong>AV:</strong> maximale Schockstärke, bis zu der jemand gehorcht.</div>
+    <div class="step-item"><strong>Befund:</strong> sehr hoher Gehorsam → Macht der Situation.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'milg')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Ungehorsam & Schutz ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Ungehorsam & Schutz</div>
+    <div class="sec-lz">Whistleblowing · Verbündete · Schutzmaßnahmen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was macht es leichter, einer unangemessenen Anweisung oder Gruppenmeinung zu widerstehen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Vor allem <strong>Verbündete</strong>: Schon ein einziger Abweichler bricht die Einstimmigkeit und macht Widerspruch sozial möglich — bei Konformität wie bei Gehorsam. Plus: die Mechanismen kennen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ungehorsam & Whistleblowing</div>
+    Widerstand gegen unethische Anweisungen fällt leichter mit <strong>Verbündeten</strong> und sichtbaren <strong>Vorbildern</strong>. Whistleblowing braucht Mut, kann aber Systeme korrigieren.
+  </div>
+  <div class="card">
+    <div class="card-title">Schutzmaßnahmen</div>
+    Die Einflussmechanismen <strong>kennen</strong> (Normen, Compliance-Techniken, Gehorsam), Entscheidungen <strong>bewusst hinterfragen</strong> und sich <strong>Verbündete</strong> suchen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Widerstand stärken</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch</div>
+    <div class="step-item"><strong>Verbündeter:</strong> bricht die Einstimmigkeit → Konformität & Gehorsam sinken.</div>
+    <div class="step-item"><strong>Wissen:</strong> wer die Techniken kennt, erkennt Manipulation.</div>
+    <div class="step-item"><strong>Distanz schaffen:</strong> Bedenkzeit, Rückfrage, „Nein“ üben.</div>
+    <div class="step-item"><strong>Whistleblowing:</strong> sichtbar machen, was schiefläuft — mit Unterstützung.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'unge')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 6 häufigsten Verwechslungen aus VL06</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Deskriptive Normen</h4>
+      <p>Was Menschen tatsächlich tun (Ist)</p>
+      <p>z. B. herumliegender Müll</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Präskriptive (injunktive) Normen</h4>
+      <p>Was man tun soll (Soll)</p>
+      <p>Gebote/Erwartungen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Deskriptive Normen schreiben vor, was man tun soll.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Compliance</h4>
+      <p>Verhaltensanpassung an eine Bitte</p>
+      <p>Ohne innere Überzeugung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Einstellungsänderung (Persuasion)</h4>
+      <p>Verändert die private Überzeugung</p>
+      <p>Tiefer, dauerhafter</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Compliance bedeutet immer auch eine echte innere Einstellungsänderung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Door-in-the-Face</h4>
+      <p>Große Bitte → Ablehnung → kleine Bitte</p>
+      <p>Mechanismus: Reziprozität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Foot-in-the-Door</h4>
+      <p>Kleine Bitte → dann große</p>
+      <p>Mechanismus: Konsistenz</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Door-in-the-Face beginnt mit einer kleinen Bitte und steigert sich dann.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Normativer Einfluss</h4>
+      <p>Anpassung, um dazuzugehören</p>
+      <p>Obwohl man es besser weiß</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Informationaler Einfluss</h4>
+      <p>Andere als Informationsquelle</p>
+      <p>v. a. in mehrdeutigen Lagen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Normativer Einfluss bedeutet, dass man die Gruppe für besser informiert hält.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Mehrheitseinfluss (Asch)</h4>
+      <p>Schnell, oft normativer Druck</p>
+      <p>Öffentliche Anpassung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Minderheitseinfluss (Moscovici)</h4>
+      <p>Langsam, über Konsistenz</p>
+      <p>Kann echtes Umdenken auslösen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Mehrheits- und Minderheiteneinfluss wirken auf exakt dieselbe Weise.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Foot-in-the-Door</h4>
+      <p>Kleine → große Bitte</p>
+      <p>Über Selbstbild/Konsistenz</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Low-Ball</h4>
+      <p>Zusage, dann Bedingungen verschlechtern</p>
+      <p>Bindung an die einmal getroffene Entscheidung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Foot-in-the-Door und Low-Ball sind dieselbe Technik.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl06</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl06';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was sind „deskriptive“ soziale Normen?",
+      "opts": [
+        "Was Menschen tatsächlich tun (der Ist-Zustand)",
+        "Ausdrückliche Vorschriften und Gebote, die festlegen, was man unbedingt tun oder lassen soll",
+        "Angeborene, biologisch festgelegte Reflexe",
+        "Reine Zufallsmuster ohne sozialen Bezug"
+      ],
+      "c": 0,
+      "e": "Deskriptive Normen beschreiben, was Menschen tatsächlich tun (Ist-Zustand) – anders als präskriptive Normen, die vorschreiben, was man tun soll."
+    },
+    {
+      "id": "s0q2",
+      "q": "In der Müll-Studie liegt schon Abfall herum – und Menschen werfen eher selbst Müll weg. Welche Norm wirkt?",
+      "opts": [
+        "Eine präskriptive (injunktive) Norm",
+        "Eine deskriptive Norm – das sichtbare Verhalten anderer",
+        "Gar keine soziale Norm",
+        "Ausschließlich der informationale Einfluss in einer mehrdeutigen, völlig neuartigen Notsituation"
+      ],
+      "c": 1,
+      "e": "Herumliegender Müll signalisiert „Hier wird Müll weggeworfen“ (deskriptive Norm): Das sichtbare tatsächliche Verhalten anderer steuert das eigene."
+    },
+    {
+      "id": "s0q3",
+      "q": "Worin unterscheiden sich deskriptive und präskriptive Normen?",
+      "opts": [
+        "Im Grunde unterscheiden sie sich gar nicht",
+        "Deskriptive schreiben vor, präskriptive beschreiben nur",
+        "Deskriptiv = was getan wird; präskriptiv = was getan werden soll",
+        "Beide beziehen sich ausschließlich auf angeborene, biologisch festgelegte Verhaltensmuster des Menschen"
+      ],
+      "c": 2,
+      "e": "Deskriptive Normen beschreiben den Ist-Zustand (was man tut); präskriptive/injunktive Normen den Soll-Zustand (was man tun soll)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was bedeutet „Compliance“ im sozialen Einfluss?",
+      "opts": [
+        "Eine tiefe, dauerhafte innere Einstellungsänderung",
+        "Reiner Gehorsam gegenüber einer formalen Autorität",
+        "Die vollständige, dauerhafte und private Überzeugung, die das Verhalten von innen heraus verändert",
+        "Verhaltensanpassung an eine Bitte – ohne innere Überzeugung"
+      ],
+      "c": 3,
+      "e": "Compliance ist die Anpassung des Verhaltens an eine direkte Bitte/Aufforderung – ohne dass sich die innere Einstellung ändern muss."
+    },
+    {
+      "id": "s1q2",
+      "q": "Worin unterscheiden sich Compliance und echte Einstellungsänderung?",
+      "opts": [
+        "Compliance ändert nur das Verhalten, Persuasion auch die private Überzeugung",
+        "Beide verändern stets gleichermaßen die tiefe innere Überzeugung sowie das nach außen gezeigte Verhalten",
+        "Sie sind im Kern völlig identisch",
+        "Compliance ist grundsätzlich immer dauerhaft und stabil"
+      ],
+      "c": 0,
+      "e": "Compliance = Verhaltensanpassung ohne innere Überzeugung; echte Einstellungsänderung (Persuasion) verändert auch die private Haltung."
+    },
+    {
+      "id": "s1q3",
+      "q": "Die „Door-in-the-Face“-Technik nutzt welchen Mechanismus?",
+      "opts": [
+        "Konsistenz nach einer ersten kleinen Zusage",
+        "Reziprozität – nach Ablehnung der großen Bitte wirkt die kleine als Entgegenkommen",
+        "Reine Wiederholung der Bitte",
+        "Ausschließlich den informationalen Einfluss in einer objektiv mehrdeutigen Wahrnehmungssituation"
+      ],
+      "c": 1,
+      "e": "Door-in-the-Face: Auf eine (abgelehnte) große Bitte folgt eine kleine; das „Nachgeben“ des Bittenden erzeugt über Reziprozität Zustimmung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was besagt der berühmte „Vicary“-Fall zu subliminaler Werbung?",
+      "opts": [
+        "Subliminale Werbung steuert das Kaufverhalten massiv und zuverlässig",
+        "Subliminale Reize sind in Wahrheit immer bewusst wahrnehmbar",
+        "Die spektakulären Effekte waren erfunden – die Wirkung ist allenfalls minimal",
+        "Subliminale Werbung ist die mit Abstand wirksamste und zuverlässigste Form der gesamten Werbepsychologie"
+      ],
+      "c": 2,
+      "e": "Der Vicary-Fall war ein Schwindel; die behaupteten massiven Effekte ließen sich nicht belegen. Subliminale Effekte sind allenfalls schwach und stark kontextabhängig."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was beschreibt Cialdinis Prinzip der „Reziprozität“?",
+      "opts": [
+        "Dass man einfach der Mehrheit folgt",
+        "Dass Knappheit den wahrgenommenen Wert erhöht",
+        "Ausschließlich die innere, vollständig private Überzeugung, die das Verhalten dauerhaft von innen verändert",
+        "Das Bedürfnis, eine erhaltene Gefälligkeit zu erwidern"
+      ],
+      "c": 3,
+      "e": "Reziprozität: Wer etwas erhält, fühlt sich verpflichtet, etwas zurückzugeben – ein zentrales Beeinflussungsprinzip (Cialdini)."
+    },
+    {
+      "id": "s2q3",
+      "q": "Was bedeutet „Behavioral Targeting“?",
+      "opts": [
+        "Werbung anhand des digitalen Fußabdrucks gezielt zuschneiden",
+        "Die vollständig zufällige, völlig ungesteuerte Verteilung identischer Werbung an alle Personen gleichzeitig",
+        "Jede Form von Werbung grundsätzlich verbieten",
+        "Ausschließlich klassische Plakatwerbung im öffentlichen Raum"
+      ],
+      "c": 0,
+      "e": "Behavioral Targeting nutzt Daten zum (digitalen) Verhalten, um Werbung individuell und gezielt auszuspielen."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Im Asch-Experiment nennt eine einstimmige Gruppe eine offensichtlich falsche Linienlänge. Was tun viele Versuchspersonen?",
+      "opts": [
+        "Sie bleiben ausnahmslos immer bei der objektiv richtigen Antwort",
+        "Sie passen sich der falschen Mehrheit an (Konformität)",
+        "Sie verlassen sofort den Versuchsraum",
+        "Sie korrigieren die Mehrheit lautstark und überzeugen alle anderen von der objektiv richtigen Lösung"
+      ],
+      "c": 1,
+      "e": "Asch zeigte: Ein erheblicher Teil der Versuchspersonen passt sich einer einstimmigen, offensichtlich falschen Mehrheit an (Mehrheitseinfluss/Konformität)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was unterscheidet normativen von informationalem Einfluss?",
+      "opts": [
+        "Es gibt im Grunde keinen Unterschied",
+        "Normativ bedeutet, man hält die Gruppe für besser informiert",
+        "Normativ = dazugehören wollen; informational = die anderen für sachlich richtig halten",
+        "Beide bezeichnen ausschließlich den Gehorsam gegenüber einer formalen, eindeutig übergeordneten Autoritätsperson"
+      ],
+      "c": 2,
+      "e": "Normativer Einfluss: Anpassung, um dazuzugehören (obwohl man es besser weiß). Informationaler Einfluss: Man hält die anderen für sachlich richtig (v. a. in mehrdeutigen Lagen)."
+    },
+    {
+      "id": "s3q3",
+      "q": "Wann beruht Konformität eher auf informationalem Einfluss?",
+      "opts": [
+        "Wenn die Situation objektiv völlig eindeutig ist",
+        "Wenn man ausschließlich dazugehören will",
+        "Ausschließlich dann, wenn die Antwort öffentlich vor einer großen, einstimmigen Gruppe gegeben werden muss",
+        "Wenn die Situation mehrdeutig ist und man Orientierung sucht"
+      ],
+      "c": 3,
+      "e": "Informationaler Einfluss greift vor allem in mehrdeutigen, unsicheren Situationen: Man nutzt die anderen als Informationsquelle, um „richtig“ zu liegen."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Welches situative Merkmal schwächt Konformität am stärksten? (Lernfrage 3)",
+      "opts": [
+        "Schon ein einziger Verbündeter, der abweicht",
+        "Eine möglichst große, vollkommen einstimmige Mehrheit, die ihre Antworten laut und öffentlich gibt",
+        "Eine öffentliche Abgabe der eigenen Antwort",
+        "Eine besonders hohe Mehrdeutigkeit der Aufgabe"
+      ],
+      "c": 0,
+      "e": "Sobald ein einziger Verbündeter (Abweichler) die Einstimmigkeit bricht, sinkt die Konformität drastisch – Aschs zentraler Befund."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was erhöht die Konformität?",
+      "opts": [
+        "Eine anonyme, private Abgabe der Antwort",
+        "Eine einstimmige, öffentlich antwortende Mehrheit",
+        "Die Anwesenheit mindestens eines klar abweichenden, offen widersprechenden Verbündeten in der Gruppe",
+        "Eine völlige objektive Eindeutigkeit der Aufgabe"
+      ],
+      "c": 1,
+      "e": "Konformität steigt bei Einstimmigkeit, öffentlicher Antwort und (bis zu einem Punkt) größerer Gruppe; ein Verbündeter oder eine private Antwort senken sie."
+    },
+    {
+      "id": "s4q3",
+      "q": "Warum gibt jemand öffentlich die falsche Mehrheitsantwort, obwohl er die richtige kennt?",
+      "opts": [
+        "Wegen informationalen Einflusses",
+        "Wegen des Prinzips der Reziprozität",
+        "Wegen normativen Einflusses – um nicht aufzufallen oder abgelehnt zu werden",
+        "Ausschließlich, weil die Person die objektiv richtige Antwort selbst überhaupt nicht kennt oder erkennt"
+      ],
+      "c": 2,
+      "e": "Wer es besser weiß, aber dennoch mitgeht, unterliegt normativem Einfluss: Anpassung, um dazuzugehören und Ablehnung zu vermeiden."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie wirkt Minderheiteneinfluss (Moscovici) typischerweise?",
+      "opts": [
+        "Schnell und vor allem über direkten normativen Druck",
+        "Im Grunde überhaupt nicht",
+        "Ausschließlich sofort, sprunghaft und über den unmittelbaren sozialen Druck einer großen Mehrheit",
+        "Langsam und über Konsistenz – er regt echtes Umdenken an"
+      ],
+      "c": 3,
+      "e": "Minderheiteneinfluss wirkt langsam, indirekt und über Konsistenz; er kann tieferes, privates Umdenken auslösen – anders als der schnelle, oft oberflächliche Mehrheitseinfluss."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ist die wichtigste Voraussetzung, damit eine Minderheit Einfluss gewinnt?",
+      "opts": [
+        "Konsistenz – sie vertritt ihre Position beharrlich und einheitlich",
+        "Eine möglichst häufige, beliebige und situationsabhängige Änderung der eigenen vertretenen Position",
+        "Eine möglichst große zahlenmäßige Stärke",
+        "Eine formale, eindeutig übergeordnete Autorität"
+      ],
+      "c": 0,
+      "e": "Konsistenz ist entscheidend: Eine Minderheit, die ihre Position beharrlich und einheitlich vertritt, kann die Mehrheit zum Nachdenken bringen."
+    },
+    {
+      "id": "s5q3",
+      "q": "Worin unterscheiden sich Mehrheits- und Minderheiteneinfluss?",
+      "opts": [
+        "Im Grunde unterscheiden sie sich gar nicht",
+        "Mehrheit: schnell/normativ; Minderheit: langsam/über Konsistenz und echtes Umdenken",
+        "Beide wirken ausschließlich über die formale Autorität einer eindeutig übergeordneten Instanz",
+        "Der Minderheiteneinfluss wirkt grundsätzlich nur über offenen Zwang"
+      ],
+      "c": 1,
+      "e": "Mehrheitseinfluss wirkt schnell und oft durch normativen Druck (öffentliche Anpassung); Minderheiteneinfluss wirkt langsam über Konsistenz und kann privates Umdenken bewirken."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Welchen kausalen Effekt untersuchte das Milgram-Experiment? (Lernfrage 4)",
+      "opts": [
+        "Den Einfluss der Gruppengröße auf die Konformität",
+        "Den reinen Mere-Exposure-Effekt",
+        "Den Einfluss von Autorität auf den Gehorsam",
+        "Ausschließlich den Einfluss einer abweichenden Minderheit auf die private Meinung der Mehrheit"
+      ],
+      "c": 2,
+      "e": "Milgram untersuchte, wie stark die Anweisung einer Autoritätsperson den Gehorsam beeinflusst – die abhängige Variable war das Ausmaß des Gehorsams."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wie wurde der Gehorsam bei Milgram operationalisiert (gemessen)?",
+      "opts": [
+        "Über einen Fragebogen zur allgemeinen Einstellung",
+        "Über die Messung von Reaktionszeiten",
+        "Über die vollständig private, anonyme und freiwillige schriftliche Selbsteinschätzung der Versuchsperson",
+        "Über die Stärke der „verabreichten“ Stromschläge"
+      ],
+      "c": 3,
+      "e": "Die abhängige Variable war, wie weit die Versuchspersonen auf Anweisung gingen – gemessen an der Stärke der (vermeintlichen) Stromschläge."
+    },
+    {
+      "id": "s6q3",
+      "q": "Was ist die zentrale Lehre aus dem Milgram-Experiment?",
+      "opts": [
+        "Die Macht der Situation (Autorität) kann den meisten Menschen Gehorsam abringen",
+        "Dass ausschließlich besonders grausame oder gestörte Persönlichkeiten überhaupt Anweisungen befolgen",
+        "Dass praktisch niemand einer Autorität gehorcht",
+        "Dass Gehorsam ein rein angeborener, unveränderlicher Reflex ist"
+      ],
+      "c": 0,
+      "e": "Kernidee: Eine Autoritätssituation kann erschreckend hohen Gehorsam erzeugen – die Situationsmacht überwiegt individuelle Persönlichkeitsunterschiede."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was zeigt die Forschung zu Ungehorsam und Whistleblowing?",
+      "opts": [
+        "Dass Ungehorsam gegenüber Autoritäten grundsätzlich unmöglich ist",
+        "Verbündete und sichtbare Vorbilder erleichtern Widerstand erheblich",
+        "Dass Whistleblowing grundsätzlich überhaupt keine Folgen hat",
+        "Ausschließlich formale Autoritäten sind jemals in der Lage, unethische Anweisungen wirksam zu stoppen"
+      ],
+      "c": 1,
+      "e": "Ungehorsam fällt leichter, wenn es Verbündete und sichtbare Vorbilder gibt, die ebenfalls widersprechen – ähnlich wie ein Abweichler bei Asch."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wie kann man sich gegen unangemessenen sozialen Einfluss wappnen?",
+      "opts": [
+        "Indem man sich grundsätzlich nie informiert",
+        "Indem man jede Norm sofort und unhinterfragt befolgt",
+        "Die Mechanismen kennen und Entscheidungen bewusst hinterfragen",
+        "Ausschließlich dadurch, dass man jeglichen Kontakt zu anderen Menschen vollständig und dauerhaft vermeidet"
+      ],
+      "c": 2,
+      "e": "Wer die Einflussmechanismen (Normen, Compliance-Techniken, Gehorsam) kennt, kann sie erkennen und Entscheidungen bewusster treffen."
+    },
+    {
+      "id": "s7q3",
+      "q": "Warum hilft schon ein einziger Verbündeter gegen Konformität und Gehorsam?",
+      "opts": [
+        "Weil er die Autoritätsperson vollständig ersetzt",
+        "Weil er die eigentliche Aufgabe für alle löst",
+        "Ausschließlich deshalb, weil dadurch die objektiv richtige Antwort technisch überhaupt erst sichtbar wird",
+        "Er bricht die Einstimmigkeit und macht Widerspruch sozial möglich"
+      ],
+      "c": 3,
+      "e": "Ein Verbündeter durchbricht die Einstimmigkeit der Mehrheit und zeigt, dass Widerspruch möglich ist – das senkt Konformität und Gehorsam deutlich."
+    }
+  ]
+};
+
+var bonusFragen = [];
+
+var corrCorrect = {
+  "ct0": "Door-in-the-Face",
+  "ct1": "Foot-in-the-Door",
+  "ct2": "Low-Ball",
+  "ct3": "Door-in-the-Face"
+};
+var corrExpl = {
+  "ct0": "Große Bitte → Ablehnung → kleine Bitte (Reziprozität) = Door-in-the-Face.",
+  "ct1": "Kleine Bitte zuerst, dann große (Konsistenz) = Foot-in-the-Door.",
+  "ct2": "Zusage einholen, dann Bedingungen verschlechtern = Low-Ball (Den-Ball-flach-halten).",
+  "ct3": "Überzogene, sicher abgelehnte Forderung → moderate nachschieben = Door-in-the-Face."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Konformitäts-Simulator (Sektion ⑤): Einstimmigkeit × Öffentlichkeit × Gruppengröße → Konformität */
+var kfState = {unan:'yes', pub:'pub', size:'big'};
+function kfSet(dim, val){
+  kfState[dim] = val;
+  var map = {unan:['kf-unan-yes','kf-unan-no'], pub:['kf-pub-pub','kf-pub-priv'], size:['kf-size-big','kf-size-small']};
+  var vals = {unan:['yes','no'], pub:['pub','priv'], size:['big','small']};
+  Object.keys(map).forEach(function(d){
+    map[d].forEach(function(id, i){
+      var b = document.getElementById(id);
+      if(b) b.classList.toggle('on', kfState[d] === vals[d][i]);
+    });
+  });
+  kfRender();
+}
+function kfRender(){
+  var o = document.getElementById('kf-out');
+  if(!o) return;
+  var msg;
+  if(kfState.unan === 'no'){
+    msg = '<strong>Konformität bricht stark ein ↓</strong> — schon ein einziger Verbündeter, der abweicht, durchbricht die Einstimmigkeit.';
+  } else if(kfState.pub === 'priv'){
+    msg = '<strong>Geringe Konformität</strong> — bei privater Antwort fällt der normative Druck (dazugehören wollen) weitgehend weg.';
+  } else if(kfState.size === 'small'){
+    msg = '<strong>Mäßige Konformität</strong> — eine sehr kleine Gruppe (1–2) übt weniger Druck aus.';
+  } else {
+    msg = '<strong>Hohe Konformität ↑</strong> — große, einstimmige Mehrheit + öffentliche Antwort: maximaler normativer Druck.';
+  }
+  o.innerHTML = msg;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  kfRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

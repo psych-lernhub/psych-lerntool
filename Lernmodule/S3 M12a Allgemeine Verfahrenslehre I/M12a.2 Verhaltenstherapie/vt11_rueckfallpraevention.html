@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.2 · VT11 Rückfallprävention</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a2-vl11
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Dual-Process-Simulator (vt11) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.2 · VT11 Rückfallprävention</h1>
+<p class="page-sub">Verhaltenstherapie · Teil 2 (Lindenmeyer) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Marlatt & Paradigmenwechsel · 2. Rückfallzeitpunkt & Verlaufskurve · 3. Neurowissenschaft & Dual Process · 4. Lapse vs. Relapse & 3faches Handicap · 5. Sozialkognitives Rückfallmodell · 6. Praktische Umsetzung (Enttabuisierung, Fragebögen, Risikotagebuch) · 7. Bewältigungstraining · 8. Notfallplan & Rückfall in der Behandlung
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Marlatt</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Rückfallzeitpunkt</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Neurowissenschaft</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Lapse vs. Relapse</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Rückfallmodell</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Praktische Umsetzung</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Bewältigungstraining</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Notfall & Rückfall</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Marlatt ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Marlatt & Paradigmenwechsel</div>
+    <div class="sec-lz">Marlatt (1985), „Relapse Prevention“ (Marlatt & Gordon); Paradigmenwechsel vom Defizitmodell (wozu/warum?) zum Risikosituationsmodell (wann?); ca. 60 % der Rückfälle durch spezifische Risikosituationen; situative Trigger, Stress, fehlende Bewältigungsressourcen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Marlatt (1985) stellte die Leitfrage der Rückfallforschung neu. Fragte er weiter „warum" — oder etwas anderes?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Er wechselte vom <strong>Defizitmodell</strong> („wozu/warum konsumiert jemand?") zum <strong>Risikosituationsmodell</strong> („<strong>wann</strong>?"). Ca. <strong>60 %</strong> aller Rückfälle gehen auf spezifische Risikosituationen zurück — situative Faktoren sind entscheidend.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Marlatt &amp; das Standardwerk</div>
+    Alan Marlatt entwickelte <strong>1985</strong> das Konzept der Rückfallprävention. Das Grundlagenwerk <em>„Relapse Prevention"</em> (Marlatt &amp; Gordon) gilt als Standardwerk; der Ansatz übertrug sich von der Suchtbehandlung auf die <strong>Psychotherapie allgemein</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Paradigmenwechsel (Marlatt, 1985)</div>
+    Weg vom <strong>Defizitmodell</strong> („wozu/warum?", Persönlichkeit/Ressourcen) hin zur <strong>Risikosituation</strong> („wann?"). Persönlichkeit/Ressourcen allein erklären Rückfälle <strong>unzureichend</strong>; situative Trigger, Stress und fehlende kurzfristige Bewältigungsressourcen sind zentral.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Nicht „warum", sondern „wann"</div>
+    Rückfälle lassen sich <strong>nicht vollständig</strong> durch Persönlichkeit und Ressourcen erklären — ca. <strong>60 %</strong> hängen an spezifischen Risikosituationen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Defizit- oder Risikosituationsmodell?</div>
+    <div class="corr-item" id="c0a">Frage: „Wozu/warum konsumiert jemand?"
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'defizit')">Defizitmodell</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'risiko')">Risikosituationsmodell</button>
+      </div><div class="corr-fb" id="c0a-fb"></div>
+    </div>
+    <div class="corr-item" id="c0b">Frage: „Wann / in welcher Situation konsumiert jemand?"
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'defizit')">Defizitmodell</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'risiko')">Risikosituationsmodell</button>
+      </div><div class="corr-fb" id="c0b-fb"></div>
+    </div>
+    <div class="corr-item" id="c0c">„Ca. 60 % aller Rückfälle durch spezifische Auslöser erklärbar"
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'defizit')">Defizitmodell</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'risiko')">Risikosituationsmodell</button>
+      </div><div class="corr-fb" id="c0c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Rückfallzeitpunkt ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Rückfallzeitpunkt & Verlaufskurve</div>
+    <div class="sec-lz">7–31 % der Rückfälle bereits während der Behandlung; meiste Rückfälle innerhalb von 3 Monaten nach Behandlungsende, viele im 1. Jahr; Verlaufskurve der Erfolgsquote identisch bei allen Störungen (100 % → steil → ~70 % → ~55 %)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wann ist die Rückfallgefahr am größten — und gilt das für alle Störungen gleich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die meisten Rückfälle treten <strong>innerhalb von 3 Monaten</strong> nach Behandlungsende auf (7–31 % schon während der Behandlung). Die <strong>Verlaufskurve der Erfolgsquote ist bei allen Störungen identisch</strong>: 100 % → steiler Abfall → ~70 % → ~55 %.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Rückfallzeitpunkt (Marlatt, 1985)</div>
+    <strong>7–31 %</strong> der Rückfälle ereignen sich bereits <strong>während</strong> der Behandlung. Die <strong>meisten</strong> treten innerhalb von <strong>3 Monaten</strong> nach Behandlungsende auf; viele innerhalb des <strong>1. Jahres</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Verlaufskurve der Erfolgsquote</div>
+    Bei <strong>allen psychischen Störungen identisch</strong>: Start bei <strong>100 %</strong>, steiler Abfall, dann flacher werdend (auf ca. <strong>70 %</strong>, dann ca. <strong>55 %</strong>).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Konsequenz für die Praxis</div>
+    Die ersten Monate nach Behandlungsende sind die <strong>kritische Phase</strong> — genau hier setzt die Rückfallprävention an (frühe Risikosituationen).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rückfallzeitpunkt aufdecken</div>
+    <div id="zeitpunkt">
+      <div class="step-item"><strong>7–31 %</strong> bereits während der Behandlung.</div>
+      <div class="step-item"><strong>Meiste Rückfälle:</strong> innerhalb von 3 Monaten nach Behandlungsende.</div>
+      <div class="step-item"><strong>Viele:</strong> innerhalb des 1. Jahres.</div>
+      <div class="step-item"><strong>Verlaufskurve:</strong> 100 % → ~70 % → ~55 % (bei allen Störungen gleich).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'zeitpunkt')">Zahlen aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Neurowissenschaft ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Neurowissenschaft & Dual Process Model</div>
+    <div class="sec-lz">Situativer Anreiz überwiegt die kognitive Kontrolle; Cue reactivity, Sensitivierung, Impulsivität (automatisch, nicht willentlich); Dual Process Model (Wiers & Stacy 2006): kontrollierte vs. automatische Prozesse, durch Hinweisreize ausgelöst</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann man automatische Anreizreaktionen wie das Verlangen einfach mit Willenskraft kontrollieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Nein</strong> — bei Sucht überwiegt der <strong>situative Anreiz die kognitive Kontrolle</strong>. Cue reactivity, Sensitivierung und Impulsivität laufen <strong>automatisch</strong> ab und entziehen sich der willentlichen Kontrolle (Dual Process Model).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Situativer Anreiz vs. kognitive Kontrolle</div>
+    Neurowissenschaftlich überwiegt bei Sucht der <strong>situative Anreiz</strong> die <strong>kognitive Kontrolle</strong>. Anreizverstärker: <strong>Cue reactivity</strong> (automatische Reaktion auf Hinweisreize), <strong>Sensitivierung</strong> (steigende Empfindlichkeit des Belohnungssystems), <strong>Impulsivität</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Dual Process Model (Wiers &amp; Stacy, 2006)</div>
+    Zwei parallele Wege, beide durch Hinweisreize ausgelöst: <strong>kontrollierte, zielgerichtete</strong> Prozesse und <strong>automatische, habituelle</strong> Prozesse (mit bidirektionaler Wechselwirkung). Im Suchtkontext <strong>dominieren häufig die automatischen</strong> Prozesse.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewusst ≠ automatisch</div>
+    Cue reactivity &amp; Co. dürfen <strong>nicht mit bewussten Entscheidungen</strong> gleichgesetzt werden — sie sind den Betroffenen oft nicht bewusst und nicht willentlich abschaltbar.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Dual-Process-Simulator — zwei Verarbeitungswege</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="dp-kontroll" onclick="dpSet('kontroll')">Kontrolliert</button>
+        <button class="sim-tbtn" id="dp-auto" onclick="dpSet('auto')">Automatisch</button>
+      </div>
+      <div class="sim-verdict" id="dp-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Rückfälle entstehen oft, wenn der <strong>automatische</strong> Weg den <strong>kontrollierten</strong> überrennt — Rückfallprävention stärkt gezielt die bewusste Steuerung.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Lapse vs. Relapse ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Lapse vs. Relapse & 3faches Handicap</div>
+    <div class="sec-lz">Lapse = erster, situationsbedingter Konsum nach Abstinenz; Relapse = vollständiger Rückfall (individuumsbedingt, Abstinenzverletzungssyndrom); Rückfall als 3faches Handicap (Betroffene: Re-Automatisierung; Therapeut*in/Angehörige: Vertrauenskrise)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist der erste „Ausrutscher" nach Abstinenz schon der vollständige Rückfall — oder etwas anderes?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Nein</strong> — der erste Konsum ist der <strong>Lapse</strong> (situationsbedingt), der vollständige Rückfall ins frühere Muster der <strong>Relapse</strong> (individuumsbedingt). Die Unterscheidung ist therapeutisch wichtig (unterschiedliche Interventionen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Lapse</div>
+    Erster, meist <strong>situationsbedingter</strong> Konsum nach einer Abstinenzphase — vorwiegend durch <strong>externe Situationsfaktoren</strong> ausgelöst („Ausrutscher").
+  </div>
+  <div class="card">
+    <div class="card-title">Relapse</div>
+    <strong>Vollständiger Rückfall</strong> ins frühere Konsummuster — vorwiegend durch <strong>individuelle Faktoren</strong> (Abstinenzverletzungssyndrom, fehlende Bewältigungsfertigkeiten).
+  </div>
+  <div class="card">
+    <div class="card-title">Rückfall als 3faches Handicap</div>
+    <strong>Betroffene:</strong> Änderungsverletzungssyndrom, Re-Automatisierung. <strong>Therapeut*in/Angehörige:</strong> Vertrauenskrise, (Selbst-)Vorwürfe.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Keine Synonyme</div>
+    Lapse (situativ, erster Konsum) ≠ Relapse (individuell, vollständiger Rückfall) — die Unterscheidung steuert die Intervention.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Lapse oder Relapse?</div>
+    <div class="corr-item" id="c3a">Erster, meist situationsbedingter Konsum nach Abstinenz
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'lapse')">Lapse</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'relapse')">Relapse</button>
+      </div><div class="corr-fb" id="c3a-fb"></div>
+    </div>
+    <div class="corr-item" id="c3b">Vollständiger Rückfall ins frühere Konsummuster (individuumsbedingt)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'lapse')">Lapse</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'relapse')">Relapse</button>
+      </div><div class="corr-fb" id="c3b-fb"></div>
+    </div>
+    <div class="corr-item" id="c3c">Vorwiegend durch externe Situationsfaktoren ausgelöst
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'lapse')">Lapse</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'relapse')">Relapse</button>
+      </div><div class="corr-fb" id="c3c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Rückfallmodell ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Sozialkognitives Rückfallmodell (Marlatt 1985)</div>
+    <div class="sec-lz">Zwei Pfade ab Risikosituation: Schlüsselstelle Bewältigungsfertigkeiten/Selbstwirksamkeit (vorhanden → gestärkte SWE; fehlend → Lapse → Änderungsverletzungssyndrom → Relapse); scheinbar harmlose Entscheidungen; 2 Ziele (Vermeidung + Bewältigung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was entscheidet im sozialkognitiven Modell darüber, ob aus einer Risikosituation ein Rückfall wird?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Die <strong>Schlüsselstelle</strong>: ob in der Risikosituation <strong>Bewältigungsfertigkeiten und Selbstwirksamkeit</strong> vorhanden sind. Vorhanden → Bewältigung → gestärkte SWE. Fehlend → Lapse → Änderungsverletzungssyndrom → Relapse.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sozialkognitives Rückfallmodell (Marlatt, 1985)</div>
+    Ab der Risikosituation zwei Pfade. <strong>Schlüsselstelle:</strong> Bewältigungsfertigkeiten / Selbstwirksamkeitsüberzeugung <strong>vorhanden oder fehlend</strong>. Vorbau: unausgewogene Lebenssituation → scheinbar harmlose Entscheidungen → Risikosituation.
+  </div>
+  <div class="card">
+    <div class="card-title">Die zwei Pfade</div>
+    <strong>Vorhanden →</strong> erfolgreiche Bewältigung → <strong>gestärkte Selbstwirksamkeit</strong>. <strong>Fehlend →</strong> 1. Konsum (Lapse) → <strong>Änderungsverletzungssyndrom</strong> → Rückfall (Relapse).
+  </div>
+  <div class="card">
+    <div class="card-title">2 Ziele der Rückfallprävention</div>
+    <strong>(1) Vermeidung:</strong> eigene Risikosituationen kennen, vermeiden und bewältigen. <strong>(2) Bewältigung:</strong> eingetretene Rückfälle möglichst schnell selbstständig oder mit Unterstützung beenden.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Scheinbar harmlose Entscheidungen</div>
+    Entscheidungen, die scheinbar nichts mit Konsum zu tun haben, aber schrittweise in die Risikosituation führen — Metapher <em>„Stau auf der A 61"</em>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rückfallpfad aufdecken</div>
+    <div id="pfad">
+      <div class="step-item"><strong>1.</strong> Unausgewogene Lebenssituation.</div>
+      <div class="step-item"><strong>2.</strong> Scheinbar harmlose Entscheidungen.</div>
+      <div class="step-item"><strong>3.</strong> Risikosituation → Schlüsselstelle (Skills/SWE vorhanden?).</div>
+      <div class="step-item"><strong>4a. Fehlend:</strong> Lapse → Änderungsverletzungssyndrom → Relapse.</div>
+      <div class="step-item"><strong>4b. Vorhanden:</strong> Bewältigung → gestärkte Selbstwirksamkeit.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'pfad')">Pfad aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Praktische Umsetzung ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Enttabuisierung, Fragebögen & Risikotagebuch</div>
+    <div class="sec-lz">Enttabuisierung/Sensibilisierung; „Stau auf der A 61“ (scheinbar harmlose Entscheidungen); Fragebögen IDTS/DTCQ (Lindenmeyer 2012); Risikoprofil; Risikotagebuch (R/X/AS/+−); Risikoentscheidung Vermeiden (−) vs. Trainieren (+)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sollte man eine identifizierte Risikosituation grundsätzlich immer vermeiden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Nein</strong> — die Risikoentscheidung (Lindenmeyer 2016): <strong>Vermeiden</strong> (− bewertet) ODER <strong>Trainieren</strong> (+ bewertet, Bewältigung üben). Beides ist legitim, aber situationsabhängig. Erfasst werden Risikosituationen u. a. mit IDTS/DTCQ.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Enttabuisierung &amp; Sensibilisierung</div>
+    Erster Umsetzungsschritt: <strong>Informationsvermittlung</strong>, Fragebögen, <strong>Risikotagebuch</strong>. Die Metapher <em>„Stau auf der A 61"</em> veranschaulicht die scheinbar harmlosen Entscheidungen (Lebenssituation → Entscheidungen → Risikosituation).
+  </div>
+  <div class="card">
+    <div class="card-title">Fragebögen (Lindenmeyer, 2012)</div>
+    <strong>IDTS</strong> (Inventory of Drug Taking Situations): „Wie häufig haben Sie in dieser Situation getrunken?". <strong>DTCQ</strong> (Drug Taking Confidence Questionnaire): „Wie zuversichtlich sind Sie, dem Verlangen zu widerstehen?". Ergebnis: <strong>Risikoprofil</strong> (Balkendiagramme).
+  </div>
+  <div class="card">
+    <div class="card-title">Risikotagebuch (Selbstbeobachtung)</div>
+    Kodierung: <strong>R</strong> = Rückfall · <strong>X</strong> = Verlangen/Problemdruck · <strong>AS</strong> = Auslösesituation · <strong>+/−</strong> = Gefühl/Stimmung. Abarbeitung je Sitzung: (1) Rückfälle? (2) Versuchungssituationen? (3) frühere Auslösesituationen?
+  </div>
+  <div class="card">
+    <div class="card-title">Risikoentscheidung (Lindenmeyer, 2016)</div>
+    <strong>Vermeiden</strong> = Situation umgehen (− bewertet). <strong>Trainieren</strong> = Bewältigungsfertigkeiten aktiv üben (+ bewertet). Nicht „immer vermeiden" — situationsabhängig.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Risikotagebuch-Kodierung aufdecken</div>
+    <div id="tagebuch">
+      <div class="step-item"><strong>R</strong> — Rückfall.</div>
+      <div class="step-item"><strong>X</strong> — Verlangen / Problemdruck.</div>
+      <div class="step-item"><strong>AS</strong> — Auslösesituation.</div>
+      <div class="step-item"><strong>+/−</strong> — Gefühl / Stimmung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'tagebuch')">Kürzel aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Bewältigungstraining ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Bewältigungstraining & CBM</div>
+    <div class="sec-lz">Rollenspiele bei sozialer Verführung („Ich will nicht … stattdessen“); Vorstellungsübungen (Bewältigungsskript, Premack); Expositionsübungen (negative Stimmung/Konflikt/soziale Verführung); AAT (Rinck & Becker 2007), CBM S3-Leitlinie (Empfehlungsgrad B, LoE 1b)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn automatische Annäherungstendenzen den Rückfall treiben — kann man sie gezielt umtrainieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Ja</strong> — das <strong>Approach-Avoidance-Training</strong> (AAT, Rinck &amp; Becker 2007) trainiert mit dem Joystick die automatischen Tendenzen um (+4–8 % Behandlungserfolg). Die CBM soll laut <strong>S3-Leitlinie</strong> in der Postakutbehandlung angeboten werden (Grad B, LoE 1b).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Rollenspiele bei sozialer Verführung (Lindenmeyer, 2016)</div>
+    Strategien: <em>„Ich will nicht … ich will stattdessen"</em> (Ablehnung + Alternative) · <strong>Wiederholen</strong> · ggf. Begründen · Themenwechsel · Metaebene („Ich will nicht mehr darüber reden") · <strong>Ultimatum</strong> („Sonst gehe ich").
+  </div>
+  <div class="card">
+    <div class="card-title">Vorstellungs- &amp; Expositionsübungen</div>
+    <strong>Vorstellung:</strong> Bewältigungsskript (alle Sinne, bis zum positiven Ende), Aufnahme, geleitete Übung (Premack-Prinzip). <strong>Exposition (3 Formen):</strong> negative Stimmungsinduktion · Konflikte · soziale Verführungssituation.
+  </div>
+  <div class="card">
+    <div class="card-title">AAT &amp; Cognitive Bias Modification</div>
+    <strong>AAT</strong> (Rinck &amp; Becker 2007): Joystick — suchtbezogene Bilder wegschieben, neutrale heranziehen. Erhöht den Behandlungserfolg in der 1-Jahreskatamnese um <strong>4–8 %</strong> (besonders bei Komorbidität). <strong>CBM</strong> laut S3-Leitlinie (AWMF 2021): Postakutbehandlung, Empfehlungsgrad <strong>B</strong>, LoE <strong>1b</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wirkmechanismus</div>
+    Das AAT kompensiert die <strong>Cue reactivity</strong> und überwindet automatische Annäherungstendenzen — es stützt das <strong>Dual Process Model</strong> (automatische Tendenzen sind veränderbar).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Expositionsform → Beispiel</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="stimmung" onclick="switchTab(this,'expo')">Negative Stimmung</button>
+      <button class="tab-btn" data-tab="konflikt" onclick="switchTab(this,'expo')">Konflikt</button>
+      <button class="tab-btn" data-tab="sozial" onclick="switchTab(this,'expo')">Soziale Verführung</button>
+    </div>
+    <div class="tab-group" data-group="expo">
+      <div class="tab-content active" data-tab="stimmung"><strong>Negative Stimmungsinduktion →</strong> z. B. Scheidungspapiere, traurige Musik, Langeweile.</div>
+      <div class="tab-content" data-tab="konflikt"><strong>Konflikte →</strong> z. B. Tonband mit einseitiger Erklärung von Konfliktgegnern.</div>
+      <div class="tab-content" data-tab="sozial"><strong>Soziale Verführung →</strong> z. B. Kneipe, Jahrmarkt, Party, Feier.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Notfall & Rückfall ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Notfallplan & Rückfall in der Behandlung</div>
+    <div class="sec-lz">Notfallplan (Situation verlassen → informieren → nüchtern werden → Abstinenzzuversicht → DANN Ursachenforschung); auf Motivationshürden verzichten; verbale Behandlungsbereitschaft ≠ Abstinenzmotivation; Weiterbehandlung statt disziplinarischer Entlassung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sollte man nach einem Rückfall sofort die Ursachen analysieren, um ihn zu verstehen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Nein</strong> — erst <strong>stabilisieren</strong>: Situation verlassen → informieren → nüchtern werden → Abstinenzzuversicht — <strong>DANN erst Ursachenforschung</strong>. „Erst nüchtern, dann nachdenken." Auf Motivationshürden wird verzichtet.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Notfallplan bei Rückfall</div>
+    <strong>1.</strong> Situation sofort verlassen → <strong>2.</strong> Wen informieren? → <strong>3.</strong> Wieder nüchtern werden → <strong>4.</strong> Abstinenzzuversicht wiedergewinnen → <strong>5. DANN erst Ursachenforschung</strong>. Eine sofortige Ursachenanalyse im akuten Zustand ist kontraproduktiv.
+  </div>
+  <div class="card">
+    <div class="card-title">Rückfall während der Behandlung</div>
+    Disziplinarische Entlassung ist für Patient*innen <strong>wenig effektiv</strong> (für die Einrichtung manchmal unausweichlich). Bei <strong>Weiterbehandlung</strong>: einfaches, geübtes Procedere. Kriterien: medizinisch vertretbar, nicht aktiv vertuscht, Kooperation, therapeutische Basis vorhanden.
+  </div>
+  <div class="card">
+    <div class="card-title">Verzicht auf Motivationshürden</div>
+    Weil: (1) die Motivation durch das <strong>Abstinenzverletzungssyndrom</strong> verringert ist; (2) verbale Behandlungsbereitschaft stark von interaktionellen Fähigkeiten/sozialer Intelligenz abhängt; (3) sie <strong>nichts über die künftige Abstinenzmotivation</strong> aussagt.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verbal ≠ tatsächlich</div>
+    Verbal geäußerte Behandlungsbereitschaft im Rückfallmoment ist <strong>kein zuverlässiger Indikator</strong> für künftige Abstinenz — nicht auf Beteuerungen verlassen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Notfallplan in der richtigen Reihenfolge</div>
+    <div id="notfall">
+      <div class="step-item"><strong>1.</strong> Situation sofort verlassen.</div>
+      <div class="step-item"><strong>2.</strong> Wen informieren?</div>
+      <div class="step-item"><strong>3.</strong> Wieder nüchtern werden.</div>
+      <div class="step-item"><strong>4.</strong> Abstinenzzuversicht wiedergewinnen.</div>
+      <div class="step-item"><strong>5.</strong> DANN erst Ursachenforschung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'notfall')">Reihenfolge aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VT11 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Lapse</h4>
+      <p>Erster, einmaliger Konsum nach Abstinenz</p>
+      <p>Vorwiegend situationsbedingt (extern)</p>
+      <p>„Ausrutscher“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Relapse</h4>
+      <p>Vollständiger Rückfall ins frühere Muster</p>
+      <p>Vorwiegend individuumsbedingt</p>
+      <p>Abstinenzverletzungssyndrom, fehlende Skills</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Lapse und Relapse sind Synonyme für denselben Rückfallprozess.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kontrollierte, zielgerichtete Prozesse</h4>
+      <p>Bewusst steuerbar</p>
+      <p>Langsamer</p>
+      <p>Dual Process Model: Weg 1</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Automatische, habituelle Prozesse</h4>
+      <p>Unbewusst, schnell, habituell</p>
+      <p>Im Suchtkontext oft dominant</p>
+      <p>Cue reactivity, Sensitivierung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im Dual Process Model führen nur automatische Prozesse zu Suchtverhalten; kontrollierte spielen keine Rolle.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Vermeiden (Risikosituation)</h4>
+      <p>Risikosituation umgehen</p>
+      <p>Negativ bewertet (−)</p>
+      <p>Schützt kurzfristig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Trainieren (Risikosituation)</h4>
+      <p>Bewältigung aktiv in der Situation üben</p>
+      <p>Positiv bewertet (+)</p>
+      <p>Baut Selbstwirksamkeit auf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Risikosituationen sollten grundsätzlich immer vermieden werden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Akute Stabilisierung nach Rückfall</h4>
+      <p>Hat Vorrang</p>
+      <p>Ausnüchterung + Abstinenzzuversicht</p>
+      <p>„Erst nüchtern…“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Ursachenforschung nach Rückfall</h4>
+      <p>Erst NACH der Stabilisierung</p>
+      <p>„…dann nachdenken“</p>
+      <p>Im akuten Zustand kontraproduktiv</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Nach einem Rückfall sollte sofort mit der Ursachenanalyse begonnen werden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Defizitmodell (wozu/warum?)</h4>
+      <p>Fragt nach Ursachen/Motiven</p>
+      <p>Persönlichkeit, Ressourcen</p>
+      <p>Erklärt Rückfälle unzureichend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Risikosituationsmodell (wann?)</h4>
+      <p>Fragt nach Zeitpunkt/Situation</p>
+      <p>Situative Auslöser, ca. 60 %</p>
+      <p>Marlatts Paradigmenwechsel (1985)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Rückfälle lassen sich vollständig durch Persönlichkeitsmerkmale und Ressourcen erklären.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a2-vl11</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a2-vl11';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Welchen Paradigmenwechsel vollzog Marlatt (1985) in der Rückfallforschung?",
+      "opts": [
+        "Weg vom Defizitmodell („wozu/warum konsumiert jemand?“) hin zur Frage nach der Risikosituation („wann konsumiert jemand?“).",
+        "Weg von der Risikosituation hin zur reinen Persönlichkeitsdiagnostik.",
+        "Weg von verhaltenstherapeutischen hin zu rein tiefenpsychologischen Erklärungen.",
+        "Marlatt vertrat 1985 die Auffassung, dass sich Rückfälle ausschließlich und vollständig durch stabile Persönlichkeitsmerkmale sowie durch das Ausmaß der individuell verfügbaren sozialen Ressourcen erklären lassen und situative Faktoren dabei keine Rolle spielen."
+      ],
+      "c": 0,
+      "e": "Marlatt (1985): Paradigmenwechsel vom Defizitmodell („wozu/warum?“) zum Risikosituationsmodell („wann?“). Persönlichkeit/Ressourcen allein erklären Rückfälle unzureichend; situative Faktoren sind entscheidend (ca. 60 % der Rückfälle durch spezifische Risikosituationen)."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie viele Rückfälle lassen sich laut Marlatt auf spezifische Risikosituationen zurückführen?",
+      "opts": [
+        "Spezifische Risikosituationen spielen nach Marlatts Befunden für das Zustandekommen von Rückfällen praktisch keine Rolle, da die ganz überwiegende Mehrheit aller Rückfälle völlig unabhängig von der jeweiligen Situation rein zufällig auftritt.",
+        "Ca. 60 % aller Rückfälle.",
+        "Ca. 10 % aller Rückfälle.",
+        "Genau 100 % aller Rückfälle ausnahmslos."
+      ],
+      "c": 1,
+      "e": "Ca. 60 % aller Rückfälle lassen sich auf spezifische Risikosituationen zurückführen. Ergänzend wirken problembezogene situative Trigger, Stress und ein Mangel an kurzfristig verfügbaren Bewältigungsressourcen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wann ereignen sich die meisten Rückfälle?",
+      "opts": [
+        "Erst viele Jahre nach Behandlungsende, praktisch nie während oder kurz nach der Therapie.",
+        "Ausschließlich während der laufenden Behandlung, danach so gut wie gar nicht mehr.",
+        "Die meisten innerhalb von 3 Monaten nach Behandlungsende; 7–31 % bereits während der Behandlung, viele im 1. Jahr.",
+        "Rückfälle treten nach aktueller Studienlage vollkommen gleichmäßig und konstant über die gesamte Lebensspanne der Betroffenen verteilt auf, ohne dass dem Zeitpunkt des Behandlungsendes dabei irgendeine besondere Bedeutung zukäme."
+      ],
+      "c": 2,
+      "e": "Rückfallzeitpunkt: 7–31 % bereits während der Behandlung; die MEISTEN innerhalb von 3 Monaten nach Behandlungsende; viele innerhalb des 1. Jahres."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was kennzeichnet die Verlaufskurve der Erfolgsquote nach Behandlung?",
+      "opts": [
+        "Sie steigt nach Behandlungsende kontinuierlich an und nähert sich mit der Zeit immer mehr 100 % an.",
+        "Sie verläuft bei jeder psychischen Störung völlig unterschiedlich und folgt keinem erkennbaren Muster.",
+        "Sie bleibt nach dem Ende der Behandlung über sämtliche Katamnesezeitpunkte hinweg dauerhaft und vollkommen unverändert auf einem konstanten Niveau von exakt 100 % stabil, ohne jemals abzufallen.",
+        "Sie ist bei allen psychischen Störungen identisch: Start bei 100 %, steiler Abfall, dann flacher werdend (auf ca. 70 %, dann ca. 55 %)."
+      ],
+      "c": 3,
+      "e": "Die Verlaufskurve der Erfolgsquote ist bei ALLEN psychischen Störungen identisch: Sie beginnt bei 100 % und fällt steil ab, dann flacher werdend (auf ca. 70 %, dann ca. 55 %)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was zeigen neurowissenschaftliche Erkenntnisse zum Rückfall bei Sucht?",
+      "opts": [
+        "Der situative Anreiz überwiegt die kognitive Kontrolle; Cue reactivity, Sensitivierung und Impulsivität stärken die Anreizseite.",
+        "Die kognitive Kontrolle überwiegt bei Sucht stets zuverlässig den situativen Anreiz.",
+        "Cue reactivity und Sensitivierung sind den Betroffenen jederzeit voll bewusst und willentlich steuerbar.",
+        "Neurowissenschaftliche Befunde belegen, dass bei Suchterkrankungen die bewusste, willentliche kognitive Kontrolle den situativen Anreiz in nahezu allen Risikosituationen mühelos und zuverlässig dominiert, sodass automatische Prozesse für das Rückfallgeschehen ohne Bedeutung sind."
+      ],
+      "c": 0,
+      "e": "Neurowissenschaft: Der situative Anreiz überwiegt die kognitive Kontrolle. Cue reactivity (automatische Reaktion auf Hinweisreize), Sensitivierung (zunehmende Empfindlichkeit des Belohnungssystems) und Impulsivität stärken die Anreizseite — diese Prozesse laufen automatisch ab und entziehen sich der willentlichen Kontrolle."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was unterscheidet das Dual Process Model (Wiers & Stacy, 2006) an Verarbeitungswegen?",
+      "opts": [
+        "Im Dual Process Model führen ausschließlich die automatischen, habituellen Prozesse zu Suchtverhalten, während die kontrollierten, zielgerichteten Prozesse nach diesem Modell überhaupt keine Rolle spielen und vollständig wirkungslos bleiben.",
+        "Kontrollierte, zielgerichtete Prozesse und automatische, habituelle Prozesse — beide durch Hinweisreize ausgelöst, mit bidirektionaler Wechselwirkung.",
+        "Nur einen einzigen, rein bewusst gesteuerten Verarbeitungsweg.",
+        "Ausschließlich genetisch festgelegte Prozesse ohne Bezug zu Hinweisreizen."
+      ],
+      "c": 1,
+      "e": "Dual Process Model (Wiers & Stacy 2006): zwei parallele Wege — (1) kontrollierte, zielgerichtete und (2) automatische, habituelle Prozesse, beide durch problembezogene Hinweisreize ausgelöst, mit bidirektionalen Wechselwirkungen. Im Suchtkontext dominieren häufig die automatischen Prozesse."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist ein „Lapse“ — im Unterschied zum „Relapse“?",
+      "opts": [
+        "Lapse ist der vollständige Rückfall ins frühere Konsummuster, Relapse nur der erste einmalige Konsum.",
+        "Lapse und Relapse bezeichnen exakt dasselbe und sind austauschbare Synonyme.",
+        "Lapse = erster, meist situationsbedingter Konsum nach einer Abstinenzphase; Relapse = vollständiger Rückfall ins frühere Konsummuster (individuumsbedingt).",
+        "Ein Lapse ist nach dem 2-Phasenmodell definitionsgemäß stets und ausschließlich durch stabile individuelle Persönlichkeitsfaktoren bedingt, während der Relapse umgekehrt immer rein durch zufällige äußere Situationsfaktoren ausgelöst wird."
+      ],
+      "c": 2,
+      "e": "Lapse = erster, meist situationsbedingter Konsum nach einer Abstinenzphase (externe Situationsfaktoren). Relapse = vollständiger Rückfall ins frühere Konsummuster, vorwiegend durch individuelle Faktoren (Abstinenzverletzungssyndrom, fehlende Bewältigungsfertigkeiten)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Inwiefern ist ein Rückfall ein „3faches Handicap“?",
+      "opts": [
+        "Ein Rückfall belastet ausschließlich die betroffene Person selbst und hat nach dem Konzept des dreifachen Handicaps definitionsgemäß keinerlei Auswirkungen auf Therapeut*innen oder Angehörige, die davon vollkommen unberührt bleiben.",
+        "Er belastet ausschließlich die Krankenkasse, den Arbeitgeber und den Staat.",
+        "Er betrifft nur die körperliche, die seelische und die finanzielle Gesundheit der betroffenen Person.",
+        "Er belastet Betroffene (Änderungsverletzungssyndrom, Re-Automatisierung) UND Therapeut*innen/Angehörige (Vertrauenskrise, Selbstvorwürfe)."
+      ],
+      "c": 3,
+      "e": "Rückfall als 3faches Handicap: Betroffene (Änderungsverletzungssyndrom, Re-Automatisierung) sowie Therapeut*in und Angehörige (Vertrauenskrise, (Selbst-)Vorwürfe) werden gleichermaßen belastet."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wo liegt die „Schlüsselstelle“ im sozialkognitiven Rückfallmodell (Marlatt, 1985)?",
+      "opts": [
+        "Bei den in der Risikosituation vorhandenen vs. fehlenden Bewältigungsfertigkeiten und der Selbstwirksamkeitsüberzeugung.",
+        "Bei der genetischen Veranlagung, die den Verlauf vollständig vorbestimmt.",
+        "Bei der Höhe der konsumierten Substanzmenge im ersten Konsum.",
+        "Die entscheidende Schlüsselstelle des Modells liegt nach Marlatt ausschließlich in der frühkindlichen Bindungserfahrung der betroffenen Person, die unabänderlich darüber bestimmt, ob es in einer späteren Risikosituation zu einem Rückfall kommt oder nicht."
+      ],
+      "c": 0,
+      "e": "Schlüsselstelle: ob in der Risikosituation Bewältigungsfertigkeiten und Selbstwirksamkeitsüberzeugung VORHANDEN oder FEHLEND sind. Vorhanden → erfolgreiche Bewältigung → gestärkte SWE. Fehlend → 1. Konsum (Lapse) → Änderungsverletzungssyndrom → Rückfall (Relapse)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was sind „scheinbar harmlose Entscheidungen“ (Marlatt)?",
+      "opts": [
+        "Die scheinbar harmlosen Entscheidungen bezeichnen im Modell ausschließlich therapeutisch bewusst geplante und gezielt herbeigeführte Konfrontationsübungen, mit denen Betroffene unter Anleitung kontrolliert an reale Risikosituationen herangeführt werden sollen.",
+        "Entscheidungen, die auf den ersten Blick nichts mit Konsum zu tun haben, aber schrittweise in eine Risikosituation führen (Metapher „Stau auf der A 61“).",
+        "Bewusste, offene Entscheidungen, direkt und absichtlich zu konsumieren.",
+        "Rein zufällige Ereignisse ohne jeden Bezug zum eigenen Verhalten."
+      ],
+      "c": 1,
+      "e": "Scheinbar harmlose Entscheidungen: scheinen nichts mit Konsum zu tun zu haben, führen aber schrittweise in eine Risikosituation (Metapher „Stau auf der A 61“: man fährt eine Route, die bekanntermaßen zum Stau führt, ohne dies zu reflektieren). Stufen: unausgewogene Lebenssituation → scheinbar harmlose Entscheidungen → Risikosituation."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche zwei Ziele verfolgt die Rückfallprävention?",
+      "opts": [
+        "Ausschließlich die vollständige und dauerhafte Vermeidung jedes Rückfalls; die Bewältigung eingetretener Rückfälle ist explizit kein Ziel.",
+        "Ausschließlich die nachträgliche Bewältigung; das Vermeiden von Rückfällen ist kein Ziel.",
+        "(1) Vermeidung von Rückfällen (Risikosituationen kennen/vermeiden/bewältigen) und (2) Bewältigung eingetretener Rückfälle (möglichst schnell beenden).",
+        "Die beiden zentralen Ziele der Rückfallprävention bestehen nach Marlatt und Gordon ausschließlich darin, einerseits die zugrunde liegende Persönlichkeitsstruktur der betroffenen Person umfassend umzugestalten und andererseits sämtliche sozialen Beziehungen der Person vollständig neu zu ordnen."
+      ],
+      "c": 2,
+      "e": "2 Ziele der Rückfallprävention: (1) Vermeidung von Rückfällen — eigene Risikosituationen kennen, vermeiden und erfolgreich bewältigen; (2) Bewältigung von Rückfällen — Rückfälle möglichst schnell selbstständig oder mit Unterstützung beenden."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche Bausteine umfasst die sozialkognitive Rückfallprävention (Marlatt & Gordon, 1985)?",
+      "opts": [
+        "Ausschließlich die medikamentöse Behandlung des Suchtverlangens, ohne psychotherapeutische Bausteine.",
+        "Die sozialkognitive Rückfallprävention beschränkt sich nach Marlatt und Gordon ausschließlich auf die nachträgliche Weiterbehandlung der betroffenen Person nach einem bereits vollständig eingetretenen Rückfall.",
+        "Ausschließlich eine einmalige Informationsveranstaltung ganz zu Beginn der Therapie.",
+        "Enttabuisierung/Modellvermittlung, Bestimmung relevanter Risikosituationen (Fragebögen/Protokolle), Sammlung/Training von Bewältigungsmöglichkeiten, Weiterbehandlung nach Rückfall."
+      ],
+      "c": 3,
+      "e": "Sozialkognitive Rückfallprävention (Marlatt & Gordon 1985): Enttabuisierung/Modellvermittlung; Fragebögen/Selbstbeobachtungsprotokolle zur Bestimmung persönlich relevanter Risikosituationen; Sammlung und Training von Bewältigungsmöglichkeiten; Weiterbehandlung nach Rückfall."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was erfassen die Fragebögen IDTS und DTCQ (Lindenmeyer, 2012)?",
+      "opts": [
+        "IDTS erfasst, wie HÄUFIG in einer Situation konsumiert wurde; DTCQ erfasst die ZUVERSICHT, in dieser Situation dem Verlangen widerstehen zu können.",
+        "Beide Fragebögen erfassen ausschließlich die körperlichen Entzugssymptome der Person.",
+        "IDTS misst die Zuversicht, DTCQ die Konsumhäufigkeit (also genau umgekehrt).",
+        "Die beiden Fragebögen IDTS und DTCQ dienen nach Lindenmeyer ausschließlich dazu, im Nachhinein die Schwere der bereits eingetretenen Abhängigkeitserkrankung auf einer standardisierten Normskala diagnostisch einzuordnen, und haben mit Risikosituationen nichts zu tun."
+      ],
+      "c": 0,
+      "e": "Fragebögen zur Bestimmung relevanter Risikosituationen (Lindenmeyer 2012): IDTS (Inventory of Drug Taking Situations) — „Wie häufig haben Sie im letzten Jahr in dieser Situation getrunken?“; DTCQ (Drug Taking Confidence Questionnaire) — „Wie zuversichtlich sind Sie, in dieser Situation dem Verlangen widerstehen zu können?“"
+    },
+    {
+      "id": "s6q2",
+      "q": "Worin unterscheiden sich „Vermeiden“ und „Trainieren“ einer Risikosituation (Lindenmeyer, 2016)?",
+      "opts": [
+        "Die Unterscheidung zwischen Vermeiden und Trainieren einer Risikosituation ist nach Lindenmeyer rein theoretischer Natur und für die konkrete praktische Behandlungsplanung vollkommen bedeutungslos, da grundsätzlich immer beide Strategien gleichzeitig und in identischer Weise anzuwenden sind.",
+        "Vermeiden = Risikosituation umgehen (− bewertet); Trainieren = Bewältigungsfertigkeiten aktiv in der Situation üben (+ bewertet).",
+        "Vermeiden ist positiv bewertet (+), Trainieren negativ (−) — also genau umgekehrt.",
+        "Beide bedeuten dasselbe und werden synonym verwendet."
+      ],
+      "c": 1,
+      "e": "Risikoentscheidung (Lindenmeyer 2016): Vermeiden = die Risikosituation umgehen (negativ bewertet, −); Trainieren = Bewältigungsfertigkeiten aktiv in der Risikosituation üben (positiv bewertet, +). Beide Strategien sind legitim, aber situationsabhängig einzusetzen."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was trainiert das Approach-Avoidance-Training (AAT, Rinck & Becker, 2007)?",
+      "opts": [
+        "Ausschließlich die bewusste, verbale Argumentation gegen den Konsum in Gruppengesprächen.",
+        "Die körperliche Fitness und Ausdauer der Betroffenen mittels Sportgeräten.",
+        "Mit einem Joystick automatische Annäherungs-/Vermeidungstendenzen gegenüber suchtbezogenen Reizen (Suchtbilder wegschieben, neutrale heranziehen).",
+        "Das Approach-Avoidance-Training nach Rinck und Becker dient ausschließlich der standardisierten diagnostischen Erfassung des aktuellen Suchtverlangens zu einem einzelnen Messzeitpunkt und beinhaltet selbst keinerlei Trainings- oder Veränderungskomponente."
+      ],
+      "c": 2,
+      "e": "AAT (Rinck & Becker 2007), eine Cognitive Bias Modification: Mit einem Joystick werden automatische Annäherungs-/Vermeidungstendenzen trainiert — suchtbezogene Bilder wegschieben (kleiner/weiter), neutrale heranziehen (größer/näher). Erhöht den Behandlungserfolg in der 1-Jahreskatamnese um 4–8 % (Wiers et al. u. a.); S3-Leitlinie: Empfehlungsgrad B, LoE 1b."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welche Formen der Expositionsübung werden in der Rückfallprävention unterschieden (Lindenmeyer, 2016)?",
+      "opts": [
+        "Ausschließlich die Exposition in einer sozialen Verführungssituation, andere Formen gibt es nicht.",
+        "Nur die rein gedankliche Vorstellung ohne reale Reizkonfrontation.",
+        "Ausschließlich eine medikamentengestützte vollständige Reizabschirmung im streng geschützten stationären Rahmen, bei der jegliche Konfrontation mit suchtauslösenden Reizen konsequent verhindert wird.",
+        "Exposition mit negativer Stimmungsinduktion, Exposition mit Konflikten und Exposition in sozialer Verführungssituation."
+      ],
+      "c": 3,
+      "e": "Drei Expositionsformen (Lindenmeyer 2016): (1) mit negativer Stimmungsinduktion (z. B. traurige Musik, Langeweile), (2) mit Konflikten (z. B. Tonband mit Konfliktgegner), (3) in sozialer Verführungssituation (z. B. Kneipe, Party). Zudem: Rollenspiele und Vorstellungsübungen (Bewältigungsskript, Premack-Prinzip)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Wie lautet die korrekte Reihenfolge im Notfallplan bei einem Rückfall?",
+    "opts": [
+      "Situation sofort verlassen → informieren → nüchtern werden → Abstinenzzuversicht wiedergewinnen → DANN erst Ursachenforschung.",
+      "Sofort mit der Ursachenforschung beginnen → dann nüchtern werden → dann die Situation verlassen.",
+      "Erst die Abstinenzzuversicht analysieren → dann konsumieren → dann informieren.",
+      "Der Notfallplan sieht ausdrücklich vor, dass im akuten Rückfallzustand noch vor jeder Stabilisierung umgehend eine ausführliche und vollständige Analyse sämtlicher auslösender Ursachen und Hintergründe des Rückfalls durchgeführt wird, um den Vorfall lückenlos zu verstehen."
+    ],
+    "c": 0,
+    "e": "Notfallplan bei Rückfall: (1) Situation sofort verlassen, (2) wen informieren?, (3) wieder nüchtern werden, (4) Abstinenzzuversicht wiedergewinnen, (5) DANN erst Ursachenforschung. ⚠ Erst nüchtern, dann nachdenken — eine sofortige Ursachenanalyse im akuten Zustand ist kontraproduktiv."
+  },
+  {
+    "id": "bq2",
+    "q": "Wie ist bei einem Rückfall während der laufenden Behandlung vorzugehen?",
+    "opts": [
+      "Bei einem Rückfall während der laufenden stationären Behandlung ist nach den dargestellten Grundsätzen ausnahmslos und in jedem Einzelfall die sofortige disziplinarische Entlassung der betroffenen Person als einzig sinnvolle und wirksame Maßnahme zwingend vorzunehmen.",
+      "Eine disziplinarische Entlassung ist für Patient*innen wenig effektiv; meist ist eine Weiterbehandlung mit einfachem, geübtem Procedere sinnvoll.",
+      "Der Rückfall sollte ignoriert und nicht thematisiert werden.",
+      "Die Behandlung sollte ohne jede Bedingung unverändert fortgesetzt werden."
+    ],
+    "c": 1,
+    "e": "Disziplinarische Entlassung ist für Patient*innen wenig effektiv (für die Einrichtung manchmal unausweichlich). Bei Weiterbehandlung: einfaches, geübtes Procedere. Mögliche Kriterien: medizinisch vertretbar, nicht aktiv vertuscht, Kooperation, therapeutische Basis vorhanden."
+  },
+  {
+    "id": "bq3",
+    "q": "Warum sollte man bei einem Rückfall auf „Motivationshürden“ verzichten?",
+    "opts": [
+      "Weil die verbal geäußerte Behandlungsbereitschaft im Rückfallmoment ein vollkommen zuverlässiger Indikator für die künftige Abstinenz ist.",
+      "Weil Motivationshürden den Arbeitsaufwand der Mitarbeiter*innen verringern.",
+      "Weil die Motivation durch das Abstinenzverletzungssyndrom verringert ist und verbale Beteuerungen nichts über die künftige Abstinenzmotivation aussagen.",
+      "Auf Motivationshürden sollte deshalb verzichtet werden, weil die nach einem Rückfall verbal geäußerte Behandlungsbereitschaft nach aktueller Studienlage der mit Abstand präziseste und stabilste Einzelprädiktor für den langfristigen Abstinenzerfolg in allen künftigen Risikosituationen ist."
+    ],
+    "c": 2,
+    "e": "Verzicht auf Motivationshürden: (1) die Motivation ist durch das Abstinenzverletzungssyndrom verringert; (2) verbale Behandlungsbereitschaft hängt stark von interaktionellen Fähigkeiten/sozialer Intelligenz ab; (3) sie sagt nichts über die Abstinenzmotivation in künftigen Risikosituationen aus."
+  },
+  {
+    "id": "bq4",
+    "q": "Welchen Stellenwert hat die Cognitive Bias Modification (CBM) laut S3-Leitlinie (AWMF, 2021)?",
+    "opts": [
+      "Die CBM wird in der aktuellen S3-Leitlinie ausdrücklich abgelehnt und gilt als unwirksames, nicht empfehlenswertes Verfahren.",
+      "Die CBM ist nach der S3-Leitlinie ausschließlich in der Akutentgiftung, niemals aber in der Postakutbehandlung anzuwenden.",
+      "Die CBM hat in der S3-Leitlinie überhaupt keine Erwähnung gefunden.",
+      "Sie sollte im Rahmen der Postakutbehandlung angeboten werden (Empfehlungsgrad B, LoE 1b)."
+    ],
+    "c": 3,
+    "e": "CBM laut S3-Leitlinie (AWMF 2021): sollte im Rahmen der Postakutbehandlung angeboten werden. Empfehlungsgrad B, LoE 1b (Gesamtabstimmung 2020: 95,8 %). Beispielverfahren: AAT (Rinck & Becker)."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche Kodierung verwendet das Risikotagebuch?",
+    "opts": [
+      "R = Rückfall, X = Verlangen/Problemdruck, AS = Auslösesituation, +/− = Gefühl/Stimmung.",
+      "R = Ruhe, X = kein Eintrag, AS = Abstinenz sicher, +/− = Kosten/Nutzen.",
+      "R = Rückfall, X = Exposition, AS = Achtsamkeit, +/− = Anwesenheit/Abwesenheit.",
+      "Das Risikotagebuch verwendet ein hochkomplexes, mehrstufiges numerisches Kodierungssystem mit über zwanzig verschiedenen Zahlencodes, das ausschließlich von speziell geschulten Therapeut*innen ausgewertet werden kann und für die Patient*innen selbst nicht zugänglich ist."
+    ],
+    "c": 0,
+    "e": "Risikotagebuch (systematische Selbstbeobachtung, möglichst online): R = Rückfall, X = Verlangen/Problemdruck, AS = Auslösesituation, +/− = Gefühl/Stimmung. Abarbeitung je Sitzung: (1) Rückfälle? (2) Versuchungssituationen? (3) frühere Auslösesituationen?"
+  },
+  {
+    "id": "bq6",
+    "q": "Was besagt „Cue reactivity“?",
+    "opts": [
+      "Cue reactivity beschreibt die bewusste, willentlich gesteuerte und jederzeit vollständig kontrollierbare Entscheidung einer betroffenen Person, in einer konkreten Situation gezielt und absichtlich zum Suchtmittel zu greifen.",
+      "Die automatische Reaktion des Organismus auf suchtbezogene Hinweisreize (Cues), die Verlangen und Annäherungstendenzen auslöst.",
+      "Die bewusste, rationale Abwägung von Vor- und Nachteilen des Konsums.",
+      "Die zunehmende körperliche Toleranz gegenüber der Substanz bei wiederholtem Konsum."
+    ],
+    "c": 1,
+    "e": "Cue reactivity: automatische Reaktion des Organismus auf suchtbezogene Hinweisreize (Cues), die Verlangen und Annäherungstendenzen auslöst. Läuft (wie Sensitivierung und Impulsivität) automatisch ab und entzieht sich der willentlichen Kontrolle."
+  },
+  {
+    "id": "bq7",
+    "q": "Was ist das „Änderungs-/Abstinenzverletzungssyndrom“?",
+    "opts": [
+      "Ein körperliches Entzugssyndrom, das ausschließlich bei vollständiger Abstinenz auftritt.",
+      "Eine Trainingsmethode zur gezielten Stärkung der Selbstwirksamkeit.",
+      "Die psychologische Reaktion nach dem ersten Konsum (Lapse) — Schuld, Scham, der Gedanke, die Abstinenz ohnehin verloren zu haben —, die den Übergang zum Relapse begünstigt.",
+      "Das Abstinenzverletzungssyndrom bezeichnet nach Marlatt die durch eine erfolgreiche Bewältigung der Risikosituation entstehende, deutlich gestärkte und stabilisierte Selbstwirksamkeitsüberzeugung, die einen erneuten Rückfall künftig zuverlässig verhindert."
+    ],
+    "c": 2,
+    "e": "Änderungs-/Abstinenzverletzungssyndrom: psychologische Reaktion nach dem ersten Konsum (Lapse) mit Schuldgefühlen, Scham und dem Gedanken, die Abstinenz ohnehin verloren zu haben → begünstigt den Übergang zum vollständigen Rückfall (Relapse)."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Aussage zum Defizit- vs. Risikosituationsmodell ist korrekt?",
+    "opts": [
+      "Beide Modelle fragen identisch nach dem Zeitpunkt des Konsums und sind inhaltlich nicht zu unterscheiden.",
+      "Das Risikosituationsmodell fragt nach dem „Warum“, das Defizitmodell nach dem „Wann“ (also genau umgekehrt).",
+      "Historisch hat das auf Persönlichkeit und Ressourcen fokussierte Defizitmodell das situationsorientierte Risikosituationsmodell vollständig abgelöst und gilt heute als der einzig anerkannte Erklärungsansatz für das Zustandekommen von Rückfällen.",
+      "Das Defizitmodell fragt „wozu/warum?“ (Persönlichkeit/Ressourcen), das Risikosituationsmodell „wann?“ (situative Auslöser); Marlatt vollzog den Wechsel zum Risikosituationsmodell."
+    ],
+    "c": 3,
+    "e": "Defizitmodell: fragt nach Ursachen/Motiven („wozu/warum?“, Persönlichkeit, Ressourcen). Risikosituationsmodell: fragt nach Zeitpunkt/situativen Auslösern („wann?“). Marlatt (1985) vollzog den Paradigmenwechsel vom Defizit- zum Risikosituationsmodell — Rückfälle lassen sich NICHT vollständig durch Persönlichkeit/Ressourcen erklären."
+  }
+];
+
+var corrCorrect = {
+  "c0a": "defizit",
+  "c0b": "risiko",
+  "c0c": "risiko",
+  "c3a": "lapse",
+  "c3b": "relapse",
+  "c3c": "lapse"
+};
+var corrExpl = {
+  "c0a": "Frage „Wozu/warum konsumiert jemand?“ = Defizitmodell (Persönlichkeit/Ressourcen).",
+  "c0b": "Frage „Wann/in welcher Situation?“ = Risikosituationsmodell (Marlatt 1985).",
+  "c0c": "Ca. 60 % der Rückfälle durch spezifische situative Auslöser = Risikosituationsmodell.",
+  "c3a": "Erster, situationsbedingter Konsum nach Abstinenz = Lapse.",
+  "c3b": "Vollständiger Rückfall ins frühere Muster (individuumsbedingt) = Relapse.",
+  "c3c": "Vorwiegend durch externe Situationsfaktoren ausgelöst = Lapse."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Dual-Process-Simulator (Sektion ③, Rückfall) */
+var dpData = {
+  kontroll:{t:'Kontrollierter / zielgerichteter Weg', d:'Bewusst steuerbar, langsamer — die reflektierte Entscheidung (Weg 1).'},
+  auto:    {t:'Automatischer / habitueller Weg', d:'Unbewusst, schnell; Aufmerksamkeitshinwendung, Problem-Assoziationen, Annäherungs-/Vermeidungstendenz — im Suchtkontext oft dominant.'}
+};
+function dpSet(k){
+  ['kontroll','auto'].forEach(function(x){ var b=document.getElementById('dp-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('dp-out'); if(!o) return;
+  var d=dpData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  dpSet('kontroll');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

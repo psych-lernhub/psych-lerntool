@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11b · 🎭 OSCE-Prüfungssimulation — Gespräch mit Simulationsperson</title>
+<!--
+  Freitext-Selbsttest von build_freitext.py erzeugt (CSS = scaffold_lernmodul.py).
+  Frage → Musterlösung aufdecken → Selbsteinschätzung (SRS). Storage-Key: lm-m11b-vl99
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Freitext-Selbsttest */
+.ft-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 18px;margin-bottom:14px}
+.ft-thema{font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ft-q{font-size:1rem;color:var(--text);font-weight:600;line-height:1.45;margin-bottom:12px}
+.ft-a{display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--text2);line-height:1.55;margin-top:10px}
+.ft-a.shown{display:block}
+.ft-a strong{color:var(--text)}
+.ft-rate{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ft-rate.shown{display:flex}
+.ft-rbtn{flex:1;min-width:120px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:9px 10px;cursor:pointer;font-size:.82rem}
+.ft-rbtn:hover{border-color:var(--accent)}
+.ft-rbtn.good:hover{border-color:#34d399}.ft-rbtn.part:hover{border-color:#fbbf24}.ft-rbtn.bad:hover{border-color:#f87171}
+.ft-state{font-size:.72rem;color:var(--text3);margin-top:8px}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.qr-prog{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.qr-prog>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11b · 🎭 OSCE-Prüfungssimulation — Gespräch mit Simulationsperson</h1>
+<p class="page-sub">Psychologische Diagnostik II · OSCE 20.07.2026 · 8 echte SP-Rollenszenarien (AMDP) + Gesprächsführung & Berlin Global Rating</p>
+<div class="lf-bar">
+  <strong>🎭 OSCE-Prüfungssimulation.</strong> 8 SP-Szenarien aus den echten Rollenanleitungen des Moduls (Depression Kraut/Schmidt, Zwang Weiß, Angst Holz, Schizophrenie Zwick, drogeninduzierte Psychose Grün, Demenz Frühling/Findig) + 5 Karten zu Gesprächsführung, Suizidalität und Berlin Global Rating Scale. Jede Karte = Aufgabe → Mustervorgehen aufdecken (Leitsymptome, AMDP-Domänen, konkrete Leitfragen, SP-Verhalten, Berlin-Fokus) → selbst einschätzen (mit Spaced-Repetition). Bewertet werden Gesprächsführung (50 % Berlin Global Rating) + stationsspezifische Checkliste — nicht das Ankreuzen.
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goToFT(0)" id="nb0">🎯 Selbsttest</button>
+  <button class="nav-btn" onclick="goToFT(1)" id="nb1">📋 Alle Fragen</button>
+</nav>
+
+<section class="section active" id="s0">
+  <div id="ftRunner"></div>
+</section>
+
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">📋 Alle Freitextfragen (13)</div>
+    <div class="sec-lz">5 Gesprächsführungs-Grundlagen + 8 Simulationspersonen-Szenarien aller im Modul behandelten Störungsbilder.</div>
+  </div>
+  <div id="ftAll"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11b-vl99';
+var FT = [{"id": "ft01", "thema": "Gesprächsführung · OSCE-Ablauf", "q": "Wie strukturierst du das 10-minütige OSCE-Erstgespräch? Nenne die Phasen von der Begrüßung bis zum Abschluss — bevor du eine konkrete Simulationsperson (SP) vor dir hast.", "a": "<strong>Rahmen:</strong> 3 Min Lesezeit für die schriftliche Instruktion → Gespräch startet mit dem vorgegebenen <strong>Eingangssatz</strong>; 10 Min Zeit. Bewertet wird die <strong>Gesprächsführung</strong> (50 % Berlin Global Rating + 50 % stationsspezifische Checkliste), <strong>nicht</strong> das Ankreuzen des AMDP-Bogens — eine Symptom-Einschätzung musst du nicht abgeben.<br><br><strong>Phasen:</strong><br>1. <strong>Begrüßung & Rahmen</strong> (~1 Min): vorstellen, Setting/Vertraulichkeit, Zeitrahmen nennen („Wir haben etwa 10 Minuten”).<br>2. <strong>Offener Einstieg</strong>: weite offene Frage zum Anliegen („Was führt Sie zu uns?” / „Erzählen Sie mal, wie es Ihnen geht.”) — SP erzählen lassen, aktiv zuhören.<br>3. <strong>Fokussierte Exploration</strong> der Leitsymptome mit gezielten AMDP-Leitfragen (Trichter: offen → konkret); Verlauf, Dauer, Belastung, Auslöser.<br>4. <strong>Pflichtthemen</strong>: Suizidalität / Eigen- & Fremdgefährdung immer ansprechen; ggf. Substanzkonsum, Vorbehandlung.<br>5. <strong>Abschluss</strong>: kurz zusammenfassen, Rückfragen ermöglichen, nächsten Schritt andeuten, verabschieden.<br><br><strong>Faustregel:</strong> erst öffnen, dann fokussieren; Struktur sichtbar halten (überleiten, zusammenfassen) — du behältst die Gesprächsführung in der Hand, nicht die SP."}, {"id": "ft02", "thema": "Bewertung · Berlin Global Rating Scale", "q": "Die Berlin Global Rating Scale (nach Scheffer 2009) macht 50 % der OSCE-Note aus. Welche 4 Dimensionen werden bewertet, und woran erkennt man jeweils eine gute Leistung?", "a": "Jede Dimension wird von <strong>1 (sehr gut)</strong> bis <strong>5 (mangelhaft)</strong> eingestuft:<br><br>1. <strong>Empathie</strong> (Eingehen auf Gefühle & Bedürfnisse): durchgehend verständnisvoll auf <em>verbale und nonverbale</em> Hinweise eingehen, angemessen reagieren — statt sie zu übergehen.<br>2. <strong>Struktur</strong> (logischer Zusammenhang): das Gespräch ist erkennbar organisiert, du gestaltest es zusammenhängend und behältst die Führung — die SP muss <em>nicht</em> selbst den Verlauf festlegen.<br>3. <strong>Verbaler Ausdruck</strong>: so kommunizieren, dass es der SP leicht fällt zu verstehen (Wortwahl, Grammatik, Intonation, Lautstärke, Stimmmodulation, Sprechtempo, Aussprache) — keine Fachsprache, kein zu schnelles Reden.<br>4. <strong>Nonverbaler Ausdruck</strong>: die SP durch Augenkontakt, Mimik, Gestik, Körperhaltung und gezielte Pausen einbeziehen und zur Beteiligung motivieren — statt sie zu frustrieren.<br><br><strong>Selbstcheck nach jeder Übung:</strong> vergib dir für alle 4 Dimensionen eine 1–5 und notiere je eine konkrete Sache, die du nächstes Mal besser machst."}, {"id": "ft03", "thema": "Gesprächsführung · Techniken", "q": "Welche konkreten Gesprächstechniken zahlen im OSCE auf eine gute Bewertung ein — und welche typischen Anfängerfehler ziehen die Note?", "a": "<strong>Was punktet:</strong><br>• <strong>Offene Fragen</strong> zum Einstieg und bei neuen Themen („Wie ist das für Sie?”), erst dann geschlossene zur Präzisierung.<br>• <strong>Aktives Zuhören</strong>: Pausen aushalten, mit Mimik/„mhm” begleiten, nicht ins Wort fallen.<br>• <strong>Paraphrasieren & Verbalisieren</strong> emotionaler Inhalte („Das klingt, als ob Sie sich sehr allein fühlen.”).<br>• <strong>Zusammenfassen</strong> und <strong>Überleiten</strong> macht Struktur hörbar („Ich habe verstanden, dass … Darf ich Sie jetzt noch zu … fragen?”).<br>• <strong>Empathische Validierung</strong> vor heiklen Fragen (Normalisieren).<br><br><strong>Was schadet:</strong><br>• <strong>Suggestiv-/Mehrfachfragen</strong> („Sie schlafen doch sicher schlecht, oder, und essen auch wenig?”).<br>• <strong>Verhör-Stil</strong>: nur geschlossene Fragen aneinanderreihen → SP übernimmt nicht, Gespräch wirkt zusammenhanglos.<br>• <strong>Fachjargon</strong> oder zu schnelles/leises Reden.<br>• <strong>Empathie überspringen</strong> und gleich „abfragen”; nonverbale Signale (Tränen, Anspannung) ignorieren.<br>• sich von einer redseligen SP <strong>die Struktur abnehmen</strong> lassen, ohne freundlich zu lenken."}, {"id": "ft04", "thema": "Pflichtthema · Suizidalität & Gefährdung", "q": "Suizidalität bzw. Eigen-/Fremdgefährdung gehört in (fast) jedes psychopathologische Erstgespräch. Wie sprichst du das an, ohne die SP zu überrumpeln?", "a": "<strong>Grundsatz:</strong> aktiv und direkt fragen — Nachfragen erhöht das Risiko <em>nicht</em>. Behutsam einleiten/normalisieren, dann konkret werden (Trichter):<br><br>• <strong>Überleitung/Normalisieren:</strong> „Wenn es einem über längere Zeit so schlecht geht, kommen manchen Menschen auch schwere Gedanken. Darf ich Sie dazu etwas fragen?”<br>• <strong>Lebensüberdruss:</strong> „Hatten Sie in letzter Zeit Gedanken, dass das Leben nicht mehr lebenswert ist?”<br>• <strong>Konkrete Suizidgedanken:</strong> „Haben Sie daran gedacht, sich etwas anzutun / sich das Leben zu nehmen?”<br>• <strong>Bei Ja — Konkretheit/Plan/Vorbereitung, Druck, Schutzfaktoren</strong> nachfragen; <strong>Absprachefähigkeit</strong> klären.<br>• Bei psychotischen/agitierten Bildern auch <strong>Fremdgefährdung</strong> (Aggression, imperatives Stimmenhören).<br><br><strong>Haltung:</strong> ruhig, wertschätzend, kein Erschrecken; Ernstnehmen signalisieren. Im OSCE zählt, <em>dass</em> und <em>wie</em> du das Thema sicher eröffnest — nicht eine Risiko-Einstufung."}, {"id": "ft05", "thema": "Gesprächsführung · schwierige SP", "q": "Die Rollenanleitungen sehen vor, dass die SP es dir „etwas schwerer machen” kann: redselig/abschweifend, misstrauisch oder erschöpft/verlangsamt. Wie gehst du mit jedem dieser Muster um?", "a": "<strong>Redselig/abschweifend</strong> (z. B. Frau Frühling, Herr Findig, Frau Zwick, Grün): wertschätzend <strong>unterbrechen und lenken</strong> — „Das ist spannend, ich möchte aber sichergehen, dass wir das Wichtigste schaffen. Darf ich kurz zu … zurückkommen?” Struktur über geschlossene Fragen und klare Überleitungen zurückgewinnen; freundlich bleiben (Empathie + Struktur müssen beide stimmen).<br><br><strong>Misstrauisch</strong> (Frau Zwick, Grün): <strong>nicht konfrontieren</strong>, keine Wahninhalte „wegdiskutieren”. Transparenz schaffen (Rolle, Schweigepflicht, Zweck), Tempo verlangsamen, validieren („Ich verstehe, dass das verunsichernd ist”), behutsam und nicht bohrend explorieren.<br><br><strong>Erschöpft/verlangsamt</strong> (Frau Kraut, Herr Schmidt): <strong>langsamer und einfacher</strong> sprechen, kurze Sätze, mehr Pausen, eine Frage nach der anderen, mehr Zeit zum Antworten geben, aktiv entlasten („Lassen Sie sich ruhig Zeit”). Nicht mit zu viel/zu schnellem Reden überfordern.<br><br><strong>Gemeinsam:</strong> das passende Verhalten zeigt sich direkt in <strong>Empathie</strong> und <strong>Struktur</strong> der Berlin-Skala — das ist genau das, was bewertet wird."}, {"id": "ft06", "thema": "SP-Szenario · Depression (mittelgradig)", "q": "Aufgabe (3 Min Lesezeit): Frau Sybille Kraut, 54, Lehrerin, geschieden, beide Töchter kürzlich ausgezogen. Sie hat eine psychosomatische Reha beantragt. Eingangssatz: „Guten Tag, mein Hausarzt meinte, ich solle hier mal über alles sprechen.” Führe ein 10-min-Erstgespräch und erhebe den psychopathologischen Befund. — Wie gehst du vor? (Verdacht: mittelgradige depressive Episode F32.1)", "a": "<strong>Leitsymptome:</strong> Antriebslosigkeit/„wie gebremst”, Grübeln, Konzentrationsprobleme, früher Auszug der Tochter als Auslöser, Appetit-/Gewichtsverlust, Erschöpfung, sozialer Rückzug, mehrfach krankgeschrieben.<br><br><strong>AMDP-Domänen:</strong> v. a. <strong>Affektivität</strong> (deprimiert, Freudlosigkeit, Insuffizienz/Hoffnungslosigkeit, Morgentief) + <strong>Antrieb</strong> (antriebsgehemmt) + <strong>Vegetativum</strong> (Schlaf, Appetit, Gewicht).<br><br><strong>Leitfragen:</strong> „Wie ist Ihre Stimmung in letzter Zeit?” · „Können Sie sich noch über Dinge freuen, die Ihnen früher Freude gemacht haben?” (Schulgarten/AG) · „Wie steht es um Ihren Antrieb, Ihre Energie?” · „Wie schlafen Sie? Wie ist der Appetit, das Gewicht?” · „Grübeln Sie viel? Machen Sie sich Vorwürfe / fühlen sich wertlos?” · „Wie blicken Sie in die Zukunft?”<br><br><strong>Pflicht:</strong> <strong>Suizidalität</strong> ansprechen (siehe ft04) — bei mittelgradiger Depression unbedingt.<br><br><strong>SP-Verhalten:</strong> kann müde/erschöpft wirken, langsam reden, resigniert („mir kann nicht geholfen werden”) → langsam sprechen, Pausen, entlasten.<br><br><strong>Berlin-Fokus:</strong> viel <strong>Empathie</strong> (Verlust/Einsamkeit validieren), Tempo an Erschöpfung anpassen (verbaler Ausdruck), trotzdem <strong>Struktur</strong> halten."}, {"id": "ft07", "thema": "SP-Szenario · Depression (schwer)", "q": "Aufgabe: Herr Schmidt, 58, Hauptkommissar, verheiratet, 2 Kinder; gebückte Haltung, erschöpft. Seit ein jüngerer Vorgesetzter kam: Erschöpfung, Lustlosigkeit, sozialer Rückzug, Schlafstörung mit Grübeln; von der Frau zum stationären Aufenthalt überredet, schambehaftet. Eingangssatz: „Meine Frau meinte, ich müsse hierherkommen.” Wie führst du das Gespräch? (Verdacht: schwere depressive Episode F32.2)", "a": "<strong>Leitsymptome:</strong> ausgeprägte Anhedonie/„nichts ergibt Sinn”, Antriebslosigkeit (kaum aus dem Bett), Schlafstörung mit Grübelschleifen, Insuffizienz-/Versagensängste, Scham, hoher Leistungsanspruch entwertet — schwerer ausgeprägt als bei Frau Kraut.<br><br><strong>AMDP-Domänen:</strong> <strong>Affektivität</strong> (deprimiert, Gefühl der Gefühllosigkeit, Insuffizienz, Hoffnungslosigkeit, Schuldgefühle) + <strong>Antrieb</strong> (gehemmt) + <strong>Vegetativum</strong> (Schlaf/Tagesrhythmus).<br><br><strong>Leitfragen:</strong> wie ft06, zusätzlich Schwere/Funktionsniveau („Was schaffen Sie im Alltag noch?”), Gefühl innerer Leere/Gefühllosigkeit, Schuld-/Versagensgedanken; Scham aufgreifen und entlasten („Sich Hilfe zu holen ist ein Schritt, kein Versagen”).<br><br><strong>Pflicht:</strong> <strong>Suizidalität</strong> — bei schwerer Episode besonders sorgfältig (Lebensüberdruss → konkrete Gedanken → Plan/Absprachefähigkeit).<br><br><strong>SP-Verhalten:</strong> müde, kann dem Gespräch schwer folgen, verträgt kein schnelles/vieles Reden → langsam, kurze Sätze, eine Frage nach der anderen, viel Pause.<br><br><strong>Berlin-Fokus:</strong> Empathie + verbaler/nonverbaler Ausdruck (Tempo, Pausen, ruhige Präsenz) bei gleichzeitig klarer Struktur."}, {"id": "ft08", "thema": "SP-Szenario · Zwang", "q": "Aufgabe: Herr Leo Weiß, 32, arbeitssuchend, lebt allein in Berlin; seit Monaten Gedanken, es könne etwas in der Wohnung passieren, wenn er geht → mehrfaches Kontrollieren von Elektrogeräten, Wasserhähnen, Tür; starke Alltagseinschränkung, sozialer Rückzug. Eingangssatz: „Ich komme einfach kaum noch aus dem Haus.” Wie explorierst du? (Verdacht: Zwangsgedanken und -handlungen, gemischt)", "a": "<strong>Leitsymptome:</strong> aufdringliche Befürchtungen (Brand/Schaden „durch meine Schuld”), <strong>Kontrollzwänge</strong> (Geräte, Wasser, Tür mehrfach), gedankliche Einengung auf das Thema, deutliche Funktionsbeeinträchtigung und Leidensdruck.<br><br><strong>AMDP-Domänen:</strong> <strong>Befürchtungen & Zwänge</strong> (Zwangsgedanken, Zwangsimpulse, Zwangshandlungen) — abgrenzen von Wahn (Einsicht in Unsinnigkeit bleibt erhalten).<br><br><strong>Leitfragen:</strong> „Gibt es Gedanken, die sich immer wieder aufdrängen, obwohl Sie sie selbst als übertrieben oder unsinnig empfinden?” · „Müssen Sie bestimmte Dinge immer wieder tun — kontrollieren, zählen, waschen?” · „Was befürchten Sie, das passieren könnte, wenn Sie es nicht tun?” · „Können Sie dem Drang widerstehen — was passiert dann?” · „Wie viel Zeit am Tag nehmen die Gedanken/Handlungen ein, wie sehr schränken sie Sie ein?” · Einsicht: „Wie erleben Sie diese Gedanken selbst?”<br><br><strong>Abgrenzung (Prüfungstrick):</strong> Zwang = <strong>ich-dyston</strong>, mit Einsicht — kein Wahn. Behutsam, nicht bagatellisieren.<br><br><strong>Pflicht:</strong> Leidensdruck/Suizidalität bei hoher Belastung erfragen.<br><br><strong>Berlin-Fokus:</strong> Struktur (vom Anliegen systematisch zu Zwangsgedanken/-handlungen/Einsicht), Empathie für die Scham."}, {"id": "ft09", "thema": "SP-Szenario · Generalisierte Angst", "q": "Aufgabe: Frau Emilia Holz, 35, Steuerfachangestellte, lebt allein; seit Monaten zunehmend ängstlich/angespannt ohne konkreten Auslöser, Grübeln/Gedankenkreisen, Benommenheit, Schwitzen, Konzentrationsprobleme, Rückzug; will unbedingt Hilfe. Eingangssatz: „Diese ständige Anspannung macht mich fertig.” Wie gehst du vor? (Verdacht: Generalisierte Angststörung)", "a": "<strong>Leitsymptome:</strong> <strong>frei flottierende</strong> Angst/Anspannung ohne klaren Auslöser („einfach ständig da”), exzessives Sorgen/Gedankenkreisen, vegetative Symptome (Benommenheit, Schwitzen), Konzentrationsprobleme, Auswirkung auf Arbeit/Beziehungen.<br><br><strong>AMDP-Domänen:</strong> <strong>Befürchtungen & Zwänge</strong> (Phobien? generalisierte Ängste?) + <strong>Affektivität</strong> (ängstlich, innere Unruhe/Anspannung) + Vegetativum.<br><br><strong>Leitfragen:</strong> „Sie beschreiben ständige Anspannung — gibt es einen Auslöser, oder ist die Angst eher dauernd da?” (→ generalisiert vs. phobisch/Panik) · „Worüber machen Sie sich Sorgen? Können Sie das Grübeln stoppen?” · „Welche körperlichen Begleiterscheinungen bemerken Sie (Herz, Schwitzen, Benommenheit, Anspannung)?” · „Gibt es plötzliche Angstanfälle mit Höhepunkt (Panik) oder bestimmte gemiedene Situationen (Phobie)?” (Differenzierung) · „Wie wirkt sich das auf Arbeit/Konzentration/Beziehungen aus?”<br><br><strong>Abgrenzung:</strong> generalisierte (dauernde) vs. Panik (Attacken) vs. phobische (situationsgebunden) Angst.<br><br><strong>SP-Verhalten:</strong> angespannt, redet evtl. an Fragen vorbei, Angst etwas zu vergessen → ruhig strukturieren, eine Sache nach der anderen.<br><br><strong>Berlin-Fokus:</strong> Empathie (Anspannung validieren), Struktur trotz Abschweifen halten."}, {"id": "ft10", "thema": "SP-Szenario · Beginnende Schizophrenie", "q": "Aufgabe: Frau Julia Zwick, 25, Philosophie-Masterstudentin, WG; seit Monaten zunehmend ängstlich, misstrauisch gegenüber dem Umfeld, sozialer Rückzug, grüblerisch, negativ gestimmt; von der besten Freundin zur Beratung überredet, glaubt nicht, dass man ihr helfen kann. Eingangssatz: „Ehrlich gesagt weiß ich nicht, ob das hier etwas bringt.” Wie führst du das Gespräch? (Verdacht: beginnende Schizophrenie)", "a": "<strong>Leitsymptome:</strong> zunehmendes <strong>Misstrauen</strong>/Beziehungserleben, Rückzug, Angst, Anspannung, Negativität — mögliche <strong>Positiv-</strong> (Wahn, Halluzination, Ich-Störung) und <strong>Negativsymptomatik</strong>.<br><br><strong>AMDP-Domänen:</strong> <strong>Wahn</strong> (Beziehungs-, Verfolgungswahn, Wahnstimmung) + <strong>Sinnestäuschungen</strong> (akustische Halluzinationen) + <strong>Ich-Störungen</strong> (Gedankeneingebung/-entzug/-ausbreitung, Depersonalisation/Derealisation).<br><br><strong>Leitfragen (behutsam!):</strong> „Sie erwähnen Misstrauen — haben Sie das Gefühl, dass andere sich gegen Sie wenden oder Sie beobachtet werden?” · „Kommt es vor, dass alltägliche Dinge eine besondere Bedeutung gerade für Sie zu haben scheinen?” (Beziehungserleben) · „Hören Sie manchmal Stimmen oder Geräusche, wenn niemand da ist? Sehen Sie Dinge, die andere nicht sehen?” · „Haben Sie den Eindruck, dass Ihre Gedanken von außen beeinflusst, entzogen oder eingegeben werden?” · „Fühlen Sie sich selbst oder die Umgebung manchmal verändert/unwirklich?”<br><br><strong>Haltung (entscheidend):</strong> <strong>nicht konfrontieren</strong>, nichts „ausreden”; Transparenz/Vertrauen aufbauen, Tempo raus, validieren. Misstrauen ist Teil des Bildes — behutsam, nicht bohrend.<br><br><strong>Pflicht:</strong> Eigen-/Fremdgefährdung, imperative Stimmen.<br><br><strong>SP-Verhalten:</strong> kann misstrauisch sein, viel reden → Vertrauen vor Inhalt, sanft strukturieren.<br><br><strong>Berlin-Fokus:</strong> Empathie + nonverbaler Ausdruck (Ruhe, Sicherheit ausstrahlen), Struktur ohne Druck."}, {"id": "ft11", "thema": "SP-Szenario · Substanzinduzierte Psychose", "q": "Aufgabe: Nico Grün, 28, in Beziehung, Immobilienmakler; viel Feiern, Alkohol, Mischkonsum, fast täglich Cannabis; am frühen Morgen von Freunden eingeliefert, weiß nicht warum; seit dem Feiern vor zwei Tagen stark unruhig/angespannt, misstrauisch, fühlt sich beobachtet. Eingangssatz: „Ich verstehe gar nicht, warum ich hier bin.” Wie gehst du vor? (Verdacht: Störung durch multiplen Substanzgebrauch / substanzinduzierte Psychose)", "a": "<strong>Leitsymptome:</strong> akute Unruhe/Anspannung nach Konsum, <strong>Misstrauen/paranoides Erleben</strong> (Personal beobachtet, Freunden nicht zu trauen, Mitpatienten „verrückt”), fehlende Krankheitseinsicht, Drang nach draußen.<br><br><strong>Doppelter Fokus:</strong><br>• <strong>Substanzanamnese:</strong> „Was haben Sie konsumiert — was, wie viel, wie oft, wann zuletzt?” (Alkohol, Cannabis fast täglich, Mischkonsum) · Konsummuster, Wirkung, Entzug.<br>• <strong>Psychopathologie</strong> (AMDP): <strong>Wahn/Beziehungserleben</strong> + <strong>Sinnestäuschungen</strong> + <strong>Bewusstsein/Orientierung</strong> (substanzbedingt prüfen) + Unruhe (Antrieb/Psychomotorik).<br><br><strong>Leitfragen:</strong> „Sie wirken angespannt — haben Sie das Gefühl, dass jemand etwas gegen Sie hat oder Sie beobachtet?” · „Hören oder sehen Sie Dinge, die andere nicht wahrnehmen?” · „Wissen Sie, wo wir sind, welcher Tag heute ist?” (Orientierung) · Substanz wie oben.<br><br><strong>Haltung:</strong> nicht konfrontieren, deeskalierend, Sicherheit/Transparenz; Misstrauen ernst nehmen.<br><br><strong>Pflicht:</strong> Eigen-/Fremdgefährdung, akute Intoxikation/Entzug.<br><br><strong>Berlin-Fokus:</strong> Empathie + nonverbal (ruhig, deeskalierend), Struktur trotz Rederei und Misstrauen."}, {"id": "ft12", "thema": "SP-Szenario · Demenz (Anosognosie)", "q": "Aufgabe: Frau Liselotte Frühling, 70, verwitwet, lebt allein; bemerkt Konzentrations-/Gedächtnisprobleme, schreibt sie dem Alter zu, sieht selbst kein Problem; musste mehrfach nach dem Weg fragen, weiß nicht, warum sie in der Klinik ist. Eingangssatz: „Ich weiß ehrlich gesagt nicht, was ich hier soll.” Wie führst du das Gespräch? (Verdacht: Demenz)", "a": "<strong>Leitsymptome:</strong> Gedächtnis-/Konzentrationsstörung, <strong>Desorientierung</strong> (Weg, Grund des Klinikbesuchs), <strong>fehlende Krankheitseinsicht (Anosognosie)</strong> — bagatellisiert als „Alter”.<br><br><strong>AMDP-Domänen:</strong> <strong>Orientierung</strong> (zeitlich/örtlich/situativ/zur Person) + <strong>Gedächtnis & Aufmerksamkeit</strong> (Merkfähigkeit/Frischgedächtnis, Konzentration, Auffassung) + ggf. <strong>Konfabulation</strong>.<br><br><strong>Leitfragen — behutsam, ohne Bloßstellen:</strong> Orientierung einbetten: „Damit ich mir ein Bild mache, frage ich ein paar Routinefragen — welcher Wochentag/Monat ist heute? Wissen Sie noch, wo wir hier gerade sind?” · Gedächtnis: „Passiert es, dass Sie Dinge verlegen oder vergessen, was Sie vorhatten?” · kleine Merkaufgabe ankündigen („Ich nenne gleich drei Begriffe, nach denen ich später noch einmal frage”). · Fremdanamnese andeuten (Tochter).<br><br><strong>Haltung (entscheidend):</strong> Würde wahren, nicht testen-wie-im-Examen-Stil, Fehler nicht vorführen; <strong>Anosognosie respektieren</strong> — nicht überzeugen wollen, dass sie krank ist.<br><br><strong>SP-Verhalten:</strong> freundlich, redselig (Tochter, Balkon/Frühling) → wertschätzend lenken, Orientierung trotzdem unterbringen.<br><br><strong>Berlin-Fokus:</strong> Empathie/Respekt + Struktur (Routinefragen geschickt einbetten)."}, {"id": "ft13", "thema": "SP-Szenario · Demenz", "q": "Aufgabe: Herr Arnold Findig, 75, lebt mit Frau im eigenen Haus, früher Lehrer/Schulleiter; seit Monaten vergesslich (verlegt Dinge, vergisst Vorhaben), Konzentration fällt schwer; ihm selbst fällt es kaum auf, aber Frau und Kinder sorgen sich → Abklärung. Eingangssatz: „Meine Familie macht sich Sorgen, ich finde es halb so wild.” Wie gehst du vor? (Verdacht: Demenz)", "a": "<strong>Leitsymptome:</strong> progrediente Vergesslichkeit (Sachen verlegen, Vorhaben vergessen), Konzentrationsstörung, geringe Eigenwahrnehmung, Anstoß durch Angehörige; im Gespräch teils <strong>Zeitverschiebung</strong> (erzählt Vergangenes, als wäre es Gegenwart).<br><br><strong>AMDP-Domänen:</strong> <strong>Gedächtnis & Aufmerksamkeit</strong> (Merkfähigkeit, Konzentration, Auffassung) + <strong>Orientierung</strong> (zeitlich/situativ) + ggf. Konfabulation.<br><br><strong>Leitfragen:</strong> „Erzählen Sie, was Ihrer Familie aufgefallen ist — und Ihnen selbst?” · „In welchen Situationen passiert das Vergessen (Namen, Termine, Wege)?” · Orientierung einbetten (Datum/Ort wie ft12) · Merkfähigkeit mit angekündigter 3-Wörter-Aufgabe · Verlauf/Alltag (was klappt noch, Fremdanamnese Frau/Kinder).<br><br><strong>Haltung:</strong> die <strong>Diskrepanz Selbst-/Fremdwahrnehmung</strong> respektvoll aufgreifen, nicht überführen; bei Zeitverschiebung freundlich im Hier-und-Jetzt verankern, ohne zu korrigieren-vorzuführen.<br><br><strong>SP-Verhalten:</strong> redselig (3 Kinder, früherer Beruf), erzählt Vergangenes als Gegenwart → wertschätzend lenken, Orientierungsfragen unterbringen.<br><br><strong>Berlin-Fokus:</strong> Empathie/Würde + Struktur; verbaler Ausdruck altersangemessen, klar."}];
+var DAY = 86400000;
+
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* SRS — gleiches Karten-Format wie Lernmodule/Quiz-Runner; Store-Key = Frage-ID */
+function ftSched(qid, rating){
+  var p=load(), now=Date.now();
+  var c=p[qid]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(rating==='good'){ c.stability=Math.max(1,c.stability*2.5); c.due=now+Math.max(DAY,c.stability*DAY); c.state='review'; }
+  else if(rating==='part'){ c.stability=Math.max(1,c.stability*1.2); c.due=now+DAY; c.state='review'; }
+  else { c.lapses++; c.stability=1; c.due=now+600000; c.state='learning'; }
+  c.reps++; p[qid]=c; save(p);
+}
+function ftStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  FT.forEach(function(q){ var c=p[q.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:FT.length};
+}
+function ftIsOpen(qid){ var c=load()[qid]; return (!c||c.state==='new'||c.due<=Date.now()); }
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function _stateLabel(qid){
+  var c=load()[qid];
+  if(!c||c.state==='new') return 'neu';
+  if(c.due<=Date.now()) return 'fällig';
+  var d=Math.round((c.due-Date.now())/DAY);
+  return 'gelernt · wieder in '+(d<1?'<1':d)+' T';
+}
+
+/* ── Karte rendern (wiederverwendet in Selbsttest + „Alle Fragen") ── */
+function ftCardHTML(q, idx, ctx){
+  return '<div class="ft-card">'
+    + (q.thema?'<div class="ft-thema">'+q.thema+'</div>':'')
+    + '<div class="ft-q">'+q.q+'</div>'
+    + '<button class="btn btn-ghost" onclick="ftReveal(this,\''+ctx+idx+'\')">Musterlösung aufdecken</button>'
+    + '<div class="ft-a" id="a'+ctx+idx+'">'+q.a+'</div>'
+    + '<div class="ft-rate" id="r'+ctx+idx+'">'
+      + '<button class="ft-rbtn good" onclick="ftRate(\''+q.id+'\',\'good\',\''+ctx+idx+'\')">✅ sicher</button>'
+      + '<button class="ft-rbtn part" onclick="ftRate(\''+q.id+'\',\'part\',\''+ctx+idx+'\')">🟡 teilweise</button>'
+      + '<button class="ft-rbtn bad" onclick="ftRate(\''+q.id+'\',\'bad\',\''+ctx+idx+'\')">❌ nochmal</button>'
+    + '</div>'
+    + '<div class="ft-state" id="s'+ctx+idx+'">Status: '+_stateLabel(q.id)+'</div>'
+  + '</div>';
+}
+function ftReveal(btn,key){ var a=document.getElementById('a'+key); var r=document.getElementById('r'+key); if(a)a.classList.add('shown'); if(r)r.classList.add('shown'); btn.style.display='none'; }
+function ftRate(qid,rating,key){
+  ftSched(qid,rating);
+  var s=document.getElementById('s'+key); if(s) s.textContent='Status: '+_stateLabel(qid);
+  if(RUN.active && RUN.ctx==='q'){ setTimeout(ftNext, 250); }
+}
+
+/* ── Selbsttest-Runner ── */
+var RUN = {order:[], pos:0, shuffle:false, dueOnly:false, active:false, ctx:'q'};
+function ftToggleShuffle(){ RUN.shuffle=!RUN.shuffle; ftStart(true); }
+function ftToggleDue(){ RUN.dueOnly=!RUN.dueOnly; ftStart(true); }
+function ftReset(){ var p=load(); FT.forEach(function(q){delete p[q.id];}); save(p); RUN.active=false; ftRender(); }
+
+function ftStart(keepScreen){
+  var idx=FT.map(function(_,i){return i;});
+  if(RUN.dueOnly) idx=idx.filter(function(i){return ftIsOpen(FT[i].id);});
+  if(RUN.shuffle) idx=_shuffle(idx);
+  RUN.order=idx; RUN.pos=0; RUN.active=true; RUN.ctx='q';
+  if(!keepScreen||idx.length) ftRender();
+}
+function ftNext(){ if(RUN.pos<RUN.order.length-1){RUN.pos++; ftRender();} else { RUN.active=false; ftRender(); } }
+function ftPrev(){ if(RUN.pos>0){RUN.pos--; ftRender();} }
+
+function ftRender(){
+  var el=document.getElementById('ftRunner'); if(!el) return;
+  var st=ftStats();
+  if(!RUN.active){
+    el.innerHTML='<div class="ft-card"><div class="ft-q">📝 Freitext-Selbsttest</div>'
+      +'<div class="qr-stat">'+st.learned+'/'+st.total+' bearbeitet · '+st.due+' offen/fällig</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.shuffle?' active':'')+'" onclick="ftToggleShuffle()">🔀 Mischen: '+(RUN.shuffle?'AN':'aus')+'</button>'
+        +'<button class="nav-btn'+(RUN.dueOnly?' active':'')+'" onclick="ftToggleDue()">🔁 Nur offene & fällige: '+(RUN.dueOnly?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="ftStart()">▶ Selbsttest starten</button>'
+      +'<button class="btn btn-ghost" onclick="ftReset()">↺ Fortschritt zurücksetzen</button></div></div>';
+    return;
+  }
+  if(!RUN.order.length){
+    el.innerHTML='<div class="ft-card"><div class="ft-q">🎉 Nichts offen!</div>'
+      +'<div class="qr-stat">Im Modus „nur offene & fällige" ist aktuell keine Frage fällig.</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-ghost" onclick="ftToggleDue()">Alle Fragen zeigen</button></div></div>';
+    return;
+  }
+  var i=RUN.order[RUN.pos], q=FT[i];
+  var pct=Math.round((RUN.pos)/RUN.order.length*100);
+  el.innerHTML='<div class="qr-stat">Frage '+(RUN.pos+1)+' / '+RUN.order.length+'</div>'
+    +'<div class="qr-prog"><div style="width:'+pct+'%"></div></div>'
+    + ftCardHTML(q, RUN.pos, 'q')
+    +'<div class="qr-ctrl">'
+      +(RUN.pos>0?'<button class="btn btn-ghost" onclick="ftPrev()">← Zurück</button>':'')
+      +'<button class="btn btn-ghost" onclick="ftNext()">Überspringen →</button>'
+      +'<button class="btn btn-ghost" onclick="RUN.active=false;ftRender()">■ Beenden</button>'
+    +'</div>';
+}
+
+/* ── „Alle Fragen" ── */
+function ftRenderAll(){
+  var el=document.getElementById('ftAll'); if(!el) return;
+  el.innerHTML=FT.map(function(q,i){return ftCardHTML(q,i,'all');}).join('');
+}
+
+(function(){ ftRender(); ftRenderAll(); })();
+
+function goToFT(idx){
+  var secs=document.querySelectorAll('.section'); var btns=document.querySelectorAll('.nav-btn');
+  secs.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  btns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  window.scrollTo(0,0);
+}
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

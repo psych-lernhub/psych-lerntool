@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14b · VL07 Messwiederholung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m14b-vl07
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Simulator (M14b) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-axis{font-size:.78rem;color:var(--text2);margin:8px 0 4px}
+.sim-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.82rem}
+.sim-row > span.lab{flex:0 0 160px;color:var(--text2)}
+.sim-row input[type=range]{flex:1}
+.sim-row > span.val{flex:0 0 76px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M14b · VL07 Messwiederholung</h1>
+<p class="page-sub">Wissenschaftliche Methodenlehre II (Statistik 2) · Dirk Lubbe · Klausur Sept 2026 (WH) · Freitext/Rechnen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Faktorarten (between/within) · 2. Versuchspläne · 3. QS-Zerlegung (zwischen/innerhalb) · 4. Freiheitsgrade & F-Test · 5. Abhängigkeit & Personeneffekt · 6. Sphärizität/Zirkularität · 7. Korrektur der Freiheitsgrade · 8. Zweifaktorielle MW-Pläne & F-Nenner
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Faktorarten</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Versuchspläne</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ QS-Zerlegung</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ df & F-Test</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Abhängigkeit</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Sphärizität</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ df-Korrektur</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Zweifaktorielle MW</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Faktorarten ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Längsschnitt & Faktorarten</div>
+    <div class="sec-lz">Gruppierungsfaktor = between-subject; Messwiederholungsfaktor = within-subject (Inner-Subjekt).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Studie misst Depressionswerte derselben Patienten zu drei Zeitpunkten (Prä/Post/Follow-Up). Was für ein Faktor ist „Messzeitpunkt"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Ein <strong>Messwiederholungsfaktor</strong> (within-subject / Inner-Subjekt-Faktor): dieselben Personen werden wiederholt gemessen. Ein <strong>Gruppierungsfaktor</strong> (between-subject) verglich dagegen verschiedene, unabhängige Personengruppen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Längsschnitt</div>
+    Um längsschnittliche Veränderungen zu untersuchen, braucht man <strong>wiederholte Messungen an identischen Probanden</strong> — in der Psychotherapieforschung typisch: vor (Prä), nach (Post) und einige Zeit nach Abschluss (Follow-Up).
+  </div>
+  <div class="card">
+    <div class="card-title">Gruppierungs- vs. Messwiederholungsfaktor</div>
+    <strong>Gruppierungsfaktor</strong> = Vergleich unabhängiger Stichproben = <em>between-subject</em> (Zwischen-Subjekt). <strong>Messwiederholungsfaktor</strong> = wiederholte Messung derselben Personen = <em>within-subject</em> (Inner-Subjekt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Zwischen-Subjekt (between) oder Inner-Subjekt (within)?</div>
+    <div class="corr-item" id="wa">Gruppierungsfaktor (z. B. Therapiegruppe)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('wa',this,'zwischen')">Zwischen-Subjekt</button>
+        <button class="corr-btn" onclick="checkCorr('wa',this,'innerhalb')">Inner-Subjekt</button>
+      </div><div class="corr-fb" id="wa-fb"></div>
+    </div>
+    <div class="corr-item" id="wb">Messwiederholungsfaktor (z. B. Messzeitpunkt)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('wb',this,'zwischen')">Zwischen-Subjekt</button>
+        <button class="corr-btn" onclick="checkCorr('wb',this,'innerhalb')">Inner-Subjekt</button>
+      </div><div class="corr-fb" id="wb-fb"></div>
+    </div>
+    <div class="corr-item" id="wc">„between-subject factor"
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('wc',this,'zwischen')">Zwischen-Subjekt</button>
+        <button class="corr-btn" onclick="checkCorr('wc',this,'innerhalb')">Inner-Subjekt</button>
+      </div><div class="corr-fb" id="wc-fb"></div>
+    </div>
+    <div class="corr-item" id="wd">„within-subject factor" / Inner-Subjekt-Faktor
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('wd',this,'zwischen')">Zwischen-Subjekt</button>
+        <button class="corr-btn" onclick="checkCorr('wd',this,'innerhalb')">Inner-Subjekt</button>
+      </div><div class="corr-fb" id="wd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Versuchspläne ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Versuchspläne der Messwiederholung</div>
+    <div class="sec-lz">Einfaktoriell (1 MW); zweifaktoriell gemischt (1 MW + 1 Gruppierung); zwei MW-Faktoren.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Messwiederholungs-Versuchspläne gibt es — und wovon ist die einfaktorielle MW-ANOVA die Erweiterung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Einfaktoriell (1 MW-Faktor) sowie zweifaktoriell — entweder <strong>1 MW + 1 Gruppierung</strong> (gemischt) oder <strong>2 MW-Faktoren</strong>. Die einfaktorielle MW-ANOVA erweitert den <strong>t-Test für abhängige Stichproben</strong> (Beobachtungspaare) auf mehr als zwei Messzeitpunkte.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Versuchspläne</div>
+    <strong>Einfaktoriell:</strong> 1 Messwiederholungsfaktor. <strong>Zweifaktoriell:</strong> entweder 1 Messwiederholungs- + 1 Gruppierungsfaktor (gemischtes Design) oder 2 Messwiederholungsfaktoren.
+  </div>
+  <div class="card">
+    <div class="card-title">Bezug zum t-Test</div>
+    Die einfaktorielle ANOVA <em>ohne</em> MW erweitert den t-Test für <strong>unabhängige</strong> Stichproben; die einfaktorielle ANOVA <em>mit</em> MW erweitert den t-Test für <strong>abhängige</strong> Stichproben (Beobachtungspaare) auf > 2 Messzeitpunkte.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Plan liegt vor?</div>
+    <div id="step1">
+      <div class="step-item"><strong>Nur ein Messzeitpunkt-Faktor, dieselben Personen</strong> → einfaktorielle MW-ANOVA.</div>
+      <div class="step-item"><strong>Messzeitpunkt + Gruppe (z. B. verschiedene Therapien)</strong> → gemischtes Design (1 MW + 1 Gruppierung).</div>
+      <div class="step-item"><strong>Zwei Messzeitpunkt-Faktoren an denselben Personen</strong> → zweifaktorieller Plan mit 2 MW-Faktoren.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ QS-Zerlegung ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Einfaktorielle MW: Quadratsummenzerlegung</div>
+    <div class="sec-lz">QS_tot = QS_zwischen + QS_innerhalb; QS_zwischen = QS_P; QS_innerhalb = QS_A + QS_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie zerlegt sich die Gesamtvariation im einfaktoriellen MW-Plan — und welcher Teil enthält die Personen, welcher die Messzeitpunkte?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>QS_tot = QS_zwischen + QS_innerhalb.</strong> Der Zwischen-Teil ist die <strong>Personenvarianz QS_P</strong>; der Innerhalb-Teil zerfällt in die <strong>Messzeitpunkte QS_A</strong> und den <strong>Fehler QS_e</strong>: QS_innerhalb = QS_A + QS_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Ebenen der Zerlegung</div>
+    Zuerst: <strong>y_im − Ḡ = (P̄_m − Ḡ)</strong> [zwischen] <strong>+ (y_im − P̄_m)</strong> [innerhalb]. Dann wird „innerhalb" weiter zerlegt in die Abweichung der Messzeitpunkte (Ā_i − Ḡ) und den Rest (Fehler).
+  </div>
+  <div class="card">
+    <div class="card-title">Die Quadratsummen</div>
+    <strong>QS_zwischen = QS_P</strong> (Unterscheiden sich die Personen?). <strong>QS_innerhalb = QS_A + QS_e</strong> (Unterscheiden sich die Messzeitpunkte vom Fehler?). Total additiv: QS_tot = QS_P + QS_A + QS_e.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Klausur-Klassiker</div>
+    Merke die Relation: <strong>QSzw = QSp</strong> und <strong>QSin = QSa + QSe</strong>. Nicht vertauschen — die Messzeitpunkte (QSa) stecken im <em>Innerhalb</em>-Teil, nicht im Zwischen-Teil.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwischen oder Innerhalb?</div>
+    <div class="corr-item" id="za">QS_P (Personenvarianz)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('za',this,'zwischen')">Zwischen</button>
+        <button class="corr-btn" onclick="checkCorr('za',this,'innerhalb')">Innerhalb</button>
+      </div><div class="corr-fb" id="za-fb"></div>
+    </div>
+    <div class="corr-item" id="zb">QS_A (Messzeitpunkte / Treatment)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('zb',this,'zwischen')">Zwischen</button>
+        <button class="corr-btn" onclick="checkCorr('zb',this,'innerhalb')">Innerhalb</button>
+      </div><div class="corr-fb" id="zb-fb"></div>
+    </div>
+    <div class="corr-item" id="zc">QS_e (Fehler)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('zc',this,'zwischen')">Zwischen</button>
+        <button class="corr-btn" onclick="checkCorr('zc',this,'innerhalb')">Innerhalb</button>
+      </div><div class="corr-fb" id="zc-fb"></div>
+    </div>
+    <div class="corr-item" id="zd">Frage: „Unterscheiden sich die Personen?"
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('zd',this,'zwischen')">Zwischen</button>
+        <button class="corr-btn" onclick="checkCorr('zd',this,'innerhalb')">Innerhalb</button>
+      </div><div class="corr-fb" id="zd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ df & F-Test ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Freiheitsgrade & F-Test</div>
+    <div class="sec-lz">df_zw = n−1, df_A = p−1, df_e = (n−1)(p−1); F = MQ_A/MQ_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>5 Personen, 3 Messzeitpunkte: QS_A = 2920, QS_e = 484. Wie groß ist F — und mit welchen Freiheitsgraden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">df_A = p−1 = 2; df_e = (n−1)(p−1) = 4·2 = 8. <strong>F = MQ_A/MQ_e = (2920/2)/(484/8) = 1460/60,5 ≈ 24,1</strong> (F_krit(2,8;0,95) = 4,46 → signifikant).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Freiheitsgrade</div>
+    <strong>df_zwischen = n − 1</strong> (Personen), <strong>df_A = p − 1</strong> (Messzeitpunkte), <strong>df_e = (n − 1)(p − 1)</strong> (Fehler); df_tot = np − 1.
+  </div>
+  <div class="card">
+    <div class="card-title">Prüfgröße</div>
+    Wie bei der einfaktoriellen ANOVA mit Gruppierungsfaktor: <strong>F = MQ_A / MQ_e</strong>. Der Personenfaktor selbst ist nicht von Interesse.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg F (5 Personen, 3 Messzeitpunkte)</div>
+    <div id="step3">
+      <div class="step-item"><strong>Schritt 1:</strong> df_A = p − 1 = 2; df_e = (n − 1)(p − 1) = 4·2 = 8.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> MQ_A = QS_A/df_A = 2920/2 = 1460.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> MQ_e = QS_e/df_e = 484/8 = 60,5.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> F = MQ_A/MQ_e = 1460/60,5 ≈ <strong>24,1</strong> (&gt; F_krit 4,46 → signifikant).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step3')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Abhängigkeit ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Abhängigkeit der Beobachtungen & Personeneffekt</div>
+    <div class="sec-lz">Cov(y_im, y_i'm) = σ²_P; Personen als Zufallsfaktor; kein απ-Term (1 Beobachtung je Zelle).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum verletzt ein Messwiederholungsdesign die Unabhängigkeitsannahme — und wie hängen die Messungen einer Person zusammen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Alle Messwerte einer Person teilen deren <strong>Personeneffekt π_m</strong>. Daher sind sie korreliert: <strong>Cov(y_im, y_i'm) = Var(π_m) = σ²_P</strong>. Aus der Unabhängigkeit der Fehler folgt bei Zufallseffekten <em>nicht</em> die Unabhängigkeit der Beobachtungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Modell</div>
+    <strong>y_im = μ + α_i + π_m + e_im.</strong> Treatment α_i fest, Personeneffekt π_m zufällig (π_m ~ N(0, σ²_P), e_im ~ N(0, σ²_e), unabhängig).
+  </div>
+  <div class="card">
+    <div class="card-title">Abhängige Beobachtungen</div>
+    Messwerte derselben Person teilen π_m → <strong>Cov(y_im, y_i'm) = σ²_P</strong>. Die Beobachtungen sind also korreliert; nur Personen untereinander sind unabhängig.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Betrachtungsweisen</div>
+    Die MW-ANOVA ist eine <strong>zweifaktorielle ANOVA mit den Personen als Zufallsfaktor</strong> (A fest, P zufällig). Da jede Zelle nur <strong>eine</strong> Beobachtung hat, ist die A×P-Interaktion nicht vom Fehler trennbar → <strong>kein απ-Term</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Warum sind die Beobachtungen abhängig?</div>
+    <div id="step4">
+      <div class="step-item"><strong>Schritt 1:</strong> Modell y_im = μ + α_i + π_m + e_im — der Personeneffekt π_m ist zufällig.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Zwei Messungen derselben Person enthalten dasselbe π_m.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Daher Cov(y_im, y_i'm) = Var(π_m) = σ²_P &gt; 0 → korreliert, nicht unabhängig.</div>
+      <div class="step-item"><strong>Folge:</strong> Der gewöhnliche F-Test braucht zusätzliche Annahmen über diese Korrelationsstruktur (Sphärizität).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Sphärizität ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Sphärizität / Zirkularität</div>
+    <div class="sec-lz">Zirkularitätsannahme für gültigen F-Test; Mauchly-Test prüft; Verletzung → F zu groß.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Weil die Messungen einer Person korreliert sind, braucht der F-Test eine Zusatzannahme. Wie heißt sie, und wie prüft man sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Die <strong>Zirkularitäts- bzw. Sphärizitätsannahme</strong> (Huynh & Feldt: notwendig und hinreichend). Homogene Korrelationen genügen. Geprüft wird sie mit dem <strong>Mauchly-Test für Sphärizität</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Von homogenen Korrelationen zur Sphärizität</div>
+    Aus der Varianzhomogenität folgt, dass alle Messungen einer Person <strong>in gleicher Höhe</strong> korreliert sind (compound symmetry). Das genügt für den F-Test, ist aber etwas zu streng.
+  </div>
+  <div class="card">
+    <div class="card-title">Zirkularität / Sphärizität</div>
+    Huynh & Feldt gaben die <strong>notwendige und hinreichende</strong> Bedingung an: die <strong>Zirkularitätsannahme</strong> (in R: <em>Sphericity</em>).
+  </div>
+  <div class="card">
+    <div class="card-title">Prüfung</div>
+    Der <strong>Mauchly-Test</strong> prüft die Sphärizität. Wird er <strong>signifikant</strong>, ist die Annahme <strong>verletzt</strong> → man weicht auf korrigierte Tests aus.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Sphärizität prüfen — Schritt für Schritt</div>
+    <div id="step5">
+      <div class="step-item"><strong>Schritt 1:</strong> Beobachtungen einer Person sind korreliert → der einfache F-Test setzt eine bestimmte Korrelationsstruktur voraus.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Diese Struktur ist die Zirkularität/Sphärizität (homogene Korrelationen genügen).</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Mauchly-Test durchführen: nicht signifikant → Annahme haltbar; signifikant → verletzt.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Bei Verletzung → korrigierte Freiheitsgrade (Greenhouse-Geisser / Huynh-Feldt).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächster Schritt</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sphärizitäts-Simulator</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sph-ok" onclick="sphSet('ok')">Sphärizität erfüllt</button>
+        <button class="sim-tbtn" id="sph-verletzt" onclick="sphSet('verletzt')">Sphärizität verletzt</button>
+      </div>
+      <div class="sim-verdict" id="sph-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Sphärizität = Gleichheit der Varianzen aller <strong>Differenzen</strong> zwischen den Messzeitpunkten. Geprüft mit dem <strong>Mauchly-Test</strong>; bei Verletzung werden die Freiheitsgrade korrigiert.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ df-Korrektur ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Korrektur der Freiheitsgrade</div>
+    <div class="sec-lz">Greenhouse-Geisser & Huynh-Feldt korrigieren die df im Innerhalb-Teil; Zwischen-Teil braucht keine.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Der Mauchly-Test ist signifikant — die Sphärizität ist verletzt. Was tut man, und welcher Teil der Tabelle ist betroffen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Bei Verletzung wird der empirische F-Wert <strong>zu groß</strong>. Zur Kompensation verkleinert man die Freiheitsgrade des kritischen Werts mit <strong>Greenhouse-Geisser</strong> oder <strong>Huynh-Feldt</strong> — aber <strong>nur im Innerhalb-Teil</strong>. Der Zwischen-Teil braucht keine Korrektur.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Folge der Verletzung</div>
+    Ist die Zirkularität verletzt, tendieren die empirischen F-Werte dazu, <strong>zu groß</strong> zu werden (zu liberale Tests, zu viele falsch-positive Befunde).
+  </div>
+  <div class="card">
+    <div class="card-title">Korrekturverfahren</div>
+    Man verwendet <strong>modifizierte (verkleinerte) Freiheitsgrade</strong> für den kritischen F-Wert: <strong>Greenhouse-Geisser</strong> (GG) oder <strong>Huynh-Feldt</strong> (HF).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Nur Innerhalb</div>
+    Die Korrektur betrifft <strong>nur den Innerhalb-Teil</strong> der Ergebnistabelle. Die Analyse des <strong>Zwischen-Teils (between-subject) erfordert keine Korrektur</strong> der Freiheitsgrade.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vom signifikanten Mauchly-Test zur Korrektur</div>
+    <div id="step6">
+      <div class="step-item"><strong>Schritt 1:</strong> Mauchly-Test signifikant → Sphärizität verletzt.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Konsequenz: empirisches F zu groß (Test zu liberal).</div>
+      <div class="step-item"><strong>Schritt 3:</strong> df des kritischen Werts verkleinern via Greenhouse-Geisser (ε) oder Huynh-Feldt.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Korrektur nur im Innerhalb-Teil; der Zwischen-Teil bleibt unverändert.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Zweifaktorielle MW ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Zweifaktorielle MW-Pläne & ihre F-Nenner</div>
+    <div class="sec-lz">Gemischt: A→MQ_P(A), B & A×B→MQ_e. Zwei MW: A→MQ_AP, B→MQ_BP, A×B→MQ_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im gemischten Plan (1 MW + 1 Gruppierung): warum wird der Gruppierungsfaktor gegen ein anderes mittleres Quadrat geprüft als der Messwiederholungsfaktor?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Weil der Between-Faktor an der <strong>Variation zwischen den Personen</strong> relativiert wird: <strong>F_A = MQ_A/MQ_P(A)</strong>. Der Within-Faktor B und die Interaktion A×B werden dagegen am Residualfehler relativiert: <strong>F_B = MQ_B/MQ_e</strong>, <strong>F_AB = MQ_AB/MQ_e</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gemischter Plan (1 MW + 1 Gruppierung)</div>
+    QS_zwischen = QS_A + QS_P(A); QS_innerhalb = QS_B + QS_AB + QS_e. F-Nenner: <strong>F_A = MQ_A/MQ_P(A)</strong> (Between!), <strong>F_B = MQ_B/MQ_e</strong>, <strong>F_AB = MQ_AB/MQ_e</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Messwiederholungsfaktoren</div>
+    Jeder Effekt wird gegen seine Interaktion mit dem Personenfaktor geprüft: <strong>F_A = MQ_A/MQ_AP</strong>, <strong>F_B = MQ_B/MQ_BP</strong>, <strong>F_AB = MQ_AB/MQ_e</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Im gemischten Plan steht nur der <strong>Between</strong>-Faktor (A) im Nenner MQ_P(A); alle <strong>Within</strong>-Terme (B, A×B) gegen MQ_e. Nicht alles gegen MQ_e setzen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher F-Nenner? (gemischter Plan & einfaktorielle MW)</div>
+    <div class="corr-item" id="na">Gruppierungsfaktor A (between) im gemischten Plan
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('na',this,'PA')">MQ_P(A)</button>
+        <button class="corr-btn" onclick="checkCorr('na',this,'e')">MQ_e</button>
+      </div><div class="corr-fb" id="na-fb"></div>
+    </div>
+    <div class="corr-item" id="nb">Messwiederholungsfaktor B (within) im gemischten Plan
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nb',this,'PA')">MQ_P(A)</button>
+        <button class="corr-btn" onclick="checkCorr('nb',this,'e')">MQ_e</button>
+      </div><div class="corr-fb" id="nb-fb"></div>
+    </div>
+    <div class="corr-item" id="nc">Interaktion A×B im gemischten Plan
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nc',this,'PA')">MQ_P(A)</button>
+        <button class="corr-btn" onclick="checkCorr('nc',this,'e')">MQ_e</button>
+      </div><div class="corr-fb" id="nc-fb"></div>
+    </div>
+    <div class="corr-item" id="nd">Faktor A im einfaktoriellen MW-Plan
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nd',this,'PA')">MQ_P(A)</button>
+        <button class="corr-btn" onclick="checkCorr('nd',this,'e')">MQ_e</button>
+      </div><div class="corr-fb" id="nd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gruppierungsfaktor (between)</h4>
+      <p>Vergleich unabhängiger Stichproben</p>
+      <p>Zwischen-Subjekt-Faktor</p>
+      <p>verschiedene Personen je Stufe</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Messwiederholungsfaktor (within)</h4>
+      <p>wiederholte Messung an denselben Personen</p>
+      <p>Inner-Subjekt-Faktor</p>
+      <p>Beobachtungen abhängig (Cov = σ²_P)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Messwiederholungsfaktor vergleicht voneinander unabhängige Personengruppen (between-subject).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Zwischen-Teil (QSzw)</h4>
+      <p>= QS_P (Personenvarianz)</p>
+      <p>Frage: Unterscheiden sich die Personen?</p>
+      <p>df = n − 1</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Innerhalb-Teil (QSin)</h4>
+      <p>= QS_A + QS_e</p>
+      <p>Frage: Unterscheiden sich die Messzeitpunkte?</p>
+      <p>enthält Treatment und Fehler</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Zwischen-Teil der Zerlegung umfasst die Quadratsumme der Messzeitpunkte (QS_A).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einfaktorielle MW / gemischter Plan</h4>
+      <p>F_A (within) = MQ_A/MQ_e</p>
+      <p>gemischt: B (within) → MQ_e</p>
+      <p>gemischt: A (between) → MQ_P(A)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zwei Messwiederholungsfaktoren</h4>
+      <p>F_A = MQ_A/MQ_AP</p>
+      <p>F_B = MQ_B/MQ_BP</p>
+      <p>F_AB = MQ_AB/MQ_e</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei zwei Messwiederholungsfaktoren wird der Haupteffekt A gegen MQ_e statt gegen MQ_AP geprüft.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Compound Symmetry / homogene Korrelationen</h4>
+      <p>alle Messungen einer Person gleich hoch korreliert</p>
+      <p>hinreichend für den F-Test</p>
+      <p>etwas zu streng</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zirkularität / Sphärizität</h4>
+      <p>notwendig UND hinreichend (Huynh & Feldt)</p>
+      <p>in R: Sphericity</p>
+      <p>Prüfung per Mauchly-Test</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Sphärizitätsannahme ist strenger als die Annahme homogener Korrelationen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sphärizität verletzt</h4>
+      <p>Mauchly-Test signifikant</p>
+      <p>empirisches F wird zu groß</p>
+      <p>df-Korrektur per Greenhouse-Geisser / Huynh-Feldt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Korrektur betrifft …</h4>
+      <p>nur den Innerhalb-Teil</p>
+      <p>der Zwischen-Teil braucht keine Korrektur</p>
+      <p>verkleinerte df für den kritischen F-Wert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei verletzter Sphärizität muss auch der Zwischen-Teil (between-subject) der df-Korrektur unterzogen werden.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m14b-vl07</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m14b-vl07';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wie heißt ein Faktor, bei dem wiederholt an denselben Probanden gemessen wird?",
+      "opts": [
+        "Messwiederholungsfaktor (within-subject / Inner-Subjekt-Faktor).",
+        "Gruppierungsfaktor (between-subject-Faktor).",
+        "Zufallsfaktor mit unendlich vielen Stufen.",
+        "Ein geschachtelter Faktor, dessen Stufen ausschließlich innerhalb einer einzigen Untersuchungsgruppe auftreten und dort vollständig miteinander verglichen werden."
+      ],
+      "c": 0,
+      "e": "Wiederholte Messung an gleichbleibenden Probanden = Messwiederholungs-/within-subject-/Inner-Subjekt-Faktor. (b) ist der Vergleich unabhängiger Stichproben."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was ist ein Gruppierungsfaktor?",
+      "opts": [
+        "Ein Faktor mit wiederholter Messung an denselben Personen.",
+        "Ein between-subject-Faktor — Vergleich zwischen unabhängigen Stichproben (Zwischen-Subjekt-Faktor).",
+        "Der Personenfaktor in einem Messwiederholungsdesign.",
+        "Ein Faktor, dessen Stufen durch die wiederholten Messzeitpunkte derselben Personen gebildet werden und der daher als Inner-Subjekt-Faktor in das Modell eingeht."
+      ],
+      "c": 1,
+      "e": "Gruppierungsfaktor = between-subject (Vergleich unabhängiger Gruppen). (d) beschreibt gerade den Messwiederholungsfaktor."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche zweifaktoriellen Messwiederholungspläne unterscheidet man?",
+      "opts": [
+        "Nur einen: zwei Gruppierungsfaktoren.",
+        "Nur einen: zwei Messwiederholungsfaktoren.",
+        "Zwei: (1) ein Messwiederholungs- + ein Gruppierungsfaktor (gemischt) und (2) zwei Messwiederholungsfaktoren.",
+        "Drei: je einen für ein, zwei oder drei gleichzeitig erhobene Messwiederholungsfaktoren, wobei Gruppierungsfaktoren in keinem dieser Pläne vorkommen dürfen."
+      ],
+      "c": 2,
+      "e": "Zweifaktoriell: entweder 1 MW + 1 Gruppierung (gemischtes Design) oder 2 MW-Faktoren."
+    },
+    {
+      "id": "s1q2",
+      "q": "Die einfaktorielle Varianzanalyse mit Messwiederholung ist die Erweiterung welches Tests?",
+      "opts": [
+        "Des t-Tests für unabhängige Stichproben, also des Vergleichs zweier voneinander völlig getrennter Personengruppen ganz ohne wiederholte Messung.",
+        "Des Omnibustests der zweifaktoriellen Varianzanalyse.",
+        "Des z-Tests für eine einzelne Stichprobe.",
+        "Des t-Tests für abhängige Stichproben (Beobachtungspaare) auf mehr als zwei Messzeitpunkte."
+      ],
+      "c": 3,
+      "e": "MW-ANOVA = Erweiterung des t-Tests für abhängige Stichproben (Beobachtungspaare) auf > 2 Messzeitpunkte. (a) ist die gewöhnliche einfaktorielle ANOVA."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie zerlegt sich die totale Quadratsumme im einfaktoriellen Messwiederholungsplan?",
+      "opts": [
+        "QS_tot = QS_zwischen + QS_innerhalb, mit QS_zwischen = QS_P und QS_innerhalb = QS_A + QS_e.",
+        "QS_tot = QS_A + QS_e (wie ohne Messwiederholung).",
+        "QS_tot = QS_A + QS_B + QS_AB + QS_e.",
+        "QS_tot = QS_zwischen · QS_innerhalb, da sich die Variation zwischen den Personen und die innerhalb der Personen im Gesamtmaß multiplikativ verbinden."
+      ],
+      "c": 0,
+      "e": "Total = zwischen (Personen, QS_P) + innerhalb; innerhalb = QS_A (Messzeitpunkte) + QS_e. Additiv."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was erfasst der ‚Zwischen‘-Teil der Quadratsummenzerlegung?",
+      "opts": [
+        "Ob sich die Messzeitpunkte (Faktor A) voneinander unterscheiden.",
+        "Ob sich die Personen voneinander unterscheiden (QS_P).",
+        "Den nicht erklärten Fehleranteil.",
+        "Den Anteil der Variabilität, der ausschließlich auf das Zusammenspiel von Personen und Messzeitpunkten zurückgeht und sich keinem der beiden Effekte einzeln zuordnen lässt."
+      ],
+      "c": 1,
+      "e": "‚Zwischen‘ = Variation zwischen den Personen (QS_P). Die Messzeitpunkte stecken im ‚Innerhalb‘-Teil."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wie viele Fehlerfreiheitsgrade hat der einfaktorielle MW-Plan (p Messzeitpunkte, n Personen)?",
+      "opts": [
+        "n − 1 (wie der Zwischen-Teil).",
+        "p − 1 (wie der Treatment-Teil).",
+        "(n − 1)(p − 1).",
+        "np − 1, da im Messwiederholungsplan sämtliche einzelnen Messwerte aller Personen gemeinsam in die Bestimmung der Fehlerfreiheitsgrade eingehen."
+      ],
+      "c": 2,
+      "e": "df_e = (n−1)(p−1). df_zwischen = n−1, df_A = p−1; df_tot = np−1."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie wird der Messwiederholungsfaktor A im einfaktoriellen Plan auf Signifikanz geprüft?",
+      "opts": [
+        "F = MQ_zwischen / MQ_A, also das Verhältnis der Personenvarianz zur mittleren Treatmentquadratsumme der Messzeitpunkte.",
+        "F = MQ_A / MQ_P.",
+        "F = MQ_P / MQ_e.",
+        "F = MQ_A / MQ_e."
+      ],
+      "c": 3,
+      "e": "Einfaktorielle MW: F = MQ_A/MQ_e (Treatment relativ zum Fehler innerhalb). Beispiel (2920/2)/(484/8) = 24,13."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Warum sind die Beobachtungen in einem Messwiederholungsdesign nicht unabhängig?",
+      "opts": [
+        "Weil alle Messwerte einer Person deren gemeinsamen Personeneffekt π_m teilen → sie sind korreliert (Cov = σ²_P).",
+        "Weil die Fehlerkomponenten nicht normalverteilt sind.",
+        "Weil die Stichprobe zu klein ist.",
+        "Weil die Treatmenteffekte als zufällig betrachtet werden und sich dadurch die Mittelwerte der einzelnen Messzeitpunkte gegenseitig systematisch beeinflussen."
+      ],
+      "c": 0,
+      "e": "Messwerte einer Person teilen ihren Personeneffekt π_m → Cov(y_im, y_i'm) = Var(π_m) = σ²_P → abhängig."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie lässt sich die einfaktorielle MW-ANOVA auch auffassen?",
+      "opts": [
+        "Als t-Test für unabhängige Stichproben.",
+        "Als zweifaktorielle ANOVA mit den Personen als Stufen eines Zufallsfaktors (A fest, Personen zufällig).",
+        "Als einfaktorielle ANOVA ganz ohne Fehlerterm.",
+        "Als rein deskriptives Verfahren, das keine inferenzstatistische Prüfung erlaubt, weil die wiederholten Messungen die Voraussetzung der Unabhängigkeit grundsätzlich verletzen."
+      ],
+      "c": 1,
+      "e": "MW-ANOVA = zweifaktorielle ANOVA (A fest, Personen P zufällig). Da jede Zelle nur 1 Beobachtung hat, ist die A×P-Interaktion nicht vom Fehler trennbar (kein απ-Term)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche Annahme muss für die Gültigkeit des F-Tests im Messwiederholungsplan erfüllt sein?",
+      "opts": [
+        "Dass die Beobachtungen vollständig unabhängig voneinander sind.",
+        "Dass alle Personen exakt denselben Messwert aufweisen.",
+        "Die Zirkularitäts- bzw. Sphärizitätsannahme (homogene Korrelationen sind dafür hinreichend).",
+        "Dass die Treatmenteffekte normalverteilt sind und die Personeneffekte über alle Messzeitpunkte hinweg exakt denselben konstanten Wert annehmen."
+      ],
+      "c": 2,
+      "e": "Zirkularität/Sphärizität (Huynh & Feldt): notwendige+hinreichende Bedingung. Homogene Korrelationen (compound symmetry) sind hinreichend, aber etwas zu streng."
+    },
+    {
+      "id": "s5q2",
+      "q": "Womit prüft man in R die Sphärizitätsannahme?",
+      "opts": [
+        "Mit dem Levene-Test, der eigens für die Prüfung der Korrelationsstruktur wiederholter Messungen derselben Personen entwickelt wurde.",
+        "Mit dem Greenhouse-Geisser-Test.",
+        "Mit dem Bonferroni-Verfahren.",
+        "Mit dem Mauchly-Test für Sphärizität."
+      ],
+      "c": 3,
+      "e": "Der Mauchly-Test prüft die Sphärizität; wird er signifikant, ist die Annahme verletzt → korrigierte Tests (GG/HF)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was passiert mit dem empirischen F-Wert, wenn die Sphärizitätsannahme verletzt ist?",
+      "opts": [
+        "Er tendiert dazu, zu groß zu werden (zu viele falsch-positive Befunde).",
+        "Er tendiert dazu, zu klein zu werden.",
+        "Er bleibt unverändert korrekt.",
+        "Er kann negative Werte annehmen, da die Verletzung der Annahme die Fehlervarianz im Nenner der Prüfgröße unter null absinken lässt."
+      ],
+      "c": 0,
+      "e": "Bei Verletzung der Zirkularität wird F tendenziell zu groß → man korrigiert (verkleinert) die Freiheitsgrade des kritischen Werts."
+    },
+    {
+      "id": "s6q2",
+      "q": "Welche Korrekturen verwendet man bei verletzter Sphärizität — und für welchen Teil?",
+      "opts": [
+        "Bonferroni und Scheffé, für den Zwischen-Teil.",
+        "Greenhouse-Geisser und Huynh-Feldt, für den Innerhalb-Teil (der Zwischen-Teil braucht keine Korrektur).",
+        "Mauchly und Levene, für beide Teile gleichermaßen.",
+        "Tukeys HSD und die Bonferroni-Korrektur, die gleichermaßen auf den Zwischen- und den Innerhalb-Teil der varianzanalytischen Ergebnistabelle angewendet werden müssen."
+      ],
+      "c": 1,
+      "e": "Greenhouse-Geisser & Huynh-Feldt korrigieren die df im INNERHALB-Teil. Der Zwischen-Teil braucht keine Korrektur."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Im gemischten Plan (1 Messwiederholungs- + 1 Gruppierungsfaktor): wogegen wird der GRUPPIERUNGSfaktor A geprüft?",
+      "opts": [
+        "Gegen MQ_e (die Residualvarianz).",
+        "Gegen MQ_AB.",
+        "Gegen MQ_P(A) — die Personen-innerhalb-der-Gruppen-Varianz.",
+        "Gegen die mittlere Quadratsumme des Messwiederholungsfaktors B, da dieser im gemischten Plan die natürliche Vergleichsbasis für den Gruppierungsfaktor bildet."
+      ],
+      "c": 2,
+      "e": "Gemischter Plan: der Zwischen-Subjekt-Faktor A wird gegen MQ_P(A) geprüft; der Within-Faktor B und A×B gegen MQ_e."
+    },
+    {
+      "id": "s7q2",
+      "q": "Im Plan mit ZWEI Messwiederholungsfaktoren: wogegen wird der Haupteffekt A geprüft?",
+      "opts": [
+        "Gegen MQ_e, also dieselbe Residualvarianz, an der auch im gemischten Plan sämtliche Within-Subjekt-Effekte einheitlich relativiert werden.",
+        "Gegen MQ_BP.",
+        "Gegen MQ_P.",
+        "Gegen MQ_AP (die Interaktion von A mit dem Personenfaktor)."
+      ],
+      "c": 3,
+      "e": "Bei 2 MW-Faktoren: F_A = MQ_A/MQ_AP, F_B = MQ_B/MQ_BP, F_AB = MQ_AB/MQ_e. Jeder Effekt gegen seine Person-Interaktion."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Im einfaktoriellen MW-Plan: QS_A = 2920 (df 2), QS_e = 484 (df 8). Wie groß ist F?",
+    "opts": [
+      "≈ 24,1 — denn MQ_A = 2920/2 = 1460 und MQ_e = 484/8 = 60,5, also 1460/60,5.",
+      "≈ 6,0, also QS_A/QS_e.",
+      "≈ 0,04, also MQ_e/MQ_A.",
+      "≈ 482, weil zur Bildung der Prüfgröße die Treatmentquadratsumme direkt durch die mittlere Fehlerquadratsumme geteilt wird, ohne sie zuvor durch ihre eigenen Freiheitsgrade zu dividieren."
+    ],
+    "c": 0,
+    "e": "F = MQ_A/MQ_e = (2920/2)/(484/8) = 1460/60,5 ≈ 24,1."
+  },
+  {
+    "id": "bq2",
+    "q": "Was besagt Cov(y_im, y_i'm) = σ²_P im Messwiederholungsmodell?",
+    "opts": [
+      "Dass die Personen voneinander unabhängig sind.",
+      "Dass zwei Messungen DERSELBEN Person über den gemeinsamen Personeneffekt korreliert sind.",
+      "Dass die Fehlervarianz null ist.",
+      "Dass die Kovarianz zwischen den Messungen verschiedener Personen genau der Varianz des Treatmenteffekts entspricht und mit zunehmender Stichprobengröße verschwindet."
+    ],
+    "c": 1,
+    "e": "Zwei Messwerte derselben Person teilen π_m → ihre Kovarianz ist Var(π_m) = σ²_P → die Beobachtungen sind abhängig."
+  },
+  {
+    "id": "bq3",
+    "q": "Warum enthält das Modell der einfaktoriellen MW-ANOVA (als zweifaktoriell betrachtet) keinen Interaktionsterm απ?",
+    "opts": [
+      "Weil Personen prinzipiell keine Interaktion mit dem Treatment eingehen können.",
+      "Weil der Interaktionsterm immer exakt null ist.",
+      "Weil jede Zelle nur EINE Beobachtung enthält → Interaktion und Fehler sind nicht trennbar.",
+      "Weil der Personenfaktor als fester Effekt modelliert wird und feste Faktoren grundsätzlich keine Interaktionen mit anderen festen Faktoren des Versuchsplans aufweisen."
+    ],
+    "c": 2,
+    "e": "Jede Person×Messzeitpunkt-Zelle hat nur 1 Wert → A×P-Interaktion kann nicht vom Fehler getrennt werden → kein απ-Term."
+  },
+  {
+    "id": "bq4",
+    "q": "Wie hängen QSzw und QSin im einfaktoriellen MW-Plan mit den anderen Quadratsummen zusammen?",
+    "opts": [
+      "QSzw = QSa + QSe und QSin = QSp, sodass die gesamte Variation zwischen den Messzeitpunkten dem Zwischen-Teil und die Personenvarianz dem Innerhalb-Teil zugeordnet wird.",
+      "QSzw = QSa und QSin = QSp + QSe.",
+      "QSzw = QSp + QSe und QSin = QSa.",
+      "QSzw = QSp und QSin = QSa + QSe."
+    ],
+    "c": 3,
+    "e": "Zwischen = Personenvarianz (QSp); Innerhalb = Treatment + Fehler (QSa + QSe). (Genau die Altklausurfrage.)"
+  },
+  {
+    "id": "bq5",
+    "q": "Der Mauchly-Test ist signifikant. Was folgt daraus?",
+    "opts": [
+      "Die Sphärizitätsannahme ist verletzt → man verwendet einen korrigierten Test (z. B. Greenhouse-Geisser).",
+      "Die Sphärizität ist bestätigt → der gewöhnliche F-Test ist gültig.",
+      "Der Gruppierungsfaktor muss neu getestet werden.",
+      "Die abhängige Variable ist nicht normalverteilt, weshalb auf ein nicht-parametrisches Verfahren wie den Kruskal-Wallis-Test ausgewichen werden muss."
+    ],
+    "c": 0,
+    "e": "Signifikanter Mauchly-Test → Sphärizität verletzt → GG- oder HF-korrigierte df für den F-Test (Innerhalb-Teil)."
+  },
+  {
+    "id": "bq6",
+    "q": "Welcher Teil der MW-Ergebnistabelle braucht KEINE Sphärizitätskorrektur?",
+    "opts": [
+      "Der Innerhalb-Teil (within-subject).",
+      "Der Zwischen-Teil (between-subject).",
+      "Beide Teile brauchen die Korrektur gleichermaßen.",
+      "Keiner der beiden Teile, da die Greenhouse-Geisser-Korrektur grundsätzlich auf alle Effekte einer Varianzanalyse mit Messwiederholung gleichzeitig angewendet werden muss."
+    ],
+    "c": 1,
+    "e": "Nur der Innerhalb-Teil ist von der Sphärizität betroffen; der Zwischen-Teil (between-subject) braucht keine Korrektur."
+  },
+  {
+    "id": "bq7",
+    "q": "Im gemischten Plan: wogegen wird der Messwiederholungsfaktor B (within) geprüft?",
+    "opts": [
+      "Gegen MQ_P(A).",
+      "Gegen MQ_A.",
+      "Gegen MQ_e (die Residualvarianz des Innerhalb-Teils).",
+      "Gegen die mittlere Quadratsumme des Gruppierungsfaktors A, da im gemischten Plan jeder Within-Faktor an der Variation des zugehörigen Between-Faktors relativiert werden muss."
+    ],
+    "c": 2,
+    "e": "Gemischter Plan: B (within) und A×B → MQ_e; nur der Between-Faktor A → MQ_P(A)."
+  },
+  {
+    "id": "bq8",
+    "q": "Im Plan mit zwei Messwiederholungsfaktoren: wogegen wird die Interaktion A×B geprüft?",
+    "opts": [
+      "Gegen MQ_AP, also die mittlere Quadratsumme der Interaktion des Faktors A mit dem Personenfaktor des Versuchsplans.",
+      "Gegen MQ_BP.",
+      "Gegen MQ_P.",
+      "Gegen MQ_e."
+    ],
+    "c": 3,
+    "e": "2 MW: F_A = MQ_A/MQ_AP, F_B = MQ_B/MQ_BP, F_AB = MQ_AB/MQ_e. Die zweifache Interaktion wird gegen den Residualfehler geprüft."
+  }
+];
+
+var corrCorrect = {
+  "wa": "zwischen",
+  "wb": "innerhalb",
+  "wc": "zwischen",
+  "wd": "innerhalb",
+  "za": "zwischen",
+  "zb": "innerhalb",
+  "zc": "innerhalb",
+  "zd": "zwischen",
+  "na": "PA",
+  "nb": "e",
+  "nc": "e",
+  "nd": "e"
+};
+var corrExpl = {
+  "wa": "Ein Gruppierungsfaktor vergleicht unabhängige Gruppen → between-subject (Zwischen-Subjekt).",
+  "wb": "Ein Messwiederholungsfaktor (Messzeitpunkt) misst innerhalb derselben Personen → within-subject.",
+  "wc": "between-subject factor = Zwischen-Subjekt-Faktor = Gruppierungsfaktor.",
+  "wd": "within-subject / Inner-Subjekt-Faktor = Messwiederholungsfaktor.",
+  "za": "QS_P (Personenvarianz) bildet den Zwischen-Teil der Zerlegung.",
+  "zb": "QS_A (Messzeitpunkte) gehört zum Innerhalb-Teil.",
+  "zc": "QS_e (Fehler) gehört zum Innerhalb-Teil.",
+  "zd": "„Unterscheiden sich die Personen?“ ist die Frage des Zwischen-Teils.",
+  "na": "Der Gruppierungsfaktor A (between) wird im gemischten Plan gegen MQ_P(A) geprüft.",
+  "nb": "Der Messwiederholungsfaktor B (within) wird gegen MQ_e geprüft.",
+  "nc": "Die Interaktion A×B wird im gemischten Plan gegen MQ_e geprüft.",
+  "nd": "Im einfaktoriellen MW-Plan wird der Faktor A gegen MQ_e geprüft."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Sphärizitäts-Simulator (vl07) */
+var sphData = {
+  ok:      {t:'Sphärizität erfüllt', d:'Die Varianzen aller Differenzpaare sind gleich → der gewöhnliche F-Test der Messwiederholung ist gültig, keine Korrektur nötig.'},
+  verletzt:{t:'Sphärizität verletzt', d:'Mauchly signifikant → der F-Test ist zu liberal (zu viele Signifikanzen). Korrektur der Freiheitsgrade: Greenhouse-Geisser (konservativ) oder Huynh-Feldt (bei ε nahe 1).'}
+};
+function sphSet(k){
+  ['ok','verletzt'].forEach(function(x){ var b=document.getElementById('sph-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('sph-out'); if(!o) return;
+  var d=sphData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  sphSet('ok');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

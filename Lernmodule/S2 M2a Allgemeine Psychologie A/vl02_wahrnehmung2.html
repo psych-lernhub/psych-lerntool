@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL02 Wahrnehmung II</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl02
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL02 Wahrnehmung II</h1>
+<p class="page-sub">Objekterkennung · Bewegung · auditive Wahrnehmung · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Problem der Objekterkennung + 4 Ansätze · 2. Gestaltgesetze · 3. Marr & Geon · 4. Bewegungswahrnehmung (Gibson/Reichardt/Johansson) · 5. auditive Wahrnehmung & Schallortung
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Objekterkennung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Gestaltgesetze</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Raumfrequenz</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Marr</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Geon-Theorie</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Bewegung</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Auditiv</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Schallortung</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Objekterkennung ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Problem der Objekterkennung & vier Ansätze</div>
+    <div class="sec-lz">Das Erkennungsproblem und die vier Erklärungsansätze überblicken.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie sehen ein Strichbild, das sowohl ein Gesicht als auch eine Vase sein könnte. Warum ist das ein <strong>Problem</strong> für das Gehirn?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Weil der <strong>retinale Input mehrdeutig</strong> ist: Dasselbe 2D-Muster erlaubt mehrere Objektinterpretationen. Das visuelle System muss entscheiden, <em>was</em> ein Objekt ist — dafür gibt es vier konkurrierende Erklärungsansätze.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">DAS Problem der Objekterkennung</div>
+    Aus einem <strong>mehrdeutigen</strong> retinalen Bild muss erschlossen werden, welches Objekt vorliegt (vgl. „unmögliche“ Figuren). Vier Ansätze versuchen das zu erklären.
+  </div>
+  <div class="card">
+    <div class="card-title">Die vier Erklärungsansätze</div>
+    <strong>Gestaltpsychologie</strong> (einfachste Interpretation), <strong>Raumfrequenzanalyse</strong> (Zerlegung in Ortsfrequenzen), <strong>Marr's Computational Theory</strong> (hierarchische Skizzen) und <strong>Geon-Theorie</strong> (Objekte aus elementaren 3D-Formen).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die vier Ansätze im Überblick</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ge" onclick="switchTab(this,'ansaetze')">Gestalt</button>
+      <button class="tab-btn" data-tab="rf" onclick="switchTab(this,'ansaetze')">Raumfrequenz</button>
+      <button class="tab-btn" data-tab="ma" onclick="switchTab(this,'ansaetze')">Marr</button>
+      <button class="tab-btn" data-tab="geo" onclick="switchTab(this,'ansaetze')">Geon</button>
+    </div>
+    <div class="tab-group" data-group="ansaetze">
+      <div class="tab-content active" data-tab="ge">Wahrnehmung = einfachste Interpretation; Gestaltgesetze → <strong>top-down</strong>.</div>
+      <div class="tab-content" data-tab="rf">Zerlegung in Ortsfrequenzen: Umrisse vs. Details → <strong>bottom-up</strong>.</div>
+      <div class="tab-content" data-tab="ma">Hierarchische Skizzen Rohskizze → 2½D → 3D → <strong>bottom-up + top-down</strong>.</div>
+      <div class="tab-content" data-tab="geo">Objekte aus ~36 elementaren 3D-Grundformen (<strong>Geonen</strong>).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Gestaltgesetze ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Gestaltpsychologie & Gestaltgesetze</div>
+    <div class="sec-lz">Gestaltgesetze benennen, anwenden und kritisch bewerten (post-hoc, top-down).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie sehen drei Punktreihen und nehmen automatisch „Spalten“ wahr, weil die Punkte einer Reihe näher beieinander stehen. Welches Prinzip steckt dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Das <strong>Gesetz der Nähe</strong> — eines der Gestaltgesetze. Diese Organisationsprinzipien sagen vorher, unter welchen Reizbedingungen welche Wahrnehmung („gute Gestalt“) entsteht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gestaltpsychologie (Wertheimer & Koffka)</div>
+    Begründet in Frankfurt. Leitsatz: <strong>„Das Ganze ist mehr als die Summe seiner Teile.“</strong> Die Gestaltgesetze sind Organisationsprinzipien der Wahrnehmung.
+  </div>
+  <div class="card">
+    <div class="card-title">Die wichtigsten Gestaltgesetze</div>
+    <strong>Prägnanz</strong> (gute Gestalt), <strong>Geschlossenheit</strong>, <strong>Ähnlichkeit</strong>, <strong>Nähe</strong>, <strong>Fortsetzung/Kontinuität</strong>, <strong>Verbundenheit</strong> (kann Nähe/Ähnlichkeit überschreiben), <strong>gemeinsames Schicksal</strong>, <strong>Figur-Grund</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewertung</div>
+    Heuristisch und intuitiv, aber: Konzepte unklar definiert; <strong>post-hoc</strong>-Erklärungen ohne Verhaltensvorhersage; reines <strong>top-down</strong>-Modell.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne das Beispiel dem Gestaltgesetz zu</div>
+    <div class="corr-item" id="c1a">Eine gepunktete Kontur wird als durchgehender Kreis gesehen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'geschlossenheit')">Geschlossenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'aehnlichkeit')">Ähnlichkeit</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'naehe')">Nähe</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'fortsetzung')">Fortsetzung</button>
+      </div><div class="corr-fb" id="c1a-fb"></div>
+    </div>
+    <div class="corr-item" id="c1b">Rote Punkte bilden eine Gruppe, blaue eine andere
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'geschlossenheit')">Geschlossenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'aehnlichkeit')">Ähnlichkeit</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'naehe')">Nähe</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'fortsetzung')">Fortsetzung</button>
+      </div><div class="corr-fb" id="c1b-fb"></div>
+    </div>
+    <div class="corr-item" id="c1c">Eng beieinander stehende Punkte werden zusammengefasst
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'geschlossenheit')">Geschlossenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'aehnlichkeit')">Ähnlichkeit</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'naehe')">Nähe</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'fortsetzung')">Fortsetzung</button>
+      </div><div class="corr-fb" id="c1c-fb"></div>
+    </div>
+    <div class="corr-item" id="c1d">Vier Punkte werden als glatte, durchgehende Kurve verbunden
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'geschlossenheit')">Geschlossenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'aehnlichkeit')">Ähnlichkeit</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'naehe')">Nähe</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'fortsetzung')">Fortsetzung</button>
+      </div><div class="corr-fb" id="c1d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Raumfrequenz ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Raumfrequenzanalyse</div>
+    <div class="sec-lz">Niedrige/hohe Ortsfrequenz; neuronale Basis; Grenzen (nur bottom-up).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Aus großer Entfernung erkennen Sie eine Person an ihrer <em>Silhouette</em>, bevor Sie ihr Gesicht ausmachen. Welche Bildinformation kommt zuerst an?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Die <strong>niedrigen Raumfrequenzen</strong> (grobe Umrisse) werden schnell und global analysiert; die <strong>hohen Frequenzen</strong> (Details wie Gesichtszüge) folgen langsamer.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Grundidee</div>
+    Objekte werden hinsichtlich ihrer <strong>Ortsfrequenz</strong> analysiert: Umrisse (global) schnell, Details (lokal) langsam. Niedrig = Umrisse, mittel = Elemente, hoch = Details.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewertung</div>
+    Neuronale Grundlage belegt (<strong>CGL</strong>: magno-/parvozelluläres System). ABER: rein <strong>bottom-up</strong> (kein Objektwissen); Objektinvarianz über Blickwinkel kaum erklärbar.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Raumfrequenzbänder</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="lo" onclick="switchTab(this,'rfband')">Niedrig</button>
+      <button class="tab-btn" data-tab="mi" onclick="switchTab(this,'rfband')">Mittel</button>
+      <button class="tab-btn" data-tab="hi" onclick="switchTab(this,'rfband')">Hoch</button>
+    </div>
+    <div class="tab-group" data-group="rfband">
+      <div class="tab-content active" data-tab="lo"><strong>Umrisse</strong> von Objekten (global, schnell).</div>
+      <div class="tab-content" data-tab="mi"><strong>Elemente</strong> von Objekten.</div>
+      <div class="tab-content" data-tab="hi"><strong>Details</strong> der Objektelemente (lokal, langsamer).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Marr ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Marr's Computational Theory</div>
+    <div class="sec-lz">Rohskizze → 2½D → 3D-Modell; bottom-up + top-down.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Bildverarbeitungs-Computer soll ein Objekt erkennen. In welcher Reihenfolge sollte er laut Marr vorgehen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Zuerst <strong>Kanten</strong> finden (Rohskizze), dann nach Gestaltgesetzen <strong>gruppieren</strong> (2½D-Skizze), zuletzt mit gespeicherten Modellen <strong>abgleichen</strong> (3D-Modell). Bottom-up beginnend, mit top-down-Abschluss.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Hierarchisches Modell (Computeranalogie)</div>
+    Große Bedeutung von <strong>Kanten</strong> (vgl. Neurone in V1); basiert auf Ortsfrequenzen (zuerst niedrige, die Kanteninformation liefern); insgesamt <strong>hierarchisch/bottom-up</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Die drei Stufen</div>
+    <strong>1. Rohskizze</strong> (Ecken/Kanten, Helligkeitsdetektoren, bottom-up) → <strong>2. 2½D-Skizze</strong> (Gruppierung nach Gestaltgesetzen) → <strong>3. 3D-Modell</strong> (Abgleich mit gespeicherten Modellen, top-down).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewertung</div>
+    Verbindet bottom-up und top-down; postuliert biologisch plausible Algorithmen. Probleme bei <strong>unscharfen</strong> (Schatten) oder konflikt-behafteten Kanten.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Stufen nach Marr</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="r" onclick="switchTab(this,'marr')">Rohskizze</button>
+      <button class="tab-btn" data-tab="z" onclick="switchTab(this,'marr')">2½D-Skizze</button>
+      <button class="tab-btn" data-tab="d" onclick="switchTab(this,'marr')">3D-Modell</button>
+    </div>
+    <div class="tab-group" data-group="marr">
+      <div class="tab-content active" data-tab="r">Detektion von <strong>Ecken/Kanten</strong> über Helligkeitsdetektoren (bottom-up).</div>
+      <div class="tab-content" data-tab="z">Gruppierung von Elementmerkmalen nach <strong>Gestaltgesetzen</strong>.</div>
+      <div class="tab-content" data-tab="d">Abgleich mit <strong>gespeicherten Modellen</strong> → Objektidentifikation (top-down).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Geon-Theorie ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Geon-Theorie (Biederman 1987)</div>
+    <div class="sec-lz">Recognition by components; 36 Geone; blickwinkelunabhängig; Grenzen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie erkennen eine Tasse als Tasse — egal ob von oben, vorne oder schräg. Wie erklärt Biederman diese <strong>Blickwinkel-Robustheit</strong>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Über <strong>Geone</strong>: Die Tasse wird auf wenige elementare 3D-Grundformen (z. B. Zylinder + gebogener Henkel) reduziert. Da Geone aus fast allen Ansichten unterscheidbar sind, sollte die Erkennung <strong>blickwinkelunabhängig</strong> sein.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Recognition by Components (Biederman, 1987)</div>
+    Objekte sind aus elementaren 3D-Formen (<strong>Geonen</strong>) zusammengesetzt. Aus <strong>~36 Geonen</strong> lassen sich Tausende Objekte bauen; Wahrnehmung = Reduktion eines Objekts auf seine Geone.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewertung</div>
+    Sparsam (36 Geone), blickwinkel-robust, validiert (ventrales System reagiert <strong>nicht</strong> auf unmögliche Objekte). ABER: <strong>Detailverlust</strong> (Kategorien ja, Individuen nein); Texturen ignoriert; Dauer doch blickwinkelabhängig.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Ansatz ist gemeint?</div>
+    <div class="corr-item" id="c4a">„Das Ganze ist mehr als die Summe seiner Teile“
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'gestalt')">Gestalt</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'raumfreq')">Raumfrequenz</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'marr')">Marr</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'geon')">Geon</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">Umrisse = niedrige, Details = hohe Frequenz; rein bottom-up
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'gestalt')">Gestalt</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'raumfreq')">Raumfrequenz</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'marr')">Marr</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'geon')">Geon</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">Rohskizze → 2½D-Skizze → 3D-Modell
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'gestalt')">Gestalt</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'raumfreq')">Raumfrequenz</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'marr')">Marr</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'geon')">Geon</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+    <div class="corr-item" id="c4d">Objekte aus ~36 elementaren Grundformen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'gestalt')">Gestalt</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'raumfreq')">Raumfrequenz</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'marr')">Marr</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'geon')">Geon</button>
+      </div><div class="corr-fb" id="c4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Bewegung ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Bewegungswahrnehmung</div>
+    <div class="sec-lz">FÜR vs. VON Bewegung; Gibson (optic flow), Reichardt-Detektor, biologische Bewegung (Johansson).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Dunkeln sehen Sie nur ein paar bewegte Lichtpunkte an den Gelenken einer Person — und erkennen trotzdem sofort, dass da jemand <em>geht</em>. Wie geht das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Biologische Bewegung</strong> (Johansson, 1975): Aus der hierarchischen Vektoranalyse weniger Punkte (6 Lichter je Seite) genügt die <strong>Bewegung</strong>, um eine Person zu erkennen (~200 ms) — statische Punkte allein reichen nicht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">FÜR vs. VON Bewegung</div>
+    <strong>FÜR Bewegung</strong>: steuert die eigene Bewegung (visuell + vestibulär + propriozeptiv; Moving Room, Lee & Anderson 1974). <strong>VON Bewegung</strong>: rein visuell, evolutionär älter; retinale Adaptation (stabilisierte Objekte verschwinden), Retinarand nur bewegungsempfindlich.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Erklärungen</div>
+    <strong>Gibson</strong> (optic flow: lokaler vs. globaler Fluss, angeboren), <strong>Reichardt-Detektor</strong> (Hassenstein & Reichardt: Netzhautbewegung minus Eigenbewegung) und <strong>biologische Bewegung</strong> (Johansson: Punktläufer).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Bewegungstheorie ist gemeint?</div>
+    <div class="corr-item" id="c5a">Lokaler optischer Fluss relativ zum globalen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'gibson')">Gibson</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'reichardt')">Reichardt</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'johansson')">Johansson</button>
+      </div><div class="corr-fb" id="c5a-fb"></div>
+    </div>
+    <div class="corr-item" id="c5b">Netzhautbewegung abzüglich der Eigenbewegung des Auges
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'gibson')">Gibson</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'reichardt')">Reichardt</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'johansson')">Johansson</button>
+      </div><div class="corr-fb" id="c5b-fb"></div>
+    </div>
+    <div class="corr-item" id="c5c">Punktläufer aus 6 Lichtern je Körperseite
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'gibson')">Gibson</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'reichardt')">Reichardt</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'johansson')">Johansson</button>
+      </div><div class="corr-fb" id="c5c-fb"></div>
+    </div>
+    <div class="corr-item" id="c5d">Angeborener Mechanismus, allein durch Umweltfaktoren erklärbar
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'gibson')">Gibson</button>
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'reichardt')">Reichardt</button>
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'johansson')">Johansson</button>
+      </div><div class="corr-fb" id="c5d-fb"></div>
+    </div>
+    <div class="corr-item" id="c5e">Wahrnehmung der Bewegung von Lebewesen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5e',this,'gibson')">Gibson</button>
+        <button class="corr-btn" onclick="checkCorr('c5e',this,'reichardt')">Reichardt</button>
+        <button class="corr-btn" onclick="checkCorr('c5e',this,'johansson')">Johansson</button>
+      </div><div class="corr-fb" id="c5e-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Auditiv ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Auditive Wahrnehmung: Lautstärke & Szenenanalyse</div>
+    <div class="sec-lz">Isophone; auditorische Szenenanalyse (Bregman); Kontinuitätseffekt.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Auf einer Party verstehen Sie Ihren Gesprächspartner trotz lauter Hintergrundgeräusche — und wenn ein Wort von Husten überdeckt wird, „hören“ Sie es trotzdem. Wie macht das Gehör das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Über <strong>auditorische Szenenanalyse</strong> (Trennung der Quellen) und den <strong>Kontinuitätseffekt</strong>: Eine von Rauschen (z. B. Husten) überdeckte Lücke wird per guter Fortsetzung ergänzt — bei reiner Stille dagegen nicht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Lautstärke: Kurven gleicher Lautstärke (Isophone)</div>
+    Hörschwelle = gerade noch hörbare Töne je Frequenz. <strong>Isophone</strong>: Schalldruck gegen Frequenz für gleich laut wahrgenommene Töne (Bezug: 1000-Hz-Ton). Gleiche dB wirken je nach Frequenz unterschiedlich laut.
+  </div>
+  <div class="card">
+    <div class="card-title">Auditorische Szenenanalyse (Bregman 1990)</div>
+    Trennung vieler Schallquellen über räumliche, zeitliche und spektrale Mechanismen. <strong>Bottom-up</strong>-Heuristiken (auditive Gestaltgesetze) + <strong>top-down</strong>-Heuristiken (Vorannahmen über Quellen).
+  </div>
+  <div class="card">
+    <div class="card-title">Kontinuitätseffekt (Warren & Sherman 1974)</div>
+    Gute Fortsetzung füllt Lücken — aber nur bei Verdeckung durch <strong>Rauschen</strong>, nicht durch Stille. „The *eel“ wird je nach Kontext zu <em>wheel</em> oder <em>meal</em> ergänzt (top-down).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei auditive Phänomene</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="iso" onclick="switchTab(this,'audit')">Isophone</button>
+      <button class="tab-btn" data-tab="szene" onclick="switchTab(this,'audit')">Szenenanalyse</button>
+      <button class="tab-btn" data-tab="kont" onclick="switchTab(this,'audit')">Kontinuität</button>
+    </div>
+    <div class="tab-group" data-group="audit">
+      <div class="tab-content active" data-tab="iso">Gleicher Schalldruck wirkt je nach <strong>Frequenz</strong> unterschiedlich laut (Bezug 1000 Hz).</div>
+      <div class="tab-content" data-tab="szene">Trennung von Quellen über bottom-up + top-down-Heuristiken (<strong>Bregman</strong>).</div>
+      <div class="tab-content" data-tab="kont">Lücken werden ergänzt — nur bei <strong>Rauschen</strong>, nicht bei Stille.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Schallortung ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Schallortung (ITD, ILD, HRTF)</div>
+    <div class="sec-lz">Interaurale Zeit-/Pegeldifferenz und kopfformabhängige Übertragungsfunktion unterscheiden.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Auto hupt rechts hinter Ihnen. Woher „weiß“ Ihr Gehör die Richtung, obwohl der Schall beide Ohren erreicht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Über <strong>binaurale</strong> Hinweise: die <strong>Zeitdifferenz</strong> (ITD, der Schall erreicht das nähere Ohr früher — v. a. tiefe Töne) und die <strong>Pegeldifferenz</strong> (ILD, Hörschatten — v. a. hohe Töne), ergänzt durch die <strong>Ohrmuschelform</strong> (HRTF).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Binaurales Hören</div>
+    Ermöglicht Richtungswahrnehmung. Anders als beim Sehen erreicht der Schall <strong>unabhängig vom Ort</strong> immer dieselben Rezeptoren — die Richtung muss aus dem Ohrvergleich berechnet werden.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Mechanismen</div>
+    <strong>ITD</strong> (interaurale Zeitdifferenz, Laufzeit, tiefe Frequenzen; z. B. 90° → ~640 µs), <strong>ILD</strong> (interaurale Pegeldifferenz, Hörschatten, hohe Frequenzen) und <strong>HRTF</strong> (kopf-/ohrformabhängige Übertragungsfunktion).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Schallortungs-Mechanismen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="itd" onclick="switchTab(this,'ortung')">ITD</button>
+      <button class="tab-btn" data-tab="ild" onclick="switchTab(this,'ortung')">ILD</button>
+      <button class="tab-btn" data-tab="hrtf" onclick="switchTab(this,'ortung')">HRTF</button>
+    </div>
+    <div class="tab-group" data-group="ortung">
+      <div class="tab-content active" data-tab="itd"><strong>Zeitdifferenz</strong>: Schall erreicht das nähere Ohr früher — vor allem <strong>tiefe</strong> Frequenzen.</div>
+      <div class="tab-content" data-tab="ild"><strong>Pegeldifferenz</strong>: Hörschatten schwächt <strong>hohe</strong> Töne der abgewandten Seite ab.</div>
+      <div class="tab-content" data-tab="hrtf"><strong>Ohrmuschel/Kopf</strong> filtern Intensität & Frequenz spezifisch (große individuelle Unterschiede).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gestaltpsychologie</h4>
+      <p>Reines top-down-Modell</p>
+      <p>Heuristische Gestaltgesetze</p>
+      <p>Post-hoc, keine Vorhersage</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Raumfrequenzanalyse</h4>
+      <p>Reines bottom-up-Modell</p>
+      <p>Zerlegung in Ortsfrequenzen</p>
+      <p>Neuronale Basis (CGL), aber Objektinvarianz-Problem</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Gestaltpsychologie ist ein rein bottom-up-, datengesteuertes Modell.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Marr's Computational Theory</h4>
+      <p>Hierarchisch: Rohskizze→2½D→3D</p>
+      <p>Kanten/Ortsfrequenzen, V1</p>
+      <p>Verbindet bottom-up & top-down</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Geon-Theorie (Biederman)</h4>
+      <p>Objekte aus ~36 Geonen</p>
+      <p>Blickwinkelunabhängig (Anspruch)</p>
+      <p>Kategorien ja, Individuen nein</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Geon-Theorie beschreibt Objekterkennung als hierarchische Abfolge von Rohskizze, 2½D- und 3D-Skizze.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Wahrnehmung FÜR Bewegung</h4>
+      <p>Steuert eigene Bewegung</p>
+      <p>Visuell + vestibulär + propriozeptiv</p>
+      <p>Moving Room (Lee & Anderson 1974)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Wahrnehmung VON Bewegung</h4>
+      <p>Rein visuell</p>
+      <p>Stammesgeschichtlich älter</p>
+      <p>Retinale Adaptation, Retinarand</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Wahrnehmung VON Bewegung beruht vor allem auf vestibulären und propriozeptiven Signalen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Interaurale Zeitdifferenz (ITD)</h4>
+      <p>Laufzeitunterschied der Ohren</p>
+      <p>Vor allem tiefe Frequenzen</p>
+      <p>z. B. 90° → ~640 µs</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Interaurale Pegeldifferenz (ILD)</h4>
+      <p>Lautstärke-/Pegelunterschied</p>
+      <p>Vor allem hohe Frequenzen</p>
+      <p>Hörschatten der abgewandten Seite</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die interaurale Zeitdifferenz ist vor allem für hohe Frequenzen im Hörschatten zuständig.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Niedrige Raumfrequenz</h4>
+      <p>Grobe Umrisse (global)</p>
+      <p>Schnell analysiert</p>
+      <p>Magnozelluläres System</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Hohe Raumfrequenz</h4>
+      <p>Feine Details (lokal)</p>
+      <p>Langsamer analysiert</p>
+      <p>Parvozelluläres System</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Niedrige Raumfrequenzen kodieren die feinen Details der Objektelemente.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl02</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl02';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Worin besteht das Grundproblem der Objekterkennung?",
+      "opts": [
+        "Das Auge kann Farbe nicht von Helligkeit trennen.",
+        "Schall erreicht stets dieselben Rezeptoren, egal woher er kommt.",
+        "Ein mehrdeutiger retinaler Input lässt mehrere Objektinterpretationen zu.",
+        "Die Linse kann nahe und ferne Objekte nicht gleichzeitig scharf abbilden, weil ihre Brechkraft begrenzt ist."
+      ],
+      "c": 2,
+      "e": "Aus dem zweideutigen Netzhautbild muss erschlossen werden, was ein Objekt ist — daher die vier Erklärungsansätze. (d) betrifft Akkommodation."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welcher Ansatz erklärt Objekterkennung über elementare 3D-Grundformen?",
+      "opts": [
+        "Die Geon-Theorie.",
+        "Die Gestaltpsychologie.",
+        "Die Raumfrequenzanalyse.",
+        "Marr's Computational Theory, weil sie Objekte ausschließlich aus 36 dreidimensionalen Standardkörpern zusammensetzt."
+      ],
+      "c": 0,
+      "e": "Die Geon-Theorie (Biederman) setzt Objekte aus ~36 Geonen zusammen. Marr ist ein hierarchisches Skizzen-Modell, kein Geon-Modell."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welcher Leitsatz steht für die Gestaltpsychologie?",
+      "opts": [
+        "Jeder Reiz wird einzeln und unabhängig verarbeitet.",
+        "Das Ganze ist mehr als die Summe seiner Teile.",
+        "Wahrnehmung ist rein datengesteuert (bottom-up).",
+        "Objekte werden in räumliche Frequenzen zerlegt, weil das System zuerst Umrisse und dann Details analysiert."
+      ],
+      "c": 1,
+      "e": "Der Leitsatz der Gestaltpsychologie (Wertheimer & Koffka). (d) beschreibt die Raumfrequenzanalyse, nicht die Gestalt."
+    },
+    {
+      "id": "s1q2",
+      "q": "Bei welchem Gestaltgesetz werden gleichgerichtet bewegte Elemente zusammengefasst?",
+      "opts": [
+        "Gesetz der Nähe, weil räumlich benachbarte Elemente unabhängig von ihrer Bewegung gruppiert werden.",
+        "Gesetz der Geschlossenheit.",
+        "Gesetz der Prägnanz.",
+        "Gesetz des gemeinsamen Schicksals."
+      ],
+      "c": 3,
+      "e": "Gemeinsames Schicksal = gleichgerichtete Bewegung erzeugt Zusammengehörigkeit. Nähe gruppiert nach Abstand, nicht nach Bewegung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was kodiert eine niedrige Raumfrequenz?",
+      "opts": [
+        "Die groben Umrisse eines Objekts.",
+        "Die feinen Details der Objektelemente.",
+        "Die Farbe der Oberfläche.",
+        "Die Kanteninformation in V1, weil hohe Frequenzen zuerst verarbeitet und dann zu Umrissen zusammengesetzt werden."
+      ],
+      "c": 0,
+      "e": "Niedrige Raumfrequenz = globale Umrisse (schnell). Details stecken in hohen Frequenzen."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was ist ein zentraler Kritikpunkt an der Raumfrequenzanalyse?",
+      "opts": [
+        "Sie hat keine neuronale Grundlage.",
+        "Sie bezieht zu viel Vorwissen ein.",
+        "Sie ist rein bottom-up und ignoriert Wissen über Objekte.",
+        "Sie erklärt die Objektinvarianz über Blickwinkel zu gut, weil sie jede Ansicht als eigene Frequenzanalyse behandelt."
+      ],
+      "c": 2,
+      "e": "Neuronale Grundlagen sind belegt (CGL, magno/parvo); der Schwachpunkt ist das fehlende Top-down und die Objektinvarianz."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Reihenfolge hat Marr's Modell der Objekterkennung?",
+      "opts": [
+        "3D-Modell → 2½D-Skizze → Rohskizze, weil die Objektidentifikation der Kantendetektion vorausgehen muss.",
+        "2½D-Skizze → Rohskizze → 3D-Modell.",
+        "Rohskizze → 3D-Modell → 2½D-Skizze.",
+        "Rohskizze (Kanten) → 2½D-Skizze (Gestaltgruppierung) → 3D-Modell (Abgleich)."
+      ],
+      "c": 3,
+      "e": "Bottom-up von Kanten zur Identifikation: erst Rohskizze, dann 2½D, zuletzt der Modellabgleich (3D)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche Stufe in Marr's Modell ist top-down?",
+      "opts": [
+        "Die Rohskizze (primal sketch).",
+        "Die 3D-Skizze (Abgleich mit gespeicherten Modellen).",
+        "Die Kantendetektion über Helligkeitsdetektoren.",
+        "Die 2½D-Skizze, weil dort bereits gespeicherte Objektmodelle vollständig abgerufen werden."
+      ],
+      "c": 1,
+      "e": "Der Modellabgleich (3D) nutzt gespeichertes Wissen = top-down. Rohskizze/Kanten sind bottom-up."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was sagt die Geon-Theorie (Biederman) über den Blickwinkel?",
+      "opts": [
+        "Objekterkennung gelingt nur aus der gelernten Ansicht.",
+        "Texturen bestimmen die Erkennung maßgeblich.",
+        "Objekterkennung sollte weitgehend blickwinkelunabhängig sein.",
+        "Die Erkennung ist immer streng blickwinkelabhängig, weil jedes Geon nur aus genau einer Perspektive identifizierbar ist."
+      ],
+      "c": 2,
+      "e": "Geone sind aus fast allen Ansichten unterscheidbar → blickwinkelunabhängige Erkennung (Detailfrage: die Dauer ist doch etwas blickwinkelabhängig)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was ist eine Schwäche der Geon-Theorie?",
+      "opts": [
+        "Detailverlust: Kategorien werden erkannt, Objekte aber nicht individualisiert.",
+        "Sie braucht unrealistisch viele Grundformen.",
+        "Sie hat keine empirische Validierung.",
+        "Sie kann unmögliche Objekte nicht von möglichen trennen, weil das ventrale System auf beide identisch reagiert."
+      ],
+      "c": 0,
+      "e": "Geone liefern Kategorien, nicht Individuen; Texturen fehlen. (d) ist falsch — das ventrale System reagiert gerade NICHT auf unmögliche Objekte."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was beschreibt Gibsons Konzept des optic flow?",
+      "opts": [
+        "Die Verzögerung zwischen zwei Netzhauteingängen.",
+        "Verschiebung des lokalen optischen Flusses (Objekt) relativ zum globalen (Umgebung).",
+        "Die Punktläufer-Darstellung biologischer Bewegung.",
+        "Die Kompensation der Augenbewegung, weil das Gehirn die aktive Eigenbewegung vom Netzhautbild abzieht."
+      ],
+      "c": 1,
+      "e": "Optic flow = lokaler vs. globaler Fluss. (a)/(d) gehören zum Reichardt-Detektor, (c) zu Johansson."
+    },
+    {
+      "id": "s5q2",
+      "q": "Wofür steht der Reichardt-Detektor?",
+      "opts": [
+        "Für die Punktläufer-Studien von Johansson, bei denen sechs Lichter je Körperseite eine Person erkennbar machen.",
+        "Für die ökologische Theorie der Umweltfaktoren.",
+        "Für die auditorische Szenenanalyse.",
+        "Für Netzhautbewegung abzüglich der durch Augenbewegung verursachten Bewegung."
+      ],
+      "c": 3,
+      "e": "Reichardt-Detektor (Hassenstein & Reichardt): wahrgenommene Bewegung = Netzhautbewegung minus Eigenbewegungsanteil, neuronal über zeitversetzte Eingänge."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was zeigen Kurven gleicher Lautstärke (Isophone)?",
+      "opts": [
+        "Welcher Schalldruck bei welcher Frequenz gleich laut klingt.",
+        "Die absolute Hörschwelle allein bei 1000 Hz.",
+        "Die Laufzeitdifferenz zwischen beiden Ohren.",
+        "Die Trennung mehrerer Schallquellen, weil das Gehör jede Frequenz einer eigenen Quelle zuordnet."
+      ],
+      "c": 0,
+      "e": "Isophone verbinden Frequenz/Schalldruck-Paare gleicher empfundener Lautstärke (Bezug: 1000-Hz-Ton)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Worauf beruht der Kontinuitätseffekt (phonemic restoration)?",
+      "opts": [
+        "Auf der interauralen Pegeldifferenz.",
+        "Auf der retinalen Adaptation.",
+        "Auf guter Fortsetzung — Lücken werden nur ergänzt, wenn sie aus Rauschen bestehen.",
+        "Auf der Geon-Reduktion, weil das auditive System Laute auf elementare Grundformen zurückführt."
+      ],
+      "c": 2,
+      "e": "Gute Fortsetzung füllt durch Rauschen verdeckte Lücken (Warren & Sherman 1974: „*eel“ → wheel/meal je nach Kontext) — ein Top-down-Effekt."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wofür ist die interaurale Zeitdifferenz (ITD) besonders relevant?",
+      "opts": [
+        "Für hochfrequente Töne, die auf der abgewandten Seite in einen Hörschatten fallen und abgeschwächt werden.",
+        "Für die Ohrmuschelform (HRTF).",
+        "Für die Lautstärkewahrnehmung.",
+        "Für tiefe Frequenzen — über den Laufzeitunterschied zwischen den Ohren."
+      ],
+      "c": 3,
+      "e": "ITD = Laufzeitunterschied, vor allem für tiefe Frequenzen. (a) beschreibt die Pegeldifferenz (ILD)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was beschreibt die HRTF (head-related transfer function)?",
+      "opts": [
+        "Den Laufzeitunterschied zwischen den Ohren.",
+        "Wie Ohrmuschel, Gehörkanal und Kopf Intensität und Frequenz des Schalls verändern.",
+        "Die Abschwächung hoher Töne im Hörschatten.",
+        "Die Zerlegung des auditorischen Stroms in Quellen, weil der Kopf jede Frequenz einem eigenen Stream zuweist."
+      ],
+      "c": 1,
+      "e": "HRTF = kopf-/ohrformabhängige Filterung des Schalls, hilft bei der Schallortung (große individuelle Unterschiede)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Wie werden die Gestaltgesetze kritisch eingeordnet?",
+    "opts": [
+      "Als post-hoc-Erklärungen ohne echte Verhaltensvorhersage.",
+      "Als exakte Naturgesetze mit präziser Vorhersage.",
+      "Als rein bottom-up und datengesteuert.",
+      "Als neuronal vollständig im CGL lokalisiert, weil jedes Gesetz einer eigenen Zellpopulation entspricht."
+    ],
+    "c": 0,
+    "e": "Heuristisch und post-hoc, kein Naturgesetz; zudem reines top-down-Modell (nicht bottom-up)."
+  },
+  {
+    "id": "bq2",
+    "q": "Welches Gestaltgesetz kann andere (Nähe, Ähnlichkeit) außer Kraft setzen?",
+    "opts": [
+      "Das Gesetz der Prägnanz.",
+      "Das Gesetz der Verbundenheit.",
+      "Das Gesetz des gemeinsamen Schicksals.",
+      "Das Gesetz der Geschlossenheit, weil eine geschlossene Form immer Vorrang vor allen anderen Gruppierungen hat."
+    ],
+    "c": 1,
+    "e": "Verbundene Formen werden als Einheit gesehen und können Nähe/Ähnlichkeit überschreiben."
+  },
+  {
+    "id": "bq3",
+    "q": "Was kennzeichnet die Wahrnehmung VON Bewegung (vs. FÜR Bewegung)?",
+    "opts": [
+      "Sie steuert die eigene Greifbewegung.",
+      "Sie ist vor allem vestibulär und propriozeptiv.",
+      "Sie ist rein visuell und stammesgeschichtlich vermutlich älter.",
+      "Sie nutzt den Moving Room, weil die Vorwärtsbewegung des Raumes als Eigenbewegung empfunden wird."
+    ],
+    "c": 2,
+    "e": "Wahrnehmung VON Bewegung ist rein visuell und evolutionär alt; (a),(b),(d) gehören zur Wahrnehmung FÜR Bewegung."
+  },
+  {
+    "id": "bq4",
+    "q": "Wie viele Geone genügen laut Biederman, um Tausende Objekte zu bilden?",
+    "opts": [
+      "Genau drei, analog zu den drei Zapfentypen des Farbensehens, die jede Form abdecken.",
+      "Etwa 200, eines pro Objektklasse.",
+      "Beliebig viele, je nach Blickwinkel.",
+      "Etwa 36 elementare Grundformen."
+    ],
+    "c": 3,
+    "e": "Aus ~36 Geonen lassen sich Tausende Objekte zusammensetzen — sparsame Voraussetzungen."
+  },
+  {
+    "id": "bq5",
+    "q": "Was zeigen Johanssons Punktläufer?",
+    "opts": [
+      "Dass wenige bewegte Lichtpunkte zur Personenwahrnehmung genügen.",
+      "Dass Texturen für biologische Bewegung unverzichtbar sind.",
+      "Dass Bewegung nur mit beiden Augen erkennbar ist.",
+      "Dass statische Bilder ausreichen, weil die Gelenkpositionen allein die Bewegungsrichtung eindeutig festlegen."
+    ],
+    "c": 0,
+    "e": "6 bewegte Lichter je Seite reichen: ~200 ms für Person, ~2 s für Mann/Frau. Ohne Bewegung kein Eindruck."
+  },
+  {
+    "id": "bq6",
+    "q": "Welche Heuristiken nutzt die auditorische Szenenanalyse (Bregman)?",
+    "opts": [
+      "Ausschließlich top-down-Vorannahmen.",
+      "Bottom-up- und top-down-Heuristiken zur Quellentrennung.",
+      "Nur die interaurale Zeitdifferenz.",
+      "Die retinale Adaptation, weil stabilisierte Reize nach Millisekunden aus dem Bewusstsein verschwinden."
+    ],
+    "c": 1,
+    "e": "Bottom-up (auditive Gestaltgesetze) + top-down (Vorannahmen über Quellen). (d) ist visuell."
+  },
+  {
+    "id": "bq7",
+    "q": "Hohe Töne von der abgewandten Seite werden abgeschwächt — welcher Mechanismus?",
+    "opts": [
+      "Interaurale Zeitdifferenz (ITD).",
+      "Head-related transfer function (HRTF).",
+      "Interaurale Pegeldifferenz (Hörschatten).",
+      "Die auditorische Szenenanalyse, weil das Gehör laute Quellen bevorzugt einem Ohr zuweist."
+    ],
+    "c": 2,
+    "e": "Der Kopf wirft für hohe Frequenzen einen Hörschatten → Pegeldifferenz (ILD). ITD betrifft tiefe Frequenzen."
+  },
+  {
+    "id": "bq8",
+    "q": "Welcher Objekterkennungs-Ansatz verbindet ausdrücklich bottom-up und top-down?",
+    "opts": [
+      "Die Raumfrequenzanalyse, die als rein bottom-up gilt, weil sie Wissen über Objekte vollständig ausklammert.",
+      "Die Gestaltpsychologie (nur top-down).",
+      "Gibsons ökologische Theorie.",
+      "Marr's Computational Theory."
+    ],
+    "c": 3,
+    "e": "Marr ist modular: Rohskizze/2½D bottom-up, 3D-Abgleich top-down. Raumfrequenz nur bottom-up, Gestalt nur top-down."
+  }
+];
+
+var corrCorrect = {
+  "c1a": "geschlossenheit",
+  "c1b": "aehnlichkeit",
+  "c1c": "naehe",
+  "c1d": "fortsetzung",
+  "c4a": "gestalt",
+  "c4b": "raumfreq",
+  "c4c": "marr",
+  "c4d": "geon",
+  "c5a": "gibson",
+  "c5b": "reichardt",
+  "c5c": "johansson",
+  "c5d": "gibson",
+  "c5e": "johansson"
+};
+var corrExpl = {
+  "c1a": "Eine unterbrochene Kontur wird zur vollständigen Form ergänzt = Geschlossenheit.",
+  "c1b": "Gleichartige Elemente (Form/Farbe) werden zusammengefasst = Ähnlichkeit.",
+  "c1c": "Räumlich benachbarte Elemente werden gruppiert = Nähe.",
+  "c1d": "Glatte, durchgehende Verläufe werden bevorzugt = gute Fortsetzung/Kontinuität.",
+  "c4a": "„Das Ganze ist mehr als die Summe der Teile“ = Gestaltpsychologie (reines top-down).",
+  "c4b": "Umrisse=niedrige, Details=hohe Frequenz, nur bottom-up = Raumfrequenzanalyse.",
+  "c4c": "Rohskizze → 2½D → 3D-Modell = Marr's Computational Theory.",
+  "c4d": "Objekte aus ~36 elementaren Grundformen = Geon-Theorie (Biederman).",
+  "c5a": "Lokaler vs. globaler optischer Fluss = Gibsons ökologische Theorie.",
+  "c5b": "Netzhautbewegung minus Eigenbewegung = Reichardt-Detektor.",
+  "c5c": "Punktläufer aus bewegten Lichtern = biologische Bewegung (Johansson).",
+  "c5d": "Angeborener Mechanismus über Umweltfaktoren = Gibson.",
+  "c5e": "Wahrnehmung der Bewegung von Lebewesen = biologische Bewegung (Johansson)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

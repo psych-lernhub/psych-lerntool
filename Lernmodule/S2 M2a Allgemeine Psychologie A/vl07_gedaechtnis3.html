@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL07 Gedächtnis III</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl07
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL07 Gedächtnis III</h1>
+<p class="page-sub">Enkodierung · Vergessen · Abruf · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Verarbeitungstiefe & Elaboration · 2. Kontextspezifität · 3. Vergessen (Interferenz) · 4. Falschinformation & falsche Erinnerungen · 5. Abruf (direkt/indirekt, Rekognition)
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Verarbeitungstiefe</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Elaboration & Distinctiveness</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Kontextspezifität</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Vergessen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Interferenz & Falschinfo</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Falsche Erinnerungen</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Abruf direkt/indirekt</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Rekognition</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Verarbeitungstiefe ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Gedächtnisprozesse & Verarbeitungstiefe</div>
+    <div class="sec-lz">Encoding/Storage/Retrieval; levels of processing (Craik); Zirkularität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wer Wörter danach beurteilt, ob sie „angenehm“ sind, erinnert sie später besser als jemand, der nur auf bestimmte Buchstaben achtet. Warum?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Wegen der <strong>Verarbeitungstiefe</strong> (Craik & Lockhart 1972): semantische („tiefe“) Verarbeitung erzeugt eine besser abrufbare Spur als oberflächliche (perzeptuelle). Kritik: das Kriterium für „tief“ ist <strong>zirkulär</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gedächtnisprozesse</div>
+    <strong>Encoding</strong> (Enkodierung) → <strong>Storage</strong> (Retention) → <strong>Retrieval</strong> (Abruf). Experimentablauf: Lernphase → Retentionsintervall → Testphase.
+  </div>
+  <div class="card">
+    <div class="card-title">Verarbeitungstiefe (Craik & Lockhart 1972)</div>
+    Je <strong>tiefer</strong> (bedeutungshaltiger) verarbeitet, desto besser erinnert. Orientierungsaufgaben: E-G-Checking &lt; Wortklasse &lt; Häufigkeit &lt; <strong>Pleasantness</strong> (semantisch, beste Erinnerung).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Zirkularität</div>
+    „Tiefe Verarbeitung“ zeigt sich an besserer Gedächtnisleistung — aber es gibt <strong>kein unabhängiges Kriterium</strong> für „tief“ außer eben dieser Leistung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Oberflächlich vs. tief</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ob" onclick="switchTab(this,'tiefe')">Oberflächlich</button>
+      <button class="tab-btn" data-tab="tf" onclick="switchTab(this,'tiefe')">Tief</button>
+    </div>
+    <div class="tab-group" data-group="tiefe">
+      <div class="tab-content active" data-tab="ob"><strong>Perzeptuell</strong> (Schriftbild, Klang) → schlechter erinnert.</div>
+      <div class="tab-content" data-tab="tf"><strong>Semantisch</strong> (Bedeutung, Pleasantness) → besser erinnert.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Elaboration & Distinctiveness ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Elaboration, Distinctiveness & Mnemotechnik</div>
+    <div class="sec-lz">Eysenck 1980; method of loci.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gedächtnisweltmeister merken sich 200 Ziffern in 3 Minuten. Welche Strategie nutzen sie — und was hat das mit „Herausstechen“ zu tun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die <strong>Methode der Orte</strong> (Elaboration: Ziffern → Bilder → entlang vertrauter Orte). Distinctiveness (Eysenck 1980): besonders <strong>herausstechende</strong> Items werden gut erinnert — der Tiefe-Effekt zeigt sich v. a. bei nicht-distinkten Items.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Elaboration & Mnemotechnik</div>
+    <strong>Elaboration</strong> = relationale Verknüpfungen zwischen Items (auch mit Vorwissen). <strong>Methode der Orte</strong> (method of loci): Inhalte als Bilder an vertrauten Orten ablegen und abschreiten — stark bei listenartigem Material.
+  </div>
+  <div class="card">
+    <div class="card-title">Distinctiveness (Eysenck & Eysenck 1980)</div>
+    Besonderheit/Herausstechen der Information. Interaktion: der Effekt der Verarbeitungstiefe zeigt sich <strong>vor allem bei nicht-herausstechenden</strong> Items → ein Teil des Tiefe-Effekts geht auf die Stimulus-Besonderheit zurück.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Elaboration vs. Distinctiveness</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="el" onclick="switchTab(this,'enc')">Elaboration</button>
+      <button class="tab-btn" data-tab="di" onclick="switchTab(this,'enc')">Distinctiveness</button>
+    </div>
+    <div class="tab-group" data-group="enc">
+      <div class="tab-content active" data-tab="el"><strong>Verknüpfen</strong> von Items miteinander/mit Vorwissen (z. B. method of loci).</div>
+      <div class="tab-content" data-tab="di"><strong>Herausstechen</strong> eines Items; distinkte Items werden gut erinnert (Eysenck).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Kontextspezifität ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Kontextspezifität (Godden & Baddeley)</div>
+    <div class="sec-lz">Abrufkontext als externer Cue.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Taucher lernten Wortlisten an Land oder unter Wasser und wurden später an Land oder unter Wasser abgefragt. Wann erinnerten sie am besten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Wenn <strong>Lern- und Abrufkontext übereinstimmten</strong> (Godden & Baddeley 1975). Der Kontext wirkt als <strong>externer Abruf-Cue</strong>. Einschränkung: je ähnlicher die Kontexte, desto kleiner der Effekt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kontextspezifität (Godden & Baddeley 1975)</div>
+    Bessere Erinnerung, wenn <strong>Lern- und Abrufkontext übereinstimmen</strong> (Land/Wasser). Der Abrufkontext fungiert als <strong>externer Hinweisreiz</strong> (cue), der das Erinnern erleichtert.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Einschränkung</div>
+    Je ähnlicher die verschiedenen Kontexte sind, desto kleiner fällt der Effekt aus (Dunne & Opitz).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Kontext-Match vs. Mismatch</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ma" onclick="switchTab(this,'kontext')">Match</button>
+      <button class="tab-btn" data-tab="mi" onclick="switchTab(this,'kontext')">Mismatch</button>
+    </div>
+    <div class="tab-group" data-group="kontext">
+      <div class="tab-content active" data-tab="ma">Lernen und Abruf im <strong>gleichen</strong> Kontext → Cues passen → <strong>bessere</strong> Erinnerung.</div>
+      <div class="tab-content" data-tab="mi">Lernen und Abruf in <strong>verschiedenen</strong> Kontexten → fehlende Cues → <strong>schlechtere</strong> Erinnerung.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Vergessen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Vergessen: Mechanismen</div>
+    <div class="sec-lz">Spurenzerfall; available/accessible; Interferenz.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Name liegt Ihnen „auf der Zunge“ — später fällt er Ihnen plötzlich ein. War die Information weg oder nur unzugänglich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Nur <strong>unzugänglich</strong>: die Information war <em>available</em> (vorhanden), aber nicht <em>accessible</em> (abrufbar) — ein Hinweis gegen reinen Spurenzerfall. Daneben: Interferenz als dritter Vergessensmechanismus.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Vergessensmechanismen</div>
+    <strong>Spurenzerfall</strong> (passiver Zerfall mit der Zeit), <strong>fehlende Abrufhinweise</strong> (available vs. accessible) und <strong>Interferenz</strong> (durch andere Lernerfahrungen).
+  </div>
+  <div class="card">
+    <div class="card-title">Befund gegen reinen Zerfall</div>
+    Bei Amnesie-Patient:innen wurden temporär nicht erinnerbare Inhalte <strong>nach Erholung wieder zugänglich</strong> → die Spur war nicht zerstört, nur unzugänglich.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Spurenzerfall vs. fehlende Abrufhinweise</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ze" onclick="switchTab(this,'verg')">Spurenzerfall</button>
+      <button class="tab-btn" data-tab="ab" onclick="switchTab(this,'verg')">Fehlende Cues</button>
+    </div>
+    <div class="tab-group" data-group="verg">
+      <div class="tab-content active" data-tab="ze"><strong>Speicherproblem</strong>: die Spur verblasst passiv → Information ist verloren.</div>
+      <div class="tab-content" data-tab="ab"><strong>Abrufproblem</strong>: available, aber nicht accessible → Information ist noch da.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Interferenz & Falschinfo ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Interferenz & Falschinformationsparadigma</div>
+    <div class="sec-lz">Proaktiv/retroaktiv; Loftus & Palmer 1974.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zeugen, die nach einem Unfall gefragt wurden, „wie schnell die Autos <em>zusammenkrachten</em>“, schätzten höhere Tempos — und „erinnerten“ später Glasscherben, die es nie gab. Wie heißt das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Das <strong>Falschinformationsparadigma</strong> (Loftus & Palmer 1974): suggestive Nachfragen verändern die Erinnerung (eine Form der <strong>retroaktiven Interferenz</strong> durch nachträgliche Fehlinformation).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Proaktive vs. retroaktive Interferenz</div>
+    <strong>Proaktiv</strong>: Altes hemmt Neues (z. B. Französisch stört Spanisch). <strong>Retroaktiv</strong>: Neues hemmt Altes (z. B. Spanisch stört Französisch).
+  </div>
+  <div class="card">
+    <div class="card-title">Falschinformationsparadigma (Loftus & Palmer 1974)</div>
+    Suggestive Fragen verändern die Erinnerung: „smashed“ → höhere Geschwindigkeitsschätzung + mehr fälschliche „broken glass“-Erinnerung als „hit“. Auch STOP- vs. Vorfahrtsschild.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: proaktive oder retroaktive Interferenz?</div>
+    <div class="corr-item" id="c4a">Alte Erinnerung hemmt das Lernen neuer Information
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'proaktiv')">Proaktiv</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'retroaktiv')">Retroaktiv</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">Neu Gelerntes hemmt den Abruf alter Information
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'proaktiv')">Proaktiv</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'retroaktiv')">Retroaktiv</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">Zuvor gelerntes Französisch erschwert die Spanisch-Klausur
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'proaktiv')">Proaktiv</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'retroaktiv')">Retroaktiv</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+    <div class="corr-item" id="c4d">Danach gelerntes Spanisch erschwert die Französisch-Klausur
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'proaktiv')">Proaktiv</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'retroaktiv')">Retroaktiv</button>
+      </div><div class="corr-fb" id="c4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Falsche Erinnerungen ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Falsche Erinnerungen & Zeugenaussagen</div>
+    <div class="sec-lz">Wade 2002; Quellenkonfusion; Cognitive Interview.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Man kann Menschen ein Kindheitsereignis „einreden“, das nie stattfand. Wie zuverlässig sind autobiographische Erinnerungen — und was heißt das für Zeugenaussagen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Erinnerungen sind <strong>rekonstruktiv</strong> und fehleranfällig: ein gefälschtes Foto erzeugte bei ~50 % falsche Erinnerungen (Wade 2002). Quellenkonfusion + Fehlinformation machen <strong>Zeugenaussagen</strong> unzuverlässig (Innocence Project: ~75 % Fehlurteile).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Falsche Erinnerungen (Wade et al. 2002)</div>
+    Ein montiertes Foto (Heißluftballonfahrt) führte über mehrere Interviews dazu, dass <strong>~50 %</strong> ein nie erlebtes Ereignis „erinnerten“.
+  </div>
+  <div class="card">
+    <div class="card-title">Quellenkonfusion & Zeugenaussagen</div>
+    <strong>Quellenkonfusion</strong> (Lindsay 2004): Information wird der falschen Quelle zugeordnet (Film vs. Erlebnis). Zeugenaussagen sind fehleranfällig (Interferenz, Fehlinformation, Schema-Erwartungen); Innocence Project: ~75 % Fehlurteile. Alternative: <strong>Cognitive Interview</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei Quellen von Gedächtnisfehlern</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="fi" onclick="switchTab(this,'fehler')">Fehlinformation</button>
+      <button class="tab-btn" data-tab="fe" onclick="switchTab(this,'fehler')">Falsche Erinnerung</button>
+      <button class="tab-btn" data-tab="qk" onclick="switchTab(this,'fehler')">Quellenkonfusion</button>
+    </div>
+    <div class="tab-group" data-group="fehler">
+      <div class="tab-content active" data-tab="fi">Suggestive Nachfragen <strong>verändern</strong> die Erinnerung (Loftus).</div>
+      <div class="tab-content" data-tab="fe">Ein nie erlebtes Ereignis wird „erinnert“ (Wade, ~50 %).</div>
+      <div class="tab-content" data-tab="qk">Inhalt ist erinnert, aber der <strong>Quelle</strong> falsch zugeordnet (Lindsay).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Abruf direkt/indirekt ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Abruf: direkt vs. indirekt</div>
+    <div class="sec-lz">Free/cued recall, recognition vs. Priming; Transfer Appropriate Processing.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Manche Tests fragen direkt „Welche Wörter waren in der Liste?“, andere messen nur, ob frühere Wörter die Leistung beschleunigen — ohne danach zu fragen. Wie heißen diese zwei Test-Arten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Direkt</strong> (explizit: free/cued recall, recognition) vs. <strong>indirekt</strong> (implizit: Priming). Die Leistung ist am besten, wenn Enkodier- und Abrufprozess zusammenpassen → <strong>Transfer Appropriate Processing</strong> (Jacoby 1983).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Direkter vs. indirekter Abruf</div>
+    <strong>Direkt</strong> (explizit): es wird direkt nach Inhalten gefragt — free recall, <strong>cued recall</strong> (meist besser), recognition. <strong>Indirekt</strong> (implizit): keine Frage nach Inhalten, aber frühere Episoden steigern die Leistung (z. B. Priming).
+  </div>
+  <div class="card">
+    <div class="card-title">Transferangemessenheit (Jacoby 1983)</div>
+    Die Leistung ist höher, wenn beim <strong>Enkodieren und Abrufen dieselben Prozesse</strong> wirken (Crossover zwischen direktem und indirektem Test).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: direkter oder indirekter Test?</div>
+    <div class="corr-item" id="c6a">Freie Reproduktion (free recall)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'direkt')">Direkt</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'indirekt')">Indirekt</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Priming (Wortidentifikation)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'direkt')">Direkt</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'indirekt')">Indirekt</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Wiedererkennen (recognition)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'direkt')">Direkt</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'indirekt')">Indirekt</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Leistungssteigerung ohne bewusstes Erinnern
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'direkt')">Direkt</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'indirekt')">Indirekt</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Rekognition ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Rekognition: Signalentdeckung & Zwei-Prozess-Modell</div>
+    <div class="sec-lz">d′; Recollection vs. Familiarity (Aggleton).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bei „schon mal gesehen?“ gibt es zwei Fehler: ein neues Item als „alt“ (False Alarm) und ein altes als „neu“ (Miss). Wie misst man die Trennleistung — und beruht Wiedererkennen nur auf der Spurstärke?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Über <strong>d′ = z(Hit) − z(False Alarm)</strong>. Und nein: das <strong>Zwei-Prozess-Modell</strong> trennt <em>Recollection</em> (Kontextabruf) von <em>Familiarity</em> (Vertrautheit) — bei Patient KN war Recollection beeinträchtigt, Familiarity kaum.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Rekognition & Signalentdeckung</div>
+    Vier Fälle: <strong>Treffer</strong> (alt→Ja), <strong>False Alarm</strong> (neu→Ja), <strong>Miss</strong> (alt→Nein), <strong>Correct Rejection</strong> (neu→Nein). Diskriminationsindex <strong>d′ = z(Hit) − z(False Alarm)</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei-Prozess-Modell (Jacoby 1989)</div>
+    Wiedererkennen beruht auf <strong>Recollection</strong> (bewusster Abruf kontextueller Details) UND <strong>Familiarity</strong> (Vertrautheitsgefühl/Spurstärke). Patient KN (Aggleton 2005): Recollection beeinträchtigt, Familiarity kaum → verschiedene neuronale Strukturen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Recollection oder Familiarity?</div>
+    <div class="corr-item" id="c7a">Bewusster Abruf kontextueller Details der Lernepisode
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c7a',this,'recollection')">Recollection</button>
+        <button class="corr-btn" onclick="checkCorr('c7a',this,'familiarity')">Familiarity</button>
+      </div><div class="corr-fb" id="c7a-fb"></div>
+    </div>
+    <div class="corr-item" id="c7b">Gefühl von Vertrautheit ohne Quellenerinnerung
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c7b',this,'recollection')">Recollection</button>
+        <button class="corr-btn" onclick="checkCorr('c7b',this,'familiarity')">Familiarity</button>
+      </div><div class="corr-fb" id="c7b-fb"></div>
+    </div>
+    <div class="corr-item" id="c7c">Beruht auf der Stärke der Gedächtnisspur
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c7c',this,'recollection')">Recollection</button>
+        <button class="corr-btn" onclick="checkCorr('c7c',this,'familiarity')">Familiarity</button>
+      </div><div class="corr-fb" id="c7c-fb"></div>
+    </div>
+    <div class="corr-item" id="c7d">„Ich erinnere mich, dass der Name auf der Liste stand“
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c7d',this,'recollection')">Recollection</button>
+        <button class="corr-btn" onclick="checkCorr('c7d',this,'familiarity')">Familiarity</button>
+      </div><div class="corr-fb" id="c7d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verarbeitungstiefe</h4>
+      <p>Oberflächlich vs. semantisch/tief</p>
+      <p>Tiefer = besser erinnert</p>
+      <p>Craik & Lockhart</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Distinctiveness</h4>
+      <p>Besonderheit/Herausstechen des Stimulus</p>
+      <p>Distinkte Items gut erinnert</p>
+      <p>Eysenck & Eysenck 1980</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Distinctiveness bedeutet, dass ein Reiz möglichst oberflächlich (nur perzeptuell) verarbeitet wird.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Proaktive Interferenz</h4>
+      <p>Alt hemmt Neu</p>
+      <p>Vorangegangenes Lernen stört</p>
+      <p>z. B. Französisch → Spanisch</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Retroaktive Interferenz</h4>
+      <p>Neu hemmt Alt</p>
+      <p>Nachfolgendes Lernen stört</p>
+      <p>z. B. Spanisch → Französisch</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei proaktiver Interferenz stört das zuletzt Gelernte den Abruf der früheren Information.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Direkter Abruf</h4>
+      <p>Explizit, bewusstes Erinnern</p>
+      <p>Free/Cued Recall, Recognition</p>
+      <p>Meist deklarativ</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Indirekter Abruf</h4>
+      <p>Implizit, ohne bewusstes Erinnern</p>
+      <p>Priming</p>
+      <p>Meist nicht-deklarativ</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Priming ist ein direkter (expliziter) Gedächtnistest, bei dem bewusst nach Inhalten gefragt wird.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Recollection</h4>
+      <p>Bewusster Abruf kontextueller Details</p>
+      <p>„Ich erinnere mich, wo/wann“</p>
+      <p>Bei Patient KN beeinträchtigt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Familiarity</h4>
+      <p>Reines Vertrautheitsgefühl</p>
+      <p>Beruht auf Spurstärke</p>
+      <p>Bei Patient KN kaum beeinträchtigt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Familiarity bezeichnet den bewussten Abruf konkreter kontextueller Details der Lernepisode.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Spurenzerfall</h4>
+      <p>Passiver Zerfall mit der Zeit</p>
+      <p>Speicherproblem</p>
+      <p>Information geht verloren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fehlende Abrufhinweise</h4>
+      <p>Available, aber nicht accessible</p>
+      <p>Abrufproblem</p>
+      <p>Information ist noch vorhanden</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei fehlenden Abrufhinweisen ist die Information physikalisch zerstört und endgültig verloren.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl07</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl07';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was besagt die Theorie der Verarbeitungstiefe (Craik & Lockhart 1972)?",
+      "opts": [
+        "Oberflächliche Verarbeitung führt zu besserem Behalten.",
+        "Die Behaltensleistung hängt allein von der Anzahl der Wiederholungen ab.",
+        "Je tiefer (bedeutungshaltiger) ein Reiz verarbeitet wird, desto besser wird er erinnert.",
+        "Information wird nur dann behalten, wenn Lern- und Abrufkontext exakt und vollständig übereinstimmen."
+      ],
+      "c": 2,
+      "e": "Tiefe = semantische/bedeutungsbezogene Verarbeitung → bessere Erinnerung als oberflächliche (perzeptuelle). (d) ist die Kontextspezifität."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Orientierungsaufgabe führte zur besten Erinnerung (Craik & Tulving 1975)?",
+      "opts": [
+        "Die Beurteilung, ob ein Wort angenehm oder unangenehm ist (Pleasantness).",
+        "Die Prüfung, ob die Buchstaben e und g im Wort vorkommen.",
+        "Das Zählen der Buchstaben eines Wortes.",
+        "Die Bestimmung der Schriftart, weil die visuelle Form besonders tief verarbeitet wird."
+      ],
+      "c": 0,
+      "e": "Pleasantness erzwingt semantische (tiefe) Verarbeitung → beste Erinnerung. E-G-Checking/Schriftart sind oberflächlich."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was zeigte Eysenck & Eysenck (1980) zur Distinctiveness?",
+      "opts": [
+        "Dass die Verarbeitungstiefe für die Erinnerung keine Rolle spielt.",
+        "Der Effekt der Verarbeitungstiefe zeigt sich vor allem bei nicht-herausstechenden Items.",
+        "Dass herausstechende Items grundsätzlich schlechter erinnert werden.",
+        "Distinctiveness und Verarbeitungstiefe sind identische Konzepte, weil beide dasselbe Hirnareal nutzen."
+      ],
+      "c": 1,
+      "e": "Bei bereits distinkten Items bringt tiefe Verarbeitung kaum noch Vorteil → ein Teil des Tiefe-Effekts geht auf die Stimulus-Besonderheit zurück."
+    },
+    {
+      "id": "s1q2",
+      "q": "Worauf beruht die Methode der Orte (method of loci)?",
+      "opts": [
+        "Auf reiner mechanischer Wiederholung ohne jede Struktur, weil nur die Menge der Durchgänge zählt.",
+        "Auf dem passiven Zerfall der Gedächtnisspur.",
+        "Auf der Unterdrückung des Rehearsals.",
+        "Auf elaborierten, bildhaften Verknüpfungen entlang vertrauter Orte."
+      ],
+      "c": 3,
+      "e": "Loci-Methode = Elaboration: Inhalte als Bilder an bekannten Orten ablegen und abschreiten — funktioniert gut bei listenartigem Material."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was zeigte Godden & Baddeley (1975) zur Kontextspezifität?",
+      "opts": [
+        "Die Erinnerung ist besser, wenn Lern- und Abrufkontext übereinstimmen.",
+        "Der Kontext hat keinen Einfluss auf die Gedächtnisleistung.",
+        "Unter Wasser wird grundsätzlich besser gelernt als an Land.",
+        "Die Erinnerung ist immer besser, wenn der Abruf in einem völlig neuen Kontext stattfindet."
+      ],
+      "c": 0,
+      "e": "Taucher erinnerten besser, wenn Lern- und Abrufumgebung (Land/Wasser) gleich waren — Kontext-Match hilft."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welche Rolle spielt der Abrufkontext laut Godden & Baddeley?",
+      "opts": [
+        "Er verhindert jede Form von Interferenz.",
+        "Er bestimmt die Verarbeitungstiefe beim Lernen.",
+        "Er fungiert als externer Hinweisreiz (cue), der das Erinnern erleichtert.",
+        "Er überschreibt die ursprüngliche Erinnerung mit plausibler Fehlinformation."
+      ],
+      "c": 2,
+      "e": "Der übereinstimmende Kontext liefert Abruf-Cues. (d) beschreibt das Falschinformations-/False-Memory-Phänomen."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was bedeutet die Unterscheidung available vs. accessible beim Vergessen?",
+      "opts": [
+        "Information zerfällt rein passiv mit der Zeit, weil Gedächtnisspuren ohne Nutzung physikalisch verblassen.",
+        "Information wird durch neue Lernerfahrungen vollständig überschrieben.",
+        "Information wird nur bei tiefer Verarbeitung überhaupt gespeichert.",
+        "Information ist prinzipiell vorhanden (available), aber momentan nicht abrufbar (accessible)."
+      ],
+      "c": 3,
+      "e": "Vergessen kann ein Abruf-, kein Speicherproblem sein: der Inhalt existiert, fehlt aber der passende Hinweisreiz. (a) ist Spurenzerfall."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welcher Befund spricht gegen reinen Spurenzerfall als Vergessensmechanismus?",
+      "opts": [
+        "Dass Information mit der Zeit allmählich verblasst.",
+        "Dass temporär nicht erinnerbare Inhalte bei Amnesie-Patient:innen nach Erholung wieder zugänglich werden.",
+        "Dass tiefere Verarbeitung besser erinnert wird.",
+        "Dass der Teilberichtsvorteil im ikonischen Gedächtnis bereits nach wenigen hundert Millisekunden vollständig verschwindet."
+      ],
+      "c": 1,
+      "e": "Wenn Inhalte später wieder abrufbar sind, waren sie nicht zerstört, sondern nur unzugänglich → gegen reinen Zerfall."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was ist retroaktive Interferenz?",
+      "opts": [
+        "Alte Information hemmt das Lernen neuer Information.",
+        "Information zerfällt passiv mit der Zeit.",
+        "Neu Gelerntes hemmt den Abruf älterer Information.",
+        "Eine Fehlinformation überschreibt die Erinnerung, weil die Befragung suggestiv formuliert ist."
+      ],
+      "c": 2,
+      "e": "Retroaktiv = neu → alt (Neues stört Altes). (a) ist proaktiv (alt → neu)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was zeigte das Falschinformationsparadigma (Loftus & Palmer 1974)?",
+      "opts": [
+        "Suggestive Fragen (z. B. „smashed“) verändern die spätere Erinnerung an ein Ereignis.",
+        "Zeugenaussagen sind besonders zuverlässig und originalgetreu.",
+        "Der Lernkontext bestimmt allein die Abrufleistung.",
+        "Tiefe Verarbeitung führt zu mehr falschen Erinnerungen, weil die Bedeutung verzerrt wird."
+      ],
+      "c": 0,
+      "e": "Das Verb in der Frage („smashed“ vs. „hit“) verschob Geschwindigkeitsschätzung und erzeugte fälschliche „broken glass“-Erinnerungen."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was zeigte Wade et al. (2002) mit dem gefälschten Heißluftballon-Foto?",
+      "opts": [
+        "Dass Erinnerungen an persönliche Ereignisse grundsätzlich korrekt sind.",
+        "Nach mehreren Interviews entwickelten ~50 % der Befragten eine falsche Erinnerung.",
+        "Dass Fotos die Erinnerung an Kindheitsereignisse nicht beeinflussen.",
+        "Dass die Übereinstimmung von Lern- und Abrufkontext die Erinnerung verbessert, weil der passende Abruf-Cue vorliegt."
+      ],
+      "c": 1,
+      "e": "Ein montiertes Foto suggerierte ein nie erlebtes Ereignis — etwa die Hälfte „erinnerte“ es nach mehreren Interviews."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ist Quellenkonfusion (Lindsay et al. 2004)?",
+      "opts": [
+        "Die völlige Unfähigkeit, überhaupt irgendeine Information aus dem Gedächtnis abzurufen, etwa nach einer Hirnschädigung.",
+        "Eine besonders zuverlässige Form der Zeugenaussage.",
+        "Der passive Zerfall einer Gedächtnisspur über die Zeit.",
+        "Eine Information wird der falschen Quelle zugeordnet (z. B. Film statt erlebtem Ereignis)."
+      ],
+      "c": 3,
+      "e": "Quellenkonfusion: der Inhalt ist erinnert, aber die Herkunft falsch zugeordnet — besonders bei ähnlichen Ereignissen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was kennzeichnet einen direkten (expliziten) Gedächtnistest?",
+      "opts": [
+        "Die Leistung wird durch frühere Episoden gesteigert, ohne dass bewusst erinnert wird.",
+        "Es wird gar nicht nach Gedächtnisinhalten gefragt.",
+        "Es wird direkt nach den Gedächtnisinhalten gefragt (bewusstes Erinnern).",
+        "Die Leistung steigt nur durch Priming, weil das implizite System keine Frage benötigt."
+      ],
+      "c": 2,
+      "e": "Direkt = explizit: man fragt direkt nach dem Gelernten (free/cued recall, recognition). (a),(b),(d) beschreiben indirekte (implizite) Tests."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was besagt das Prinzip der Transferangemessenheit (Jacoby 1983)?",
+      "opts": [
+        "Die Gedächtnisleistung ist höher, wenn Enkodierung und Abruf dieselben Prozesse nutzen.",
+        "Tiefe Verarbeitung ist in jedem Fall besser als oberflächliche.",
+        "Der Kontext spielt für den Abruf keine Rolle.",
+        "Wiedererkennen ist grundsätzlich besser als freie Reproduktion, weil weniger Suche nötig ist."
+      ],
+      "c": 0,
+      "e": "Transfer Appropriate Processing: passt der Abrufmodus zum Enkodiermodus, ist die Leistung am besten (daher der Crossover direkt/indirekt)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was ist im Rekognitionstest ein „False Alarm“?",
+      "opts": [
+        "Ein altes Item wird korrekt als „alt“ erkannt.",
+        "Ein neues Item wird fälschlich als „schon gesehen“ beurteilt.",
+        "Ein altes Item wird fälschlich als „neu“ beurteilt.",
+        "Ein neues Item wird korrekt als „neu“ zurückgewiesen, weil die Gedächtnisspur fehlt."
+      ],
+      "c": 1,
+      "e": "False Alarm = neues Item fälschlich als „alt“. (a) Treffer, (c) Miss, (d) Correct Rejection."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was unterscheidet Recollection von Familiarity (Zwei-Prozess-Modell)?",
+      "opts": [
+        "Beide beruhen ausschließlich auf demselben Vertrautheitssignal, weil das Gehirn nur die Spurstärke auswertet.",
+        "Recollection ist lediglich ein Gefühl von Vertrautheit.",
+        "Familiarity ruft bewusst kontextuelle Details der Lernepisode ab.",
+        "Recollection ruft kontextuelle Details bewusst ab; Familiarity ist ein reines Vertrautheitsgefühl."
+      ],
+      "c": 3,
+      "e": "Recollection = bewusster Abruf des Kontexts; Familiarity = bloßes „kenne ich“-Gefühl (Spurstärke). Patient KN: Recollection beeinträchtigt, Familiarity kaum."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was ist Elaboration?",
+    "opts": [
+      "Das Erstellen relationaler Verknüpfungen zwischen Items (auch mit Vorwissen).",
+      "Der passive Zerfall einer Gedächtnisspur über die Zeit.",
+      "Das Übereinstimmen von Lern- und Abrufkontext.",
+      "Das fälschliche Zuordnen einer Information zu einer falschen Quelle, etwa einem Film."
+    ],
+    "c": 0,
+    "e": "Elaboration verknüpft neue Inhalte miteinander und mit Vorwissen → tiefere, besser abrufbare Repräsentation."
+  },
+  {
+    "id": "bq2",
+    "q": "Was ist das zentrale Problem der Verarbeitungstiefe-Theorie?",
+    "opts": [
+      "Sie hat überhaupt keine empirische Stütze.",
+      "Zirkularität: es fehlt ein unabhängiges Kriterium für „tiefe Verarbeitung“.",
+      "Sie gilt ausschließlich für visuelle Reize.",
+      "Sie kann den Recency-Effekt nicht erklären, weil sie nur das Langzeitgedächtnis betrifft."
+    ],
+    "c": 1,
+    "e": "„Tief“ wird oft über die bessere Gedächtnisleistung definiert, die es erklären soll → Zirkelschluss."
+  },
+  {
+    "id": "bq3",
+    "q": "Was ist proaktive Interferenz?",
+    "opts": [
+      "Neu Gelerntes hemmt den Abruf alter Information.",
+      "Information zerfällt passiv über die Zeit.",
+      "Früher Gelerntes hemmt das Lernen bzw. den Abruf neuer Information.",
+      "Suggestive Fragen verändern die Erinnerung, weil sie nachträglich Fehlinformation einspeisen."
+    ],
+    "c": 2,
+    "e": "Proaktiv = alt → neu (Altes stört Neues). (a) ist retroaktiv."
+  },
+  {
+    "id": "bq4",
+    "q": "Welcher direkte Gedächtnistest liefert typischerweise die beste Leistung?",
+    "opts": [
+      "Freie Reproduktion ohne jeden Hinweis, weil das Gehirn dabei die vollständige Suchleistung selbst erbringt.",
+      "Priming.",
+      "Reine Wiederholung ohne Abruf.",
+      "Cued Recall (geförderte Reproduktion mit Hinweisen)."
+    ],
+    "c": 3,
+    "e": "Hinweisreize (cues) erleichtern den Abruf → cued recall > free recall. Priming ist ein indirekter Test."
+  },
+  {
+    "id": "bq5",
+    "q": "Wie berechnet sich der Diskriminationsindex d′?",
+    "opts": [
+      "d′ = z(Hit) − z(False Alarm).",
+      "d′ = Hit + Miss.",
+      "d′ = Set Size × (Hit − FA).",
+      "d′ = Treffer geteilt durch korrekte Zurückweisungen, weil beide die Trefferquote bestimmen."
+    ],
+    "c": 0,
+    "e": "d′ = z(Hit) − z(False Alarm): je größer, desto besser die Trennung von alt/neu. (c) ist die WM-Kapazität K."
+  },
+  {
+    "id": "bq6",
+    "q": "Worauf verweist das Zwei-Prozess-Modell der Rekognition?",
+    "opts": [
+      "Auf einen einzigen Familiarity-Prozess.",
+      "Auf zwei Prozesse — Recollection und Familiarity — mit verschiedenen neuronalen Strukturen.",
+      "Auf reinen Spurenzerfall.",
+      "Auf die Transferangemessenheit, weil Enkodierung und Abruf stets identisch ablaufen müssen."
+    ],
+    "c": 1,
+    "e": "Wiedererkennen beruht auf Recollection (Kontextabruf) UND Familiarity (Vertrautheit) — dissoziierbar (Patient KN)."
+  },
+  {
+    "id": "bq7",
+    "q": "Was zeigte Patient KN (Aggleton et al. 2005)?",
+    "opts": [
+      "Dass Recollection und Familiarity identisch sind.",
+      "Dass beide Prozesse gleichermaßen beeinträchtigt waren.",
+      "Recollection war stark beeinträchtigt, Familiarity kaum → getrennte Strukturen.",
+      "Dass die Verarbeitungstiefe keinen Einfluss auf das Wiedererkennen hat, weil nur Vertrautheit zählt."
+    ],
+    "c": 2,
+    "e": "Die selektive Beeinträchtigung der Recollection bei erhaltener Familiarity stützt zwei getrennte neuronale Prozesse."
+  },
+  {
+    "id": "bq8",
+    "q": "Warum sind Zeugenaussagen fehleranfällig?",
+    "opts": [
+      "Weil das Gedächtnis Ereignisse wie eine Videoaufnahme exakt und unveränderlich abspeichert und originalgetreu wiedergibt.",
+      "Weil ausschließlich das Kurzzeitgedächtnis beteiligt ist.",
+      "Weil Priming bewusste Erinnerungen erzeugt.",
+      "Wegen Interferenz, Fehlinformation, Quellenkonfusion und Schema-Erwartungen."
+    ],
+    "c": 3,
+    "e": "Das Gedächtnis rekonstruiert (statt aufzuzeichnen) und ist für nachträgliche Verzerrungen anfällig (Innocence Project: ~75 % Fehlurteile durch Zeugen)."
+  }
+];
+
+var corrCorrect = {
+  "c4a": "proaktiv",
+  "c4b": "retroaktiv",
+  "c4c": "proaktiv",
+  "c4d": "retroaktiv",
+  "c6a": "direkt",
+  "c6b": "indirekt",
+  "c6c": "direkt",
+  "c6d": "indirekt",
+  "c7a": "recollection",
+  "c7b": "familiarity",
+  "c7c": "familiarity",
+  "c7d": "recollection"
+};
+var corrExpl = {
+  "c4a": "Alte Erinnerung hemmt das Lernen neuer Information = proaktiv (alt → neu).",
+  "c4b": "Neu Gelerntes hemmt den Abruf alter Information = retroaktiv (neu → alt).",
+  "c4c": "Zuvor gelerntes Französisch erschwert die Spanisch-Klausur = proaktiv.",
+  "c4d": "Danach gelerntes Spanisch erschwert die Französisch-Klausur = retroaktiv.",
+  "c6a": "Freie Reproduktion fragt direkt nach Inhalten = direkter (expliziter) Test.",
+  "c6b": "Priming steigert die Leistung ohne bewusstes Erinnern = indirekter (impliziter) Test.",
+  "c6c": "Wiedererkennen fragt direkt nach Inhalten = direkter Test.",
+  "c6d": "Leistungssteigerung ohne bewusstes Erinnern = indirekter Test.",
+  "c7a": "Bewusster Abruf kontextueller Details der Lernepisode = Recollection.",
+  "c7b": "Vertrautheitsgefühl ohne Quellenerinnerung = Familiarity.",
+  "c7c": "Stärke der Gedächtnisspur = Familiarity-Signal.",
+  "c7d": "„Ich erinnere mich, dass der Name auf der Liste stand“ = Recollection."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

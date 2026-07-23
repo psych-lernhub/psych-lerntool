@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.1 · VL07 Absolute & relative Wirksamkeit</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a1-vl07
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Effektstärken-Simulator (vl07) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.1 · VL07 Absolute & relative Wirksamkeit</h1>
+<p class="page-sub">Allgemeine Verfahrenslehre I · Teil 1 (Böge) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Forschungsfragen im Wandel · 2. Eysenck & Schulenstreit · 3. Smith & Glass (1977) · 4. Effektstärken (Cohen's d) · 5. Absolute Wirksamkeit & Kontrollgruppen · 6. Relative Wirksamkeit & Allegiance · 7. Dodo-Bird-Verdikt · 8. Erklärungen & Implikationen
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Forschungsfragen</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Eysenck & Schulenstreit</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Smith & Glass (1977)</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Effektstärken (Cohen's d)</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Absolute Wirksamkeit</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Relative Wirksamkeit</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Dodo-Bird-Verdikt</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Erklärungen & Implikationen</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Forschungsfragen ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Forschungsfragen im Wandel</div>
+    <div class="sec-lz">Outcome- vs Prozessforschung; Phasen: Rechtfertigung → Spezifität → (Kosten-)Effizienz → Effectiveness → evidenzbasiert → praxisbasierte Evidenz</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die Psychotherapieforschung hat im Lauf der Zeit ganz unterschiedliche Fragen gestellt. Was untersucht „Outcome"-Forschung — und wie unterscheidet sie sich von der Prozessforschung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0"><strong>Outcome-Forschung</strong> = das Ergebnis/der Erfolg der Behandlung (wirkt es?). <strong>Prozessforschung</strong> = WIE Therapie wirkt (welche Ereignisse in den Sitzungen führen zur Veränderung). Beide liefen historisch parallel.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Outcome- vs. Prozessforschung</div>
+    <strong>Outcome-Forschung:</strong> Ergebnisse/Erfolg der Behandlung — lange das Hauptinteresse. <strong>Prozessforschung:</strong> WIE Psychotherapie wirkt und durch welche Ereignisse in den Sitzungen Veränderung entsteht. Beide Stränge verliefen über die Zeit parallel.
+  </div>
+  <div class="card">
+    <div class="card-title">Fragestellungen im Wandel</div>
+    <strong>Rechtfertigung</strong> (1950–70): Wirkt Psychotherapie überhaupt? → <strong>Spezifität</strong> (1960–80): Welche wirkt besser? → <strong>(Kosten-)Effizienz</strong> (1970–90) → <strong>Effectiveness</strong>/klinische Bedeutsamkeit (1980–2000) → <strong>Evidenzbasierung</strong> (1990–2010, Leitlinien) → <strong>praxisbasierte Evidenz</strong> (2000–2020).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Phasen der Psychotherapieforschung</div>
+    <div id="phasen">
+      <div class="step-item"><strong>Rechtfertigung (1950–1970):</strong> Ist Psychotherapie überhaupt wirksam?</div>
+      <div class="step-item"><strong>Spezifität (1960–1980):</strong> Welche Psychotherapie ist wirksamer?</div>
+      <div class="step-item"><strong>(Kosten-)Effizienz (1970–1990):</strong> Wie lässt sich die Effizienz verbessern?</div>
+      <div class="step-item"><strong>Effectiveness (1980–2000):</strong> Übertragung in die praktische Versorgung.</div>
+      <div class="step-item"><strong>Evidenzbasierung (1990–2010) → praxisbasierte Evidenz (2000–2020).</strong></div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'phasen')">Phasen aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Eysenck & Schulenstreit ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Eysenck & der Schulenstreit</div>
+    <div class="sec-lz">Eysencks methodischer Fehler (keine Randomisierung, Luborsky); unsystematische Literaturzusammenfassungen → widersprüchliche Schlüsse trotz gleicher Evidenz</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eysenck behauptete, Psychotherapie sei nicht wirksamer als Spontanremission. Was war daran methodisch falsch — und warum kamen verschiedene Autoren aus denselben Daten zu gegenteiligen Schlüssen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1"><strong>Eysencks Fehler:</strong> keine zufällige Zuweisung, bedeutsame Gruppenunterschiede (Luborsky: Patienten weisen sich nicht zufällig selbst zu). <strong>Schulenstreit:</strong> dieselbe Evidenz, aber <strong>unsystematische</strong> Zusammenfassungen mit subjektiven Entscheidungen → widersprüchliche Schlüsse.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Eysenck & die Kritik (Luborsky)</div>
+    Eysenck schloss, Psychotherapie sei nicht wirksamer als Spontanremission. <strong>Methodisch unzulässig:</strong> bedeutsame Unterschiede zwischen Behandlungs- und Kontrollgruppen, <strong>keine zufällige Zuweisung</strong>. Luborsky (1954) spottete: Patienten müssten sich „zufällig selbst" Psychiatern, Allgemeinmedizinern und Krankenhäusern zuweisen.
+  </div>
+  <div class="card">
+    <div class="card-title">Der Schulenstreit</div>
+    Eysenck/Rachman: Verhaltenstherapie wirksam, psychodynamische/eklektische Therapie unzureichend. Bergin, Luborsky, Meltzoff & Kornreich: gegenteilig (psychodynamische Therapien seien wirksam). <strong>Alle betrachteten im Wesentlichen dieselbe Evidenz.</strong>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Probleme unsystematischer Zusammenfassungen</div>
+    Keine systematische Studienauswahl · keine objektiven Ein-/Ausschlusskriterien · keine reliable Datenextraktion · keine Inferenzstatistik. Stattdessen subjektive Entscheidungen (z. B. Spontanremission: Eysenck 60 %, Bergin 30 %) und „Auszählen" positiver Ergebnisse.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Warum widersprüchliche Schlüsse? — Schritt für Schritt</div>
+    <div id="unsys">
+      <div class="step-item"><strong>1.</strong> Keine systematische, nachvollziehbare Studienauswahl.</div>
+      <div class="step-item"><strong>2.</strong> Keine objektiven Ein-/Ausschlusskriterien für Primärstudien.</div>
+      <div class="step-item"><strong>3.</strong> Keine reliable, regelgeleitete Datenextraktion der Effekte.</div>
+      <div class="step-item"><strong>4.</strong> Keine inferenzstatistische Prüfung der Unterschiede.</div>
+      <div class="step-item"><strong>Folge:</strong> subjektive Entscheidungen (z. B. Spontanremissionsrate) → gegensätzliche Schlüsse trotz gleicher Datenbasis.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'unsys')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Smith & Glass (1977) ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Meilenstein: Smith & Glass (1977)</div>
+    <div class="sec-lz">Erste große Meta-Analyse; etabliert Wirksamkeit + Methodik; Re-Analysen entkräften Kritik (echte Patient*innen d=0,72; hochwertige Studien d=0,90)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>1977 erschien die erste große Meta-Analyse zur Psychotherapie. Warum gilt Smith & Glass als Meilenstein — und hielt das Ergebnis der Kritik stand?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Smith & Glass (1977) etablierte sowohl die <strong>Wirksamkeit der Psychotherapie</strong> als auch die <strong>Meta-Analyse als Methode</strong>. Re-Analysen entkräfteten die Kritik: nur echte Patient*innen <strong>d = 0,72</strong>, nur hochwertige Studien <strong>d = 0,90</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Der Meilenstein</div>
+    Smith & Glass (1977): erste große Meta-Analyse zur Psychotherapie. Trotz heute erkannter Mängel (bloße arithmetische Mittelung aller Effektstärken) etablierte sie <strong>zwei Dinge</strong>: die Wirksamkeit von Psychotherapie UND die Meta-Analyse als Methode der Psychotherapieforschung.
+  </div>
+  <div class="card">
+    <div class="card-title">Kritik & Re-Analysen</div>
+    <strong>Kritik 1:</strong> „Die meisten Studien untersuchen gar keine Störungen" (nur 46 % klinisch relevant). → Re-Analyse echter Patient*innen (Andrews & Harvey 1981): <strong>d = 0,72</strong>. <strong>Kritik 2:</strong> „Studien zu unterschiedlicher Qualität". → Re-Analyse nur hochwertiger Studien (Landmann & Dawes): <strong>d = 0,90</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Beide Re-Analysen zeigen: Die Wirksamkeit bleibt auch unter strengeren Bedingungen bestehen — die Kritik <strong>entkräftet</strong> das Ergebnis nicht.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Kritik vs. Re-Analyse</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="k1" onclick="switchTab(this,'sg')">Kritik 1</button>
+      <button class="tab-btn" data-tab="k2" onclick="switchTab(this,'sg')">Kritik 2</button>
+    </div>
+    <div class="tab-group" data-group="sg">
+      <div class="tab-content active" data-tab="k1"><strong>Kritik:</strong> „keine echten Störungen" (nur 46 % klinisch relevant). <strong>Re-Analyse</strong> (Andrews & Harvey 1981, nur echte Patient*innen): <strong>d = 0,72</strong>.</div>
+      <div class="tab-content" data-tab="k2"><strong>Kritik:</strong> „zu unterschiedliche Studienqualität". <strong>Re-Analyse</strong> (Landmann & Dawes, nur hochwertige Studien): <strong>d = 0,90</strong>.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Effektstärken (Cohen's d) ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Effektstärken: Cohen's d</div>
+    <div class="sec-lz">d ~0,2 small / ~0,5 medium / ~0,8 large; Anteil über Mittelwert; NNT sinkt mit steigendem d</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Effektstärken werden meist als Cohen's d angegeben. Ab welchem Wert spricht man von „klein", „mittel", „groß" — und was sagt die „Number needed to treat" (NNT)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Cohen's d: <strong>~0,2 small · ~0,5 medium · ~0,8 large</strong>. Die <strong>NNT</strong> gibt an, wie viele behandelt werden müssen, damit eine*r zusätzlich profitiert — sie <strong>sinkt</strong>, je größer d (d = 0,8 → NNT ~3).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Cohen's d interpretieren</div>
+    <strong>~0,2 = small · ~0,5 = medium · ~0,8 = large.</strong> Bei d = 0,8 sind ~79 % der Behandelten besser als der Durchschnitt der Unbehandelten; ~14 % der Varianz im Outcome gehen auf die Behandlung zurück.
+  </div>
+  <div class="card">
+    <div class="card-title">Number needed to treat (NNT)</div>
+    Zahl der zu Behandelnden, damit ein zusätzlicher Behandlungserfolg eintritt. Sie <strong>sinkt mit steigendem d</strong>: d = 0,1 → NNT ~18; d = 0,5 → NNT ~4; d = 0,8 → NNT ~3; d = 1,0 → NNT ~2.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Größeres d = <strong>kleinere</strong> NNT (effizienter). NNT ist <strong>nicht</strong> die Zahl der Sitzungen oder die Therapiedauer.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Effekt? — Cohen's d zuordnen</div>
+    <div class="corr-item" id="c3a">d = 0,1
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'small')">small</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'medium')">medium</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'large')">large</button>
+      </div><div class="corr-fb" id="c3a-fb"></div>
+    </div>
+    <div class="corr-item" id="c3b">d = 0,5
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'small')">small</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'medium')">medium</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'large')">large</button>
+      </div><div class="corr-fb" id="c3b-fb"></div>
+    </div>
+    <div class="corr-item" id="c3c">d = 0,8
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'small')">small</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'medium')">medium</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'large')">large</button>
+      </div><div class="corr-fb" id="c3c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Absolute Wirksamkeit ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Absolute Wirksamkeit & Kontrollgruppen</div>
+    <div class="sec-lz">Gesamteffektstärke ~0,75–0,85; vergleichbar/besser als Medizin; WL (~0,71–0,75) > CAU (~0,31–0,46); Überschätzungsquellen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie wirksam ist Psychotherapie absolut gesehen — und warum hängt die berichtete Effektstärke so stark davon ab, womit verglichen wird?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Gesamteffektstärke <strong>~0,75–0,85</strong> (vergleichbar/besser als viele medizinische Behandlungen). Die Kontrollgruppe entscheidet mit: gegen <strong>Warteliste ~0,71–0,75</strong> (hoch), gegen <strong>Care as usual ~0,31–0,46</strong> (niedriger).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Aktueller Stand der absoluten Wirksamkeit</div>
+    Gesamteffektstärken von <strong>0,75–0,85</strong> über verschiedene Behandlungen und Patientengruppen (NNT ~3,4–3,9). Zum Vergleich: Aspirin zur Gefäßprävention d = 0,12, Kortikosteroide bei Asthma d = 0,56 → Psychotherapie ist <strong>vergleichbar wirksam oder besser</strong> als viele medizinische Behandlungen. (Zahl der Meta-Analysen: 1977 = 1, 2013 = 710.)
+  </div>
+  <div class="card">
+    <div class="card-title">Wahl der Kontrollgruppe</div>
+    Gegen <strong>Warteliste (WL)</strong>: ~0,71–0,75 — höher, weil keine aktive Behandlung. Gegen <strong>Care as usual (CAU)</strong>: ~0,31–0,46 — niedriger, weil aktive Vergleichsbedingung. Die Kontrollgruppe verändert das Ergebnis erheblich!
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Überschätzungsquellen</div>
+    Die Effektivität wird häufig überschätzt durch: <strong>Risk of Bias</strong> (ältere Studien, schlechte Qualität), <strong>Allegiance-Effekte</strong> und die <strong>Wahl der Kontrollgruppe</strong> (Warteliste statt CAU).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Effektstärken-Simulator — wähle die Kontrollbedingung</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ks-wl" onclick="ksSet('wl')">vs. Warteliste</button>
+        <button class="sim-tbtn" id="ks-cau" onclick="ksSet('cau')">vs. Care as usual</button>
+      </div>
+      <div class="sim-verdict" id="ks-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Kernidee: Die <strong>gemessene Effektstärke hängt von der Kontrollbedingung ab</strong>. Wartelisten überschätzen den Effekt (kein aktiver Vergleich), CAU liefert konservativere Werte.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Relative Wirksamkeit ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Relative Wirksamkeit & Allegiance</div>
+    <div class="sec-lz">Indirekter vs direkter Vergleich (direkt überlegen); Allegiance-Effekt = Überzeugung der Forschenden → Überschätzung (gewollt/ungewollt)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Um zwei Therapien zu vergleichen, gibt es zwei Wege. Welcher ist methodisch überlegen — und was ist ein „Allegiance-Effekt"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Direkter Vergleich</strong> (beide Therapien in EINER Studie) ist überlegen; <strong>indirekte</strong> Vergleiche (über je eigene Kontrollgruppen) sind kaum eindeutig. <strong>Allegiance-Effekt:</strong> Überzeugung der Forschenden von einem Verfahren → Überschätzung (gewollt oder ungewollt).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Indirekter Wirksamkeitsvergleich</div>
+    Man berechnet die Effektstärken von Therapie A und B jeweils <strong>gegen eine eigene Kontrollgruppe</strong> und vergleicht sie dann. Probleme: Klassifizierung der Studien, Kontrollgruppen oft <strong>nicht identisch</strong>, Allegiance-Effekte → die Ergebnisse sind <strong>fast nie eindeutig interpretierbar</strong>. Daher: direkte Vergleiche bevorzugen.
+  </div>
+  <div class="card">
+    <div class="card-title">Allegiance-Effekt</div>
+    Das <strong>Ausmaß, in dem Forschende/Therapeut*innen von einem Verfahren überzeugt sind</strong>. Beispiel: Eine überzeugte VT-Forscherin bietet die Kontrollbedingung evtl. nicht als bona-fide Therapie an, schult/supervisiert die VT besser → systematische <strong>Überschätzung des favorisierten Verfahrens</strong>. Kann absichtlich ODER unabsichtlich entstehen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Allegiance ≠ Risk of Bias</div>
+    <strong>Allegiance</strong> = Überzeugung/Bevorzugung (auch unabsichtlich). <strong>Risk of Bias durch Design</strong> = strukturelle Mängel (z. B. zu kleine Stichprobe, fehlende Randomisierung). Allegiance erfordert keine bewusste Manipulation!
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Indirekter oder direkter Vergleich?</div>
+    <div class="corr-item" id="c5a">Zwei Therapien werden in derselben Studie direkt gegeneinander getestet
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'indirekt')">Indirekt</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'direkt')">Direkt</button>
+      </div><div class="corr-fb" id="c5a-fb"></div>
+    </div>
+    <div class="corr-item" id="c5b">Effektstärken zweier Therapien gegen je eigene Kontrollgruppe werden verglichen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'indirekt')">Indirekt</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'direkt')">Direkt</button>
+      </div><div class="corr-fb" id="c5b-fb"></div>
+    </div>
+    <div class="corr-item" id="c5c">Der methodisch überlegene, bevorzugte Vergleichstyp
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'indirekt')">Indirekt</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'direkt')">Direkt</button>
+      </div><div class="corr-fb" id="c5c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Dodo-Bird-Verdikt ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Das Dodo-Bird-Verdikt</div>
+    <div class="sec-lz">Wampold et al. (1997): bona-fide Therapien störungsübergreifend gleich wirksam; gegenteilige Befunde (klein, pro KVT: Tolin 2010, Steinert 2017)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Alle haben gewonnen" — das Dodo-Bird-Verdikt. Was besagt es genau, woher kommt der Name, und was sagen gegenteilige Befunde?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Bona-fide Therapien unterscheiden sich <strong>störungsübergreifend</strong> nicht signifikant in der Wirksamkeit (Wampold 1997; Name aus „Alice im Wunderland"). Gegenteilige Befunde: wenn überhaupt Unterschiede, dann <strong>klein und tendenziell pro KVT</strong> (Tolin 2010).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Dodo-Bird-Verdikt</div>
+    Aus <strong>direkten</strong> Vergleichen (Wampold et al. 1997): Unterschiedliche (bona-fide) Psychotherapieverfahren unterscheiden sich <strong>nicht signifikant</strong> in ihrer Wirksamkeit. Der Name geht auf den Dodo aus „Alice im Wunderland" zurück: „Alle haben gewonnen, und alle sollen Preise bekommen."
+  </div>
+  <div class="card">
+    <div class="card-title">Gegenteilige Befunde</div>
+    Werden doch störungsübergreifend Unterschiede gefunden, sind sie <strong>klein</strong> und begünstigen tendenziell die <strong>KVT</strong> (Tolin 2010). Steinert et al. (2017) belegen dagegen die <strong>Äquivalenz</strong> der psychodynamischen Therapie.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    Das Dodo-Bird-Verdikt ist ein <strong>störungsübergreifender</strong> (aggregierter) Befund. Es bedeutet <strong>nicht</strong>, dass jede Therapie für jede einzelne Störung gleich wirksam ist — störungsspezifische Unterschiede sind möglich.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Dodo-Bird — Aussage, Name, Grenzen</div>
+    <div id="dodo">
+      <div class="step-item"><strong>Aussage:</strong> bona-fide Therapien störungsübergreifend gleich wirksam (Wampold 1997).</div>
+      <div class="step-item"><strong>Name:</strong> Dodo aus „Alice im Wunderland" — „alle haben gewonnen".</div>
+      <div class="step-item"><strong>Grenze:</strong> gilt aggregiert/störungsübergreifend — nicht für jede einzelne Störung.</div>
+      <div class="step-item"><strong>Gegenbefund:</strong> kleine Unterschiede pro KVT (Tolin 2010); PDT äquivalent (Steinert 2017).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'dodo')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Erklärungen & Implikationen ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Erklärungen & Implikationen</div>
+    <div class="sec-lz">Underpowerte Studien, Äquifinalität, gemeinsame Wirkfaktoren, störungsspezifisch; Barkham et al. (2021): mehr hochwertige Forschung + Kosten-Effektivität</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum finden Studien oft keine Unterschiede zwischen Verfahren — und was folgt daraus für Forschung und Praxis?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Mögliche Gründe: <strong>underpowerte Studien</strong>, <strong>Äquifinalität</strong> (gleiches Ziel über verschiedene Prozesse), <strong>gemeinsame Wirkfaktoren</strong>, verdeckte <strong>störungsspezifische</strong> Unterschiede. Implikation (Barkham et al. 2021): mehr <strong>hochwertige Forschung</strong> + Kosten-Effektivität.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Erklärungen für das Dodo-Bird-Verdikt</div>
+    (1) Bisherige Forschung konnte echte Unterschiede nicht aufdecken (<strong>underpowerte Studien</strong>). (2) <strong>Äquifinalität:</strong> verschiedene Therapien erreichen dasselbe Ziel über unterschiedliche Prozesse. (3) <strong>Gemeinsame kurative Faktoren</strong>, die in den jeweiligen Theorien nicht hervorgehoben werden. (4) Unterschiede zeigen sich evtl. nur <strong>störungsspezifisch</strong>. Diese Erklärungen schließen sich nicht aus.
+  </div>
+  <div class="card">
+    <div class="card-title">Implikationen (Barkham, Lutz & Castonguay, 2021)</div>
+    Vergleiche zeigen keine Unterschiede oder leichten <strong>KVT-Vorteil</strong>; es gibt aber glaubwürdige Alternativen. Problem: viele <strong>low-quality Studien</strong> → es braucht größere, längere Studien und <strong>Kosten-Effektivitäts-Analysen</strong>. Besonders Nicht-KVT-Verfahren müssen hochwertige Evidenz liefern.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Praxis-Perspektive</div>
+    Stärker auf <strong>Dosis-Wirkungs-Beziehungen</strong> (Tempo, Dauer, Kosten) und auf <strong>gemeinsame Wirkfaktoren</strong> achten. Auch kleine Unterschiede (d = 0,2) werden bedeutsam, wenn sehr viele Menschen behandelt werden.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vier Erklärungen für das Dodo-Bird-Verdikt</div>
+    <div id="erkl">
+      <div class="step-item"><strong>1. Methodisch:</strong> underpowerte Studien decken echte Unterschiede nicht auf.</div>
+      <div class="step-item"><strong>2. Äquifinalität:</strong> gleiches Ziel über unterschiedliche Prozesse.</div>
+      <div class="step-item"><strong>3. Gemeinsame Wirkfaktoren:</strong> dieselben kurativen Faktoren in verschiedenen Verfahren.</div>
+      <div class="step-item"><strong>4. Störungsspezifisch:</strong> Unterschiede gehen im aggregierten Mittel unter.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'erkl')">Erklärungen aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL07 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Absolute Wirksamkeit</h4>
+      <p>Wirkt Psychotherapie besser als keine Behandlung?</p>
+      <p>Vergleich mit Kontrollgruppe</p>
+      <p>„Gegen Null“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Relative Wirksamkeit</h4>
+      <p>Ist eine Therapieform besser als eine andere?</p>
+      <p>Direkter oder indirekter Verfahrensvergleich</p>
+      <p>„Gegen eine andere Therapie“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine Meta-Analyse, die Psychotherapie gegen eine Warteliste vergleicht, belegt die relative Überlegenheit einer bestimmten Therapieform.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Indirekter Wirksamkeitsvergleich</h4>
+      <p>Effektstärken gegen je eigene Kontrollgruppe</p>
+      <p>Umweg über Kontrollbedingungen</p>
+      <p>Kaum eindeutig interpretierbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Direkter Wirksamkeitsvergleich</h4>
+      <p>Beide Therapien in derselben Studie</p>
+      <p>Identische Bedingungen</p>
+      <p>Methodisch überlegen → bevorzugt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Indirekte Vergleiche von Effektstärken aus verschiedenen Meta-Analysen sind genauso aussagekräftig wie direkte Vergleiche.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Allegiance-Effekt</h4>
+      <p>Überzeugung der Forschenden/Therapeut*innen von einem Verfahren</p>
+      <p>Absichtlich ODER unabsichtlich</p>
+      <p>Überschätzung des favorisierten Verfahrens</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Risk of Bias durch Studiendesign</h4>
+      <p>Strukturelle Mängel des Designs</p>
+      <p>z. B. zu kleine Stichprobe, fehlende Randomisierung</p>
+      <p>Unabhängig von Überzeugung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Allegiance-Effekte treten nur dann auf, wenn Forschende bewusst und vorsätzlich manipulieren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Dodo-Bird-Verdikt (störungsübergreifend)</h4>
+      <p>Bona-fide Therapien im Mittel gleich wirksam</p>
+      <p>Aggregierter, störungsübergreifender Befund</p>
+      <p>Wampold et al. (1997)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Störungsspezifische Unterschiede</h4>
+      <p>Können einzelstörungsbezogen sehr wohl bestehen</p>
+      <p>Werden im aggregierten Vergleich verdeckt</p>
+      <p>Müssen separat untersucht werden</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Dodo-Bird-Verdikt gilt für jede einzelne psychische Störung gleichermaßen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Effektstärke gegen Warteliste (WL)</h4>
+      <p>Kontrollgruppe ohne aktive Behandlung</p>
+      <p>Größerer Kontrast → höhere Effektstärke</p>
+      <p>ca. 0,71–0,75</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Effektstärke gegen Care as usual (CAU)</h4>
+      <p>Aktive Vergleichsbedingung</p>
+      <p>Kleinerer Kontrast → niedrigere Effektstärke</p>
+      <p>ca. 0,31–0,46</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Wahl der Kontrollgruppe (Warteliste vs. Care as usual) hat keinen systematischen Einfluss auf die berichtete Effektstärke.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a1-vl07</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a1-vl07';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was untersucht die Outcome-Forschung (im Gegensatz zur Prozessforschung)?",
+      "opts": [
+        "Die Ergebnisse / den Erfolg einer Behandlung (ob und wie stark Psychotherapie wirkt).",
+        "Die Outcome-Forschung untersucht ausschließlich, durch welche konkreten Ereignisse innerhalb der einzelnen Therapiesitzungen die Veränderung beim Patienten Schritt für Schritt zustande kommt.",
+        "Ausschließlich die Kosten einer einzelnen Therapiestunde.",
+        "Nur die Ausbildung der Therapeut*innen."
+      ],
+      "c": 0,
+      "e": "Outcome-Forschung = Ergebnisse/Erfolg der Behandlung. Prozessforschung = WIE Psychotherapie wirkt (Ereignisse in den Sitzungen). Beide liefen historisch parallel."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Fragestellung prägte die früheste Phase (1950–1970) der Psychotherapieforschung?",
+      "opts": [
+        "In der frühesten Phase ging es bereits um die Übertragung von Forschungsbefunden in die praktische Versorgung (Effectiveness) sowie um die praxisbasierte Evidenz zur Verbesserung von Behandlungsergebnissen.",
+        "Rechtfertigung: Ist Psychotherapie überhaupt wirksam?",
+        "Praxisbasierte Evidenz.",
+        "Optimierung der Kosten-Effizienz."
+      ],
+      "c": 1,
+      "e": "Phasen: Rechtfertigung (1950–70, „wirkt es überhaupt?“) → Spezifität (welche wirkt besser?) → (Kosten-)Effizienz → Effectiveness → evidenzbasiert → praxisbasierte Evidenz."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was war Eysencks zentraler methodischer Fehler (Kritik von Luborsky)?",
+      "opts": [
+        "Er nutzte eine viel zu große Stichprobe.",
+        "Er randomisierte die Zuteilung zu streng.",
+        "Es gab bedeutsame Unterschiede zwischen den Gruppen und keine zufällige Zuweisung (keine Randomisierung).",
+        "Eysencks einziger Fehler bestand darin, dass er die Spontanremissionsrate viel zu niedrig ansetzte und dadurch die Wirksamkeit der Psychotherapie systematisch deutlich überschätzte."
+      ],
+      "c": 2,
+      "e": "Eysencks Vergleich war methodisch unzulässig: keine zufällige Zuweisung, bedeutsame Gruppenunterschiede. Luborsky (1954): Patienten weisen sich nicht zufällig selbst zu."
+    },
+    {
+      "id": "s1q2",
+      "q": "Warum kamen die Literaturzusammenfassungen (Eysenck vs. Bergin/Luborsky) zu gegensätzlichen Schlüssen?",
+      "opts": [
+        "Weil sie jeweils völlig unterschiedliche und einander nicht überschneidende Datenbestände aus ganz verschiedenen Jahrzehnten und Ländern auswerteten, sodass eine Übereinstimmung gar nicht möglich war.",
+        "Weil sie identische, objektive Einschlusskriterien verwendeten.",
+        "Weil sie alle dieselben inferenzstatistischen Verfahren nutzten.",
+        "Sie betrachteten im Wesentlichen dieselbe Evidenz, trafen aber subjektive Entscheidungen (unsystematische Zusammenfassungen)."
+      ],
+      "c": 3,
+      "e": "Unsystematische Literaturzusammenfassungen: keine systematische Studienauswahl, keine objektiven Ein-/Ausschlusskriterien, keine reliable Datenextraktion, keine Inferenzstatistik → subjektive Schlüsse trotz gleicher Evidenz."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was war die historische Bedeutung der Meta-Analyse von Smith & Glass (1977)?",
+      "opts": [
+        "Sie etablierte die Wirksamkeit von Psychotherapie und die Methodik der Meta-Analyse in der Forschung.",
+        "Sie bewies endgültig und unwiderlegbar die eindeutige Überlegenheit eines einzigen bestimmten Psychotherapieverfahrens über alle anderen Schulen hinweg und beendete damit den Schulenstreit.",
+        "Sie widerlegte, dass Psychotherapie überhaupt wirkt.",
+        "Sie war die erste reine Prozessstudie."
+      ],
+      "c": 0,
+      "e": "Smith & Glass (1977): erster großer Meta-Analyse-Meilenstein — etablierte sowohl die Wirksamkeit von Psychotherapie als auch die Meta-Analyse als Methode (trotz heute erkannter methodischer Mängel)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie reagierten die Re-Analysen auf die Kritik an Smith & Glass?",
+      "opts": [
+        "Die Re-Analysen bestätigten die Kritik vollständig und zeigten, dass nach Ausschluss methodisch schwacher Studien und von Nicht-Patient*innen keinerlei Wirksamkeit der Psychotherapie mehr nachweisbar war (d nahe 0).",
+        "Auch mit „echten“ Patient*innen (d = 0,72) und nur hochwertigen Studien (d = 0,90) blieb die Wirksamkeit bestehen.",
+        "Sie verzichteten ganz auf die Angabe von Effektstärken.",
+        "Sie fanden durchgehend negative (schädliche) Effekte."
+      ],
+      "c": 1,
+      "e": "Re-Analysen: nur Studien mit echten Patient*innen (Andrews & Harvey 1981): d = 0,72; nur hochwertige Studien (Landmann & Dawes): d = 0,90 → Kritik entkräftet."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wie wird ein Cohen's d von 0,8 interpretiert?",
+      "opts": [
+        "Als gar kein Effekt.",
+        "Als kleiner Effekt (small).",
+        "Als großer Effekt (large).",
+        "Ein Cohen's d von 0,8 gilt grundsätzlich als vernachlässigbar kleiner bis allenfalls mittlerer Effekt, der praktisch keine klinische Relevanz besitzt und daher keiner weiteren Beachtung bedarf."
+      ],
+      "c": 2,
+      "e": "Cohen's d: ~0,2 small, ~0,5 medium, ~0,8 large. Bei d = 0,8 sind ~79 % der Behandelten besser als der Durchschnitt der Unbehandelten (NNT ~3)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was bedeutet „Number needed to treat“ (NNT)?",
+      "opts": [
+        "Die Number needed to treat gibt an, wie viele Therapiesitzungen ein einzelner Patient mindestens absolvieren muss, bevor überhaupt eine erste messbare Verbesserung der Symptomatik eintreten kann.",
+        "Die Anzahl der Studien in einer Meta-Analyse.",
+        "Die Dauer einer Therapie in Wochen.",
+        "Die Zahl der zu Behandelnden, damit ein zusätzlicher Behandlungserfolg eintritt (sinkt mit steigendem d)."
+      ],
+      "c": 3,
+      "e": "NNT = wie viele müssen behandelt werden, damit eine*r zusätzlich profitiert. Sinkt mit steigender Effektstärke (d = 0,8 → NNT ~3; d = 0,1 → NNT ~18)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wie hoch ist die aktuelle Gesamteffektstärke der Psychotherapie (absolute Wirksamkeit)?",
+      "opts": [
+        "Etwa 0,75–0,85 über verschiedene Behandlungen und Patientengruppen hinweg.",
+        "Die absolute Wirksamkeit der Psychotherapie liegt über alle Störungsbilder hinweg konstant bei einem sehr kleinen Wert von etwa 0,10–0,15 und damit deutlich unter der Wirksamkeit gängiger medizinischer Behandlungen.",
+        "Bei genau 0,00 (kein Effekt).",
+        "Konstant über 2,5."
+      ],
+      "c": 0,
+      "e": "Aktuelle Gesamteffektstärke Psychotherapie: ~0,75–0,85 (NNT ~3,4–3,9) — vergleichbar mit oder besser als viele medizinische Behandlungen (z. B. Aspirin-Prävention d = 0,12)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie beeinflusst die Wahl der Kontrollgruppe die berichtete Effektstärke?",
+      "opts": [
+        "Die Wahl der Kontrollgruppe hat überhaupt keinen systematischen Einfluss; eine Effektstärke gegen eine Warteliste ist exakt gleich groß wie dieselbe Therapie gegen eine „Care as usual“-Bedingung gemessen.",
+        "Gegen Warteliste (WL) fallen Effektstärken höher aus (~0,71–0,75) als gegen Care as usual (~0,31–0,46).",
+        "Gegen Care as usual sind die Effektstärken immer am höchsten.",
+        "Kontrollgruppen werden in der Wirksamkeitsforschung nie verwendet."
+      ],
+      "c": 1,
+      "e": "Die Kontrollgruppenwahl beeinflusst die Effektstärke stark: vs. Warteliste ~0,71–0,75 (hoch, da keine aktive Behandlung), vs. Care as usual ~0,31–0,46 (niedriger). Neben Allegiance/Risk of Bias eine Überschätzungsquelle."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist das zentrale Problem indirekter Wirksamkeitsvergleiche?",
+      "opts": [
+        "Sie sind methodisch grundsätzlich immer eindeutig interpretierbar.",
+        "Sie testen beide Therapien stets in derselben Studie.",
+        "Sie sind kaum eindeutig interpretierbar (Klassifizierung, nicht-identische Kontrollgruppen, Allegiance) → direkte Vergleiche bevorzugen.",
+        "Das einzige Problem indirekter Vergleiche besteht darin, dass sie generell zu wenige Primärstudien einschließen; ansonsten sind sie direkten Vergleichen in jeder methodischen Hinsicht klar überlegen."
+      ],
+      "c": 2,
+      "e": "Indirekter Vergleich (Effektstärken zweier Therapien gegen je eigene Kontrollgruppe): Probleme = Klassifizierung der Studien, Kontrollgruppen oft nicht identisch, Allegiance → fast nie eindeutig. Daher direkte Vergleiche bevorzugen."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ist ein Allegiance-Effekt?",
+      "opts": [
+        "Ein Allegiance-Effekt bezeichnet ausschließlich die bewusste und vorsätzliche Datenfälschung durch Forschende, die ihr bevorzugtes Verfahren mit voller Absicht und in betrügerischer Weise besser darstellen wollen.",
+        "Eine rein zufällige Schwankung der Messwerte ohne systematische Richtung.",
+        "Ein rein statistisches Korrekturverfahren für Meta-Analysen.",
+        "Das Ausmaß, in dem Forschende/Therapeut*innen von einem Verfahren überzeugt sind — führt (gewollt oder ungewollt) zur Überschätzung des favorisierten Verfahrens."
+      ],
+      "c": 3,
+      "e": "Allegiance-Effekt: Überzeugung der Forschenden/Therapeut*innen von einem Verfahren → systematische Überschätzung des favorisierten Verfahrens; kann absichtlich ODER unabsichtlich entstehen (z. B. bessere Schulung/Supervision der eigenen Bedingung)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was besagt das Dodo-Bird-Verdikt?",
+      "opts": [
+        "Unterschiedliche (bona-fide) Psychotherapieverfahren unterscheiden sich nicht signifikant in ihrer Wirksamkeit.",
+        "Das Dodo-Bird-Verdikt besagt, dass ausschließlich verhaltenstherapeutische Verfahren wirksam sind und alle anderen Psychotherapieschulen über sämtliche Störungsbilder hinweg signifikant unterlegen sind.",
+        "Dass Psychotherapie generell unwirksam ist.",
+        "Dass nur Medikamente wirken."
+      ],
+      "c": 0,
+      "e": "Dodo-Bird-Verdikt (Wampold et al. 1997): bona-fide Therapien unterscheiden sich störungsübergreifend nicht signifikant in der Wirksamkeit. Name aus „Alice im Wunderland“: „Alle haben gewonnen.“"
+    },
+    {
+      "id": "s6q2",
+      "q": "Was zeigen gegenteilige Befunde zum Dodo-Bird-Verdikt (Tolin 2010, Steinert 2017)?",
+      "opts": [
+        "Die gegenteiligen Befunde zeigen durchgehend sehr große, klinisch hochbedeutsame Wirksamkeitsunterschiede, die eindeutig die psychodynamische Therapie über alle Störungen hinweg favorisieren.",
+        "Wenn störungsübergreifend Unterschiede gefunden werden, sind sie klein und begünstigen tendenziell die KVT.",
+        "Dass es überhaupt keine Therapieeffekte gibt.",
+        "Dass alle Therapien systematisch schaden."
+      ],
+      "c": 1,
+      "e": "Gegenteilige Befunde: wenn überhaupt Unterschiede, dann klein und zugunsten der KVT (Tolin 2010); psychodynamische Therapie wurde aber ebenfalls als äquivalent belegt (Steinert et al. 2017)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was bedeutet „Äquifinalität“ als Erklärung für das Dodo-Bird-Verdikt?",
+      "opts": [
+        "Dass schlicht alle Studien zu klein (underpowered) sind.",
+        "Dass es keinerlei gemeinsame Wirkfaktoren gibt.",
+        "Unterschiedliche Therapieformen erreichen dasselbe Ziel über unterschiedliche Prozesse.",
+        "Äquifinalität bedeutet, dass jede Therapieform zwingend exakt denselben Prozess und denselben Wirkmechanismus nutzen muss, um überhaupt zu einem vergleichbaren Behandlungsergebnis gelangen zu können."
+      ],
+      "c": 2,
+      "e": "Erklärungen Dodo-Bird: (1) underpowerte Studien decken echte Unterschiede nicht auf; (2) Äquifinalität (gleiches Ziel über verschiedene Prozesse); (3) gemeinsame kurative Faktoren; (4) störungsspezifische Unterschiede gehen im Mittel unter."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welche Implikation ziehen Barkham, Lutz & Castonguay (2021) aus der Befundlage?",
+      "opts": [
+        "Sie schlussfolgern, dass aufgrund der eindeutigen Befundlage keinerlei weitere Forschung mehr nötig sei und insbesondere Nicht-KVT-Verfahren bereits abschließend und umfassend hochwertig belegt seien.",
+        "Dass künftig nur noch unsystematische Einzelfallstudien durchgeführt werden sollten.",
+        "Dass Effektstärken für die Bewertung völlig irrelevant sind.",
+        "Vergleiche zeigen keine oder leicht pro-KVT-Unterschiede; es braucht mehr hochwertige Forschung (v. a. für Nicht-KVT) und Kosten-Effektivität."
+      ],
+      "c": 3,
+      "e": "Implikationen: Vergleiche zeigen keine Unterschiede oder leichten KVT-Vorteil; viele low-quality Studien → größere/längere Studien + Kosten-Effektivität nötig; auch kleine Unterschiede (d = 0,2) werden bei vielen Behandelten bedeutsam."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was unterscheidet Prozess- von Outcome-Forschung?",
+    "opts": [
+      "Prozessforschung fragt, WIE Therapie wirkt; Outcome-Forschung fragt nach dem Ergebnis.",
+      "Prozessforschung und Outcome-Forschung sind exakt dasselbe und untersuchen beide ausschließlich die Kosten-Nutzen-Relation einer abgeschlossenen Behandlung über lange Katamnesezeiträume.",
+      "Prozessforschung untersucht ausschließlich Medikamente.",
+      "Outcome-Forschung gibt es heute nicht mehr."
+    ],
+    "c": 0,
+    "e": "Prozessforschung: WIE wirkt Therapie (Ereignisse in Sitzungen). Outcome-Forschung: Ergebnis/Erfolg. Beide liefen historisch parallel."
+  },
+  {
+    "id": "bq2",
+    "q": "Was ist „absolute Wirksamkeit“?",
+    "opts": [
+      "Absolute Wirksamkeit bezeichnet den direkten Vergleich zweier konkurrierender Psychotherapieverfahren innerhalb derselben randomisierten Studie zur Klärung, welches Verfahren überlegen ist.",
+      "Ob Psychotherapie besser wirkt als keine Behandlung (Vergleich mit einer Kontrollgruppe).",
+      "Die Wirksamkeit ausschließlich bei Wartelisten-Patient*innen.",
+      "Die maximale theoretisch mögliche Effektstärke."
+    ],
+    "c": 1,
+    "e": "Absolute Wirksamkeit = gegen „nichts“/Kontrollgruppe (wirkt PT überhaupt?). Relative Wirksamkeit = ein Verfahren vs. ein anderes."
+  },
+  {
+    "id": "bq3",
+    "q": "Worauf geht der Name „Dodo-Bird-Verdikt“ zurück?",
+    "opts": [
+      "Auf den Erstautor der ersten einschlägigen Meta-Analyse.",
+      "Auf eine ausgestorbene Vogelart, die als Studienobjekt diente.",
+      "Auf den Dodo aus „Alice im Wunderland“: „Alle haben gewonnen, und alle sollen Preise bekommen.“",
+      "Der Begriff geht auf eine groß angelegte tierexperimentelle Vergleichsstudie zurück, in der verschiedene Vogelarten unter standardisierten Bedingungen in einem Wettrennen gegeneinander antraten."
+    ],
+    "c": 2,
+    "e": "Dodo-Bird-Verdikt: Begriff aus „Alice im Wunderland“ — der Dodo erklärt nach dem Rennen „alle haben gewonnen“. Steht für: alle (bona-fide) Verfahren wirken gleich."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Aussage zum Dodo-Bird-Verdikt ist korrekt?",
+    "opts": [
+      "Das Dodo-Bird-Verdikt bedeutet, dass nachweislich jede beliebige Therapie für jede einzelne psychische Störung exakt gleich wirksam ist und störungsspezifische Unterschiede damit vollständig ausgeschlossen werden können.",
+      "Es belegt die generelle Überlegenheit der Psychoanalyse.",
+      "Es besagt, dass Psychotherapie unwirksam ist.",
+      "Es ist ein störungsübergreifender Befund; störungsspezifische Unterschiede sind möglich."
+    ],
+    "c": 3,
+    "e": "Dodo-Bird ist ein störungsÜBERGREIFENDER (aggregierter) Befund. Er schließt störungsSPEZIFISCHE Unterschiede NICHT aus — diese können im Mittel verdeckt sein."
+  },
+  {
+    "id": "bq5",
+    "q": "Was kennzeichnet eine unsystematische Literaturzusammenfassung?",
+    "opts": [
+      "Keine systematische Studienauswahl, keine objektiven Ein-/Ausschlusskriterien, keine Inferenzstatistik.",
+      "Eine unsystematische Literaturzusammenfassung zeichnet sich gerade dadurch aus, dass sie streng vordefinierte, reproduzierbare Suchstrategien und reliable Regeln zur Datenextraktion sowie inferenzstatistische Auswertungen konsequent anwendet.",
+      "Die durchgängige Verwendung einer Meta-Regression.",
+      "Die verpflichtende Vorregistrierung des Studienprotokolls."
+    ],
+    "c": 0,
+    "e": "Unsystematische Zusammenfassung: subjektive Studienauswahl, keine objektiven Kriterien, „Auszählen“ positiver Ergebnisse, persönliche Schlussfolgerung — daher widersprüchliche Schlüsse trotz gleicher Evidenz."
+  },
+  {
+    "id": "bq6",
+    "q": "Warum sind direkte Wirksamkeitsvergleiche den indirekten überlegen?",
+    "opts": [
+      "Direkte Vergleiche sind ausschließlich deshalb überlegen, weil sie grundsätzlich mit weitaus größeren Stichproben arbeiten und immer eine längere Katamnese sowie eine vollständige Verblindung aller Beteiligten garantieren.",
+      "Beide Therapien werden in derselben Studie unter identischen Bedingungen getestet.",
+      "Weil sie ganz ohne Kontrollgruppe auskommen.",
+      "Weil sie keinerlei Effektstärken benötigen."
+    ],
+    "c": 1,
+    "e": "Direkter Vergleich: beide Therapien in EINER Studie, identische Bedingungen → methodisch überlegen. Indirekt: Umweg über je eigene Kontrollgruppen (oft nicht identisch) → kaum eindeutig."
+  },
+  {
+    "id": "bq7",
+    "q": "Effektstärken gegen welche Kontrollbedingung fallen am höchsten aus?",
+    "opts": [
+      "Gegen eine „Care as usual“-Bedingung.",
+      "Gegen eine aktive Vergleichstherapie.",
+      "Gegen eine Warteliste (WL).",
+      "Die Effektstärken fallen am höchsten aus, wenn die Psychotherapie direkt gegen ein anderes, ebenfalls als wirksam geltendes bona-fide Psychotherapieverfahren in einem Head-to-Head-Design getestet wird."
+    ],
+    "c": 2,
+    "e": "Gegen Warteliste (keine aktive Behandlung) sind Effektstärken am höchsten (~0,71–0,75); gegen Care as usual deutlich niedriger (~0,31–0,46). Wahl der Kontrollgruppe = Überschätzungsquelle."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Faktoren führen zur Überschätzung der Psychotherapie-Wirksamkeit?",
+    "opts": [
+      "Eine systematische Unterschätzung entsteht ausschließlich dadurch, dass moderne Studien durch ihre besonders hohe methodische Qualität und große Stichproben echte Effekte konsequent verschwinden lassen.",
+      "Eine besonders strenge Randomisierung der Teilnehmenden.",
+      "Die ausschließliche Verwendung aktiver Kontrollgruppen.",
+      "Allegiance-Effekte, Risk of Bias (schlechte methodische Qualität) und die Wahl der Kontrollgruppe (Warteliste)."
+    ],
+    "c": 3,
+    "e": "Überschätzungsquellen: Allegiance-Effekte, Risk of Bias (z. B. ältere Studien geringer Qualität) und die Wahl der Kontrollgruppe (Warteliste statt Care as usual)."
+  }
+];
+
+var corrCorrect = {
+  "c3a": "small",
+  "c3b": "medium",
+  "c3c": "large",
+  "c5a": "direkt",
+  "c5b": "indirekt",
+  "c5c": "direkt"
+};
+var corrExpl = {
+  "c3a": "Cohen's d = 0,1 → kleiner Effekt (small); nur ~54 % der Behandelten über dem Mittelwert der Unbehandelten, NNT ~18.",
+  "c3b": "Cohen's d = 0,5 → mittlerer Effekt (medium); ~69 % über dem Mittelwert, NNT ~4.",
+  "c3c": "Cohen's d = 0,8 → großer Effekt (large); ~79 % über dem Mittelwert, NNT ~3.",
+  "c5a": "Zwei Therapien in derselben Studie gegeneinander getestet = direkter Vergleich (methodisch überlegen).",
+  "c5b": "Effektstärken zweier Therapien gegen je eigene Kontrollgruppe verglichen = indirekter Vergleich (kaum eindeutig).",
+  "c5c": "Der methodisch überlegene, bevorzugte Vergleichstyp ist der direkte Vergleich."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Effektstärken-Simulator (Sektion ④): Effektstärke je nach Kontrollbedingung */
+var ksData = {
+  wl: {e:'≈ 0,71–0,75 (groß)', d:'Warteliste: Kontrollgruppe erhält gar keine aktive Behandlung → großer Kontrast → höhere Effektstärke (Überschätzung möglich)'},
+  cau:{e:'≈ 0,31–0,46 (moderat)', d:'Care as usual: aktive Vergleichsbedingung → kleinerer Kontrast → konservativere, realistischere Effektstärke'}
+};
+function ksSet(k){
+  ['wl','cau'].forEach(function(x){ var b=document.getElementById('ks-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('ks-out'); if(!o) return;
+  var d=ksData[k];
+  o.innerHTML='<strong>Typische Effektstärke (Cohen’s d):</strong> '+d.e+'<br>'+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  ksSet('wl');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

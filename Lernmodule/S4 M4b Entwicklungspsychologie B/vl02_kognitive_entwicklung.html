@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL02 Kognitive Entwicklung & Theorien kognitiven Alterns</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl02
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* bespoke Simulator (Sektion ①): Mechanik vs. Pragmatik */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+.sim-curve{font-size:1.4rem;letter-spacing:2px;margin:6px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL02 Kognitive Entwicklung & Theorien kognitiven Alterns</h1>
+<p class="page-sub">Entwicklungspsychologie B (Erwachsenenalter und Alter) · Prof. Dr. Kerstin Jost · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Duales Prozessmodell: Mechanik vs. Pragmatik (Baltes) · 2. Gedächtnissysteme (Squire) & was im Alter abbaut/stabil bleibt · 3. Inhibitionsdefizit-Theorie (Hasher & Zacks): 3 Funktionen · 4. Arbeitsgedächtniskapazität vs. Filtereffizienz · 5. Geschwindigkeitshypothese (Salthouse): 2 Mechanismen · 6. Sensorische Leistungsfähigkeit & Intelligenz (Lindenberger/Baltes) · 7. Ressourcen-Zuordnung, Common-Cause, Nichtgebrauch, Terminal Decline · 8. Moderatorvariablen & kompensatorische Reserven
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Mechanik & Pragmatik</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Gedächtnis im Alter</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Inhibitionsdefizit</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ AG-Kapazität & Filter</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Processing Speed</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Sensorik</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Weitere Modelle</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Moderatoren & Reserven</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Mechanik & Pragmatik ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Kognition im Alter: Duales Prozessmodell (Baltes, 1987)</div>
+    <div class="sec-lz">Mechanik (biologisch/fluid: Tempo, Genauigkeit, Koordination, räumliches Vorstellen, Merkfähigkeit) baut früh ab; Pragmatik (kulturell/kristallin: Wissensbestände, Wortschatz, Allgemeinbildung) bleibt stabil bis ~75 J. Cattell (1943): fluide vs. kristalline Intelligenz. Multidirektionalität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine 70-Jährige hat einen riesigen Wortschatz und reiches Allgemeinwissen, braucht aber spürbar länger, um sich neue Telefonnummern zu merken oder schnell zu reagieren. Wie lässt sich dieses Muster mit <em>einem</em> Modell erklären?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Das <strong>Duale Prozessmodell (Baltes, 1987)</strong> trennt zwei Verläufe: Die <strong>Pragmatik</strong> (kristallin — Wortschatz, Allgemeinwissen) bleibt stabil oder nimmt zu, während die <strong>Mechanik</strong> (fluid — Tempo, Merkfähigkeit) früh abbaut. Beides zusammen erklärt das scheinbar widersprüchliche Profil.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Duales Prozessmodell (Baltes, 1987)</div>
+    Zwei Komponenten der Intelligenz mit unterschiedlichem Lebensspannenverlauf. Grundlage: Cattell (1943) unterschied <strong>fluide</strong> und <strong>kristalline</strong> Intelligenz; Baltes übertrug das auf <strong>Mechanik</strong> und <strong>Pragmatik</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Mechanik (fluide Intelligenz)</div>
+    Biologisch bestimmt: Schnelligkeit, Genauigkeit, Koordination elementarer Prozesse, räumliches Vorstellungsvermögen, Wahrnehmungsgeschwindigkeit, Merkfähigkeit. Zeigt bereits <strong>ab Mitte des dritten Lebensjahrzehnts</strong> erste Einbußen → früher Abbau.
+  </div>
+  <div class="card">
+    <div class="card-title">Pragmatik (kristalline Intelligenz)</div>
+    Kulturell geprägte Wissensbestände: Wortschatz, Allgemeinbildung, Erfahrungswissen. Bleibt <strong>bis ca. 75 Jahre stabil</strong> oder nimmt sogar zu; deutlicher Abbau erst ab ~80 J. (biologisch–kulturelle Interaktion).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Nicht vertauschen: <strong>Mechanik = fluid = alterungsanfällig</strong> (Tempo), <strong>Pragmatik = kristallin = stabil</strong> (Wissen). Multidirektionalität: verschiedene Funktionen verlaufen unterschiedlich.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🎛 Simulator: Mechanik oder Pragmatik?</div>
+    <div style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle eine kognitive Fähigkeit — der Simulator ordnet sie zu und zeigt den typischen Verlauf über die Lebensspanne.</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="mp-wort" onclick="mpSet('wort')">Wortschatz</button>
+        <button class="sim-tbtn" id="mp-wissen" onclick="mpSet('wissen')">Allgemeinwissen</button>
+        <button class="sim-tbtn" id="mp-speed" onclick="mpSet('speed')">Verarbeitungstempo</button>
+        <button class="sim-tbtn" id="mp-raum" onclick="mpSet('raum')">Räuml. Vorstellen</button>
+        <button class="sim-tbtn" id="mp-merk" onclick="mpSet('merk')">Merkfähigkeit (AG)</button>
+        <button class="sim-tbtn" id="mp-erf" onclick="mpSet('erf')">Erfahrungswissen</button>
+      </div>
+      <div class="sim-verdict" id="mp-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Gedächtnis im Alter ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Gedächtnissysteme (Squire) & Veränderungsprofil</div>
+    <div class="sec-lz">Taxonomie: Langzeitgedächtnis (deklarativ = episodisch + semantisch; non-deklarativ = prozedural + Priming) + Arbeitsgedächtnis. Kaum Abbau: prozedural, semantisch. Abbau: Arbeitsgedächtnis, episodisch, Quellen-, räumliches, prospektives Gedächtnis (Huppert et al. 2000).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Im Alter lässt einfach das Gedächtnis nach.“ — Stimmt das so pauschal? Welche Gedächtnisform bleibt im Alter weitgehend erhalten, welche nicht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Nein — es gibt <strong>kein</strong> einheitliches „Gedächtnis“. <strong>Multidirektionalität:</strong> Prozedurales und semantisches Gedächtnis bleiben weitgehend stabil, während Arbeitsgedächtnis, episodisches, Quellen-, räumliches und prospektives Gedächtnis nachlassen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gedächtnissysteme (Taxonomie nach Squire)</div>
+    <strong>Langzeitgedächtnis</strong> teilt sich in <strong>deklarativ (explizit)</strong> = episodisch + semantisch und <strong>non-deklarativ (implizit)</strong> = prozedural + Priming/perzeptuelles Lernen. Daneben steht das <strong>Arbeitsgedächtnis</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Episodisch vs. semantisch</div>
+    <strong>Episodisch:</strong> autobiografische Erinnerungen, an Zeit/Raum gebunden, oft in einer Situation erworben. <strong>Semantisch:</strong> Welt-/Faktenwissen, kontextunabhängig, durch mehrfaches Wiederholen gestärkt.
+  </div>
+  <div class="card">
+    <div class="card-title">Prospektives Gedächtnis (Huppert et al., 2000)</div>
+    Sich selbstständig an Zukünftiges erinnern (z.B. Medikamente einnehmen) — häufigstes Alltags-Gedächtnisproblem, ressourcenintensiv. Studie: 11.956 Personen >65 J., nur ~die Hälfte erfolgreich, linearer Abfall, Zusammenhang zu Demenz.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <strong>Multidirektionalität</strong> ≠ allgemeiner Abbau: prozedural & semantisch bleiben stabil, episodisch & Arbeitsgedächtnis bauen ab. Episodisches ist NICHT besonders stabil (häufiger Irrtum).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: bleibt im Alter stabil oder verschlechtert sich?</div>
+    <div class="corr-item" id="w1a">Prozedurales Gedächtnis (Fertigkeiten, Gewohnheiten)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1a',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1a',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1a-fb"></div>
+    </div>
+    <div class="corr-item" id="w1b">Semantisches Gedächtnis (Welt-/Faktenwissen)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1b',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1b',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1b-fb"></div>
+    </div>
+    <div class="corr-item" id="w1c">Arbeitsgedächtnis
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1c',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1c',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1c-fb"></div>
+    </div>
+    <div class="corr-item" id="w1d">Episodisches Gedächtnis (Erinnerungen in Zeit/Raum)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1d',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1d',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1d-fb"></div>
+    </div>
+    <div class="corr-item" id="w1e">Prospektives Gedächtnis (an Zukünftiges denken)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1e',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1e',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1e-fb"></div>
+    </div>
+    <div class="corr-item" id="w1f">Quellengedächtnis (woher stammt die Information?)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w1f',this,'stabil')">Bleibt stabil</button>
+        <button class="corr-btn" onclick="checkCorr('w1f',this,'abbau')">Verschlechtert sich</button>
+      </div><div class="corr-fb" id="w1f-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Inhibitionsdefizit ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Inhibitionsdefizit-Theorie (Hasher & Zacks, 1988)</div>
+    <div class="sec-lz">Inhibition reguliert Information im AG. 3 Funktionen: Zugang (access), Löschen (deletion), Unterdrückung (restraint). Im Alter alle 3 beeinträchtigt → AG mit Irrelevantem gefüllt. Neurobiologie: Frontalkortex, Dopamin. Empirie: Stroop, Interferenz; Gazzaley et al. 2005 (Suppression defizitär).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum lassen sich ältere Erwachsene beim Lesen stärker von eingestreuten, als irrelevant markierten Wörtern ablenken als jüngere? Was genau funktioniert da nicht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Die <strong>Inhibition</strong> (Hemmung irrelevanter Information) lässt nach. Nach Hasher &amp; Zacks (1988) regulieren Inhibitionsprozesse das Arbeitsgedächtnis; sind sie beeinträchtigt, gelangt zu viel Irrelevantes hinein — die Distraktoren stören den Lesefluss.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Inhibitionsdefizit-Theorie (Hasher &amp; Zacks, 1988)</div>
+    Zentrale Annahme: <strong>Inhibitionsprozesse regulieren, welche Information ins Arbeitsgedächtnis gelangt und dort bleibt.</strong> Im höheren Alter sind alle drei Funktionen beeinträchtigt → das AG ist mit irrelevanter Information „verstopft“ → weniger Kapazität für Relevantes (Folgen für Sprache, Gedächtnis, Aufmerksamkeit).
+  </div>
+  <div class="card">
+    <div class="card-title">Neurobiologische Grundlage</div>
+    Strukturell: alterskorrelierte Veränderungen im <strong>Frontalkortex</strong> (v.a. dorsolateral präfrontal — AG & Kontrolle). Funktionell: Veränderungen im <strong>Dopaminsystem</strong> (Schlüsselrolle für selektive Aufmerksamkeit und Kontrolle).
+  </div>
+  <div class="card">
+    <div class="card-title">Empirie: Gazzaley et al. (2005)</div>
+    fMRT: Jüngere zeigen sowohl <strong>Enhancement</strong> (Verstärkung Relevantes) als auch <strong>Suppression</strong> (Unterdrückung Irrelevantes). Bei Älteren ist v.a. die <strong>Suppression</strong> defizitär — das Enhancement bleibt weitgehend intakt.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 3 Funktionen der Inhibition — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Zugangsfunktion (access):</strong> begrenzt den Zugang (irrelevanter) Information zum Arbeitsgedächtnis — der „Türsteher“.</div>
+    <div class="step-item"><strong>② Löschfunktion (deletion):</strong> löscht Information, die nicht länger relevant ist — räumt das AG auf.</div>
+    <div class="step-item"><strong>③ Unterdrückung (restraint):</strong> verhindert, dass Denken/Handeln durch dominante Informationen und Reaktionstendenzen bestimmt werden.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'inh')">Nächste Funktion ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ AG-Kapazität & Filter ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Arbeitsgedächtniskapazität & Filtereffizienz</div>
+    <div class="sec-lz">AG-Kapazität korreliert mit komplexen Aufgaben; Prädiktor für schulischen Erfolg (Cowan et al. 2005) & Intelligenz (Conway, Kane & Engle 2003). Unterschiede durch Speicherkapazität vs. Filtereffizienz (Vogel et al. 2005; Jost et al. 2011). Cluttered/enriched Memory: Nach- und Vorteile.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei ältere Personen unterscheiden sich stark in ihrer Arbeitsgedächtnisleistung. Liegt das daran, dass die eine „mehr speichern“ kann — oder gibt es eine andere Erklärung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Nicht nur die <strong>Speicherkapazität</strong> zählt, sondern die <strong>Filtereffizienz</strong>: Wer Irrelevantes besser ausfiltert, hält das AG frei für Relevantes (Vogel et al. 2005). Es geht also weniger um „wie viel passt rein“ als um „was kommt rein“.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">AG-Kapazität als Prädiktor</div>
+    Die Arbeitsgedächtniskapazität korreliert hoch mit Leistungen in komplexen kognitiven Aufgaben und ist ein guter Prädiktor für <strong>schulischen Erfolg</strong> (Cowan et al., 2005) und <strong>allgemeine Intelligenz</strong> (Conway, Kane &amp; Engle, 2003). AG-Funktionen nehmen mit dem Alter ab.
+  </div>
+  <div class="card">
+    <div class="card-title">Cluttered Memory (Amer, Wynn &amp; Hasher)</div>
+    Ältere bilden „cluttered“ / <strong>enriched</strong> Repräsentationen (mit Relevantem + Irrelevantem). <strong>Nachteil:</strong> stört den Abruf der Zielinformation. <strong>Vorteil:</strong> kann Kreativität fördern (breite Assoziationen, z.B. Remote Associates Task).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <strong>Speicherkapazität</strong> (Menge) ≠ <strong>Filtereffizienz</strong> (Selektionsqualität). Cluttered Memory ist nicht nur Defizit — die Anreicherung kann auch nützen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Speicherkapazität · Filtereffizienz · Cluttered Memory</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="kap" onclick="switchTab(this,'ag')">Speicherkapazität</button>
+      <button class="tab-btn" data-tab="filt" onclick="switchTab(this,'ag')">Filtereffizienz</button>
+      <button class="tab-btn" data-tab="clut" onclick="switchTab(this,'ag')">Cluttered Memory</button>
+    </div>
+    <div class="tab-group" data-group="ag">
+      <div class="tab-content active" data-tab="kap"><strong>Was:</strong> Anzahl gleichzeitig speicherbarer Items (K-Score). <strong>Frage:</strong> „Wie viel passt rein?“ Jüngere haben im Schnitt höhere Werte als Ältere.</div>
+      <div class="tab-content" data-tab="filt"><strong>Was:</strong> wie gut Irrelevantes ferngehalten wird. <strong>Frage:</strong> „Was kommt rein?“ Erklärt Leistungsunterschiede mit (Vogel et al. 2005; Jost et al. 2011; Schwarzkopf et al. 2016).</div>
+      <div class="tab-content" data-tab="clut"><strong>Was:</strong> reichhaltigere („verstopfte“) Repräsentationen im Alter. <strong>Doppelt:</strong> Nachteil beim gezielten Abruf, Vorteil bei kreativen, assoziativen Aufgaben.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Processing Speed ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Geschwindigkeitshypothese (Salthouse, 1996)</div>
+    <div class="sec-lz">Mit dem Alter sinkt die Verarbeitungsgeschwindigkeit → Einbußen in vielen Aufgaben. Zwei Mechanismen: begrenzte Zeit (limited time) und Gleichzeitigkeit (simultaneity). Sparsame, präzise Theorie.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Salthouse erklärt einen großen Teil des kognitiven Abbaus mit <em>einer einzigen</em> Variable. Welche — und warum gilt seine Theorie als besonders „sparsam“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Die <strong>Verarbeitungsgeschwindigkeit</strong> (processing speed). Sie sinkt mit dem Alter und zieht Einbußen in vielen Aufgaben nach sich. „Sparsam“, weil ein einzelner Mechanismus viel Varianz erklärt (Salthouse, 1996).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Geschwindigkeitshypothese (Salthouse, 1996)</div>
+    Zentrale Annahme: Mit dem Alter <strong>verringert sich die kognitive Verarbeitungsgeschwindigkeit</strong>, was Einbußen in der Performanz vieler kognitiver Aufgaben zur Folge hat. Eine <strong>präzise und sparsame</strong> Theorie (ein Mechanismus, viel erklärte Varianz).
+  </div>
+  <div class="card">
+    <div class="card-title">Messung</div>
+    Erfasst z.B. über Tempo-Aufgaben (Ziffern-Symbol-Test, Zahlen-Verbindungs-Tests / Trail Making). Geschwindigkeit gilt als Kern der <strong>Mechanik</strong> (fluide Intelligenz).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Salthouse erklärt den Abbau über das <strong>Tempo</strong>, NICHT über die drei Inhibitionsfunktionen (das ist Hasher &amp; Zacks). Beide sind verschiedene Erklärungsmodelle.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 2 Mechanismen — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Mechanismus der begrenzten Zeit (limited time):</strong> relevante Operationen werden zu langsam ausgeführt, um in der verfügbaren Zeit erfolgreich abgeschlossen zu werden.</div>
+    <div class="step-item"><strong>② Mechanismus der Gleichzeitigkeit (simultaneity):</strong> Informationsverlust — langsame Verarbeitung reduziert die Menge der für komplexe Prozesse <em>gleichzeitig</em> verfügbaren Information.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'speed')">Nächster Mechanismus ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Sensorik ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Sensorische Leistungsfähigkeit & Intelligenz</div>
+    <div class="sec-lz">3 Erklärungen: sensorische Deprivation, Kompensation durch Kognition, schlechtere Testwahrnehmung. Lindenberger & Baltes (1997): Kontrolle für Sehen/Hören erklärt ~95% des Altersunterschieds in Intelligenz. Lindenberger et al. (2001): künstliche Einschränkung bei Jüngeren senkt Intelligenz NICHT.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kontrolliert man statistisch für Seh- und Hörleistung, schrumpft der Zusammenhang zwischen Alter und Intelligenz dramatisch. Heißt das, dass schlechtes Sehen/Hören die Intelligenz „erzeugt“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Nicht zwingend kausal in eine Richtung. Lindenberger &amp; Baltes (1997): Kontrolle für Sehen/Hören erklärt ~<strong>95%</strong> des Altersunterschieds in Intelligenz. Aber Lindenberger et al. (2001): künstliche Seh-/Höreinschränkung bei <strong>Jüngeren</strong> senkte die Intelligenzleistung <strong>NICHT</strong> → kein bloßer Wahrnehmungseffekt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sensorik &amp; Intelligenz im Alter</div>
+    Bei Älteren hängen sensorische Fähigkeiten <strong>stärker</strong> mit der Intelligenz zusammen als bei Jüngeren. Varianzaufklärung: ~<strong>11%</strong> bei 25–60-Jährigen, ~<strong>31%</strong> bei 70–103-Jährigen (Baltes &amp; Lindenberger, 1997).
+  </div>
+  <div class="card">
+    <div class="card-title">Schlüsselbefund (Lindenberger et al., 2001)</div>
+    Beruht der Effekt nur auf Problemen beim Wahrnehmen der Aufgaben? <strong>Nein:</strong> experimentelle Einschränkung von Sehen/Hören bei jungen Erwachsenen reduzierte die Intelligenztestleistung nicht → der Zusammenhang ist kein reines Mess-/Wahrnehmungsartefakt.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Statistischer Zusammenhang (≈95% aufgeklärt) ≠ einfache Kausalität „schlecht Sehen → dumm“. Der Befund passt eher zu einer <strong>gemeinsamen Ursache</strong> (Common-Cause, s. ⑦).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 3 Erklärungen — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Sensorische Deprivation:</strong> sensorische Einschränkungen halten von kognitiv stimulierenden Interaktionen mit der Umwelt ab.</div>
+    <div class="step-item"><strong>② Kompensation:</strong> bei sensorischen Leistungen steigen die kognitiven Anforderungen — kognitive Ressourcen müssen die sensorischen Defizite ausgleichen.</div>
+    <div class="step-item"><strong>③ Schlechtere Testleistung:</strong> Aufgaben werden wegen schlechtem Sehen/Hören nicht richtig wahrgenommen (→ von Lindenberger et al. 2001 als alleinige Ursache widerlegt).</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'sens')">Nächste Erklärung ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Weitere Modelle ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Ressourcen-Zuordnung, Common-Cause, Disuse & Terminal Decline</div>
+    <div class="sec-lz">Ressourcen-Zuordnung (Lindenberger et al. 2000: duale Aufgabe → Ältere reduzieren Merkleistung überproportional). Common-Cause (genereller Hirnabbau, −2%/Dekade). Nichtgebrauch/Disuse (Lövdén et al. 2005). Terminal Decline (Small 2003; Wilson 2003/2007: ~42–43 Monate vor dem Tod, Alzheimer-Allel).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Neben Inhibition, Tempo und Sensorik gibt es weitere Erklärungsmodelle des Abbaus. Welches erklärt, warum Ältere beim gleichzeitigen Gehen + Merken besonders stark in der Merkleistung einbrechen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Die <strong>veränderte Zuordnung von Ressourcen</strong>: im Alter werden mehr Ressourcen für nichtkognitive Anforderungen (z.B. das Gehen/die Balance) gebunden, die dann für die kognitive Aufgabe fehlen (Lindenberger et al. 2000).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ressourcen-Zuordnung</div>
+    Im Alter fehlen Ressourcen, die für nichtkognitive Anforderungen aufgewendet werden. <strong>Lindenberger et al. (2000):</strong> Laufen (schwieriger Parcours) + Merkaufgabe → Ältere reduzieren die Merkleistung überproportional. <strong>Kemper et al. (2003):</strong> Reden + Laufen → Ältere reduzieren die Redegeschwindigkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Common-Cause-Hypothese</div>
+    Eine <strong>gemeinsame Ursache</strong> für kognitive UND sensorische Veränderungen → generelle Abbauprozesse des Gehirns. Belege: Hirnvolumen nimmt ~<strong>2% pro Dekade</strong> ab (stärker frontal); Abnahme dendritischer Verzweigungen/synaptischer Verbindungen.
+  </div>
+  <div class="card">
+    <div class="card-title">Nichtgebrauch (Disuse) &amp; Terminal Decline</div>
+    <strong>Disuse („use it or lose it“):</strong> Lövdén et al. (2005) — Aktivität zu T<sub>i</sub> sagt späteren Abbau der Wahrnehmungsgeschwindigkeit vorher, nicht umgekehrt. <strong>Terminal Decline:</strong> beschleunigtes Absinken in den Jahren vor dem Tod (~42–43 Monate; Small 2003, Wilson 2003/2007; Zusammenhang mit Alzheimer-Allel).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Welches Erklärungsmodell?</div>
+    <div class="corr-item" id="w6a">Ältere brechen beim gleichzeitigen Laufen überproportional in der Merkleistung ein.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w6a',this,'ressourcen')">Ressourcen-Zuordnung</button>
+        <button class="corr-btn" onclick="checkCorr('w6a',this,'common')">Common-Cause</button>
+        <button class="corr-btn" onclick="checkCorr('w6a',this,'disuse')">Nichtgebrauch</button>
+        <button class="corr-btn" onclick="checkCorr('w6a',this,'terminal')">Terminal Decline</button>
+      </div><div class="corr-fb" id="w6a-fb"></div>
+    </div>
+    <div class="corr-item" id="w6b">Kognitiver und sensorischer Abbau gehen auf generelle Abbauprozesse des Gehirns zurück (Volumen −2%/Dekade).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w6b',this,'ressourcen')">Ressourcen-Zuordnung</button>
+        <button class="corr-btn" onclick="checkCorr('w6b',this,'common')">Common-Cause</button>
+        <button class="corr-btn" onclick="checkCorr('w6b',this,'disuse')">Nichtgebrauch</button>
+        <button class="corr-btn" onclick="checkCorr('w6b',this,'terminal')">Terminal Decline</button>
+      </div><div class="corr-fb" id="w6b-fb"></div>
+    </div>
+    <div class="corr-item" id="w6c">Frühere Aktivität sagt den späteren Abbau der Wahrnehmungsgeschwindigkeit vorher — nicht umgekehrt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w6c',this,'ressourcen')">Ressourcen-Zuordnung</button>
+        <button class="corr-btn" onclick="checkCorr('w6c',this,'common')">Common-Cause</button>
+        <button class="corr-btn" onclick="checkCorr('w6c',this,'disuse')">Nichtgebrauch</button>
+        <button class="corr-btn" onclick="checkCorr('w6c',this,'terminal')">Terminal Decline</button>
+      </div><div class="corr-fb" id="w6c-fb"></div>
+    </div>
+    <div class="corr-item" id="w6d">Beschleunigter Abbau der Intelligenz in den letzten Jahren vor dem Tod.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('w6d',this,'ressourcen')">Ressourcen-Zuordnung</button>
+        <button class="corr-btn" onclick="checkCorr('w6d',this,'common')">Common-Cause</button>
+        <button class="corr-btn" onclick="checkCorr('w6d',this,'disuse')">Nichtgebrauch</button>
+        <button class="corr-btn" onclick="checkCorr('w6d',this,'terminal')">Terminal Decline</button>
+      </div><div class="corr-fb" id="w6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Moderatoren & Reserven ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Moderatorvariablen & kompensatorische Reserven</div>
+    <div class="sec-lz">Moderatoren: Genetik (Alzheimer-Allel), Bildung/Beruf, Gesundheit, soziale Anregung (Gruber & Schaie 1986), flexibler Persönlichkeitsstil. Reserven (fördernd): Lebensstil („use it or lose it“), Bildung, Arbeitsumfeld, Training, Orchestrierung der Ressourcen (Lang et al. 2011).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Menschen sind gleich alt, ihre kognitive Entwicklung verläuft aber sehr unterschiedlich. Welche Faktoren moderieren das — und was lässt sich aktiv dagegen tun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Moderatoren</strong> (Genetik, Bildung/Beruf, Gesundheit, soziale Anregung, Persönlichkeit) bestimmen das Ausmaß des Abbaus. <strong>Kompensatorische Reserven</strong> (Lebensstil, Bildung, Training, Orchestrierung der Ressourcen) lassen sich aktiv nutzen — „use it or lose it“.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Moderatorvariablen</div>
+    Bestimmen das <strong>Ausmaß</strong> kognitiver Veränderungen: <strong>genetische Faktoren</strong> (Allel mit erhöhtem Risiko für beschleunigten Abbau/Alzheimer), <strong>Bildung/Beruf</strong> (positiv korreliert), <strong>Gesundheit</strong> (Demenzen, Stoffwechsel, Herz-Kreislauf beschleunigen den Abbau), <strong>soziale Anregung</strong> (z.B. verheiratet sein; Gruber &amp; Schaie 1986), <strong>flexibler Persönlichkeitsstil</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Kompensatorische Reserven</div>
+    Mittleres Erwachsenenalter: hohe Stabilität, aber große <strong>Heterogenität</strong>. Umweltanforderungen/Arbeitsumgebungen beeinflussen den Verlauf. Fördernd sind Lebensstil, Bildung, Arbeitsumfeld, Training und die Orchestrierung verschiedener Ressourcen.
+  </div>
+  <div class="card">
+    <div class="card-title">Orchestrierung (Lang et al., 2011)</div>
+    Idee: <strong>kontextadäquate aktive Nutzung</strong> der Ressourcen durch Interventionen (Ressourcen-Regulation). Person × Kontext (Ressourcen, Prozesse, Plastizität) → übergeordnetes Ziel: <strong>Lebensqualität</strong>. Bildung sagt v.a. Veränderungen der kristallinen Intelligenz/des Gedächtnisses vorher, weniger der fluiden/Geschwindigkeit.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Fördernde Einflüsse — Schritt für Schritt</div>
+    <div class="step-item"><strong>① Lebensstil:</strong> „use it or lose it“ — kognitiv anspruchsvolle Alltags-/Freizeitaktivitäten puffern den Abbau (Pufferfunktion).</div>
+    <div class="step-item"><strong>② Bildung:</strong> beeinflusst lebenslang die kognitive Entwicklung; guter Prädiktor für kristalline Intelligenz und Gedächtnis.</div>
+    <div class="step-item"><strong>③ Arbeitsumfeld:</strong> ein anregungsarmes Umfeld führt zur Verkümmerung intellektueller Fähigkeiten (erste Längsschnittbefunde).</div>
+    <div class="step-item"><strong>④ Training:</strong> wirkt Abbau/mangelnder Übung entgegen; Personen mit größeren Defiziten profitieren evtl. mehr — Frage: Transfer?</div>
+    <div class="step-item"><strong>⑤ Orchestrierung:</strong> aktives, kontextadäquates Zusammenspiel aller Ressourcen für individuelle Ziele (Lang et al. 2011).</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'res')">Nächster Einfluss ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL02 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Mechanik (fluide Intelligenz)</h4>
+      <p>Biologisch bestimmt</p>
+      <p>Tempo, Genauigkeit, Koordination, räuml. Vorstellen</p>
+      <p>Frühes Maximum, dann Abbau</p>
+      <p>Alterungsanfällig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Pragmatik (kristalline Intelligenz)</h4>
+      <p>Kulturell geprägt</p>
+      <p>Wissensbestände, Wortschatz, Allgemeinbildung</p>
+      <p>Stabil bis ~75 J., Abbau erst ab ~80 J.</p>
+      <p>Erfahrungswissen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Mechanik bleibt als kristallines Erfahrungswissen bis ins höchste Alter stabil, während die Pragmatik früh abbaut.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Inhibitionsdefizit-Theorie (Hasher & Zacks)</h4>
+      <p>Defizit der Inhibition (access/deletion/restraint)</p>
+      <p>AG mit irrelevanter Info gefüllt</p>
+      <p>Vorhersage: Interferenzparadigmen (Stroop, Distraktoren)</p>
+      <p>Filtereffizienz im Fokus</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Geschwindigkeitshypothese (Salthouse)</h4>
+      <p>Verlangsamte Verarbeitung</p>
+      <p>2 Mechanismen: begrenzte Zeit & Gleichzeitigkeit</p>
+      <p>Sehr sparsame, präzise Theorie</p>
+      <p>Tempo im Fokus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Geschwindigkeitshypothese erklärt den Abbau über ein Defizit der drei Inhibitionsfunktionen access, deletion und restraint.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Speicherkapazität</h4>
+      <p>Anzahl gleichzeitig speicherbarer Items</p>
+      <p>Reine Menge („wie viel passt rein?“)</p>
+      <p>K-Score als Maß</p>
+      <p>Kapazitätsorientiert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Filtereffizienz</h4>
+      <p>Wie gut Irrelevantes ferngehalten wird</p>
+      <p>Qualität der Selektion („was kommt rein?“)</p>
+      <p>Vogel et al. 2005; Jost et al. 2011</p>
+      <p>Kontroll-/Inhibitionsorientiert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Filtereffizienz bezeichnet schlicht die Anzahl der Items, die gleichzeitig im Arbeitsgedächtnis gespeichert werden können.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Common-Cause-Hypothese</h4>
+      <p>Gemeinsame Ursache</p>
+      <p>Genereller Hirnabbau (Volumen −2%/Dekade)</p>
+      <p>Erklärt kognitive UND sensorische Veränderung</p>
+      <p>Strukturell/biologisch</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Nichtgebrauch (Disuse)</h4>
+      <p>„use it or lose it“</p>
+      <p>Nichtgebrauch verursacht Abbau</p>
+      <p>Lövdén et al. 2005 (Aktivität → späterer Speed)</p>
+      <p>Aktivitäts-/erfahrungsbezogen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Common-Cause-Hypothese führt den kognitiven Abbau auf mangelnde geistige Aktivität (Nichtgebrauch) zurück.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Deklaratives Gedächtnis (explizit)</h4>
+      <p>Bewusst, sprachlich berichtbar</p>
+      <p>Episodisch + semantisch</p>
+      <p>Episodisch: Abbau im Alter</p>
+      <p>Semantisch: bleibt stabil</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Non-deklaratives Gedächtnis (implizit)</h4>
+      <p>Unbewusst, nicht berichtbar</p>
+      <p>Prozedural + Priming</p>
+      <p>Fertigkeiten/Gewohnheiten</p>
+      <p>Bleibt im Alter weitgehend erhalten</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das prozedurale Gedächtnis und das Priming gehören zum deklarativen, bewusst zugänglichen Gedächtnissystem.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl02</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl02';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was unterscheidet die kognitive Mechanik von der Pragmatik im Dualen Prozessmodell (Baltes, 1987)?",
+      "opts": [
+        "Die Mechanik umfasst biologisch bestimmte Basisprozesse (Tempo, Genauigkeit, Koordination), die Pragmatik kulturell geprägtes Wissen.",
+        "Die Mechanik bezeichnet das kulturell erworbene Erfahrungs- und Weltwissen, während die Pragmatik die rein biologisch determinierte Verarbeitungsgeschwindigkeit und Genauigkeit elementarer Prozesse meint.",
+        "Mechanik und Pragmatik sind nur zwei Begriffe für dieselbe fluide Intelligenz.",
+        "Die Pragmatik baut grundsätzlich früher ab als die Mechanik."
+      ],
+      "c": 0,
+      "e": "Mechanik = biologisch bestimmt (fluide): Schnelligkeit, Genauigkeit, Koordination, räumliches Vorstellen, Merkfähigkeit. Pragmatik = kulturell geprägt (kristallin): Wissensbestände, Wortschatz, Allgemeinbildung."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie verlaufen Mechanik und Pragmatik typischerweise über die Lebensspanne?",
+      "opts": [
+        "Beide steigen bis ins hohe Alter kontinuierlich an.",
+        "Die Mechanik erreicht früh ein Maximum und fällt dann ab; die Pragmatik bleibt lange stabil bzw. nimmt zu.",
+        "Beide fallen ab dem jungen Erwachsenenalter gleich steil ab.",
+        "Die Pragmatik erreicht bereits in der Kindheit ihr Maximum und sinkt danach kontinuierlich, während die Mechanik als kristallines Wissen bis ins höchste Lebensalter zuverlässig weiter zunimmt."
+      ],
+      "c": 1,
+      "e": "Mechanik (fluid): frühes Maximum, dann Abbau (ab Mitte 3. Lebensjahrzehnt nachweisbar). Pragmatik (kristallin): stabil bis ca. 75 J., Abbau erst ab ~80 J."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche Gedächtnissysteme zeigen im Alter KEINE bzw. kaum Verschlechterung?",
+      "opts": [
+        "Arbeitsgedächtnis und episodisches Gedächtnis.",
+        "Quellengedächtnis und prospektives Gedächtnis.",
+        "Prozedurales und semantisches Gedächtnis.",
+        "Ausschließlich das episodische Gedächtnis, da autobiografische Erinnerungen lebenslang besonders stabil im Langzeitgedächtnis verankert bleiben."
+      ],
+      "c": 2,
+      "e": "Kaum/keine Verschlechterung: prozedurales und semantisches Gedächtnis. Verschlechterung: Arbeitsgedächtnis, episodisches, Quellen-, räumliches und prospektives Gedächtnis (→ Multidirektionalität)."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was zeigte die Studie von Huppert et al. (2000) zum prospektiven Gedächtnis?",
+      "opts": [
+        "Das prospektive Gedächtnis verbessert sich mit zunehmendem Alter kontinuierlich, weil ältere Menschen über mehr Routinen und Erinnerungshilfen im Alltag verfügen als jüngere.",
+        "Alle Teilnehmenden über 65 lösten die Aufgaben erfolgreich.",
+        "Es bestand kein Zusammenhang zu Demenz.",
+        "Nur etwa die Hälfte der über 65-Jährigen löste die Aufgaben; die Leistung fiel linear mit dem Alter (Zusammenhang zu Demenz)."
+      ],
+      "c": 3,
+      "e": "Huppert et al. (2000): 11.956 Personen >65 J., Screening zum prospektiven Gedächtnis; nur ~die Hälfte erfolgreich, linearer Abfall mit dem Alter, Zusammenhang zu Demenz."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Welche drei Funktionen der Inhibition unterscheidet die Theorie von Hasher & Zacks (1988)?",
+      "opts": [
+        "Zugangsfunktion (access), Löschfunktion (deletion) und Unterdrückung (restraint).",
+        "Die Kodierung, die Konsolidierung und den Abruf von Informationen aus dem Langzeitgedächtnis über mehrere hierarchisch geordnete Speicherstufen hinweg.",
+        "Enkodierung, Rehearsal und Wiedergabe.",
+        "Wahrnehmung, Aufmerksamkeit und Sprache."
+      ],
+      "c": 0,
+      "e": "Drei Funktionen der Inhibition: Zugangsfunktion (begrenzt Zugang irrelevanter Info zum AG), Löschfunktion (löscht nicht mehr Relevantes), Unterdrückung (verhindert Dominanz starker Reaktionstendenzen)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie erklärt die Inhibitionsdefizit-Theorie den kognitiven Abbau im Alter?",
+      "opts": [
+        "Ältere haben ein größeres Arbeitsgedächtnis als Jüngere.",
+        "Die drei Inhibitionsprozesse sind beeinträchtigt → das Arbeitsgedächtnis ist mit irrelevanter Information gefüllt → weniger Kapazität für Relevantes.",
+        "Inhibition spielt im Alter keine Rolle mehr.",
+        "Ältere Erwachsene unterdrücken irrelevante Information sogar besser als Jüngere, wodurch ihr Arbeitsgedächtnis effizienter mit ausschließlich relevanten Inhalten gefüllt wird."
+      ],
+      "c": 1,
+      "e": "Im Alter sind alle drei Inhibitionsprozesse beeinträchtigt → AG ist mit irrelevanter/nicht mehr relevanter Information gefüllt → reduzierte Kapazität für relevante Information (Folgen für Sprache, Gedächtnis, Aufmerksamkeit)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wofür ist die Arbeitsgedächtniskapazität ein guter Prädiktor (Cowan et al. 2005; Conway, Kane & Engle 2003)?",
+      "opts": [
+        "Nur für die Körpergröße.",
+        "Für die sensorische Sehschärfe.",
+        "Für schulischen Erfolg und allgemeine Intelligenz.",
+        "Ausschließlich für das prozedurale Gedächtnis und motorische Fertigkeiten, nicht jedoch für schulische Leistungen oder die allgemeine Intelligenz."
+      ],
+      "c": 2,
+      "e": "AG-Kapazität korreliert hoch mit Leistungen in komplexen kognitiven Aufgaben und ist ein guter Prädiktor für schulischen Erfolg (Cowan et al., 2005) und allgemeine Intelligenz (Conway, Kane & Engle, 2003)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was meint „Filtereffizienz“ als Erklärung für Unterschiede in der Arbeitsgedächtnisleistung?",
+      "opts": [
+        "Die reine Anzahl gleichzeitig speicherbarer Items, also die schiere Kapazität des Speichers, unabhängig davon, welche Inhalte hineingelangen.",
+        "Die Geschwindigkeit motorischer Reaktionen.",
+        "Die Gesamtgröße des Langzeitgedächtnisses.",
+        "Wie gut irrelevante Information vom Arbeitsgedächtnis ferngehalten wird."
+      ],
+      "c": 3,
+      "e": "Filtereffizienz (Vogel et al. 2005; Jost et al. 2011; Schwarzkopf et al. 2016): nicht (nur) die Speicherkapazität, sondern wie effizient Irrelevantes ausgefiltert wird, erklärt Leistungsunterschiede."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was besagt die Geschwindigkeitshypothese (Salthouse, 1996)?",
+      "opts": [
+        "Mit dem Alter sinkt die Verarbeitungsgeschwindigkeit, was Einbußen in vielen kognitiven Aufgaben verursacht.",
+        "Mit dem Alter steigt die Verarbeitungsgeschwindigkeit kontinuierlich an, sodass ältere Erwachsene komplexe kognitive Aufgaben sogar schneller und fehlerfreier lösen als jüngere.",
+        "Die Geschwindigkeit hat keinen Einfluss auf kognitive Leistungen.",
+        "Nur das Gedächtnis, nicht die Geschwindigkeit, verändert sich im Alter."
+      ],
+      "c": 0,
+      "e": "Salthouse (1996): Mit dem Alter verringert sich die kognitive Verarbeitungsgeschwindigkeit → Einbußen in der Performanz vieler kognitiver Aufgaben. Eine präzise und sparsame Theorie."
+    },
+    {
+      "id": "s4q2",
+      "q": "Über welche zwei Mechanismen wirkt die verlangsamte Verarbeitung laut Salthouse?",
+      "opts": [
+        "Inhibition und Enkodierung.",
+        "Mechanismus der begrenzten Zeit und Mechanismus der Gleichzeitigkeit.",
+        "Sensorische Deprivation und Terminal Decline.",
+        "Über die genetisch bedingte Veränderung des Dopaminsystems sowie über die altersbedingte Schrumpfung des Hippocampus und des präfrontalen Kortex."
+      ],
+      "c": 1,
+      "e": "Begrenzte Zeit (limited time): Operationen sind zu langsam, um in verfügbarer Zeit fertig zu werden. Gleichzeitigkeit (simultaneity): langsame Verarbeitung reduziert die für komplexe Prozesse gleichzeitig verfügbare Information."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche drei Erklärungen für den Zusammenhang von Sensorik und Intelligenz im Alter werden genannt?",
+      "opts": [
+        "Nur genetische Faktoren.",
+        "Inhibition, Speed und Arbeitsgedächtnis.",
+        "Sensorische Deprivation, Kompensation durch Kognition und schlechtere Testwahrnehmung.",
+        "Allein die experimentell nachgewiesene Tatsache, dass eine künstliche Einschränkung des Sehens und Hörens bei jungen Erwachsenen deren Intelligenztestleistung massiv reduziert."
+      ],
+      "c": 2,
+      "e": "Drei Erklärungen: (a) sensorische Deprivation (weniger kognitiv stimulierende Interaktion), (b) Kompensation (kognitive Ressourcen nötig, um sensorische Defizite auszugleichen), (c) schlechtere Testleistung, weil Aufgaben sensorisch nicht richtig wahrgenommen werden."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was fand Lindenberger et al. (2001) bei experimenteller Einschränkung von Sehen/Hören bei Jüngeren?",
+      "opts": [
+        "Die Intelligenzleistung der jungen Erwachsenen brach unter der sensorischen Einschränkung vollständig ein, womit ein direkter Wahrnehmungseffekt auf die Testleistung belegt war.",
+        "Sehen/Hören und Intelligenz erwiesen sich als kausal direkt verknüpft.",
+        "Ältere schnitten unter Einschränkung besser ab als Jüngere.",
+        "Die Intelligenztestleistung wurde NICHT reduziert → der Sensorik-Effekt beruht nicht auf bloßer Wahrnehmung der Aufgaben."
+      ],
+      "c": 3,
+      "e": "Lindenberger et al. (2001): experimentelle Seh-/Höreinschränkung bei Jüngeren reduzierte die Intelligenzleistung NICHT → der Sensorik-Intelligenz-Zusammenhang beruht nicht auf bloßen Wahrnehmungsproblemen bei den Aufgaben."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was zeigte Lindenberger et al. (2000) zur Zuordnung von Ressourcen (duale Aufgabe Laufen + Merken)?",
+      "opts": [
+        "Ältere reduzierten überproportional die Leistung bei der Merkaufgabe.",
+        "Jüngere und ältere Teilnehmer reduzierten ihre Merkleistung beim gleichzeitigen Laufen in exakt gleichem Ausmaß, sodass das Alter keine Rolle für die Ressourcenverteilung spielte.",
+        "Ältere liefen deutlich schneller als Jüngere.",
+        "Die Merkleistung stieg beim gleichzeitigen Laufen sogar an."
+      ],
+      "c": 0,
+      "e": "Lindenberger et al. (2000): bei dualer Aufgabe (schwieriger Parcours + Merkaufgabe) reduzierten Ältere überproportional die Merkleistung — im Alter werden mehr Ressourcen für nichtkognitive Anforderungen gebunden."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was unterscheidet die Common-Cause- von der Nichtgebrauchs-(Disuse-)Hypothese?",
+      "opts": [
+        "Beide nehmen exakt dieselben Mechanismen an.",
+        "Common-Cause: eine gemeinsame Ursache (genereller Hirnabbau) für kognitive UND sensorische Veränderungen; Disuse: Nichtgebrauch führt zum Abbau.",
+        "Die Common-Cause-Hypothese betrifft nur das Gedächtnis, die Disuse-Hypothese nur die Wahrnehmung.",
+        "Die Common-Cause-Hypothese erklärt den Abbau durch fehlende geistige Aktivität, während die Nichtgebrauchs-Hypothese eine gemeinsame neuronale Ursache für sensorische und kognitive Verluste über generelle Abbauprozesse des Gehirns postuliert."
+      ],
+      "c": 1,
+      "e": "Common-Cause: gemeinsame Ursache (generelle Abbauprozesse des Gehirns) für kognitive UND sensorische Veränderungen. Nichtgebrauch (Disuse): „use it or lose it“ — Nichtgebrauch verursacht den Abbau (Lövdén et al. 2005)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Welche Variable wirkt als Moderator für das Ausmaß kognitiver Veränderungen im Alter?",
+      "opts": [
+        "Die Augenfarbe.",
+        "Die Körpergröße im Erwachsenenalter.",
+        "Bildungsstand und berufliche Komplexität.",
+        "Ausschließlich das chronologische Lebensalter selbst, da weder Bildung noch Gesundheit noch soziale Einbindung einen Einfluss auf den kognitiven Verlauf nehmen."
+      ],
+      "c": 2,
+      "e": "Moderatoren: genetische Faktoren (Alzheimer-Allel), Bildungsstand/Beruf (positiv korreliert), Gesundheitszustand, soziale Anregung (z.B. verheiratet sein; Gruber & Schaie 1986), flexibler Persönlichkeitsstil."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was meint die Orchestrierung kognitiver Ressourcen (Lang et al. 2011) bzw. der „use it or lose it“-Ansatz?",
+      "opts": [
+        "Kognitive Reserven sind genetisch vollständig festgelegt und lassen sich durch Lebensstil, Bildung oder gezieltes Training in keiner Weise beeinflussen.",
+        "Nur eine medikamentöse Behandlung kann den kognitiven Abbau aufhalten.",
+        "Geistiges Training schadet im Alter eher, als dass es nützt.",
+        "Kontextadäquate aktive Nutzung der verfügbaren Ressourcen (Lebensstil, Bildung, Training) puffert den kognitiven Abbau."
+      ],
+      "c": 3,
+      "e": "Kompensatorische Reserven: fördernd sind Lebensstil („use it or lose it“), Bildung, Arbeitsumfeld, Training und die Orchestrierung verschiedener Ressourcen (Lang et al. 2011: kontextadäquate aktive Nutzung → Ziel Lebensqualität)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zum Dualen Prozessmodell ist FALSCH?",
+    "opts": [
+      "Die Mechanik (fluide Intelligenz) bleibt bis ins höchste Alter stabil oder nimmt sogar zu.",
+      "Die Pragmatik umfasst kulturell geprägtes Wissen wie Wortschatz und Allgemeinbildung.",
+      "Die Mechanik umfasst Tempo und Genauigkeit elementarer Verarbeitungsprozesse.",
+      "Die Pragmatik bleibt über weite Teile des Erwachsenenalters stabil und kann sogar zunehmen, während die Mechanik vergleichsweise früh abzubauen beginnt."
+    ],
+    "c": 0,
+    "e": "FALSCH ist a: Die MECHANIK (fluid) baut früh ab; stabil/zunehmend ist die PRAGMATIK (kristallin). b, c, d sind korrekt."
+  },
+  {
+    "id": "bq2",
+    "q": "Ein 75-Jähriger liest einen Text mit eingestreuten, als irrelevant markierten Distraktorwörtern und ist deutlich langsamer als ein 25-Jähriger. Welche Theorie erklärt das am besten?",
+    "opts": [
+      "Allein die Geschwindigkeitshypothese (Salthouse).",
+      "Inhibitionsdefizit-Theorie (Hasher & Zacks) — mangelnde Filterung irrelevanter Information.",
+      "Die Common-Cause-Hypothese.",
+      "Das Berliner Weisheitsparadigma, da das Lesen eines Textes mit Distraktoren in erster Linie das Expertenwissen über die fundamentale Pragmatik des Lebens erfasst."
+    ],
+    "c": 1,
+    "e": "Interferenzparadigmen (Distraktoren beim Lesen) sind die klassische Vorhersage der Inhibitionsdefizit-Theorie: Ältere sind schlechter, wenn explizit als irrelevant markierte Distraktoren präsentiert werden."
+  },
+  {
+    "id": "bq3",
+    "q": "Welche Befundlage spricht dafür, dass der Sensorik-Intelligenz-Zusammenhang NICHT bloß ein Wahrnehmungsartefakt ist?",
+    "opts": [
+      "Bei Älteren ist der Zusammenhang deutlich schwächer als bei Jüngeren.",
+      "Sehen und Hören verbessern sich im Alter wieder.",
+      "Eine künstliche Seh-/Höreinschränkung bei Jüngeren senkte die Intelligenzleistung nicht (Lindenberger et al. 2001).",
+      "Die statistische Kontrolle für Seh- und Hörleistung verstärkte den Zusammenhang zwischen Alter und Intelligenz noch deutlich, anstatt ihn wie erwartet zu reduzieren."
+    ],
+    "c": 2,
+    "e": "Würde der Effekt nur auf schlechter Aufgabenwahrnehmung beruhen, müsste künstliche Einschränkung bei Jüngeren die Leistung senken — tat sie nicht (Lindenberger et al. 2001)."
+  },
+  {
+    "id": "bq4",
+    "q": "Was kennzeichnet den Terminal Decline?",
+    "opts": [
+      "Eine deutliche Verbesserung der kognitiven Leistungsfähigkeit in den letzten Lebensjahren, die sich über sämtliche kognitive Tests hinweg zuverlässig nachweisen lässt.",
+      "Einen Abbau, der nur bei Demenzpatienten ohne jedes genetische Risiko auftritt.",
+      "Einen rein sensorischen Verlust ohne kognitive Komponente.",
+      "Ein beschleunigtes Absinken der Intelligenz in den Jahren vor dem Tod (Small et al. 2003; Wilson et al. 2003/2007)."
+    ],
+    "c": 3,
+    "e": "Terminal Decline: beschleunigtes Absinken der Intelligenz in den Jahren vor dem Tod (begann im Mittel ~42–43 Monate davor); Zusammenhang mit Alzheimer-Allel; erklärt z.T. die beobachtete Abnahme der kristallinen Intelligenz."
+  },
+  {
+    "id": "bq5",
+    "q": "Im Gedächtnissystem-Modell (Squire) — welche Zuordnung stimmt?",
+    "opts": [
+      "Episodisches und semantisches Gedächtnis gehören zum deklarativen (expliziten) System.",
+      "Das prozedurale Gedächtnis und das Priming bilden gemeinsam das deklarative, also bewusst zugängliche und sprachlich berichtbare Gedächtnissystem.",
+      "Das Arbeitsgedächtnis ist ein Teil des non-deklarativen Systems.",
+      "Priming gehört zum deklarativen System."
+    ],
+    "c": 0,
+    "e": "Deklaratives (explizites) System = episodisch + semantisch. Non-deklarativ (implizit) = prozedural + Priming/perzeptuelles Lernen. Das Arbeitsgedächtnis steht neben dem Langzeitgedächtnis."
+  },
+  {
+    "id": "bq6",
+    "q": "Welche zwei Mechanismen nennt Salthouse für die Wirkung verlangsamter Verarbeitung?",
+    "opts": [
+      "Zugangs- und Löschfunktion.",
+      "Mechanismus der begrenzten Zeit und Mechanismus der Gleichzeitigkeit.",
+      "Sensorische Deprivation und Kompensation.",
+      "Die altersbedingte Reduktion der dendritischen Verzweigungen sowie die genetisch determinierte Abnahme der grauen Substanz im Frontalkortex."
+    ],
+    "c": 1,
+    "e": "Begrenzte Zeit (Operationen zu langsam für die verfügbare Zeit) und Gleichzeitigkeit (Informationsverlust: weniger gleichzeitig verfügbare Info für komplexe Prozesse)."
+  },
+  {
+    "id": "bq7",
+    "q": "Was zeigte die Studie von Lövdén et al. (2005) zugunsten der Nichtgebrauchs-Hypothese?",
+    "opts": [
+      "Die Wahrnehmungsgeschwindigkeit sagte die spätere Aktivität vorher.",
+      "Aktivität und Kognition hingen über den gesamten Zeitraum gar nicht zusammen.",
+      "Die Aktivität zu T_i sagte die spätere Veränderung der Wahrnehmungsgeschwindigkeit vorher — nicht umgekehrt.",
+      "Sowohl die Aktivität als auch die Wahrnehmungsgeschwindigkeit sagten einander wechselseitig und in exakt gleichem Ausmaß über alle vier Messzeitpunkte hinweg vorher."
+    ],
+    "c": 2,
+    "e": "Lövdén et al. (2005), Längsschnitt 70+: Aktivität zu T_i sagte die Veränderung der Wahrnehmungsgeschwindigkeit T_i→T_i+1 vorher, aber nicht umgekehrt → spricht für Nichtgebrauch (Disuse)."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Einflüsse gelten als fördernd für kompensatorische Reserven?",
+    "opts": [
+      "Ausschließlich genetische Faktoren, da Umwelt, Bildung und Lebensstil nachweislich keinerlei Einfluss auf den Erhalt kognitiver Reserven im Alter haben.",
+      "Sensorische Deprivation und sozialer Rückzug.",
+      "Ein möglichst einfaches, anregungsarmes Arbeitsumfeld.",
+      "Lebensstil, Bildung, Arbeitsumfeld, Training und die Orchestrierung der Ressourcen."
+    ],
+    "c": 3,
+    "e": "Fördernd: Lebensstil („use it or lose it“), Bildung (Prädiktor v.a. für kristalline Intelligenz/Gedächtnis), anregendes Arbeitsumfeld, Training einzelner Ressourcen und deren Orchestrierung (Lang et al. 2011)."
+  }
+];
+
+var corrCorrect = {
+  "w1a": "stabil",
+  "w1b": "stabil",
+  "w1c": "abbau",
+  "w1d": "abbau",
+  "w1e": "abbau",
+  "w1f": "abbau",
+  "w6a": "ressourcen",
+  "w6b": "common",
+  "w6c": "disuse",
+  "w6d": "terminal"
+};
+var corrExpl = {
+  "w1a": "Prozedurales Gedächtnis (Fertigkeiten, Gewohnheiten) — keine/kaum Verschlechterung im Alter.",
+  "w1b": "Semantisches Gedächtnis (Welt-/Faktenwissen) — bleibt weitgehend stabil (Teil der Pragmatik).",
+  "w1c": "Arbeitsgedächtnis — verschlechtert sich deutlich (Teil der Mechanik).",
+  "w1d": "Episodisches Gedächtnis (Erinnerungen in Zeit/Raum) — verschlechtert sich im Alter.",
+  "w1e": "Prospektives Gedächtnis (an Zukünftiges denken) — häufigstes Alltagsproblem, nimmt ab.",
+  "w1f": "Quellengedächtnis (woher stammt die Information?) — verschlechtert sich im Alter.",
+  "w6a": "Überproportionaler Einbruch der Merkleistung beim gleichzeitigen Laufen → Veränderung der Ressourcen-Zuordnung (Lindenberger et al. 2000).",
+  "w6b": "Gemeinsame Ursache für kognitive UND sensorische Veränderungen (genereller Hirnabbau, Volumen −2%/Dekade) → Common-Cause-Hypothese.",
+  "w6c": "Frühere Aktivität sagt späteren Abbau der Wahrnehmungsgeschwindigkeit vorher (nicht umgekehrt) → Nichtgebrauch/Disuse (Lövdén et al. 2005).",
+  "w6d": "Beschleunigter Abbau in den letzten Jahren vor dem Tod → Terminal Decline (Small/Wilson)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Simulator (Sektion ①): Mechanik vs. Pragmatik — Alterskurve */
+var mpData = {
+  wort:   {typ:'Pragmatik (kristallin)', curve:'📈 steigt / stabil bis ~75 J.', b:'Wortschatz = kulturell erworbenes Wissen → Pragmatik. Bleibt lange stabil oder nimmt zu.'},
+  wissen: {typ:'Pragmatik (kristallin)', curve:'📈 steigt / stabil bis ~75 J.', b:'Allgemeinbildung/Weltwissen = Wissensbestände → Pragmatik. Deutlicher Abbau erst ab ~80 J.'},
+  speed:  {typ:'Mechanik (fluid)', curve:'📉 frühes Maximum, dann Abbau', b:'Verarbeitungsgeschwindigkeit = biologische Basisfunktion → Mechanik. Einbußen ab Mitte des 3. Lebensjahrzehnts.'},
+  raum:   {typ:'Mechanik (fluid)', curve:'📉 frühes Maximum, dann Abbau', b:'Räumliches Vorstellungsvermögen = biologisch bestimmt → Mechanik. Alterungsanfällig.'},
+  merk:   {typ:'Mechanik (fluid)', curve:'📉 frühes Maximum, dann Abbau', b:'Merkfähigkeit/Arbeitsgedächtnis = Mechanik. Nimmt mit dem Alter ab.'},
+  erf:    {typ:'Pragmatik (kristallin)', curve:'📈 steigt / stabil bis ~75 J.', b:'Erfahrungswissen = individuelle Konstellationen von Erfahrung → Pragmatik. Über die Lebensspanne aufgebaut.'}
+};
+function mpSet(k){
+  ['wort','wissen','speed','raum','merk','erf'].forEach(function(x){ var b=document.getElementById('mp-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('mp-out'); if(!o) return;
+  var d=mpData[k];
+  o.innerHTML='<strong>Zuordnung:</strong> '+d.typ+'<div class="sim-curve">'+d.curve+'</div>'+d.b;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  mpSet('wort');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

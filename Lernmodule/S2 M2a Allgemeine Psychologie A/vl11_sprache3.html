@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL11 Sprache III (Erwerb)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl11
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL11 Sprache III (Erwerb)</h1>
+<p class="page-sub">Erst- & Zweitspracherwerb · Phasen · Theorien · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Phasen des Erstspracherwerbs · 2. Theorien (Behaviorismus/Nativismus/sozial-interaktiv) · 3. Sensible Phasen · 4. Erst- vs. Zweitspracherwerb · 5. Konsequenzen (Immersion)
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Definition & Phasen</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Prälinguale Phase</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Frühlinguistische Phase</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Differenzierungsphase</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Behaviorismus</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Nativismus</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Sozial-interaktiv</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Sensible Phase & L2</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Definition & Phasen ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Erstspracherwerb: Definition & Phasen</div>
+    <div class="sec-lz">Natürlich, vollständig; feste Phasenfolge (prälingual/frühlinguistisch/Differenzierung).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kein Kind bekommt Grammatikunterricht — und doch beherrscht mit fünf Jahren praktisch jedes Kind seine Muttersprache. Wie läuft dieser Erwerb ab?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Der <strong>Erstspracherwerb</strong> verläuft <strong>natürlich</strong> (ohne Unterricht, unabhängig von Motivation/Talent) und in einer <strong>festen Phasenfolge</strong>: prälingual (→ Phonologie), frühlinguistisch (→ Semantik), Differenzierung (→ Syntax). Keine Stufe wird ausgelassen, nur das Tempo variiert.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — Erstspracherwerb</div>
+    <p>Der Erwerb der ersten Sprache/Muttersprache im frühesten Kindesalter. Jedes gesunde Kind erwirbt sie unter normalen Umständen <strong>vollständig und muttersprachlich</strong>; der Erwerb vollzieht sich <strong>natürlich</strong> — ohne spezifischen Unterricht und unabhängig von Motivation oder Sprachtalent (life-long learning bleibt möglich).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Phasen — feste Reihenfolge</div>
+    <ul>
+      <li><strong>Prälinguale Phase</strong> (0–1 J.) → Phonologie</li>
+      <li><strong>Frühlinguistische Phase</strong> (1–2½ J.) → Semantik</li>
+      <li><strong>Differenzierungsphase</strong> (2½–5 J.) → Syntax</li>
+    </ul>
+    <div class="hinweis">Der Erwerb folgt einer <strong>vorhersehbaren Reihenfolge</strong>; keine Stufe wird ausgelassen, das Tempo variiert aber zwischen Kindern.</div>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Phase → Kompetenz: Schritt für Schritt aufdecken</div>
+    <div id="s0steps">
+      <div class="step-item"><div class="step-label">Prälingual (0–1 J.)</div>Vom Plappern zur Phonemunterscheidung → Erwerb <strong>phonologischer</strong> Kompetenz.</div>
+      <div class="step-item"><div class="step-label">Frühlinguistisch (1–2½ J.)</div>Wortschatzexplosion, Holophrasen, Zweiwortsätze → Erwerb <strong>semantischer</strong> Kompetenz.</div>
+      <div class="step-item"><div class="step-label">Differenzierung (2½–5 J.)</div>Regelextraktion, komplexe Strukturen → Erwerb <strong>syntaktischer</strong> Kompetenz.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s0steps')" style="margin-top:10px">Nächste Phase zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Prälinguale Phase ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Prälinguale Phase (0–1 J.): Phonologie</div>
+    <div class="sec-lz">Plappern, Phonemunterscheidung, Head Turning (Kuhl), CPS.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Schon wenige Tage alte Säuglinge können die Muttersprache von einer Fremdsprache unterscheiden — bevor sie ein einziges Wort sprechen. Welche Kompetenz reift hier heran?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die <strong>phonologische Kompetenz</strong>. In der prälingualen Phase (0–1 J.) wird die Perzeption an die Muttersprache angepasst (mit 6 M. bevorzugen Säuglinge die eigenen Vokal-Prototypen — <strong>Head Turning</strong>) und die Produktion durchläuft Stadien vom Gurren bis zum <strong>Plappern</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sprachperzeption</div>
+    <p>Intrauterine Sprachwahrnehmung; schon <strong>wenige Tage</strong> nach der Geburt unterscheiden Säuglinge Phoneme und Satzmelodie der Muttersprache von anderen Sprachen. Mit <strong>6 Monaten</strong> (Head Turning) wenden sie sich bevorzugt den Vokal-Prototypen der <em>eigenen</em> Sprache zu. Mit <strong>9 Monaten</strong> markiert der <strong>Closure Positive Shift (CPS)</strong> im EKP die Grenzen von Intonationsphrasen.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Sprachproduktion (Stadien)</div>
+    <ul>
+      <li>0–8 W.: heulen, schlucken, niesen</li>
+      <li>8–20 W.: gurren, lachen, vokalisieren</li>
+      <li>16–30 W.: vokales Spiel mit einfachen Lauten</li>
+      <li>25–50 W.: repetitives Plappern</li>
+      <li>9–18 M.: nicht-repetitives Plappern</li>
+    </ul>
+    <div class="hinweis">→ Erwerb <strong>phonologischer</strong> Kompetenzen.</div>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Produktionsstadien — Schritt für Schritt aufdecken</div>
+    <div id="s1steps">
+      <div class="step-item"><div class="step-label">0–8 Wochen</div>heulen, schlucken, niesen, aufstoßen</div>
+      <div class="step-item"><div class="step-label">8–20 Wochen</div>gurren, lachen, vokalisieren</div>
+      <div class="step-item"><div class="step-label">16–30 Wochen</div>vokales Spiel mit einfachen Lauten</div>
+      <div class="step-item"><div class="step-label">25–50 Wochen</div>repetitives Plappern</div>
+      <div class="step-item"><div class="step-label">9–18 Monate</div>nicht-repetitives Plappern → Übergang zur frühlinguistischen Phase</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s1steps')" style="margin-top:10px">Nächstes Stadium zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Frühlinguistische Phase ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Frühlinguistische Phase (1–2½ J.): Semantik</div>
+    <div class="sec-lz">Holophrasen, Über­generalisierung/Über­diskriminierung, Zweiwortsätze.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Kleinkind nennt jedes Tier mit vier Beinen „Hund“ — ein anderes sagt „Auto“ nur zum eigenen Spielzeugauto, nie zu echten Autos. Wie heißen diese beiden Fehler?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">„Hund“ für alle Vierbeiner = <strong>Übergeneralisierung</strong> (Wort zu WEIT). „Auto“ nur fürs Spielzeugauto = <strong>Überdiskriminierung</strong> (Wort zu ENG). Beides typisch für die frühlinguistische Phase — den Erwerb <strong>semantischer Kompetenz</strong> (Holophrasen, Zweiwortsätze).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Holophrasen</div>
+    <p>Verwendung einzelner Worte zur Vermittlung <strong>komplexer Bedeutungen</strong> — ein Wort steht für eine ganze Aussage. „Ata“ (= Schalter): je nach Situation „Ich will das Licht anmachen!“ oder „Du hast das Licht ausgemacht.“</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Übergeneralisierung vs. Überdiskriminierung</div>
+    <p><strong>Übergeneralisierung:</strong> ein Wort wird zu WEIT verwendet — „Hund“ für alle Vierbeiner. <strong>Überdiskriminierung:</strong> eine Basiskategorie wird zu ENG verwendet — „Auto“ nur fürs eigene Spielzeugauto, nicht für echte Autos.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Zweiwortsätze (ab 1½–1¾ J.)</div>
+    <p>Drücken Relationen aus: Besitz („Papa Buch“), Handlung+Objekt („Spielen Auto“), Objekt+Ort („Pulli Stuhl“), Fehlen („Weg Mili“). Voraussetzung: <strong>Objektpermanenz</strong>. → Erwerb <strong>semantischer</strong> Kompetenz (Beginn des Syntaxerwerbs).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Übergeneralisierung oder Überdiskriminierung?</div>
+    <div class="corr-item" id="c2a">„Hund“ wird für alle Tiere mit vier Beinen verwendet.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'uebergen')">Übergeneralisierung</button>
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'ueberdisk')">Überdiskriminierung</button>
+      </div><div class="corr-fb" id="c2a-fb"></div>
+    </div>
+    <div class="corr-item" id="c2b">„Auto“ wird nur für das eigene Spielzeugauto verwendet.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'uebergen')">Übergeneralisierung</button>
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'ueberdisk')">Überdiskriminierung</button>
+      </div><div class="corr-fb" id="c2b-fb"></div>
+    </div>
+    <div class="corr-item" id="c2c">Ein Wort wird auf zu viele Objekte angewendet, für die es eigene Bezeichnungen gibt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'uebergen')">Übergeneralisierung</button>
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'ueberdisk')">Überdiskriminierung</button>
+      </div><div class="corr-fb" id="c2c-fb"></div>
+    </div>
+    <div class="corr-item" id="c2d">Eine Basiskategorie wird nur für ein einziges spezifisches Objekt benutzt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'uebergen')">Übergeneralisierung</button>
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'ueberdisk')">Überdiskriminierung</button>
+      </div><div class="corr-fb" id="c2d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Differenzierungsphase ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Differenzierungsphase (2½–5 J.): Syntax</div>
+    <div class="sec-lz">Übergeneralisierung (trinkte), P600/ELAN, fast mapping (Bartlett & Carey).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Kind, das vorher korrekt „trank“ sagte, sagt nun plötzlich „trinkte“. Ist das ein Rückschritt — oder ein Fortschritt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Ein <strong>Fortschritt</strong>: „trinkte“ zeigt, dass das Kind die regelmäßige Beugungs<em>regel</em> extrahiert und (über)anwendet — der Erwerb <strong>syntaktischer Kompetenz</strong> in der Differenzierungsphase. Neue Wörter werden hier oft per <strong>fast mapping</strong> (eine Darbietung genügt) gelernt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Erwerb syntaktischer Kompetenz</div>
+    <p>Verstehen komplexer Strukturen (Passivsätze, Pronomina, Kasus-/Genusmarkierung; Ironie noch nicht). Produktion: <strong>Extraktion und Anwendung syntaktischer Regeln</strong> — die Übergeneralisierung „<strong>trinkte</strong>“ statt „trank“ zeigt, dass die regelmäßige Beugungsregel extrahiert und auf ein unregelmäßiges Verb überangewendet wurde.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Erkennen syntaktischer Fehler (P600 & ELAN)</div>
+    <p><strong>P600</strong> = bewusste, kontrollierte syntaktische Prozesse (schon bei 2-Jährigen). <strong>ELAN</strong> = initiale automatische Syntaxanalyse (erst ab ~2,5 J., noch verzögert). Dass die P600 vor der ELAN erscheint → unterschiedliche Entwicklungsschritte von kontrollierter und automatischer Syntaxverarbeitung.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Wortschatz & fast mapping (Bartlett & Carey 1978)</div>
+    <p><strong>Benennungsexplosion</strong>: ab ~2½ J. (~400 Wörter) wächst der Wortschatz rasant (~9 Wörter/Tag; mit 6 J. ~14.000). <strong>fast mapping</strong>: schon eine Nennung von „chromium“ (olivgrün) genügte, damit Dreijährige die Farbe später überzufällig zuordneten.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — Befunde der Differenzierungsphase</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Übergeneralisierung</h4><p>„trinkte“ statt „trank“ — Regel extrahiert und überangewendet (Fortschritt).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>P600</h4><p>Bewusste, kontrollierte Syntaxverarbeitung (schon bei 2-Jährigen).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>ELAN</h4><p>Initiale automatische Syntaxanalyse (erst ab ~2,5 J., noch verzögert).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>fast mapping</h4><p>Eine Darbietung genügt fürs Wortlernen (Bartlett & Carey 1978).</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Behaviorismus ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Theorie I: Lerntheorie (Behaviorismus)</div>
+    <div class="sec-lz">Imitation/Verstärkung; Gegenargumente (Brown et al. 1969).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Das Kind ahmt nach, wird gelobt, und so lernt es sprechen.“ — Reicht diese behavioristische Erklärung aus, um den Spracherwerb zu verstehen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Nur begrenzt. Der <strong>Behaviorismus</strong> (Imitation + Verstärkung) erklärt den Worterwerb, scheitert aber an der <strong>Syntax</strong>: Eltern verstärken den <em>Wahrheitsgehalt</em>, nicht die Struktur (Brown et al.), und <strong>Übergeneralisierung</strong> ist so nicht erklärbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Lerntheorie (Behaviorismus)</div>
+    <p>Alles menschliche Verhalten — auch Sprache — ist <strong>gelernt</strong>; keine besonderen Prädispositionen. Mechanismus: <strong>Imitation und Verstärkung</strong> (operantes Konditionieren) — Verstärkung kommunikativer Laute durch Zuwendung der Eltern, assoziative Lernsequenzen (Gegenstand–Wort), Syntaxerwerb durch Nachahmung und korrektive Äußerungen.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Gegenargumente (Brown, Cazden & Bellugi 1969)</div>
+    <ul>
+      <li>Sprache (v. a. Syntax) ist <strong>hierarchisch</strong>, nicht assoziativ organisiert</li>
+      <li><strong>Übergeneralisierung</strong> („trinkte“) ist durch Imitation/Verstärkung nicht erklärbar</li>
+      <li>Eltern verstärken den <strong>Wahrheitsgehalt</strong>, nicht die grammatische Struktur</li>
+      <li>Sprache wird von allen Kindern in gleicher Weise gelernt</li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gegenargumente — Schritt für Schritt aufdecken</div>
+    <div id="s4steps">
+      <div class="step-item"><div class="step-label">Argument 1</div>Sprache (Syntax) ist <strong>hierarchisch</strong>, nicht assoziativ — Imitation reicht nicht.</div>
+      <div class="step-item"><div class="step-label">Argument 2</div><strong>Übergeneralisierung</strong> („trinkte“) kann nicht imitiert oder verstärkt worden sein.</div>
+      <div class="step-item"><div class="step-label">Argument 3</div>Eltern verstärken den <strong>Wahrheitsgehalt</strong>, nicht die grammatische Struktur — trotzdem wird die Grammatik korrekt.</div>
+      <div class="step-item"><div class="step-label">Argument 4</div>Sprache wird von <strong>allen Kindern in gleicher Weise</strong> gelernt — trotz sehr unterschiedlicher Verstärkungsbedingungen.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s4steps')" style="margin-top:10px">Nächstes Gegenargument zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Nativismus ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Theorie II: Nativismus (Chomsky)</div>
+    <div class="sec-lz">LAD, Universalgrammatik, poverty of stimulus, Kreolsprachen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kinder lernen Sprache erstaunlich schnell — obwohl der sprachliche Input lückenhaft und fehlerhaft ist. Wie erklärt Chomsky dieses „Wunder“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Mit dem <strong>Nativismus</strong>: einer angeborenen Spracherwerbsfähigkeit (<strong>LAD</strong>) mit <strong>Universalgrammatik</strong>. Schlüsselargument: <strong>poverty of stimulus</strong> — der Input ist zu defizitär, um die erreichte Kompetenz zu erklären (außerdem: Kreolsprachen, Kreativität, sensible Phasen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Nativismus (Chomsky 1957)</div>
+    <p>Als Kritik am Behaviorismus: eine <strong>angeborene</strong> Fähigkeit des Spracherwerbs = <strong>Language Acquisition Device (LAD)</strong>. Das LAD enthält eine <strong>Universalgrammatik</strong> (sprachunspezifische Vorstufe der Tiefenstruktur). Der Input speist das LAD, das eine Sprachtheorie (Phonologie, Morphologie, Semantik, Syntax) generiert.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Argumente PRO Nativismus</div>
+    <ul>
+      <li>Nur der Mensch lernt Sprache → LAD <strong>artspezifisch/biologisch</strong> (Pidgin → Kreol)</li>
+      <li>Sprache ist <strong>kreativ</strong> („Farblose grüne Ideen schlafen wütend“)</li>
+      <li>Sprache wird sehr <strong>schnell</strong> gelernt</li>
+      <li><strong>Poverty of stimulus</strong>: Input zu defizitär für die Kompetenz</li>
+      <li>Existenz <strong>sensibler Phasen</strong> als Beleg für angeborene Fähigkeit</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kritik</div>
+    <p>Evidenz wider: auch nicht-sprachbezogene Defizite; Sprache reich an Regularitäten; Sprachinput allein nicht ausreichend (Sachs, Bard & Johnson 1981 — Fall „Jim“: Spracherwerb über Fernsehen scheiterte, erst soziale Interaktion half).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Behaviorismus oder Nativismus?</div>
+    <div class="corr-item" id="c5a">Sprache wird durch Imitation und Verstärkung gelernt (operantes Konditionieren).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'nativ')">Nativismus</button>
+      </div><div class="corr-fb" id="c5a-fb"></div>
+    </div>
+    <div class="corr-item" id="c5b">Angeborene Sprachfähigkeit (LAD) mit Universalgrammatik.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'nativ')">Nativismus</button>
+      </div><div class="corr-fb" id="c5b-fb"></div>
+    </div>
+    <div class="corr-item" id="c5c">Keine besonderen Prädispositionen für das Sprachenlernen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'nativ')">Nativismus</button>
+      </div><div class="corr-fb" id="c5c-fb"></div>
+    </div>
+    <div class="corr-item" id="c5d">Poverty of stimulus — der Input ist zu defizitär für die erreichte Kompetenz.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'nativ')">Nativismus</button>
+      </div><div class="corr-fb" id="c5d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Sozial-interaktiv ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Theorie III: Sozial-interaktiver Ansatz</div>
+    <div class="sec-lz">Gemeinsame Aufmerksamkeit (Tomasello); LASS; Ammensprache/scaffolding/motherese.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eltern zeigen, blicken, benennen — „Oh schau, ein Hündchen!“. Braucht es überhaupt ein angeborenes Sprachmodul, oder erklärt schon die soziale Interaktion den Erwerb?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Der <strong>sozial-interaktive Ansatz</strong> (Bruner, Tomasello) hält ein sprachspezifisches Modul für überflüssig: <strong>gemeinsame Aufmerksamkeit</strong> und kindgerichtete Sprache (<strong>LASS</strong>: Ammensprache → scaffolding → motherese) erklären den Erwerb aus der sozial-kognitiven Entwicklung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sozial-interaktiver Ansatz (Bruner, Tomasello)</div>
+    <p>Angeborene sprachspezifische Mechanismen sind <strong>überflüssig</strong> — Spracherwerb ist aus der <strong>sozial-kognitiven Entwicklung</strong> erklärbar: gemeinsamer Aufmerksamkeitsfokus (Blick, Gesten), Gesten als Vorläufer der Sprache, Verstehen kommunikativer Absichten, pattern recognition. Tomasello (2002): 8 M. Aufmerksamkeit <em>prüfen</em> → 11–14 M. <em>folgen</em> → 13–15 M. <em>lenken</em>.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">LASS / child directed language (CDL)</div>
+    <ul>
+      <li><strong>Ammensprache</strong> („baby talk“, bis ~12 M.): hohe Tonlage, übertriebene Satzmelodie → Prosodie/Phonologie</li>
+      <li><strong>Stützende Sprache</strong> („scaffolding“, 2. Lj.): gemeinsamer Fokus, Worteinführung im Dialog → Wortschatz</li>
+      <li><strong>Lehrende Sprache</strong> („motherese“, ab ~2 J.): Modellsprache, korrektive Rückmeldung → Grammatik</li>
+    </ul>
+    <div class="hinweis">Kritik: CDL fördert den Erwerb, ist aber <strong>keine Voraussetzung</strong> (nicht universell); kognitive Entwicklung wird vernachlässigt.</div>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — kindgerichtete Sprache (LASS)</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Ammensprache (bis ~12 M.)</h4><p>„baby talk“: hohe Tonlage, übertriebene Melodie, Pausen → zentral: Prosodie/Phonologie.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Scaffolding (2. Lj.)</h4><p>Stützende Sprache: gemeinsamer Fokus, Routinen, Worteinführung → zentral: Wortschatz.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Motherese (ab ~2 J.)</h4><p>Lehrende Sprache: Modellsprache, korrektive Rückmeldung → zentral: Grammatik.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Gemeinsame Aufmerksamkeit</h4><p>Tomasello: prüfen (8 M.) → folgen (11–14 M.) → lenken (13–15 M.).</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Sensible Phase & L2 ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Sensible Phasen & Zweitspracherwerb</div>
+    <div class="sec-lz">Lenneberg; Johnson & Newport; Erst- vs. Zweitspracherwerb; Immersion.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wer als Kind in ein neues Land zieht, lernt die Sprache meist akzentfrei — wer erst mit 30 kommt, oft nicht mehr. Was steckt dahinter, und wie unterscheidet sich das vom Erstspracherwerb?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Die <strong>sensible Phase</strong> (Lenneberg): ein Zeitfenster (bis Pubertätsende) für müheloses Sprachenlernen (Johnson & Newport: Age of Arrival). Der <strong>Zweitspracherwerb</strong> unterscheidet sich vom Erstspracherwerb in Ausgangspunkt, Verlauf, Endstand und Einflussfaktoren (cross-linguistic transfer).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sensible Phase (Lenneberg 1967)</div>
+    <p>Ein für den Spracherwerb <strong>begrenztes, domänenspezifisches Zeitfenster</strong>; hängt von der Hirnentwicklung (linke Hemisphäre) ab und reicht bis zum Ende der Pubertät. Beleg: <strong>Johnson & Newport (1989)</strong> — je später das „Age of Arrival“, desto schlechter die erreichte grammatische Kompetenz (deutlicher Abfall nach der Pubertät).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Erst- vs. Zweitspracherwerb</div>
+    <table>
+      <tr><th>Aspekt</th><th>Erstsprache</th><th>Zweitsprache</th></tr>
+      <tr><td>Ausgangspunkt</td><td>~ null</td><td>L1 vorhanden (transfer)</td></tr>
+      <tr><td>Verlauf</td><td>feste Stufenfolge</td><td>sehr heterogen</td></tr>
+      <tr><td>Endstand</td><td>muttersprachlich, implizit</td><td>selten muttersprachlich, explizit</td></tr>
+      <tr><td>Einfluss</td><td>ungesteuert</td><td>gesteuert (Alter, Motivation …)</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">Anwendung: Immersion</div>
+    <p>Annahme: gleiche Hirnmechanismen, nur andere Kontexte. <strong>Immersion</strong>: Fremdsprache als <em>Medium</em> (nicht Gegenstand) — „Sprachbad“, language across the curriculum, ungesteuerter Erwerb durch Umgang (vgl. Erstspracherwerb).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Erst- oder Zweitspracherwerb?</div>
+    <div class="corr-item" id="c7a">Ausgangspunkt ungefähr null; verläuft natürlich und ungesteuert.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c7a',this,'erst')">Erstspracherwerb</button>
+        <button class="corr-btn" onclick="checkCorr('c7a',this,'zweit')">Zweitspracherwerb</button>
+      </div><div class="corr-fb" id="c7a-fb"></div>
+    </div>
+    <div class="corr-item" id="c7b">Es existiert bereits eine Muttersprache (cross-linguistic transfer).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c7b',this,'erst')">Erstspracherwerb</button>
+        <button class="corr-btn" onclick="checkCorr('c7b',this,'zweit')">Zweitspracherwerb</button>
+      </div><div class="corr-fb" id="c7b-fb"></div>
+    </div>
+    <div class="corr-item" id="c7c">Führt zu muttersprachlicher Kompetenz und impliziten Kenntnissen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c7c',this,'erst')">Erstspracherwerb</button>
+        <button class="corr-btn" onclick="checkCorr('c7c',this,'zweit')">Zweitspracherwerb</button>
+      </div><div class="corr-fb" id="c7c-fb"></div>
+    </div>
+    <div class="corr-item" id="c7d">Gesteuerter Erwerb, abhängig von Lernkontext, Erwerbsalter und Motivation.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c7d',this,'erst')">Erstspracherwerb</button>
+        <button class="corr-btn" onclick="checkCorr('c7d',this,'zweit')">Zweitspracherwerb</button>
+      </div><div class="corr-fb" id="c7d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare zu Spracherwerb sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Übergeneralisierung</h4>
+      <p>Wort zu WEIT verwendet</p>
+      <p>„Hund“ für alle Vierbeiner</p>
+      <p>auch: „trinkte“ statt „trank“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Überdiskriminierung</h4>
+      <p>Wort zu ENG verwendet</p>
+      <p>„Auto“ nur fürs Spielzeugauto</p>
+      <p>Basiskategorie nur für ein Objekt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der Übergeneralisierung wird ein Wort zu eng nur für ein einziges spezifisches Objekt verwendet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Behaviorismus</h4>
+      <p>Sprache ist gelernt</p>
+      <p>Imitation + Verstärkung</p>
+      <p>Keine Prädispositionen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Nativismus (Chomsky)</h4>
+      <p>Angeborene Fähigkeit (LAD)</p>
+      <p>Universalgrammatik</p>
+      <p>Poverty of stimulus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Behaviorismus nimmt eine angeborene Universalgrammatik (LAD) als Grundlage des Spracherwerbs an.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Nativismus (LAD)</h4>
+      <p>Angeborenes Sprachmodul</p>
+      <p>Universalgrammatik</p>
+      <p>sprachspezifisch & angeboren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Sozial-interaktiv (LASS)</h4>
+      <p>Soziale Unterstützung</p>
+      <p>Gemeinsame Aufmerksamkeit (Tomasello)</p>
+      <p>angeborene Sprachmodule überflüssig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der sozial-interaktive Ansatz erklärt den Spracherwerb durch ein angeborenes, sprachspezifisches Modul (LAD).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Erstspracherwerb</h4>
+      <p>Ausgangspunkt ~ null</p>
+      <p>ungesteuert, natürlich</p>
+      <p>muttersprachlich, implizit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zweitspracherwerb</h4>
+      <p>L1 bereits vorhanden</p>
+      <p>gesteuert, von Alter/Motivation abhängig</p>
+      <p>selten muttersprachlich, explizit</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim Erstspracherwerb ist bereits eine Muttersprache vorhanden, die den Erwerb über cross-linguistic transfer beeinflusst.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>P600</h4>
+      <p>Bewusste syntaktische Kontrolle</p>
+      <p>kontrollierter Prozess</p>
+      <p>schon bei 2-Jährigen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>ELAN</h4>
+      <p>Initiale automatische Syntaxanalyse</p>
+      <p>automatischer Prozess</p>
+      <p>erst ab ~2,5 J., noch verzögert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die ELAN ist der Indikator für bewusste, kontrollierte syntaktische Verarbeitungsprozesse.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl11</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl11';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was kennzeichnet den Erstspracherwerb?",
+      "opts": [
+        "Er setzt eine bereits vorhandene Muttersprache voraus.",
+        "Er gelingt nur mit gezieltem Grammatikunterricht.",
+        "Jedes gesunde Kind erwirbt seine Erstsprache natürlich und vollständig.",
+        "Er ist mit dem Ende des ersten Lebensjahres vollständig abgeschlossen und bleibt danach unveränderlich."
+      ],
+      "c": 2,
+      "e": "Erstspracherwerb verläuft natürlich (ohne Unterricht, unabhängig von Motivation/Talent); jedes gesunde Kind erreicht muttersprachliche Kompetenz. (a) beschreibt den Zweitspracherwerb."
+    },
+    {
+      "id": "s0q2",
+      "q": "In welcher Reihenfolge verlaufen die Phasen des Erstspracherwerbs?",
+      "opts": [
+        "Prälinguale → frühlinguistische → Differenzierungsphase.",
+        "Differenzierungs- → prälinguale → frühlinguistische Phase.",
+        "Frühlinguistische → prälinguale → Differenzierungsphase.",
+        "Die Phasen werden je nach Kind in individuell unterschiedlicher Reihenfolge und teils übersprungen durchlaufen."
+      ],
+      "c": 0,
+      "e": "Feste Reihenfolge: prälingual (0–1 J), frühlinguistisch (1–2½ J), Differenzierung (2½–5 J). Keine Stufe wird ausgelassen, nur das Tempo variiert."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche Kompetenz wird in der prälingualen Phase (0–1 Jahr) vor allem erworben?",
+      "opts": [
+        "Syntaktische Kompetenz.",
+        "Phonologische Kompetenz.",
+        "Semantische Kompetenz.",
+        "Die Fähigkeit, komplexe Passivsätze und Kasusmarkierungen vollständig zu verstehen."
+      ],
+      "c": 1,
+      "e": "Prälinguale Phase → Erwerb phonologischer Kompetenzen (von Lauten/Plappern bis zur Phonemunterscheidung). Semantik kommt frühlinguistisch, Syntax in der Differenzierungsphase."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was zeigte die Head-Turning-Studie (Kuhl) mit 6 Monate alten Säuglingen?",
+      "opts": [
+        "Säuglinge können Sprachlaute erst ab dem zweiten Lebensjahr zuverlässig unterscheiden, sobald die ersten Wörter produziert werden.",
+        "Säuglinge bevorzugen grundsätzlich die Vokale einer beliebigen Fremdsprache.",
+        "Die Satzmelodie spielt für Säuglinge in diesem Alter noch keine Rolle.",
+        "Säuglinge wenden sich bevorzugt den Vokalvarianten der eigenen Muttersprache zu."
+      ],
+      "c": 3,
+      "e": "Mit 6 Monaten reagieren Säuglinge stärker auf die Vokal-Prototypen ihrer eigenen Sprache (amerikanische auf /i/, schwedische auf /y/) → frühe phonologische Anpassung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was sind Holophrasen?",
+      "opts": [
+        "Einzelne Worte, die eine komplexe Bedeutung vermitteln.",
+        "Sätze aus drei und mehr Wörtern.",
+        "Grammatisch vollständige Passivsätze.",
+        "Lautäußerungen ohne jede Bedeutung, die ausschließlich der motorischen Übung der Artikulationsorgane dienen."
+      ],
+      "c": 0,
+      "e": "Holophrasen: ein Wort steht für eine ganze Aussage („Ata“ = „mach das Licht an“). Typisch für die frühlinguistische Phase."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was ist eine Überdiskriminierung beim Wortschatzerwerb?",
+      "opts": [
+        "Die Anwendung eines Wortes für zu viele verschiedene Objekte („Hund“ für alle Tiere).",
+        "Das Auslassen von Funktionswörtern im Satz.",
+        "Die Verwendung einer Basiskategorie nur für ein spezifisches Objekt („Auto“ nur fürs Spielzeugauto).",
+        "Das blitzschnelle Lernen einer Wortbedeutung schon nach einer einzigen, beiläufigen Darbietung des betreffenden neuen Wortes."
+      ],
+      "c": 2,
+      "e": "Überdiskriminierung: ein Wort wird zu ENG verwendet („Auto“ nur fürs eigene Spielzeugauto, nicht für echte Autos). (a) ist Übergeneralisierung, (d) fast mapping."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Kompetenz wird in der Differenzierungsphase (2½–5 J.) vor allem erworben?",
+      "opts": [
+        "Phonologische Kompetenz.",
+        "Die Fähigkeit zur Phonemunterscheidung kurz nach der Geburt.",
+        "Ausschließlich der allererste Grundwortschatz von etwa 50 Wörtern, der dann bis zum Schulalter unverändert bleibt.",
+        "Syntaktische Kompetenz."
+      ],
+      "c": 3,
+      "e": "Differenzierungsphase → Erwerb syntaktischer Kompetenz (Regeln extrahieren/anwenden, komplexe Strukturen verstehen). Phonologie ist prälingual."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was zeigt die Übergeneralisierung „trinkte“ statt „trank“?",
+      "opts": [
+        "Dass das Kind die Beugungsregel noch gar nicht kennt.",
+        "Dass das Kind eine syntaktische Regel extrahiert und (über)anwendet.",
+        "Dass das Kind nur auswendig gelernte Formen wiedergibt.",
+        "Dass die phonologische Kompetenz in dieser Phase noch vollständig fehlt und die Lautbildung gestört ist."
+      ],
+      "c": 1,
+      "e": "„trinkte“ = Anwendung der regelmäßigen (schwachen) Beugungsregel auf ein unregelmäßiges Verb → die Regel wurde extrahiert und übergeneralisiert (ein Fortschritt!)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wie erklärt die Lerntheorie (Behaviorismus) den Spracherwerb?",
+      "opts": [
+        "Durch eine angeborene Universalgrammatik.",
+        "Durch gemeinsame Aufmerksamkeit und Gesten.",
+        "Durch Imitation und Verstärkung (operantes Konditionieren).",
+        "Durch eine artspezifische, biologisch determinierte Spracherwerbsfähigkeit im Gehirn des Kindes."
+      ],
+      "c": 2,
+      "e": "Behaviorismus: Sprache ist gelernt — Imitation + Verstärkung (operantes Konditionieren), keine besonderen Prädispositionen. (a)/(d) sind Nativismus, (b) sozial-interaktiv."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welches Argument spricht GEGEN die behavioristische Erklärung (Brown et al. 1969)?",
+      "opts": [
+        "Eltern verstärken den Wahrheitsgehalt, nicht die grammatische Struktur.",
+        "Sprache wird von allen Kindern völlig unterschiedlich gelernt.",
+        "Übergeneralisierung lässt sich durch Verstärkung gut erklären.",
+        "Sprache ist rein assoziativ und gar nicht hierarchisch organisiert, weshalb Verstärkung sie vollständig erklärt."
+      ],
+      "c": 0,
+      "e": "Brown et al.: Eltern korrigieren v. a. den Wahrheitsgehalt, nicht die Syntax — trotzdem lernen Kinder korrekte Grammatik. Auch Übergeneralisierung ist behavioristisch nicht erklärbar."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist das Language Acquisition Device (LAD; Chomsky 1957)?",
+      "opts": [
+        "Ein durch Verstärkung erlernter Imitationsmechanismus.",
+        "Eine angeborene Fähigkeit zum Spracherwerb mit Universalgrammatik.",
+        "Die stützende Sprache der Eltern (scaffolding).",
+        "Ein soziales Unterstützungssystem aus gemeinsamer Aufmerksamkeit und kindgerichteter Sprache."
+      ],
+      "c": 1,
+      "e": "LAD = angeborenes „Sprachmodul“ mit Universalgrammatik (sprachunspezifische Vorstufe der Tiefenstruktur). (d) ist das LASS des sozial-interaktiven Ansatzes."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welches Argument führt Chomsky FÜR den Nativismus an?",
+      "opts": [
+        "Dass Eltern jede einzelne kindliche Äußerung gezielt und systematisch auf ihre grammatische Korrektheit hin überprüfen und verbessern.",
+        "Dass Sprache rein assoziativ organisiert ist.",
+        "Dass ausschließlich Imitation den Spracherwerb erklärt.",
+        "Poverty of stimulus: der Input ist zu defizitär, um die Sprachkompetenz zu erklären."
+      ],
+      "c": 3,
+      "e": "Pro Nativismus: poverty of stimulus (defizitärer Input), Kreativität der Sprache, schneller Erwerb, Kreolsprachen, sensible Phasen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Worauf gründet der sozial-interaktive Ansatz (Bruner, Tomasello) den Spracherwerb?",
+      "opts": [
+        "Auf der sozial-kognitiven Entwicklung, v. a. gemeinsamer Aufmerksamkeit.",
+        "Auf einer rein angeborenen Universalgrammatik.",
+        "Auf reiner Verstärkung kommunikativer Laute durch die Eltern.",
+        "Auf der spontanen Mutation einer sprachunspezifischen Vorstufe der Tiefenstruktur im Gehirn."
+      ],
+      "c": 0,
+      "e": "Sozial-interaktiv: Spracherwerb aus der sozial-kognitiven Entwicklung — gemeinsamer Aufmerksamkeitsfokus, Gesten, Verstehen kommunikativer Absichten; angeborene sprachspezifische Mechanismen sind überflüssig."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was beschreibt das „scaffolding“ (stützende Sprache, 2. Lebensjahr)?",
+      "opts": [
+        "Die übertriebene Satzmelodie der Ammensprache im ersten Lebensjahr.",
+        "Die grammatik-lehrende Modellsprache ab etwa zwei Jahren (motherese).",
+        "Sprache im einfachen Dialog mit gemeinsamem Aufmerksamkeitsfokus und Worteinführung.",
+        "Ein angeborenes Modul, das aus dem Input automatisch eine vollständige Grammatiktheorie generiert."
+      ],
+      "c": 2,
+      "e": "Scaffolding (stützende Sprache, 2. Lj.): gemeinsamer Fokus, Routinen, Formate, Worteinführung im Dialog (zentral: Wortschatz). (a) ist Ammensprache, (b) motherese."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was besagt das Konzept der sensiblen Phase für den Spracherwerb (Lenneberg 1967)?",
+      "opts": [
+        "Sprache kann in jedem beliebigen Lebensalter gleich gut, vollständig und mühelos erworben werden, unabhängig vom Reifegrad des Gehirns.",
+        "Die sensible Phase betrifft alle kognitiven Domänen gleichermaßen.",
+        "Sie endet bereits mit dem Ende des ersten Lebensjahres.",
+        "Es gibt ein begrenztes Zeitfenster (bis Pubertätsende) für müheloses Sprachenlernen."
+      ],
+      "c": 3,
+      "e": "Sensible Phase (Lenneberg): domänenspezifisches Zeitfenster, abhängig von der Hirnreifung (linke Hemisphäre), bis Pubertätsende. Beleg: Johnson & Newport (Age of Arrival)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Worin unterscheidet sich der Zweit- vom Erstspracherwerb beim Ausgangspunkt?",
+      "opts": [
+        "Beim Zweitspracherwerb ist der Ausgangspunkt ungefähr null.",
+        "Beim Zweitspracherwerb ist bereits eine Muttersprache vorhanden (cross-linguistic transfer).",
+        "Beim Erstspracherwerb ist bereits eine andere Sprache vorhanden.",
+        "Beide starten vollständig ohne jegliche sprachliche oder kognitive Voraussetzung beim Lernenden."
+      ],
+      "c": 1,
+      "e": "Zweitspracherwerb: es existiert schon eine L1 → positiver/negativer cross-linguistic transfer (z. B. Akzent). Erstspracherwerb: Ausgangspunkt ~ null."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was zeigte die Studie von Bartlett & Carey (1978) mit dem Kunstwort „chromium“?",
+    "opts": [
+      "Eine einzige Darbietung reichte, damit Kinder etwas über das neue Wort lernten (fast mapping).",
+      "Kinder lernen neue Wörter erst nach Hunderten von Wiederholungen.",
+      "Farbwörter werden von Dreijährigen überhaupt nicht gelernt.",
+      "Das Wort wurde erst nach explizitem Grammatikunterricht korrekt verwendet und blieb sonst völlig unverstanden."
+    ],
+    "c": 0,
+    "e": "Bartlett & Carey: nach einer einzigen Nennung von „chromium“ (olivgrün) konnten Dreijährige die Farbe später überzufällig zuordnen → fast mapping (schnelle Bedeutungsabbildung)."
+  },
+  {
+    "id": "bq2",
+    "q": "Was meint die „Benennungsexplosion“?",
+    "opts": [
+      "Der schlagartige Verlust des Wortschatzes in der Pubertät.",
+      "Der explosionsartige Anstieg des Wortschatzes ab etwa 2½ Jahren.",
+      "Das erste Plappern im Alter von wenigen Wochen.",
+      "Die Unfähigkeit, nach dem sechsten Lebensjahr noch neue Wörter aufzunehmen, sobald die Grammatik gefestigt ist."
+    ],
+    "c": 1,
+    "e": "Benennungsexplosion: ab ~2½ Jahren (~400 Wörter) wächst der Wortschatz rasant — im Schnitt ~9 neue Wörter pro Tag."
+  },
+  {
+    "id": "bq3",
+    "q": "Welche EKP-Komponente gilt als Indikator für bewusste, kontrollierte Syntaxverarbeitung?",
+    "opts": [
+      "Die ELAN (frühe automatische Analyse).",
+      "Der Closure Positive Shift (CPS).",
+      "Die P600.",
+      "Die N400, die ausschließlich semantische Inkongruenzen am Satzende widerspiegelt."
+    ],
+    "c": 2,
+    "e": "P600 = bewusste syntaktische Kontrollprozesse; ELAN = initiale automatische Syntaxanalyse; CPS markiert Intonationsphrasen-Grenzen."
+  },
+  {
+    "id": "bq4",
+    "q": "Welches Argument führt Chomsky mit Pidgin- und Kreolsprachen für den Nativismus an?",
+    "opts": [
+      "Dass Sprache ausschließlich durch Imitation der umgebenden Erwachsenen und schrittweise Verstärkung erlernter Lautfolgen entsteht.",
+      "Dass Kreolsprachen über gar keine eigene Grammatik verfügen.",
+      "Dass nur soziale Interaktion überhaupt Sprache hervorbringt.",
+      "Aus einem Pidgin entsteht in der nächsten Generation eine voll ausgebildete grammatische Kreolsprache."
+    ],
+    "c": 3,
+    "e": "Kinder machen aus einem grammatisch armen Pidgin (Zweitsprache) eine voll grammatische Kreolsprache (Muttersprache) → spricht für eine angeborene Grammatikanlage."
+  },
+  {
+    "id": "bq5",
+    "q": "Was ist das Language Acquisition Support System (LASS) im sozial-interaktiven Ansatz?",
+    "opts": [
+      "Die kommunikativen Voraussetzungen/kindgerichtete Sprache (Ammensprache, scaffolding, motherese).",
+      "Ein angeborenes Sprachmodul im Gehirn des Kindes.",
+      "Ein operanter Verstärkungsplan der Eltern.",
+      "Eine sprachunspezifische Vorstufe der Tiefenstruktur, die sich beim Kind spontan und ohne Input entfaltet."
+    ],
+    "c": 0,
+    "e": "LASS = child directed language: Ammensprache (bis ~12 M.), stützende Sprache/scaffolding (2. Lj.), lehrende Sprache/motherese (ab ~2 J.). Das LAD (b/d) ist das nativistische Pendant."
+  },
+  {
+    "id": "bq6",
+    "q": "Was kennzeichnet die Ammensprache („baby talk“)?",
+    "opts": [
+      "Komplexe, lange Sätze mit besonders vielen Funktionswörtern.",
+      "Hohe Tonlage, übertriebene Satzmelodie und Pausen zwischen den Phrasen.",
+      "Korrektive syntaktische Rückmeldung und grammatik-lehrende Modellsprache.",
+      "Eine vollständig monotone Sprechweise ohne jede Betonung, um das Kind nicht zu überfordern."
+    ],
+    "c": 1,
+    "e": "Ammensprache (bis ~12 M.): hohe Tonlage, deutliches Sprechen, übertriebene Satzmelodie, Pausen an Phrasengrenzen, Betonung wichtiger Wörter — zentral für Prosodie/Phonologie."
+  },
+  {
+    "id": "bq7",
+    "q": "Was bedeutet „cross-linguistic transfer“ im Zweitspracherwerb?",
+    "opts": [
+      "Das vollständige Vergessen der Erstsprache beim Erlernen einer neuen Sprache.",
+      "Der Erwerb der Zweitsprache völlig ohne jeden Einfluss der Erstsprache.",
+      "Die positive oder negative Beeinflussung durch die bereits vorhandene Erstsprache (z. B. Akzent).",
+      "Der gleichzeitige Erwerb von drei oder mehr Sprachen ohne jede gegenseitige Beeinflussung der Systeme."
+    ],
+    "c": 2,
+    "e": "Cross-linguistic transfer: die L1 beeinflusst die L2 — positiv oder negativ (z. B. Phonem-Substitution → Akzent; falsche Wortbedeutung leihen → lend/borrow)."
+  },
+  {
+    "id": "bq8",
+    "q": "Worauf zielt der Immersionsansatz im Fremdsprachenunterricht?",
+    "opts": [
+      "Auf expliziten, regelgeleiteten Grammatikunterricht mit systematischen Vokabeltests und schriftlichen Konjugationsübungen.",
+      "Auf das reine Auswendiglernen von Konjugationstabellen.",
+      "Auf die bewusste Korrektur jedes einzelnen Fehlers durch die Lehrkraft.",
+      "Auf natürlichen Erwerb durch „Eintauchen“ in die Sprache als Medium des Unterrichts (Sprachbad)."
+    ],
+    "c": 3,
+    "e": "Immersion: die Fremdsprache ist Medium (nicht Gegenstand) — „language bath“, ungesteuerter Erwerb durch Umgang, „durch die Hintertür“ (vgl. Erstspracherwerb)."
+  }
+];
+
+var corrCorrect = {
+  "c2a": "uebergen",
+  "c2b": "ueberdisk",
+  "c2c": "uebergen",
+  "c2d": "ueberdisk",
+  "c5a": "behav",
+  "c5b": "nativ",
+  "c5c": "behav",
+  "c5d": "nativ",
+  "c7a": "erst",
+  "c7b": "zweit",
+  "c7c": "erst",
+  "c7d": "zweit"
+};
+var corrExpl = {
+  "c2a": "„Hund“ für alle Vierbeiner = Übergeneralisierung (Wort zu weit verwendet).",
+  "c2b": "„Auto“ nur fürs eigene Spielzeugauto = Überdiskriminierung (Wort zu eng verwendet).",
+  "c2c": "Ein Wort auf zu viele Objekte mit eigenen Bezeichnungen anwenden = Übergeneralisierung.",
+  "c2d": "Eine Basiskategorie nur für ein einziges spezifisches Objekt = Überdiskriminierung.",
+  "c5a": "Imitation und Verstärkung (operantes Konditionieren) = Behaviorismus.",
+  "c5b": "Angeborene Sprachfähigkeit (LAD) mit Universalgrammatik = Nativismus.",
+  "c5c": "Keine besonderen Prädispositionen fürs Sprachenlernen = Behaviorismus.",
+  "c5d": "Poverty of stimulus (defizitärer Input) = Argument des Nativismus.",
+  "c7a": "Ausgangspunkt ~ null, natürlich/ungesteuert = Erstspracherwerb.",
+  "c7b": "Bereits vorhandene Muttersprache, cross-linguistic transfer = Zweitspracherwerb.",
+  "c7c": "Muttersprachliche Kompetenz und implizite Kenntnisse = Erstspracherwerb.",
+  "c7d": "Gesteuerter Erwerb, abhängig von Lernkontext/Alter/Motivation = Zweitspracherwerb."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

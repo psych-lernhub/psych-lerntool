@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · Vertiefung 5 — Selbstbild, Urteilsfehler & Beziehungen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl25
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── Bespoke-Simulatoren (Vertiefungsmodul) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sim-slider{flex:1;min-width:150px;accent-color:var(--accent)}
+.sim-val{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text);min-width:32px;text-align:right}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0}
+.sim-barwrap{height:26px;background:var(--surface2);border-radius:6px;overflow:hidden;margin:2px 0 12px}
+.sim-barfill{height:100%;width:0;transition:width .4s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#0f172a;font-weight:700;font-size:.78rem;white-space:nowrap}
+.sim-verdict{margin-top:6px;font-size:.86rem;color:var(--text);background:var(--surface);border-left:3px solid var(--accent);padding:9px 12px;border-radius:6px;line-height:1.5}
+.sim-post{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:12px 14px;margin:6px 0 12px;font-size:.92rem;color:var(--text);line-height:1.5;min-height:44px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · Vertiefung 5 — Selbstbild, Urteilsfehler & Beziehungen</h1>
+<p class="page-sub">Sozialpsychologie · Vertiefungsseminar M5.2 · anwendungsorientiert + interaktiv · Klausur 14.07.2026 (MC)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Verzerrte Selbstwahrnehmung · 2. Dunning-Kruger-Effekt · 3. selbstwertdienliche Verzerrungen · 4. positive Illusionen (Taylor & Brown) · 5. Online-Dating: Access/Communication/Matching · 6. Urteilsfehler in Beziehungen
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Selbst & Verzerrung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Dunning-Kruger</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Selbstwert-Verzerrungen</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Positive Illusionen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Online-Dating-Services</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Dating kritisch</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Urteilsfehler im Alltag</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Anwendung</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Selbst & Verzerrung ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Selbstwahrnehmung ist verzerrt</div>
+    <div class="sec-lz">Warum wir uns selten objektiv sehen — meist zu positiv.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du hältst dich vermutlich für einen fairen, überdurchschnittlich kompetenten und selbstkritischen Menschen. Aber wie verlässlich ist dein Urteil über dich selbst eigentlich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Weniger, als wir denken. Unsere Selbstsicht ist <strong>systematisch verzerrt</strong> — meist in die <strong>zu positive</strong> Richtung. Genau diese Verzerrungen schauen wir uns hier an (und am Ende, was Online-Dating damit zu tun hat).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Wir sehen uns nicht objektiv</div>
+    Selbsturteile entstehen nicht wie eine neutrale Messung. Sie werden von <strong>Motiven</strong> (Selbstwert schützen) und von <strong>fehlender Einsicht</strong> in die eigenen Grenzen geformt — meist zu unseren Gunsten.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei große Quellen der Verzerrung</div>
+    <strong>Motivational:</strong> Wir wollen uns gut fühlen (Better-than-average, self-serving bias, positive Illusionen). <strong>Kognitiv:</strong> Wem Kompetenz fehlt, dem fehlt oft auch die Einsicht in die eigene Inkompetenz (Dunning-Kruger).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Warum das zählt</div>
+    Verzerrte Selbsturteile beeinflussen Lernen, Entscheidungen und Beziehungen. Wer sie kennt, kann <strong>Feedback einholen</strong> und realistischer urteilen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Überblick: Verzerrungen des Selbstbildes — Schritt für Schritt</div>
+    <div id="step0">
+      <div class="step-item"><strong>1. Dunning-Kruger.</strong> Wenig Kompetente überschätzen sich — ihnen fehlt die Einsicht in eigene Fehler.</div>
+      <div class="step-item"><strong>2. Better-than-average.</strong> Die Mehrheit hält sich für überdurchschnittlich (was nicht sein kann).</div>
+      <div class="step-item"><strong>3. Selbstwertdienliche Verzerrung.</strong> Erfolge schreiben wir uns zu, Misserfolge den Umständen.</div>
+      <div class="step-item"><strong>4. Positive Illusionen.</strong> Mild überpositives Selbstbild, Kontrollillusion, unrealistischer Optimismus.</div>
+      <div class="step-item"><strong>Roter Faden:</strong> Fast alle Verzerrungen schützen den Selbstwert — angenehm, aber auf Kosten der Genauigkeit.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächste Verzerrung zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Dunning-Kruger ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Der Dunning-Kruger-Effekt</div>
+    <div class="sec-lz">Warum gerade Inkompetente sich überschätzen. Interaktiv: Kompetenz vs. Selbsteinschätzung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wer kennt das eigene Können besser ein — Anfänger:innen oder Profis? Und wer liegt mit der Selbsteinschätzung am weitesten daneben?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Am weitesten daneben liegen die <strong>wenig Kompetenten</strong> — und zwar nach <em>oben</em>: Sie überschätzen sich massiv (<strong>Dunning-Kruger-Effekt</strong>). Profis schätzen sich realistischer, oft sogar leicht zu niedrig.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Der Dunning-Kruger-Effekt</div>
+    Menschen mit <strong>geringer Kompetenz</strong> in einem Bereich <strong>überschätzen</strong> ihre Leistung deutlich. Der Grund: Ihnen fehlt genau das Wissen, das nötig wäre, um die <strong>eigenen Fehler zu erkennen</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Die „doppelte Bürde“</div>
+    Inkompetenz bestraft doppelt: Man macht Fehler — <em>und</em> merkt nicht, dass man sie macht. Kompetente dagegen unterschätzen sich eher leicht (sie halten Leichtes für „allgemein leicht“).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    Der Ausweg ist <strong>Dazulernen</strong>: Wer kompetenter wird, kann auch die eigene Leistung realistischer einschätzen. Selbstvertrauen allein hilft nicht.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: tatsächliche Kompetenz vs. Selbsteinschätzung</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Schiebe die tatsächliche Kompetenz (Perzentil) und vergleiche, wie sich die Person typischerweise selbst einschätzt.</p>
+    <div class="sim-box">
+      <div class="sim-row">
+        <span class="sim-lbl">tatsächliche Kompetenz (Perzentil)</span>
+        <input type="range" class="sim-slider" id="dk-skill" min="0" max="100" value="15" oninput="dkCalc()">
+        <span class="sim-val" id="dk-skillv">15</span>
+      </div>
+      <div class="sim-lbl">tatsächliche Leistung</div><div class="sim-barwrap"><div class="sim-barfill" id="dk-actual"></div></div>
+      <div class="sim-lbl">selbst eingeschätzte Leistung</div><div class="sim-barwrap"><div class="sim-barfill" id="dk-est"></div></div>
+      <div class="sim-verdict" id="dk-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Selbstwert-Verzerrungen ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Selbstwertdienliche Verzerrungen</div>
+    <div class="sec-lz">Better-than-average, self-serving bias, falscher Konsensus & Co.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Neben Dunning-Kruger gibt es weitere Verzerrungen, die unser Selbstbild aufpolieren. Kennst du die wichtigsten — und kannst du sie unterscheiden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Vier zentrale: <strong>Dunning-Kruger</strong>, <strong>Better-than-average</strong> (Mehrheit hält sich für überdurchschnittlich), <strong>selbstwertdienliche Verzerrung</strong> (Erfolg = ich, Misserfolg = Umstände) und <strong>falscher Konsensus</strong> (alle ticken wie ich).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Better-than-average &amp; self-serving bias</div>
+    <strong>Better-than-average:</strong> Eine Mehrheit hält sich für überdurchschnittlich (im Fahren, im Humor …) — rechnerisch unmöglich. <strong>Selbstwertdienliche Verzerrung:</strong> Erfolge schreiben wir uns selbst zu, Misserfolge den äußeren Umständen.
+  </div>
+  <div class="card">
+    <div class="card-title">Falscher Konsensus</div>
+    Wir überschätzen, wie sehr andere so denken/handeln wie wir selbst. Das erklärt auch, warum Profis sich unterschätzen: „Wenn mir das leichtfällt, fällt es bestimmt allen leicht.“
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Gemeinsamer Nenner</div>
+    Fast alle dieser Verzerrungen <strong>schützen den Selbstwert</strong>. Sie fühlen sich richtig an — gerade deshalb sind sie so schwer zu bemerken.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Verzerrung → Bedeutung</div>
+    <div class="corr-item" id="aa">Dunning-Kruger-Effekt
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'dk')">Inkompetente überschätzen sich, weil ihnen die Einsicht in eigene Fehler fehlt</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'bta')">die Mehrheit hält sich für überdurchschnittlich</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'selfserving')">Erfolge sich selbst, Misserfolge den Umständen zuschreiben</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'konsensus')">überschätzen, wie viele andere genauso denken/können wie man selbst</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Better-than-average-Effekt
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'dk')">Inkompetente überschätzen sich, weil ihnen die Einsicht in eigene Fehler fehlt</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'bta')">die Mehrheit hält sich für überdurchschnittlich</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'selfserving')">Erfolge sich selbst, Misserfolge den Umständen zuschreiben</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'konsensus')">überschätzen, wie viele andere genauso denken/können wie man selbst</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">Selbstwertdienliche Verzerrung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'dk')">Inkompetente überschätzen sich, weil ihnen die Einsicht in eigene Fehler fehlt</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'bta')">die Mehrheit hält sich für überdurchschnittlich</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'selfserving')">Erfolge sich selbst, Misserfolge den Umständen zuschreiben</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'konsensus')">überschätzen, wie viele andere genauso denken/können wie man selbst</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Falscher Konsensus
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'dk')">Inkompetente überschätzen sich, weil ihnen die Einsicht in eigene Fehler fehlt</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'bta')">die Mehrheit hält sich für überdurchschnittlich</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'selfserving')">Erfolge sich selbst, Misserfolge den Umständen zuschreiben</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'konsensus')">überschätzen, wie viele andere genauso denken/können wie man selbst</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Positive Illusionen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Positive Illusionen (Taylor & Brown)</div>
+    <div class="sec-lz">Überpositives Selbstbild, Kontrollillusion, Optimismus. Interaktiv: Nutzen vs. Realitätsnähe.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist es immer am gesündesten, sich selbst völlig realistisch zu sehen? Oder kann ein bisschen Selbst-Schönfärberei sogar guttun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Überraschend: Taylor &amp; Brown fanden, dass viele <strong>psychisch gesunde</strong> Menschen <strong>mild positive Illusionen</strong> haben — ein leicht zu rosiges Selbstbild kann mit Wohlbefinden einhergehen. Nur wenn es zu stark wird, kippt der Nutzen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die drei positiven Illusionen</div>
+    <strong>1. Überpositives Selbstbild</strong> (man sieht sich besser, als man ist). <strong>2. Kontrollillusion</strong> (man überschätzt den eigenen Einfluss, auch auf Zufälliges). <strong>3. Unrealistischer Optimismus</strong> (gute Dinge passieren eher mir, schlechte den anderen).
+  </div>
+  <div class="card">
+    <div class="card-title">Der überraschende Befund</div>
+    Anders als lange gedacht ist die <strong>nüchternste</strong> Sicht nicht automatisch die gesündeste. <strong>Mild</strong> positive Illusionen hängen oft mit besserer Stimmung, Motivation und Durchhaltevermögen zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Die Dosis entscheidet</div>
+    <strong>Zu starke</strong> Illusionen führen zu Realitätsverlust und Fehlentscheidungen (man unterschätzt echte Risiken). Es ist eine <strong>Gratwanderung</strong> zwischen Wohlbefinden und Realitätsnähe.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Wohlbefinden vs. Realitätsnähe</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Schalte positive Illusionen zu und beobachte den Tausch zwischen Wohlbefinden und Realitätsnähe.</p>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn" id="pi-self" onclick="piToggle('self')">überpositives Selbstbild</button>
+        <button class="sim-tbtn" id="pi-control" onclick="piToggle('control')">Kontrollillusion</button>
+        <button class="sim-tbtn" id="pi-optimism" onclick="piToggle('optimism')">unrealistischer Optimismus</button>
+      </div>
+      <div class="sim-lbl">Wohlbefinden</div><div class="sim-barwrap"><div class="sim-barfill" id="pi-well"></div></div>
+      <div class="sim-lbl">Realitätsnähe</div><div class="sim-barwrap"><div class="sim-barfill" id="pi-real"></div></div>
+      <div class="sim-verdict" id="pi-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Online-Dating-Services ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Online-Dating: die drei Services</div>
+    <div class="sec-lz">Access, Communication, Matching — und ihre Tücken.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Vom Selbstbild zur Partnersuche: Online-Dating verspricht, mit Wissenschaft und Mathe bessere Partner:innen zu finden. Was bieten diese Plattformen eigentlich genau?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Drei Services: <strong>Access</strong> (Zugang zu vielen Profilen), <strong>Communication</strong> (Chat vor dem Treffen) und <strong>Matching</strong> (Algorithmus). Die ersten beiden sind real nützlich — das Matching-Versprechen ist wissenschaftlich fragwürdig.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Access &amp; Communication</div>
+    <strong>Access:</strong> Zugang zu weit mehr potenziellen Partner:innen, als man offline je träfe (über Profile). <strong>Communication:</strong> die Möglichkeit, per CMC zu schreiben, bevor man sich persönlich trifft.
+  </div>
+  <div class="card">
+    <div class="card-title">Matching &amp; die Schattenseiten</div>
+    <strong>Matching:</strong> ein Algorithmus soll „passende“ Personen auswählen. Aber: der riesige Pool + 2D-Profile fördern eine <strong>Shopping-/Bewertungs-Mentalität</strong>, Objektifizierung und weniger Bindungsbereitschaft.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Profil ≠ Mensch</div>
+    Ein Profil ist eine <strong>flache, kuratierte</strong> Darstellung. Entscheidende Aspekte (Chemie, Interaktion) zeigen sich erst im echten Treffen — nicht im Profil oder im langen Chat.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Online-Dating → Bedeutung</div>
+    <div class="corr-item" id="ba">Access
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'access')">Zugang zu vielen potenziellen Partner:innen über Profile</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'communication')">Austausch per Chat, bevor man sich persönlich trifft</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'matching')">ein Algorithmus wählt angeblich besonders passende Partner:innen aus</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'shopping')">2D-Profil + großer Pool → Shopping-/Bewertungs-Mentalität</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Communication
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'access')">Zugang zu vielen potenziellen Partner:innen über Profile</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'communication')">Austausch per Chat, bevor man sich persönlich trifft</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'matching')">ein Algorithmus wählt angeblich besonders passende Partner:innen aus</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'shopping')">2D-Profil + großer Pool → Shopping-/Bewertungs-Mentalität</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">Matching
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'access')">Zugang zu vielen potenziellen Partner:innen über Profile</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'communication')">Austausch per Chat, bevor man sich persönlich trifft</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'matching')">ein Algorithmus wählt angeblich besonders passende Partner:innen aus</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'shopping')">2D-Profil + großer Pool → Shopping-/Bewertungs-Mentalität</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Profil-Falle
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'access')">Zugang zu vielen potenziellen Partner:innen über Profile</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'communication')">Austausch per Chat, bevor man sich persönlich trifft</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'matching')">ein Algorithmus wählt angeblich besonders passende Partner:innen aus</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'shopping')">2D-Profil + großer Pool → Shopping-/Bewertungs-Mentalität</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Dating kritisch ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Online-Dating kritisch: einzigartig, nicht überlegen</div>
+    <div class="sec-lz">Was die Wissenschaft über die Versprechen sagt.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Wir nutzen Wissenschaft, um dich zu verkuppeln.“ Hält dieses Versprechen der Online-Dating-Branche einer kritischen Prüfung stand?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Teils. Online-Dating ist wirklich <strong>einzigartig</strong> (es verändert die Partnersuche grundlegend), aber <strong>nicht überlegen</strong> (keine verlässlich besseren Beziehungen). Vor allem das <strong>Matching-Versprechen</strong> ist wissenschaftlich nicht gedeckt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Fragen, zwei Antworten</div>
+    <strong>Einzigartig?</strong> Ja — Access/Communication/Matching verändern Kennenlernen und Partnerwahl grundlegend. <strong>Überlegen?</strong> Nein — es gibt keinen verlässlichen Beleg, dass daraus bessere oder stabilere Beziehungen entstehen.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum Matching nicht hält</div>
+    Algorithmen stützen sich auf <strong>Vorab-Ähnlichkeit</strong>. Aber wie eine Beziehung wächst, wie zwei Menschen mit Stress umgehen, welche Lebensumstände kommen — das lässt sich <strong>vor</strong> dem Kennenlernen kaum vorhersagen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Praktische Lehre</div>
+    Nutze den <strong>Zugang</strong> klug, aber triff dich <strong>früh persönlich</strong> (CMC nicht überdehnen) und vertraue weniger dem Algorithmus als dem echten Eindruck.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Online-Dating kritisch lesen — Schritt für Schritt</div>
+    <div id="step5">
+      <div class="step-item"><strong>1. Versprechen.</strong> Plattformen werben mit „wissenschaftlichem“ Matching für überlegene Beziehungen.</div>
+      <div class="step-item"><strong>2. Einzigartigkeit (ja).</strong> Der Zugang zu riesigen Partner-Pools und Vorab-Kommunikation ist tatsächlich neu.</div>
+      <div class="step-item"><strong>3. Überlegenheit (nein).</strong> Es fehlt der Beleg, dass online geschlossene Beziehungen glücklicher/stabiler sind.</div>
+      <div class="step-item"><strong>4. Matching-Mythos.</strong> Vorab-Ähnlichkeit erklärt kaum den langfristigen Beziehungserfolg — der Algorithmus kann das Wesentliche nicht kennen.</div>
+      <div class="step-item"><strong>5. Nebenwirkung.</strong> Der große Pool kann „Shopping“-Denken fördern und die Bindungsbereitschaft senken.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Urteilsfehler im Alltag ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Urteilsfehler in Selbst & Beziehung</div>
+    <div class="sec-lz">Szenarien den passenden Verzerrungen zuordnen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Jetzt mischen wir alles: Selbst-Verzerrungen und Beziehungs-Tücken zeigen sich ständig im Alltag. Erkennst du sie in konkreten Situationen wieder?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Die gleichen Mechanismen aus diesem Modul tauchen überall auf — beim Autofahren, beim Noten-Erklären, beim Chatten und beim Glauben an „den perfekten Match“. Ordne die Szenarien zu.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Verzerrungen erkennen lernen</div>
+    Der praktische Wert liegt darin, die Muster <strong>im Moment</strong> zu bemerken: „Aha, das ist gerade Better-than-average / self-serving bias / eine überdehnte CMC.“ Bemerken ist der erste Schritt zum klügeren Urteil.
+  </div>
+  <div class="card">
+    <div class="card-title">Selbst &amp; Beziehung hängen zusammen</div>
+    Verzerrte Selbstbilder prägen auch Beziehungen: Wer sich selbst über- und andere unterschätzt, urteilt vorschnell — online wie offline. Realismus + echte Begegnung wirken dem entgegen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Szenario → Phänomen</div>
+    <div class="corr-item" id="ca">Du hältst dich für einen überdurchschnittlich guten Autofahrer — wie fast alle.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'bta')">Better-than-average-Effekt</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'cmc')">überdehnte CMC → Erwartungsverletzung</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'selfserving')">selbstwertdienliche Verzerrung</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'matching')">Matching-Mythos (skeptisch bleiben)</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">Nach wochenlangem Chatten ist das erste Date enttäuschend — der Mensch wirkt ganz anders.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'bta')">Better-than-average-Effekt</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'cmc')">überdehnte CMC → Erwartungsverletzung</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'selfserving')">selbstwertdienliche Verzerrung</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'matching')">Matching-Mythos (skeptisch bleiben)</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">Die gute Note ist dein Talent, die schlechte lag am unfairen Test.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'bta')">Better-than-average-Effekt</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'cmc')">überdehnte CMC → Erwartungsverletzung</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'selfserving')">selbstwertdienliche Verzerrung</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'matching')">Matching-Mythos (skeptisch bleiben)</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">Eine App verspricht dir per Algorithmus den „perfekten Match“.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'bta')">Better-than-average-Effekt</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'cmc')">überdehnte CMC → Erwartungsverletzung</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'selfserving')">selbstwertdienliche Verzerrung</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'matching')">Matching-Mythos (skeptisch bleiben)</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Anwendung ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Anwendung: klüger urteilen</div>
+    <div class="sec-lz">Selbsturteile prüfen und Beziehungen real angehen. Interaktiv: Selbst-Check.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie nutzt du dieses Wissen konkret — um über dich selbst klüger zu urteilen und Beziehungen realistischer anzugehen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Zwei Faustregeln: <strong>(1)</strong> Selbsturteile mit gesunder Skepsis behandeln und aktiv <strong>Feedback</strong> einholen (besonders in neuen Gebieten). <strong>(2)</strong> Beim Kennenlernen den <strong>realen Menschen</strong> über Profil und Algorithmus stellen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Klüger über sich selbst urteilen</div>
+    <strong>Demut in neuen Bereichen</strong> (da ist die Überschätzung am größten), <strong>Feedback einholen</strong> statt nur dem Bauchgefühl trauen, und <strong>milde</strong> positive Illusionen okay finden — solange sie nicht zu echten Fehlentscheidungen führen.
+  </div>
+  <div class="card">
+    <div class="card-title">Klüger daten</div>
+    Zugang nutzen, aber <strong>früh persönlich treffen</strong>, Matching-Versprechen <strong>skeptisch</strong> sehen und sich nicht im endlosen Vergleichen verlieren. Beziehungen entstehen in der Begegnung, nicht im Profil.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Selbst-Check</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle für jede Situation die klügste Reaktion.</p>
+    <div class="sim-box">
+      <div class="sim-lbl" id="sc-prog"></div>
+      <div class="sim-post" id="sc-scenario"></div>
+      <div class="sim-toggle" id="sc-btns"></div>
+      <div class="sim-verdict" id="sc-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die klausurkritischen Gegensatzpaare dieser Vertiefung sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Dunning-Kruger-Effekt</h4>
+      <p>wenig Kompetente überschätzen sich</p>
+      <p>fehlende Metakognition</p>
+      <p>Selbsteinschätzung der Inkompetenten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Falscher Konsensus</h4>
+      <p>Hochkompetente unterschätzen sich</p>
+      <p>projizieren eigenes Können auf andere</p>
+      <p>„fällt mir leicht → allen leicht“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim Dunning-Kruger-Effekt unterschätzen sich vor allem die besonders kompetenten Personen stark.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Better-than-average-Effekt</h4>
+      <p>Vergleich mit dem Durchschnitt</p>
+      <p>Mehrheit hält sich für überdurchschnittlich</p>
+      <p>Selbstbild zu positiv</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Selbstwertdienliche Verzerrung</h4>
+      <p>Erklärung von Erfolg/Misserfolg</p>
+      <p>Erfolg = ich, Misserfolg = Umstände</p>
+      <p>schützt den Selbstwert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Better-than-average-Effekt beschreibt, dass man Erfolge sich selbst und Misserfolge den Umständen zuschreibt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Positive Illusionen (mild)</h4>
+      <p>leicht überpositiv</p>
+      <p>oft mit Wohlbefinden verbunden</p>
+      <p>Taylor & Brown</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Realitätsverlust (zu stark)</h4>
+      <p>übersteigerte Selbstüberschätzung</p>
+      <p>führt zu Fehlentscheidungen</p>
+      <p>Nutzen kippt in Risiko</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Je stärker die positiven Illusionen ausgeprägt sind, desto besser ist das immer für die betroffene Person.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Online-Dating: einzigartig</h4>
+      <p>verändert die Partnersuche grundlegend</p>
+      <p>Access/Communication/Matching</p>
+      <p>Antwort: ja</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Online-Dating: überlegen</h4>
+      <p>bessere Beziehungsergebnisse?</p>
+      <p>verlässlich glücklichere Paare?</p>
+      <p>Antwort: nein (unbelegt)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Forschung belegt, dass Online-Dating zu verlässlich besseren und langfristig glücklicheren Beziehungen führt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Access / Communication</h4>
+      <p>Zugang zu Profilen + Vorab-Chat</p>
+      <p>real nützlich/neu</p>
+      <p>wissenschaftlich plausibel</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Matching-Algorithmus</h4>
+      <p>„passende“ Auswahl per Mathe</p>
+      <p>Kernversprechen der Anbieter</p>
+      <p>ohne überzeugenden Beleg</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Für die Matching-Algorithmen gibt es die stärksten Belege, während Access und Communication wissenschaftlich fragwürdig sind.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl25</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl25';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wie gut kennst du dich selbst — z. B. deine Fähigkeiten und deine Wirkung auf andere?",
+      "opts": [
+        "Oft systematisch verzerrt, denn wir sehen uns selbst selten völlig objektiv.",
+        "Praktisch perfekt und vollkommen objektiv, ganz ohne jede Verzerrung durch Motive.",
+        "Nur bei anderen deutlich erkennbar, bei einem selbst dagegen so gut wie nie.",
+        "Ausnahmslos fehlerfrei, da das eigene Urteil grundsätzlich als zuverlässigste Quelle gilt."
+      ],
+      "c": 0,
+      "e": "Selbstwahrnehmung ist systematisch verzerrt — durch Motive (Selbstwert) und durch fehlende Einsicht in eigene Grenzen."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Art von Verzerrung ist typisch für die Selbsteinschätzung?",
+      "opts": [
+        "Eine durchgehend zu negative, selbstabwertende Sicht auf die eigene Person.",
+        "Eine tendenziell zu positive, selbstwertdienliche Sicht auf sich selbst.",
+        "Gar keine Verzerrung — Selbsturteile sind grundsätzlich neutral und ausgewogen.",
+        "Eine zufällige Schwankung ohne jede systematische Richtung, mal positiv, mal negativ."
+      ],
+      "c": 1,
+      "e": "Die meisten Verzerrungen gehen in die selbstwertschützende, eher zu positive Richtung (z. B. Better-than-average-Effekt)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Eine Person mit sehr geringer Kompetenz in einem Bereich schätzt sich selbst typischerweise wie ein?",
+      "opts": [
+        "Realistisch, ziemlich genau ihrem tatsächlichen, eher niedrigen Niveau entsprechend.",
+        "Deutlich zu niedrig, sie unterschätzt ihre eigene tatsächliche Kompetenz spürbar und dauerhaft.",
+        "Deutlich zu hoch, sie überschätzt sich stark, wie es der Dunning-Kruger-Effekt beschreibt.",
+        "Mit mathematisch exakter Präzision, die ihr wahres Niveau bis aufs Perzentil genau trifft."
+      ],
+      "c": 2,
+      "e": "Dunning-Kruger: Gerade die wenig Kompetenten überschätzen sich am stärksten — ihnen fehlt die Einsicht in die eigenen Fehler."
+    },
+    {
+      "id": "s1q2",
+      "q": "Und wie schätzen sich sehr kompetente Personen oft ein?",
+      "opts": [
+        "Sie überschätzen sich noch stärker als alle anderen und liegen damit am weitesten über ihrer tatsächlichen Leistung.",
+        "Sie schätzen sich praktisch immer exakt richtig ein, ganz unabhängig von Aufgabe, Situation oder Vorwissen.",
+        "Sie halten sich grundsätzlich für inkompetent, ganz unabhängig vom tatsächlichen eigenen Leistungsniveau und Vorwissen.",
+        "Eher etwas zu niedrig, weil sie annehmen, was ihnen leichtfällt, falle auch allen anderen leicht — falscher Konsensus."
+      ],
+      "c": 3,
+      "e": "Die Hochkompetenten unterschätzen sich oft leicht: Sie projizieren ihr eigenes Können auf andere und halten Aufgaben für „einfach“."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Warum überschätzen sich gerade Inkompetente? Was fehlt ihnen laut Dunning und Kruger?",
+      "opts": [
+        "Die metakognitive Fähigkeit, die eigene Inkompetenz zu erkennen — die sogenannte doppelte Bürde.",
+        "Schlicht jede Motivation, überhaupt ein gutes Ergebnis in der jeweiligen Aufgabe erzielen zu wollen.",
+        "Ausreichend Schlaf und ausreichend Erholung in der Nacht vor der jeweiligen Leistungssituation.",
+        "Eine angeborene, unveränderliche neurologische Struktur, die jede Form von Lernen unmöglich macht."
+      ],
+      "c": 0,
+      "e": "Doppelte Bürde: Wem das Wissen für gute Leistung fehlt, dem fehlt oft auch das Wissen, die eigene schlechte Leistung zu erkennen."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was kann den Dunning-Kruger-Effekt verringern?",
+      "opts": [
+        "Mehr Selbstvertrauen aufbauen, auch ganz ohne zusätzliches Fachwissen zu erwerben.",
+        "Dazulernen — wer kompetenter wird, kann auch die eigene Leistung realistischer einschätzen.",
+        "Aufgaben grundsätzlich vermeiden, bei denen die eigene Kompetenz noch gering ist.",
+        "Eine vollständige Abschaffung jeglicher Rückmeldung über die eigene Leistung."
+      ],
+      "c": 1,
+      "e": "Kompetenzerwerb hilft doppelt: Man wird besser UND lernt, die eigene Leistung realistischer einzuschätzen."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Taylor und Brown beschreiben „positive Illusionen“. Was gehört dazu?",
+      "opts": [
+        "Eine durchweg negative, pessimistische Sicht auf die eigene Person und ihre Fähigkeiten.",
+        "Eine völlig realitätsgenaue, nüchterne Einschätzung ohne jede Beschönigung oder Verzerrung.",
+        "Ein überpositives Selbstbild, eine übertriebene Kontrollillusion und ein unrealistischer Optimismus.",
+        "Eine ausschließlich auf objektiv überprüfbaren Fakten beruhende Wahrnehmung ohne jede Beschönigung."
+      ],
+      "c": 2,
+      "e": "Drei positive Illusionen: überpositives Selbstbild, übertriebene Kontrollillusion und unrealistischer Optimismus."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was ist laut Taylor und Brown das Überraschende an diesen milden Illusionen?",
+      "opts": [
+        "Sie kommen ausschließlich bei schwer psychisch kranken Menschen vor, praktisch nie bei gesunden Personen.",
+        "Sie stehen in überhaupt keinem erkennbaren Zusammenhang mit dem allgemeinen psychischen Wohlbefinden oder der Lebenszufriedenheit.",
+        "Sie führen immer und ganz unmittelbar zu schweren, dauerhaft folgenreichen Fehlentscheidungen und Rückschlägen.",
+        "Sie sind oft mit psychischer Gesundheit und Wohlbefinden verbunden — realistisch ist nicht automatisch am gesündesten."
+      ],
+      "c": 3,
+      "e": "Provokant: mild positive Illusionen gehen oft mit besserem Wohlbefinden einher. (Bei zu starker Ausprägung kippt der Nutzen in Risiko.)"
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Online-Dating bietet „Access“. Was ist damit gemeint?",
+      "opts": [
+        "Der Zugang zu sehr vielen potenziellen Partner:innen über durchsuchbare Online-Profile.",
+        "Der Austausch per Chat und Nachrichten, bevor man sich persönlich trifft.",
+        "Die algorithmische Auswahl besonders gut zueinander passender Partner:innen.",
+        "Ein technisches Verfahren, das nur Anmeldegeschwindigkeit und Ladezeiten der Website misst."
+      ],
+      "c": 0,
+      "e": "Access = Zugang/Exposition: man sieht weit mehr potenzielle Partner:innen (Profile), als man offline je träfe."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wofür gibt es laut der kritischen Analyse KEINEN überzeugenden wissenschaftlichen Beleg?",
+      "opts": [
+        "Dass Online-Dating als Phänomen existiert und von vielen Millionen Menschen täglich genutzt wird.",
+        "Dass Profile überhaupt nützliche Informationen über die jeweilige Person enthalten können.",
+        "Dass Menschen über Online-Plattformen tatsächlich miteinander kommunizieren können.",
+        "Dass die Matching-Algorithmen tatsächlich überlegene, langfristig glücklichere Paare zusammenführen."
+      ],
+      "c": 3,
+      "e": "Matching-Algorithmen: kein überzeugender Beleg. Vorab-Ähnlichkeit erklärt kaum, wie sich eine Beziehung später entwickelt."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Die kritische Analyse beantwortet zwei Fragen zu Online-Dating: Einzigartigkeit und Überlegenheit. Wie?",
+      "opts": [
+        "Beide Fragen sind laut der kritischen Analyse eindeutig mit Nein zu beantworten.",
+        "Beide Fragen sind laut der Analyse uneingeschränkt und ohne jede Einschränkung mit Ja zu beantworten.",
+        "Die Einzigartigkeit wird bejaht, die Überlegenheit gegenüber Offline-Dating dagegen verneint.",
+        "Die Einzigartigkeit wird verneint, während die Überlegenheit klar, umfassend und vollständig belegt sei."
+      ],
+      "c": 2,
+      "e": "Online-Dating ist wirklich neu (einzigartig), aber nicht verlässlich besser (nicht überlegen) als konventionelles Kennenlernen."
+    },
+    {
+      "id": "s5q2",
+      "q": "Warum kann ein riesiger Pool an Profilen sogar nachteilig sein?",
+      "opts": [
+        "Weil die Profile ausschließlich wahre, tiefgehende und vollständige Informationen über die Person zeigen.",
+        "Weil schon eine zu geringe Auswahl an Profilen die Partnersuche spürbar überfordert.",
+        "Weil die Matching-Algorithmen für ihre Dienste viel zu bescheiden und zurückhaltend werben.",
+        "Weil er eine Shopping-Mentalität fördert, Menschen objektiviert und die Bindungsbereitschaft senkt."
+      ],
+      "c": 3,
+      "e": "Der große Pool + 2D-Profile fördern eine vergleichende „Shopping“-Haltung, Objektifizierung und geringere Bindungsbereitschaft."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Fast alle Autofahrer:innen halten sich für überdurchschnittlich gut. Welcher Effekt ist das?",
+      "opts": [
+        "Better-than-average-Effekt — die meisten Menschen halten sich für besser als der Durchschnitt.",
+        "Der Dunning-Kruger-Effekt im engeren Sinne, bezogen auf die eigene Fahrkompetenz.",
+        "Eine Kontrollillusion, also die Überschätzung des Einflusses auf das Fahrgeschehen.",
+        "Ein rein statistisches Artefakt der Fragebogenformulierung ohne echten Bezug zur Realität."
+      ],
+      "c": 0,
+      "e": "Better-than-average-Effekt: Eine Mehrheit kann nicht überdurchschnittlich sein — die Selbsteinschätzung ist systematisch zu positiv."
+    },
+    {
+      "id": "s6q2",
+      "q": "Du schreibst deine gute Note deinem Talent zu, die schlechte aber dem unfairen Test. Welche Verzerrung?",
+      "opts": [
+        "Ein falscher Konsensus, bei dem man annimmt, alle anderen dächten und urteilten genauso wie man selbst.",
+        "Eine Kontrollillusion, also der feste Glaube, den zufälligen Ausgang des Tests selbst steuern zu können.",
+        "Eine pluralistische Ignoranz bezüglich der eigenen Prüfungsleistung und ihrer Ursachen.",
+        "Selbstwertdienliche Verzerrung — Erfolge werden sich selbst, Misserfolge den Umständen zugeschrieben."
+      ],
+      "c": 3,
+      "e": "Selbstwertdienliche Verzerrung (self-serving bias): Erfolg = ich, Misserfolg = die Umstände — schützt den Selbstwert."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wie gehst du mit dem Dunning-Kruger-Effekt bei dir selbst am klügsten um?",
+      "opts": [
+        "Grundsätzlich davon ausgehen, dass von diesem Effekt immer nur andere Menschen betroffen sind.",
+        "Aktiv Feedback von anderen einholen und in neuen Bereichen bewusst demütig bleiben.",
+        "Jede eigene Selbsteinschätzung komplett ignorieren und stattdessen einfach weitermachen.",
+        "Grundsätzlich davon ausgehen, dass die eigene spontane Einschätzung bereits vollkommen zutreffend ist."
+      ],
+      "c": 1,
+      "e": "Gerade in neuen Gebieten lohnt Demut + externes Feedback — die eigene Sicherheit ist dort am wenigsten verlässlich."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welche Haltung zu Online-Dating folgt aus der Forschung?",
+      "opts": [
+        "Dem Matching-Algorithmus die gesamte Partnerwahl blind überlassen, weil er dem menschlichen Urteil überlegen sei.",
+        "Online-Dating als Ganzes grundsätzlich meiden und stattdessen nur offline nach Partnern suchen.",
+        "Möglichst lange nur chatten und ein persönliches Treffen dabei bewusst so weit wie irgend möglich hinauszögern.",
+        "Access klug nutzen, früh persönlich treffen und Matching-Versprechen skeptisch sehen — der Mensch zählt."
+      ],
+      "c": 3,
+      "e": "Praxis: den Zugang nutzen, aber bald offline treffen (CMC nicht überdehnen) und Matching-Versprechen kritisch sehen."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Ein Anfänger ist nach einem Tag überzeugt, ein Thema „komplett verstanden“ zu haben. Was steckt dahinter?",
+    "opts": [
+      "Der Dunning-Kruger-Effekt — geringe Kompetenz gepaart mit großem Selbstvertrauen.",
+      "Echte Expertise, die sich schon nach einem einzigen Tag intensiven Lernens einstellt.",
+      "Eine selbstwertdienliche Verzerrung im engeren Sinne, bezogen auf den eigenen Lernerfolg.",
+      "Ein durch objektive Leistungstests bestätigter Nachweis tatsächlicher fachlicher Meisterschaft."
+    ],
+    "c": 0,
+    "e": "Klassischer Dunning-Kruger: Wenig Wissen + fehlende Selbsteinsicht → starke Überschätzung der eigenen Kompetenz."
+  },
+  {
+    "id": "bq2",
+    "q": "Jemand glaubt, durch ein „Glücksritual“ den Ausgang eines reinen Zufallsspiels beeinflussen zu können. Welche Illusion?",
+    "opts": [
+      "Ein falscher Konsensus bezüglich der eigenen Fähigkeit, das Zufallsspiel zu beeinflussen.",
+      "Eine Kontrollillusion — der Glaube, ein rein zufälliges Ergebnis steuern zu können.",
+      "Ein Better-than-average-Effekt bezogen auf die eigene Fähigkeit im Umgang mit Glücksspielen.",
+      "Eine rationale, mathematisch fundierte Abschätzung des tatsächlichen Einflusses des Rituals."
+    ],
+    "c": 1,
+    "e": "Kontrollillusion: man überschätzt den eigenen Einfluss auf objektiv zufällige Ereignisse — eine der positiven Illusionen."
+  },
+  {
+    "id": "bq3",
+    "q": "Ein langes intensives Chatten vor dem ersten Date endet oft womit?",
+    "opts": [
+      "Mit einer Beziehung, die dadurch von Anfang an garantiert perfekt und reibungslos verläuft.",
+      "Mit völliger Gleichgültigkeit beider Seiten schon beim allerersten persönlichen Treffen.",
+      "Mit Enttäuschung und Erwartungsverletzung, weil man sich vorab ein zu idealisiertes Bild aufgebaut hat.",
+      "Mit einer zutreffenden Vorhersage des gesamten Beziehungsverlaufs, die sich später exakt bestätigt."
+    ],
+    "c": 2,
+    "e": "Zu viel CMC vor dem Treffen → überzogene Erwartungen; das reale Date kann diese „Erwartungsverletzung“ kaum erfüllen."
+  },
+  {
+    "id": "bq4",
+    "q": "Was ist der „Better-than-average“-Effekt NICHT?",
+    "opts": [
+      "Die Tendenz, sich selbst durchweg für überdurchschnittlich gut, fähig und kompetent zu halten.",
+      "Eine Form der selbstwertdienlichen, insgesamt eher zu positiven Sicht auf die eigene Person.",
+      "Bei einer Mehrheit logisch unmöglich, da nicht alle zugleich über dem Durchschnitt liegen können.",
+      "Eine objektiv korrekte Beschreibung der Realität, in der die Mehrheit tatsächlich überdurchschnittlich ist."
+    ],
+    "c": 3,
+    "e": "Es ist gerade KEINE korrekte Beschreibung — es kann nicht die Mehrheit überdurchschnittlich sein. Genau das macht es zur Verzerrung."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche der drei Online-Dating-Services ist die wissenschaftlich umstrittenste Versprechung?",
+    "opts": [
+      "Matching — die algorithmische Auswahl besonders gut passender Partner:innen.",
+      "Access — der Zugang zu einer sehr großen Zahl potenzieller Partner:innen über Profile.",
+      "Communication — der Austausch per Chat und Nachricht vor dem persönlichen Treffen.",
+      "Sämtliche drei Services gelten in der Forschung als gleichermaßen gut empirisch abgesichert."
+    ],
+    "c": 0,
+    "e": "Access und Communication sind real nützlich/neu; für die Matching-Versprechen fehlt dagegen der überzeugende Beleg."
+  },
+  {
+    "id": "bq6",
+    "q": "Ein Experte hält eine für ihn leichte Aufgabe fälschlich für „allgemein einfach“. Welche Verzerrung?",
+    "opts": [
+      "Eine Kontrollillusion bezogen auf die Schwierigkeit der jeweiligen Aufgabe.",
+      "Ein falscher Konsensus — man überschätzt, wie sehr andere einem selbst ähneln.",
+      "Eine selbstwertdienliche Verzerrung bezogen auf die eigene Aufgabenschwierigkeit.",
+      "Eine zutreffende Einschätzung der Schwierigkeit, die für alle Menschen gleichermaßen gilt."
+    ],
+    "c": 1,
+    "e": "Falscher Konsensus: Man projiziert das eigene Können/Denken auf andere — daher unterschätzen Experten oft, wie schwer etwas für andere ist."
+  },
+  {
+    "id": "bq7",
+    "q": "Mild positive Illusionen können nützlich sein — wann werden sie riskant?",
+    "opts": [
+      "Sie sind grundsätzlich immer und in jeder Dosierung ausschließlich schädlich für die Person.",
+      "Wenn sie so stark werden, dass sie zu echten Fehlentscheidungen und Realitätsverlust führen.",
+      "Nur dann, wenn andere Menschen von diesen positiven Illusionen überhaupt erfahren.",
+      "Ausschließlich dann, wenn sie im Labor künstlich erzeugt und bildgebend sichtbar gemacht werden."
+    ],
+    "c": 1,
+    "e": "Die Dosis macht es: leicht positiv = oft hilfreich; zu stark = gefährliche Selbstüberschätzung und Fehlentscheidungen."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Gesamtbotschaft zu Selbstbild und Beziehungen ist am angemessensten?",
+    "opts": [
+      "Dem eigenen spontanen Bauchgefühl grundsätzlich blind vertrauen, ohne je Rückmeldung von anderen einzuholen.",
+      "Sich selbst grundsätzlich für deutlich schlechter als alle anderen Menschen und Mitbewerber halten.",
+      "Algorithmen die wichtigen Entscheidungen über die eigene Partnerwahl vollständig und dauerhaft überlassen.",
+      "Selbsturteile mit gesunder Skepsis behandeln, Feedback einholen und den realen Menschen über das Profil stellen."
+    ],
+    "c": 3,
+    "e": "Realistisch: eigene Urteile prüfen (Demut + Feedback) und Beziehungen über echte Begegnung statt Profil/Algorithmus aufbauen."
+  }
+];
+
+var corrCorrect = {
+  "aa": "dk",
+  "ab": "bta",
+  "ac": "selfserving",
+  "ad": "konsensus",
+  "ba": "access",
+  "bb": "communication",
+  "bc": "matching",
+  "bd": "shopping",
+  "ca": "bta",
+  "cb": "cmc",
+  "cc": "selfserving",
+  "cd": "matching"
+};
+var corrExpl = {
+  "aa": "Dunning-Kruger: Inkompetente überschätzen sich, weil ihnen die Einsicht in eigene Fehler fehlt.",
+  "ab": "Better-than-average: die Mehrheit hält sich für überdurchschnittlich (logisch unmöglich).",
+  "ac": "Selbstwertdienliche Verzerrung: Erfolge sich selbst, Misserfolge den Umständen zuschreiben.",
+  "ad": "Falscher Konsensus: überschätzen, wie viele andere genauso denken/können wie man selbst.",
+  "ba": "Access: Zugang zu vielen potenziellen Partner:innen über Profile.",
+  "bb": "Communication: Austausch per CMC, bevor man sich persönlich trifft.",
+  "bc": "Matching: Algorithmus wählt angeblich besonders passende Partner:innen aus (unbelegt).",
+  "bd": "Profil-Falle: 2D-Profil + großer Pool → Shopping-/Bewertungs-Mentalität, weniger Bindung.",
+  "ca": "„Ich bin ein überdurchschnittlicher Fahrer“ (wie fast alle) = Better-than-average-Effekt.",
+  "cb": "Enttäuschendes Date nach langem Chatten = überdehnte CMC → Erwartungsverletzung.",
+  "cc": "Gute Note = mein Talent, schlechte = unfairer Test = selbstwertdienliche Verzerrung.",
+  "cd": "„Perfekter Match per Algorithmus“ → skeptisch bleiben: der Matching-Mythos ist unbelegt."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── Dunning-Kruger — Kompetenz vs. Selbsteinschätzung ── */
+function dkCalc(){
+  var s=document.getElementById('dk-skill'); if(!s) return;
+  var a=parseInt(s.value,10);
+  var est=Math.round(55+a*0.22); /* relativ flach, hoch am unteren Ende */
+  document.getElementById('dk-skillv').textContent=a;
+  var ab=document.getElementById('dk-actual'); if(ab){ ab.style.width=a+'%'; ab.textContent=a+'.'; ab.style.background='var(--cyan)'; }
+  var eb=document.getElementById('dk-est'); if(eb){ eb.style.width=est+'%'; eb.textContent=est+'.'; eb.style.background='var(--accent)'; }
+  var v=document.getElementById('dk-v'); if(!v) return;
+  var gap=est-a;
+  if(gap>=20) v.innerHTML='<strong>Starke Überschätzung (+'+gap+'):</strong> Wenig Kompetente halten sich für weit besser, als sie sind — sie merken ihre Fehler nicht.';
+  else if(gap<=-5) v.innerHTML='<strong>Leichte Unterschätzung ('+gap+'):</strong> Sehr Kompetente schätzen sich oft etwas zu niedrig ein (falscher Konsensus).';
+  else v.innerHTML='<strong>Recht realistisch ('+(gap>=0?'+':'')+gap+'):</strong> im mittleren Bereich liegen Selbst- und Fremdbild am nächsten beieinander.';
+}
+
+/* ── Positive Illusionen — Wohlbefinden vs. Realitätsnähe ── */
+var pi={self:false,control:false,optimism:false};
+function piToggle(k){ pi[k]=!pi[k]; var b=document.getElementById('pi-'+k); if(b) b.classList.toggle('on',pi[k]); piRender(); }
+function piRender(){
+  var n=0; for(var k in pi){ if(pi[k]) n++; }
+  var well=30+n*22, real=95-n*23;
+  var wb=document.getElementById('pi-well'); if(wb){ wb.style.width=well+'%'; wb.textContent=well+'%'; wb.style.background='var(--green)'; }
+  var rb=document.getElementById('pi-real'); if(rb){ rb.style.width=real+'%'; rb.textContent=real+'%'; rb.style.background = real>=50?'var(--cyan)':'var(--orange)'; }
+  var v=document.getElementById('pi-v'); if(!v) return;
+  if(n===0) v.innerHTML='<strong>Völlig nüchtern:</strong> maximale Realitätsnähe — dafür fehlen die positiven Illusionen, die oft mit Wohlbefinden einhergehen.';
+  else if(n===3) v.innerHTML='<strong>Alle drei Illusionen:</strong> hohes Wohlbefinden, aber niedrige Realitätsnähe → Gefahr von Selbstüberschätzung und Fehlentscheidungen.';
+  else v.innerHTML='<strong>Milde Illusionen ('+n+'/3):</strong> die gesunde Mischung — etwas Optimismus hebt das Wohlbefinden, ohne die Realität zu verlieren.';
+}
+
+/* ── Selbst-Check-Picker ── */
+var SC=[
+  {s:"Du fängst ein neues, schwieriges Fach an und fühlst dich nach einer Woche schon „ziemlich sicher“. Wie reagierst du klug?", o:[
+    {t:"Auf das Sicherheitsgefühl vertrauen — du hast es offenbar drauf", ok:false},
+    {t:"Demütig bleiben und gezielt Feedback / eine echte Leistungsprobe einholen", ok:true},
+    {t:"Das Fach abbrechen, bevor es schwer wird", ok:false}
+  ], fb:"Gerade am Anfang ist die Überschätzung am größten (Dunning-Kruger). Feedback + echte Tests schützen vor dem Sicherheits-Trugschluss."},
+  {s:"Eine Dating-App verspricht dir den „wissenschaftlich perfekten Match“. Wie gehst du damit um?", o:[
+    {t:"Dem Algorithmus die Auswahl komplett überlassen", ok:false},
+    {t:"Den Zugang nutzen, aber skeptisch bleiben und die Person bald persönlich treffen", ok:true},
+    {t:"Möglichst lange nur schreiben, um ganz sicher zu sein", ok:false}
+  ], fb:"Matching-Versprechen sind unbelegt; langes Chatten schafft falsche Erwartungen. Früh persönlich treffen und selbst urteilen."},
+  {s:"Du hast eine Prüfung verhauen und denkst sofort: „Der Test war einfach unfair.“ Was wäre die ehrlichere Reflexion?", o:[
+    {t:"Recht haben — bei einem schlechten Ergebnis ist immer der Test schuld", ok:false},
+    {t:"Auch den eigenen Anteil prüfen, statt nur den Umständen die Schuld zu geben (self-serving bias erkennen)", ok:true},
+    {t:"Nie wieder eine Prüfung schreiben", ok:false}
+  ], fb:"Misserfolg automatisch den Umständen zuzuschreiben ist die selbstwertdienliche Verzerrung. Ehrlich ist, auch den eigenen Anteil zu prüfen."}
+];
+var scI=0;
+function scRender(){
+  var sc=document.getElementById('sc-scenario'); if(!sc) return;
+  var bt=document.getElementById('sc-btns'), fb=document.getElementById('sc-fb'), pr=document.getElementById('sc-prog');
+  if(scI>=SC.length){ sc.textContent='✅ Alle '+SC.length+' Situationen gemeistert — du urteilst reflektierter!'; if(bt) bt.innerHTML=''; if(fb) fb.textContent=''; if(pr) pr.textContent=''; return; }
+  var cur=SC[scI];
+  sc.textContent=cur.s;
+  if(pr) pr.textContent='Situation '+(scI+1)+' / '+SC.length;
+  if(fb) fb.textContent='';
+  if(bt){ bt.innerHTML=''; cur.o.forEach(function(opt,idx){ var b=document.createElement('button'); b.className='sim-tbtn'; b.textContent=opt.t; b.onclick=function(){ scPick(idx); }; bt.appendChild(b); }); }
+}
+function scPick(idx){
+  var cur=SC[scI], fb=document.getElementById('sc-fb');
+  if(cur.o[idx].ok){ if(fb){ fb.style.color='var(--green)'; fb.innerHTML='✓ '+cur.fb; } scI++; setTimeout(scRender,1600); }
+  else { if(fb){ fb.style.color='var(--red)'; fb.textContent='✗ Das spielt einer Verzerrung in die Hände — denk noch einmal nach.'; } }
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* Init der bespoke-Simulatoren */
+  dkCalc(); piRender(); scRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

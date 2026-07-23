@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL05 Gedächtnis I</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl05
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL05 Gedächtnis I</h1>
+<p class="page-sub">Gedächtnissysteme · sensorisch/KZG · Arbeitsgedächtnis · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Gedächtnissysteme & Mehrspeichermodell · 2. sensorisches Gedächtnis (Sperling) · 3. KZG: Kapazität, Messung, Verarbeitung · 4. serieller Positionseffekt · 5. Chunking, Rehearsal, Arbeitsgedächtnis
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Definition & Ebbinghaus</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Mehrspeichermodell</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Ikonisches Gedächtnis</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Echoisch & sensorisch</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ KZG: Kapazität</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ KZG: Verarbeitung</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Chunking & Rehearsal</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Arbeitsgedächtnis</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Definition & Ebbinghaus ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Definition, Prozesse & Ebbinghaus</div>
+    <div class="sec-lz">Encoding/Storage/Retrieval; Vergessenskurve & Ersparnismethode.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie lernen für die Klausur 10 Wochen lang je 30 min — ein:e Kommiliton:in nur 8 h am Vortag. Warum schneiden Sie trotz weniger Gesamtzeit besser ab?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Wegen der <strong>Vergessenskurve</strong> (Ebbinghaus): Massiertes Lernen am Vortag wird größtenteils schnell wieder vergessen. Verteiltes, wiederholtes Lernen nutzt die <strong>Ersparnis</strong> beim Wiederlernen und verankert den Stoff dauerhafter.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition & Prozesse</div>
+    Gedächtnis = Prozesse/Systeme für Einspeicherung, Aufbewahrung, Abruf und Anwendung von Information. Drei Prozesse: <strong>Encoding</strong> (Enkodierung), <strong>Storage</strong> (Speicherung), <strong>Retrieval</strong> (Abruf).
+  </div>
+  <div class="card">
+    <div class="card-title">Ebbinghaus & Vergessenskurve (1885)</div>
+    Begründer der experimentellen Gedächtnispsychologie; sinnlose Silben (<strong>KVK-Trigramme</strong>). <strong>Ersparnismethode</strong> misst die Restinformation. Vergessenskurve: <strong>exponentieller Zerfall</strong> (größter Verlust in den ersten Stunden), dann asymptotisch.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Gedächtnisprozesse</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="enc" onclick="switchTab(this,'proz')">Encoding</button>
+      <button class="tab-btn" data-tab="sto" onclick="switchTab(this,'proz')">Storage</button>
+      <button class="tab-btn" data-tab="ret" onclick="switchTab(this,'proz')">Retrieval</button>
+    </div>
+    <div class="tab-group" data-group="proz">
+      <div class="tab-content active" data-tab="enc"><strong>Enkodierung</strong>: Reizinformation in einen neuronalen Code transformieren.</div>
+      <div class="tab-content" data-tab="sto"><strong>Speicherung</strong>: enkodiertes Material über die Zeit aufbewahren.</div>
+      <div class="tab-content" data-tab="ret"><strong>Abruf</strong>: gespeicherte Information später wiederauffinden.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Mehrspeichermodell ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Mehrspeichermodell (Atkinson & Shiffrin)</div>
+    <div class="sec-lz">Sensorisch → KZG → LZG; Annahmen je Speicher.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Telefonnummer ist nach Sekunden weg, „Radfahren“ können Sie noch nach Jahren. Wie ordnet ein klassisches Modell solche Unterschiede?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Über das <strong>Mehrspeichermodell</strong> (Atkinson & Shiffrin 1968): drei Speicher mit unterschiedlicher Haltedauer — <strong>sensorisch</strong> (Sekundenbruchteile), <strong>KZG</strong> (~20 s) und <strong>LZG</strong> (dauerhaft).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mehrspeichermodell (Atkinson & Shiffrin 1968)</div>
+    „Modales Modell“: das Gedächtnis ist nach <strong>zeitlichen Aspekten, Dauer und Menge</strong> in Subsysteme geteilt. Informationsfluss: äußere Reize → sensorischer Speicher → (Aufmerksamkeit) → Arbeits-/Kurzzeitgedächtnis → (Enkodieren) → Langzeitgedächtnis.
+  </div>
+  <div class="card">
+    <div class="card-title">Die drei Speicher</div>
+    <strong>Sensorisch (UKZG)</strong>: Bruchteile einer Sekunde, Weiterleitung nur bei Aufmerksamkeit. <strong>KZG</strong>: begrenzt, ~20 s, durch Kontrollprozesse verlängerbar. <strong>LZG</strong>: große Menge, dauerhaft, unbewusst bis zum Abruf.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne die Aussage dem Speicher zu</div>
+    <div class="corr-item" id="c1a">Hält Information nur Bruchteile einer Sekunde, reizspezifisch
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'sensorisch')">Sensorisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'kzg')">KZG</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'lzg')">LZG</button>
+      </div><div class="corr-fb" id="c1a-fb"></div>
+    </div>
+    <div class="corr-item" id="c1b">~7 Items, ~20 Sekunden, Durchgangsstation
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'sensorisch')">Sensorisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'kzg')">KZG</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'lzg')">LZG</button>
+      </div><div class="corr-fb" id="c1b-fb"></div>
+    </div>
+    <div class="corr-item" id="c1c">Große Menge, Minuten bis dauerhaft, unbewusst
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'sensorisch')">Sensorisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'kzg')">KZG</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'lzg')">LZG</button>
+      </div><div class="corr-fb" id="c1c-fb"></div>
+    </div>
+    <div class="corr-item" id="c1d">Wird nur bei Aufmerksamkeit weitergeleitet
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'sensorisch')">Sensorisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'kzg')">KZG</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'lzg')">LZG</button>
+      </div><div class="corr-fb" id="c1d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Ikonisches Gedächtnis ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Ikonisches Gedächtnis (Sperling 1960)</div>
+    <div class="sec-lz">Ganz- vs. Teilbericht; hohe Kapazität, schneller Zerfall.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine 3×4-Buchstabenmatrix blitzt für 50 ms auf. Sie können nur ~4 Buchstaben nennen — aber wenn ein Ton sofort danach eine Zeile vorgibt, fast die ganze Zeile. Was folgt daraus?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Kurz nach der Darbietung sind <strong>mehr</strong> Items verfügbar (~9 von 12), als im Ganzbericht berichtet werden (~4). Der <strong>ikonische Speicher</strong> (Sperling 1960) hat also hohe Kapazität, zerfällt aber so schnell, dass der Vorteil nur unmittelbar nutzbar ist.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ikonisches Gedächtnis (Sperling 1960)</div>
+    Visuelle Form des sensorischen Gedächtnisses (Ikon = visuelle Einheit). <strong>Ganzbericht</strong>: ~4 von 12 Buchstaben. <strong>Teilbericht</strong> (Ton signalisiert Zeile): ~3 der Zeile → ≈9 verfügbar. Mit Verzögerung sinkt der Teilberichtsvorteil.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Bewertung</div>
+    <strong>Hohe Kapazität, schneller Zerfall.</strong> Speicherort unklar (retinales Nachbild vs. kortikale Verarbeitung); verschiedene Abruf-Cues führen zu unterschiedlichen Verfallsgeschwindigkeiten → widerspricht der reinen Ikon-Idee.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ganzbericht vs. Teilbericht</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ganz" onclick="switchTab(this,'sperling')">Ganzbericht</button>
+      <button class="tab-btn" data-tab="teil" onclick="switchTab(this,'sperling')">Teilbericht</button>
+    </div>
+    <div class="tab-group" data-group="sperling">
+      <div class="tab-content active" data-tab="ganz">Möglichst viele Buchstaben → nur <strong>~4 von 12</strong>; Zeit bis Abruf kaum Einfluss.</div>
+      <div class="tab-content" data-tab="teil">Nur die signalisierte Zeile → ~3 der Zeile (<strong>≈9 verfügbar</strong>); Zeit bis Abruf großer Einfluss.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Echoisch & sensorisch ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Echoisches & sensorisches Gedächtnis</div>
+    <div class="sec-lz">Darwin 1972; allgemeine Eigenschaften & Bedeutung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gibt es ein „Echo“ auch fürs Hören — und warum vergisst man trotz riesiger sensorischer Kapazität fast alles sofort wieder?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Ja: das <strong>echoische Gedächtnis</strong> (Darwin et al. 1972), die auditive Form — der Teilberichtsvorteil hält hier ~4 s. Der sensorische Speicher hat hohe Kapazität, zerfällt aber sehr schnell; nur <strong>beachtete</strong> Inhalte entgehen dem Zerfall.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Echoisches Gedächtnis (Darwin et al. 1972)</div>
+    Auditive Form des sensorischen Gedächtnisses (in Anlehnung an Sperling): auditive Listen aus drei Richtungen; Ganzbericht „ohr-weise“; Teilberichtsvorteil bei Beschränkung auf eine Richtung — er <strong>verschwindet nach ~4 s</strong> (länger als beim Ikon).
+  </div>
+  <div class="card">
+    <div class="card-title">Sensorisches Gedächtnis allgemein</div>
+    Für alle Modalitäten; Information <strong>reizspezifisch</strong>; hohe Kapazität, sehr schneller Zerfall. Bedeutung: begrenzte Ressourcen → die Aufmerksamkeit lenkt auf relevante Inhalte (z. B. der Ton bei Sperling) und verhindert den Zerfall.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ikonisch vs. echoisch</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ik" onclick="switchTab(this,'sens')">Ikonisch</button>
+      <button class="tab-btn" data-tab="ec" onclick="switchTab(this,'sens')">Echoisch</button>
+    </div>
+    <div class="tab-group" data-group="sens">
+      <div class="tab-content active" data-tab="ik"><strong>Visuell</strong> (Sperling); sehr kurzer Zerfall (Bruchteile einer Sekunde).</div>
+      <div class="tab-content" data-tab="ec"><strong>Auditiv</strong> (Darwin); Teilberichtsvorteil bis ~4 s.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ KZG: Kapazität ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Kurzzeitgedächtnis: Kapazität & Messung</div>
+    <div class="sec-lz">Miller 7±2; Span-Task & Change Detection.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Telefonnummer (~7 Ziffern) merken Sie sich kurz problemlos, eine 12-stellige IBAN kaum. Wo liegt die Grenze des KZG?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Bei der <strong>„magical number seven“</strong> (Miller 1956): ~7 ± 2 Items (für rein visuelle Information eher 3–4). Gemessen wird die Kapazität über <strong>Span-Tasks</strong> und die <strong>Change Detection Task</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kapazität (Miller 1956)</div>
+    KZG = kurzzeitiges Merken einer begrenzten Menge (~20 s), Durchgangsstation zum LZG. Spanne: <strong>7 ± 2 Items</strong> („The magical number seven plus or minus two“); für visuelle Information eher <strong>3–4</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Messung</div>
+    <strong>Span-Tasks</strong>: Wiedergabe von Zahlen/Buchstaben/Reihenfolgen (z. B. Corsi-Tapping). <strong>Change Detection Task</strong> (Luck & Vogel 1997): Memory Set einprägen → Veränderung erkennen; WM-Kapazität <strong>K = Set Size · (Hit − FA)</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwei Messparadigmen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="span" onclick="switchTab(this,'mess')">Span-Task</button>
+      <button class="tab-btn" data-tab="cd" onclick="switchTab(this,'mess')">Change Detection</button>
+    </div>
+    <div class="tab-group" data-group="mess">
+      <div class="tab-content active" data-tab="span">Wiedergabe einer Folge → Kapazität = Zahl <strong>korrekt</strong> wiedergegebener Items.</div>
+      <div class="tab-content" data-tab="cd">Veränderung im Test-Array erkennen → <strong>K = Set Size · (Hit − FA)</strong>; visuell ~3–4 Objekte.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ KZG: Verarbeitung ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Sternberg & serieller Positionseffekt</div>
+    <div class="sec-lz">Serielle erschöpfende Suche; Primacy/Recency.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Je mehr Zahlen in einer kurz gezeigten Reihe waren, desto länger dauert die Entscheidung, ob eine bestimmte dabei war — und zwar gleichmäßig pro Zahl. Was sagt das über die Suche im KZG?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Sie ist <strong>seriell</strong> (Sternberg 1966): RT ≈ 400 + 40·n steigt linear pro Item. Da JA/NEIN gleich lang dauern, ist sie <strong>erschöpfend</strong> (durchsucht alle Items, statt beim Treffer abzubrechen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sternberg-Suche (1966)</div>
+    Entscheiden, ob eine Zahl in einer kurz gezeigten Reihe vorkam. <strong>RT ≈ 400 ms + 40 ms · n</strong> → lineare Funktion = serielle Suche; <strong>kein</strong> Unterschied JA/NEIN → erschöpfende (nicht selbstbeendende) Suche.
+  </div>
+  <div class="card">
+    <div class="card-title">Serieller Positionseffekt</div>
+    Items am <strong>Anfang</strong> und <strong>Ende</strong> einer Liste werden besser erinnert. <strong>Recency</strong> (Ende) → noch im KZG. <strong>Primacy</strong> (Anfang) → schon im LZG (öfter wiederholt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Primacy oder Recency?</div>
+    <div class="corr-item" id="c5a">Bessere Erinnerung der ersten Listenitems
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'primacy')">Primacy</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'recency')">Recency</button>
+      </div><div class="corr-fb" id="c5a-fb"></div>
+    </div>
+    <div class="corr-item" id="c5b">Bessere Erinnerung der letzten Listenitems
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'primacy')">Primacy</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'recency')">Recency</button>
+      </div><div class="corr-fb" id="c5b-fb"></div>
+    </div>
+    <div class="corr-item" id="c5c">Information ist noch im Kurzzeitgedächtnis
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'primacy')">Primacy</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'recency')">Recency</button>
+      </div><div class="corr-fb" id="c5c-fb"></div>
+    </div>
+    <div class="corr-item" id="c5d">Information ist schon im Langzeitgedächtnis
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'primacy')">Primacy</button>
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'recency')">Recency</button>
+      </div><div class="corr-fb" id="c5d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Chunking & Rehearsal ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Chunking & Rehearsal</div>
+    <div class="sec-lz">Kapazität vs. Dauer; Brown-Peterson, Interferenz vs. Zerfall.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„B H M E T R A G F M“ ist kaum zu merken — „MfG, Arte, MHB“ dagegen leicht, obwohl es dieselben 10 Buchstaben sind. Welche zwei Strategien stecken dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Chunking</strong> (Bündeln zu Einheiten → mehr Kapazität) und <strong>Rehearsal</strong> (inneres Wiederholen → längere Haltedauer). Das Brown-Peterson-Paradigma zeigt: ohne Rehearsal ist der Inhalt nach Sekunden weg.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Chunking</div>
+    Information zu <strong>größeren Einheiten</strong> bündeln → erhöht die Kapazität. Schachmeister gruppieren Stellungen zu Chunks und beherrschen bis ~100.000 (Chase & Simon 1973) — aber nur bei <strong>sinnvollen</strong> Stellungen.
+  </div>
+  <div class="card">
+    <div class="card-title">Rehearsal & Brown-Peterson (1958/1959)</div>
+    <strong>Rehearsal</strong> = inneres Wiederholen → erhöht v. a. die <strong>Haltedauer</strong> (verbal). Brown-Peterson: Trigramm merken, dann rückwärts zählen (unterbindet Rehearsal) → nach wenigen Sekunden vergessen. Spricht eher für <strong>Interferenz</strong> als für reinen Zerfall.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Chunking oder Rehearsal?</div>
+    <div class="corr-item" id="c6a">Information zu größeren Einheiten zusammenfassen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'chunking')">Chunking</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'rehearsal')">Rehearsal</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Inneres Wiederholen der zu merkenden Information
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'chunking')">Chunking</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'rehearsal')">Rehearsal</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Schachmeister gruppieren Figuren in Stellungen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'chunking')">Chunking</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'rehearsal')">Rehearsal</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Erhöht vor allem die Speicherdauer (verbal)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'chunking')">Chunking</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'rehearsal')">Rehearsal</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Arbeitsgedächtnis ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Arbeitsgedächtnis (Baddeley & Hitch)</div>
+    <div class="sec-lz">Zentrale Exekutive + Sklavensysteme.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kopfrechnen ist mehr als „Zahlen halten“ — Sie müssen sie auch <em>bearbeiten</em>. Welches Modell trägt diesem aktiven Charakter Rechnung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Das <strong>Arbeitsgedächtnis</strong> (Baddeley & Hitch 1974): eine <strong>zentrale Exekutive</strong> koordiniert modalitätsspezifische „Sklavensysteme“ (phonologische Schleife, visuell-räumlicher Notizblock) — Information wird nicht nur gehalten, sondern verarbeitet.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Arbeitsgedächtnis (Baddeley & Hitch 1974)</div>
+    Chunking/Rehearsal zeigen: Information wird nicht nur passiv gespeichert, sondern <strong>bearbeitet</strong>. Das Arbeitsgedächtnis ergänzt das KZG: eine modalitätsunabhängige <strong>zentrale Exekutive</strong> koordiniert modalitätsspezifische „Sklavensysteme“.
+  </div>
+  <div class="card">
+    <div class="card-title">Komponenten</div>
+    <strong>Zentrale Exekutive</strong> (Koordination) · <strong>phonologische Schleife</strong> (verbal-akustisch) · <strong>visuell-räumlicher Notizblock</strong> (visuell/räumlich) · <strong>episodischer Puffer</strong> (Baddeley 2000; integriert, Verbindung zum LZG).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Sklavensysteme</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="ph" onclick="switchTab(this,'wm')">Phonolog. Schleife</button>
+      <button class="tab-btn" data-tab="vs" onclick="switchTab(this,'wm')">Notizblock</button>
+      <button class="tab-btn" data-tab="ep" onclick="switchTab(this,'wm')">Episod. Puffer</button>
+    </div>
+    <div class="tab-group" data-group="wm">
+      <div class="tab-content active" data-tab="ph">Hält und wiederholt <strong>verbal-akustisches</strong> Material.</div>
+      <div class="tab-content" data-tab="vs">Hält <strong>visuelle/räumliche</strong> Information.</div>
+      <div class="tab-content" data-tab="ep"><strong>Integriert</strong> Information modalitätsübergreifend; Verbindung zum LZG.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sensorischer Speicher</h4>
+      <p>Bruchteile einer Sekunde</p>
+      <p>Hohe Kapazität, reizspezifisch</p>
+      <p>Weiterleitung nur bei Aufmerksamkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kurzzeitgedächtnis</h4>
+      <p>~20 Sekunden</p>
+      <p>~7 ± 2 Items</p>
+      <p>Durchgangsstation zum LZG</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der sensorische Speicher hält nur ~7 Items und gibt sie nach etwa 20 Sekunden ab.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Primacy-Effekt</h4>
+      <p>Erste Items besser erinnert</p>
+      <p>Schon ins LZG übergegangen</p>
+      <p>Profitiert von Wiederholung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Recency-Effekt</h4>
+      <p>Letzte Items besser erinnert</p>
+      <p>Noch im KZG</p>
+      <p>Verschwindet bei verzögertem Abruf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Recency-Effekt entsteht, weil die letzten Items bereits ins Langzeitgedächtnis übergegangen sind.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Chunking</h4>
+      <p>Information zu Einheiten bündeln</p>
+      <p>Erhöht die Kapazität</p>
+      <p>z. B. Schachmeister (Chase & Simon)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Rehearsal</h4>
+      <p>Inneres Wiederholen</p>
+      <p>Erhöht v. a. die Haltedauer</p>
+      <p>Vor allem für verbales Material</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Rehearsal erhöht die Kapazität, indem es Einzelitems zu größeren Einheiten zusammenfasst.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ganzbericht (Sperling)</h4>
+      <p>Möglichst viele Buchstaben</p>
+      <p>Nur ~4 von 12</p>
+      <p>Zeit bis Abruf kaum Einfluss</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Teilbericht (Sperling)</h4>
+      <p>Nur die signalisierte Zeile</p>
+      <p>~3 der Zeile (≈9 verfügbar)</p>
+      <p>Zeit bis Abruf großer Einfluss</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im Ganzbericht können mehr Items wiedergegeben werden als beim Teilbericht kurz nach der Darbietung verfügbar sind.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kurzzeitgedächtnis</h4>
+      <p>Passives Halten</p>
+      <p>Begrenzte Menge, ~20 s</p>
+      <p>Durchgangsstation</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Arbeitsgedächtnis</h4>
+      <p>Aktive kognitive Bearbeitung</p>
+      <p>Zentrale Exekutive + Sklavensysteme</p>
+      <p>Baddeley & Hitch 1974</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Arbeitsgedächtnis ist ein rein passiver Speicher ohne Kontroll- oder Verarbeitungsfunktion.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl05</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl05';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was untersuchte Ebbinghaus mit der Ersparnismethode?",
+      "opts": [
+        "Die Kapazität des Arbeitsgedächtnisses.",
+        "Den seriellen Positionseffekt.",
+        "Wie viel Information noch im Gedächtnis ist (Lernersparnis beim Wiederlernen).",
+        "Die Trennung von ikonischem und echoischem Gedächtnis durch Teilberichte verschiedener Modalitäten."
+      ],
+      "c": 2,
+      "e": "Je weniger Durchgänge das Wiederlernen braucht, desto mehr ist noch gespeichert — die Ersparnis misst die Restinformation."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie verläuft die Vergessenskurve nach Ebbinghaus (1885)?",
+      "opts": [
+        "Exponentieller Zerfall — größter Verlust in den ersten Stunden, dann asymptotisch.",
+        "Linear gleichmäßig über die Zeit.",
+        "U-förmig mit einem Anstieg am Ende.",
+        "Stufenförmig, weil Information erst nach festen Konsolidierungsintervallen verloren geht."
+      ],
+      "c": 0,
+      "e": "Der größte Teil geht schnell verloren (~70 % in den ersten ~10 h), danach flacht die Kurve asymptotisch ab."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche drei Speicher unterscheidet das Mehrspeichermodell (Atkinson & Shiffrin 1968)?",
+      "opts": [
+        "Ikonisch, echoisch und haptisch.",
+        "Sensorischer Speicher, Kurzzeit- und Langzeitgedächtnis.",
+        "Phonologische Schleife, visuell-räumlicher Notizblock und zentrale Exekutive.",
+        "Primacy-, Recency- und Mittelspeicher, je nach Position des Items in der Liste."
+      ],
+      "c": 1,
+      "e": "Das modale Modell teilt nach Haltedauer: sensorisch → KZG → LZG. (a) sind sensorische Untertypen, (c) ist Baddeley."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wann wird Information aus dem sensorischen Speicher weitergeleitet?",
+      "opts": [
+        "Immer automatisch und vollständig, weil der sensorische Speicher keine Kapazitätsgrenze besitzt.",
+        "Nach etwa 20 Sekunden.",
+        "Erst nach Konsolidierung im Langzeitgedächtnis.",
+        "Nur, wenn ihr Aufmerksamkeit zugewendet wird."
+      ],
+      "c": 3,
+      "e": "Der sensorische Speicher zerfällt schnell; nur beachtete Information wird ins KZG weitergeleitet."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was zeigte Sperling (1960) mit dem Teilbericht?",
+      "opts": [
+        "Kurz nach Darbietung sind mehr Items verfügbar, als im Ganzbericht berichtet werden.",
+        "Im Ganzbericht werden mehr Items berichtet als im Teilbericht.",
+        "Die Kapazität des Langzeitgedächtnisses ist unbegrenzt.",
+        "Das echoische Gedächtnis hält auditive Information etwa vier Sekunden, bevor der Teilberichtsvorteil verschwindet."
+      ],
+      "c": 0,
+      "e": "Teilbericht ~3 der angezeigten Zeile (≈9 verfügbar) vs. Ganzbericht ~4 → der sensorische Speicher hält kurz viel, zerfällt aber schnell."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welche Eigenschaften hat der ikonische/sensorische Speicher?",
+      "opts": [
+        "Geringe Kapazität, lange Haltedauer.",
+        "Genau 7 Items, etwa 20 Sekunden.",
+        "Hohe Kapazität, aber sehr schneller Zerfall.",
+        "Eine modalitätsunabhängige Speicherung, weil die zentrale Exekutive alle Sinne integriert."
+      ],
+      "c": 2,
+      "e": "Sensorisches Gedächtnis = hohe Kapazität, sehr kurze Dauer. (b) beschreibt das KZG, (d) Baddeleys zentrale Exekutive."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was kennzeichnet das echoische Gedächtnis (Darwin et al. 1972)?",
+      "opts": [
+        "Es ist die visuelle Form des sensorischen Gedächtnisses, in der ein Nachbild durch die Trägheit der Photorezeptoren entsteht.",
+        "Sein Teilberichtsvorteil hält mehrere Minuten.",
+        "Es speichert verbales Material über Stunden.",
+        "Die auditive Form; der Teilberichtsvorteil verschwindet nach etwa 4 Sekunden."
+      ],
+      "c": 3,
+      "e": "Echoisch = auditives sensorisches Gedächtnis; der Teilberichtsvorteil hält länger als beim Ikon (~4 s). (a) beschreibt das ikonische Gedächtnis."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche Bedeutung hat das sensorische Gedächtnis?",
+      "opts": [
+        "Es speichert Information dauerhaft.",
+        "Es überbrückt, bis die Aufmerksamkeit wichtige Inhalte selektiert.",
+        "Es führt Rechenoperationen aus.",
+        "Es verknüpft getrennte Merkmale zu Objekten, weil der Spotlight als Klebstoff wirkt."
+      ],
+      "c": 1,
+      "e": "Bei begrenzten Ressourcen hält der sensorische Puffer Information kurz vor, bis die Aufmerksamkeit selektiert. (d) ist die Merkmalsintegration."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wie groß ist die Kapazität des Kurzzeitgedächtnisses (Miller 1956)?",
+      "opts": [
+        "Praktisch unbegrenzt.",
+        "Genau 3 Items, unabhängig vom Material.",
+        "Etwa 7 ± 2 Items („magical number seven“).",
+        "Etwa 100.000 Einheiten, weil geübte Personen sehr viele Chunks beherrschen."
+      ],
+      "c": 2,
+      "e": "Miller: durchschnittlich 7 ± 2 Items (für visuelle Information eher 3–4). (d) verwechselt Chunks von Experten mit der KZG-Spanne."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie wird die (Arbeits-)Gedächtnis-Kapazität gemessen?",
+      "opts": [
+        "Über Span-Tasks (z. B. Zahlen, Corsi) oder die Change Detection Task.",
+        "Über die Vergessenskurve nach Ebbinghaus.",
+        "Über die Reaktionszeit im Posner-Paradigma.",
+        "Über den Teilberichtsvorteil im ikonischen Gedächtnis, weil dieser die Items pro Sekunde abbildet."
+      ],
+      "c": 0,
+      "e": "Span-Tasks und Change Detection (K = Set Size · (Hit − FA)) messen die Kapazität. (d) misst das sensorische, nicht das Kurzzeitgedächtnis."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was zeigte die Sternberg-Suche (1966)?",
+      "opts": [
+        "Eine parallele Suche mit flacher Reaktionszeitfunktion.",
+        "Eine lineare RT-Zunahme pro Item → serielle, erschöpfende Suche.",
+        "Dass Items am Listenende besser erinnert werden.",
+        "Dass JA-Antworten deutlich schneller sind als NEIN-Antworten, weil die Suche selbstbeendend abbricht."
+      ],
+      "c": 1,
+      "e": "RT ≈ 400 + 40·n (linear) = seriell; kein JA/NEIN-Unterschied = erschöpfend (nicht selbstbeendend)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Wie erklärt man den Recency-Effekt?",
+      "opts": [
+        "Die zuerst gehörten Items sind bereits ins Langzeitgedächtnis übergegangen und daher besonders gut abrufbar.",
+        "Die mittleren Items werden gechunkt.",
+        "Die Suche im KZG verläuft parallel.",
+        "Die letzten Items sind noch im Kurzzeitgedächtnis verfügbar."
+      ],
+      "c": 3,
+      "e": "Recency: das Listenende ist noch im KZG. (a) beschreibt den Primacy-Effekt (Items schon im LZG)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was bewirkt Chunking?",
+      "opts": [
+        "Es erhöht die Kapazität, indem Information zu größeren Einheiten gebündelt wird.",
+        "Es verlängert die Haltedauer durch inneres Wiederholen.",
+        "Es filtert irrelevante Reize früh aus.",
+        "Es überträgt Information automatisch ins Langzeitgedächtnis, weil größere Einheiten dauerhaft kodiert werden."
+      ],
+      "c": 0,
+      "e": "Chunking bündelt Einzelitems zu Einheiten → mehr Inhalt bei gleicher Item-Zahl. (b) ist Rehearsal."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was zeigte das Brown-Peterson-Paradigma (1958/1959)?",
+      "opts": [
+        "Dass Chunking die Kapazität erhöht.",
+        "Dass Schachmeister bis zu 100.000 Chunks beherrschen.",
+        "Ohne Rehearsal ist ein Trigramm nach wenigen Sekunden vergessen.",
+        "Dass der Teilberichtsvorteil nach vier Sekunden verschwindet, weil das Echo zerfällt."
+      ],
+      "c": 2,
+      "e": "Rückwärtszählen unterbindet das Rehearsal → das Trigramm zerfällt rasch (Argument eher für Interferenz). (d) ist das echoische Gedächtnis."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was unterscheidet das Arbeitsgedächtnis vom klassischen KZG (Baddeley & Hitch 1974)?",
+      "opts": [
+        "Es speichert Information ausschließlich passiv, weil es im Gegensatz zum KZG keine Kontrollprozesse besitzt.",
+        "Es hat keine Kapazitätsgrenze.",
+        "Es ist mit dem sensorischen Speicher identisch.",
+        "Es verrichtet aktiv kognitive Arbeit, nicht nur passive Speicherung."
+      ],
+      "c": 3,
+      "e": "Das Arbeitsgedächtnis manipuliert Information aktiv (Chunking, Rehearsal, Koordination) — nicht nur passives Halten."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welche Komponenten gehören zu Baddeleys Modell?",
+      "opts": [
+        "Ikonisches, echoisches und haptisches Register.",
+        "Zentrale Exekutive, phonologische Schleife und visuell-räumlicher Notizblock.",
+        "Sensorischer Speicher, KZG und LZG.",
+        "Primacy- und Recency-Puffer, die je nach Position eines Items in der gemerkten Liste aktiviert werden."
+      ],
+      "c": 1,
+      "e": "Baddeley & Hitch: zentrale Exekutive + Sklavensysteme (phonologische Schleife, Notizblock), später episodischer Puffer. (c) ist Atkinson & Shiffrin."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Prozesse umfasst das Gedächtnis?",
+    "opts": [
+      "Encoding (Enkodierung), Storage (Speicherung), Retrieval (Abruf).",
+      "Sensorik, Motorik, Reflexe.",
+      "Primacy, Recency, Interferenz.",
+      "Disengage, Move und Engage, weil das Gedächtnis die Aufmerksamkeit zwischen Inhalten verschiebt."
+    ],
+    "c": 0,
+    "e": "Die drei Kernprozesse: Aufnahme, Aufbewahrung, Abruf. (d) sind die Spotlight-Mechanismen der Aufmerksamkeit."
+  },
+  {
+    "id": "bq2",
+    "q": "Wie lange hält das Kurzzeitgedächtnis Information etwa?",
+    "opts": [
+      "Bruchteile einer Sekunde.",
+      "Etwa 20 Sekunden (ohne Rehearsal).",
+      "Mehrere Jahre.",
+      "Etwa vier Sekunden, danach verschwindet der Teilberichtsvorteil des Echos."
+    ],
+    "c": 1,
+    "e": "~20 s ohne Auffrischung; (a) ist sensorisch, (c) LZG, (d) echoisches Gedächtnis."
+  },
+  {
+    "id": "bq3",
+    "q": "Was spricht im Brown-Peterson-Paradigma eher für Interferenz als für reinen Zerfall?",
+    "opts": [
+      "Dass die Kapazität bei 7 Items liegt.",
+      "Dass Chunking die Kapazität erhöht.",
+      "Das interferierende Rückwärtszählen verschlechtert die Reproduktion.",
+      "Dass der Teilbericht im ikonischen Gedächtnis mehr Items liefert als der Ganzbericht."
+    ],
+    "c": 2,
+    "e": "Die konkurrierende Zähl-Aufgabe (Interferenz) lässt das Trigramm rasch verloren gehen."
+  },
+  {
+    "id": "bq4",
+    "q": "Wodurch lässt sich die Haltedauer im KZG verlängern?",
+    "opts": [
+      "Allein durch Chunking, das jedoch ausschließlich die Kapazität und nicht die Dauer beeinflusst.",
+      "Durch frühe Selektion.",
+      "Durch den Recency-Effekt.",
+      "Durch Rehearsal (inneres Wiederholen)."
+    ],
+    "c": 3,
+    "e": "Rehearsal frischt die Spur auf und verlängert die Haltedauer (Chunking betrifft eher die Kapazität)."
+  },
+  {
+    "id": "bq5",
+    "q": "Was bedeutet der Primacy-Effekt?",
+    "opts": [
+      "Die ersten Items einer Liste werden besser erinnert (schon im LZG).",
+      "Die letzten Items werden besser erinnert.",
+      "Die mittleren Items werden bevorzugt.",
+      "Items werden unabhängig von ihrer Position gleich gut erinnert, weil das KZG alle parallel hält."
+    ],
+    "c": 0,
+    "e": "Primacy: die ersten Items wurden öfter wiederholt und sind bereits im LZG. Recency = die letzten (noch im KZG)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was ergab die Change Detection Task (Luck & Vogel 1997) zur visuellen WM-Kapazität?",
+    "opts": [
+      "Etwa 7 ± 2 Objekte.",
+      "Eine begrenzte Kapazität von nur wenigen (≈ 3–4) Objekten.",
+      "Eine praktisch unbegrenzte Kapazität.",
+      "Eine Kapazität von 100.000 Einheiten, weil geübte Betrachter Chunks bilden."
+    ],
+    "c": 1,
+    "e": "Visuelle Arbeitsgedächtnis-Kapazität ist auf ~3–4 Objekte begrenzt (geringer als die verbale Spanne von 7±2)."
+  },
+  {
+    "id": "bq7",
+    "q": "Was besagt die „magical number seven“ (Miller 1956)?",
+    "opts": [
+      "Das Langzeitgedächtnis fasst sieben Kategorien.",
+      "Es existieren sieben Gedächtnissysteme.",
+      "Das Kurzzeitgedächtnis fasst durchschnittlich 7 ± 2 Items.",
+      "Sieben Sekunden vergehen, bis ein Trigramm ohne Rehearsal vergessen ist."
+    ],
+    "c": 2,
+    "e": "Miller: die KZG-Spanne liegt bei etwa 7 ± 2 Items."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Rolle spielt die zentrale Exekutive in Baddeleys Modell?",
+    "opts": [
+      "Sie speichert ausschließlich visuelle Information, weil sie dem visuell-räumlichen Notizblock direkt untergeordnet ist.",
+      "Sie wiederholt verbales Material.",
+      "Sie hält ikonische Nachbilder.",
+      "Sie koordiniert modalitätsunabhängig die Sklavensysteme."
+    ],
+    "c": 3,
+    "e": "Die zentrale Exekutive steuert und koordiniert die modalitätsspezifischen Subsysteme (Notizblock, phonologische Schleife)."
+  }
+];
+
+var corrCorrect = {
+  "c1a": "sensorisch",
+  "c1b": "kzg",
+  "c1c": "lzg",
+  "c1d": "sensorisch",
+  "c5a": "primacy",
+  "c5b": "recency",
+  "c5c": "recency",
+  "c5d": "primacy",
+  "c6a": "chunking",
+  "c6b": "rehearsal",
+  "c6c": "chunking",
+  "c6d": "rehearsal"
+};
+var corrExpl = {
+  "c1a": "Bruchteile einer Sekunde, reizspezifisch = sensorischer Speicher.",
+  "c1b": "~7 Items, ~20 s, Durchgangsstation = Kurzzeitgedächtnis.",
+  "c1c": "Große Menge, Minuten bis dauerhaft, unbewusst = Langzeitgedächtnis.",
+  "c1d": "Weiterleitung nur bei Aufmerksamkeit = Eigenschaft des sensorischen Speichers.",
+  "c5a": "Bessere Erinnerung der ersten Items = Primacy-Effekt.",
+  "c5b": "Bessere Erinnerung der letzten Items = Recency-Effekt.",
+  "c5c": "Information noch im KZG → Recency-Effekt.",
+  "c5d": "Information schon im LZG → Primacy-Effekt.",
+  "c6a": "Information zu größeren Einheiten zusammenfassen = Chunking.",
+  "c6b": "Inneres Wiederholen = Rehearsal.",
+  "c6c": "Schachmeister gruppieren Figuren zu Chunks (Chase & Simon) = Chunking.",
+  "c6d": "Erhöht v. a. die Speicherdauer für verbales Material = Rehearsal."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

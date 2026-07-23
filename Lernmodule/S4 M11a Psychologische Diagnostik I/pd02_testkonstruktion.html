@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD02 Testkonstruktion</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl02
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+
+/* PD02-spezifische Lernwidgets */
+.overview{border-left:4px solid var(--orange)}
+.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.overview-chip{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px;font-size:.76rem;color:var(--text2)}
+.widget{background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(129,140,248,.08));border:1px solid rgba(56,189,248,.28);border-radius:14px;padding:16px;margin-bottom:12px}
+.widget h3{font-size:1rem;margin:0 0 6px}.widget p,.widget li{font-size:.86rem;color:var(--text2)}
+.widget label{display:block;font-size:.8rem;font-weight:700;color:var(--text);margin:10px 0 5px}
+.widget select,.widget input[type=number],.widget input[type=text]{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;min-height:44px;padding:8px 10px;font:inherit}
+.widget-feedback{display:none;margin-top:12px;padding:11px 12px;border-radius:9px;background:var(--surface);border:1px solid var(--border);font-size:.84rem;color:var(--text)}
+.widget-feedback.show{display:block}.widget-feedback.good{border-color:var(--green)}.widget-feedback.bad{border-color:var(--red)}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.model-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}
+.arrow-line{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0;font-size:.82rem}.node{border:1px solid var(--accent);border-radius:999px;padding:6px 10px;color:var(--text);background:rgba(129,140,248,.08)}.arrow{font-size:1.25rem;color:var(--orange);font-weight:900}
+.process-list{list-style:none;padding:0;margin:10px 0}.process-list li{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:8px;margin-bottom:7px}.step-num{font-weight:900;color:var(--accent)}.move-btns{display:flex;gap:4px}.mini-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:7px;min-width:38px;min-height:38px;cursor:pointer}
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.case{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px}.case p{min-height:44px}.case select{margin-top:5px}
+.taxonomy{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tax-col{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px}.tax-col h4{font-size:.86rem;color:var(--accent);margin-bottom:6px}.tax-col ul{padding-left:17px}
+.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px;overflow-x:auto;color:var(--text)}
+.faded-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scale-preview{display:flex;gap:5px;align-items:flex-end;flex-wrap:wrap;margin:12px 0}.scale-tick{min-width:34px;text-align:center;border:1px solid var(--border);background:var(--bg);border-radius:7px;padding:6px 4px;font-size:.72rem}
+.compare-table td:first-child{min-width:90px}.callout{border-left:3px solid var(--cyan);padding-left:10px;margin:8px 0;color:var(--text2);font-size:.84rem}
+.source-note{font-size:.72rem;color:var(--text3);margin-top:8px}.exact-source{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.78rem;background:var(--bg);border:1px dashed var(--border);border-radius:8px;padding:9px;color:var(--text2)}
+@media(max-width:680px){.overview-grid,.model-grid,.case-grid,.taxonomy,.faded-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD02 Testkonstruktion</h1>
+<p class="page-sub">Psychologische Diagnostik · Dr. Nadine Wedderhoff · Sommersemester 2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie wird ein Konstrukt operationalisiert? · Welche Item- und Skalenentscheidungen sind begründbar? · Wie entstehen Antwortverzerrungen?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<aside class="card overview" aria-label="Stoffkarte">
+  <div class="card-title">Stoffkarte · 56 Folien</div>
+  <p>Das Modul folgt dem vollständigen Weg von der Konstruktdefinition über Testplanung und Itemgestaltung bis zu Antworttendenzen.</p>
+  <div class="overview-grid">
+    <div class="overview-chip">1–11 · Testbegriff, Messmodelle, Konstrukt</div><div class="overview-chip">12–22 · Datenarten, Strategien, Planung</div><div class="overview-chip">23–41 · Item- und Ratingskalenformate</div>
+    <div class="overview-chip">42–46 · Rating, Ranking, Paarvergleich</div><div class="overview-chip">47–50 · Itemformulierung und Reihung</div><div class="overview-chip">51–56 · Antworttendenzen und Polung</div>
+  </div>
+</aside>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Test & Modell</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Ablauf & Konstrukt</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Daten & Strategien</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Testplanung</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Itemformate</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Ratingskalen</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Rating–Ranking–Paare</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Gute Items</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">⑨ Antworttendenzen</button>
+  <button type="button" role="tab" aria-controls="s9" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(9)" id="nb9">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s10" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(10)" id="nb10">🎯 Gemischter Abruf</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Test & Modell ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+  data-source-id="PD02-A01E01 PD02-A01E02 PD02-A01E03 PD02-A01E04" data-slides="1–4" data-source-status="direkt"
+  data-learning-objective="LZ01+LZ02" data-widget-type="W3" data-cognitive-task="definieren_und_pfeilrichtung_bestimmen">
+  <div class="sec-head"><div class="sec-title">① Testbegriff und Messprinzip</div><div class="sec-lz">Psychometrische Tests einordnen und reflektive von formativen Messmodellen über die Pfeilrichtung unterscheiden.</div><div class="source-meta">Folien 1–4 · Widget W3</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Vier Items sollen dasselbe Merkmal abbilden. Zeigt der kausale Pfeil bei einem reflektiven Modell von den Items zum Merkmal oder umgekehrt?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq0" aria-hidden="true">Vom latenten Merkmal zu den Items. Die Itemantworten werden als beobachtbare Folgen des Konstrukts verstanden.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A01E01"><div class="card-title">Veranstaltungsrahmen</div><p>Modul 11a: Psychologische Diagnostik · BSc. Psychologie (Präsenz) · Dr. Nadine Wedderhoff · Sommersemester 2026.</p></article><article class="card" data-source-id="PD02-A01E02"><div class="card-title">Definition und Einordnung</div><p><strong>Psychometrischer Test:</strong> wissenschaftliches Routineverfahren zur Untersuchung eines oder mehrerer empirisch abgrenzbarer Persönlichkeitsmerkmale mit dem Ziel einer möglichst quantitativen Aussage über den relativen Grad der individuellen Merkmalsausprägung.</p><p>Tests sind damit eine <strong>Messmethode</strong>, jedoch nicht die einzige: Die Folie nennt Interviews und Verhaltensbeobachtungen als weitere diagnostische Messmethoden.</p><p class="source-note">Definition nach Lienert &amp; Raatz (1998).</p></article><article class="card" data-source-id="PD02-A01E03"><div class="card-title">Reflektives und formatives Messmodell</div><div class="model-grid"><div class="model-box"><strong>Reflektiv</strong><div class="arrow-line"><span class="node">latentes Merkmal</span><span class="arrow">→</span><span class="node">Items 1–4</span></div><p>Das hypothetische Konstrukt ist Ursache; die Indikatoren sind beobachtbare Folgen oder Konsequenzen.</p></div><div class="model-box"><strong>Formativ</strong><div class="arrow-line"><span class="node">Items 1–4</span><span class="arrow">→</span><span class="node">latente Variable</span></div><p>Die Indikatoren formen die Variable und müssen nicht miteinander korreliert sein.</p></div></div><p class="source-note">Reflektive Erläuterung nach Weiber &amp; Mühlhaus (2014).</p></article><article class="card" data-source-id="PD02-A01E04"><div class="card-title">Barthel-Index: sichtbarer Scoreauszug</div><p>Die Folie zeigt gestufte Bewertungen grundlegender Alltagsfunktionen. Die Punkte einzelner Bereiche werden zu einem Testscore zusammengeführt.</p><table><caption class="sr-only">Auszug aus dem Barthel-Index</caption><thead><tr><th scope="col">Bereich</th><th scope="col">Ausprägung</th><th scope="col">Punkte</th></tr></thead><tbody><tr><th scope="row" rowspan="3">Essen</th><td>unabhängig, Geschirr und Besteck</td><td>10</td></tr><tr><td>Hilfe, etwa beim Schneiden</td><td>5</td></tr><tr><td>total hilfsbedürftig</td><td>0</td></tr><tr><th scope="row" rowspan="2">Baden</th><td>ohne Hilfe</td><td>5</td></tr><tr><td>mit Hilfe</td><td>0</td></tr><tr><th scope="row" rowspan="2">Waschen</th><td>Gesicht, Haare, Zähne selbständig</td><td>5</td></tr><tr><td>braucht Hilfe</td><td>0</td></tr><tr><th scope="row" rowspan="3">An-/Auskleiden</th><td>unabhängig inklusive Schuhe</td><td>10</td></tr><tr><td>teilweise selbständig</td><td>5</td></tr><tr><td>total hilfsbedürftig</td><td>0</td></tr></tbody></table><p class="source-note">Die Folie klassifiziert diesen Auszug nicht ausdrücklich als reflektiv oder formativ; das Modul ergänzt daher keine solche Zuordnung.</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W3</div>
+  <div class="widget"><h3>Pfeilrichtungs-Mapper</h3><p>Lege für beide Modelle Quelle und Ziel des Pfeils fest.</p><div class="model-grid"><div><label for="reflectDir">Reflektives Modell</label><select id="reflectDir"><option value="">Bitte wählen</option><option value="latent-items">latentes Merkmal → Items</option><option value="items-latent">Items → latente Variable</option></select></div><div><label for="formDir">Formatives Modell</label><select id="formDir"><option value="">Bitte wählen</option><option value="latent-items">latentes Merkmal → Items</option><option value="items-latent">Items → latente Variable</option></select></div></div><button class="btn btn-accent" type="button" onclick="checkArrowModel()">Richtungen prüfen</button><div id="arrowFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq0"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Ablauf & Konstrukt ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+  data-source-id="PD02-A02E01 PD02-A02E02 PD02-A02E03 PD02-A02E04 PD02-A02E05 PD02-A02E06" data-slides="5–11" data-source-status="direkt"
+  data-learning-objective="LZ03+LZ04" data-widget-type="W2" data-cognitive-task="prozess_rekonstruieren_und_abgrenzen">
+  <div class="sec-head"><div class="sec-title">② Ablauf und Festlegung des Merkmals</div><div class="sec-lz">Die fünf Konstruktionsstufen rekonstruieren und Konstruktraum, Definitionstechniken sowie nomologisches Netzwerk einordnen.</div><div class="source-meta">Folien 5–11 · Widget W2</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Warum ist „Items formulieren“ nicht der erste Schritt der Testkonstruktion?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq1" aria-hidden="true">Ohne Merkmalsabgrenzung und Konstruktdefinition ist nicht festgelegt, was die Items repräsentativ und trennscharf erfassen sollen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A02E01"><div class="card-title">Fünf Stufen der Testkonstruktion</div><table><caption class="sr-only">Ablauf der Testkonstruktion</caption><thead><tr><th scope="col">Stufe</th><th scope="col">Zugeordnete Arbeiten</th></tr></thead><tbody><tr><th scope="row">1. Merkmal festlegen</th><td>erste Abgrenzung; theoretische/empirische Befunde sichten; Definition</td></tr><tr><th scope="row">2. Testplanung</th><td>Datentyp; Konstruktionsstrategie; Testlänge; Rahmenbedingungen</td></tr><tr><th scope="row">3. Testrohform</th><td>Itemkonstruktion; Instruktion; Testgestaltung</td></tr><tr><th scope="row">4. Optimierungsstichprobe</th><td>Itemanalyse und Selektion; Gütekriterien prüfen</td></tr><tr><th scope="row">5. Normstichprobe</th><td>Normen bestimmen; Gütekriterien erneut prüfen</td></tr></tbody></table></article><article class="card" data-source-id="PD02-A02E02"><div class="card-title">Latenter und manifester Bereich</div><div class="arrow-line"><span class="node">Konstrukt<br><small>latent, nicht direkt beobachtbar</small></span><span class="arrow">→</span><span class="node">Item 1 · Item 2 · … · Item k<br><small>manifest</small></span><span class="arrow">→</span><span class="node">Testscore</span></div><p>Auf das Konstrukt wird aus beobachtbarem Verhalten beziehungsweise Testverhalten rückgeschlossen.</p></article><article class="card" data-source-id="PD02-A02E03"><div class="card-title">Arten des Messziels</div><ul><li>qualitative versus quantitative Merkmale;</li><li>Traits versus States, als Beispiele werden PANAS oder STAI genannt;</li><li>unidimensionale versus multidimensionale Merkmale, deren Struktur später empirisch geprüft wird.</li></ul><table><caption class="sr-only">Intelligenztheorien und Faktorenzahlen</caption><thead><tr><th scope="col">Intelligenztheorie</th><th scope="col">Faktoren</th></tr></thead><tbody><tr><td>Spearman (1904): g-Faktor</td><td>1</td></tr><tr><td>Horn &amp; Cattel (1966): fluide/kristalline Intelligenz</td><td>2</td></tr><tr><td>Thurstone (1938): Primary mental abilities</td><td>7</td></tr><tr><td>Guilford (1967): Structure of intellect</td><td>120</td></tr></tbody></table><p class="source-note">Die sichtbare Schreibweise „Cattel“ wird quellentreu dokumentiert.</p></article><article class="card" data-source-id="PD02-A02E04"><div class="card-title">Anforderungsanalyse und Konstruktraum</div><p>Nach der ersten Festlegung des Messziels wird die Konstruktdefinition erstellt. Die Anforderungsanalyse bestimmt den Konstruktraum: Der Test soll das angestrebte Konstrukt <strong>repräsentativ</strong> und <strong>trennscharf</strong> messen.</p></article><article class="card" data-source-id="PD02-A02E05"><div class="card-title">Top-down und Bottom-up</div><table><thead><tr><th scope="col">Richtung</th><th scope="col">Logik</th><th scope="col">Ansätze</th></tr></thead><tbody><tr><th scope="row">Top-down</th><td>Konstrukt definiert Inhalte</td><td>erfahrungsgeleitet-intuitiv; Literaturrecherche in Datenbanken und bestehenden Tests</td></tr><tr><th scope="row">Bottom-up</th><td>aus Inhalten wird Konstrukt entwickelt</td><td>analytisch-empirisch, etwa standardisierte Beobachtung/Befragung und Critical Incident Technique</td></tr></tbody></table></article><article class="card" data-source-id="PD02-A02E06"><div class="card-title">Nomologisches Netzwerk</div><p>Das Netzwerk ergänzt die Definition um Anknüpfungen, Überschneidungen und Grenzen. Im sichtbaren Beispiel liegt <strong>Konzentration</strong> in Überlappung mit <strong>Intelligenz</strong>, <strong>Inhibition</strong> und <strong>Speed</strong>.</p><div class="arrow-line" aria-label="Textalternative zum Überlappungsdiagramm"><span class="node">Intelligenz</span><span class="node">Inhibition</span><span class="node" style="border-color:var(--orange)">Konzentration</span><span class="node">Speed</span></div></article>
+  <div class="phase-label">Phase 3 — Anwenden · W2</div>
+  <div class="widget"><h3>Process Builder</h3><p>Bringe die fünf Hauptstufen mit den Pfeiltasten in die richtige Reihenfolge. Drag-and-drop ist nicht erforderlich.</p><ol class="process-list" id="processBuilder"><li data-step="2"><span class="step-num">1.</span><span>Testplanung</span><span class="move-btns"><button class="mini-btn" type="button" aria-label="Testplanung nach oben" onclick="moveProcess(this,-1)">↑</button><button class="mini-btn" type="button" aria-label="Testplanung nach unten" onclick="moveProcess(this,1)">↓</button></span></li><li data-step="1"><span class="step-num">2.</span><span>Festlegung des zu erfassenden Merkmals</span><span class="move-btns"><button class="mini-btn" type="button" aria-label="Merkmalsfestlegung nach oben" onclick="moveProcess(this,-1)">↑</button><button class="mini-btn" type="button" aria-label="Merkmalsfestlegung nach unten" onclick="moveProcess(this,1)">↓</button></span></li><li data-step="5"><span class="step-num">3.</span><span>Testendform an eine Normstichprobe</span><span class="move-btns"><button class="mini-btn" type="button" aria-label="Normstichprobe nach oben" onclick="moveProcess(this,-1)">↑</button><button class="mini-btn" type="button" aria-label="Normstichprobe nach unten" onclick="moveProcess(this,1)">↓</button></span></li><li data-step="3"><span class="step-num">4.</span><span>Konstruktion einer Testrohform</span><span class="move-btns"><button class="mini-btn" type="button" aria-label="Testrohform nach oben" onclick="moveProcess(this,-1)">↑</button><button class="mini-btn" type="button" aria-label="Testrohform nach unten" onclick="moveProcess(this,1)">↓</button></span></li><li data-step="4"><span class="step-num">5.</span><span>Rohform an eine Optimierungsstichprobe</span><span class="move-btns"><button class="mini-btn" type="button" aria-label="Optimierungsstichprobe nach oben" onclick="moveProcess(this,-1)">↑</button><button class="mini-btn" type="button" aria-label="Optimierungsstichprobe nach unten" onclick="moveProcess(this,1)">↓</button></span></li></ol><button class="btn btn-accent" type="button" onclick="checkProcess()">Reihenfolge prüfen</button><div id="processFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq1"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Daten & Strategien ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+  data-source-id="PD02-A03E01 PD02-A03E02 PD02-A03E03 PD02-A03E04 PD02-A03E05 PD02-A03E06" data-slides="12–17" data-source-status="direkt"
+  data-learning-objective="LZ05" data-widget-type="W1+W9" data-cognitive-task="faelle_klassifizieren">
+  <div class="sec-head"><div class="sec-title">③ Datenarten und Konstruktionsstrategien</div><div class="sec-lz">T-, Q- und L-Daten sowie rationale, externale und induktive Strategien fallbezogen unterscheiden.</div><div class="source-meta">Folien 12–17 · Widget W1+W9</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Ein Selbstbericht und eine Verhaltensbeobachtung sollen dasselbe Konstrukt erfassen. Muss zwischen beiden Verfahren ein hoher Zusammenhang entstehen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Die Folie betont, dass objektive und subjektive Verfahren häufig nur gering zusammenhängen und teilweise unterschiedliche Kriterien vorhersagen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A03E01"><div class="card-title">T-, Q- und L-Daten</div><table><thead><tr><th scope="col">Datenart</th><th scope="col">Definition der Folie</th></tr></thead><tbody><tr><th scope="row">T-Daten</th><td>Test data: Antworten eindeutig richtig oder falsch klassifizierbar</td></tr><tr><th scope="row">Q-Daten</th><td>Questionnaire data: subjektives Selbst- oder Fremdrating</td></tr><tr><th scope="row">L-Daten</th><td>Life data: beobachtetes Verhalten der Proband*innen</td></tr></tbody></table><p>Leistungstests bestehen typischerweise aus objektiven, Persönlichkeitsfragebögen aus subjektiven Inhalten; zugleich werden objektive Persönlichkeitstests als Ausnahme genannt. Objektive und subjektive Zugänge zum gleichen Konstrukt korrelieren häufig nur gering und können unterschiedliche Kriterien vorhersagen.</p><p class="source-note">Datenarten nach Cattell (1965).</p></article><article class="card" data-source-id="PD02-A03E02"><div class="card-title">Leistungsmotivation über verschiedene Zugänge</div><ul><li><strong>LMI:</strong> siebenstufiges Selbstberichtitem „Es ist mir sehr wichtig, eine verantwortungsvolle Position zu erreichen.“ (Schuler &amp; Prochaska, 2001)</li><li><strong>TAT:</strong> Thematischer Apperzeptionstest mit Bildmaterial (Murray, 1943)</li><li><strong>OLMT:</strong> Objektiver Leistungsmotivationstest (Schmidt-Atzert, 2004)</li></ul><p>Die Montage verdeutlicht: Dasselbe breite Konstrukt kann über unterschiedliche diagnostische Zugänge erfasst werden.</p></article><article class="card" data-source-id="PD02-A03E03"><div class="card-title">Drei Konstruktionsstrategien</div><p>Rationale beziehungsweise deduktive, externale beziehungsweise kriteriumsorientierte und induktive beziehungsweise faktorenanalytische Strategie.</p></article><article class="card" data-source-id="PD02-A03E04"><div class="card-title">Rationale Strategie</div><p>Aus der Theorie wird abgeleitet, wie sich das Konstrukt differenziert; darauf aufbauend werden Items konstruiert und anschließend auf Güte geprüft.</p><p><strong>RIASEC-Beispiel:</strong> praktisch-technisch [R], intellektuell-forschend [I], künstlerisch-sprachlich [A], sozial [S], unternehmerisch [E], konventionell [C]. Für [A] werden Interesse an einer Fremdsprache und an künstlerischer Gestaltung genannt.</p><p class="source-note">Holland (1985); AIST-R nach Bergmann &amp; Eder (2004).</p></article><article class="card" data-source-id="PD02-A03E05"><div class="card-title">Externale Strategie</div><p>Vorab unterschiedliche Gruppen bearbeiten eine möglichst heterogene Itemmenge. Beibehalten werden Items, in denen sich die Gruppen tatsächlich unterscheiden.</p><p><strong>MMPI-Beispiel:</strong> 1000 Items wurden klinisch auffälligen Gruppen und einer Kontrollgruppe vorgelegt; 556 Items mit deutlichen Mittelwertunterschieden wurden beibehalten und zu Subskalen gruppiert.</p><p class="source-note">Hathaway &amp; McKinley (1951).</p></article><article class="card" data-source-id="PD02-A03E06"><div class="card-title">Induktive Strategie</div><p>Es wird festgelegt, welche Items das Konstrukt erfassen, nicht aber dessen Dimensionalität. Subskalen werden insbesondere durch Faktorenanalyse ermittelt.</p><p><strong>Lexikalischer Ansatz/Big Five:</strong> Alltagswichtige Persönlichkeitseigenschaften hinterlassen sprachliche „Sedimente“ und werden eher in einzelnen Wörtern abgebildet.</p><p class="source-note">Sedimentshypothese nach Klages (1926).</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W1+W9</div>
+  <div class="widget" id="strategyCases"><h3>Fallklassifikation</h3><div class="case-grid"><div class="case"><p>Eine Person bewertet ihre eigene Leistungsmotivation auf einer Skala.</p><select data-answer="Q"><option value="">Datenart</option><option>T</option><option>Q</option><option>L</option></select></div><div class="case"><p>Beobachtende registrieren das Verhalten einer Person in einer Alltagssituation.</p><select data-answer="L"><option value="">Datenart</option><option>T</option><option>Q</option><option>L</option></select></div><div class="case"><p>Items werden aus einem theoretisch vorgegebenen Interessensmodell abgeleitet.</p><select data-answer="rational"><option value="">Strategie</option><option value="rational">rational</option><option value="external">external</option><option value="induktiv">induktiv</option></select></div><div class="case"><p>Nur Items, die klinische und Kontrollgruppe unterscheiden, werden behalten.</p><select data-answer="external"><option value="">Strategie</option><option value="rational">rational</option><option value="external">external</option><option value="induktiv">induktiv</option></select></div><div class="case"><p>Subskalen werden erst aus der empirischen Faktorenstruktur abgeleitet.</p><select data-answer="induktiv"><option value="">Strategie</option><option value="rational">rational</option><option value="external">external</option><option value="induktiv">induktiv</option></select></div></div><button class="btn btn-accent" type="button" onclick="checkCaseSet('strategyCases','strategyFb')">Fälle prüfen</button><div id="strategyFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq2"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Testplanung ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+  data-source-id="PD02-A04E01 PD02-A04E02 PD02-A04E03 PD02-A04E04 PD02-A04E05" data-slides="18–22" data-source-status="direkt"
+  data-learning-objective="LZ06" data-widget-type="W9" data-cognitive-task="designentscheidung_begruenden">
+  <div class="sec-head"><div class="sec-title">④ Länge, Zeit, Zielgruppe und Rahmenbedingungen</div><div class="sec-lz">Planungsentscheidungen anhand von Genauigkeit, Belastung, Zielgruppe und Einsatzbedingungen begründen.</div><div class="source-meta">Folien 18–22 · Widget W9</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Ein längerer Test ist genauer. Warum ist „so lang wie möglich“ trotzdem keine ausreichende Planungsregel?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Weil Zeitaufwand, Ermüdung, Zielgruppe, Dimensionalität und Einsatzbedingungen gegen den Genauigkeitsgewinn abgewogen werden müssen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A04E01"><div class="card-title">Testlänge und Testzeit</div><ul><li>Mit der Testlänge nimmt die Genauigkeit zu, zugleich steigen Zeitaufwand und mögliche Ermüdung.</li><li>Die geeignete Länge hängt auch von der Dimensionalität ab.</li><li>Die Rohform braucht mehr Items als die Endform, weil in der Itemanalyse bis zu 75 % eliminiert werden können.</li><li>Zeit kann für den Gesamttext, Subskalen oder einzelne Items begrenzt werden.</li><li><strong>Speed:</strong> sehr leichte Aufgaben plus anspruchsvolle Zeitkomponente. <strong>Power:</strong> keine Zeitbegrenzung, aber steigende Aufgabenschwierigkeit.</li></ul><p class="source-note">Die sichtbaren Schreibweisen „begrenz“ und „Zeitbegrenzug“ werden nur im Quellenaudit dokumentiert.</p></article><article class="card" data-source-id="PD02-A04E02"><div class="card-title">Zielgruppe und d2-R-Sichtbarkeit</div><p>Zielgruppenmerkmale wie Alter, Bildung oder Händigkeit bei Reaktionszeitmessungen können Itemformat und -inhalt bestimmen.</p><p class="exact-source">Streichen Sie jedes „d“, das mit zwei Stichen versehen ist, so schnell wie möglich – aber natürlich auch ohne Fehler – durch.</p><p>Im Folienbeispiel machen Personen ab 60 Jahren wegen schlechter Erkennbarkeit mehr Fehler; eine größere Schrift reduziert derartige Fehler.</p><p class="source-note">d2 nach Brickenkamp (2002); Sichtbarkeitsbeispiel nach Bühner &amp; Schmidt-Atzert (2004).</p></article><article class="card" data-source-id="PD02-A04E03"><div class="card-title">Anpassung an die Zielgruppe</div><ul><li><strong>Eigenschaftsspektrum:</strong> Der Test muss im vermuteten Ausprägungsbereich differenzieren, etwa Extraversion bei Animateur*innen.</li><li><strong>Fähigkeitsspektrum:</strong> Items für 6-Jährige müssen anders schwierig sein als für 16-Jährige; informative Items können sich auch zwischen Bildungsgruppen unterscheiden.</li><li>Ein breites Schwierigkeitsspektrum vermeidet sehr spezifische Tests, verlängert aber den Test und kann Frustration oder Langeweile erzeugen.</li><li>Alternativen: adaptives Testen oder subgruppenspezifische Normierung.</li><li>Begriffe müssen zur Zielgruppe passen.</li></ul></article><article class="card" data-source-id="PD02-A04E04"><div class="card-title">Rahmenbedingungen</div><table><thead><tr><th scope="col">Entscheidung</th><th scope="col">Quellennahe Abwägung</th></tr></thead><tbody><tr><th scope="row">Einsatzbereich</th><td>z. B. Personalauswahl mit Folgen für Akzeptanz und Verfälschbarkeit</td></tr><tr><th scope="row">Gruppe</th><td>ökonomischer; aber keine individuelle Interaktion bei besonderem Material und mögliche Interaktion zwischen Proband*innen</td></tr><tr><th scope="row">Computer</th><td>standardisierte Reize/Instruktionen, zeitliche Standardisierung, Reaktionszeiten, adaptives Testen, keine manuelle Auswertung; dagegen Equipment und Computerängstlichkeit</td></tr><tr><th scope="row">Internet</th><td>besondere Variante mit zusätzlichen Vor- und Nachteilen</td></tr><tr><th scope="row">Zweck</th><td>Individualdiagnostik versus Screening</td></tr></tbody></table></article><article class="card" data-source-id="PD02-A04E05"><div class="card-title">Übergang zur Testrohform</div><p>Nach Merkmalsfestlegung und Testplanung folgt die Konstruktion der Rohform: Itemkonstruktion, Instruktion und Testgestaltung.</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W9</div>
+  <div class="widget" id="planningCases"><h3>Diagnostic Case Decision</h3><div class="case-grid"><div class="case"><p>Eine ältere Zielgruppe erkennt kleine d2-Zeichen schlecht.</p><select data-answer="schrift"><option value="">Entscheidung</option><option value="schrift">größere Schrift</option><option value="mehrschwierigkeit">schwierigere Zeichen</option><option value="nurzeit">nur mehr Zeit</option></select></div><div class="case"><p>Reaktionszeiten sollen präzise und standardisiert registriert werden.</p><select data-answer="computer"><option value="">Entscheidung</option><option value="papier">Papierfassung</option><option value="computer">computergestützt</option><option value="aufsatz">offener Aufsatz</option></select></div><div class="case"><p>Ein sehr heterogenes Fähigkeitsspektrum soll ohne extrem langen Test abgedeckt werden.</p><select data-answer="adaptiv"><option value="">Entscheidung</option><option value="breit">nur sehr breite feste Itemmenge</option><option value="adaptiv">adaptives Testen</option><option value="gleich">identische Schwierigkeit</option></select></div><div class="case"><p>Viele Personen sollen ökonomisch vorselektiert werden.</p><select data-answer="screen"><option value="">Entscheidung</option><option value="screen">Gruppen-Screening</option><option value="einzel">Einzeldiagnostik mit Interaktion</option><option value="keine">keine Rahmenfestlegung</option></select></div></div><button class="btn btn-accent" type="button" onclick="checkCaseSet('planningCases','planningFb')">Entscheidungen prüfen</button><div id="planningFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq3"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Itemformate ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+  data-source-id="PD02-A05E01 PD02-A05E02 PD02-A05E03 PD02-A05E04 PD02-A05E05 PD02-A05E06 PD02-A05E07 PD02-A05E14" data-slides="23–32, 40–41" data-source-status="direkt"
+  data-learning-objective="LZ07" data-widget-type="W2+W4+W5" data-cognitive-task="taxonomie_zuordnen_und_rechnen">
+  <div class="sec-head"><div class="sec-title">⑤ Itemformate und Ratewahrscheinlichkeit</div><div class="sec-lz">Die Taxonomie freier, geschlossener und atypischer Formate rekonstruieren und die Ratewahrscheinlichkeit berechnen.</div><div class="source-meta">Folien 23–32, 40–41 · Widget W2+W4+W5</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Eine geschlossene Aufgabe ist leichter auszuwerten. Bedeutet das automatisch, dass sie diagnostisch besser ist?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true">Nein. Auswertungsobjektivität und Ökonomie sind nur Wahlkriterien; Passung zum Merkmal, Verständlichkeit, Ratewahrscheinlichkeit und Distraktorqualität müssen ebenfalls stimmen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A05E01"><div class="card-title">Item, Itemstamm und Antwortformat</div><p>Ein Item ist der kleinste Testbaustein. Es besteht aus Frage, Aufgabenstellung oder Reiz als <strong>Itemstamm</strong> und den zulässigen registrierten Antwortmöglichkeiten als <strong>Antwortformat</strong>.</p></article><article class="card" data-source-id="PD02-A05E02"><div class="card-title">Zwei Klassifikationsdimensionen</div><ul><li><strong>offen/frei</strong> versus <strong>geschlossen/gebunden</strong>: freie Generierung oder Auswahl aus Vorgaben;</li><li><strong>qualitativ</strong> mit kategorialer/nominaler Antwortskala versus <strong>quantitativ</strong> mit Abstufung.</li></ul><p>Wahlkriterien: objektive Auswertbarkeit, Verständlichkeit, Ökonomie und bei Leistungstests geringe Ratewahrscheinlichkeit.</p></article><article class="card" data-source-id="PD02-A05E03"><div class="card-title">Taxonomie nach Moosbrugger und Kelava (2007)</div><div class="taxonomy"><div class="tax-col"><h4>Freies Antwortformat</h4><ul><li>Kurzaufsatzaufgaben</li><li>Ergänzungsaufgaben</li></ul></div><div class="tax-col"><h4>Geschlossenes Antwortformat</h4><ul><li>Ordnungsaufgaben<ul><li>Zuordnung</li><li>Umordnung</li></ul></li><li>Auswahlaufgaben<ul><li>dichotom</li><li>Mehrfachauswahl</li></ul></li><li>Beurteilungsaufgaben<ul><li>Analogskala</li><li>Ratingskala</li></ul></li></ul></div><div class="tax-col"><h4>Atypisches Antwortformat</h4><p>Aufgaben ohne die dargestellte freie/geschlossene Antwortstruktur, etwa Zahlenverbinden oder Zeichenstreichen.</p></div></div></article><article class="card" data-source-id="PD02-A05E04"><div class="card-title">Offenes Antwortformat</div><p><strong>Kurzaufsatz:</strong> Jahreszeiten erklären; kreative Nutzungen für Garnrolle und Nagel; freie Bildantwort. <strong>Ergänzung:</strong> Land von Lima; Analogie Apfel:Obst = Weizen:…; Lückentext.</p><p><strong>Vorteile:</strong> freie Reproduktion, keine Zufallslösung, komplexe Aufgaben. <strong>Nachteile:</strong> eingeschränkte Auswertungsobjektivität; mögliche Ketteneffekte bei Ergänzungen.</p></article><article class="card" data-source-id="PD02-A05E05"><div class="card-title">Ordnungsaufgaben</div><p><strong>Zuordnung:</strong> Länder–Hauptstädte oder Wisconsin-Card-Sorting-Test. <strong>Umordnung:</strong> Bilder in eine logische Reihe bringen.</p><p>Durchführung und Auswertung sind ökonomisch, Zufallslösungen eher unwahrscheinlich; die Konstruktion ist schwierig.</p></article><article class="card" data-source-id="PD02-A05E06"><div class="card-title">Auswahlaufgaben</div><p>Beispiele der Folie: dichotomes richtig/falsch-Item, Wortanalogie, Präferenzitem und figurale Matrix.</p><ul><li>Antwortmöglichkeiten müssen <strong>disjunkt</strong> sein.</li><li>Bei Persönlichkeitstests sollen sie <strong>vollständig</strong> sein.</li><li>Bei Leistungstests sollen falsche Antworten als <strong>plausible Distraktoren</strong> funktionieren.</li></ul></article><article class="card" data-source-id="PD02-A05E07"><div class="card-title">Distraktor, Ratewahrscheinlichkeit und Schwierigkeit</div><p>Ein Distraktor ist eine falsche Alternative, die von der richtigen Lösung ablenken soll. Mehr Alternativen erschweren das Raten, gute Distraktoren sind jedoch schwierig zu konstruieren; geschlossene Aufgaben prüfen zudem Wiedererkennen statt freier Reproduktion.</p><div class="formula" role="math" aria-label="Ratewahrscheinlichkeit: eins geteilt durch n über k">P(Raten) = 1 / C(n,k) = 1 / [n! / (k!·(n-k)!)]</div><p><strong>Vollständiges Beispiel:</strong> n=5 Antwortmöglichkeiten, k=2 richtige Antworten: C(5,2)=5!/(2!·3!)=10; daher 1/10=.10.</p><p><strong>Richtung der Itemschwierigkeit auf der Folie:</strong> Zu einfache Distraktoren erhöhen den Kennwert und machen die Aufgabe leichter; zu schwere Distraktoren senken ihn und machen die Aufgabe schwerer. Im Extremfall können selbst wissende Personen richtige und falsche Optionen kaum unterscheiden.</p></article><article class="card" data-source-id="PD02-A05E14"><div class="card-title">Atypische Antwortformate</div><p>Gezeigt werden der Zahlenverbindungstest mit den Zahlen 1 bis 20 (Oswald &amp; Roth, 1987) und die d2-Zeichenstreichaufgabe (Brickenkamp, 2002).</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W2+W4+W5</div>
+  <div class="widget"><h3>Itemformat-Labor mit Formula Ladder</h3><div class="faded-grid"><div><label for="formatCase1">„In welchem Land liegt Lima?“ mit frei einzutragender Antwort</label><select id="formatCase1" data-answer="open"><option value="">Format wählen</option><option value="open">Ergänzungsaufgabe, offen</option><option value="assign">Zuordnungsaufgabe, geschlossen</option><option value="rating">Ratingskala</option></select></div><div><label for="formatCase2">Länder werden vorgegebenen Hauptstädten zugeordnet</label><select id="formatCase2" data-answer="assign"><option value="">Format wählen</option><option value="open">Kurzaufsatz, offen</option><option value="assign">Zuordnungsaufgabe, geschlossen</option><option value="atypical">atypisches Format</option></select></div></div><button class="btn btn-ghost" type="button" onclick="checkCaseSet(this.parentElement.id||'itemFormatLab','formatLabFb')" style="display:none">versteckt</button><div id="itemFormatLab" style="display:none"></div><hr style="border-color:var(--border);margin:16px 0"><p><strong>Stufe 1 – vollständig:</strong> n=5, k=2 → C(5,2)=10 → P=.10.</p><label for="combDen">Stufe 2 – welcher Nenner fehlt? 1 / C(5,2) = 1 / …</label><input id="combDen" type="text" inputmode="numeric" placeholder="Nenner"><label for="selfRate">Stufe 3 – selbst: n=4, k=1. Gib Wahrscheinlichkeit als Bruch oder Dezimalzahl an.</label><input id="selfRate" type="text" placeholder="z. B. 1/4"><button class="btn btn-accent" type="button" onclick="(function(){var ok1=document.getElementById('formatCase1').value==='open',ok2=document.getElementById('formatCase2').value==='assign';if(!ok1||!ok2){pdFeedback('rateFb',false,'Prüfe zuerst die beiden Formatzuordnungen.');return;}checkRateStep();})()">Labor prüfen</button><div id="rateFb" class="widget-feedback" aria-live="polite"></div><p class="callout"><strong>Transfer:</strong> Mehr Alternativen reduzieren die reine Ratechance nur dann sinnvoll, wenn die zusätzlichen Distraktoren plausibel konstruiert sind.</p></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq4"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Ratingskalen ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+  data-source-id="PD02-A05E08 PD02-A05E09 PD02-A05E10 PD02-A05E11 PD02-A05E12 PD02-A05E13" data-slides="33–39" data-source-status="direkt"
+  data-learning-objective="LZ07" data-widget-type="W7" data-cognitive-task="skalenmerkmale_prognostizieren">
+  <div class="sec-head"><div class="sec-title">⑥ Ratingskalen gestalten und interpretieren</div><div class="sec-lz">Kategorienzahl, Verankerung, Polarität, Mittelkategorie und Weiß-nicht-Kategorie als Designentscheidungen beurteilen.</div><div class="source-meta">Folien 33–39 · Widget W7</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Sind mehr Antwortkategorien immer besser, weil sie theoretisch feiner differenzieren?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Bei sehr vielen Kategorien nutzen Befragte faktisch nicht alle. Die Folie empfiehlt 7 bis 9 Antwortoptionen und zeigt Häufungen bei bevorzugten Zahlen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A05E08"><div class="card-title">Beurteilungsaufgaben</div><p>Die Folie setzt Beurteilungsaufgaben mit Ratingskalen gleich und zeigt fünf- sowie siebenstufige Lebenszufriedenheitsskalen.</p></article><article class="card" data-source-id="PD02-A05E09"><div class="card-title">Unterscheidungsmerkmale von Ratingskalen</div><ul><li>Zahl der Antwortkategorien;</li><li>verbale, numerische oder symbolische Verankerung;</li><li>unipolar oder bipolar;</li><li>mit oder ohne Mittelkategorie;</li><li>mit oder ohne Weiß-nicht-Kategorie.</li></ul></article><article class="card" data-source-id="PD02-A05E10"><div class="card-title">Zahl der Antwortkategorien</div><p>Häufig werden 2 bis 9 Kategorien verwendet; visuelle Analogskalen erlauben feinere Abstufungen. Mehr Kategorien erhöhen theoretisch die Differenzierung, werden faktisch aber nicht vollständig genutzt.</p><p><strong>100-stufiges Gefühlsthermometer:</strong> 80 % der Ratings waren Vielfache von 10; fast der gesamte Rest lag bei 15 und 85. Empfehlung: 7 bis 9 Antwortoptionen.</p><p class="source-note">Tourangeau, Rips &amp; Rasinski (2000); Empfehlung Preston &amp; Colman (2000).</p></article><article class="card" data-source-id="PD02-A05E11"><div class="card-title">Verankerungen und Etikettierung</div><p>Verankerungen können verbal, numerisch und/oder symbolisch sein. Verbale Labels können alle Kategorien oder nur Extrempole benennen; die Benennung jeder Kategorie wird mit höherer Messgenauigkeit verbunden.</p><table><thead><tr><th scope="col">Dimension</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th></tr></thead><tbody><tr><th scope="row">Häufigkeit</th><td>nie</td><td>selten</td><td>gelegentlich</td><td>oft</td><td>immer</td></tr><tr><th scope="row">Intensität</th><td>nicht</td><td>wenig</td><td>mittelmäßig</td><td>ziemlich</td><td>oft</td></tr><tr><th scope="row">Bewertung</th><td>stimmt nicht</td><td>stimmt wenig</td><td>stimmt mittelmäßig</td><td>stimmt ziemlich</td><td>stimmt sehr</td></tr></tbody></table><p>Numerische Labels sollen psychologische Abstände angleichen. Symbolische Labels sind spracharm, für Kinder geeignet und dienen besonders affektiven Urteilen; gezeigt werden SAM und ein General-Motors-Item zur Arbeitszufriedenheit.</p><p class="source-note">Rohrmann (1978); Krosnick (1999); Lang et al. (1980); Kunin (1955).</p></article><article class="card" data-source-id="PD02-A05E12"><div class="card-title">Unipolare und bipolare Skalen</div><p>Unipolare Skalen laufen ab einem Nullpunkt in eine Richtung; bipolare Skalen bilden negative und positive Richtungen um Null ab. Skala und Konstrukt sollen sich decken. Negative Zahlen können zusätzlich „negativ“ konnotiert und ungewohnt sein.</p><p><strong>Schwarz et al. (1991):</strong> Bei der Frage nach bisherigem Lebenserfolg lagen 34 % in den Kategorien 0–5 der Skala 0–10, aber 13 % in den Kategorien −5–0 der Skala −5 bis +5. Die numerische Rahmung beeinflusste damit die Antworten.</p></article><article class="card" data-source-id="PD02-A05E13"><div class="card-title">Mittelkategorie und Weiß-nicht</div><p>Eine Mitte entsteht etwa bei bipolaren Skalen mit ungerader Kategorienzahl. Ihre Bedeutung ist mehrdeutig: Ambivalenz, Unsicherheit, fehlende Meinungsbildung oder bequeme Ausweichreaktion.</p><p>Eine Weiß-nicht-Kategorie macht sichtbar, wenn eine Frage nicht beantwortet werden kann, kann aber suggerieren, sie schon bei Unsicherheit zu wählen.</p><p><strong>Aschmann &amp; Widmann (1986):</strong> 19 % äußerten zur Abschaffung des Art. 35 Abs. 4 GG eine Meinung; mit angebotener Weiß-nicht-Kategorie waren es 2 %.</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W7</div>
+  <div class="widget"><h3>Skalen-Designer: erst prognostizieren, dann gestalten</h3><label for="scalePrediction">Was ist bei 100 Kategorien am ehesten zu erwarten?</label><select id="scalePrediction"><option value="">Prognose wählen</option><option value="uniform">alle Kategorien werden gleichmäßig genutzt</option><option value="cluster">Antworten häufen sich auf bevorzugten Zahlen</option></select><button class="btn btn-ghost" type="button" onclick="checkScalePrediction()">Prognose prüfen</button><div id="scalePredFb" class="widget-feedback" aria-live="polite"></div><div class="faded-grid"><div><label for="scaleN">Kategorienzahl</label><input id="scaleN" type="number" min="2" max="12" value="7"></div><div><label for="scaleAnchor">Verankerung</label><select id="scaleAnchor"><option value="full">jede Kategorie verbal</option><option value="ends">nur Extrempole verbal</option></select></div><div><label for="scalePol">Polarität</label><select id="scalePol"><option value="uni">unipolar</option><option value="bi">bipolar</option></select></div><div><label><input id="scaleMid" type="checkbox" checked> Mittelkategorie vorsehen</label><label><input id="scaleDont" type="checkbox"> Weiß-nicht anbieten</label></div></div><div id="scalePreview" class="scale-preview" aria-label="Vorschau der Kategorien"></div><button class="btn btn-accent" type="button" onclick="buildScale()">Design interpretieren</button><div id="scaleFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq5"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Rating–Ranking–Paare ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6"
+  data-source-id="PD02-A06E01 PD02-A06E02 PD02-A06E03" data-slides="42–46" data-source-status="direkt"
+  data-learning-objective="LZ08" data-widget-type="W1+W4" data-cognitive-task="formate_vergleichen_und_aufwand_berechnen">
+  <div class="sec-head"><div class="sec-title">⑦ Rating, Ranking und Paarvergleich</div><div class="sec-lz">Datenstruktur, Aufwand und Aussageform der drei Urteilsformate vergleichen und Paarzahlen berechnen.</div><div class="source-meta">Folien 42–46 · Widget W1+W4</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Welche Information geht verloren, wenn fünf Objekte nur in eine Rangreihe gebracht werden?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq6" aria-hidden="true">Es gibt nur relative Rangpositionen. Wie stark ein Objekt absolut gefällt und wie groß die Abstände zwischen Rängen sind, bleibt offen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A06E01"><div class="card-title">Rating</div><p>Jedes Objekt wird auf derselben absoluten Kategorienstruktur beurteilt. Das Beispiel bewertet fünf Parteien jeweils mit gut, mittel oder schlecht.</p></article><article class="card" data-source-id="PD02-A06E02"><div class="card-title">Ranking</div><p>Eine vorgegebene Objektmenge wird hinsichtlich eines globalen oder spezifischen Merkmals sortiert. Ranking kann vollständig oder unvollständig sein; die Rangzahlen sind ordinal.</p><p><strong>Vorteile:</strong> Differenzierung wird garantiert und die Auseinandersetzung intensiviert. <strong>Nachteile:</strong> Differenzierung wird ohne Ties auch erzwungen; Aufwand steigt; Urteile sind nur relativ; die Daten sind abhängig beziehungsweise ipsativ und verletzen Voraussetzungen vieler statistischer Verfahren.</p></article><article class="card" data-source-id="PD02-A06E03"><div class="card-title">Paarvergleich</div><p>Objekte werden paarweise, meist vollständig und häufig im Forced-Choice-Modus beurteilt. Skalierungsmodelle wie Thurstones Law of comparative judgment können die Urteile modellieren.</p><p><strong>Konsistenz:</strong> Aus A&gt;B und B&gt;C sollte A&gt;C folgen. A&gt;B, B&gt;C und C&gt;A bilden eine zirkuläre Triade.</p><div class="formula" role="math" aria-label="Zahl der Paarvergleiche v gleich k mal k minus eins geteilt durch zwei">v = k·(k−1)/2</div><p>Ein vollständiger Paarvergleich ist sehr aufwendig; die Urteile bleiben relativ statt absolut verankert.</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W1+W4</div>
+  <div class="widget" id="formatCases"><h3>Formatentscheidung und Paarzahl</h3><div class="case-grid"><div class="case"><p>Jede Partei erhält unabhängig eine Bewertung von gut bis schlecht.</p><select data-answer="rating"><option value="">Format</option><option value="rating">Rating</option><option value="ranking">Ranking</option><option value="pair">Paarvergleich</option></select></div><div class="case"><p>Fünf Parteien werden ohne Rangbindungen von Platz 1 bis 5 geordnet.</p><select data-answer="ranking"><option value="">Format</option><option value="rating">Rating</option><option value="ranking">Ranking</option><option value="pair">Paarvergleich</option></select></div><div class="case"><p>Für jedes Parteienpaar wird entschieden, welche Partei besser gefällt.</p><select data-answer="pair"><option value="">Format</option><option value="rating">Rating</option><option value="ranking">Ranking</option><option value="pair">Paarvergleich</option></select></div></div><button class="btn btn-ghost" type="button" onclick="checkCaseSet('formatCases','formatFb')">Formate prüfen</button><div id="formatFb" class="widget-feedback" aria-live="polite"></div><label for="pairK">Objektzahl k für einen vollständigen Paarvergleich</label><input id="pairK" type="number" min="2" max="30" value="5"><button class="btn btn-accent" type="button" onclick="calcPairs()">Paarzahl berechnen</button><div id="pairFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq6"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Gute Items ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7"
+  data-source-id="PD02-A07E01 PD02-A07E02 PD02-A07E03 PD02-A07E04" data-slides="47–50" data-source-status="direkt"
+  data-learning-objective="LZ09" data-widget-type="W11" data-cognitive-task="fehler_diagnostizieren">
+  <div class="sec-head"><div class="sec-title">⑧ Itembeantwortung, Formulierung und Reihung</div><div class="sec-lz">Den Antwortprozess rekonstruieren, Formulierungsfehler diagnostizieren und Positions- von Reihenfolgeeffekten trennen.</div><div class="source-meta">Folien 47–50 · Widget W11</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Warum kann ein grammatisch korrektes Item trotzdem diagnostisch schlecht sein?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq7" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq7" aria-hidden="true">Weil Verständlichkeit, eindeutiger Merkmalsbezug, klare Polungsrichtung, passende Antwortskala, definierter Zeitraum und nicht-extreme Formulierung zusätzlich erfüllt sein müssen.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A07E01"><div class="card-title">Itembeantwortung als Informationsverarbeitung</div><div class="arrow-line"><span class="node">Verständnis</span><span class="arrow">→</span><span class="node">Abruf</span><span class="arrow">→</span><span class="node">Urteil</span><span class="arrow">→</span><span class="node">Reaktion</span></div><p>Beispiel: „Wie häufig haben Sie in den letzten sechs Monaten Drogen konsumiert?“ mit den Kategorien nie, selten, manchmal, häufig. Der Prozess kann durch <strong>Satisficing</strong> statt Optimizing abgekürzt werden.</p><p class="source-note">Tourangeau et al. (2000); Krosnick &amp; Alwin (1987).</p></article><article class="card" data-source-id="PD02-A07E02"><div class="card-title">Regeln zur Itemformulierung</div><table><thead><tr><th scope="col">Regel</th><th scope="col">Gegenbeispiel der Folie</th></tr></thead><tbody><tr><th scope="row">zielgruppengerecht verständlich</th><td>„Ich fühle mich depressiv“</td></tr><tr><th scope="row">keine umständliche Länge/Abkürzungen</th><td>„U.U. ist es m.E. legitim …“</td></tr><tr><th scope="row">nur ein Thema</th><td>„Mein Therapeut ist einfühlsam und kompetent“</td></tr><tr><th scope="row">keine doppelte Verneinung</th><td>„Ich habe selten keinen Appetit“</td></tr><tr><th scope="row">Stamm passt zur Skala</th><td>„Ich gehe selten ins Kino“ plus nie–häufig</td></tr><tr><th scope="row">Zeitraum eindeutig</th><td>„In den letzten Wochen …“</td></tr></tbody></table></article><article class="card" data-source-id="PD02-A07E03"><div class="card-title">Merkmalsbezug, Polungsrichtung und Extremität</div><ul><li>Es muss plausibel sein, dass ein Item das intendierte Merkmal erfasst: Eine Frage nach Gauß ist nicht ohne Weiteres reines Mathematikwissen; einige figurale IST-Items waren ohne räumliches Vorstellungsvermögen lösbar.</li><li>Es muss klar sein, welche Antwort eine höhere Merkmalsausprägung bedeutet: Das Astrologie-Faktenitem ist für die Einstellung zur Astrologie ungeeignet.</li><li>Items dürfen nicht extrem formuliert sein: „Man sollte den Glauben an die Astrologie hart bestrafen“ ist ein Gegenbeispiel.</li></ul><p class="source-note">Figurales Beispiel nach Putz-Osterloh (1977).</p></article><article class="card" data-source-id="PD02-A07E04"><div class="card-title">Aufgabenreihung</div><p>Items können nach Subskalen gruppiert oder durchmischt werden. Bei Powertests steigt die Schwierigkeit typischerweise an. Die Folie zeigt blockweise Subtests mit jeweiliger Instruktion und eine durchmischte Abfolge bei einem mehrdimensionalen Persönlichkeitstest.</p><p><strong>Positionseffekt:</strong> abhängig von der Stelle, etwa Ermüdung am Ende. <strong>Reihenfolgeeffekt:</strong> abhängig davon, welche Items zuvor bearbeitet wurden.</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W11</div>
+  <div class="widget" id="itemDebugger"><h3>Misconception Debugger: Welche Regel ist verletzt?</h3><div class="case-grid"><div class="case"><p>„Ich habe selten keinen Appetit.“</p><select data-answer="neg"><option value="">Fehler wählen</option><option value="neg">doppelte Verneinung</option><option value="two">zwei Themen</option><option value="time">unklare Zeitspanne</option></select></div><div class="case"><p>„Mein Therapeut ist einfühlsam und kompetent.“</p><select data-answer="two"><option value="">Fehler wählen</option><option value="neg">doppelte Verneinung</option><option value="two">zwei Themen</option><option value="scale">Stamm-Skala-Mismatch</option></select></div><div class="case"><p>„Ich gehe selten ins Kino.“ Antwort: nie–selten–gelegentlich–häufig.</p><select data-answer="scale"><option value="">Fehler wählen</option><option value="scale">Stamm-Skala-Mismatch</option><option value="extreme">extreme Formulierung</option><option value="time">unklare Zeitspanne</option></select></div><div class="case"><p>„In den letzten Wochen war ich häufig niedergeschlagen.“</p><select data-answer="time"><option value="">Fehler wählen</option><option value="time">unklare Zeitspanne</option><option value="two">zwei Themen</option><option value="neg">doppelte Verneinung</option></select></div></div><button class="btn btn-accent" type="button" onclick="checkItemDebugger()">Diagnosen prüfen</button><div id="itemDebugFb" class="widget-feedback" aria-live="polite"></div></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq7"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(6)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(8)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — ⑨ Antworttendenzen ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8"
+  data-source-id="PD02-A08E01 PD02-A08E02 PD02-A08E03 PD02-A08E04 PD02-A08E05 PD02-A08E06 PD02-A08E07" data-slides="51–56" data-source-status="direkt"
+  data-learning-objective="LZ10" data-widget-type="W9+W11" data-cognitive-task="bias_erkennen_und_massnahmen_abwaegen">
+  <div class="sec-head"><div class="sec-title">⑨ Antworttendenzen und Verfälschung</div><div class="sec-lz">Formale und inhaltliche Antworttendenzen, Kontrollansätze und Itempolung fallbezogen unterscheiden.</div><div class="source-meta">Folien 51–56 · Widget W9+W11</div></div>
+  <div class="phase-label">Phase 1 — Aktivieren</div>
+  <div class="entry-q"><p>Wenn alle Items positiv formuliert sind, warum kann ein hoher Summenwert teilweise etwas anderes als das Merkmal abbilden?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq8" onclick="revealEntry(this,'eq8')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq8" aria-hidden="true">Weil die Merkmalsausprägung mit einer allgemeinen Zustimmungstendenz konfundiert sein kann. Ausgewogene Polung soll diese Überlagerung reduzieren, bringt aber eigene Risiken mit.</div></div>
+  <div class="phase-label">Phase 2 — Verstehen</div>
+  <article class="card" data-source-id="PD02-A08E01"><div class="card-title">Definition Antworttendenz</div><p>Antworttendenzen beziehungsweise response sets, styles oder bias sind Tendenzen, Items nicht nur entsprechend der eigenen Ausprägung im betrachteten Merkmal zu beantworten.</p></article><article class="card" data-source-id="PD02-A08E02"><div class="card-title">Formale Antworttendenzen</div><ul><li><strong>Akquieszenz:</strong> inhaltsunabhängige Zustimmung;</li><li><strong>Tendenz zur Mitte:</strong> Vermeidung extremer Kategorien, etwa aus Unsicherheit oder Unkenntnis;</li><li><strong>Raten:</strong> bei Leistungstests;</li><li><strong>Antwortmuster:</strong> zufällige, konstante oder rhythmische Wahl einer Kategorie.</li></ul></article><article class="card" data-source-id="PD02-A08E03"><div class="card-title">Inhaltliche Antworttendenzen</div><p><strong>Soziale Erwünschtheit:</strong> Antworten in Richtung angenommener sozialer Normen und Werte. Sie kann bei bestimmten Inhalten, Kontexten oder Personen stärker sein.</p><p>Unterschieden werden unbewusste positive Selbstdarstellung (<em>self-deceptive enhancement</em>) und intentional nach außen gerichtete Darstellung (<em>impression management</em>). <strong>Dis-/Simulation</strong> ist intentionales faking bad oder faking good. Die Grenzen zur sozialen Erwünschtheit sind nicht immer scharf.</p></article><article class="card" data-source-id="PD02-A08E04"><div class="card-title">Kontrollskalen und ihre Grenzen</div><p>Kontrollskalen können zufälliges Antworten über sehr häufige Inhalte oder soziale Erwünschtheit über seltene, stark erwünschte Aussagen erfassen. Beispiele: „Ich versuche zumindest jede Nacht etwas Schlaf zu bekommen“, „Ich bin immer objektiv“, „Manchmal bin ich ungerecht“.</p><p>Hohe Werte können zur Nichtinterpretation oder statistischen Korrektur führen. Kritik: durchschaubar und selbst verfälschbar, mögliche Motivationskosten; manche Antworttendenzen können stabile Persönlichkeitsteile sein; Validität muss durch Verfälschung nicht zwingend leiden.</p><p class="source-note">Ones &amp; Viswesvaran (1998).</p></article><article class="card" data-source-id="PD02-A08E05"><div class="card-title">Faking-good-Prüfung und Gegenmaßnahmen</div><p>Verfälschungsanfälligkeit kann experimentell durch Vergleich einer Normalbedingung mit einer ausdrücklichen Faking-good-Instruktion untersucht werden.</p><ul><li>Instruktion: Rechtfertigung, Ermahnung, Anonymität/Vertraulichkeit, Warnung vor Erkennung;</li><li>SD-ausbalancierte Forced-Choice-Items;</li><li>Lügenskala, etwa Social Desirability Scale;</li><li>Verschleierung der Testabsicht in objektiven Persönlichkeitstests.</li></ul><p class="source-note">Crowne &amp; Marlowe (1960); deutsche Fassung Lück &amp; Timaeus (1969).</p></article><article class="card" data-source-id="PD02-A08E06"><div class="card-title">Positive und negative Itempolung</div><p>Sind alle Items gleich positiv gepolt, ist die Merkmalsausprägung mit Zustimmungstendenz konfundiert. Ein ausgewogenes Verhältnis positiver und negativer Items soll dies reduzieren.</p><table><thead><tr><th scope="col">Rosenberg-Beispiel</th><th scope="col">Polung</th></tr></thead><tbody><tr><td>Alles in allem bin ich mit mir selbst zufrieden.</td><td>positiv</td></tr><tr><td>Hin und wieder denke ich, dass ich gar nichts tauge.</td><td>negativ, invertiert</td></tr><tr><td>Ich besitze eine Reihe guter Eigenschaften.</td><td>positiv</td></tr><tr><td>Ich fühle mich von Zeit zu Zeit richtig nutzlos.</td><td>negativ, invertiert</td></tr></tbody></table></article><article class="card" data-source-id="PD02-A08E07"><div class="card-title">Grenzen invertierter Items</div><ul><li>Nicht jeder Inhalt lässt sich gleich gut positiv und negativ formulieren, wenn Formulierungsregeln eingehalten werden.</li><li>Ein Argument: invertierte Items fungieren als „speed bumps“ und halten Aufmerksamkeit aufrecht.</li><li>Gegenargument: Sie verwirren Proband*innen.</li><li>Negative Items können einen unerwünschten eigenen Methodenfaktor bilden.</li></ul><p class="source-note">Speed-bump-Argument nach Podsakoff, MacKenzie, Lee &amp; Podsakoff (2003).</p></article>
+  <div class="phase-label">Phase 3 — Anwenden · W9+W11</div>
+  <div class="widget" id="biasLab"><h3>Bias-Labor: Prozess erkennen</h3><div class="case-grid"><div class="case"><p>Eine Person stimmt unabhängig vom Inhalt fast allen Aussagen zu.</p><select data-answer="acq"><option value="">Einordnung</option><option value="acq">Akquieszenz</option><option value="mid">Tendenz zur Mitte</option><option value="sim">Simulation</option></select></div><div class="case"><p>Eine Person wählt aus Unsicherheit wiederholt die neutrale Mitte.</p><select data-answer="mid"><option value="">Einordnung</option><option value="acq">Akquieszenz</option><option value="mid">Tendenz zur Mitte</option><option value="sd">soziale Erwünschtheit</option></select></div><div class="case"><p>Eine Bewerberin stellt sich absichtlich besonders positiv dar.</p><select data-answer="sim"><option value="">Einordnung</option><option value="sde">self-deceptive enhancement</option><option value="sim">faking good / Simulation</option><option value="pattern">Antwortmuster</option></select></div><div class="case"><p>„Ich fühle mich von Zeit zu Zeit richtig nutzlos.“ soll mit positiven Selbstwertitems gemeinsam ausgewertet werden.</p><select data-answer="invert"><option value="">Folgerung</option><option value="direct">direkt gleiche Richtung</option><option value="invert">negative Polung berücksichtigen/invertieren</option><option value="drop">wegen Negativität automatisch verwerfen</option></select></div></div><button class="btn btn-accent" type="button" onclick="checkBiasLab()">Fälle prüfen</button><div id="biasFb" class="widget-feedback" aria-live="polite"></div><p class="callout">Kontrollskalen und invertierte Items sind keine fehlerfreien Lösungen: Das Quellenpaket verlangt ausdrücklich eine Abwägung ihrer Grenzen.</p></div>
+  <div class="quiz-phase"><div class="phase-label">Phase 4 — Sofort-Abruf</div><div id="sq8"></div></div>
+  <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(7)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(9)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s9" role="tabpanel" aria-hidden="true" aria-labelledby="nb9" data-widget-type="W1" data-source-id="PD02-VERWECHSLUNGEN" data-slides="3,12–16,23–30,42–56" data-source-status="integriert" data-learning-objective="LZ02–LZ10">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Zentrale Verwechslungs-Duelle</div>
+    <div class="sec-lz">Richtung, Bezugsart und Datenstruktur sicher trennen</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>reflektives Messmodell</h4>
+      <p>Latentes Merkmal → Items</p>
+      <p>Items gelten als beobachtbare Folgen.</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>formatives Messmodell</h4>
+      <p>Items/Indikatoren → Variable</p>
+      <p>Indikatoren müssen nicht korreliert sein.</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> In beiden Modellen verursache das Konstrukt die Indikatoren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>T-Daten</h4>
+      <p>Antworten richtig/falsch klassifizierbar</p>
+      <p>typisch bei Leistungstests</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Q-Daten</h4>
+      <p>subjektives Selbst- oder Fremdrating</p>
+      <p>typisch bei Fragebögen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Q-Daten seien grundsätzlich objektive Leistungstests.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>rationale Strategie</h4>
+      <p>Theorie → Konstruktgliederung → Items</p>
+      <p>Güte anschließend prüfen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>externale Strategie</h4>
+      <p>Gruppenunterschiede als Auswahlkriterium</p>
+      <p>heterogene Ausgangsitemmenge</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Strategien bestimmen Subskalen primär durch Faktorenanalyse.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>offenes Antwortformat</h4>
+      <p>Antwort frei generieren</p>
+      <p>Reproduktion statt Wiedererkennen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>geschlossenes Antwortformat</h4>
+      <p>Antwort aus Vorgaben auswählen</p>
+      <p>gebundenes Antwortformat</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Geschlossene Antworten erforderten immer freie Reproduktion.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Rating</h4>
+      <p>jedes Objekt auf einer Skala</p>
+      <p>absolute Kategorienstruktur</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Ranking</h4>
+      <p>Objekte relativ ordnen</p>
+      <p>ordinale, ipsative Rangdaten</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Ranking liefere absolute, voneinander unabhängige Urteile.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Positionseffekt</h4>
+      <p>abhängig von der Stelle im Test</p>
+      <p>Beispiel: Ermüdung am Ende</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Reihenfolgeeffekt</h4>
+      <p>abhängig von vorherigen Items</p>
+      <p>inhaltlicher Kontext der Abfolge</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Begriffe bezeichneten ausschließlich Ermüdung am Testende.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>soziale Erwünschtheit</h4>
+      <p>Orientierung an sozialen Normen</p>
+      <p>kann verschiedene Prozesse umfassen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Dis-/Simulation</h4>
+      <p>intentionales Vortäuschen</p>
+      <p>faking good oder faking bad</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Phänomene seien stets eindeutig trennbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>positive Itempolung</h4>
+      <p>Zustimmung bedeutet stärkere Ausprägung</p>
+      <p>direkte Polungsrichtung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>negative/invertierte Itempolung</h4>
+      <p>Zustimmung bedeutet geringere Ausprägung</p>
+      <p>für gemeinsame Richtung invertiert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Negative Items könnten ohne Umpolung mit positiven Items summiert werden.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(8)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(10)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 11 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s10" role="tabpanel" aria-hidden="true" aria-labelledby="nb10" data-quiz data-widget-type="SRS" data-source-id="PD02-MIXED-RETRIEVAL" data-slides="2–56" data-source-status="integriert" data-learning-objective="LZ01–LZ10">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl02</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl02';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd02-s0-q1",
+      "q": "Welche Pfeilrichtung kennzeichnet ein reflektives Messmodell?",
+      "opts": [
+        "Vom latenten Konstrukt zu den beobachtbaren Itemantworten eines Tests.",
+        "Von den beobachtbaren Items zur gebildeten latenten Variable.",
+        "Vom zusammengefassten Testscore zurück zu den einzelnen Items.",
+        "Zwischen allen Items ohne gerichteten Bezug zu einem latenten Merkmal."
+      ],
+      "c": 0,
+      "e": "Im reflektiven Modell gelten die Itemantworten als beobachtbare Folgen des latenten Merkmals. Das formative Modell kehrt diese Richtung um.",
+      "oe": [
+        "Genau: Das Konstrukt wird als Ursache der Indikatoren dargestellt.",
+        "Das beschreibt die formative Richtung.",
+        "Der Testscore ist nicht die kausale Ausgangsvariable des Diagramms.",
+        "Eine ungerichtete Itembeziehung bildet das gezeigte Messprinzip nicht ab."
+      ],
+      "mt": [
+        null,
+        "richtung_vertauscht",
+        "score_als_ursache",
+        "kausalrichtung_ausgelassen"
+      ],
+      "source_ids": [
+        "PD02-A01E03"
+      ],
+      "learning_objective_id": "LZ02"
+    },
+    {
+      "id": "pd02-s0-q2",
+      "q": "Welche Einordnung entspricht der Testdefinition auf den Folien?",
+      "opts": [
+        "Ein Test ist die vorrangige diagnostische Methode und ersetzt Interviews sowie Beobachtungen.",
+        "Ein Test ist eine wissenschaftliche Messmethode neben weiteren diagnostischen Methoden.",
+        "Ein Test liefert eine fehlerfreie Beschreibung der individuellen Merkmalsausprägung.",
+        "Ein Test untersucht nur direkt beobachtbares Verhalten und keine latenten Merkmale."
+      ],
+      "c": 1,
+      "e": "Die Folie ordnet Tests als prominente, aber nicht einzige Messmethode ein. Genannt werden daneben Interviews und Verhaltensbeobachtungen.",
+      "oe": [
+        "Die Folie nennt ausdrücklich weitere Messmethoden.",
+        "Richtig: Der Test ist eine Messmethode innerhalb eines breiteren diagnostischen Methodenspektrums.",
+        "Fehlerfreiheit gehört nicht zur Definition. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Psychometrische Tests beziehen sich häufig auf nicht direkt beobachtbare Konstrukte."
+      ],
+      "mt": [
+        "test_als_einzige_methode",
+        null,
+        "perfektionsannahme",
+        "latent_manifest_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A01E02"
+      ],
+      "learning_objective_id": "LZ01"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd02-s1-q1",
+      "q": "Welche Stufe folgt im dargestellten Ablauf unmittelbar auf die Testplanung?",
+      "opts": [
+        "Die Bestimmung von Normen an der endgültigen Normstichprobe.",
+        "Die erneute Prüfung der Gütekriterien nach der abschließenden Normierung.",
+        "Die Konstruktion der Testrohform mit Items, Instruktion und Gestaltung.",
+        "Die Itemanalyse und Selektion in einer dafür gezogenen Optimierungsstichprobe."
+      ],
+      "c": 2,
+      "e": "Nach der Testplanung wird zunächst eine Testrohform konstruiert. Erst danach folgen Optimierungsstichprobe, Itemanalyse und schließlich die Normstichprobe.",
+      "oe": [
+        "Normen werden erst in der fünften Stufe bestimmt. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Die erneute Gütekriterienprüfung gehört zur Endformphase.",
+        "Richtig: Die Rohform ist die dritte der fünf Prozessstufen.",
+        "Itemanalyse und Selektion gehören zur vierten Stufe."
+      ],
+      "mt": [
+        "prozessstufe_vorgezogen",
+        "prozessstufe_vorgezogen",
+        null,
+        "prozessstufe_vorgezogen"
+      ],
+      "source_ids": [
+        "PD02-A02E01"
+      ],
+      "learning_objective_id": "LZ03"
+    },
+    {
+      "id": "pd02-s1-q2",
+      "q": "Welche Vorgehensweise ist eine Bottom-up-Technik der Konstruktdefinition?",
+      "opts": [
+        "Theoriegeleitete Ableitung der Inhalte aus einem vorab definierten Konstrukt.",
+        "Erfahrungsbasierte Festlegung der Inhalte durch sachkundige Fachpersonen.",
+        "Systematische Sammlung und Analyse von Definitionen aus Literatur und bestehenden Tests.",
+        "Analytisch-empirische Entwicklung des Konstrukts aus standardisiert erhobenen Inhalten."
+      ],
+      "c": 3,
+      "e": "Bottom-up bedeutet, dass aus erhobenen Inhalten das Konstrukt entwickelt wird. Die anderen Optionen gehören zu den dargestellten Top-down-Zugängen.",
+      "oe": [
+        "Das ist eine theoretisch-deduktive Top-down-Richtung. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Der erfahrungsgeleitet-intuitive Ansatz ist Top-down.",
+        "Die Literaturrecherche wird auf der Folie als Top-down-Technik eingeordnet.",
+        "Genau: Der analytisch-empirische Ansatz arbeitet von beobachteten Inhalten zum Konstrukt."
+      ],
+      "mt": [
+        "topdown_bottomup_vertauscht",
+        "topdown_bottomup_vertauscht",
+        "topdown_bottomup_vertauscht",
+        null
+      ],
+      "source_ids": [
+        "PD02-A02E05"
+      ],
+      "learning_objective_id": "LZ04"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd02-s2-q1",
+      "q": "Ein Selbstberichtitem fragt auf einer siebenstufigen Skala nach Leistungsmotivation. Welcher Datenart entspricht dies?",
+      "opts": [
+        "Q-Daten, weil ein subjektives Selbsturteil auf einer Ratingskala erhoben wird.",
+        "T-Daten, weil jede Antwort objektiv als richtig oder falsch gilt.",
+        "L-Daten, weil das Verhalten im natürlichen Alltag beobachtet wird.",
+        "T-Daten, weil eine hohe Skalenstufe eine bessere Leistung der Person bedeutet."
+      ],
+      "c": 0,
+      "e": "Q-Daten beruhen auf subjektiven Selbst- oder Fremdratings. T-Daten sind auf der Folie richtig/falsch klassifizierbar, L-Daten beobachtetes Verhalten.",
+      "oe": [
+        "Richtig: Das LMI-Beispiel ist ein subjektives Rating und damit Q-Daten.",
+        "Bei diesem Item gibt es keine objektiv richtige Antwort.",
+        "Es wird kein Verhalten beobachtet.",
+        "Skalenhöhe macht eine Antwort nicht zu T-Daten."
+      ],
+      "mt": [
+        null,
+        "datenart_verwechselt",
+        "datenart_verwechselt",
+        "datenart_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A03E01",
+        "PD02-A03E02"
+      ],
+      "learning_objective_id": "LZ05"
+    },
+    {
+      "id": "pd02-s2-q2",
+      "q": "Welche Strategie wählt Items danach aus, ob sie vorab definierte Gruppen empirisch trennen?",
+      "opts": [
+        "Die rationale Strategie mit Ableitung der Items aus einer Theorie.",
+        "Die externale beziehungsweise kriteriumsorientierte Strategie.",
+        "Die induktive Strategie mit nachträglicher Faktorenanalyse der Items.",
+        "Die Top-down-Definition durch Literaturrecherche und Expertenwissen."
+      ],
+      "c": 1,
+      "e": "Bei der externalen Strategie ist die tatsächliche Gruppentrennung das Selektionskriterium. Das MMPI-Beispiel startet mit 1000 und behält 556 differenzierende Items.",
+      "oe": [
+        "Rationale Konstruktion beginnt bei Theorie.",
+        "Genau: Externale Konstruktion orientiert die Itemauswahl an einem Außenkriterium beziehungsweise Gruppenunterschied.",
+        "Induktive Konstruktion bestimmt die Dimensionalität empirisch.",
+        "Das ist eine Definitionstechnik, nicht die externale Konstruktionsstrategie."
+      ],
+      "mt": [
+        "strategie_verwechselt",
+        null,
+        "strategie_verwechselt",
+        "strategie_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A03E05"
+      ],
+      "learning_objective_id": "LZ05"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd02-s3-q1",
+      "q": "Was kennzeichnet den dargestellten Extrempol eines reinen Speedtests?",
+      "opts": [
+        "Schwieriger werdende Aufgaben werden ohne feste Zeitbegrenzung bearbeitet.",
+        "Sehr schwierige Aufgaben werden mit großzügiger Bearbeitungszeit vorgelegt.",
+        "Leichte Aufgaben werden unter einer strengen Zeitbegrenzung bearbeitet.",
+        "Leichte Aufgaben werden ohne Zeitdruck vor allem nach Genauigkeit ausgewertet."
+      ],
+      "c": 2,
+      "e": "Die Folie kontrastiert Speedtests mit leichter Aufgabenanforderung und starker Zeitkomponente gegen Powertests ohne Zeitbegrenzung und mit steigender Schwierigkeit.",
+      "oe": [
+        "Das beschreibt den Powerpol. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Schwierigkeit und fehlende Zeitgrenze gehören zum Powerpol.",
+        "Richtig: Beim Speedpol entsteht die Anforderung vor allem durch die knappe Zeit.",
+        "Ohne Zeitdruck fehlt das zentrale Speedmerkmal."
+      ],
+      "mt": [
+        "speed_power_verwechselt",
+        "speed_power_verwechselt",
+        null,
+        "speed_power_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A04E01"
+      ],
+      "learning_objective_id": "LZ06"
+    },
+    {
+      "id": "pd02-s3-q2",
+      "q": "Ein d2-ähnlicher Test soll für Personen ab 60 Jahren eingesetzt werden. Welche Anpassung folgt direkt aus dem Folienbeispiel?",
+      "opts": [
+        "Eine kleinere Schrift erhöht die Standardisierung für alle Altersgruppen.",
+        "Eine schwierigere Zeichenfolge gleicht Altersunterschiede im Sehen aus.",
+        "Eine reine Verlängerung der Testzeit beseitigt die schlechte Erkennbarkeit.",
+        "Eine größere Schrift kann sichtbarkeitsbedingte Fehler reduzieren."
+      ],
+      "c": 3,
+      "e": "Das Beispiel berichtet mehr Fehler bei schlecht erkennbaren Zeichen und eine Reduktion dieser Fehler durch eine Version mit größerer Schrift.",
+      "oe": [
+        "Kleinere Zeichen verschärfen das benannte Problem.",
+        "Mehr Schwierigkeit adressiert nicht die Sichtbarkeit.",
+        "Zeit und Sichtbarkeit sind unterschiedliche Ursachen.",
+        "Genau: Die Anpassung betrifft die visuelle Erkennbarkeit der Items."
+      ],
+      "mt": [
+        "zielgruppenpassung_verfehlt",
+        "zielgruppenpassung_verfehlt",
+        "zielgruppenpassung_verfehlt",
+        null
+      ],
+      "source_ids": [
+        "PD02-A04E02"
+      ],
+      "learning_objective_id": "LZ06"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd02-s4-q1",
+      "q": "Welche Aussage trennt offene und geschlossene Antwortformate korrekt?",
+      "opts": [
+        "Offene Formate verlangen freie Generierung, geschlossene die Auswahl aus Vorgaben.",
+        "Offene Formate verlangen Wiedererkennen, geschlossene eine freie Reproduktion.",
+        "Offene Formate sind quantitativ, geschlossene Formate dagegen qualitativ.",
+        "Offene Formate sind objektiver auswertbar als vorgegebene geschlossene Antwortalternativen."
+      ],
+      "c": 0,
+      "e": "Der entscheidende Unterschied liegt in der freien Generierung gegenüber der Auswahl aus vorgegebenen Alternativen. Qualitativ/quantitativ ist eine zweite Dimension.",
+      "oe": [
+        "Richtig: Generieren versus Auswählen ist das Trennkriterium.",
+        "Die Anforderungen sind vertauscht. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Offen/geschlossen und qualitativ/quantitativ sind nicht identisch.",
+        "Offene Antworten haben eher eingeschränkte Auswertungsobjektivität."
+      ],
+      "mt": [
+        null,
+        "offen_geschlossen_vertauscht",
+        "dimensionen_vermischt",
+        "objektivitaet_vertauscht"
+      ],
+      "source_ids": [
+        "PD02-A05E02",
+        "PD02-A05E04"
+      ],
+      "learning_objective_id": "LZ07"
+    },
+    {
+      "id": "pd02-s4-q2",
+      "q": "Wie groß ist die gezeigte Ratewahrscheinlichkeit bei fünf Antwortmöglichkeiten und zwei richtigen Antworten?",
+      "opts": [
+        "Sie beträgt 2 durch 5 beziehungsweise .40.",
+        "Sie beträgt 1 durch 10 beziehungsweise .10.",
+        "Sie beträgt 1 durch 5 beziehungsweise .20.",
+        "Sie beträgt 2 durch 10 beziehungsweise .20."
+      ],
+      "c": 1,
+      "e": "Es gibt C(5,2)=10 mögliche Zweierkombinationen. Genau eine Kombination enthält die beiden richtigen Antworten, daher 1/10=.10.",
+      "oe": [
+        "Das Verhältnis k/n berücksichtigt die möglichen Kombinationen nicht.",
+        "Richtig: Die kombinatorische Rechnung der Folie endet bei .10.",
+        "1/n gilt hier nicht, weil zwei Antworten gewählt werden.",
+        "Der Zähler bleibt eine günstige Kombination, nicht zwei."
+      ],
+      "mt": [
+        "kombinatorik_falsch",
+        null,
+        "kombinatorik_falsch",
+        "kombinatorik_falsch"
+      ],
+      "source_ids": [
+        "PD02-A05E07"
+      ],
+      "learning_objective_id": "LZ07"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd02-s5-q1",
+      "q": "Welche Empfehlung wird auf den Folien für die Zahl von Antwortoptionen einer Ratingskala genannt?",
+      "opts": [
+        "Zwei bis drei Antwortoptionen werden als allgemeiner Standard empfohlen.",
+        "Genau fünfzig Antwortoptionen gelten als optimale Differenzierung.",
+        "Sieben bis neun Antwortoptionen werden als Empfehlung genannt.",
+        "Hundert Antwortoptionen werden wegen ihrer gleichmäßigen Nutzung empfohlen."
+      ],
+      "c": 2,
+      "e": "Die Folie nennt 7 bis 9 Optionen. Das 100-stufige Gefühlsthermometer zeigt, dass Befragte sehr feine Kategorien faktisch nicht gleichmäßig nutzen.",
+      "oe": [
+        "Diese geringe Zahl wird nicht als allgemeine Empfehlung genannt.",
+        "Eine 50er-Empfehlung steht nicht auf der Folie.",
+        "Genau: Die Empfehlung lautet 7 bis 9 Antwortoptionen.",
+        "Das 100er-Beispiel illustriert gerade die selektive Kategorienutzung."
+      ],
+      "mt": [
+        "kategorienzahl_falsch",
+        "kategorienzahl_falsch",
+        null,
+        "kategorienzahl_falsch"
+      ],
+      "source_ids": [
+        "PD02-A05E10"
+      ],
+      "learning_objective_id": "LZ07"
+    },
+    {
+      "id": "pd02-s5-q2",
+      "q": "Warum darf eine Mittelkategorie nicht automatisch als neutrale Meinung interpretiert werden?",
+      "opts": [
+        "Sie zeigt typischerweise eine exakt halbierte Merkmalsausprägung der befragten Person.",
+        "Sie kennzeichnet regelmäßig, dass die Frage sprachlich nicht verstanden wurde.",
+        "Sie bedeutet vorwiegend, dass positive und negative Urteile gleich stark sind.",
+        "Sie kann auch Ambivalenz, Unsicherheit, fehlende Meinung oder Ausweichen bedeuten."
+      ],
+      "c": 3,
+      "e": "Die Folie nennt mehrere mögliche Bedeutungen und warnt vor einer bequemen Ausweichkategorie. Die beobachtete Auswahl ist daher nicht eindeutig interpretierbar.",
+      "oe": [
+        "Die Mitte ist keine exakte Messgarantie.",
+        "Unverständnis ist nur eine mögliche, nicht zwingende Ursache.",
+        "Ambivalenz ist möglich, aber nicht die einzige Bedeutung.",
+        "Richtig: Mehrere Antwortprozesse können zur Mitte führen."
+      ],
+      "mt": [
+        "mittelkategorie_ueberinterpretiert",
+        "mittelkategorie_ueberinterpretiert",
+        "mittelkategorie_ueberinterpretiert",
+        null
+      ],
+      "source_ids": [
+        "PD02-A05E13"
+      ],
+      "learning_objective_id": "LZ07"
+    }
+  ],
+  "6": [
+    {
+      "id": "pd02-s6-q1",
+      "q": "Welche Datenstruktur entsteht durch ein vollständiges Ranking ohne Rangbindungen?",
+      "opts": [
+        "Ordinale Rangzahlen mit voneinander abhängigen, ipsativen Urteilen.",
+        "Unabhängige absolute Ratings auf einer für jedes Objekt gleichen Skala.",
+        "Nominale Kategorien ohne Reihenfolge und ohne Bezug zwischen den Objekten.",
+        "Metrische Abstände, die zwischen allen Rangplätzen gleich groß sind."
+      ],
+      "c": 0,
+      "e": "Ranking erzwingt eine relative Reihenfolge. Die Rangzahlen sind ordinal und die Urteile innerhalb einer Person voneinander abhängig beziehungsweise ipsativ.",
+      "oe": [
+        "Genau: Rangplätze liefern relative ordinale und abhängige Daten.",
+        "Das beschreibt ein Rating, nicht ein Ranking. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+        "Rangzahlen besitzen eine Ordnung.",
+        "Gleiche Abstände sind aus Rangplätzen nicht ableitbar."
+      ],
+      "mt": [
+        null,
+        "rating_ranking_verwechselt",
+        "ordinal_nominal_verwechselt",
+        "ordinal_metrisch_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A06E02"
+      ],
+      "learning_objective_id": "LZ08"
+    },
+    {
+      "id": "pd02-s6-q2",
+      "q": "Wie viele Paarvergleiche sind bei fünf Objekten für einen vollständigen Vergleich erforderlich?",
+      "opts": [
+        "Fünf Vergleiche, weil jedes der fünf Objekte einmal ausgewählt wird.",
+        "Zehn Vergleiche, weil sich 5·4 geteilt durch 2 zu 10 ergibt.",
+        "Zwanzig Vergleiche, weil jede Vergleichsrichtung gesondert gezählt wird.",
+        "Fünfundzwanzig Vergleiche, weil alle Felder einer 5-mal-5-Matrix zählen."
+      ],
+      "c": 1,
+      "e": "Die Folie gibt v=k·(k−1)/2 an. Für k=5 ergibt sich 5·4/2=10 ungeordnete Objektpaare.",
+      "oe": [
+        "Ein Objekt hat mehrere Paarungen.",
+        "Richtig: Jede ungeordnete Kombination wird genau einmal beurteilt.",
+        "Die Division durch zwei verhindert doppelte Richtungszählung.",
+        "Selbstvergleiche und doppelte Paare werden nicht benötigt."
+      ],
+      "mt": [
+        "paarzahl_falsch",
+        null,
+        "paarzahl_falsch",
+        "paarzahl_falsch"
+      ],
+      "source_ids": [
+        "PD02-A06E03"
+      ],
+      "learning_objective_id": "LZ08"
+    }
+  ],
+  "7": [
+    {
+      "id": "pd02-s7-q1",
+      "q": "Welche zentrale Regel verletzt das Item „Mein Therapeut ist einfühlsam und kompetent“?",
+      "opts": [
+        "Das Item enthält eine doppelte Verneinung in Stamm und Antwortskala.",
+        "Das Item verwendet einen unklaren Zeitraum ohne eindeutig definierten Bezug.",
+        "Das Item verbindet zwei Themen, die unterschiedlich beurteilt werden können.",
+        "Das Item passt sprachlich nicht zu einer vorgesehenen Skala mit Häufigkeitskategorien."
+      ],
+      "c": 2,
+      "e": "Einfühlsamkeit und Kompetenz können unterschiedlich beurteilt werden. Eine einzige Antwort kann deshalb nicht eindeutig beiden Teilurteilen zugeordnet werden.",
+      "oe": [
+        "Es enthält keine Verneinung.",
+        "Ein Zeitraum wird in diesem Item nicht behauptet.",
+        "Genau: Das Item ist doppelläufig beziehungsweise thematisch nicht eindeutig.",
+        "Der zentrale Fehler ist das Doppelthema, nicht die Grammatik. Diese Ergänzung ändert die fachliche Einordnung nicht."
+      ],
+      "mt": [
+        "itemregel_verwechselt",
+        "itemregel_verwechselt",
+        null,
+        "itemregel_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A07E02"
+      ],
+      "learning_objective_id": "LZ09"
+    },
+    {
+      "id": "pd02-s7-q2",
+      "q": "Worin besteht der Unterschied zwischen Positions- und Reihenfolgeeffekt?",
+      "opts": [
+        "Position betrifft die Itemschwierigkeit, Reihenfolge nur die verfügbare Zeit.",
+        "Position betrifft vorherige Items, Reihenfolge die Ermüdung am Testende.",
+        "Beide Begriffe bezeichnen eine schwächere Leistung bei den letzten Aufgaben.",
+        "Position meint die Stelle im Test, Reihenfolge die zuvor bearbeiteten Items."
+      ],
+      "c": 3,
+      "e": "Ein Positionseffekt hängt von der Stelle eines Items ab, etwa Ermüdung am Ende. Ein Reihenfolgeeffekt hängt davon ab, welche Inhalte vorher bearbeitet wurden.",
+      "oe": [
+        "Schwierigkeit und Zeit sind nicht die definierenden Bezugsgrößen.",
+        "Die beiden Begriffe sind hier vertauscht.",
+        "Ermüdung ist nur ein Beispiel für einen Positionseffekt.",
+        "Richtig: Stelle und vorausgehender Inhalt sind verschiedene Bezugsgrößen."
+      ],
+      "mt": [
+        "position_reihenfolge_verwechselt",
+        "position_reihenfolge_verwechselt",
+        "position_reihenfolge_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD02-A07E04"
+      ],
+      "learning_objective_id": "LZ09"
+    }
+  ],
+  "8": [
+    {
+      "id": "pd02-s8-q1",
+      "q": "Welche Beschreibung kennzeichnet Dis- oder Simulation am eindeutigsten?",
+      "opts": [
+        "Eine Person täuscht absichtlich faking good oder faking bad vor.",
+        "Eine Person stimmt unabhängig vom Inhalt bevorzugt fast allen Aussagen zu.",
+        "Eine Person wählt aus Unsicherheit bevorzugt die mittlere Antwortkategorie.",
+        "Eine Person stellt sich unbewusst im Einklang mit sozialen Normen positiver dar."
+      ],
+      "c": 0,
+      "e": "Dis-/Simulation ist auf der Folie als intentionales Vortäuschen beschrieben. Akquieszenz und Mitte sind formale Tendenzen; soziale Erwünschtheit kann andere Prozesse umfassen.",
+      "oe": [
+        "Genau: Intentionalität und vorgetäuschte Ausprägung sind die Kernmerkmale.",
+        "Das ist Akquieszenz.",
+        "Das ist die Tendenz zur Mitte.",
+        "Das beschreibt eher self-deceptive enhancement als intentionale Simulation. Diese Ergänzung ändert die fachliche Einordnung nicht."
+      ],
+      "mt": [
+        null,
+        "biasart_verwechselt",
+        "biasart_verwechselt",
+        "biasart_verwechselt"
+      ],
+      "source_ids": [
+        "PD02-A08E02",
+        "PD02-A08E03"
+      ],
+      "learning_objective_id": "LZ10"
+    },
+    {
+      "id": "pd02-s8-q2",
+      "q": "Welche quellentreue Aussage zu negativ beziehungsweise invertiert formulierten Items ist korrekt?",
+      "opts": [
+        "Sie beseitigen Akquieszenz ohne zusätzliche Verständnisschwierigkeiten.",
+        "Sie können Aufmerksamkeit erhöhen, aber auch verwirren oder Methodenfaktoren bilden.",
+        "Sie lassen sich für jeden Inhalt gleich gut und regelkonform formulieren.",
+        "Sie können ohne Umpolung zusammen mit positiv gepolten Items zu einem Score addiert werden."
+      ],
+      "c": 1,
+      "e": "Die Folie stellt konkurrierende Argumente dar: mögliche speed bumps, mögliche Verwirrung und ein unerwünschter Methodenfaktor. Eine uneingeschränkte Empfehlung folgt nicht.",
+      "oe": [
+        "Die Folie nennt ausdrücklich Grenzen und neue Probleme.",
+        "Richtig: Vorteile und Risiken werden gemeinsam dargestellt.",
+        "Nicht jeder Inhalt lässt sich gleich gut umpolen.",
+        "Negative Items müssen für eine gemeinsame Richtung invertiert behandelt werden. Diese Ergänzung ändert die fachliche Einordnung nicht."
+      ],
+      "mt": [
+        "invertierte_items_idealisiert",
+        null,
+        "invertierte_items_idealisiert",
+        "invertierte_items_idealisiert"
+      ],
+      "source_ids": [
+        "PD02-A08E06",
+        "PD02-A08E07"
+      ],
+      "learning_objective_id": "LZ10"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd02-b-q1",
+    "q": "Ein Index wird ausschließlich aus mehreren unterschiedlichen Alltagsfunktionen zusammengesetzt. Welche Aussage ist für ein formatives Modell charakteristisch?",
+    "opts": [
+      "Das latente Merkmal verursacht die Indikatoren in derselben Richtung.",
+      "Alle Indikatoren müssen deshalb sehr hoch miteinander korrelieren.",
+      "Die Indikatoren formen die latente beziehungsweise zusammengesetzte Variable.",
+      "Der Testscore verursacht rückwirkend die einzelnen beobachteten Itemantworten."
+    ],
+    "c": 2,
+    "e": "Formative Modelle laufen von den Indikatoren zur gebildeten Variable; die Indikatoren müssen laut Folie nicht korreliert sein.",
+    "oe": [
+      "Das ist die reflektive Richtung. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+      "Korrelationszwang wird für formative Indikatoren verneint.",
+      "Genau: Die Indikatoren sind die bildenden Komponenten.",
+      "Der Score ist Ergebnis, nicht rückwirkende Ursache."
+    ],
+    "mt": [
+      "richtung_vertauscht",
+      "richtung_vertauscht",
+      null,
+      "richtung_vertauscht"
+    ],
+    "source_ids": [
+      "PD02-A01E03"
+    ],
+    "learning_objective_id": "LZ02"
+  },
+  {
+    "id": "pd02-b-q2",
+    "q": "Eine Konstruktdefinition soll festlegen, was zu Konzentration gehört und wo Überschneidungen zu Speed oder Inhibition liegen. Welches Werkzeug passt?",
+    "opts": [
+      "Eine reine Normtabelle für die spätere Umrechnung von Testwerten.",
+      "Eine Optimierungsstichprobe zur unmittelbaren Itemselektion.",
+      "Eine Rangreihe der Items nach ihrer Bearbeitungsposition.",
+      "Ein nomologisches Netzwerk mit Anknüpfungen und Abgrenzungen."
+    ],
+    "c": 3,
+    "e": "Das nomologische Netzwerk spezifiziert Überschneidungen, Anknüpfungen und ausgeschlossene Inhalte eines Konstrukts.",
+    "oe": [
+      "Normen erfüllen eine andere Prozessfunktion.",
+      "Itemselektion folgt erst später.",
+      "Eine Reihenfolge bildet keine Konstruktrelationen ab.",
+      "Richtig: Genau diese relationalen Abgrenzungen zeigt das Netzwerk."
+    ],
+    "mt": [
+      "werkzeug_verwechselt",
+      "werkzeug_verwechselt",
+      "werkzeug_verwechselt",
+      null
+    ],
+    "source_ids": [
+      "PD02-A02E06"
+    ],
+    "learning_objective_id": "LZ04"
+  },
+  {
+    "id": "pd02-b-q3",
+    "q": "Ein Test startet mit einer breiten Itemmenge; Subskalen werden erst anhand der Faktorenstruktur gebildet. Welche Strategie liegt vor?",
+    "opts": [
+      "Die induktive beziehungsweise faktorenanalytische Strategie.",
+      "Die externale Strategie anhand vorab definierter Gruppenunterschiede.",
+      "Die rationale Strategie anhand einer weitgehend vorgegebenen Theorie.",
+      "Die reine Literaturrecherche als Datentyp der späteren Testauswertung."
+    ],
+    "c": 0,
+    "e": "Bei der induktiven Strategie ist die Dimensionalität nicht vorab festgelegt; Subskalen werden insbesondere faktorenanalytisch ermittelt.",
+    "oe": [
+      "Genau: Die empirische Struktur bestimmt die Subskalen.",
+      "Gruppentrennung wäre external.",
+      "Theorieableitung wäre rational.",
+      "Literaturrecherche ist keine Datenart der Testauswertung."
+    ],
+    "mt": [
+      null,
+      "strategie_verwechselt",
+      "strategie_verwechselt",
+      "strategie_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A03E06"
+    ],
+    "learning_objective_id": "LZ05"
+  },
+  {
+    "id": "pd02-b-q4",
+    "q": "Welche Planungsentscheidung ist am direktesten erforderlich, wenn Reaktionszeiten millisekundengenau erfasst werden sollen?",
+    "opts": [
+      "Eine reine Gruppentestung ohne technisches Equipment genügt für exakte Reaktionszeiten.",
+      "Ein computergestütztes Verfahren ermöglicht eine stärkere zeitliche Standardisierung.",
+      "Ein offenes Antwortformat zuverlässig unmittelbar millisekundengenaue Messung.",
+      "Eine längere Papierfassung ersetzt die technische Erfassung der Reaktionszeiten."
+    ],
+    "c": 1,
+    "e": "Als Vorteil computergestützter Verfahren nennt die Folie zeitliche Standardisierung und die Erfassung von Reaktionszeiten.",
+    "oe": [
+      "Ohne Technik ist die geforderte Präzision nicht begründet.",
+      "Richtig: Die technische Darbietung und Registrierung ist für die Zeitmessung relevant.",
+      "Antwortoffenheit löst die Zeitregistrierung nicht.",
+      "Testlänge ersetzt keine Reaktionszeitmessung."
+    ],
+    "mt": [
+      "rahmenbedingung_verwechselt",
+      null,
+      "rahmenbedingung_verwechselt",
+      "rahmenbedingung_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A04E04"
+    ],
+    "learning_objective_id": "LZ06"
+  },
+  {
+    "id": "pd02-b-q5",
+    "q": "Eine Wissensaufgabe besitzt Antwortalternativen, die sich überschneiden. Welche Konstruktionsregel ist verletzt?",
+    "opts": [
+      "Die Antwortmöglichkeiten decken für einen Persönlichkeitstest zu viele Fälle ab.",
+      "Die Aufgabe verwendet eine Ratingskala statt eines atypischen Testformats.",
+      "Die Antwortmöglichkeiten sind nicht disjunkt und überschneiden sich inhaltlich.",
+      "Die Aufgabe enthält zu viele plausible Distraktoren für einen Leistungstest."
+    ],
+    "c": 2,
+    "e": "Auswahloptionen müssen disjunkt sein. Bei Leistungstests sollen falsche Optionen zusätzlich plausibel sein.",
+    "oe": [
+      "Vollständigkeit ist bei Persönlichkeitstests erwünscht.",
+      "Die Formatbezeichnung erklärt die Überschneidung nicht.",
+      "Genau: Überschneidende Optionen verletzen die Disjunktheitsregel.",
+      "Plausibilität ist eine Anforderung, kein Fehler an sich. Diese Ergänzung ändert die fachliche Einordnung nicht."
+    ],
+    "mt": [
+      "auswahlregel_verwechselt",
+      "auswahlregel_verwechselt",
+      null,
+      "auswahlregel_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A05E06"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd02-b-q6",
+    "q": "Welche Schlussfolgerung unterstützt das Beispiel mit den Skalen 0–10 und −5 bis +5?",
+    "opts": [
+      "Negative Zahlen gewährleisten eine präzisere und unverzerrte Merkmalsmessung.",
+      "Bipolare Skalen erzeugen unabhängig vom Konstrukt dieselben Antworten wie unipolare.",
+      "Die Prozentwerte belegen eine universelle Wirkung bei jeder denkbaren Befragung.",
+      "Die numerische Rahmung einer inhaltlich gleichen Skala kann Antworten beeinflussen."
+    ],
+    "c": 3,
+    "e": "Die Folie zeigt unterschiedliche Anteile im unteren Skalenbereich und warnt, dass negative Zahlen konnotiert oder ungewohnt sein können.",
+    "oe": [
+      "Eine Präzisionsgarantie wird nicht behauptet.",
+      "Die gezeigten Antworten unterscheiden sich gerade. Diese Ergänzung ändert die fachliche Einordnung nicht.",
+      "Der Befund wird nicht zu einem universellen Gesetz erweitert.",
+      "Richtig: Die Antwortskala ist nicht bloß eine neutrale Verpackung."
+    ],
+    "mt": [
+      "skalenrahmung_ignoriert",
+      "skalenrahmung_ignoriert",
+      "skalenrahmung_ignoriert",
+      null
+    ],
+    "source_ids": [
+      "PD02-A05E12"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd02-b-q7",
+    "q": "Eine Person bevorzugt A vor B und B vor C, entscheidet sich aber für C vor A. Wie heißt dieses Muster?",
+    "opts": [
+      "Eine zirkuläre Triade als Verletzung der Transitivität.",
+      "Ein vollständiges Ranking mit erlaubter Rangplatzbindung.",
+      "Ein unabhängiges Rating mit absoluter Skalenverankerung.",
+      "Eine konsistente Paarvergleichsfolge nach dem Transitivitätsprinzip."
+    ],
+    "c": 0,
+    "e": "A>B, B>C und C>A bilden die auf der Folie genannte zirkuläre Triade und verletzen die erwartete Transitivität.",
+    "oe": [
+      "Genau: Die drei Urteile schließen sich zyklisch.",
+      "Es handelt sich um Paarurteile, nicht um Rangbindungen.",
+      "Absolute Ratings sind nicht gegeben.",
+      "Die Folge ist gerade nicht transitiv konsistent."
+    ],
+    "mt": [
+      null,
+      "transitivitaet_verwechselt",
+      "transitivitaet_verwechselt",
+      "transitivitaet_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A06E03"
+    ],
+    "learning_objective_id": "LZ08"
+  },
+  {
+    "id": "pd02-b-q8",
+    "q": "Das Item „In den letzten Wochen war ich häufig niedergeschlagen“ soll beantwortet werden. Welcher Mangel ist auf der Folie hervorgehoben?",
+    "opts": [
+      "Das Item enthält zwei voneinander unabhängige Themen in einem Satz.",
+      "Der Bezugszeitraum „letzte Wochen“ ist nicht eindeutig definiert.",
+      "Das Item verwendet eine doppelte Verneinung aus Stamm und Skala.",
+      "Das Item ist wegen eines fehlenden Fachbegriffs für jede Zielgruppe zu einfach."
+    ],
+    "c": 1,
+    "e": "Zeitpunkte und Zeitspannen sollen eindeutig definiert sein. „In den letzten Wochen“ lässt die konkrete Dauer offen.",
+    "oe": [
+      "Es wird nur Niedergeschlagenheit thematisiert.",
+      "Richtig: Der zeitliche Bezugsrahmen bleibt unpräzise.",
+      "Eine doppelte Verneinung liegt nicht vor.",
+      "Der Quellenkritikpunkt ist die Zeitspanne."
+    ],
+    "mt": [
+      "itemregel_verwechselt",
+      null,
+      "itemregel_verwechselt",
+      "itemregel_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A07E02"
+    ],
+    "learning_objective_id": "LZ09"
+  },
+  {
+    "id": "pd02-b-q9",
+    "q": "Eine Person stimmt unabhängig vom Inhalt fast allen Aussagen zu. Welche Antworttendenz liegt am ehesten vor?",
+    "opts": [
+      "Impression Management als gezielte positive Darstellung nach außen.",
+      "Tendenz zur Mitte als Vermeidung stärker ausgeprägter Antwortkategorien.",
+      "Akquieszenz beziehungsweise die inhaltsunabhängige Ja-Sage-Tendenz.",
+      "Faking bad als absichtliches Vortäuschen einer stärkeren Beeinträchtigung."
+    ],
+    "c": 2,
+    "e": "Akquieszenz ist auf der Folie als inhaltsunabhängige Zustimmungstendenz definiert. Die anderen Optionen beziehen sich auf andere Antwortprozesse.",
+    "oe": [
+      "Positive Außendarstellung ist inhaltlich gerichtet.",
+      "Die Mitte ist keine Zustimmung zu allen Aussagen.",
+      "Genau: Das definierende Merkmal ist Zustimmung unabhängig vom Iteminhalt.",
+      "Faking bad ist intentional und merkmalsgerichtet."
+    ],
+    "mt": [
+      "biasart_verwechselt",
+      "biasart_verwechselt",
+      null,
+      "biasart_verwechselt"
+    ],
+    "source_ids": [
+      "PD02-A08E02"
+    ],
+    "learning_objective_id": "LZ10"
+  }
+];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+
+function pdFeedback(id,ok,msg){var el=document.getElementById(id);if(!el)return;el.className='widget-feedback show '+(ok?'good':'bad');el.innerHTML=(ok?'✓ ':'✗ ')+msg;el.setAttribute('role','status');}
+function checkArrowModel(){var r=document.getElementById('reflectDir').value,f=document.getElementById('formDir').value;var ok=r==='latent-items'&&f==='items-latent';pdFeedback('arrowFb',ok,ok?'Beide Richtungen stimmen: reflektiv Konstrukt → Items, formativ Items → gebildete Variable.':'Prüfe die Ursache-Wirkungsrichtung: Beim reflektiven Modell gelten Items als Folgen; beim formativen Modell als bildende Indikatoren.');}
+function moveProcess(btn,dir){var li=btn.closest('li'),ul=li.parentElement;if(dir<0&&li.previousElementSibling)ul.insertBefore(li,li.previousElementSibling);if(dir>0&&li.nextElementSibling)ul.insertBefore(li.nextElementSibling,li);renumberProcess();}
+function renumberProcess(){document.querySelectorAll('#processBuilder li').forEach(function(li,i){var n=li.querySelector('.step-num');if(n)n.textContent=(i+1)+'.';});}
+function checkProcess(){var got=Array.from(document.querySelectorAll('#processBuilder li')).map(function(x){return x.dataset.step;}).join('');pdFeedback('processFb',got==='12345',got==='12345'?'Die fünf Stufen stehen korrekt. Beachte: Normierung folgt erst nach Optimierung und Testendform.':'Die Reihenfolge ist noch nicht korrekt. Beginne mit Merkmalsfestlegung und Testplanung; die Normstichprobe steht am Ende.');}
+function checkCaseSet(container,fb){var root=document.getElementById(container),sels=root.querySelectorAll('select[data-answer]'),ok=true,missing=false;var wrong=[];sels.forEach(function(sel,i){if(!sel.value)missing=true;if(sel.value!==sel.dataset.answer){ok=false;wrong.push(i+1);}});if(missing){pdFeedback(fb,false,'Bitte bearbeite zunächst alle Fälle.');return;}pdFeedback(fb,ok,ok?'Alle Zuordnungen sind fachlich passend.':'Noch nicht passend bei Fall '+wrong.join(', ')+'. Nutze das jeweilige Trennkriterium, nicht nur die Oberfläche des Beispiels.');}
+function checkRateStep(){var a=document.getElementById('combDen').value.trim(),b=document.getElementById('selfRate').value.trim().replace(',','.');var ok1=a==='10',ok2=b==='.25'||b==='0.25'||b==='1/4';var ok=ok1&&ok2;pdFeedback('rateFb',ok,ok?'Richtig: C(5,2)=10 und bei n=4, k=1 gilt 1/C(4,1)=1/4=.25.':'Prüfe beide Stufen: Zuerst die Zahl möglicher Kombinationen, dann den Kehrwert für genau eine günstige Kombination.');}
+function buildScale(){var n=Number(document.getElementById('scaleN').value),anchor=document.getElementById('scaleAnchor').value,pol=document.getElementById('scalePol').value,mid=document.getElementById('scaleMid').checked,dont=document.getElementById('scaleDont').checked;var prev=document.getElementById('scalePreview');prev.innerHTML='';for(var i=1;i<=n;i++){var x=document.createElement('span');x.className='scale-tick';x.textContent=i;prev.appendChild(x);}var parts=[];parts.push(n+' Kategorien');parts.push(anchor==='full'?'jede Kategorie verbal benannt':'nur Extrempole verbal benannt');parts.push(pol==='bi'?'bipolare Skala':'unipolare Skala');parts.push(mid?'Mittelkategorie vorgesehen':'keine Mittelkategorie');parts.push(dont?'Weiß-nicht-Kategorie vorgesehen':'keine Weiß-nicht-Kategorie');var msg=parts.join(' · ')+'. ';if(n>=7&&n<=9)msg+='Die Kategorienzahl liegt in der auf den Folien genannten Empfehlung von 7 bis 9. ';if(n>9)msg+='Die Folien warnen, dass bei sehr vielen Kategorien faktisch nicht alle genutzt werden. ';if(anchor==='full')msg+='Die vollständige Benennung wird mit höherer Messgenauigkeit verbunden. ';if(pol==='bi')msg+='Prüfe, ob negative Zahlen zum Konstrukt passen und ob ihre Konnotation Antworten beeinflussen kann. ';if(mid)msg+='Die Mitte ist mehrdeutig: Ambivalenz, Unsicherheit, fehlende Meinung oder Ausweichen sind möglich. ';if(dont)msg+='Weiß-nicht macht Nichtbeantwortbarkeit sichtbar, kann aber bei Unsicherheit zur Ausweichoption werden.';pdFeedback('scaleFb',true,msg);}
+function checkScalePrediction(){var v=document.getElementById('scalePrediction').value;pdFeedback('scalePredFb',v==='cluster',v==='cluster'?'Richtig: Im 100-stufigen Beispiel häuften sich Antworten bei Vielfachen von 10 sowie 15 und 85.':'Die Folie berichtet keine gleichmäßige Nutzung: 80 % waren Vielfache von 10, fast der Rest lag bei 15 und 85.');}
+function calcPairs(){var k=Number(document.getElementById('pairK').value);if(!Number.isInteger(k)||k<2||k>30){pdFeedback('pairFb',false,'Bitte gib eine ganze Objektzahl zwischen 2 und 30 ein.');return;}var v=k*(k-1)/2;pdFeedback('pairFb',true,'Für k='+k+' gilt v='+k+'·'+(k-1)+'/2='+v+'. Der Aufwand wächst schnell, weil jedes ungeordnete Paar beurteilt wird.');}
+function checkItemDebugger(){checkCaseSet('itemDebugger','itemDebugFb');}
+function checkBiasLab(){checkCaseSet('biasLab','biasFb');}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET-LOKAL -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:9998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+#fr-ov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px}
+#fr-ov.on{display:flex}.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #475569;border-radius:14px;max-width:520px;width:100%;padding:18px}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:8px;padding:10px;font:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}.fr-btn{border:1px solid #475569;background:#334155;color:#e2e8f0;border-radius:8px;min-height:44px;padding:8px 14px;cursor:pointer}.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+@media print{#fr-fab,#fr-ov{display:none!important}}
+</style>
+<button id="fr-fab" type="button" aria-haspopup="dialog" aria-controls="fr-ov" onclick="frReport.open()">🐞 Fehler melden</button>
+<div id="fr-ov" role="dialog" aria-modal="true" aria-labelledby="fr-title">
+  <div class="fr-box">
+    <h2 id="fr-title" style="font-size:1.05rem;margin:0 0 8px">Fehlerbericht lokal speichern</h2>
+    <p style="font-size:.82rem;color:#94a3b8;margin:0 0 10px">Der Bericht wird nur als Markdown-Datei heruntergeladen. Es erfolgt keine Netzwerkanfrage.</p>
+    <textarea id="fr-text" placeholder="Fundstelle und Beschreibung"></textarea>
+    <div class="fr-row"><button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button><button class="fr-btn prim" type="button" onclick="frReport.save()">Bericht herunterladen</button></div>
+  </div>
+</div>
+<script>
+window.frReport=(function(){
+  var lastFocus=null;
+  function open(){lastFocus=document.activeElement;document.getElementById('fr-ov').classList.add('on');setTimeout(function(){document.getElementById('fr-text').focus();},20);}
+  function close(){document.getElementById('fr-ov').classList.remove('on');if(lastFocus)lastFocus.focus();}
+  function save(){var t=document.getElementById('fr-text').value.trim();if(!t){document.getElementById('fr-text').focus();return;}var now=new Date();var md='# Fehlerbericht – PD02 Testkonstruktion\n\n- Zeitpunkt: '+now.toISOString()+'\n- Seite: '+location.href+'\n- Modul: '+document.title+'\n\n## Beschreibung\n'+t+'\n';var b=new Blob([md],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='pd02_fehlerbericht_'+now.toISOString().replace(/[:.]/g,'-')+'.md';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},500);document.getElementById('fr-text').value='';close();}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('fr-ov').classList.contains('on'))close();});
+  return {open:open,close:close,save:save};
+})();
+</script>
+<!-- /FEHLER-WIDGET-LOKAL -->
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

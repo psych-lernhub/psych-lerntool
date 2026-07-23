@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL14 Tod und Sterben</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl14
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:8px}
+.sim-toggle{display:flex;flex-wrap:wrap;gap:6px}
+.sim-tbtn{border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2)}
+.sim-tbtn.on{border-color:var(--accent);background:rgba(129,140,248,.12);color:var(--text)}
+.sim-verdict{margin-top:10px;font-size:.86rem;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL14 Tod und Sterben</h1>
+<p class="page-sub">Entwicklungspsychologie B (Jost) · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Beschreiben, wovon die Angst vor Sterben und Tod abhängt; Alterseffekte beschreiben und erklären · 2. Stufen der Auseinandersetzung mit dem Sterben benennen/beschreiben; Kübler-Ross kritisch einordnen · 3. Veränderung der Suizidrate im Erwachsenenalter beschreiben · 4. Beschreiben, wie sich Lebenszufriedenheit nach Verwitwung ändert und anpasst
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Fakten zur Mortalität</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Angst vor Sterben & Tod</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Cicirelli-Modell</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Korrelate & Erklärung</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Kübler-Ross</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Kritik & Empirie</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Verwitwung & Suizid</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Das sterbende Gehirn</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Fakten zur Mortalität ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Ein paar Fakten: Sterben als Phänomen des hohen Alters</div>
+    <div class="sec-lz">Vom 30. bis 80. Lebensjahr steigt die Mortalität exponentiell an, danach verlangsamt sich der Anstieg. 25 % der Frauen und 39 % der Männer sterben mit 60–80 Jahren; 66 % der Frauen und 47 % der Männer sterben über 80 (Statistisches Bundesamt, 2009). Häufigste Todesursachen: Herz-Kreislauf- und Krebserkrankungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Schätz mal: In welchem Altersfenster sterben die meisten Menschen — und steigt das Sterberisiko wirklich immer schneller, je älter man wird?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die meisten sterben <strong>über 80</strong> (66 % der Frauen, 47 % der Männer) — Sterben ist ein <strong>Phänomen des hohen Alters</strong>. Und nein: Die Mortalität steigt vom 30. bis 80. Lebensjahr <strong>exponentiell</strong>, danach <strong>verlangsamt</strong> sich der Anstieg.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mortalitätsverlauf</div>
+    Vom <strong>30. bis 80. Lebensjahr</strong> steigt die Mortalität <strong>exponentiell</strong> an — <strong>danach verlangsamt sich der Anstieg</strong>. Das Sterberisiko wächst also lange immer schneller, flacht im höchsten Alter aber ab (beliebter Klausur-Distraktor: „beschleunigt sich nach 80 weiter“).
+  </div>
+  <div class="card">
+    <div class="card-title">Wer stirbt wann? (Statistisches Bundesamt, 2009)</div>
+    <strong>60–80 Jahre:</strong> 25 % der Frauen, 39 % der Männer. <strong>Über 80 Jahre:</strong> 66 % der Frauen, 47 % der Männer. → Frauen sterben später; für beide Geschlechter ist Sterben ein Phänomen des <strong>hohen Alters</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Häufigste Todesursachen</div>
+    <strong>Herz-Kreislauf-Erkrankungen</strong> und <strong>Krebserkrankungen</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Fakten Schritt für Schritt</div>
+    <div id="st0">
+      <div class="step-item"><span class="step-label">Kurve</span><strong>Exponentieller Anstieg 30 → 80</strong>, danach Verlangsamung — nicht „immer weiter beschleunigt“.</div>
+      <div class="step-item"><span class="step-label">Frauen</span>25 % sterben mit 60–80, <strong>66 % über 80</strong>.</div>
+      <div class="step-item"><span class="step-label">Männer</span><strong>39 %</strong> sterben mit 60–80, 47 % über 80 — Männer sterben im Schnitt früher als Frauen.</div>
+      <div class="step-item"><span class="step-label">Ursachen</span><strong>Herz-Kreislauf</strong> und <strong>Krebs</strong> führen die Statistik an.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'st0')">Nächsten Punkt aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Angst vor Sterben & Tod ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Angst vor Sterben und Tod: drei Ängste, ein Paradox</div>
+    <div class="sec-lz">Drei Facetten: Angst vor schmerzhaftem Sterben, vor Sterben in Einsamkeit, vor dem Danach — der Gegenpol ist Akzeptanz. Erwartung: Nähe zum Tod steigt mit dem Alter → Ängste müssten zunehmen. Tatsächlich ist die Angst im MITTLEREN Alter am weitesten verbreitet: Auseinandersetzung mit dem Thema, gesundheitliche Verschlechterung, „Halbzeit“, eigene Eltern sterben, Phase besonders hoher Verantwortung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wer hat mehr Angst vor dem Tod: eine 45-jährige Berufstätige mit zwei Kindern — oder ihr 80-jähriger Vater?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Statistisch die <strong>45-Jährige</strong>: Die Angst vor dem Tod ist im <strong>mittleren Alter am weitesten verbreitet</strong> — obwohl der Vater dem Tod zeitlich näher ist. Genau dieses Paradox erklärt die Vorlesung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Facetten der Angst</div>
+    Angst vor <strong>schmerzhaftem Sterben</strong> · Angst vor <strong>Sterben in Einsamkeit</strong> · Angst vor dem <strong>Danach</strong>. Der Angst steht als zweiter Pol die <strong>Akzeptanz</strong> gegenüber.
+  </div>
+  <div class="card">
+    <div class="card-title">Die Erwartung — und das Paradox</div>
+    Nähe zum Tod geht mit verstärkten Ängsten einher → da die Nähe zum Tod mit dem Alter ansteigt, <em>sollten</em> auch die Ängste zunehmen. <strong>Jedoch: Die Angst ist im mittleren Alter am weitesten verbreitet.</strong>
+  </div>
+  <div class="card">
+    <div class="card-title">Warum gerade das mittlere Alter?</div>
+    Auseinandersetzung mit dem Thema · <strong>gesundheitliche Verschlechterung</strong> · <strong>„Halbzeit“</strong> · die <strong>eigenen Eltern sterben</strong> · Phase besonders <strong>hoher Verantwortung</strong> (z. B. für Kinder und Beruf).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Erwartung vs. Befund</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g10" onclick="switchTab(this,'g1')">Erwartung</button><button class="tab-btn" data-tab="g11" onclick="switchTab(this,'g1')">Befund</button><button class="tab-btn" data-tab="g12" onclick="switchTab(this,'g1')">Erklärung</button></div>
+    <div class="tab-group" data-group="g1"><div class="tab-content active" data-tab="g10">Nähe zum Tod ↑ mit dem Alter → Ängste müssten im hohen Alter am größten sein.</div><div class="tab-content" data-tab="g11">Die Angst ist im MITTLEREN Alter am weitesten verbreitet; im hohen Alter überwiegt zunehmend die Akzeptanz.</div><div class="tab-content" data-tab="g12">Mittleres Alter = „Halbzeit“, sterbende Eltern, gesundheitliche Verschlechterung, Verantwortung — die Endlichkeit wird erstmals konkret, ohne dass schon Bewältigung/Sinnsuche stattgefunden hat.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Cicirelli-Modell ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Prozessmodell: Einflüsse auf die Veränderung der Angst (Cicirelli, 2003)</div>
+    <div class="sec-lz">Annäherung an die durchschnittliche Lebenserwartung + Verschlechterung von Gesundheit/Leistungsfähigkeit + Konfrontation mit dem Tod anderer → Wahrnehmung der begrenzten verbleibenden Lebenszeit (mitbeeinflusst durch biologischen Überlebenstrieb und Verantwortung für Andere) → Zunahme der Angst vor dem Tod → Bewältigung, Sinnsuche → Abnahme der Angst, Zunahme der Akzeptanz.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Drei Dinge passieren oft gleichzeitig: Man nähert sich der durchschnittlichen Lebenserwartung, die Gesundheit wird schlechter, Bekannte sterben. Was lösen diese drei Erfahrungen laut Modell gemeinsam aus?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Sie münden in die <strong>Wahrnehmung der begrenzten verbleibenden Lebenszeit</strong> — das Zentrum des Modells (modifiziert nach Cicirelli, 2003). Erst daraus entsteht die Zunahme der Angst, auf die Bewältigung und Sinnsuche folgen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die drei Auslöser</div>
+    <strong>Annäherung an die durchschnittliche Lebenserwartung</strong> + <strong>Verschlechterung der Gesundheit und Leistungsfähigkeit</strong> + <strong>Konfrontation mit dem Tod anderer Menschen</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Das Zentrum — plus zwei Nebeneinflüsse</div>
+    Alle drei Auslöser münden in die <strong>Wahrnehmung der begrenzten verbleibenden Lebenszeit</strong>. Zusätzlich wirken der <strong>biologische Überlebenstrieb</strong> und die <strong>Verantwortung für Andere</strong> auf diesen Kern ein.
+  </div>
+  <div class="card">
+    <div class="card-title">Der weitere Verlauf</div>
+    → <strong>Zunahme der Angst vor dem Tod</strong> → <strong>Bewältigung, Sinnsuche</strong> → <strong>Abnahme der Angst, Zunahme der Akzeptanz</strong>. Das Modell erklärt damit auch, warum die Angst nach dem mittleren Alter wieder sinkt (Abb. 47, aus Lang et al. 2011).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Das Prozessmodell Schritt für Schritt</div>
+    <div id="st2">
+      <div class="step-item"><span class="step-label">Schritt 1 — Auslöser</span>Annäherung an die Lebenserwartung · Gesundheitsverschlechterung · Konfrontation mit dem Tod anderer.</div>
+      <div class="step-item"><span class="step-label">Schritt 2 — Kern</span><strong>Wahrnehmung der begrenzten verbleibenden Lebenszeit</strong> (mitbeeinflusst durch Überlebenstrieb + Verantwortung für Andere).</div>
+      <div class="step-item"><span class="step-label">Schritt 3</span><strong>Zunahme der Angst</strong> vor dem Tod.</div>
+      <div class="step-item"><span class="step-label">Schritt 4</span><strong>Bewältigung, Sinnsuche.</strong></div>
+      <div class="step-item"><span class="step-label">Schritt 5 — Ergebnis</span><strong>Abnahme der Angst, Zunahme der Akzeptanz.</strong></div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'st2')">Nächsten Schritt aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Korrelate & Erklärung ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Warum Ältere weniger Angst haben — und was wirklich korreliert</div>
+    <div class="sec-lz">Erklärung: Ältere haben die meisten Lebensziele erreicht, erwarten weniger Positives, haben sich mehr mit der Endlichkeit auseinandergesetzt → sehen eher Sinn im Tod. Methodisch: Kohorteneffekte (Religiosität) denkbar, aber auch Längsschnitte zeigen die Abnahme. Metaanalyse Fortner & Neimeyer (1999): signifikant positiv Institutionalisierung (≈ +.33, stärkstes Korrelat), psychische Probleme (≈ +.28), körperliche Einschränkung (≈ +.17); negativ positives Befinden (≈ −.30); NICHT signifikant: Alter, Geschlecht, Religiosität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Intuitiv würden viele tippen: „Je älter, desto mehr Todesangst" und „Religiöse haben weniger Angst". Was sagt die Metaanalyse von Fortner & Neimeyer (1999) dazu?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Beides <strong>nicht signifikant</strong>! Weder Alter noch Religiosität (noch Geschlecht) korrelieren bedeutsam mit der Todesangst Älterer. Signifikant sind stattdessen <strong>Institutionalisierung</strong>, <strong>psychische Probleme</strong>, <strong>körperliche Einschränkung</strong> (positiv) und <strong>positives Befinden</strong> (negativ).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Warum Ältere weniger Angst haben</div>
+    Wichtige Faktoren: <strong>Bedauern bezogen auf Lebensziele</strong> und <strong>Sinnhaftigkeit des Todes</strong>. Ältere haben die meisten <strong>Lebensziele erreicht</strong>, <strong>erwarten weniger Positives</strong> im verbleibenden Leben und haben sich <strong>mehr mit der Endlichkeit auseinandergesetzt</strong> → sie sehen eher einen <strong>Sinn im Tod</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Methodischer Einwand — und seine Entkräftung</div>
+    <strong>Kohorteneffekte</strong> bezogen auf <strong>Religiosität</strong> könnten den Alterseffekt in <em>querschnittlichen</em> Untersuchungen beeinflusst haben — jedoch zeigen auch <strong>längsschnittliche</strong> Untersuchungen die Abnahme der Angst. Der Alterseffekt ist also kein reines Kohortenartefakt.
+  </div>
+  <div class="card">
+    <div class="card-title">Korrelate der Todesangst (Fortner & Neimeyer, 1999)</div>
+    Metaanalyse, ältere Menschen (Abb. 48): <strong>signifikant positiv</strong> Institutionalisierung (≈ +.33, stärkstes Korrelat), psychische Probleme (≈ +.28), körperliche Einschränkung (≈ +.17) · <strong>signifikant negativ</strong> positives Befinden (≈ −.30) · <strong>nicht signifikant</strong> Alter, weibliches Geschlecht, Religiosität.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Was korreliert wie?</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g30" onclick="switchTab(this,'g3')">signifikant +</button><button class="tab-btn" data-tab="g31" onclick="switchTab(this,'g3')">signifikant −</button><button class="tab-btn" data-tab="g32" onclick="switchTab(this,'g3')">nicht signifikant</button></div>
+    <div class="tab-group" data-group="g3"><div class="tab-content active" data-tab="g30">Institutionalisierung (≈ +.33, am stärksten) · psychische Probleme (≈ +.28) · körperliche Einschränkung (≈ +.17). Merkhilfe: belastende LEBENSUMSTÄNDE, nicht demografische Merkmale.</div><div class="tab-content" data-tab="g31">Positives Befinden (≈ −.30): Wem es gut geht, der hat weniger Todesangst.</div><div class="tab-content" data-tab="g32">Alter · weibliches Geschlecht · Religiosität — alle drei nahe 0. Beliebte Klausur-Distraktoren!</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Kübler-Ross ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Das Stufenmodell des Sterbens von Kübler-Ross</div>
+    <div class="sec-lz">Fünf Stufen: 1. Nichtwahrhabenwollen (Diagnose = Irrtum; gibt Zeit zur Verarbeitung) · 2. Zorn (Diagnose akzeptiert, aber als ungerecht empfunden; Zorn auf Gesunde/Ärzte/Schicksal) · 3. Verhandeln (Tod hinausschieben, bis etwas Bestimmtes erreicht ist) · 4. Depression (Verhandeln hilft nicht, Verschlechterungen) · 5. Zustimmung („Zeit der letzten Ruhe vor dem Tod“).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Patient sagt nach der Diagnose: „Das muss eine Verwechslung im Labor sein — ich fühle mich doch gar nicht krank." Ist das schon eine der Kübler-Ross-Stufen — und wenn ja, wozu ist sie gut?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Ja: <strong>Nichtwahrhabenwollen</strong> (Stufe 1). Nach Kübler-Ross reagieren die meisten so — und die Stufe hat eine <strong>Funktion</strong>: Sie gibt Zeit, die bedrohliche Information <strong>allmählich zu verarbeiten</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Stufen 1–3</div>
+    <strong>1. Nichtwahrhabenwollen:</strong> Diagnose = vermeintlicher Irrtum („fühle mich nicht so krank"); gibt Zeit zur allmählichen Verarbeitung. <strong>2. Zorn:</strong> Diagnose akzeptiert, aber als <em>ungerecht</em> empfunden — Zorn auf Gesunde, auf Ärzte (zu späte Erkennung, schlechte Behandlung) oder das Schicksal. <strong>3. Verhandeln:</strong> den als unvermeidbar erkannten Tod <em>hinausschieben</em> — sterben ja, aber erst nach dem „runden" Geburtstag oder der Geburt des Enkelkindes.
+  </div>
+  <div class="card">
+    <div class="card-title">Stufen 4–5</div>
+    <strong>4. Depression:</strong> Die Krankheit schreitet voran, Verschlechterungen häufen sich, das Verhandeln hilft nicht → depressive Verstimmung. <strong>5. Zustimmung:</strong> die „<strong>Zeit der letzten Ruhe vor dem Tod</strong>" — eine zustimmende Haltung zur Tatsache, in Kürze sterben zu müssen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslungsgefahr: Verhandeln vs. Zustimmung</div>
+    „Ich sterbe gern, wenn ich vorher noch …" ist <strong>Verhandeln</strong> (Bedingung, Aufschieben), nicht Zustimmung. Zustimmung ist <strong>bedingungslos</strong> — keine Forderung mehr, nur noch Ruhe.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🧪 Simulator: Stufen-Selektor (Kübler-Ross)</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="kr-1" onclick="krSet(1)">1 Nichtwahrhabenwollen</button>
+        <button class="sim-tbtn" id="kr-2" onclick="krSet(2)">2 Zorn</button>
+        <button class="sim-tbtn" id="kr-3" onclick="krSet(3)">3 Verhandeln</button>
+        <button class="sim-tbtn" id="kr-4" onclick="krSet(4)">4 Depression</button>
+        <button class="sim-tbtn" id="kr-5" onclick="krSet(5)">5 Zustimmung</button>
+      </div>
+      <div class="sim-verdict" id="kr-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Kritik & Empirie ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Kritik am Stufenmodell & empirische Befunde (Hinton, Kruse)</div>
+    <div class="sec-lz">Kritik: Fallarbeit mit 200 terminal Erkrankten (überwiegend Krebs), Methode unzureichend dokumentiert, Reaktionsweisen wie Kampfgeist fehlen, universelle Abfolge musste revidiert werden. Hinton (1999): 76 Krebspatienten + Angehörige, letzte 8 Wochen, wöchentliche Interviews — Akzeptanz nimmt zu, erreicht aber nur 50–60 %, unterschiedliche Verläufe. Kruse (1995, Längsschnitt): 5 Reaktionsweisen — Sinnfindung 18 %, Akzeptanz+Suche 24 %, Nichtwahrhabenwollen 16 %, Resignation/Verbitterung 20 %, Depression bis Hinnahme 22 %.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Durchlaufen wirklich alle Sterbenden die fünf Kübler-Ross-Stufen in derselben Reihenfolge?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Nein — genau diese <strong>Universalitätsannahme musste revidiert werden</strong>. Kruse (1995) fand fünf <strong>verschiedene Reaktionsweisen nebeneinander</strong> (16–24 %), und bei Hinton (1999) erreichte die Akzeptanz selbst kurz vor dem Tod nur <strong>50–60 %</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kritik am Stufenmodell</div>
+    Eine der bekanntesten Beschreibungen, beruht auf <strong>Fallarbeit mit 200 terminal erkrankten Patient*innen</strong> (überwiegend Krebs). Aber: <strong>methodisches Vorgehen unzureichend dokumentiert</strong>; weitere Reaktionsweisen wie <strong>Kampfgeist fehlen</strong>; die <strong>als universell erachtete Abfolge musste revidiert werden</strong>. Wert: charakterisiert häufig anzutreffende Reaktionen Sterbender.
+  </div>
+  <div class="card">
+    <div class="card-title">Hinton (1999): Akzeptanz bleibt unvollständig</div>
+    <strong>76 Krebspatienten und Angehörige</strong>, letzte <strong>8 Wochen</strong> vor dem Tod, <strong>wöchentliche qualitative Interviews</strong> zu Todesnähe-Bewusstsein und Akzeptanz. Befund: Akzeptanzraten nahmen mit der Todesnähe bei Sterbenden UND Angehörigen zu — erreichten aber nur <strong>50–60 %</strong>; <strong>unterschiedliche Verläufe</strong> (Abb. 49).
+  </div>
+  <div class="card">
+    <div class="card-title">Kruse (1995): fünf Reaktionsweisen (Längsschnitt)</div>
+    a) <strong>Linderung durch neuen Lebenssinn</strong>/wichtige Aufgabe (18 %) · b) <strong>zunehmende Akzeptanz + Suche</strong> nach Möglichkeiten, die das Leben noch bietet (24 %) · c) Bedrohung <strong>nicht ins Zentrum</strong> treten lassen, Nichtwahrhabenwollen (16 %) · d) zunehmende <strong>Resignation und Verbitterung</strong> (20 %) · e) <strong>Phasen tiefer Depression bis zur Hinnahme</strong> (22 %; vgl. Kübler-Ross).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Welche Kruse-Reaktionsweise zeigt sich?</div>
+    <div class="corr-item" id="w14a">„Seit ich weiß, dass ich meiner Enkelin noch das Lesen beibringen will, sind die Ängste leiser geworden — ich habe noch eine Aufgabe."
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w14a',this,'Sinnfindung')">Sinnfindung</button><button class="corr-btn" onclick="checkCorr('w14a',this,'Akzeptanz + Suche')">Akzeptanz + Suche</button><button class="corr-btn" onclick="checkCorr('w14a',this,'Nichtwahrhabenwollen')">Nichtwahrhabenwollen</button><button class="corr-btn" onclick="checkCorr('w14a',this,'Resignation/Verbitterung')">Resignation/Verbitterung</button></div><div class="corr-fb" id="w14a-fb"></div>
+    </div>
+    <div class="corr-item" id="w14b">„Ich weiß, dass ich sterben werde. Aber solange es geht, will ich noch jeden Morgen in meinen Garten."
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w14b',this,'Sinnfindung')">Sinnfindung</button><button class="corr-btn" onclick="checkCorr('w14b',this,'Akzeptanz + Suche')">Akzeptanz + Suche</button><button class="corr-btn" onclick="checkCorr('w14b',this,'Nichtwahrhabenwollen')">Nichtwahrhabenwollen</button><button class="corr-btn" onclick="checkCorr('w14b',this,'Resignation/Verbitterung')">Resignation/Verbitterung</button></div><div class="corr-fb" id="w14b-fb"></div>
+    </div>
+    <div class="corr-item" id="w14c">„Über so etwas rede ich nicht — lassen Sie uns lieber den Sommerurlaub planen." Die Bedrohung darf nicht ins Zentrum des Erlebens.
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w14c',this,'Sinnfindung')">Sinnfindung</button><button class="corr-btn" onclick="checkCorr('w14c',this,'Akzeptanz + Suche')">Akzeptanz + Suche</button><button class="corr-btn" onclick="checkCorr('w14c',this,'Nichtwahrhabenwollen')">Nichtwahrhabenwollen</button><button class="corr-btn" onclick="checkCorr('w14c',this,'Resignation/Verbitterung')">Resignation/Verbitterung</button></div><div class="corr-fb" id="w14c-fb"></div>
+    </div>
+    <div class="corr-item" id="w14d">„Es hat ja doch alles keinen Sinn mehr. Das Leben war ungerecht zu mir, und jetzt auch noch das."
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w14d',this,'Sinnfindung')">Sinnfindung</button><button class="corr-btn" onclick="checkCorr('w14d',this,'Akzeptanz + Suche')">Akzeptanz + Suche</button><button class="corr-btn" onclick="checkCorr('w14d',this,'Nichtwahrhabenwollen')">Nichtwahrhabenwollen</button><button class="corr-btn" onclick="checkCorr('w14d',this,'Resignation/Verbitterung')">Resignation/Verbitterung</button></div><div class="corr-fb" id="w14d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Verwitwung & Suizid ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Tod des Lebenspartners & Suizid über die Lebensspanne</div>
+    <div class="sec-lz">Verwitwung: eines der am stärksten belastenden Lebensereignisse (Verlust des wichtigsten Kommunikationspartners, Einkommenseinschränkungen, Aufgabenübernahme, Geschlechtsunterschiede im Risiko). Lebenszufriedenheit (Lucas 2007): sinkt schon vor der Verwitwung, Tiefpunkt beim Ereignis, mehrjährige allmähliche Erholung ohne volles Ausgangsniveau. Suizidrate: steigt mit dem Alter, Männer > Frauen, bei Männern ab 60 besonders starker Anstieg. Motive: unerträglich/unveränderlich erlebte Situation beenden; Depression.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bricht die Lebenszufriedenheit erst mit dem Tod des Partners ein — oder schon vorher? Und kehrt sie je ganz zurück?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Sie sinkt <strong>schon in den Jahren davor</strong> (z. B. Krankheit/Pflege des Partners), erreicht <strong>zum Ereignis den Tiefpunkt</strong> und erholt sich dann <strong>über mehrere Jahre</strong> — ohne das Ausgangsniveau ganz zu erreichen (nach Lucas, 2007).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Verwitwung: Warum so belastend?</div>
+    Eines der <strong>am stärksten belastenden Lebensereignisse</strong>: Die <strong>emotional nahestehende Person und der wichtigste Kommunikationspartner</strong> geht verloren · <strong>Einschränkungen im verfügbaren Einkommen</strong> · Aktivitäten, für die die Partner*in zuständig war, müssen <strong>übernommen</strong> werden · <strong>Geschlechtsunterschiede im Verwitwungsrisiko</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Lebenszufriedenheit rund um die Verwitwung (Lucas, 2007)</div>
+    Abb. 51: allmähliches <strong>Absinken bereits vor</strong> der Verwitwung (≈ 7,2 → 6,7), <strong>Tiefpunkt beim Ereignis</strong> (≈ 6,0), danach <strong>mehrjährige allmähliche Erholung</strong> (≈ 6,9 nach 7 Jahren) — das Ausgangsniveau wird nicht ganz erreicht. Passt zum Set-Point-Muster aus VL12.
+  </div>
+  <div class="card">
+    <div class="card-title">Suizid über die Lebensspanne</div>
+    Die <strong>Suizidrate steigt mit dem Lebensalter</strong>, ist <strong>bei Männern höher</strong> als bei Frauen und steigt bei Männern <strong>nach dem 60. Lebensjahr besonders stark</strong> (bis ≈ 80/100 000 in den höchsten Altersgruppen; Abb. 50). <strong>Motive:</strong> eine unerträglich und unveränderlich erlebte Situation (Einsamkeit, Schmerzen, Hilfsbedürftigkeit) beenden · Depression.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Der Lebenszufriedenheits-Verlauf in drei Phasen</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g60" onclick="switchTab(this,'g6')">Jahre davor</button><button class="tab-btn" data-tab="g61" onclick="switchTab(this,'g6')">Ereignis</button><button class="tab-btn" data-tab="g62" onclick="switchTab(this,'g6')">Jahre danach</button></div>
+    <div class="tab-group" data-group="g6"><div class="tab-content active" data-tab="g60">Allmähliches Absinken schon VOR der Verwitwung — oft Vorboten wie Krankheit und Pflege des Partners.</div><div class="tab-content" data-tab="g61">Tiefpunkt der Lebenszufriedenheit genau zum Zeitpunkt der Verwitwung (≈ 6,0 auf der Skala).</div><div class="tab-content" data-tab="g62">Mehrjährige, allmähliche Erholung — aber das alte Ausgangsniveau wird nicht ganz erreicht. Kein „Zurück in wenigen Wochen“!</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Das sterbende Gehirn ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Aktuelle Studie: das sterbende Gehirn (Vicente et al., 2022)</div>
+    <div class="sec-lz">Erste EEG-Aufzeichnung eines sterbenden menschlichen Gehirns im realen Akutsetting: 87-jähriger Patient, Herzstillstand während der Ableitung; 30 s vor/nach Herzstillstand analysiert. Befund: absolute Power (Delta/Beta/Alpha/Gamma) reduziert, aber relativer Gamma-Anteil erhöht; Gamma an Alpha-/Theta-Rhythmen gekoppelt — auch nach Sistieren des Blutflusses. Muster wie bei Träumen/Erinnern/Meditieren („life recall“). Exkurs Methode: resting-state EEG, Fourier-Analyse → Powerspektrum (Alpha-Peak bei geschlossenen Augen).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Beim Herzstillstand geht das Licht sofort aus" — stimmt das nach der EEG-Evidenz von Vicente et al. (2022)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Nein. Das Gehirn blieb <strong>aktiv und koordiniert</strong>: Trotz absolut reduzierter Power zeigte sich ein <strong>erhöhter relativer Gamma-Anteil</strong> und die <strong>Kopplung von Gamma an Alpha/Theta</strong> — sogar nach dem Sistieren des zerebralen Blutflusses.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Studie (Vicente et al., 2022, Frontiers in Aging Neuroscience)</div>
+    Erste Evidenz vom <strong>sterbenden menschlichen Gehirn</strong> in einem realen Akutversorgungs-Setting: kontinuierliches <strong>EEG eines 87-jährigen Patienten</strong> (Herzstillstand nach traumatischem Subduralhämatom) — analysiert u. a. die <strong>30 Sekunden vor und nach</strong> dem Herzstillstand. Zuvor war erhöhte Aktivität nach Herzstillstand (v. a. <strong>Gamma-Band</strong>) nur <strong>tierexperimentell</strong> gezeigt.
+  </div>
+  <div class="card">
+    <div class="card-title">Befunde</div>
+    Nach Suppression beider Hemisphären: <strong>Anstieg der absoluten Gamma-Power, Abfall der Theta-Power</strong>. Nach dem Herzstillstand: Delta, Beta, Alpha und Gamma <strong>absolut reduziert</strong>, aber <strong>höherer relativer Gamma-Anteil</strong>. <strong>Cross-Frequency-Coupling:</strong> linkshemisphärisches Gamma durch <strong>Alpha- und Theta-Rhythmen</strong> moduliert — über alle Zeitfenster, <strong>auch nach Sistieren des zerebralen Blutflusses</strong>; stärkste Kopplung Gamma×Alpha.
+  </div>
+  <div class="card">
+    <div class="card-title">Deutung & Exkurs Methode</div>
+    Die Muster ähneln denen bei <strong>Träumen, Erinnerungsabruf und Meditation</strong> → möglicherweise ein „<strong>Lebensfilm</strong>" (life recall) in der Nahtod-Periode; vorsichtig zu deuten (neuronale Verletzung/Schwellung). <strong>Exkurs:</strong> resting-state EEG, <strong>Fourier-Analyse → Powerspektrum</strong>; klassisch: deutlicher <strong>Alpha-Peak bei geschlossenen Augen</strong> (2 min Augen auf vs. zu).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Absolut vs. relativ vs. Kopplung</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g70" onclick="switchTab(this,'g7')">absolute Power</button><button class="tab-btn" data-tab="g71" onclick="switchTab(this,'g7')">relative Gamma-Power</button><button class="tab-btn" data-tab="g72" onclick="switchTab(this,'g7')">Kopplung</button></div>
+    <div class="tab-group" data-group="g7"><div class="tab-content active" data-tab="g70">Nach dem Herzstillstand sinkt die absolute Power in Delta, Beta, Alpha UND Gamma — die Gesamtaktivität nimmt ab.</div><div class="tab-content" data-tab="g71">Der ANTEIL der Gamma-Aktivität am Gesamtsignal ist gegenüber dem interiktalen Intervall ERHÖHT — das ist der scheinbare Widerspruch, den Klausurfragen gern ausnutzen.</div><div class="tab-content" data-tab="g72">Gamma wird von Alpha-/Theta-Rhythmen moduliert (Cross-Frequency-Coupling) — koordinierte Aktivität selbst ohne zerebralen Blutfluss; Muster wie bei Träumen/Erinnern/Meditieren.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL14 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Angst vor dem Tod</h4>
+      <p>Gipfel im MITTLEREN Alter</p>
+      <p>„Halbzeit“, Eltern sterben</p>
+      <p>im Alter: Abnahme, Akzeptanz</p>
+      <p>Korrelat: Institutionalisierung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Suizidrate</h4>
+      <p>steigt MIT dem Alter</p>
+      <p>Männer > Frauen</p>
+      <p>Männer: starker Anstieg ab 60</p>
+      <p>kein Gipfel in der Lebensmitte</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wie die Todesangst erreicht auch die Suizidrate ihren Gipfel im mittleren Lebensalter und sinkt im hohen Alter wieder ab.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kübler-Ross (Stufenmodell)</h4>
+      <p>5 Stufen in fester Abfolge</p>
+      <p>Fallarbeit, 200 terminal Erkrankte</p>
+      <p>Abfolge galt als universell</p>
+      <p>Kritik: Kampfgeist fehlt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kruse (1995)</h4>
+      <p>Längsschnittstudie</p>
+      <p>5 Reaktionsweisen NEBENeinander</p>
+      <p>interindividuelle Unterschiede</p>
+      <p>mit Prozentanteilen (18–24 %)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kruse (1995) bestätigte, dass alle Sterbenden die fünf Kübler-Ross-Stufen in derselben Reihenfolge durchlaufen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Hinton (1999)</h4>
+      <p>76 Krebspatienten + Angehörige</p>
+      <p>letzte 8 Wochen, wöchentl. Interviews</p>
+      <p>Akzeptanz nimmt zu …</p>
+      <p>… erreicht aber nur 50–60 %</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fortner & Neimeyer (1999)</h4>
+      <p>Metaanalyse</p>
+      <p>Korrelate der Todesangst</p>
+      <p>Institutionalisierung +.33</p>
+      <p>positives Befinden −.30</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Fortner & Neimeyer (1999) interviewten 76 Krebspatienten wöchentlich in den letzten acht Lebenswochen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verhandeln (Stufe 3)</h4>
+      <p>Tod als unvermeidbar erkannt</p>
+      <p>will ihn HINAUSSCHIEBEN</p>
+      <p>„erst noch das Enkelkind …“</p>
+      <p>aktives Feilschen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zustimmung (Stufe 5)</h4>
+      <p>„Zeit der letzten Ruhe“</p>
+      <p>zustimmende Haltung</p>
+      <p>kein Aufschieben mehr</p>
+      <p>letzte Stufe</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer sagt „Ich sterbe gern, wenn ich vorher noch meinen 80. Geburtstag erleben darf“, befindet sich in der Stufe der Zustimmung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Absolute Power (nach Herzstillstand)</h4>
+      <p>Delta, Beta, Alpha, Gamma</p>
+      <p>alle REDUZIERT</p>
+      <p>Gesamtaktivität sinkt</p>
+      <p>kein Widerspruch zum Befund</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Relative Gamma-Power</h4>
+      <p>Gamma-ANTEIL erhöht</p>
+      <p>vs. interiktales Intervall</p>
+      <p>+ Kopplung an Alpha/Theta</p>
+      <p>auch ohne Blutfluss</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Vicente et al. (2022) fanden, dass die absolute Gamma-Power nach dem Herzstillstand ansteigt, während der relative Gamma-Anteil sinkt.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl14</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl14';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wie verändert sich die Mortalität über das Erwachsenenalter?",
+      "opts": [
+        "Vom 30. bis 80. Lebensjahr steigt sie exponentiell an, danach verlangsamt sich der Anstieg.",
+        "Sie steigt von der Geburt bis zum Lebensende streng linear an, ohne dass sich das Anstiegstempo in irgendeiner Lebensphase erkennbar verändert.",
+        "Sie bleibt bis zum 60. Lebensjahr praktisch konstant und springt dann abrupt auf ihr Maximum.",
+        "Sie steigt bis zum 80. Lebensjahr exponentiell und beschleunigt sich danach noch weiter."
+      ],
+      "c": 0,
+      "e": "Die Folie nennt den exponentiellen Anstieg der Mortalität vom 30. bis 80. Lebensjahr; danach verlangsamt sich der Anstieg. Sterben ist damit ein Phänomen des hohen Alters."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Angabe entspricht den Zahlen des Statistischen Bundesamts (2009) zur Sterblichkeit?",
+      "opts": [
+        "25 % der Frauen und 39 % der Männer sterben im Alter über 80 Jahren.",
+        "66 % der Frauen und 47 % der Männer sterben im Alter über 80 Jahren.",
+        "Männer sterben deutlich häufiger als Frauen im Alter über 80 Jahren, weil ihre durchschnittliche Lebenserwartung die der Frauen übersteigt.",
+        "Über 90 % beider Geschlechter sterben vor dem 60. Lebensjahr."
+      ],
+      "c": 1,
+      "e": "66 % der Frauen und 47 % der Männer sterben über 80; im Alter 60–80 sterben 25 % der Frauen und 39 % der Männer. Frauen sterben also später — Option c dreht das Verhältnis um."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche drei Ängste umfasst die „Angst vor Sterben und Tod“ laut Vorlesung?",
+      "opts": [
+        "Angst vor Krankenhäusern, Angst vor Ärzten und Angst vor Kontrollverlust im Alltag der letzten Lebensjahre.",
+        "Angst vor dem Verlust des Partners, Angst vor Armut und Angst vor Pflegebedürftigkeit.",
+        "Angst vor schmerzhaftem Sterben, Angst vor Sterben in Einsamkeit und Angst vor dem Danach.",
+        "Angst vor dem Vergessenwerden, Angst vor Fremdbestimmung und Angst vor der Diagnose."
+      ],
+      "c": 2,
+      "e": "Die Folie nennt genau drei Facetten: Angst vor schmerzhaftem Sterben, vor Sterben in Einsamkeit und vor dem Danach — dem Pol Angst steht die Akzeptanz gegenüber."
+    },
+    {
+      "id": "s1q2",
+      "q": "In welcher Lebensphase ist die Angst vor dem Tod am weitesten verbreitet — und was kennzeichnet diese Phase?",
+      "opts": [
+        "Im hohen Alter, denn die Nähe zum Tod steigt mit dem Alter kontinuierlich an, und mit ihr müssen zwangsläufig auch die Ängste immer weiter zunehmen.",
+        "Im jungen Erwachsenenalter, weil das Leben noch ganz am Anfang steht.",
+        "Die Angst ist über alle Altersgruppen hinweg praktisch gleich verteilt.",
+        "Im mittleren Alter — u. a. „Halbzeit“, Sterben der eigenen Eltern, gesundheitliche Verschlechterung und besonders hohe Verantwortung."
+      ],
+      "c": 3,
+      "e": "Entgegen der Erwartung (Nähe zum Tod → mehr Angst) ist die Angst im mittleren Alter am weitesten verbreitet: Auseinandersetzung mit dem Thema, „Halbzeit“, sterbende Eltern, hohe Verantwortung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was steht im Zentrum des Prozessmodells zur Angst vor dem Tod (modifiziert nach Cicirelli, 2003)?",
+      "opts": [
+        "Die Wahrnehmung der begrenzten verbleibenden Lebenszeit.",
+        "Der biologische Überlebenstrieb als Endpunkt des Prozesses, in den alle anderen Einflussgrößen des Modells letztlich einmünden.",
+        "Die Zunahme der Religiosität im Alter.",
+        "Die Akzeptanz des Todes als Ausgangspunkt des Modells."
+      ],
+      "c": 0,
+      "e": "Annäherung an die Lebenserwartung, Gesundheitsverschlechterung und Konfrontation mit dem Tod anderer münden in die Wahrnehmung der begrenzten verbleibenden Lebenszeit — das Zentrum des Modells."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wodurch nimmt die Angst vor dem Tod im Cicirelli-Modell schließlich wieder ab?",
+      "opts": [
+        "Durch konsequente Verdrängung und Vermeidung des Themas.",
+        "Durch Bewältigung und Sinnsuche — es folgt die Abnahme der Angst und die Zunahme der Akzeptanz.",
+        "Durch umfassende medizinische Aufklärung über den Sterbeprozess, die dem Modell zufolge der einzige wirksame Weg zur Angstreduktion ist.",
+        "Die Angst nimmt im Modell nicht wieder ab, sondern bleibt bis zum Tod konstant hoch."
+      ],
+      "c": 1,
+      "e": "Auf die Zunahme der Angst folgen im Modell Bewältigung und Sinnsuche → Abnahme der Angst vor dem Tod, Zunahme der Akzeptanz."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welches ist laut der Metaanalyse von Fortner & Neimeyer (1999) das stärkste positive Korrelat der Angst vor dem Tod bei älteren Menschen?",
+      "opts": [
+        "Das Alter selbst — je älter die Person, desto größer die Angst; dieser Zusammenhang ist der mit Abstand stärkste der gesamten Metaanalyse.",
+        "Die Religiosität.",
+        "Die Institutionalisierung (≈ +.33).",
+        "Das weibliche Geschlecht."
+      ],
+      "c": 2,
+      "e": "Signifikant positiv korrelieren Institutionalisierung (≈ +.33, stärkstes Korrelat), psychische Probleme (≈ +.28) und körperliche Einschränkung; Alter, Geschlecht und Religiosität sind nicht signifikant."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie erklärt die Vorlesung, dass Ältere trotz größerer Todesnähe weniger Angst vor dem Tod haben als Menschen im mittleren Alter?",
+      "opts": [
+        "Ältere verdrängen den Tod stärker als alle anderen Altersgruppen.",
+        "Der Befund ist ausschließlich ein Kohortenartefakt der Religiosität — in längsschnittlichen Untersuchungen verschwindet der scheinbare Alterseffekt daher vollständig und kehrt sich teilweise sogar um.",
+        "Ältere haben schlicht weniger Zeit, sich zu ängstigen, da ihr Alltag durch gesundheitliche Versorgung ausgefüllt ist.",
+        "Ältere haben die meisten Lebensziele erreicht, erwarten weniger Positives und haben sich mehr mit der Endlichkeit auseinandergesetzt — sie sehen eher einen Sinn im Tod."
+      ],
+      "c": 3,
+      "e": "Wichtige Faktoren sind Bedauern bezogen auf Lebensziele und Sinnhaftigkeit des Todes. Kohorteneffekte (Religiosität) wären denkbar, aber auch Längsschnittstudien zeigen die Abnahme der Angst."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "In welcher Reihenfolge durchlaufen Sterbende die Stufen im Modell von Kübler-Ross?",
+      "opts": [
+        "Nichtwahrhabenwollen → Zorn → Verhandeln → Depression → Zustimmung.",
+        "Zorn → Nichtwahrhabenwollen → Depression → Verhandeln → Zustimmung.",
+        "Nichtwahrhabenwollen → Depression → Zorn → Zustimmung → Verhandeln, wobei die letzten beiden Stufen beliebig oft ihre Position tauschen können.",
+        "Verhandeln → Zorn → Nichtwahrhabenwollen → Depression → Zustimmung."
+      ],
+      "c": 0,
+      "e": "Die fünf Stufen nach Kübler-Ross: 1. Nichtwahrhabenwollen, 2. Zorn, 3. Verhandeln, 4. Depression, 5. Zustimmung („Zeit der letzten Ruhe vor dem Tod“)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Ein todkranker Patient sagt: „Ich bin bereit zu sterben — aber erst will ich noch die Geburt meines Enkelkindes erleben.“ Welche Kübler-Ross-Stufe zeigt sich hier?",
+      "opts": [
+        "Zustimmung, denn er hat den Tod akzeptiert.",
+        "Verhandeln — der als unvermeidbar erkannte Tod soll hinausgeschoben werden, bis etwas Bestimmtes erreicht ist.",
+        "Nichtwahrhabenwollen, denn er glaubt offenkundig weiterhin nicht an die Richtigkeit seiner Diagnose und hält sie für einen ärztlichen Irrtum.",
+        "Depression, weil er das Fortschreiten der Krankheit bemerkt."
+      ],
+      "c": 1,
+      "e": "Klassisches Verhandeln (Stufe 3): sterben ja, aber erst nach einem bestimmten Ereignis (runder Geburtstag, Geburt eines Enkelkindes). Der Tod ist dabei als unvermeidbar erkannt — kein Nichtwahrhabenwollen."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Welche Kritik am Stufenmodell von Kübler-Ross führt die Vorlesung an?",
+      "opts": [
+        "Das Modell beruht auf randomisierten Experimenten mit Kontrollgruppe, deren Ergebnisse sich jedoch in keiner einzigen späteren Feldstudie mit Sterbenden replizieren ließen.",
+        "Das Modell beschreibt ausschließlich Reaktionen von Angehörigen, nicht von Sterbenden selbst.",
+        "Die als universell erachtete Abfolge musste revidiert werden; weitere Reaktionsweisen wie Kampfgeist fehlen, das methodische Vorgehen ist unzureichend dokumentiert.",
+        "Die Stichprobe bestand nur aus gesunden Studierenden."
+      ],
+      "c": 2,
+      "e": "Kritikpunkte: Fallarbeit mit 200 terminal Erkrankten (überwiegend Krebs), Methode unzureichend dokumentiert, Reaktionsweisen wie Kampfgeist fehlen, die universelle Abfolge musste revidiert werden."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was zeigte die Studie von Hinton (1999) mit 76 Krebspatienten und ihren Angehörigen in den letzten acht Lebenswochen?",
+      "opts": [
+        "Alle Patienten erreichten in der letzten Woche die vollständige Akzeptanz ihres Sterbens.",
+        "Die Akzeptanz nahm bei den Angehörigen zu, bei den Sterbenden dagegen kontinuierlich ab, sodass sich beide Gruppen immer weiter voneinander entfernten.",
+        "Es ließen sich fünf verschiedene Reaktionsweisen mit festen Prozentanteilen unterscheiden.",
+        "Akzeptanzraten nahmen mit der Todesnähe zwar zu, erreichten aber nur 50 bis 60 % — bei unterschiedlichen Verläufen."
+      ],
+      "c": 3,
+      "e": "Hinton (1999): wöchentliche qualitative Interviews; Bewusstheit und Akzeptanz nahmen bei Sterbenden UND Angehörigen zu, die Akzeptanzrate erreichte aber nur 50–60 %. Die fünf Reaktionsweisen stammen von Kruse (1995)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie verändert sich die Lebenszufriedenheit im Umfeld der Verwitwung (nach Lucas, 2007)?",
+      "opts": [
+        "Sie sinkt bereits in den Jahren vor der Verwitwung, erreicht zum Ereignis den Tiefpunkt und erholt sich danach über mehrere Jahre allmählich.",
+        "Sie bleibt bis zum Ereignis völlig stabil, bricht dann abrupt ein und kehrt innerhalb weniger Wochen vollständig auf das ursprüngliche Ausgangsniveau zurück.",
+        "Sie steigt vor der Verwitwung an, weil sich die Partner emotional vorbereiten.",
+        "Sie sinkt erst Jahre nach der Verwitwung, wenn die Einsamkeit chronisch wird."
+      ],
+      "c": 0,
+      "e": "Abbildung 51 (nach Lucas 2007): allmähliches Absinken schon vor der Verwitwung (z. B. Pflege/Krankheit des Partners), Tiefpunkt beim Ereignis, danach mehrjährige allmähliche Erholung — ohne das Ausgangsniveau ganz zu erreichen."
+    },
+    {
+      "id": "s6q2",
+      "q": "Welche Aussage zur Suizidrate über die Lebensspanne ist korrekt?",
+      "opts": [
+        "Sie ist bei Frauen in allen Altersgruppen höher als bei Männern, weil Frauen deutlich häufiger unter Depressionen und Einsamkeit im Alter leiden.",
+        "Sie steigt mit dem Lebensalter, ist bei Männern höher als bei Frauen und steigt bei Männern nach dem 60. Lebensjahr besonders stark an.",
+        "Sie erreicht — wie die Todesangst — ihren Gipfel im mittleren Lebensalter.",
+        "Sie sinkt im hohen Alter deutlich ab, da Ältere den Tod eher akzeptieren."
+      ],
+      "c": 1,
+      "e": "Die Suizidrate steigt mit dem Alter, liegt bei Männern höher und steigt bei Männern nach dem 60. Lebensjahr besonders stark (bis ≈ 80/100 000 in den höchsten Altersgruppen). Anders als die Todesangst hat sie keinen Gipfel im mittleren Alter."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Auf welcher Datengrundlage beruht die Studie von Vicente et al. (2022) zum „sterbenden Gehirn“?",
+      "opts": [
+        "Auf tierexperimentellen Ableitungen an Ratten unmittelbar nach künstlich herbeigeführtem Herzstillstand, die erstmals systematisch mittels statistischer Modelle auf den Menschen hochgerechnet wurden.",
+        "Auf einer fMRT-Untersuchung von 76 Palliativpatienten in den letzten Lebenswochen.",
+        "Auf der kontinuierlichen EEG-Aufzeichnung eines 87-jährigen Patienten, der während der Ableitung einen Herzstillstand erlitt — inklusive der 30 Sekunden vor und nach dem Herzstillstand.",
+        "Auf retrospektiven Interviews mit Überlebenden von Nahtoderfahrungen."
+      ],
+      "c": 2,
+      "e": "Es ist die erste Evidenz am sterbenden menschlichen Gehirn in einem realen Akutversorgungs-Setting: EEG eines 87-Jährigen (Herzstillstand nach traumatischem Subduralhämatom), analysiert wurden u. a. die 30 s vor/nach dem Herzstillstand. Erhöhte Gamma-Aktivität nach Herzstillstand war zuvor nur tierexperimentell gezeigt."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was ist der zentrale Befund von Vicente et al. (2022)?",
+      "opts": [
+        "Mit dem Herzstillstand erlischt sämtliche messbare Hirnaktivität innerhalb von Sekundenbruchteilen, sodass keinerlei koordinierte Signale mehr nachweisbar sind.",
+        "Die absolute Alpha-Power steigt nach dem Herzstillstand massiv an.",
+        "Das EEG zeigt nach dem Herzstillstand ausschließlich Delta-Wellen wie im Tiefschlaf.",
+        "Ein höherer relativer Gamma-Anteil und die Kopplung von Gamma- an Alpha-/Theta-Rhythmen — auch nach Sistieren des zerebralen Blutflusses."
+      ],
+      "c": 3,
+      "e": "Nach dem Herzstillstand sind Delta, Beta, Alpha und Gamma absolut reduziert, aber der relative Gamma-Anteil ist erhöht; Cross-Frequency-Coupling (Gamma moduliert durch Alpha/Theta) bleibt selbst nach Sistieren des Blutflusses bestehen — Hirnwellenmuster wie bei Träumen/Erinnern/Meditieren."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Todesursachen sind laut Vorlesung die häufigsten?",
+    "opts": [
+      "Herz-Kreislauf- und Krebserkrankungen.",
+      "Atemwegserkrankungen und Unfälle, die zusammen mehr als die Hälfte aller Sterbefälle im höheren Erwachsenenalter ausmachen.",
+      "Demenzen und neurodegenerative Erkrankungen.",
+      "Infektionskrankheiten und Stürze im hohen Alter."
+    ],
+    "c": 0,
+    "e": "Die Folie „Ein paar Fakten“ nennt Herz-Kreislauf- und Krebserkrankungen als häufigste Todesursachen."
+  },
+  {
+    "id": "bq2",
+    "q": "Welches Korrelat hängt in der Metaanalyse von Fortner & Neimeyer (1999) negativ mit der Angst vor dem Tod zusammen?",
+    "opts": [
+      "Die Institutionalisierung.",
+      "Das positive Befinden (≈ −.30).",
+      "Die körperliche Einschränkung, denn wer körperlich eingeschränkt ist, hat sich bereits intensiver mit dem eigenen Sterben auseinandergesetzt.",
+      "Das Alter."
+    ],
+    "c": 1,
+    "e": "Positives Befinden korreliert signifikant negativ (≈ −.30) mit der Todesangst. Institutionalisierung, psychische Probleme und körperliche Einschränkung korrelieren positiv; das Alter ist nicht signifikant."
+  },
+  {
+    "id": "bq3",
+    "q": "Welche Reaktionsweise war in der Längsschnittstudie von Kruse (1995) die häufigste?",
+    "opts": [
+      "Durchschreiten von Phasen tiefer Depression bis zur Hinnahme des baldigen Todes, so wie es das Stufenmodell von Kübler-Ross als universellen Normalverlauf beschreibt.",
+      "Zunehmende Resignation und Verbitterung.",
+      "Zunehmende Akzeptanz des Sterbens bei gleichzeitiger Suche nach Möglichkeiten, die das Leben noch bietet (24 %).",
+      "Nichtwahrhabenwollen — die Bedrohung nicht ins Zentrum des Erlebens treten zu lassen."
+    ],
+    "c": 2,
+    "e": "Kruse (1995): a) Linderung durch neuen Lebenssinn 18 %, b) Akzeptanz + Suche nach Möglichkeiten 24 % (häufigste), c) Nichtwahrhabenwollen 16 %, d) Resignation/Verbitterung 20 %, e) Depression bis Hinnahme 22 %."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Funktion hat das Nichtwahrhabenwollen (Stufe 1) nach Kübler-Ross?",
+    "opts": [
+      "Es schützt die Angehörigen davor, zu früh mit der Diagnose konfrontiert zu werden, und stabilisiert so das familiäre Umfeld des Patienten dauerhaft.",
+      "Es ist ein rein pathologischer Abwehrmechanismus ohne Funktion.",
+      "Es verhindert, dass Ärzte weitere belastende Diagnostik durchführen.",
+      "Es gibt den Patienten Zeit, die bedrohliche Information allmählich zu verarbeiten."
+    ],
+    "c": 3,
+    "e": "Nach Kübler-Ross reagieren die meisten mit Unglauben (die Diagnose müsse ein Irrtum sein); das anfängliche Nichtwahrhabenwollen gibt Zeit, die bedrohliche Information allmählich zu verarbeiten."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche Suizidmotive nennt die Vorlesung?",
+    "opts": [
+      "Eine unerträglich und unveränderlich erlebte Situation (wie Einsamkeit, Schmerzen oder Hilfsbedürftigkeit) zu beenden — sowie Depression.",
+      "Finanzielle Not und drohende Pflegeheimeinweisung, die in den amtlichen Statistiken als die beiden häufigsten Auslöser im höheren Lebensalter geführt werden.",
+      "Impulsive Kurzschlusshandlungen ohne erkennbares Motiv.",
+      "Nachahmungseffekte nach Medienberichten (Werther-Effekt)."
+    ],
+    "c": 0,
+    "e": "Die Folie nennt zwei Motive: eine unerträglich und unveränderlich erlebte Situation (Einsamkeit, Schmerzen, Hilfsbedürftigkeit) zu beenden, sowie Depression."
+  },
+  {
+    "id": "bq6",
+    "q": "Was macht die Verwitwung zu einem der am stärksten belastenden Lebensereignisse?",
+    "opts": [
+      "Vor allem der Zwang, die gemeinsame Wohnung aufzugeben und in eine altersgerechte Einrichtung umzuziehen, der fast alle Verwitweten unmittelbar nach dem Todesfall trifft.",
+      "Der Verlust der emotional nahestehenden Person und des wichtigsten Kommunikationspartners, Einkommenseinschränkungen und die Übernahme der Aufgaben des Partners.",
+      "Ausschließlich die finanziellen Einbußen durch den Wegfall der Rente.",
+      "Der damit verbundene vollständige Verlust aller sozialen Kontakte."
+    ],
+    "c": 1,
+    "e": "Die Folie nennt: Verlust der emotional nahestehenden Person und des wichtigsten Kommunikationspartners, Einschränkungen im verfügbaren Einkommen, Übernahme der Aktivitäten des Partners — plus Geschlechtsunterschiede im Verwitwungsrisiko."
+  },
+  {
+    "id": "bq7",
+    "q": "Auf welcher Datengrundlage beruht das Stufenmodell von Kübler-Ross?",
+    "opts": [
+      "Auf einer repräsentativen Bevölkerungsumfrage.",
+      "Auf wöchentlichen qualitativen Interviews mit 76 Krebspatienten und ihren Angehörigen in den letzten acht Lebenswochen vor dem Tod.",
+      "Auf Fallarbeit mit 200 terminal erkrankten Patient*innen, überwiegend Krebspatienten.",
+      "Auf Tagebuchanalysen Verwitweter."
+    ],
+    "c": 2,
+    "e": "Kübler-Ross: Fallarbeit mit 200 terminal Erkrankten (überwiegend Krebs), methodisch unzureichend dokumentiert. Die 76 Krebspatienten mit wöchentlichen Interviews sind die Studie von Hinton (1999)."
+  },
+  {
+    "id": "bq8",
+    "q": "Was kennzeichnet die Stufe „Zorn“ im Modell von Kübler-Ross?",
+    "opts": [
+      "Die Diagnose wird für einen Irrtum gehalten, weil man sich gar nicht so krank fühlt und deshalb weitere ärztliche Untersuchungen kategorisch verweigert.",
+      "Der Zorn richtet sich ausschließlich gegen die eigene Person in Form von Schuldgefühlen.",
+      "Die Person versucht, den Tod durch Zorn hinauszuschieben.",
+      "Die Diagnose ist akzeptiert, wird aber als ungerecht empfunden — der Zorn kann sich auf Gesunde, Ärzte oder das Schicksal richten."
+    ],
+    "c": 3,
+    "e": "In Stufe 2 akzeptieren die Personen die Diagnose, empfinden die Erkrankung aber als ungerecht; der Zorn richtet sich auf gesunde Menschen, auf Ärzte (vermeintlich zu späte Erkennung/schlechte Behandlung) oder das Schicksal."
+  }
+];
+
+var corrCorrect = {
+  "w14a": "Sinnfindung",
+  "w14b": "Akzeptanz + Suche",
+  "w14c": "Nichtwahrhabenwollen",
+  "w14d": "Resignation/Verbitterung"
+};
+var corrExpl = {
+  "w14a": "Reaktionsweise a nach Kruse (1995): Linderung der Todesängste durch einen neuen Lebenssinn und die Überzeugung, noch eine wichtige Aufgabe zu erfüllen (18 %).",
+  "w14b": "Reaktionsweise b (24 %, die häufigste): zunehmende Akzeptanz des Sterbens bei gleichzeitiger Suche nach Möglichkeiten, die das Leben noch bietet.",
+  "w14c": "Reaktionsweise c (16 %): Bemühung, die Bedrohung der eigenen Existenz nicht ins Zentrum des Erlebens treten zu lassen.",
+  "w14d": "Reaktionsweise d (20 %): zunehmende Resignation und Verbitterung."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── Kübler-Ross-Stufen-Selektor (bespoke) ── */
+function krSet(k){
+  var S={
+   1:["Nichtwahrhabenwollen","„Die Diagnose muss ein Irrtum sein — ich fühle mich doch gar nicht so krank.“","Die meisten reagieren mit Unglauben. Funktion: gibt Zeit, die bedrohliche Information allmählich zu verarbeiten."],
+   2:["Zorn","„Warum ich? Die Ärzte haben es viel zu spät erkannt!“","Diagnose ist akzeptiert, wird aber als ungerecht empfunden — Zorn auf Gesunde, Ärzte oder das Schicksal."],
+   3:["Verhandeln","„Ich bin bereit — aber erst will ich noch die Geburt meines Enkelkindes erleben.“","Der als unvermeidbar erkannte Tod soll hinausgeschoben werden, bis etwas Bestimmtes erreicht ist (runder Geburtstag, Enkelkind)."],
+   4:["Depression","„Es wird immer schlimmer — das Verhandeln hat nichts genützt.“","Die Krankheit schreitet voran, Verschlechterungen häufen sich → depressive Verstimmung."],
+   5:["Zustimmung","„Ich habe meinen Frieden gemacht.“","Die „Zeit der letzten Ruhe vor dem Tod“: zustimmende Haltung zur Tatsache, in Kürze sterben zu müssen — ohne Bedingungen."]};
+  [1,2,3,4,5].forEach(function(x){var b=document.getElementById("kr-"+x); if(b)b.classList.toggle("on",x===k);});
+  var s=S[k],o=document.getElementById("kr-out");
+  if(o)o.innerHTML="<strong>Stufe "+k+" — "+s[0]+"</strong><br><em>"+s[1]+"</em><br><span style=\"color:var(--text2)\">"+s[2]+"</span>";
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  krSet(1);
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

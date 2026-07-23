@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD05 Itemanalyse</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  ausgefüllt:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl05
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD05 bespoke widgets */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px}
+.formula{font-family:Georgia,"Times New Roman",serif;font-size:1.18rem;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin:12px 0;color:var(--text)}
+.formula-wide{overflow-x:auto;white-space:nowrap}.micro-note{font-size:.74rem!important;color:var(--text3)!important}.warning-note,.source-variance{border-left:3px solid var(--yellow);background:rgba(251,191,36,.07);padding:10px 12px;border-radius:7px;font-size:.8rem;color:var(--text2)}
+.takehome{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:12px 14px;margin:12px 0;color:var(--text2);font-size:.86rem}.takehome strong{color:var(--green)}
+.table-scroll{overflow-x:auto;margin:10px 0}.matrix-table,.r-table,.decision-table{width:100%;border-collapse:collapse;font-size:.8rem}.matrix-table caption,.r-table caption,.decision-table caption{text-align:left;color:var(--text3);font-size:.72rem;margin-bottom:6px}.matrix-table th,.matrix-table td,.r-table th,.r-table td,.decision-table th,.decision-table td{border:1px solid var(--border);padding:7px;text-align:center}.matrix-table th,.r-table th,.decision-table th{background:var(--surface2);color:var(--text)}
+.process-builder{list-style:none;padding:0;margin:12px 0}.process-step{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px}.process-step .num{font-weight:800;color:var(--accent)}.process-step .step-actions{display:flex;gap:5px}.process-step button{min-width:38px;min-height:38px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:7px;cursor:pointer}.widget-actions{display:flex;gap:8px;flex-wrap:wrap}.widget-feedback{margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--bg);color:var(--text2);font-size:.82rem;min-height:22px}.widget-feedback.good{border:1px solid var(--green);color:var(--green)}.widget-feedback.bad{border:1px solid var(--red);color:var(--red)}
+.hist-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini-hist{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}.mini-hist figcaption{font-size:.78rem;color:var(--text2);margin-bottom:10px}.mini-hist figcaption span{font-size:.7rem;color:var(--text3)}.bars-hist{height:130px;display:grid;grid-template-columns:repeat(7,1fr);gap:3px;align-items:end;border-left:1px solid var(--text3);border-bottom:1px solid var(--text3);padding:0 4px}.bars-hist.two{grid-template-columns:repeat(2,1fr);gap:25px}.bars-hist i{display:block;background:var(--yellow);border:1px solid rgba(0,0,0,.35)}.hist-axis{display:grid;grid-template-columns:repeat(7,1fr);font-size:.68rem;text-align:center;color:var(--text3);padding-left:5px}.hist-axis.two{grid-template-columns:repeat(2,1fr)}
+.ladder-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.input-label{display:flex;flex-direction:column;gap:5px;font-size:.78rem;color:var(--text2);margin:10px 0}.input-label input,.input-label select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:9px;font-size:.9rem}.blank{display:inline-block;min-width:70px;border-bottom:2px solid var(--accent)}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.choice-grid button,.output-buttons button,.sim-choice button{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:9px;padding:9px;cursor:pointer;text-align:left}.choice-grid button:hover,.output-buttons button:hover,.sim-choice button:hover{border-color:var(--accent)}
+.relation-strip{display:grid;grid-template-columns:110px 30px 1fr 30px 90px;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px;margin:7px 0;font-size:.78rem;text-align:center}.prediction-box{border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:10px}.prediction-box legend{font-size:.78rem;color:var(--accent);font-weight:700}.prediction-box label{display:block;font-size:.8rem;color:var(--text2);margin:5px 0}.sim-choice{display:flex;gap:8px;flex-wrap:wrap}.variance-stage{height:32px;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:12px}.variance-meter{height:100%;background:linear-gradient(90deg,var(--orange),var(--green));transition:width .3s}.access-fallback{margin-top:10px;color:var(--text3);font-size:.75rem}
+.scatter-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:14px;align-items:start}#scatterSvg,.selection-plot svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--border);border-radius:10px}.plot-bg{fill:#111827;stroke:#475569}.zero-line,.cut-line{stroke:#94a3b8;stroke-width:1;stroke-dasharray:5 4}.trend-line{fill:none;stroke:#a3a300;stroke-width:5}.axis-label{fill:#94a3b8;font-size:13px}.scatter-point{fill:#e2e8f0;stroke:#0f172a;stroke-width:1}.scatter-label{fill:#e2e8f0;font-size:12px}.scatter-point.active{fill:#38bdf8;stroke:#fff;stroke-width:2}.legend-list{display:flex;flex-direction:column;gap:5px;font-size:.72rem;color:var(--text3)}.legend-list i{display:inline-block;margin-right:6px}.legend-list .dot{width:9px;height:9px;border-radius:50%;background:var(--text)}.legend-list .curve{width:20px;height:3px;background:#a3a300}
+.code-block{background:#111827;border:1px solid var(--border);border-radius:10px;padding:14px;overflow:auto;font-size:.78rem;line-height:1.45;color:#d1d5db}.code-block.compact{font-size:.72rem}.output-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.output-summary span{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:.72rem;color:var(--text3)}.output-summary b{display:block;color:var(--text);font-size:.9rem}.r-table [data-rcol].highlight{background:rgba(163,163,0,.28);color:var(--text)}.output-buttons{display:flex;gap:8px;flex-wrap:wrap}.soft-rule{border:0;border-top:1px solid var(--border);margin:16px 0}
+.criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.criteria-grid div{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center}.criteria-grid strong{display:block;color:var(--accent);font-size:.72rem;text-transform:uppercase}.criteria-grid span{display:block;margin-top:5px}.exclude-diff{fill:rgba(163,163,0,.35)}.exclude-r{fill:rgba(251,146,60,.28)}.selection-plot{max-width:600px;margin:10px auto}.selector-controls{display:flex;gap:12px;flex-wrap:wrap;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px}.selector-controls label{font-size:.78rem;color:var(--text2)}.decision-keep{color:var(--green);font-weight:700}.decision-drop{color:var(--red);font-weight:700}.decision-review{color:var(--yellow);font-weight:700}
+@media(max-width:700px){.hist-grid,.scatter-layout{grid-template-columns:1fr}.choice-grid{grid-template-columns:1fr}.output-summary{grid-template-columns:repeat(2,1fr)}.criteria-grid{grid-template-columns:1fr}.relation-strip{grid-template-columns:1fr}.relation-strip b{transform:rotate(90deg)}}
+@media(prefers-reduced-motion:reduce){.variance-meter,.process-step,.bar-fill{transition:none!important}}
+
+
+.source-banner{font-size:.7rem;color:var(--text3);margin:2px 0 8px}.duel-side p{margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD05 Itemanalyse</h1>
+<div class="source-banner" data-source-id="PD05-F01" data-slides="1" data-source-status="direkt" data-learning-objective="orientation" data-widget-type="orientation">Primärquelle: PD05 Itemanalyse · 16 Folien · keine externen Fachquellen</div>
+<p class="page-sub">Psychologische Diagnostik · vollständiges Offline-Lernmodul · Folien 1–16</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie werden Items vorbereitet, beschrieben und selektiert? · Wie hängen Schwierigkeit, Varianz und Trennschärfe zusammen? · Wie liest man alpha()-Ausgaben und trifft begründete Selektionsentscheidungen?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Ablauf & Matrix</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Schwierigkeit</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Varianz</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Trennschärfe</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ R-Ausgabe</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Selektion</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">🎯 SRS-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Ablauf & Matrix ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+  data-source-id="PD05-F01 PD05-F02 PD05-F03" data-slides="1–3" data-source-status="direkt"
+  data-learning-objective="LZ-01 LZ-02" data-widget-type="W2 Process Builder" data-cognitive-task="prozess_rekonstruieren_und_matrix_lesen">
+  <div class="sec-head">
+    <div class="sec-title">① Einordnung, Testscorematrix und Invertierung</div>
+    <div class="sec-lz">Die Itemanalyse in den Konstruktionsprozess einordnen, X = (xᵢⱼ) lesen und negativ gepolte Items korrekt invertieren.</div>
+    <div class="source-meta">Folien 1–3 · Quellen PD05-F01 PD05-F02 PD05-F03 · Widget W2 Process Builder</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wo im Konstruktionsprozess liegt die Itemanalyse – vor der Testrohform, bei ihrer Optimierung oder erst nach der Normierung?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0" aria-hidden="true"><strong>Bei der Optimierung der Testrohform.</strong> Erst danach wird die Testendform einer Normstichprobe vorgegeben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F01 PD05-F02" data-slides="1–2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W2">
+  <div class="card-title">Stoffkarte · Wo die Itemanalyse hingehört</div>
+  <p>Die Vorlesung ordnet die Itemanalyse in einen fünfstufigen Ablauf ein. Zuerst wird das Merkmal abgegrenzt und definiert, danach werden Datentyp, Konstruktionsstrategie, Testlänge und Rahmenbedingungen geplant. Es folgt die Konstruktion der Testrohform mit Items, Instruktion und Gestaltung.</p>
+  <p><strong>Itemanalyse und Selektion</strong> finden statt, wenn die Rohform einer Stichprobe zur Optimierung vorgegeben wird. In derselben Phase werden die Gütekriterien geprüft. Erst die daraus hervorgehende Testendform wird anschließend einer Normstichprobe vorgegeben, um Normen zu bestimmen und Gütekriterien erneut zu prüfen.</p>
+</div>
+<div class="card" data-source-id="PD05-F03" data-slides="3" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W6">
+  <div class="card-title">Testscorematrix X = (xᵢⱼ)</div>
+  <p>Die codierten Antworten werden in eine rechteckige Matrix eingetragen. Die <strong>Personen i = 1,…,n</strong> bilden die Zeilen, die <strong>Items j = 1,…,m</strong> die Spalten. Die Zelle <strong>xᵢⱼ</strong> ist der Score von Person i auf Item j.</p>
+  <div class="table-scroll"><table class="matrix-table"><caption>Beispiel einer Testscorematrix; didaktische Rekonstruktion der Matrixstruktur</caption><thead><tr><th scope="col">Person</th><th scope="col">Item 1</th><th scope="col">Item 2</th><th scope="col">Item 3</th></tr></thead><tbody><tr><th scope="row">Person 1</th><td>1</td><td>6</td><td>0</td></tr><tr><th scope="row">Person 2</th><td>0</td><td>3</td><td>1</td></tr><tr><th scope="row">Person 3</th><td>1</td><td>5</td><td>1</td></tr></tbody></table></div>
+  <p class="micro-note">Codierungsbeispiele der Quelle: 1 = korrekt und 0 = inkorrekt; alternativ Ratings, etwa von 1 bis 7.</p>
+</div>
+<div class="card" data-source-id="PD05-F03" data-slides="3" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W4">
+  <div class="card-title">Negativ gepolte Items vor der Analyse invertieren</div>
+  <p>Negativ gepolte Items müssen so transformiert werden, dass hohe Scores bei allen Items in dieselbe Merkmalsrichtung weisen. Bei einer Antwortskala von der unteren Grenze <em>uⱼ</em> bis zur oberen Grenze <em>oⱼ</em> gilt:</p>
+  <div class="formula" role="math" aria-label="invertierter Score gleich untere Grenze plus obere Grenze minus ursprünglicher Score">x<sub>ij,inv</sub> = (u<sub>j</sub> + o<sub>j</sub>) − x<sub>ij</sub></div>
+  <p>Beispiel: Auf einer Skala von 1 bis 7 wird der Wert 2 zu (1 + 7) − 2 = <strong>6</strong>. Im weiteren Verlauf setzt die Quelle voraus, dass alle nötigen Invertierungen bereits in X vorgenommen wurden.</p>
+</div>
+<div class="takehome" data-source-id="PD05-F03" data-slides="3" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-02" data-widget-type="summary"><strong>Drei Itemindizes:</strong> Itemschwierigkeit, Itemvarianz und Itemtrennschärfe.</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W2 Process Builder</div>
+  
+<div class="card widget-card" data-source-id="PD05-F02" data-slides="2" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-01" data-widget-type="W2">
+  <div class="card-title">Process Builder · Bringe die fünf Schritte in die richtige Reihenfolge</div>
+  <p>Verschiebe die Schritte mit den Pfeiltasten. Drag-and-drop ist nicht erforderlich.</p>
+  <ol id="processBuilder" class="process-builder" aria-label="Sortierbare Prozessschritte"></ol>
+  <div class="widget-actions"><button class="btn btn-accent" type="button" onclick="checkProcess()">Reihenfolge prüfen</button><button class="btn btn-ghost" type="button" onclick="resetProcess()">Neu mischen</button></div>
+  <div id="processFeedback" class="widget-feedback" role="status" aria-live="polite"></div>
+</div>
+<div class="card mini-application" data-source-id="PD05-F03" data-slides="3" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-02" data-widget-type="W6">
+  <div class="card-title">Matrix Reader · Was bedeutet x₂₃?</div>
+  <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('matrix-meaning',this,'item_person')">Item 2 von Person 3</button><button class="corr-btn" onclick="checkCorr('matrix-meaning',this,'person_item')">Person 2 auf Item 3</button><button class="corr-btn" onclick="checkCorr('matrix-meaning',this,'testwert')">Testwert 2 der Stichprobe 3</button></div>
+  <div class="corr-fb" id="matrix-meaning-fb" role="status"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Schwierigkeit ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+  data-source-id="PD05-F04 PD05-F05 PD05-F06" data-slides="4–6" data-source-status="direkt"
+  data-learning-objective="LZ-03" data-widget-type="W4+W5 Formula Ladder" data-cognitive-task="berechnen_und_interpretieren">
+  <div class="sec-head">
+    <div class="sec-title">② Itemschwierigkeit: Verteilungen, Formel und Normierung</div>
+    <div class="sec-lz">Extremverteilungen erkennen, pⱼ und pⱼ* berechnen und die scheinbar paradoxe Indexrichtung korrekt interpretieren.</div>
+    <div class="source-meta">Folien 4–6 · Quellen PD05-F04 PD05-F05 PD05-F06 · Widget W4+W5 Formula Ladder</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Leistungsitem hat pⱼ = .90. Ist es damit besonders schwer oder besonders leicht?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1" aria-hidden="true"><strong>Besonders leicht.</strong> Ein hoher pⱼ bedeutet, dass viele Personen das Item gelöst haben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F04" data-slides="4" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W11">
+  <div class="card-title">Itemschwierigkeit als zentrale Tendenz</div>
+  <p>Die Itemschwierigkeit beschreibt die zentrale Tendenz der Antworten auf ein Item. Ein Item liefert wenig Information über interindividuelle Unterschiede, wenn nahezu alle Personen gleich antworten.</p>
+  <div class="hist-grid">
+    <figure class="mini-hist"><figcaption><strong>Deckeneffekt</strong> · Antworten am oberen Ende<br><span>Quelle: MW = 6,1; SD = 1,5; N = 200</span></figcaption><div class="bars-hist" aria-label="Histogramm mit Schwerpunkt bei Antwort 7"><i style="height:5%"></i><i style="height:4%"></i><i style="height:9%"></i><i style="height:4%"></i><i style="height:10%"></i><i style="height:38%"></i><i style="height:100%"></i></div><div class="hist-axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></figure>
+    <figure class="mini-hist"><figcaption><strong>Bodeneffekt</strong> · Antworten am unteren Ende<br><span>Quelle: MW = 0,09; SD = 0,28; N = 200</span></figcaption><div class="bars-hist two" aria-label="Dichotomes Histogramm mit Schwerpunkt bei Antwort 0"><i style="height:100%"></i><i style="height:9%"></i></div><div class="hist-axis two"><span>0</span><span>1</span></div></figure>
+  </div>
+  <p class="micro-note">Die Balkenhöhen sind strukturgetreu aus Folie 4 rekonstruiert; entscheidend ist die Konzentration am oberen beziehungsweise unteren Skalenende.</p>
+</div>
+<div class="card" data-source-id="PD05-F05" data-slides="5" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W4">
+  <div class="card-title">Unnormierter Schwierigkeitsindex</div>
+  <div class="formula" role="math" aria-label="p j gleich Summe der Itemscores geteilt durch n">p<sub>j</sub> = (Σ<sub>i=1</sub><sup>n</sup> x<sub>ij</sub>) / n</div>
+  <p>Der Wertebereich reicht von der unteren Antwortcodierung <em>uⱼ</em> bis zur oberen Antwortcodierung <em>oⱼ</em>. Bei 0-1-codierten Items entspricht der Mittelwert dem Lösungsanteil:</p>
+  <div class="formula" role="math" aria-label="p j gleich h j geteilt durch n">p<sub>j</sub> = h<sub>j</sub> / n</div>
+  <div class="warning-note"><strong>Typische Fehlinterpretation:</strong> Ein hoher Index bedeutet bei einem Leistungsitem nicht „schwer“, sondern „von vielen gelöst“ und damit umgangssprachlich leicht.</div>
+</div>
+<div class="card" data-source-id="PD05-F06" data-slides="6" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W4">
+  <div class="card-title">Normierung auf 0 bis 100</div>
+  <div class="formula formula-wide" role="math" aria-label="p Stern j gleich p j minus untere Grenze geteilt durch obere minus untere Grenze mal hundert">p<sub>j</sub><sup>*</sup> = [(p<sub>j</sub> − u<sub>j</sub>) / (o<sub>j</sub> − u<sub>j</sub>)] · 100</div>
+  <p>Bei einem dichotomen 0-1-Item vereinfacht sich dies zu (hⱼ/n) · 100. Liegen fehlende Werte vor, wird im Nenner nicht die gesamte Stichprobe verwendet, sondern die Zahl der Personen, die das Item <strong>gültig beantwortet</strong> haben.</p>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W4+W5 Formula Ladder</div>
+  
+<div class="card widget-card" data-source-id="PD05-F05 PD05-F06" data-slides="5–6" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-03" data-widget-type="W4+W5">
+  <div class="card-title">Formula Ladder · vom vollständigen Beispiel zum Transfer</div>
+  <div class="ladder-tabs" role="tablist" aria-label="Rechenstufen">
+    <button class="tab-btn active" data-tab="full" onclick="switchTab(this,'formulaLadder')" role="tab" aria-selected="true">1 Vollständig</button>
+    <button class="tab-btn" data-tab="fade" onclick="switchTab(this,'formulaLadder')" role="tab" aria-selected="false">2 Teilweise</button>
+    <button class="tab-btn" data-tab="self" onclick="switchTab(this,'formulaLadder')" role="tab" aria-selected="false">3 Selbst</button>
+    <button class="tab-btn" data-tab="transfer" onclick="switchTab(this,'formulaLadder')" role="tab" aria-selected="false">4 Transfer</button>
+  </div>
+  <div class="tab-group" data-group="formulaLadder">
+    <div class="tab-content active" data-tab="full"><p><strong>Vollständiges Beispiel:</strong> Scores 1, 0, 1, 1, 1 → Σx = 4, n = 5 → pⱼ = 4/5 = <strong>0,80</strong>. Bei 0-1-Codierung ist pⱼ* = <strong>80</strong>.</p><p class="micro-note">Didaktisches Beispiel, direkt aus den Quellenformeln abgeleitet.</p></div>
+    <div class="tab-content" data-tab="fade" aria-hidden="true"><p><strong>Teilweise ausgeblendet:</strong> Auf einer Skala von 1 bis 7 beträgt der Itemmittelwert 5.</p><div class="formula">pⱼ* = [(5 − 1) / (7 − 1)] · 100 = <span class="blank">?</span></div><button class="btn btn-ghost" onclick="showInlineAnswer(this,'66,67')">Zwischenergebnis zeigen</button></div>
+    <div class="tab-content" data-tab="self" aria-hidden="true"><p><strong>Selbstständige Aufgabe:</strong> 7 von 10 Personen lösen ein 0-1-Item. Gib pⱼ* ein.</p><label class="input-label">pⱼ* <input id="difficultySelf" type="number" inputmode="decimal" min="0" max="100"></label><button class="btn btn-accent" onclick="checkDifficultySelf()">Prüfen</button><div id="difficultySelfFb" class="widget-feedback" role="status"></div></div>
+    <div class="tab-content" data-tab="transfer" aria-hidden="true"><p><strong>Transfer mit Missing Data:</strong> Von 10 Personen antworten 8 gültig; 6 lösen das Item. Welcher Nenner ist korrekt und wie groß ist pⱼ*?</p><div class="choice-grid"><button onclick="checkDifficultyTransfer(this,10,60)">Nenner 10 · pⱼ* = 60</button><button onclick="checkDifficultyTransfer(this,8,75)">Nenner 8 · pⱼ* = 75</button><button onclick="checkDifficultyTransfer(this,6,100)">Nenner 6 · pⱼ* = 100</button></div><div id="difficultyTransferFb" class="widget-feedback" role="status"></div></div>
+  </div>
+</div>
+<div class="card mini-application" data-source-id="PD05-F04" data-slides="4" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-03" data-widget-type="W11"><div class="card-title">Verteilung erkennen</div><p>Fast alle Personen wählen 6 oder 7 auf einer 1–7-Skala.</p><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('ceiling-case',this,'decke')">Deckeneffekt</button><button class="corr-btn" onclick="checkCorr('ceiling-case',this,'boden')">Bodeneffekt</button></div><div class="corr-fb" id="ceiling-case-fb" role="status"></div></div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Varianz ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+  data-source-id="PD05-F07" data-slides="7" data-source-status="direkt"
+  data-learning-objective="LZ-03" data-widget-type="W7 Diagram Manipulator" data-cognitive-task="parameterwirkung_prognostizieren">
+  <div class="sec-head">
+    <div class="sec-title">③ Itemvarianz und ihre Begrenzung durch die Schwierigkeit</div>
+    <div class="sec-lz">Erklären, wann ein Item differenziert und warum extreme Schwierigkeiten die mögliche Itemvarianz begrenzen.</div>
+    <div class="source-meta">Folien 7 · Quellen PD05-F07 · Widget W7 Diagram Manipulator</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was passiert mit der Itemvarianz, wenn wirklich alle Personen exakt denselben Itemscore erhalten?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2" aria-hidden="true"><strong>Sie wird null.</strong> Ohne Unterschiede in den Antworten kann das Item keine Personen differenzieren.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F07" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W7">
+  <div class="card-title">Itemvarianz als Differenzierungspotenzial</div>
+  <p>Die Itemvarianz beschreibt, wie stark die Antworten zwischen Personen variieren. Items mit größerer Varianz sind tendenziell eher geeignet, Personen zu differenzieren. Im Grenzfall <strong>sⱼ² = 0</strong> erhält jede Person denselben Score; auf Grundlage dieses Items ist dann überhaupt keine Differenzierung möglich.</p>
+</div>
+<div class="card" data-source-id="PD05-F07" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W3">
+  <div class="card-title">Schwierigkeit begrenzt die mögliche Varianz</div>
+  <p>Die Kennwerte sind nicht unabhängig. Je extremer die Itemschwierigkeit, desto kleiner kann die Itemvarianz ausfallen. Für die Grenzfälle gilt ausdrücklich:</p>
+  <div class="relation-strip"><span>pⱼ* = 0</span><b>→</b><span>alle Antworten am unteren Ende</span><b>→</b><span>sⱼ² = 0</span></div>
+  <div class="relation-strip"><span>pⱼ* = 100</span><b>→</b><span>alle Antworten am oberen Ende</span><b>→</b><span>sⱼ² = 0</span></div>
+  <p>Die größten Varianzen erlauben Items mit <strong>mittlerer Schwierigkeit</strong>. Die Quelle formuliert dies als qualitative Beziehung, nicht als zusätzliche Varianzformel.</p>
+</div>
+<div class="takehome" data-source-id="PD05-F07" data-slides="7" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-03" data-widget-type="summary"><strong>Prüfregel:</strong> Extreme Schwierigkeit → wenig mögliche Streuung; mittlere Schwierigkeit → größere mögliche Streuung.</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7 Diagram Manipulator</div>
+  
+<div class="card widget-card" data-source-id="PD05-F07" data-slides="7" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-03" data-widget-type="W7">
+  <div class="card-title">Difficulty–Variance Simulator · erst prognostizieren, dann prüfen</div>
+  <fieldset class="prediction-box"><legend>Prognose für pⱼ* = 0</legend><label><input type="radio" name="varPred" value="max"> maximale mögliche Varianz</label><label><input type="radio" name="varPred" value="zero"> Varianz gleich null</label><label><input type="radio" name="varPred" value="unknown"> keine Aussage möglich</label></fieldset>
+  <div class="sim-choice" role="group" aria-label="Schwierigkeitswert wählen"><button onclick="setVarianceState(0)">pⱼ* = 0</button><button onclick="setVarianceState(50)">pⱼ* = 50</button><button onclick="setVarianceState(100)">pⱼ* = 100</button></div>
+  <div class="variance-stage" aria-label="Textuelle Darstellung des möglichen Varianzniveaus"><div id="varianceMeter" class="variance-meter" style="width:0%"></div></div>
+  <div id="varianceState" class="widget-feedback" role="status" aria-live="polite">Wähle zuerst einen Wert.</div>
+  <div class="access-fallback"><strong>Textalternative:</strong> Bei 0 und 100 ist sⱼ² = 0; im mittleren Bereich ist eine größere Varianz möglich.</div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Trennschärfe ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+  data-source-id="PD05-F08 PD05-F09 PD05-F10 PD05-F11" data-slides="8–11" data-source-status="direkt"
+  data-learning-objective="LZ-03 LZ-04" data-widget-type="W7 Scatter Explorer" data-cognitive-task="formel_abgrenzen_und_diagramm_interpretieren">
+  <div class="sec-head">
+    <div class="sec-title">④ Itemtrennschärfe, part-whole Korrektur und Dimensionen</div>
+    <div class="sec-lz">Unkorrigierte und korrigierte Trennschärfe unterscheiden, Eigentrenn- und Fremdtrennschärfen deuten und das Streudiagramm lesen.</div>
+    <div class="source-meta">Folien 8–11 · Quellen PD05-F08 PD05-F09 PD05-F10 PD05-F11 · Widget W7 Scatter Explorer</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum ist Cor(xᵢⱼ, xᵢ) als Trennschärfe problematisch, wenn xᵢ den Itemscore xᵢⱼ bereits enthält?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3" aria-hidden="true">Durch die <strong>part-whole Überlappung</strong> wird der Zusammenhang überschätzt. Der eigene Itemanteil muss aus dem Testwert entfernt werden.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F08" data-slides="8" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W4">
+  <div class="card-title">Unkorrigierte Itemtrennschärfe</div>
+  <p>Die Trennschärfe beschreibt den Zusammenhang zwischen dem Itemscore und dem Testwert. Sie ist umso höher, je ähnlicher das Item Personen so differenziert, wie es der Testwert tut.</p>
+  <div class="formula" role="math" aria-label="r j x gleich Korrelation von Itemscore und Testwert">r<sub>jx</sub> = Cor(x<sub>ij</sub>, x<sub>i</sub>)</div>
+  <p>Bei dichotomen Items wird dies als punkt-biseriale Korrelation bezeichnet; die Quelle kennzeichnet sie hier als zur Produkt-Moment-Korrelation identisch.</p>
+</div>
+<div class="card" data-source-id="PD05-F09" data-slides="9" data-source-status="direkt_mit_notationshinweis" data-learning-objective="LZ-04" data-widget-type="W4">
+  <div class="card-title">Korrigierte Trennschärfe · part-whole Korrektur</div>
+  <p>Da der Testwert als Summe oder Mittelwert das betrachtete Item bereits enthält, wird die unkorrigierte Korrelation überschätzt. Deshalb wird das Item mit dem Testwert <strong>ohne seinen eigenen Anteil</strong> korreliert:</p>
+  <div class="formula formula-wide" role="math" aria-label="korrigierte Trennschärfe gleich Korrelation von Itemscore und Testwert minus Itemscore">r<sub>jx</sub><sup>*</sup> = Cor(x<sub>ij</sub>, x<sub>i</sub> − x<sub>ij</sub>)</div>
+  <div class="source-variance"><strong>Quellenhinweis:</strong> Folie 9 beschreibt den korrigierten Index, zeigt in der Formel aber sichtbar kein Sternchen. Das Lernmodul nutzt r*ⱼₓ zur eindeutigen Kennzeichnung und dokumentiert die Abweichung.</div>
+</div>
+<div class="card" data-source-id="PD05-F10" data-slides="10" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W1">
+  <div class="card-title">Wertebereich und mehrdimensionale Tests</div>
+  <ul><li>Trennschärfen liegen als Korrelationen zwischen <strong>−1 und +1</strong>.</li><li>Nach notwendiger Invertierung sollen sie möglichst hoch und keinesfalls negativ sein.</li><li><strong>Eigentrennschärfe:</strong> Korrelation mit dem Testwert der zugehörigen Dimension.</li><li><strong>Fremdtrennschärfe:</strong> Korrelation mit Testwerten anderer Dimensionen; sie sollte deutlich niedriger ausfallen.</li></ul>
+  <p>Mittlere Itemschwierigkeiten begünstigen sowohl hohe Itemvarianzen als auch hohe Trennschärfen.</p>
+</div>
+<div class="card" data-source-id="PD05-F11" data-slides="11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W7">
+  <div class="card-title">Streudiagramm lesen</div>
+  <p>Die x-Achse zeigt pⱼ von 0 bis 4, die y-Achse die korrigierte Trennschärfe r*ⱼₓ von −1 bis +1. Zwanzig Items sind nummeriert. Die olivfarbene Kurve steigt zum mittleren Schwierigkeitsbereich an und fällt zu den Rändern ab. <strong>Item 10</strong> liegt als einziges Item sichtbar unter null; Item 20 liegt am höchsten.</p>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7 Scatter Explorer</div>
+  
+<div class="card widget-card" data-source-id="PD05-F11" data-slides="11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03 LZ-04" data-widget-type="W7">
+  <div class="card-title">Scatter Explorer · Item auswählen und fachlich deuten</div>
+  <p>Die Positionen sind qualitativ aus der Folie rekonstruiert; sie dienen nicht als exakte Rohwerte.</p>
+  <div class="scatter-layout">
+    <svg id="scatterSvg" viewBox="0 0 520 340" role="img" aria-labelledby="scatterTitle scatterDesc"><title id="scatterTitle">Itemschwierigkeit und korrigierte Itemtrennschärfe</title><desc id="scatterDesc">Zwanzig nummerierte Punkte, eine bogenförmige Trendkurve und Item 10 unterhalb von null.</desc><rect x="55" y="20" width="430" height="270" class="plot-bg"></rect><line x1="55" y1="155" x2="485" y2="155" class="zero-line"></line><path d="M55 145 Q270 45 485 155" class="trend-line"></path><g id="scatterPoints"></g><text x="270" y="330" text-anchor="middle" class="axis-label">Itemschwierigkeit pⱼ (0–4)</text><text x="16" y="155" text-anchor="middle" transform="rotate(-90 16 155)" class="axis-label">korrigierte Trennschärfe r*ⱼₓ (−1 bis +1)</text></svg>
+    <div><label class="input-label">Item auswählen<select id="scatterSelect" onchange="selectScatterItem(this.value)"></select></label><div id="scatterInfo" class="widget-feedback" role="status">Wähle ein Item aus.</div><div class="legend-list"><span><i class="dot"></i> nummeriertes Item</span><span><i class="curve"></i> qualitative Trendkurve</span></div></div>
+  </div>
+  <div class="access-fallback"><strong>Textalternative:</strong> Item 20 und 7 liegen sehr hoch; Item 10 liegt als einziges unter 0; Items 1, 12 und 4 liegen nahe 0.</div>
+</div>
+<div class="card mini-application" data-source-id="PD05-F08 PD05-F09" data-slides="8–9" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-04" data-widget-type="W11"><div class="card-title">Formel-Debugger</div><p>Welche Größe muss aus xᵢ entfernt werden, damit der Eigenanteil des betrachteten Items nicht mehr im Testwert steckt?</p><div class="choice-grid"><button onclick="checkPartWhole(this,'item')">xᵢⱼ, der Score des betrachteten Items</button><button onclick="checkPartWhole(this,'mean')">pⱼ, der Mittelwert des betrachteten Items</button><button onclick="checkPartWhole(this,'var')">sⱼ², die Varianz des betrachteten Items</button></div><div id="partWholeFb" class="widget-feedback" role="status"></div></div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ R-Ausgabe ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+  data-source-id="PD05-F12 PD05-F13" data-slides="12–13" data-source-status="direkt"
+  data-learning-objective="LZ-05" data-widget-type="W8 R-Output Explorer" data-cognitive-task="output_lokalisieren_und_deuten">
+  <div class="sec-head">
+    <div class="sec-title">⑤ R-Code und alpha()-Output lesen</div>
+    <div class="sec-lz">Den gezeigten R-Aufruf nachvollziehen und r.drop, mean, sd sowie zentrale Gesamtwerte im Output gezielt lokalisieren und interpretieren.</div>
+    <div class="source-meta">Folien 12–13 · Quellen PD05-F12 PD05-F13 · Widget W8 R-Output Explorer</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Spalte würdest du im alpha()-Output zuerst suchen, wenn du die korrigierte Itemtrennschärfe beurteilen willst?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4" aria-hidden="true"><strong>r.drop.</strong> In der gezeigten Ausgabe sind r.drop, mean und sd als besonders relevante Itemstatistiken hervorgehoben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F12" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W8">
+  <div class="card-title">Gezeigter R-Aufruf</div>
+  <p>Die Quelle verwendet die Funktion <code>alpha()</code> aus dem Paket <code>psych</code> für die Skala „Tanzen“ mit den Items 3, 5, 9 und 11:</p>
+  <pre class="code-block"><code>library(psych)
+alpha(party[,paste0("item_", c(3,5,9,11))])</code></pre>
+  <p class="micro-note">Die Folie schreibt sichtbar „Chronbachs alpha“. Die Lernprosa normalisiert nur den Eigennamen zu „Cronbachs Alpha“; der R-Code bleibt exakt.</p>
+</div>
+<div class="card" data-source-id="PD05-F13" data-slides="13" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-05" data-widget-type="W8">
+  <div class="card-title">Gesamtausgabe und zentrale Itemstatistiken</div>
+  <div class="output-summary"><span>raw_alpha <b>0,78</b></span><span>std.alpha <b>0,78</b></span><span>average_r <b>0,46</b></span><span>mean <b>5,0</b></span><span>sd <b>1,3</b></span></div>
+  <p>Die Ausgabe enthält außerdem 95%-Grenzen, „Reliability if an item is dropped“ und „Item statistics“. In der Folie sind innerhalb der Itemstatistiken die Spalten <strong>r.drop</strong>, <strong>mean</strong> und <strong>sd</strong> oliv hervorgehoben.</p>
+  <div class="table-scroll"><table class="r-table"><caption>Item statistics aus der gezeigten alpha()-Ausgabe</caption><thead><tr><th scope="col">Item</th><th scope="col">n</th><th scope="col">raw.r</th><th scope="col">std.r</th><th scope="col">r.cor</th><th scope="col" data-rcol="rdrop">r.drop</th><th scope="col" data-rcol="mean">mean</th><th scope="col" data-rcol="sd">sd</th></tr></thead><tbody><tr><th scope="row">item_3</th><td>320</td><td>0,81</td><td>0,81</td><td>0,72</td><td data-rcol="rdrop">0,64</td><td data-rcol="mean">5,0</td><td data-rcol="sd">1,8</td></tr><tr><th scope="row">item_5</th><td>320</td><td>0,74</td><td>0,76</td><td>0,63</td><td data-rcol="rdrop">0,55</td><td data-rcol="mean">4,9</td><td data-rcol="sd">1,6</td></tr><tr><th scope="row">item_9</th><td>320</td><td>0,77</td><td>0,76</td><td>0,64</td><td data-rcol="rdrop">0,56</td><td data-rcol="mean">5,0</td><td data-rcol="sd">1,8</td></tr><tr><th scope="row">item_11</th><td>320</td><td>0,77</td><td>0,76</td><td>0,64</td><td data-rcol="rdrop">0,56</td><td data-rcol="mean">4,9</td><td data-rcol="sd">1,7</td></tr></tbody></table></div>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W8 R-Output Explorer</div>
+  
+<div class="card widget-card" data-source-id="PD05-F13" data-slides="13" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-05" data-widget-type="W8">
+  <div class="card-title">R-Output Explorer · lokalisieren, dann deuten</div>
+  <p>Wähle den Kennwert, den du im Output suchen willst. Die betreffende Spalte wird markiert und fachlich erklärt.</p>
+  <div class="output-buttons" role="group" aria-label="Kennwert auswählen"><button onclick="highlightRColumn('rdrop')">r.drop</button><button onclick="highlightRColumn('mean')">mean</button><button onclick="highlightRColumn('sd')">sd</button></div>
+  <div id="rColumnFeedback" class="widget-feedback" role="status">Noch keine Spalte ausgewählt.</div>
+  <hr class="soft-rule">
+  <label class="input-label">Welches Item hat den höchsten r.drop-Wert?<select id="rDropSelect"><option value="">Bitte wählen</option><option>item_3</option><option>item_5</option><option>item_9</option><option>item_11</option></select></label><button class="btn btn-accent" onclick="checkRDropItem()">Antwort prüfen</button><div id="rDropFb" class="widget-feedback" role="status"></div>
+</div>
+<div class="card" data-source-id="PD05-F13" data-slides="13" data-source-status="quellenanhang" data-learning-objective="LZ-05" data-widget-type="W8"><div class="card-title">Vollständiger Quellenoutput</div><details><summary>Reliability analysis aufklappen</summary><pre class="code-block compact"><code>raw_alpha std.alpha G6(smc) average_r S/N  ase mean  sd median_r
+0.78      0.78      0.73    0.46      3.5 0.02 5.0 1.3 0.46
+
+95% confidence boundaries
+Feldt     0.73 0.78 0.81
+Duhachek  0.74 0.78 0.82
+
+Reliability if an item is dropped:
+item_3  raw_alpha 0.69 · std.alpha 0.69 · average_r 0.43
+item_5  raw_alpha 0.74 · std.alpha 0.74 · average_r 0.48
+item_9  raw_alpha 0.73 · std.alpha 0.73 · average_r 0.47
+item_11 raw_alpha 0.73 · std.alpha 0.73 · average_r 0.47</code></pre></details></div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Selektion ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+  data-source-id="PD05-F14 PD05-F15 PD05-F16" data-slides="14–16" data-source-status="direkt_mit_quellenabweichung"
+  data-learning-objective="LZ-06" data-widget-type="W9 Selection Decision" data-cognitive-task="diagnostische_selektionsentscheidung">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Itemselektion als Mehrkriterienentscheidung</div>
+    <div class="sec-lz">Statistische Cutoffs anwenden, konkurrierende Kriterien abwägen und mehrdimensionale Tests angemessen analysieren.</div>
+    <div class="source-meta">Folien 14–16 · Quellen PD05-F14 PD05-F15 PD05-F16 · Widget W9 Selection Decision</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Soll ein Item ausschließlich deshalb bleiben, weil Schwierigkeit und Trennschärfe die Cutoffs erfüllen?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5" aria-hidden="true"><strong>Nein.</strong> Missing Data, Inhalt, Polung, Testlänge und praktische Funktionen können die Entscheidung verändern.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD05-F14" data-slides="14" data-source-status="direkt" data-learning-objective="LZ-06" data-widget-type="W9">
+  <div class="card-title">Beispielhafte statistische Kriterien</div>
+  <p>Für einen eindimensionalen Persönlichkeitstest nennt die Quelle drei Ziele: Schwierigkeiten sollen breit, aber nicht extrem streuen; korrigierte Trennschärfen sollen möglichst hoch sein; und für die Endform sollen genügend Items verbleiben, im Beispiel mindestens 12.</p>
+  <div class="criteria-grid"><div><strong>Schwierigkeit</strong><span>15 &lt; pⱼ* &lt; 85</span></div><div><strong>Trennschärfe</strong><span>r*ⱼₓ &gt; .30</span></div><div><strong>Testlänge</strong><span>mindestens 12 Items</span></div></div>
+</div>
+<div class="card" data-source-id="PD05-F15" data-slides="15" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W7">
+  <div class="card-title">Anwendung am Streudiagramm</div>
+  <p>Folie 15 markiert den Bereich unter r*ⱼₓ = .30 horizontal und die Schwierigkeitsbereiche außerhalb pⱼ = 0,6 bis 3,4 vertikal. Das erste Kriterium eliminiert <strong>1, 4, 9, 10 und 12</strong>; das zweite Kriterium eliminiert zusätzlich <strong>16</strong>.</p>
+  <div class="selection-plot" role="img" aria-label="Rekonstruiertes Streudiagramm mit Ausschlussbereich unter r Stern gleich Punkt drei und außerhalb p gleich null Komma sechs bis drei Komma vier"><svg viewBox="0 0 520 320"><rect x="55" y="20" width="430" height="260" class="plot-bg"></rect><rect x="55" y="20" width="65" height="260" class="exclude-diff"></rect><rect x="420" y="20" width="65" height="260" class="exclude-diff"></rect><rect x="55" y="137" width="430" height="143" class="exclude-r"></rect><line x1="55" y1="137" x2="485" y2="137" class="cut-line"></line><g id="selectionPoints"></g><text x="270" y="310" text-anchor="middle" class="axis-label">pⱼ · akzeptierter Bereich 0,6–3,4</text><text x="18" y="150" text-anchor="middle" transform="rotate(-90 18 150)" class="axis-label">r*ⱼₓ · Schwelle .30</text></svg></div>
+</div>
+<div class="card" data-source-id="PD05-F14 PD05-F15" data-slides="14–15" data-source-status="direkt_mit_quellenabweichung" data-learning-objective="LZ-06" data-widget-type="W11">
+  <div class="card-title">Offener B-Punkt · Grenzwerte</div>
+  <p>Folie 14 verwendet <strong>strikte</strong> Grenzen (&lt;, &gt;), Folie 15 dagegen <strong>inklusive</strong> Grenzen (≤, ≥). Nur Items exakt bei 15, 85 beziehungsweise .30 werden unterschiedlich behandelt. Da keine bevorzugte Konvention geklärt ist, weist das Modul beide Varianten aus und vereinheitlicht sie nicht still.</p>
+</div>
+<div class="card" data-source-id="PD05-F16" data-slides="16" data-source-status="direkt" data-learning-objective="LZ-06" data-widget-type="W9">
+  <div class="card-title">Weitere Kriterien und mehrdimensionale Tests</div>
+  <ul><li>hoher Missing-Data-Anteil als möglicher Eliminationsgrund;</li><li>ein sehr leichtes „Eisbrecher“-Item kann trotz extremer Schwierigkeit sinnvoll sein;</li><li>inhaltliche Zusammensetzung der verbleibenden Items berücksichtigen;</li><li>ausreichend viele negativ gepolte Items beibehalten.</li></ul>
+  <p>Die Cutoffs sind teilweise willkürlich, und Kriterien können miteinander unvereinbar sein. Deshalb ist eine Abwägung statt eines festen Algorithmus nötig.</p>
+  <p>Bei mehrdimensionalen Tests werden die Analysen für jede postulierte Dimension getrennt durchgeführt und gegebenenfalls durch Fremdtrennschärfen ergänzt. Ob die Dimensionalität tatsächlich von den Daten gestützt wird, lässt sich so nur schwer prüfen; die Folie nennt hierfür <strong>Faktorenanalysen</strong>.</p>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W9 Selection Decision</div>
+  
+<div class="card widget-card" data-source-id="PD05-F14 PD05-F15 PD05-F16" data-slides="14–16" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-06" data-widget-type="W9">
+  <div class="card-title">Selection Decision · Kriterien anwenden und Konflikte begründen</div>
+  <p>Aktiviere Kriterien. Die Tabelle zeigt, welche Items im Folienbeispiel ausgeschlossen würden. Die Zahlen beruhen auf den ausdrücklich genannten Eliminationslisten, nicht auf erfundenen exakten Punktwerten.</p>
+  <div class="selector-controls"><label><input id="critR" type="checkbox" checked onchange="renderSelectionDecision()"> r*ⱼₓ-Schwelle anwenden</label><label><input id="critP" type="checkbox" checked onchange="renderSelectionDecision()"> Schwierigkeitsbereich anwenden</label><label><input id="critMissing" type="checkbox" onchange="renderSelectionDecision()"> hohen Missing-Anteil mitbedenken</label></div>
+  <div class="table-scroll"><table class="decision-table"><caption>Entscheidungen für die 20 Items</caption><thead><tr><th scope="col">Item</th><th scope="col">Trennschärfe</th><th scope="col">Schwierigkeit</th><th scope="col">Entscheidung</th></tr></thead><tbody id="selectionDecisionBody"></tbody></table></div>
+  <div id="selectionDecisionFb" class="widget-feedback" role="status"></div>
+  <hr class="soft-rule"><p><strong>Konfliktfall:</strong> Ein sehr leichtes Item erfüllt den Schwierigkeitscutoff nicht, soll aber als Eisbrecher dienen. Welche Entscheidung ist quellentreu?</p><div class="choice-grid"><button onclick="checkIcebreaker(this,'delete')">Automatisch eliminieren, weil Cutoffs immer Vorrang haben</button><button onclick="checkIcebreaker(this,'weigh')">Inhaltlich und praktisch abwägen, statt automatisch zu eliminieren</button><button onclick="checkIcebreaker(this,'ignore')">Alle statistischen Kennwerte vollständig ignorieren</button></div><div id="icebreakerFb" class="widget-feedback" role="status"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die zentralen Richtungs-, Bezugs- und Formelfehler der Itemanalyse sicher auseinanderhalten.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Hoher Schwierigkeitsindex</h4>
+      <p>Viele Personen lösen beziehungsweise bejahen das Item.</p>
+      <p>Bei einem Leistungsitem ist das Item umgangssprachlich eher leicht.</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Hohe Alltagsschwierigkeit</h4>
+      <p>Wenige Personen lösen die Aufgabe.</p>
+      <p>Der Lösungsanteil und damit pⱼ ist eher niedrig.</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein hoher Schwierigkeitsindex bedeutet, dass eine Aufgabe besonders schwer ist.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Deckeneffekt</h4>
+      <p>Antworten konzentrieren sich am oberen Skalenende.</p>
+      <p>Viele stimmen stark zu oder lösen das Item.</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bodeneffekt</h4>
+      <p>Antworten konzentrieren sich am unteren Skalenende.</p>
+      <p>Viele berichten selten oder lösen das Item nicht.</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Decken- und Bodeneffekt unterscheiden sich nur in der Bezeichnung, nicht in der Richtung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Unkorrigierte Trennschärfe</h4>
+      <p>Korrelation mit dem vollständigen Testwert.</p>
+      <p>Der Itemscore ist im Testwert selbst enthalten.</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Korrigierte Trennschärfe</h4>
+      <p>Korrelation mit dem Testwert ohne den Itemanteil.</p>
+      <p>Part-whole Überlappung wird entfernt.</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Trennschärfevarianten sind austauschbar, weil der Itemanteil keinen Einfluss hat.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eigentrennschärfe</h4>
+      <p>Bezug auf den Testwert der zugehörigen Dimension.</p>
+      <p>Soll möglichst hoch ausfallen.</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fremdtrennschärfe</h4>
+      <p>Bezug auf Testwerte anderer Dimensionen.</p>
+      <p>Soll deutlich niedriger als die Eigentrennschärfe sein.</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Fremdtrennschärfen sollten genauso hoch sein wie Eigentrennschärfen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Folie 14: strikte Grenze</h4>
+      <p>15 < pⱼ* < 85</p>
+      <p>r*ⱼₓ > .30</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Folie 15: inklusive Grenze</h4>
+      <p>15 ≤ pⱼ* ≤ 85</p>
+      <p>r*ⱼₓ ≥ .30</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die beiden Folien verwenden mathematisch exakt dieselbe Randfallkonvention.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl05</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl05';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd05-s0-q1",
+      "q": "In welcher Phase der Testkonstruktion werden Itemanalyse und Itemselektion durchgeführt?",
+      "opts": [
+        "Bei der Definition des zu erfassenden Merkmals und seiner ersten Abgrenzung.",
+        "Bei der Vorgabe der Testrohform an eine Stichprobe zur Optimierung.",
+        "Bei der Vorgabe der Testendform an eine Stichprobe zur Normbestimmung.",
+        "Bei der Festlegung von Datentyp, Testlänge und Rahmenbedingungen."
+      ],
+      "c": 1,
+      "e": "Itemanalyse und Selektion gehören zur Optimierung der Testrohform; danach folgt erst die Vorgabe der Endform an eine Normstichprobe.",
+      "oe": [
+        "Die Merkmalsdefinition liegt am Beginn des Konstruktionsprozesses, noch vor der Rohform.",
+        "Richtig: In der Optimierungsstichprobe werden Rohform, Items und Gütekriterien geprüft.",
+        "Die Normstichprobe erhält bereits die Testendform und dient der Normbestimmung.",
+        "Datentyp, Testlänge und Rahmenbedingungen werden bereits in der Testplanung festgelegt."
+      ],
+      "mt": [
+        "prozessstufe_zu_frueh",
+        null,
+        "normierung_mit_optimierung_verwechselt",
+        "testplanung_mit_itemanalyse_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F02"
+      ],
+      "learning_objective_id": "LZ-01",
+      "concept_id": "testkonstruktionsprozess"
+    },
+    {
+      "id": "pd05-s0-q2",
+      "q": "Wie sind Personen und Items in der Testscorematrix X = (xᵢⱼ) angeordnet?",
+      "opts": [
+        "Personen bilden die Spalten, während Items die Zeilen der Matrix bilden.",
+        "Personen und Items werden gemeinsam nur auf der Hauptdiagonalen angeordnet.",
+        "Personen bilden die Zeilen, während Items die Spalten der Matrix bilden.",
+        "Personen bilden einzelne Matrizen, während Items deren Tabellenblätter bilden."
+      ],
+      "c": 2,
+      "e": "In der Testscorematrix stehen die Personen i = 1,…,n in den Zeilen und die Items j = 1,…,m in den Spalten.",
+      "oe": [
+        "Hier sind Zeilen- und Spaltenbedeutung vertauscht.",
+        "Eine Diagonalanordnung beschreibt keine rechteckige Testscorematrix.",
+        "Richtig: Jede Zelle xᵢⱼ ist der Score von Person i auf Item j.",
+        "Die Quelle beschreibt eine einzelne rechteckige Matrix, keine Sammlung von Tabellenblättern."
+      ],
+      "mt": [
+        "zeile_spalte_vertauscht",
+        "matrixstruktur_falsch",
+        null,
+        "matrixstruktur_falsch"
+      ],
+      "source_ids": [
+        "PD05-F03"
+      ],
+      "learning_objective_id": "LZ-02",
+      "concept_id": "testscorematrix"
+    },
+    {
+      "id": "pd05-s0-q3",
+      "q": "Eine negativ gepolte Skala reicht von 1 bis 7. Welcher invertierte Wert gehört zum ursprünglichen Score 2?",
+      "opts": [
+        "Der invertierte Wert beträgt 5, weil nur die obere Grenze vermindert wird.",
+        "Der invertierte Wert beträgt 7, weil der niedrigere Score maximal erhöht wird.",
+        "Der invertierte Wert beträgt 3, weil die Skalenmitte als Bezug genommen wird.",
+        "Der invertierte Wert beträgt 6, weil (1 + 7) − 2 gerechnet wird."
+      ],
+      "c": 3,
+      "e": "Die Invertierung lautet (uⱼ + oⱼ) − xᵢⱼ. Für 1 bis 7 und den Score 2 ergibt sich daher 8 − 2 = 6.",
+      "oe": [
+        "Die Formel verwendet die Summe aus unterer und oberer Grenze, nicht nur die obere Grenze.",
+        "Die Invertierung ersetzt den Wert nicht pauschal durch das Skalenmaximum.",
+        "Die Skalenmitte ist nicht die in der Quelle angegebene Transformationsregel.",
+        "Richtig: (1 + 7) − 2 ergibt den invertierten Wert 6."
+      ],
+      "mt": [
+        "invertierungsformel_unvollstaendig",
+        "invertierung_als_maximierung",
+        "skalenmitte_statt_formel",
+        null
+      ],
+      "source_ids": [
+        "PD05-F03"
+      ],
+      "learning_objective_id": "LZ-02",
+      "concept_id": "iteminvertierung"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd05-s1-q1",
+      "q": "Was bedeutet ein hoher Schwierigkeitsindex bei einem dichotom codierten Leistungsitem?",
+      "opts": [
+        "Viele Personen lösen das Item; es ist umgangssprachlich eher leicht.",
+        "Wenige Personen lösen das Item; es ist umgangssprachlich eher schwer.",
+        "Die Antworten streuen stark; das Item besitzt deshalb eine hohe Varianz.",
+        "Der Testwert korreliert hoch; das Item besitzt deshalb hohe Trennschärfe."
+      ],
+      "c": 0,
+      "e": "Bei 0-1-Codierung entspricht pⱼ dem Lösungsanteil. Ein hoher Wert bedeutet viele richtige Antworten und damit ein leichtes Item.",
+      "oe": [
+        "Richtig: Der Index ist ein Lösungs- beziehungsweise Zustimmungsanteil und keine umgangssprachliche Schwere.",
+        "Hier wird die alltagssprachliche Bedeutung von „schwierig“ fälschlich auf den Index übertragen.",
+        "Varianz und Itemschwierigkeit hängen zusammen, sind aber nicht derselbe Kennwert.",
+        "Trennschärfe ist eine Korrelation und nicht die Bedeutung eines hohen Schwierigkeitsindex."
+      ],
+      "mt": [
+        null,
+        "alltagsschwierigkeit_mit_index_verwechselt",
+        "schwierigkeit_mit_varianz_verwechselt",
+        "schwierigkeit_mit_trennschaerfe_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F05"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "schwierigkeitsindex_interpretation"
+    },
+    {
+      "id": "pd05-s1-q2",
+      "q": "Wie wird der unnormierte Schwierigkeitsindex pⱼ bei vollständigen Daten bestimmt?",
+      "opts": [
+        "Als Streuung der Itemscores um ihren Mittelwert über alle Personen.",
+        "Als Mittelwert der Itemscores über die Personen: Σᵢxᵢⱼ geteilt durch n.",
+        "Als Korrelation des Itemscores mit dem um das Item bereinigten Testwert.",
+        "Als Anteil fehlender Antworten bezogen auf die gesamte Analysestichprobe."
+      ],
+      "c": 1,
+      "e": "Der Schwierigkeitsindex ist die zentrale Tendenz des Items und wird bei vollständigen Daten als arithmetischer Mittelwert der Itemscores berechnet.",
+      "oe": [
+        "Diese Beschreibung gehört zur Streuung beziehungsweise Itemvarianz.",
+        "Richtig: pⱼ = (Σᵢxᵢⱼ)/n.",
+        "Diese Formel beschreibt die korrigierte Itemtrennschärfe.",
+        "Fehlende Antworten verändern gegebenenfalls den Nenner, definieren aber nicht pⱼ."
+      ],
+      "mt": [
+        "mittelwert_mit_varianz_verwechselt",
+        null,
+        "schwierigkeit_mit_trennschaerfe_verwechselt",
+        "missing_als_kennwert_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F05"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "schwierigkeitsindex_formel"
+    },
+    {
+      "id": "pd05-s1-q3",
+      "q": "Ein Item wurde von 72 Personen gültig beantwortet; 54 lösten es. Wie groß ist pⱼ*?",
+      "opts": [
+        "pⱼ* = 54, weil die absolute Zahl gelöster Aufgaben direkt übernommen wird.",
+        "pⱼ* = 66,7, weil die 18 falschen Antworten durch 54 geteilt werden.",
+        "pⱼ* = 75, weil 54 durch 72 geteilt und mit 100 multipliziert wird.",
+        "pⱼ* = 80, weil fehlende Werte als zusätzliche richtige Antworten zählen."
+      ],
+      "c": 2,
+      "e": "Bei Missing Data wird n durch die Zahl gültiger Antworten ersetzt. Damit gilt pⱼ* = (54/72) · 100 = 75.",
+      "oe": [
+        "Der normierte Index ist ein Prozentwert und nicht die absolute Lösungshäufigkeit.",
+        "Hier wird ein falscher Quotient aus falschen und richtigen Antworten gebildet.",
+        "Richtig: Nur 72 gültige Antworten bilden den Nenner; 54/72 = 0,75.",
+        "Fehlende Werte werden nicht als richtige Antworten behandelt."
+      ],
+      "mt": [
+        "haeufigkeit_statt_anteil",
+        "falscher_quotient",
+        null,
+        "missing_als_richtig_codiert"
+      ],
+      "source_ids": [
+        "PD05-F06"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "normierter_schwierigkeitsindex"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd05-s2-q1",
+      "q": "Was beschreibt die Itemvarianz eines Items?",
+      "opts": [
+        "Den Mittelwert der Antworten und damit die zentrale Tendenz des Items.",
+        "Den Anteil der Personen, die ein dichotom codiertes Item korrekt lösen.",
+        "Den Zusammenhang des Items mit dem aus allen Items gebildeten Testwert.",
+        "Die Streuung der Antworten zwischen den untersuchten Personen."
+      ],
+      "c": 3,
+      "e": "Die Itemvarianz erfasst die Variabilität der Antworten. Bei sⱼ² = 0 antworten alle gleich, sodass das Item nicht differenzieren kann.",
+      "oe": [
+        "Diese Beschreibung gehört zur Itemschwierigkeit beziehungsweise zum Mittelwert.",
+        "Der Lösungsanteil ist bei 0-1-Codierung der Schwierigkeitsindex.",
+        "Der Zusammenhang mit dem Testwert beschreibt die Itemtrennschärfe.",
+        "Richtig: Varianz bezeichnet die interindividuelle Streuung der Itemantworten."
+      ],
+      "mt": [
+        "varianz_mit_schwierigkeit_verwechselt",
+        "varianz_mit_loesungsanteil_verwechselt",
+        "varianz_mit_trennschaerfe_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD05-F07"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "itemvarianz"
+    },
+    {
+      "id": "pd05-s2-q2",
+      "q": "Welche Aussage gilt in den Grenzfällen pⱼ* = 0 und pⱼ* = 100?",
+      "opts": [
+        "Die Itemvarianz ist jeweils null, weil alle Personen denselben Score erhalten.",
+        "Die Itemvarianz ist jeweils maximal, weil die Schwierigkeit besonders extrem ist.",
+        "Die Itemtrennschärfe ist jeweils perfekt, weil die Antworten eindeutig ausfallen.",
+        "Die Itemschwierigkeit ist jeweils mittig, weil beide Grenzwerte sich ausgleichen."
+      ],
+      "c": 0,
+      "e": "Bei pⱼ* = 0 oder 100 sind alle Antworten gleich. Deshalb gilt sⱼ² = 0 und das Item kann keine Personen unterscheiden.",
+      "oe": [
+        "Richtig: Gleichförmige Antworten erzeugen keine Streuung.",
+        "Extreme Schwierigkeit begrenzt die mögliche Varianz statt sie zu maximieren.",
+        "Eindeutige, aber gleichförmige Antworten führen nicht zu perfekter Trennschärfe.",
+        "0 und 100 sind die Extremwerte des normierten Schwierigkeitsindex."
+      ],
+      "mt": [
+        null,
+        "extrem_mit_maximaler_varianz_verwechselt",
+        "gleichfoermigkeit_mit_perfekter_trennung",
+        "grenzwerte_als_mitte_gedeutet"
+      ],
+      "source_ids": [
+        "PD05-F07"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "schwierigkeit_varianz_relation"
+    },
+    {
+      "id": "pd05-s2-q3",
+      "q": "Welche Itemschwierigkeit erlaubt nach der Quelle tendenziell die größte Itemvarianz?",
+      "opts": [
+        "Eine Schwierigkeit am unteren Rand des möglichen Wertebereichs.",
+        "Eine Schwierigkeit ungefähr im mittleren Bereich des Wertebereichs.",
+        "Eine Schwierigkeit am oberen Rand des möglichen Wertebereichs.",
+        "Eine Schwierigkeit außerhalb des zulässigen Wertebereichs der Codierung."
+      ],
+      "c": 1,
+      "e": "Mittlere Itemschwierigkeiten erlauben die größten Varianzen; extreme Schwierigkeiten begrenzen dagegen die mögliche Streuung.",
+      "oe": [
+        "Am unteren Rand antworten die Personen überwiegend gleich, sodass die Varianz klein wird.",
+        "Richtig: Im mittleren Bereich können sich Antworten stärker zwischen Personen verteilen.",
+        "Am oberen Rand antworten die Personen überwiegend gleich, sodass die Varianz klein wird.",
+        "Ein Wert außerhalb der Antwortcodierung ist kein zulässiger Schwierigkeitsindex."
+      ],
+      "mt": [
+        "extremwert_als_varianzmaximum",
+        null,
+        "extremwert_als_varianzmaximum",
+        "wertebereich_ignoriert"
+      ],
+      "source_ids": [
+        "PD05-F07"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "schwierigkeit_varianz_relation"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd05-s3-q1",
+      "q": "Was beschreibt die Itemtrennschärfe?",
+      "opts": [
+        "Die Streuung der Itemantworten unabhängig von den übrigen Items des Tests.",
+        "Den Mittelwert der Itemantworten über alle Personen der Analysestichprobe.",
+        "Den Zusammenhang der Itemantworten mit den Testwerten der Personen.",
+        "Den Anteil fehlender Antworten innerhalb einer einzelnen Itemspalte."
+      ],
+      "c": 2,
+      "e": "Die Trennschärfe ist die Korrelation zwischen Itemscore und Testwert. Sie zeigt, wie ähnlich das Item Personen wie der Testwert differenziert.",
+      "oe": [
+        "Die Streuung eines Items wird durch die Itemvarianz beschrieben.",
+        "Der Mittelwert eines Items ist sein Schwierigkeitsindex.",
+        "Richtig: Hohe Trennschärfe trennt Personen mit hohen und niedrigen Testwerten gut.",
+        "Missing Data kann ein Selektionskriterium sein, definiert aber keine Trennschärfe."
+      ],
+      "mt": [
+        "trennschaerfe_mit_varianz_verwechselt",
+        "trennschaerfe_mit_schwierigkeit_verwechselt",
+        null,
+        "trennschaerfe_mit_missing_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F08"
+      ],
+      "learning_objective_id": "LZ-03",
+      "concept_id": "itemtrennschaerfe"
+    },
+    {
+      "id": "pd05-s3-q2",
+      "q": "Warum wird die unkorrigierte Item-Testwert-Korrelation durch eine part-whole Korrektur ersetzt?",
+      "opts": [
+        "Weil der Testwert das Item selbst enthält und der Zusammenhang deshalb überschätzt wird.",
+        "Weil die Antwortkategorien zuerst zwingend auf den Wertebereich von 0 bis 100 normiert werden.",
+        "Weil die Itemvarianz aus dem Testwert entfernt werden muss, bevor ein Mittelwert gebildet wird.",
+        "Weil fehlende Antworten grundsätzlich als Nullwerte in die Korrelation eingehen müssen."
+      ],
+      "c": 0,
+      "e": "Der Itemscore ist Bestandteil des Summen- oder Mittelwerts. Die part-whole Korrektur entfernt diesen Eigenanteil vor der Korrelation.",
+      "oe": [
+        "Richtig: Die mathematische Überlappung würde die unkorrigierte Trennschärfe künstlich erhöhen.",
+        "Die Normierung des Schwierigkeitsindex ist für die part-whole Korrektur nicht entscheidend.",
+        "Die Korrektur entfernt den Itemscore aus dem Testwert, nicht die Itemvarianz.",
+        "Die Quelle fordert keine pauschale Nullcodierung fehlender Antworten."
+      ],
+      "mt": [
+        null,
+        "partwhole_mit_normierung_verwechselt",
+        "itemscore_mit_varianz_verwechselt",
+        "missing_als_null_codiert"
+      ],
+      "source_ids": [
+        "PD05-F09"
+      ],
+      "learning_objective_id": "LZ-04",
+      "concept_id": "part_whole_korrektur"
+    },
+    {
+      "id": "pd05-s3-q3",
+      "q": "Wie sollten Fremdtrennschärfen im Vergleich zu Eigentrennschärfen ausfallen?",
+      "opts": [
+        "Sie sollten ungefähr gleich hoch sein, weil beide dieselbe Dimension abbilden.",
+        "Sie sollten höher ausfallen, weil fremde Dimensionen mehr Varianz enthalten.",
+        "Sie sollten negativ ausfallen, damit die Dimensionen vollständig unabhängig sind.",
+        "Sie sollten deutlich niedriger sein als die Trennschärfen zur eigenen Dimension."
+      ],
+      "c": 3,
+      "e": "Eigentrennschärfen beziehen sich auf die zugehörige Dimension. Fremdtrennschärfen zu anderen Dimensionen sollten deutlich niedriger ausfallen.",
+      "oe": [
+        "Fremdtrennschärfen beziehen sich gerade nicht auf dieselbe Dimension.",
+        "Mehr Varianz in einer anderen Dimension begründet keine höhere Fremdtrennschärfe.",
+        "Die Quelle verlangt niedrigere, aber nicht zwingend negative Fremdtrennschärfen.",
+        "Richtig: Das Item soll stärker mit seiner eigenen als mit fremden Dimensionen zusammenhängen."
+      ],
+      "mt": [
+        "eigen_fremd_gleichgesetzt",
+        "fremdtrennschaerfe_ueberhoeht",
+        "niedrig_mit_negativ_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD05-F10"
+      ],
+      "learning_objective_id": "LZ-04",
+      "concept_id": "eigen_fremdtrennschaerfe"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd05-s4-q1",
+      "q": "Mit welcher R-Funktion werden in der gezeigten Auswertung korrigierte Trennschärfen ausgegeben?",
+      "opts": [
+        "Mit der Funktion alpha() aus dem Paket psych.",
+        "Mit der Funktion cor() aus dem Paket graphics.",
+        "Mit der Funktion mean() aus dem Paket stats.",
+        "Mit der Funktion var() aus dem Paket methods."
+      ],
+      "c": 0,
+      "e": "Die gezeigte Auswertung verwendet alpha() aus dem Paket psych für korrigierte Trennschärfen und die Reliabilitätsschätzung.",
+      "oe": [
+        "Richtig: Der gezeigte Code lädt psych und ruft alpha() für vier Items auf.",
+        "cor() ist nicht der in der Quelle gezeigte Aufruf und graphics ist nicht das genannte Paket.",
+        "mean() berechnet einen Mittelwert, erzeugt aber nicht die dargestellte alpha()-Ausgabe.",
+        "var() berechnet eine Varianz und gehört nicht zu dem gezeigten Auswertungsschritt."
+      ],
+      "mt": [
+        null,
+        "andere_r_funktion",
+        "mittelwert_statt_alpha",
+        "varianz_statt_alpha"
+      ],
+      "source_ids": [
+        "PD05-F12"
+      ],
+      "learning_objective_id": "LZ-05",
+      "concept_id": "r_alpha_funktion"
+    },
+    {
+      "id": "pd05-s4-q2",
+      "q": "Welche Spalte der Itemstatistiken enthält die korrigierte Itemtrennschärfe?",
+      "opts": [
+        "Die Spalte mean mit dem Mittelwert des jeweiligen Items.",
+        "Die Spalte r.drop mit den korrigierten Itemtrennschärfen.",
+        "Die Spalte sd mit den Standardabweichungen der Items.",
+        "Die Spalte n mit der gültigen Fallzahl des jeweiligen Items."
+      ],
+      "c": 1,
+      "e": "In der gezeigten alpha()-Ausgabe steht r.drop für die korrigierte Itemtrennschärfe; mean und sd beschreiben zentrale Tendenz und Streuung.",
+      "oe": [
+        "mean enthält die Itemmittelwerte und nicht die korrigierte Trennschärfe.",
+        "Richtig: r.drop korreliert das Item mit dem Testwert ohne den eigenen Itemanteil.",
+        "sd enthält die Standardabweichung des jeweiligen Items.",
+        "n gibt die Zahl der ausgewerteten Fälle an."
+      ],
+      "mt": [
+        "r_drop_mit_mean_verwechselt",
+        null,
+        "r_drop_mit_sd_verwechselt",
+        "r_drop_mit_n_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F13"
+      ],
+      "learning_objective_id": "LZ-05",
+      "concept_id": "r_output_rdrop"
+    },
+    {
+      "id": "pd05-s4-q3",
+      "q": "Welches Item besitzt in der gezeigten alpha()-Ausgabe den höchsten r.drop-Wert?",
+      "opts": [
+        "item_5 mit einem r.drop-Wert von 0,55.",
+        "item_9 mit einem r.drop-Wert von 0,56.",
+        "item_3 mit einem r.drop-Wert von 0,64.",
+        "item_11 mit einem r.drop-Wert von 0,56."
+      ],
+      "c": 2,
+      "e": "In den Itemstatistiken hat item_3 mit r.drop = 0,64 den höchsten korrigierten Trennschärfewert der vier Items.",
+      "oe": [
+        "item_5 weist 0,55 auf und liegt damit unter item_3.",
+        "item_9 weist 0,56 auf und liegt damit unter item_3.",
+        "Richtig: 0,64 ist der größte r.drop-Wert der Tabelle.",
+        "item_11 weist 0,56 auf und liegt damit unter item_3."
+      ],
+      "mt": [
+        "tabellenwert_verwechselt",
+        "tabellenwert_verwechselt",
+        null,
+        "tabellenwert_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F13"
+      ],
+      "learning_objective_id": "LZ-05",
+      "concept_id": "r_output_rdrop"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd05-s5-q1",
+      "q": "Welche statistischen Cutoffs werden im Beispiel für die Itemselektion genannt?",
+      "opts": [
+        "pⱼ* zwischen 5 und 95 sowie r*ⱼₓ mindestens 0,10 im Beispiel.",
+        "pⱼ* zwischen 10 und 90 sowie r*ⱼₓ mindestens 0,20.",
+        "pⱼ* zwischen 20 und 80 sowie r*ⱼₓ mindestens 0,40.",
+        "pⱼ* zwischen 15 und 85 sowie r*ⱼₓ ungefähr ab 0,30."
+      ],
+      "c": 3,
+      "e": "Die Folien nennen 15 und 85 als Schwierigkeitsschwellen sowie 0,30 als Schwelle der korrigierten Trennschärfe.",
+      "oe": [
+        "Diese Zahlenkombination wird in den Quellenfolien nicht verwendet.",
+        "Diese Zahlenkombination wird in den Quellenfolien nicht verwendet.",
+        "Diese Zahlenkombination wird in den Quellenfolien nicht verwendet.",
+        "Richtig: Die Gleichheitszeichen unterscheiden sich zwischen Folie 14 und 15, die Zahlenwerte sind jedoch identisch."
+      ],
+      "mt": [
+        "cutoff_zahlen_verwechselt",
+        "cutoff_zahlen_verwechselt",
+        "cutoff_zahlen_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD05-F14",
+        "PD05-F15"
+      ],
+      "learning_objective_id": "LZ-06",
+      "concept_id": "selektionscutoffs"
+    },
+    {
+      "id": "pd05-s5-q2",
+      "q": "Welche Items werden im Beispiel allein durch das Trennschärfekriterium eliminiert?",
+      "opts": [
+        "Die Items 1, 4, 9, 10 und 12.",
+        "Die Items 2, 3, 6, 8 und 15.",
+        "Die Items 5, 7, 11, 13 und 20.",
+        "Die Items 14, 16, 17, 18 und 19."
+      ],
+      "c": 0,
+      "e": "Die Abbildung auf Folie 15 nennt für r*ⱼₓ ≥ .30 die eliminierten Items 1, 4, 9, 10 und 12.",
+      "oe": [
+        "Richtig: Diese fünf Items liegen im Beispiel unterhalb der Trennschärfeschwelle.",
+        "Diese Items werden in der Abbildung nicht als durch Kriterium 1 eliminiert aufgeführt.",
+        "Diese Items liegen im oberen Bereich des Trennschärfediagramms und werden nicht genannt.",
+        "Diese Gruppe entspricht weder der angegebenen Eliminationsliste noch einem einzelnen Kriterium."
+      ],
+      "mt": [
+        null,
+        "eliminationsliste_verwechselt",
+        "hohe_trennschaerfe_eliminiert",
+        "eliminationsliste_verwechselt"
+      ],
+      "source_ids": [
+        "PD05-F15"
+      ],
+      "learning_objective_id": "LZ-06",
+      "concept_id": "itemselektion_beispiel"
+    },
+    {
+      "id": "pd05-s5-q3",
+      "q": "Warum lässt sich für die Itemselektion meist kein fester Algorithmus angeben?",
+      "opts": [
+        "Weil nur die Testlänge entscheidet und alle Kennwerte deshalb ignoriert werden müssen.",
+        "Weil Cutoffs teilweise willkürlich sind und mehrere Kriterien miteinander konkurrieren können.",
+        "Weil Itemschwierigkeit und Trennschärfe bei allen Items grundsätzlich denselben Wert besitzen.",
+        "Weil Faktorenanalysen jede Itemselektion automatisch und ohne Abwägung vollständig ersetzen."
+      ],
+      "c": 1,
+      "e": "Die Quelle fordert eine Abwägung: Cutoffs sind teilweise willkürlich, und statistische, inhaltliche sowie praktische Kriterien können unvereinbar sein.",
+      "oe": [
+        "Die Testlänge ist nur eines von mehreren Kriterien; Kennwerte werden nicht pauschal ignoriert.",
+        "Richtig: Itemselektion ist eine begründete Mehrkriterienentscheidung und kein starrer Automatismus.",
+        "Schwierigkeit und Trennschärfe sind verschiedene Kennwerte und variieren zwischen Items.",
+        "Faktorenanalysen werden für die Dimensionalitätsprüfung genannt, nicht als vollständiger Ersatz der Selektion."
+      ],
+      "mt": [
+        "nur_testlaenge",
+        null,
+        "kennwerte_gleichgesetzt",
+        "faktorenanalyse_als_automatik"
+      ],
+      "source_ids": [
+        "PD05-F16"
+      ],
+      "learning_objective_id": "LZ-06",
+      "concept_id": "selektionsabwaegung"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd05-b-q1",
+    "q": "Welcher Schritt folgt auf die Optimierung der Testrohform?",
+    "opts": [
+      "Die erneute Definition des Merkmals ohne weitere Datenerhebung.",
+      "Die Konstruktion einer zweiten Rohform ohne Gütekriterienprüfung.",
+      "Die Vorgabe der Testendform an eine Normstichprobe.",
+      "Die vollständige Rückkehr zur Wahl der Konstruktionsstrategie."
+    ],
+    "c": 2,
+    "e": "Nach der Optimierung der Rohform wird die Testendform einer Normstichprobe vorgegeben; dort werden Normen bestimmt und Gütekriterien erneut geprüft.",
+    "oe": [
+      "Die Merkmalsdefinition ist der erste und nicht der nachfolgende Schritt.",
+      "Die Quelle nennt keine zweite Rohform als regulären Folgeschritt.",
+      "Richtig: Die Endform wird normiert und erneut auf Gütekriterien geprüft.",
+      "Die Wahl der Konstruktionsstrategie gehört zur früheren Testplanung."
+    ],
+    "mt": [
+      "prozess_rueckwaerts",
+      "prozessschritt_erfunden",
+      null,
+      "prozess_rueckwaerts"
+    ],
+    "source_ids": [
+      "PD05-F02"
+    ],
+    "learning_objective_id": "LZ-01",
+    "concept_id": "testkonstruktionsprozess"
+  },
+  {
+    "id": "pd05-b-q2",
+    "q": "Welche drei Itemindizes werden in der Itemanalyse des Decks behandelt?",
+    "opts": [
+      "Itemvalidität, Itemobjektivität und Itemnormierung.",
+      "Itemschwierigkeit, Itemvarianz und Itemtrennschärfe.",
+      "Testlänge, Bearbeitungszeit und Auswertungsobjektivität.",
+      "Sensitivität, Spezifität und positiver Vorhersagewert."
+    ],
+    "c": 1,
+    "e": "Das Deck führt Itemschwierigkeit, Itemvarianz und Itemtrennschärfe als die drei Kennwerte zur Beschreibung und Selektion von Items ein.",
+    "oe": [
+      "Diese Begriffe sind nicht die drei auf Folie 3 angekündigten Itemindizes.",
+      "Richtig: Diese drei Kennwerte strukturieren die folgenden Abschnitte.",
+      "Diese Merkmale betreffen andere Aspekte eines Tests und nicht die drei Itemindizes.",
+      "Diese Kennwerte gehören zu diagnostischen Entscheidungen und nicht zu diesem Itemindex-Set."
+    ],
+    "mt": [
+      "guetekriterien_statt_itemindizes",
+      null,
+      "testmerkmale_statt_itemindizes",
+      "entscheidungskennwerte_statt_itemindizes"
+    ],
+    "source_ids": [
+      "PD05-F03"
+    ],
+    "learning_objective_id": "LZ-02",
+    "concept_id": "drei_itemindizes"
+  },
+  {
+    "id": "pd05-b-q3",
+    "q": "Wodurch unterscheiden sich Decken- und Bodeneffekt?",
+    "opts": [
+      "Beim Deckeneffekt liegen Antworten oben, beim Bodeneffekt unten gebündelt.",
+      "Beim Deckeneffekt streuen Antworten maximal, beim Bodeneffekt gar nicht.",
+      "Beim Deckeneffekt fehlen Daten, beim Bodeneffekt sind alle Daten vollständig.",
+      "Beim Deckeneffekt ist r negativ, beim Bodeneffekt ist r positiv."
+    ],
+    "c": 0,
+    "e": "Der Deckeneffekt bezeichnet eine Konzentration am oberen Skalenende, der Bodeneffekt eine Konzentration am unteren Skalenende.",
+    "oe": [
+      "Richtig: Beide Effekte bedeuten geringe Differenzierung, aber an entgegengesetzten Skalenenden.",
+      "Beide Effekte können geringe Streuung erzeugen; der Unterschied ist die Richtung.",
+      "Missing Data ist nicht das Unterscheidungsmerkmal dieser Verteilungseffekte.",
+      "Das Vorzeichen einer Korrelation definiert weder Decken- noch Bodeneffekt."
+    ],
+    "mt": [
+      null,
+      "richtung_ignoriert",
+      "verteilung_mit_missing_verwechselt",
+      "verteilung_mit_korrelation_verwechselt"
+    ],
+    "source_ids": [
+      "PD05-F04"
+    ],
+    "learning_objective_id": "LZ-03",
+    "concept_id": "decke_boden"
+  },
+  {
+    "id": "pd05-b-q4",
+    "q": "80 von 100 Personen lösen ein 0-1-codiertes Item. Wie groß ist pⱼ?",
+    "opts": [
+      "pⱼ = 0,20, weil nur die nicht gelösten Antworten zählen.",
+      "pⱼ = 0,50, weil dichotome Items stets in der Mitte liegen.",
+      "pⱼ = 0,80, weil 80 Lösungen durch 100 Personen geteilt werden.",
+      "pⱼ = 80,00, weil der unnormierte Index als Prozentwert angegeben wird."
+    ],
+    "c": 2,
+    "e": "Bei dichotomer 0-1-Codierung ist pⱼ der Lösungsanteil. 80/100 ergibt den unnormierten Wert 0,80.",
+    "oe": [
+      "Hier wird der Anteil falscher statt richtiger Antworten berechnet.",
+      "Dichotome Codierung erzwingt keinen Mittelwert von 0,50.",
+      "Richtig: pⱼ = hⱼ/n = 80/100 = 0,80.",
+      "80 wäre der auf 0 bis 100 normierte Wert pⱼ*, nicht der unnormierte Index."
+    ],
+    "mt": [
+      "falsche_antworten_als_loesungsanteil",
+      "dichotom_als_mitte",
+      null,
+      "p_mit_p_stern_verwechselt"
+    ],
+    "source_ids": [
+      "PD05-F05"
+    ],
+    "learning_objective_id": "LZ-03",
+    "concept_id": "schwierigkeitsindex_rechnen"
+  },
+  {
+    "id": "pd05-b-q5",
+    "q": "Wie lautet die unkorrigierte Itemtrennschärfe?",
+    "opts": [
+      "rⱼₓ = Cor(xᵢⱼ, xᵢ), also Itemscore mit vollständigem Testwert.",
+      "rⱼₓ = Var(xᵢⱼ), also Varianz der Itemantworten über Personen.",
+      "rⱼₓ = Mean(xᵢⱼ), also Mittelwert der Itemantworten über Personen.",
+      "rⱼₓ = Cor(xᵢⱼ, xᵢ − xᵢⱼ), also korrigierte Korrelation."
+    ],
+    "c": 0,
+    "e": "Unkorrigiert wird der Itemscore xᵢⱼ mit dem vollständigen Testwert xᵢ korreliert. Die letzte Option beschreibt bereits die part-whole Korrektur.",
+    "oe": [
+      "Richtig: Diese Formel enthält den Itemscore noch im Testwert.",
+      "Varianz und Trennschärfe sind unterschiedliche Kennwerte.",
+      "Mittelwert und Trennschärfe sind unterschiedliche Kennwerte.",
+      "Diese Formel entfernt den Itemanteil und ist deshalb die korrigierte Variante."
+    ],
+    "mt": [
+      null,
+      "trennschaerfe_mit_varianz_verwechselt",
+      "trennschaerfe_mit_mittelwert_verwechselt",
+      "korrigiert_unkorrigiert_verwechselt"
+    ],
+    "source_ids": [
+      "PD05-F08",
+      "PD05-F09"
+    ],
+    "learning_objective_id": "LZ-04",
+    "concept_id": "trennschaerfe_formeln"
+  },
+  {
+    "id": "pd05-b-q6",
+    "q": "In welchem Wertebereich liegen Trennschärfeindizes als Korrelationen?",
+    "opts": [
+      "Zwischen 0 und 100, weil Trennschärfen als Prozentwerte normiert sind.",
+      "Zwischen −1 und +1, weil es sich um Korrelationskoeffizienten handelt.",
+      "Zwischen 1 und 7, weil Items typischerweise Ratingskalen verwenden.",
+      "Zwischen 0 und n, weil der Stichprobenumfang die Obergrenze bestimmt."
+    ],
+    "c": 1,
+    "e": "Trennschärfen sind Korrelationen und liegen daher im Bereich von −1 bis +1. Nach korrekter Invertierung sollen sie möglichst hoch und nicht negativ sein.",
+    "oe": [
+      "Der Bereich 0 bis 100 gehört zum normierten Schwierigkeitsindex.",
+      "Richtig: −1 bis +1 ist der in der Quelle angegebene Korrelationsbereich.",
+      "Eine Antwortskala bestimmt nicht den Wertebereich der Korrelation.",
+      "Der Stichprobenumfang ist nicht die numerische Obergrenze eines Korrelationskoeffizienten."
+    ],
+    "mt": [
+      "trennschaerfe_mit_p_stern_verwechselt",
+      null,
+      "korrelation_mit_skala_verwechselt",
+      "korrelation_mit_n_verwechselt"
+    ],
+    "source_ids": [
+      "PD05-F10"
+    ],
+    "learning_objective_id": "LZ-03",
+    "concept_id": "trennschaerfe_wertebereich"
+  },
+  {
+    "id": "pd05-b-q7",
+    "q": "Wie ist eine negative Trennschärfe nach notwendiger Iteminvertierung zu beurteilen?",
+    "opts": [
+      "Sie ist erwünscht, weil negative Werte eine besonders starke Trennung anzeigen.",
+      "Sie ist neutral, weil nur der Betrag und nicht die Richtung der Korrelation zählt.",
+      "Sie ist unproblematisch, weil jede Dimension negative Eigentrennschärfen benötigt.",
+      "Sie ist unerwünscht, weil das Item entgegengesetzt zum Testwert differenziert."
+    ],
+    "c": 3,
+    "e": "Nach korrekter Invertierung sollen Trennschärfen möglichst hoch und keinesfalls negativ sein; ein negatives Vorzeichen weist auf eine gegenläufige Differenzierung hin.",
+    "oe": [
+      "Ein negativer Wert bedeutet keine besonders gute, sondern eine gegenläufige Trennung.",
+      "Bei der Trennschärfe ist die Richtung fachlich bedeutsam.",
+      "Eigentrennschärfen sollen nicht systematisch negativ sein.",
+      "Richtig: Das Item verhält sich gegenläufig zur intendierten Testwertdimension."
+    ],
+    "mt": [
+      "negativ_als_stark_gedeutet",
+      "betrag_ohne_richtung",
+      "negative_eigentrennschaerfe_normalisiert",
+      null
+    ],
+    "source_ids": [
+      "PD05-F10",
+      "PD05-F11"
+    ],
+    "learning_objective_id": "LZ-03",
+    "concept_id": "negative_trennschaerfe"
+  },
+  {
+    "id": "pd05-b-q8",
+    "q": "Welcher Gesamtwert für raw_alpha steht in der gezeigten R-Ausgabe?",
+    "opts": [
+      "raw_alpha = 0,64 für die vier ausgewählten Items.",
+      "raw_alpha = 0,73 für die vier ausgewählten Items.",
+      "raw_alpha = 0,78 für die vier ausgewählten Items.",
+      "raw_alpha = 0,81 für die vier ausgewählten Items."
+    ],
+    "c": 2,
+    "e": "In der Kopfzeile der Reliability analysis steht raw_alpha = 0,78; derselbe Wert erscheint auch als std.alpha.",
+    "oe": [
+      "0,64 ist der höchste r.drop-Wert eines einzelnen Items, nicht raw_alpha.",
+      "0,73 erscheint an anderen Stellen der Ausgabe, ist aber nicht der Gesamtwert raw_alpha.",
+      "Richtig: raw_alpha und std.alpha betragen in der Ausgabe jeweils 0,78.",
+      "0,81 ist eine obere Konfidenzgrenze, nicht der Gesamtwert raw_alpha."
+    ],
+    "mt": [
+      "rdrop_mit_alpha_verwechselt",
+      "tabellenbereich_verwechselt",
+      null,
+      "konfidenzgrenze_mit_alpha_verwechselt"
+    ],
+    "source_ids": [
+      "PD05-F13"
+    ],
+    "learning_objective_id": "LZ-05",
+    "concept_id": "r_output_alpha"
+  },
+  {
+    "id": "pd05-b-q9",
+    "q": "Welches zusätzliche Kriterium kann trotz akzeptabler Itemkennwerte gegen ein Item sprechen?",
+    "opts": [
+      "Ein hoher Anteil fehlender Antworten bei diesem Item.",
+      "Eine ausreichende Zahl gültiger Antworten bei diesem Item.",
+      "Eine mittlere Schwierigkeit innerhalb des gewünschten Bereichs.",
+      "Eine hohe korrigierte Trennschärfe zur eigenen Dimension."
+    ],
+    "c": 0,
+    "e": "Die Quelle nennt einen hohen Missing-Data-Anteil als zusätzliches Eliminationskriterium. Itemselektion berücksichtigt daher mehr als nur Schwierigkeit und Trennschärfe.",
+    "oe": [
+      "Richtig: Viele fehlende Werte können die Verwendbarkeit eines Items einschränken.",
+      "Ausreichend gültige Antworten sind kein genannter Ausschlussgrund.",
+      "Eine mittlere Schwierigkeit ist im statistischen Beispiel eher erwünscht.",
+      "Eine hohe Eigentrennschärfe ist im statistischen Beispiel eher erwünscht."
+    ],
+    "mt": [
+      null,
+      "gueltige_daten_als_problem",
+      "guenstiger_kennwert_als_ausschluss",
+      "guenstiger_kennwert_als_ausschluss"
+    ],
+    "source_ids": [
+      "PD05-F16"
+    ],
+    "learning_objective_id": "LZ-06",
+    "concept_id": "weitere_selektionskriterien"
+  },
+  {
+    "id": "pd05-b-q10",
+    "q": "Wie behandelt das Lernmodul die unterschiedlichen Gleichheitszeichen der Cutoffs auf Folie 14 und 15?",
+    "opts": [
+      "Es vereinheitlicht beide still auf strikte Grenzen und verwirft die zweite Darstellung.",
+      "Es vereinheitlicht beide still auf inklusive Grenzen und verwirft die erste Darstellung.",
+      "Es ersetzt beide Angaben durch neue Grenzwerte aus einer externen Fachquelle.",
+      "Es weist beide Varianten quellentreu aus und markiert den Randfall als Unsicherheit."
+    ],
+    "c": 3,
+    "e": "Folie 14 verwendet strikte, Folie 15 inklusive Grenzen. Da keine bevorzugte Konvention geklärt ist, bleiben beide Varianten sichtbar dokumentiert.",
+    "oe": [
+      "Eine stille Vereinheitlichung würde den Quellenwiderspruch verdecken.",
+      "Eine stille Vereinheitlichung würde den Quellenwiderspruch verdecken.",
+      "Externe Grenzwerte sind im Lerninhalt nicht zulässig und nicht erforderlich.",
+      "Richtig: Nur Werte exakt am Cutoff wären von der Abweichung betroffen."
+    ],
+    "mt": [
+      "quellenabweichung_verdeckt",
+      "quellenabweichung_verdeckt",
+      "externe_ergaenzung",
+      null
+    ],
+    "source_ids": [
+      "PD05-F14",
+      "PD05-F15"
+    ],
+    "learning_objective_id": "LZ-06",
+    "concept_id": "cutoff_unsicherheit"
+  },
+  {
+    "id": "pd05-b-q11",
+    "q": "Wie wird die Itemanalyse bei einem mehrdimensionalen Test erweitert?",
+    "opts": [
+      "Alle Items werden nur mit einem einzigen Gesamttestwert korreliert.",
+      "Die Analysen werden dimensionsweise durchgeführt und um Fremdtrennschärfen ergänzt.",
+      "Die Schwierigkeit wird vollständig verworfen und nur die Testlänge betrachtet.",
+      "Jede Dimension wird ohne Datenanalyse direkt aus den Itemformulierungen abgeleitet."
+    ],
+    "c": 1,
+    "e": "Bei mehrdimensionalen Merkmalen werden Itemanalysen getrennt für die postulierten Dimensionen durchgeführt; ergänzend können Fremdtrennschärfen geprüft werden.",
+    "oe": [
+      "Ein einziger Gesamttestwert würde die postulierten Dimensionen nicht getrennt berücksichtigen.",
+      "Richtig: Eigentrenn- und Fremdtrennschärfen beziehen sich auf unterschiedliche Dimensionswerte.",
+      "Die Itemschwierigkeit bleibt ein möglicher Itemindex und wird nicht pauschal verworfen.",
+      "Die Quelle fordert eine Datenanalyse und keine rein sprachliche Dimensionszuweisung."
+    ],
+    "mt": [
+      "dimensionen_ignoriert",
+      null,
+      "itemindex_verworfen",
+      "dimensionalitaet_ohne_daten"
+    ],
+    "source_ids": [
+      "PD05-F10",
+      "PD05-F16"
+    ],
+    "learning_objective_id": "LZ-06",
+    "concept_id": "mehrdimensionale_itemanalyse"
+  },
+  {
+    "id": "pd05-b-q12",
+    "q": "Welches Verfahren wird genannt, um die postulierte Dimensionalität stärker anhand der Daten zu untersuchen?",
+    "opts": [
+      "Eine zusätzliche Normierung der Itemschwierigkeiten auf 0 bis 100.",
+      "Eine erneute Invertierung aller bereits positiv gepolten Items.",
+      "Eine Faktorenanalyse der Daten zur Prüfung der postulierten Dimensionen.",
+      "Eine reine Sortierung der Items nach ihren jeweiligen Missing-Data-Anteilen."
+    ],
+    "c": 2,
+    "e": "Die Quelle nennt Faktorenanalysen, weil die dimensionsweise Itemanalyse allein nur schwer zeigt, ob die postulierte Dimensionalität von den Daten gestützt wird.",
+    "oe": [
+      "Die Normierung von pⱼ* prüft keine Dimensionalitätsstruktur.",
+      "Eine unnötige Invertierung prüft keine Dimensionalitätsstruktur.",
+      "Richtig: Faktorenanalysen werden ausdrücklich für diesen Zweck genannt.",
+      "Missing-Data-Anteile sind ein praktisches Selektionskriterium, aber keine Dimensionalitätsprüfung."
+    ],
+    "mt": [
+      "normierung_als_dimensionalitaetspruefung",
+      "invertierung_als_dimensionalitaetspruefung",
+      null,
+      "missing_als_dimensionalitaetspruefung"
+    ],
+    "source_ids": [
+      "PD05-F16"
+    ],
+    "learning_objective_id": "LZ-06",
+    "concept_id": "faktorenanalyse_dimensionalitaet"
+  }
+];
+
+var corrCorrect = {
+  "matrix-meaning": "person_item",
+  "ceiling-case": "decke",
+  "floor-case": "boden"
+};
+var corrExpl = {
+  "matrix-meaning": "xᵢⱼ bezeichnet den Score von Person i im Item j.",
+  "ceiling-case": "Die Antworten liegen überwiegend am oberen Skalenende: Deckeneffekt.",
+  "floor-case": "Die Antworten liegen überwiegend am unteren Skalenende: Bodeneffekt."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+
+/* PD05 bespoke widget logic */
+var processCanonical=[
+  'Festlegung des zu erfassenden Merkmals',
+  'Testplanung',
+  'Konstruktion einer Testrohform',
+  'Vorgabe der Rohform an eine Stichprobe zur Optimierung',
+  'Vorgabe der Testendform an eine Normstichprobe'
+];
+var processState=[];
+function shuffleArray(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function resetProcess(){processState=shuffleArray(processCanonical.slice());renderProcess();var f=document.getElementById('processFeedback');f.textContent='';f.className='widget-feedback';}
+function renderProcess(){var el=document.getElementById('processBuilder');if(!el)return;el.innerHTML=processState.map(function(s,i){return '<li class="process-step"><span class="num">'+(i+1)+'</span><span>'+s+'</span><span class="step-actions"><button type="button" aria-label="'+s+' nach oben" onclick="moveProcess('+i+',-1)" '+(i===0?'disabled':'')+'>↑</button><button type="button" aria-label="'+s+' nach unten" onclick="moveProcess('+i+',1)" '+(i===processState.length-1?'disabled':'')+'>↓</button></span></li>';}).join('');}
+function moveProcess(i,d){var n=i+d;if(n<0||n>=processState.length)return;var t=processState[i];processState[i]=processState[n];processState[n]=t;renderProcess();}
+function checkProcess(){var ok=processState.every(function(s,i){return s===processCanonical[i];}),f=document.getElementById('processFeedback');f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Korrekt. Itemanalyse und Selektion liegen in Schritt 4, der Optimierung der Rohform.':'Noch nicht korrekt. Achte darauf, dass erst nach Rohformkonstruktion optimiert und danach normiert wird.';}
+function showInlineAnswer(btn,value){var b=btn.parentElement.querySelector('.blank');if(b)b.textContent=value;btn.disabled=true;}
+function checkDifficultySelf(){var v=parseFloat(document.getElementById('difficultySelf').value),f=document.getElementById('difficultySelfFb'),ok=Math.abs(v-70)<0.01;f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Richtig: 7/10 · 100 = 70.':'Nicht ganz. Teile die sieben Lösungen durch zehn und multipliziere mit 100.';}
+function checkDifficultyTransfer(btn,den,val){var f=document.getElementById('difficultyTransferFb'),ok=den===8&&val===75;f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Richtig: Nur acht gültige Antworten gehören in den Nenner; 6/8 · 100 = 75.':'Der Nenner muss die Zahl der gültigen Antworten sein. Fehlende Antworten werden nicht als falsch oder richtig gezählt.';}
+function setVarianceState(v){var pred=document.querySelector('input[name="varPred"]:checked'),f=document.getElementById('varianceState'),m=document.getElementById('varianceMeter');var width=v===50?100:0;m.style.width=width+'%';var txt=v===50?'Bei mittlerer Schwierigkeit ist eine größere Itemvarianz möglich.':('Bei pⱼ* = '+v+' antworten alle am selben Skalenende; daher gilt sⱼ² = 0.');if(pred){txt+=(pred.value===(v===0?'zero':pred.value)?' Deine Prognose wurde berücksichtigt.':' Vergleiche dies mit deiner Prognose.');}f.className='widget-feedback '+((v===0||v===100||v===50)?'good':'');f.textContent=txt;}
+var scatterData=[
+{id:1,x:.72,y:.03,desc:'nahe oberhalb von 0'}, {id:2,x:2.05,y:.40,desc:'mittlere positive Trennschärfe'}, {id:3,x:2.40,y:.38,desc:'mittlere positive Trennschärfe'}, {id:4,x:3.12,y:.08,desc:'nahe oberhalb von 0'}, {id:5,x:1.86,y:.63,desc:'oberer Bereich'}, {id:6,x:1.72,y:.45,desc:'mittlere positive Trennschärfe'}, {id:7,x:1.60,y:.73,desc:'sehr hoher Bereich'}, {id:8,x:2.55,y:.36,desc:'mittlere positive Trennschärfe'}, {id:9,x:1.25,y:.23,desc:'niedriger positiver Bereich'}, {id:10,x:2.72,y:-.12,desc:'einziger sichtbarer negativer Wert'}, {id:11,x:3.38,y:.53,desc:'oberer Bereich'}, {id:12,x:.88,y:.08,desc:'nahe oberhalb von 0'}, {id:13,x:2.92,y:.58,desc:'oberer Bereich'}, {id:14,x:.86,y:.60,desc:'oberer Bereich'}, {id:15,x:1.18,y:.42,desc:'mittlere positive Trennschärfe'}, {id:16,x:.32,y:.40,desc:'mittlere positive Trennschärfe bei niedriger Schwierigkeit'}, {id:17,x:1.34,y:.55,desc:'oberer bis mittlerer Bereich'}, {id:18,x:2.45,y:.60,desc:'oberer Bereich'}, {id:19,x:.55,y:.35,desc:'mittlere positive Trennschärfe'}, {id:20,x:1.78,y:.82,desc:'höchster sichtbarer Punkt'}
+];
+function sx(x){return 55+(x/4)*430;}function sy(y){return 155-y*135;}
+function initScatter(){var g=document.getElementById('scatterPoints'),sel=document.getElementById('scatterSelect');if(!g||!sel)return;g.innerHTML=scatterData.map(function(d){return '<g data-item="'+d.id+'"><circle class="scatter-point" cx="'+sx(d.x)+'" cy="'+sy(d.y)+'" r="6"></circle><text class="scatter-label" x="'+(sx(d.x)+7)+'" y="'+(sy(d.y)-7)+'">'+d.id+'</text></g>';}).join('');sel.innerHTML='<option value="">Bitte wählen</option>'+scatterData.map(function(d){return '<option value="'+d.id+'">Item '+d.id+'</option>';}).join('');}
+function selectScatterItem(id){document.querySelectorAll('#scatterPoints .scatter-point').forEach(function(c){c.classList.remove('active');});var f=document.getElementById('scatterInfo');if(!id){f.textContent='Wähle ein Item aus.';return;}var d=scatterData.find(function(x){return String(x.id)===String(id);}),g=document.querySelector('#scatterPoints [data-item="'+id+'"] .scatter-point');if(g)g.classList.add('active');f.textContent='Item '+d.id+': '+d.desc+'. Die Position ist qualitativ aus Folie 11 rekonstruiert.';}
+function checkPartWhole(btn,v){var f=document.getElementById('partWholeFb'),ok=v==='item';f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Richtig: xᵢ − xᵢⱼ entfernt den Score des betrachteten Items aus dem Testwert.':'Nicht richtig. Entfernt wird der konkrete Itemscore xᵢⱼ, nicht Mittelwert oder Varianz des Items.';}
+function highlightRColumn(key){document.querySelectorAll('.r-table [data-rcol]').forEach(function(e){e.classList.toggle('highlight',e.dataset.rcol===key);});var f=document.getElementById('rColumnFeedback');var t={rdrop:'r.drop ist die korrigierte Itemtrennschärfe. Der höchste Wert ist 0,64 bei item_3.',mean:'mean ist der Itemmittelwert und entspricht hier der zentralen Tendenz des jeweiligen Items.',sd:'sd ist die Standardabweichung und beschreibt die Streuung der Itemantworten.'};f.textContent=t[key];f.className='widget-feedback good';}
+function checkRDropItem(){var v=document.getElementById('rDropSelect').value,f=document.getElementById('rDropFb'),ok=v==='item_3';f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Richtig: item_3 hat r.drop = 0,64.':'Nicht richtig. Vergleiche die vier Werte 0,64, 0,55, 0,56 und 0,56.';}
+var lowR=[1,4,9,10,12], extremeP=[16];
+function renderSelectionPlot(){var g=document.getElementById('selectionPoints');if(!g)return;g.innerHTML=scatterData.map(function(d){var cx=55+(d.x/4)*430,cy=150-d.y*130;return '<circle cx="'+cx+'" cy="'+cy+'" r="5" class="scatter-point"></circle><text x="'+(cx+6)+'" y="'+(cy-6)+'" class="scatter-label">'+d.id+'</text>';}).join('');}
+function renderSelectionDecision(){var useR=document.getElementById('critR').checked,useP=document.getElementById('critP').checked,useM=document.getElementById('critMissing').checked,body=document.getElementById('selectionDecisionBody');if(!body)return;var kept=0;body.innerHTML='';for(var i=1;i<=20;i++){var rFail=lowR.indexOf(i)>=0,pFail=extremeP.indexOf(i)>=0,drop=(useR&&rFail)||(useP&&pFail),review=useM&&!drop;var decision=drop?'<span class="decision-drop">eliminieren</span>':(review?'<span class="decision-review">Missing prüfen</span>':'<span class="decision-keep">behalten</span>');if(!drop)kept++;body.innerHTML+='<tr><th scope="row">'+i+'</th><td>'+(rFail?'unter Schwelle':'nicht genannt')+'</td><td>'+(pFail?'zu extrem':'nicht genannt')+'</td><td>'+decision+'</td></tr>';}var f=document.getElementById('selectionDecisionFb');f.textContent='Nach den aktivierten statistischen Kriterien verbleiben '+kept+' von 20 Items. Die Quelle fordert zusätzlich eine inhaltliche und praktische Abwägung.';f.className='widget-feedback';}
+function checkIcebreaker(btn,v){var f=document.getElementById('icebreakerFb'),ok=v==='weigh';f.className='widget-feedback '+(ok?'good':'bad');f.textContent=ok?'✓ Richtig: Ein Eisbrecher kann eine begründete Ausnahme darstellen; Cutoffs sind keine automatische Entscheidungsmaschine.':'Nicht quellentreu. Die Folie verlangt eine Abwägung konkurrierender Kriterien.';}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  resetProcess(); initScatter(); renderSelectionPlot(); renderSelectionDecision();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

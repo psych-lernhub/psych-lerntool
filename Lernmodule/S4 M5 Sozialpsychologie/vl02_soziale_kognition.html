@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL02 Soziale Kognition</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl02
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Schema-Aktivierungs-Simulator (VL02) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL02 Soziale Kognition</h1>
+<p class="page-sub">Sozialpsychologie · Prof. Dr. Susanne Veit · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Wie können Heuristiken durch Social-Media-Konsum negative Folgen haben? · 2. Wodurch werden Gedächtnisinhalte aktiviert? · 3. Welcher paradoxe Effekt tritt bei dem Versuch auf, Stereotype zu unterdrücken?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Soziale Kognition & Modell</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Mentale Repräsentationen</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Zugänglichkeit & Passung</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Folgen von Schemata</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Tief vs. heuristisch</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Urteilsheuristiken</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Stereotyp-Unterdrückung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Kontinuummodell</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Soziale Kognition & Modell ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Soziale Kognition & das Modell</div>
+    <div class="sec-lz">Definition · drei Einflussfaktoren (Gedächtnis · Bedingungen · Motive) · Chirurgen-Rätsel</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Ein Vater und sein Sohn haben einen Unfall. Der Sohn wird in den OP gebracht, doch die Chirurgin sagt: ‚Ich kann nicht operieren — das ist mein Sohn.'“ Wie geht das?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die Chirurgin ist die <strong>Mutter</strong>. Wer ins Stocken gerät, dem hat ein unbewusstes Stereotyp (Chirurg = männlich) die soziale Kognition geleitet — genau solche Prozesse untersucht dieses Teilgebiet.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was ist soziale Kognition?</div>
+    Das Teilgebiet untersucht die <strong>kognitiven Prozesse</strong> (Informationsverarbeitung), die sozialpsychologischen Phänomenen zugrunde liegen — wie wir die soziale Welt wahrnehmen, deuten und erinnern.
+  </div>
+  <div class="card">
+    <div class="card-title">Das Modell — drei Einflussfaktoren</div>
+    <strong>(1) Gedächtnisinhalte</strong> (Schemata, Stereotype) · <strong>(2) Verarbeitungsbedingungen</strong> (tief vs. heuristisch, z. B. bei Zeitdruck) · <strong>(3) Motive &amp; Ziele</strong>. Alle drei wirken zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">Motive: ungerichtet vs. gerichtet</div>
+    <strong>Ungerichtete</strong> Motive zielen auf <em>abstrakte Qualitäten</em> — dass das Ergebnis <strong>richtig</strong> ist (Selbsteinschätzungsmotiv) oder der Prozess nicht zu anspruchsvoll — und beeinflussen nur die <em>Intensität/Art</em> der Verarbeitung. <strong>Gerichtete</strong> Motive begünstigen ein <strong>Wunsch-Ergebnis</strong> (z. B. ein positives Selbstbild, Selbstaufwertungsmotiv) — auch auf Kosten der Genauigkeit: selektive Informationssuche, -deutung und Erinnerung. Achtung: Das Selbsteinschätzungsmotiv ist <em>ungerichtet</em> (es will Richtigkeit, kein bestimmtes Bild).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Die drei Faktoren aufdecken</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch das Modell</div>
+    <div class="step-item"><strong>Gedächtnisinhalte:</strong> Was ist gespeichert? (Schemata, Stereotype, Ereignisschemata)</div>
+    <div class="step-item"><strong>Verarbeitungsbedingungen:</strong> Wie viel Zeit/Ressourcen? → tief oder heuristisch.</div>
+    <div class="step-item"><strong>Motive &amp; Ziele:</strong> Was will ich? → Intensität und Richtung der Verarbeitung.</div>
+    <div class="step-item"><strong>Ergebnis:</strong> Erst das Zusammenspiel aller drei bestimmt Wahrnehmung und Urteil.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'mod')">Nächster Faktor ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Mentale Repräsentationen ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Mentale Repräsentationen</div>
+    <div class="sec-lz">Kategorie · Schema · Ereignisschema · Stereotyp (Kern der Wahrheit → Übergeneralisierung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was haben „ein Restaurantbesuch“, „der typische Professor“ und „Vögel“ kognitiv gemeinsam?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Alle drei sind <strong>mentale Repräsentationen</strong> — gespeicherte Wissensstrukturen (ein Ereignisschema, ein Stereotyp, eine Kategorie), die das Verarbeiten neuer Information leiten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kategorien & Schemata</div>
+    <strong>Kategorien</strong> fassen Ähnliches zu Gruppen zusammen. <strong>Schemata</strong> sind organisierte Wissensstrukturen über Objekte, Personen oder Situationen — sie leiten, was wir erwarten.
+  </div>
+  <div class="card">
+    <div class="card-title">Ereignisschemata & Stereotype</div>
+    <strong>Ereignisschemata</strong> speichern typische Abläufe (Restaurant: bestellen → essen → zahlen). <strong>Stereotype</strong> sind Schemata über <em>soziale Gruppen</em>.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Schema vs. Stereotyp + „Kern der Wahrheit“</div>
+    Ein Stereotyp ist ein <strong>Spezialfall</strong> des Schemas (über eine Gruppe). Es kann einen statistischen Kern haben, führt aber durch <strong>Übergeneralisierung</strong> auf das Individuum zu Fehlurteilen. <strong>Akkuratheits-Befund:</strong> Nationale Stereotype decken sich kaum mit tatsächlich gemessenen Persönlichkeitsmerkmalen (wenig akkurat); Gender- und Altersstereotype sind im Gruppenmittel relativ akkurat — was die Anwendung aufs Individuum trotzdem nicht rechtfertigt. Und: <strong>Wissen um ≠ Zustimmung zu</strong> — Stereotype sind sozial geteilt, man kennt ihre Inhalte aus der Sozialisation, und sie können die Kognition <em>automatisch</em> beeinflussen, auch wenn man sie ablehnt.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Vom Allgemeinen zum Speziellen</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch die Repräsentationstypen</div>
+    <div class="step-item"><strong>Kategorie:</strong> „Vögel“ — ähnliche Objekte zusammengefasst.</div>
+    <div class="step-item"><strong>Schema:</strong> organisiertes Wissen über ein Objekt/eine Person/Situation.</div>
+    <div class="step-item"><strong>Ereignisschema:</strong> ein Schema über einen typischen <em>Ablauf</em> (Restaurantbesuch).</div>
+    <div class="step-item"><strong>Stereotyp:</strong> ein Schema über eine <em>soziale Gruppe</em> — mit Übergeneralisierungs-Risiko.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'rep')">Nächster Typ ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Zugänglichkeit & Passung ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Aktivierung: Zugänglichkeit & Passung</div>
+    <div class="sec-lz">Lernfrage 2: assoziatives Netzwerk · chronisch vs. temporär (Priming) · Fit</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Menschen sehen dieselbe mehrdeutige Szene — und deuten sie völlig verschieden. Woran liegt das? <em>(Lernfrage 2: Wodurch werden Gedächtnisinhalte aktiviert?)</em></p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Bei ihnen ist jeweils ein anderes <strong>Schema</strong> aktiv. Welches Schema „gewinnt“, hängt von zwei Dingen ab: <strong>Zugänglichkeit</strong> (wie leicht abrufbar) und <strong>Passung</strong> (wie gut es zur Situation passt).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Assoziatives Netzwerk & Spreading Activation</div>
+    Gedächtnisinhalte sind <strong>Knoten</strong> in einem Netzwerk. Wird ein Knoten aktiviert, breitet sich die Aktivierung auf assoziierte Knoten aus (<strong>Spreading Activation</strong>) — das erklärt Priming-Effekte.
+  </div>
+  <div class="card">
+    <div class="card-title">Zugänglichkeit: drei Formen</div>
+    <strong>Chronisch:</strong> dauerhaft erhöht durch häufige/wichtige Nutzung. <strong>Temporär:</strong> kurzfristig durch <strong>Priming</strong> (vorherige Aktivierung) — kann Urteile beeinflussen, ohne dass man es merkt. <strong>Zielabhängig:</strong> zeitweilig erhöht durch aktuelle Ziele (z. B. beim Lernen für eine Prüfung sind prüfungsrelevante Inhalte leichter zugänglich).
+  </div>
+  <div class="card">
+    <div class="card-title">Passung (Fit) — und das Zusammenspiel</div>
+    Passung = wie gut ein Schema zur aktuellen Information passt. Ein <strong>zugängliches</strong> Schema wird auch bei geringerer Passung eher genutzt — beide Faktoren wirken zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Arten von Passung: komparativ vs. normativ</div>
+    <strong>Komparative Passung</strong> = die <em>Struktur der Situation</em>: Eine Teilgruppe hebt sich sichtbar vom Rest ab (im Bus grölen einige mit Fußballschals, die übrigen sitzen still → Kategorie „Fußballfans" drängt sich auf). <strong>Normative Passung</strong> = Übereinstimmung mit <em>inhaltlichen Erwartungen</em> an die Kategorie (wirkt eine „verrückte" Person in Alltagskleidung oder im teuren Anzug erwartungskonformer?). Merksatz: komparativ = Vergleich <em>in</em> der Situation · normativ = Vergleich mit der <em>Erwartung</em>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Wird das Schema aktiviert?</div>
+  <div class="card">
+    <div class="card-title">Stell Zugänglichkeit und Passung ein</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Zugänglichkeit (wie leicht abrufbar)</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sa-acc-low" onclick="saSet('acc','low')">niedrig</button>
+        <button class="sim-tbtn" id="sa-acc-high" onclick="saSet('acc','high')">hoch</button>
+      </div>
+      <div class="sim-lbl">Passung (passt es zur Situation?)</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sa-fit-low" onclick="saSet('fit','low')">niedrig</button>
+        <button class="sim-tbtn" id="sa-fit-high" onclick="saSet('fit','high')">hoch</button>
+      </div>
+      <div class="sim-verdict" id="sa-out"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Chronisch oder temporär (Priming)?</div>
+    <div class="corr-item" id="ck0">Du denkst bei „Arzt“ sofort an einen Mann, weil du das seit Kindheit so kennst.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ck0',this,'chronisch')">chronisch</button>
+        <button class="corr-btn" onclick="checkCorr('ck0',this,'temporär')">temporär</button>
+      </div><div class="corr-fb" id="ck0-fb"></div>
+    </div>
+    <div class="corr-item" id="ck1">Direkt nach einer Doku über Betrüger misstraust du einem Verkäufer.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ck1',this,'chronisch')">chronisch</button>
+        <button class="corr-btn" onclick="checkCorr('ck1',this,'temporär')">temporär</button>
+      </div><div class="corr-fb" id="ck1-fb"></div>
+    </div>
+    <div class="corr-item" id="ck2">Ein Wort, das du gerade gelesen hast, fällt dir gleich danach leichter ein.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ck2',this,'chronisch')">chronisch</button>
+        <button class="corr-btn" onclick="checkCorr('ck2',this,'temporär')">temporär</button>
+      </div><div class="corr-fb" id="ck2-fb"></div>
+    </div>
+    <div class="corr-item" id="ck3">Deine wichtigste Lebensrolle ist dir dauerhaft präsent.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ck3',this,'chronisch')">chronisch</button>
+        <button class="corr-btn" onclick="checkCorr('ck3',this,'temporär')">temporär</button>
+      </div><div class="corr-fb" id="ck3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Folgen von Schemata ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Folgen von Schemata</div>
+    <div class="sec-lz">Bestätigungsverzerrung (Aufnahme/Deutung/Erinnerung) · selbsterfüllende Prophezeiung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wer einmal als „faul“ gilt, dem wird selbst eine wohlverdiente Pause als Faulheit ausgelegt. Welcher Mechanismus steckt dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Die <strong>Bestätigungsverzerrung</strong>: Das Schema lenkt Aufnahme, Deutung und Erinnerung. Verändert die Erwartung sogar das <em>reale</em> Verhalten der Zielperson, wird daraus eine <strong>selbsterfüllende Prophezeiung</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bestätigungsverzerrung — drei Phasen</div>
+    <strong>Aufnahme:</strong> schemakonsistente Info wird bevorzugt wahrgenommen. <strong>Deutung:</strong> Mehrdeutiges wird schemakonform interpretiert. <strong>Erinnerung:</strong> Konsistentes wird besser erinnert.
+  </div>
+  <div class="card">
+    <div class="card-title">Selbsterfüllende Prophezeiung</div>
+    Die Erwartung beeinflusst das <strong>eigene Verhalten</strong>, das wiederum das Verhalten der Zielperson so verändert, dass die ursprüngliche Erwartung am Ende <strong>real bestätigt</strong> wird.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Bestätigungsverzerrung vs. selbsterfüllende Prophezeiung</div>
+    Bestätigungsverzerrung = <strong>rein im Kopf</strong> des Beobachters (Zielperson unverändert). Selbsterfüllende Prophezeiung = die Zielperson <strong>verändert sich real</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Wie ein Schema die Verarbeitung formt</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch die Phasen</div>
+    <div class="step-item"><strong>1 · Aufnahme:</strong> Du achtest vor allem auf Belege, die deine Erwartung stützen.</div>
+    <div class="step-item"><strong>2 · Deutung:</strong> Mehrdeutiges (eine Pause) deutest du schemakonform (Faulheit).</div>
+    <div class="step-item"><strong>3 · Erinnerung:</strong> Später erinnerst du vor allem die „passenden“ Momente.</div>
+    <div class="step-item"><strong>Eskalation:</strong> Behandelst du die Person entsprechend, verändert sich womöglich ihr Verhalten real → selbsterfüllende Prophezeiung.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'best')">Nächste Phase ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Tief vs. heuristisch ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Tiefe vs. heuristische Verarbeitung</div>
+    <div class="sec-lz">kognitiver Geizkragen · Automatizität · Denken &amp; Körper (Embodied Cognition)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum prüfen wir nicht jede Information sorgfältig, obwohl wir es im Prinzip könnten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Weil wir „kognitive Geizkragen“ sind — geistige Ressourcen sind knapp. Meist verarbeiten wir schnell und <strong>heuristisch</strong>; nur bei genug Motivation und Kapazität <strong>tief</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Tief vs. heuristisch + kognitiver Geizkragen</div>
+    <strong>Tief:</strong> sorgfältig, genau, aber aufwändig. <strong>Heuristisch:</strong> schnelle Faustregeln, sparsam, aber fehleranfällig. Der <strong>kognitive Geizkragen</strong> bevorzugt das Sparen von Ressourcen.
+  </div>
+  <div class="card">
+    <div class="card-title">Automatisch vs. kontrolliert</div>
+    <strong>Automatische</strong> Prozesse: schnell, unbewusst, schwer kontrollierbar. <strong>Kontrollierte</strong>: langsam, bewusst, flexibel. Automatizität erklärt, warum Stereotype auch dann wirken, wenn man sie ablehnt.
+  </div>
+  <div class="card">
+    <div class="card-title">Denken &amp; Körper (Embodied Cognition)</div>
+    Kognition steckt nicht nur im Kopf: <strong>Körperliche</strong> Empfindungen (Wärme, Gewicht) beeinflussen soziale Urteile — eine warme Tasse lässt eine Person „wärmer“ wirken.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher Verarbeitungsmodus?</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch die Modi</div>
+    <div class="step-item"><strong>Viel Zeit, hohe Motivation:</strong> tiefe, systematische Verarbeitung.</div>
+    <div class="step-item"><strong>Zeitdruck, Ablenkung, geringe Motivation:</strong> schnelle heuristische Verarbeitung.</div>
+    <div class="step-item"><strong>Automatisch:</strong> läuft ohne Absicht ab (z. B. Stereotyp-Aktivierung) — schwer zu stoppen.</div>
+    <div class="step-item"><strong>Embodied:</strong> selbst Körperzustände (warm/schwer) färben das soziale Urteil.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'verarb')">Weiter ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Urteilsheuristiken ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Urteilsheuristiken</div>
+    <div class="sec-lz">Lernfrage 1: Repräsentativität · Verfügbarkeit · Anker</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Nach einer Doku über Einbrüche fühlst du dich plötzlich unsicherer — obwohl die Statistik gleich blieb. Welche „Abkürzung im Kopf“ wirkt? <em>(Lernfrage 1)</em></p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Die <strong>Verfügbarkeitsheuristik</strong>: Leicht erinnerbare Beispiele lassen ein Ereignis häufiger wirken. Genau hier setzen Social-Media-Folgen an — drastische Inhalte sind leicht abrufbar und verzerren die Einschätzung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Repräsentativitätsheuristik</div>
+    Wahrscheinlichkeit wird nach <strong>Ähnlichkeit zum Prototyp</strong> beurteilt — und die <strong>Basisrate</strong> ignoriert (eine ruhige Person eher „Bibliothekarin“ als „Verkäuferin“, obwohl es viel mehr Verkäuferinnen gibt).
+  </div>
+  <div class="card">
+    <div class="card-title">Verfügbarkeitsheuristik</div>
+    Häufigkeit wird danach geschätzt, <strong>wie leicht Beispiele einfallen</strong>. Folien-Beispiel (Schwartz et al., 1991): Wer sich an 12 statt nur 6 selbstsichere Situationen erinnern soll, hält sich für <em>weniger</em> selbstsicher — das Erinnern selbst fällt schwerer und wird als Information genutzt.
+  </div>
+  <div class="lbuch-banner">
+    <strong>📚 Lehrbuch-Ergänzung (nicht auf der Folie):</strong> Schlagzeilen und Social-Media-Inhalte sind ebenfalls leicht abrufbar und können so seltene, aber drastische Ereignisse überschätzen lassen — ein gängiges Alltagsbeispiel der Verfügbarkeitsheuristik, ergänzend zum Folienbeispiel.
+  </div>
+  <div class="card">
+    <div class="card-title">Ankerheuristik</div>
+    Ein <strong>anfänglicher Wert</strong> (Anker) beeinflusst das Urteil, das davon ausgehend nur <strong>unzureichend angepasst</strong> wird — z. B. eine erste hohe Preisangabe verschiebt, was als „fair“ gilt.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Heuristik wirkt?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Szenario der passenden Heuristik zu</div>
+    <div class="corr-item" id="hk0">Nach vielen Hai-Filmen hältst du Hai-Angriffe für häufig.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('hk0',this,'Repräsentativität')">Repräsentativität</button>
+        <button class="corr-btn" onclick="checkCorr('hk0',this,'Verfügbarkeit')">Verfügbarkeit</button>
+        <button class="corr-btn" onclick="checkCorr('hk0',this,'Anker')">Anker</button>
+      </div><div class="corr-fb" id="hk0-fb"></div>
+    </div>
+    <div class="corr-item" id="hk1">Du hältst eine schüchterne Person eher für eine Bibliothekarin als für eine Verkäuferin.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('hk1',this,'Repräsentativität')">Repräsentativität</button>
+        <button class="corr-btn" onclick="checkCorr('hk1',this,'Verfügbarkeit')">Verfügbarkeit</button>
+        <button class="corr-btn" onclick="checkCorr('hk1',this,'Anker')">Anker</button>
+      </div><div class="corr-fb" id="hk1-fb"></div>
+    </div>
+    <div class="corr-item" id="hk2">Eine erste hohe Preisangabe beeinflusst, was du später für fair hältst.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('hk2',this,'Repräsentativität')">Repräsentativität</button>
+        <button class="corr-btn" onclick="checkCorr('hk2',this,'Verfügbarkeit')">Verfügbarkeit</button>
+        <button class="corr-btn" onclick="checkCorr('hk2',this,'Anker')">Anker</button>
+      </div><div class="corr-fb" id="hk2-fb"></div>
+    </div>
+    <div class="corr-item" id="hk3">Die Lottozahlen 1-2-3-4-5-6 wirken unwahrscheinlicher als 4-8-15-16-23-42.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('hk3',this,'Repräsentativität')">Repräsentativität</button>
+        <button class="corr-btn" onclick="checkCorr('hk3',this,'Verfügbarkeit')">Verfügbarkeit</button>
+        <button class="corr-btn" onclick="checkCorr('hk3',this,'Anker')">Anker</button>
+      </div><div class="corr-fb" id="hk3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Stereotyp-Unterdrückung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Stereotyp-Unterdrückung & paradoxe Effekte</div>
+    <div class="sec-lz">Lernfrage 3: Vermeidung vs. Unterdrückung · ironische Prozesse · Bumerang</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Versuch mal, 30 Sekunden lang <em>nicht</em> an einen weißen Bären zu denken.</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Schwer — der Überwachungsprozess, der prüft, ob du daran denkst, hält den Gedanken aktiv (<strong>ironischer Prozess</strong>). Bei Stereotypen führt das nach der Unterdrückung zum <strong>Bumerang-Effekt</strong> <em>(Lernfrage 3)</em>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Strategien gegen Stereotypisierung</div>
+    <strong>(1) Aktivierung vermeiden</strong> (z. B. durch entgegenstehende Verarbeitungs-/Verhaltensziele, egalitäre Überzeugungen oder ausreichende Aufmerksamkeitskapazität) und <strong>(2) Wirkung unterdrücken</strong>, nachdem das Stereotyp schon aktiviert ist. Beide haben Grenzen.
+  </div>
+  <div class="card">
+    <div class="card-title">Ironische Prozesse (Wegner)</div>
+    Der Versuch, einen Gedanken zu unterdrücken, braucht einen <strong>Überwachungsprozess</strong>, der ständig prüft, ob der Gedanke auftaucht — und ihn dadurch <strong>aktiv hält</strong>.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Bumerang-Effekt vs. ironische Prozesse</div>
+    <strong>Ironische Prozesse</strong> = der <em>Mechanismus</em>. <strong>Bumerang-Effekt</strong> = das <em>Ergebnis</em>: Nach der Unterdrückung wird das Stereotyp <strong>stärker</strong> angewendet als zuvor.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Der Bumerang Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Warum Unterdrückung nach hinten losgehen kann</div>
+    <div class="step-item"><strong>1:</strong> Du nimmst dir vor, ein Stereotyp <em>nicht</em> anzuwenden.</div>
+    <div class="step-item"><strong>2:</strong> Ein Überwachungsprozess sucht ständig nach genau diesem Gedanken.</div>
+    <div class="step-item"><strong>3:</strong> Dadurch bleibt das Stereotyp die ganze Zeit aktiv und hoch zugänglich.</div>
+    <div class="step-item"><strong>4 · Rebound:</strong> Lässt die Kontrolle nach, wird es <em>stärker</em> angewendet als ohne Unterdrückung.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'bum')">Nächster Schritt ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Kontinuummodell ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Kontinuummodell der Eindrucksbildung</div>
+    <div class="sec-lz">kategorienbasiert → individualisiert (Motivation + Kapazität)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bleibt es immer beim ersten, schnellen „Schubladen-Urteil“ über einen Menschen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Nein. Das <strong>Kontinuummodell</strong> beschreibt einen Bereich von <strong>kategorienbasiert</strong> (stereotyp) bis <strong>individualisiert</strong> — je nachdem, wie viel Motivation und kognitive Kapazität vorhanden sind.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ausgangspunkt: Kategorisierung</div>
+    Zuerst wird eine Person automatisch anhand auffälliger Merkmale (Geschlecht, Alter) <strong>kategorisiert</strong> — schnell und stereotyp.
+  </div>
+  <div class="card">
+    <div class="card-title">Übergang zur Individualisierung</div>
+    Bei <strong>ausreichender Motivation und Kapazität</strong> geht die Beurteilung von der Kategorie zur <strong>individualisierten</strong> Verarbeitung über — die Person wird als Einzelfall gesehen.
+  </div>
+  <div class="card">
+    <div class="card-title">Praktische Implikation</div>
+    Stereotypisierung ist <strong>kein unvermeidliches Schicksal</strong>: Mit Motivation und kognitiven Ressourcen lässt sie sich reduzieren.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Vom Stereotyp zum Individuum</div>
+  <div class="card">
+    <div class="card-title">Klick dich durch das Kontinuum</div>
+    <div class="step-item"><strong>Stufe 1:</strong> automatische Kategorisierung anhand auffälliger Merkmale.</div>
+    <div class="step-item"><strong>Stufe 2:</strong> Passt die Person zum Schema? Bestätigung oder Widerlegung.</div>
+    <div class="step-item"><strong>Stufe 3:</strong> Bei Motivation + Kapazität → individualisierte Beurteilung.</div>
+    <div class="step-item"><strong>Fazit:</strong> Ressourcen und Motivation entscheiden, wie weit man auf dem Kontinuum kommt.</div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'kont')">Nächste Stufe ▸</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 8 häufigsten Verwechslungen aus VL02</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Chronische Zugänglichkeit</h4>
+      <p>Dauerhaft erhöht durch häufige/wichtige Nutzung</p>
+      <p>Stabile Eigenschaft der Repräsentation</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Temporäre Zugänglichkeit (Priming)</h4>
+      <p>Kurzfristig durch vorherige Aktivierung</p>
+      <p>Verschwindet wieder</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Priming erhöht die chronische Zugänglichkeit eines Konzepts dauerhaft.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Repräsentativitätsheuristik</h4>
+      <p>Urteil nach Ähnlichkeit zum Prototyp</p>
+      <p>Ignoriert Basisraten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verfügbarkeitsheuristik</h4>
+      <p>Urteil nach Abrufleichtigkeit von Beispielen</p>
+      <p>Häufig Erinnertes wird überschätzt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Verfügbarkeitsheuristik basiert darauf, wie typisch ein Ereignis für eine Kategorie ist.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Schema</h4>
+      <p>Allgemeine Wissensstruktur über Objekte/Personen/Situationen</p>
+      <p>Oberbegriff</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Stereotyp</h4>
+      <p>Spezielles Schema über eine soziale Gruppe</p>
+      <p>Annahmen über Gruppenmitglieder</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Stereotypen und Schemata sind identische Konzepte und beliebig austauschbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Selbsterfüllende Prophezeiung</h4>
+      <p>Eigenes Verhalten verändert die Zielperson real</p>
+      <p>Erwartung wird dadurch wahr</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bestätigungsverzerrung</h4>
+      <p>Rein kognitiv: verzerrt Aufnahme/Deutung/Erinnerung</p>
+      <p>Zielperson bleibt unverändert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Selbsterfüllende Prophezeiung und Bestätigungsverzerrung sind dasselbe, nur anders benannt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ironische Prozesse (Wegner)</h4>
+      <p>Mechanismus: Überwachungsprozess hält Gedanken aktiv</p>
+      <p>Beim Versuch zu unterdrücken</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bumerang-Effekt</h4>
+      <p>Beobachtbares Ergebnis: Stereotyp danach verstärkt</p>
+      <p>Rebound nach Unterdrückung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Bumerang-Effekt und ironische Prozesse sind exakt dasselbe Phänomen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Heuristische Verarbeitung</h4>
+      <p>Nutzt Faustregeln/Heuristiken &amp; Stereotype (schnell, mühelos, innerer Autopilot)</p>
+      <p>Schnell, ressourcensparend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Automatische Verarbeitung</h4>
+      <p>Läuft unbewusst und unwillkürlich ab</p>
+      <p>Schwer kontrollierbar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Automatische Prozesse werden willentlich gestartet und lassen sich jederzeit bewusst wieder stoppen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Komparative Passung</h4>
+      <p>Struktur der Situation: eine Teilgruppe hebt sich vom Rest ab</p>
+      <p>Beispiel: einige im Bus grölen mit Fußballschal, andere verhalten sich normal</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Normative Passung</h4>
+      <p>Übereinstimmung mit inhaltlichen Erwartungen an die Kategorie</p>
+      <p>Beispiel: wirkt eine „verrückte“ Person in Alltagskleidung erwartungskonformer als im teuren Anzug?</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Normative Passung beschreibt, wie sich eine Gruppe strukturell vom Rest der Situation abhebt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Wissen um ein Stereotyp</h4>
+      <p>Man kennt den sozial geteilten Inhalt aus der Sozialisation</p>
+      <p>Kann die Kognition automatisch beeinflussen — auch ohne Zustimmung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zustimmung zu einem Stereotyp</h4>
+      <p>Man hält den Inhalt persönlich für zutreffend</p>
+      <p>Ist NICHT nötig, damit das Stereotyp wirkt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer ein Stereotyp kennt, stimmt ihm damit automatisch auch inhaltlich zu.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl02</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl02';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was beschreibt das Teilgebiet „soziale Kognition“ am besten?",
+      "opts": [
+        "Die kognitiven Prozesse, die sozialpsychologischen Phänomenen zugrunde liegen",
+        "Ausschließlich das beobachtbare Verhalten großer Menschenmengen ohne innere Vorgänge",
+        "Die Lehre von angeborenen, situationsunabhängigen Persönlichkeitseigenschaften",
+        "Die rein biologische Beschreibung einzelner Hirnregionen und neuronaler Bahnen"
+      ],
+      "c": 0,
+      "e": "Soziale Kognition untersucht die Informationsverarbeitung – also die kognitiven Prozesse – hinter sozialpsychologischen Phänomenen."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche drei Faktoren bestimmen laut Modell der sozialen Kognition gemeinsam die Informationsverarbeitung?",
+      "opts": [
+        "Allein das Gedächtnis, alles andere ist dabei vollkommen nachrangig",
+        "Gedächtnisinhalte, Verarbeitungsbedingungen sowie Motive und Ziele",
+        "Genetik, Hormonspiegel und angeborene Reflexe des Nervensystems",
+        "Ausschließlich die aktuelle Stimmung und das Wetter am Tag der Testung"
+      ],
+      "c": 1,
+      "e": "Das Modell nennt drei gleichwertige Einflussfaktoren: gespeicherte Gedächtnisinhalte, die aktuellen Verarbeitungsbedingungen und handlungsleitende Motive/Ziele."
+    },
+    {
+      "id": "s0q3",
+      "q": "Das „Chirurgen-Rätsel“ (der Chirurg sagt: „Ich kann nicht operieren, das ist mein Sohn“) illustriert vor allem ...",
+      "opts": [
+        "dass medizinisches Fachwissen hier grundsätzlich vollständig angeboren und stabil ist",
+        "dass solche Rätsel logisch betrachtet immer vollkommen unlösbar bleiben",
+        "wie unbewusste Stereotype, etwa zum Geschlecht, die Wahrnehmung leiten",
+        "dass logisches Denken im Alltag hier praktisch nie eine Rolle spielt"
+      ],
+      "c": 2,
+      "e": "Viele kommen nicht auf „die Mutter“, weil das Stereotyp „Chirurg = männlich“ die soziale Kognition unbewusst leitet."
+    },
+    {
+      "id": "s0q4",
+      "q": "Zwei Studierende lesen Feedback zur Hausarbeit. Anna will ein möglichst ZUTREFFENDES Bild ihrer Leistung; Ben sucht gezielt nach Sätzen, die sein positives Selbstbild stützen. Welche Motive wirken hier?",
+      "opts": [
+        "Anna: ungerichtetes Motiv, nämlich Richtigkeit — Ben: gerichtetes Motiv, ein Wunsch-Ergebnis",
+        "Anna: gerichtetes Motiv, ihre Einschätzung zielt auf ein Ergebnis — Ben: ungerichtetes Motiv",
+        "Beide verfolgen gerichtete Motive, weil jede Informationsverarbeitung ein Ziel hat",
+        "Beide verfolgen ungerichtete Motive, weil Feedback stets völlig neutral verarbeitet wird"
+      ],
+      "c": 0,
+      "e": "Ungerichtete Motive zielen auf abstrakte Qualitäten (z. B. Richtigkeit — Selbsteinschätzungsmotiv) und steuern nur, WIE intensiv verarbeitet wird; gerichtete Motive begünstigen ein Wunsch-Ergebnis (z. B. positives Selbstbild) und verzerren Suche, Deutung und Erinnerung dorthin."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Du weißt im Restaurant automatisch: erst bestellen, dann essen, dann zahlen. Welche Repräsentation nutzt du?",
+      "opts": [
+        "Ein Stereotyp über die typischen Gäste eines gehobenen Restaurants",
+        "Eine Urteilsheuristik zur schnellen Schätzung von Wahrscheinlichkeiten",
+        "Eine selbsterfüllende Prophezeiung über den Verlauf des Abends",
+        "Ein Ereignisschema für typische Abläufe in dieser Situation"
+      ],
+      "c": 3,
+      "e": "Ein Ereignisschema speichert typische Handlungsabläufe und erlaubt schnelle Orientierung in vertrauten Situationen."
+    },
+    {
+      "id": "s1q2",
+      "q": "Worin unterscheidet sich ein Stereotyp von einem allgemeinen Schema?",
+      "opts": [
+        "Ein Stereotyp ist ein Schema speziell über eine soziale Gruppe",
+        "Ein Stereotyp ist immer völlig falsch, ein Schema entspricht der Realität",
+        "Ein Schema ist stets angeboren, ein Stereotyp dagegen stets anerzogen",
+        "Beide sind exakt dasselbe Konzept und beliebig gegeneinander austauschbar"
+      ],
+      "c": 0,
+      "e": "Ein Stereotyp ist ein Spezialfall des Schemas – eine Wissensstruktur speziell über eine soziale Gruppe. Beide sind weder identisch noch gegensätzlich."
+    },
+    {
+      "id": "s1q3",
+      "q": "Was ist mit dem „Kern der Wahrheit“ von Stereotypen gemeint?",
+      "opts": [
+        "Stereotype sind in jedem Einzelfall vollständig und exakt zutreffend",
+        "Sie können statistisch etwas enthalten, übergeneralisieren aber auf Einzelne",
+        "Sie sind grundsätzlich vollständig frei erfunden und ohne jeden statistischen Bezug",
+        "Sie betreffen ausschließlich Objekte und niemals Menschen oder soziale Gruppen"
+      ],
+      "c": 1,
+      "e": "Ein Stereotyp kann einen statistischen Kern haben, führt aber durch Übergeneralisierung auf das Individuum zu Fehlurteilen."
+    },
+    {
+      "id": "s1q4",
+      "q": "Jana lehnt das Stereotyp „Frauen können nicht einparken“ entschieden ab — trotzdem schießt ihr beim Anblick einer rangierenden Fahrerin genau dieser Satz durch den Kopf. Was zeigt das?",
+      "opts": [
+        "Dass Jana dem Stereotyp insgeheim doch zustimmt, sonst wäre es nicht aktiviert worden",
+        "Dass Stereotype nur wirken, wenn man ihnen zustimmt — hier liegt also keine Aktivierung vor",
+        "Wissen um ≠ Zustimmung: sozial geteilte Inhalte können automatisch aktiviert werden",
+        "Dass es sich hier eindeutig um ein Ereignisschema handelt und nicht um ein Stereotyp"
+      ],
+      "c": 2,
+      "e": "Stereotype sind sozial geteilt: Man kennt ihre Inhalte aus der Sozialisation, ohne ihnen zuzustimmen — und sie können die soziale Kognition trotzdem automatisch beeinflussen. Deshalb schützt Ablehnung allein nicht vor Stereotypeffekten."
+    },
+    {
+      "id": "s1q5",
+      "q": "In der Debatte um den „Kern der Wahrheit“ wurde geprüft, wie akkurat Stereotype sind. Was zeigte der Abgleich mit tatsächlich gemessenen Persönlichkeitsmerkmalen?",
+      "opts": [
+        "Nationale Stereotype waren hochakkurat, Gender- und Altersstereotype dagegen unzutreffend",
+        "Alle geprüften Stereotyparten waren im statistischen Mittel gleichermaßen akkurat",
+        "Die Akkuratheit ließ sich methodisch dabei grundsätzlich gar nicht sauber untersuchen oder belegen",
+        "Nationale Stereotype waren wenig akkurat; Gender- und Altersstereotype relativ akkurat"
+      ],
+      "c": 3,
+      "e": "Kernbefund: Nationale Stereotype treffen kaum zu, Gender- und Altersstereotype sind im Gruppenmittel relativ akkurat. Wichtig bleibt: Selbst ein statistischer Kern rechtfertigt keine Anwendung aufs Individuum (Übergeneralisierung)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Du hast gerade einen Krimi gesehen; kurz darauf wirkt dein freundlicher Nachbar verdächtig. Was ist passiert?",
+      "opts": [
+        "Chronische Zugänglichkeit, dauerhaft im Gedächtnis verankert",
+        "Hohe Passung ganz ohne vorherige Form der Zugänglichkeit im Gedächtnis",
+        "Temporäre Zugänglichkeit durch Priming – der Reiz war gerade aktiv",
+        "Eine bewusste, sorgfältige und kontrollierte Analyse aller verfügbaren Fakten"
+      ],
+      "c": 2,
+      "e": "Der Krimi hat das „Verdacht“-Schema kurzfristig aktiviert (Priming = temporäre Zugänglichkeit). Chronisch wäre es durch dauerhafte Nutzung."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was beschreibt das assoziative Netzwerkmodell des Gedächtnisses?",
+      "opts": [
+        "Dass jedes Wissenselement isoliert und ohne jede Verbindung gespeichert wird",
+        "Dass ausschließlich bewusste, willentlich abgerufene Gedanken zählen",
+        "Dass alle Schemata vollständig angeboren und unveränderlich sind",
+        "Knoten sind assoziativ verbunden, Aktivierung breitet sich aus"
+      ],
+      "c": 3,
+      "e": "Im assoziativen Netzwerk sind Inhalte Knoten; die Aktivierung eines Knotens breitet sich automatisch auf verbundene Knoten aus (ausbreitende semantische Aktivierung) – das erklärt Priming."
+    },
+    {
+      "id": "s2q3",
+      "q": "Was unterscheidet Zugänglichkeit von Passung?",
+      "opts": [
+        "Zugänglichkeit = wie leicht ein Schema aktivierbar ist; Passung = wie gut es passt",
+        "Beide bezeichnen identische Vorgänge und sind beliebig gegeneinander austauschbar",
+        "Passung ist angeboren, Zugänglichkeit wird dagegen ausschließlich durch Erfahrung erlernt",
+        "Zugänglichkeit gilt laut Modell grundsätzlich nur für Objekte, niemals für Personen"
+      ],
+      "c": 0,
+      "e": "Zugänglichkeit ist die Abrufleichtigkeit eines Schemas (situationsunabhängig); Passung ist die Übereinstimmung mit der aktuellen Information. Beide wirken zusammen."
+    },
+    {
+      "id": "s2q4",
+      "q": "Im Bus grölt eine Gruppe mit Fußballschals, während die übrigen Fahrgäste still sitzen. Dass die Kategorie „Fußballfans“ hier angewendet wird, liegt vor allem an …",
+      "opts": [
+        "… normativer Passung: das Verhalten entspricht den inhaltlichen Erwartungen an diese Gruppe",
+        "… komparativer Passung: die Gruppe hebt sich strukturell vom Rest der Situation ab",
+        "… chronischer Zugänglichkeit: die Kategorie wird bei dieser Person ständig genutzt",
+        "… Priming: die Kategorie wurde kurz zuvor durch einen konkreten Hinweisreiz aktiviert"
+      ],
+      "c": 1,
+      "e": "Komparative Passung = Struktur der Situation (eine Teilgruppe unterscheidet sich sichtbar vom Rest); normative Passung = Übereinstimmung mit inhaltlichen Erwartungen (z. B. „verrückte“ Person in Alltagskleidung statt teurem Anzug). Zugänglichkeit wäre der zweite, davon getrennte Aktivierungspfad."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Eine Personalerin hält eine Bewerberin für inkompetent, deutet jede neutrale Antwort als Schwäche und erinnert sich später vor allem an Schwächen. Was liegt vor?",
+      "opts": [
+        "Eine selbsterfüllende Prophezeiung mit real verändertem Verhalten der Bewerberin",
+        "Eine Bestätigungsverzerrung – die Erwartung verzerrt Deutung und Erinnerung",
+        "Eine reine Verfügbarkeitsheuristik ohne jeden Bezug zur Erwartungshaltung",
+        "Embodied Cognition durch rein körperliche Empfindungen während des Gesprächs"
+      ],
+      "c": 1,
+      "e": "Die Erwartung verzerrt Deutung und Erinnerung – ein rein kognitiver Prozess (Bestätigungsverzerrung). Keine SEP, weil sich das Verhalten der Bewerberin nicht real geändert hat."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was unterscheidet die selbsterfüllende Prophezeiung von der Bestätigungsverzerrung?",
+      "opts": [
+        "Sie sind identisch und letztlich nur zwei verschiedene Namen für denselben psychologischen Vorgang",
+        "Die Bestätigungsverzerrung verändert die beobachtete Zielperson tatsächlich real",
+        "Die selbsterfüllende Prophezeiung verändert dabei tatsächlich die Zielperson",
+        "Die selbsterfüllende Prophezeiung läuft ausschließlich im Kopf des Beobachters ab"
+      ],
+      "c": 2,
+      "e": "Bei der Bestätigungsverzerrung bleibt alles im Kopf des Beobachters; bei der selbsterfüllenden Prophezeiung verändert das veränderte Verhalten des Beobachters die Zielperson real."
+    },
+    {
+      "id": "s3q3",
+      "q": "Wie wirken sich Schemata typischerweise auf die Erinnerung aus?",
+      "opts": [
+        "Schemakonsistente Informationen werden grundsätzlich schlechter erinnert",
+        "Schemainhalte werden grundsätzlich nie bewusst wahrgenommen, verarbeitet oder gespeichert",
+        "Jede Information wird immer vollständig neutral und unverzerrt behalten",
+        "Schemakonsistente Inhalte werden bevorzugt wahrgenommen sowie erinnert"
+      ],
+      "c": 3,
+      "e": "Schemata lenken Aufnahme (konsistente Info bevorzugt), Deutung (Mehrdeutiges schemakonform) und Erinnerung (Konsistentes besser erinnert) – übergreifend: Bestätigungsverzerrung."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was beschreibt der Begriff „kognitiver Geizkragen“ (cognitive miser)?",
+      "opts": [
+        "Die Tendenz, kognitive Ressourcen zu sparen und heuristisch zu verarbeiten",
+        "Die ausgeprägte Neigung, in jeder Alltagssituation alle Informationen tief zu prüfen",
+        "Eine spezielle Form der organischen, neurologisch bedingten Gedächtnisstörung",
+        "Ein vollständig angeborener motorischer Reflex ohne jede kognitive Beteiligung"
+      ],
+      "c": 0,
+      "e": "Der „cognitive miser“ beschreibt die Tendenz, kognitive Ressourcen zu schonen und bevorzugt schnelle, heuristische Verarbeitung zu nutzen."
+    },
+    {
+      "id": "s4q2",
+      "q": "Unter welcher Bedingung wird eher heuristisch statt tief verarbeitet?",
+      "opts": [
+        "Bei viel Zeit, hoher Motivation und voller, ungeteilter Aufmerksamkeit",
+        "Bei Zeitdruck, starker Ablenkung oder insgesamt geringer Motivation",
+        "Niemals – Menschen verarbeiten grundsätzlich immer tief und vollständig",
+        "Ausschließlich während des nächtlichen Schlafs, niemals im Wachzustand"
+      ],
+      "c": 1,
+      "e": "Verarbeitungsbedingungen entscheiden: Zeitdruck, Ablenkung oder geringe Motivation begünstigen die schnelle heuristische Verarbeitung."
+    },
+    {
+      "id": "s4q3",
+      "q": "Eine warme Tasse in der Hand lässt eine fremde Person freundlicher wirken. Welches Phänomen?",
+      "opts": [
+        "Reine Repräsentativitätsheuristik ohne jeden körperlichen oder situativen Auslöser",
+        "Eine klassische Bestätigungsverzerrung durch vorherige Erwartungen",
+        "Embodied Cognition – körperliche Empfindungen beeinflussen soziale Urteile",
+        "Eine rein bewusste Kontrolle, die jede körperliche Empfindung ausblendet"
+      ],
+      "c": 2,
+      "e": "Embodied Cognition (Williams & Bargh, 2008): Körperliche Zustände wie Wärme beeinflussen soziale Urteile – physische Wärme färbt auf die Beurteilung Fremder als freundlicher ab."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Nach vielen Schlagzeilen über Flugzeugunglücke hältst du Fliegen für gefährlicher als Autofahren. Welche Heuristik wirkt?",
+      "opts": [
+        "Repräsentativität, weil das Urteil nach Ähnlichkeit zu einem Prototyp gefällt wird",
+        "Die Ankerheuristik durch einen zuvor im Gespräch genannten Zahlenwert",
+        "Embodied Cognition durch eine ganz konkrete körperliche Empfindung",
+        "Verfügbarkeitsheuristik – leicht erinnerbare Beispiele wirken häufiger"
+      ],
+      "c": 3,
+      "e": "Leicht abrufbare Beispiele (Schlagzeilen) lassen ein Ereignis häufiger erscheinen – das ist die Verfügbarkeitsheuristik (relevant für Social-Media-Folgen, Lernfrage 1)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Johns Beschreibung (still, detailverliebt, am Vergangenen interessiert) passt gut zu einem Archäologen – obwohl es weit mehr Lkw-Fahrer als Archäologen gibt, hältst du ihn eher für einen Archäologen. Welche Heuristik wirkt?",
+      "opts": [
+        "Repräsentativität – Ähnlichkeit zum Prototyp, die Basisrate wird ignoriert",
+        "Verfügbarkeit, weil hier die Leichtigkeit des Abrufs von Beispielen entscheidet",
+        "Die Ankerheuristik durch einen zuvor genannten, vorgegebenen Zahlenwert",
+        "Eine Bestätigungsverzerrung erst später bei der Erinnerung an die Person"
+      ],
+      "c": 0,
+      "e": "Du ordnest John nach Ähnlichkeit zum Archäologen-Prototyp ein und ignorierst die viel höhere Basisrate der Lkw-Fahrer – das ist die Repräsentativitätsheuristik."
+    },
+    {
+      "id": "s5q3",
+      "q": "Worauf beruht die Ankerheuristik?",
+      "opts": [
+        "Auf der wahrgenommenen Ähnlichkeit zu einem typischen Vertreter der Kategorie",
+        "Auf einem anfänglichen Wert, an den das Urteil unzureichend angepasst wird",
+        "Auf einer körperlichen Empfindung wie Wärme, Kälte oder Gewicht",
+        "Auf der Leichtigkeit, mit der einem Beispiele ins Gedächtnis kommen"
+      ],
+      "c": 1,
+      "e": "Bei der Ankerheuristik orientiert sich das Urteil an einem anfänglichen Wert (Anker) und wird davon ausgehend nur unzureichend angepasst."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Jemand versucht krampfhaft, nicht in Stereotype zu verfallen – und urteilt kurz darauf besonders stereotyp. Was ist passiert?",
+      "opts": [
+        "Das Stereotyp wurde durch die Unterdrückung dauerhaft und vollständig gelöscht",
+        "Die bewusste Unterdrückung ist der Person hier völlig mühelos gelungen",
+        "Bumerang-Effekt – nach der Unterdrückung kommt das Stereotyp verstärkt zurück",
+        "Eine vollständig kontrollierte, bewusste Analyse ganz ohne Einfluss des Gedankens"
+      ],
+      "c": 2,
+      "e": "Der Versuch der Unterdrückung hält über den Überwachungsprozess das Stereotyp aktiv; scheitert die Kontrolle, kommt es verstärkt zurück (Bumerang-Effekt)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Warum kann der Versuch, ein Stereotyp zu unterdrücken, es paradox verstärken?",
+      "opts": [
+        "Weil das Stereotyp durch die Unterdrückung sofort und endgültig gelöscht wird",
+        "Weil Motivation bei der Unterdrückung grundsätzlich keine Rolle spielt",
+        "Weil Stereotype angeboren und damit vollständig unveränderlich sind",
+        "Weil der Überwachungsprozess ständig nach dem Gedanken sucht und ihn hält"
+      ],
+      "c": 3,
+      "e": "Ironische Prozesse (Wegner): Der automatische Überwachungsprozess sucht ständig nach dem unerwünschten Gedanken und hält ihn dadurch aktiv."
+    },
+    {
+      "id": "s6q3",
+      "q": "Was unterscheidet ironische Prozesse vom Bumerang-Effekt?",
+      "opts": [
+        "Ironische Prozesse sind der Mechanismus, der Bumerang-Effekt das Ergebnis",
+        "Beide bezeichnen exakt dasselbe Phänomen und unterscheiden sich in keiner Hinsicht",
+        "Der Bumerang-Effekt tritt ausschließlich während des nächtlichen Schlafs auf",
+        "Ironische Prozesse betreffen grundsätzlich nur Objekte, niemals einzelne Personen"
+      ],
+      "c": 0,
+      "e": "Ironische Prozesse (Wegner) sind der Mechanismus (Überwachungsprozess hält den Gedanken aktiv); der Bumerang-Effekt ist das resultierende verstärkte Anwenden des Stereotyps."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was besagt das Kontinuummodell der Eindrucksbildung?",
+      "opts": [
+        "Die Eindrucksbildung verläuft hier immer vollständig und ausschließlich stereotyp und niemals anders",
+        "Urteile reichen von kategorienbasiert bis individualisiert – je nach Motivation und Kapazität",
+        "Eine individualisierte Beurteilung anderer Menschen ist grundsätzlich unmöglich",
+        "Es werden dabei ausschließlich Objekte kategorisiert, niemals einzelne Personen"
+      ],
+      "c": 1,
+      "e": "Das Kontinuummodell: Beurteilung verläuft von automatischer Kategorisierung (stereotyp) bis zu individualisierter Verarbeitung – abhängig von Motivation und kognitiver Kapazität."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wann wechselt man laut Kontinuummodell von Kategorisierung zu Individualisierung?",
+      "opts": [
+        "Grundsätzlich niemals, ein solcher Wechsel ist nicht vorgesehen",
+        "Ausschließlich bei besonders starker körperlicher Müdigkeit",
+        "Bei ausreichender Motivation und ausreichender kognitiver Kapazität",
+        "Nur dann, wenn die Zielperson um eine individuelle Betrachtung bittet"
+      ],
+      "c": 2,
+      "e": "Individualisierung erfordert Motivation und kognitive Kapazität; fehlen diese, bleibt es bei der schnellen kategorienbasierten (stereotypen) Verarbeitung."
+    },
+    {
+      "id": "s7q3",
+      "q": "Welche praktische Implikation hat das Kontinuummodell?",
+      "opts": [
+        "Stereotypisierung ist ein unvermeidliches und unveränderliches Schicksal",
+        "Motivation und Anstrengung ändern daran angeblich grundsätzlich nichts am Ergebnis",
+        "Es werden dabei ohnehin ausschließlich Objekte, nie Personen beurteilt",
+        "Stereotypisierung ist über Motivation und kognitive Ressourcen reduzierbar"
+      ],
+      "c": 3,
+      "e": "Das Modell zeigt: Stereotypisierung ist kein unvermeidliches Schicksal – mit Motivation und kognitiver Kapazität gelingt individualisierte Beurteilung."
+    }
+  ]
+};
+
+var bonusFragen = [];
+
+var corrCorrect = {
+  "ck0": "chronisch",
+  "ck1": "temporär",
+  "ck2": "temporär",
+  "ck3": "chronisch",
+  "hk0": "Verfügbarkeit",
+  "hk1": "Repräsentativität",
+  "hk2": "Anker",
+  "hk3": "Repräsentativität"
+};
+var corrExpl = {
+  "ck0": "Seit Kindheit gefestigt → dauerhaft erhöhte (chronische) Zugänglichkeit.",
+  "ck1": "Kurzfristig durch die Doku aktiviert → temporäre Zugänglichkeit (Priming).",
+  "ck2": "Eben gelesen → kurzfristig leichter abrufbar (Priming = temporär).",
+  "ck3": "Dauerhaft bedeutsame Rolle → chronisch zugänglich.",
+  "hk0": "Leicht erinnerbare Bilder (Filme) lassen das Ereignis häufiger erscheinen.",
+  "hk1": "Urteil nach Ähnlichkeit zum Prototyp, Basisrate ignoriert.",
+  "hk2": "Der erste Wert dient als Anker für das spätere Urteil.",
+  "hk3": "Die „unordentliche“ Reihe wirkt zufälliger/typischer – beide sind gleich wahrscheinlich (Repräsentativität)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Schema-Aktivierungs-Simulator (Sektion ③): Zugänglichkeit × Passung → wird Schema aktiviert? */
+var saState = {acc:'low', fit:'low'};
+function saSet(dim, val){
+  saState[dim] = val;
+  var map = {acc:['sa-acc-low','sa-acc-high'], fit:['sa-fit-low','sa-fit-high']};
+  var vals = {acc:['low','high'], fit:['low','high']};
+  Object.keys(map).forEach(function(d){
+    map[d].forEach(function(id, i){
+      var b = document.getElementById(id);
+      if(b) b.classList.toggle('on', saState[d] === vals[d][i]);
+    });
+  });
+  saRender();
+}
+function saRender(){
+  var o = document.getElementById('sa-out');
+  if(!o) return;
+  var a = saState.acc, f = saState.fit, msg;
+  if(a === 'high' && f === 'high'){
+    msg = '<strong>Schema wird klar aktiviert ✓</strong> — leicht abrufbar <em>und</em> passend: Es leitet die Deutung der Situation.';
+  } else if(a === 'high' && f === 'low'){
+    msg = '<strong>Eher aktiviert</strong> — ein hoch zugängliches Schema wird auch bei schwacher Passung oft noch genutzt (Zugänglichkeit dominiert).';
+  } else if(a === 'low' && f === 'high'){
+    msg = '<strong>Kann aktiviert werden</strong> — bei hoher Passung greift das Schema, auch wenn es nicht chronisch zugänglich ist.';
+  } else {
+    msg = '<strong>Kaum aktiviert ✗</strong> — weder leicht abrufbar noch passend: ein anderes Schema setzt sich durch.';
+  }
+  o.innerHTML = msg;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  saRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

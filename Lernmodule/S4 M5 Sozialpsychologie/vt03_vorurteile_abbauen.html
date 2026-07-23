@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · Vertiefung 3 — Vorurteile abbauen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl23
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── Bespoke-Simulatoren (Vertiefungsmodul) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sim-slider{flex:1;min-width:150px;accent-color:var(--accent)}
+.sim-val{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text);min-width:32px;text-align:right}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0}
+.sim-barwrap{height:26px;background:var(--surface2);border-radius:6px;overflow:hidden;margin:2px 0 12px}
+.sim-barfill{height:100%;width:0;transition:width .4s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#0f172a;font-weight:700;font-size:.78rem;white-space:nowrap}
+.sim-verdict{margin-top:6px;font-size:.86rem;color:var(--text);background:var(--surface);border-left:3px solid var(--accent);padding:9px 12px;border-radius:6px;line-height:1.5}
+.sim-post{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:12px 14px;margin:6px 0 12px;font-size:.92rem;color:var(--text);line-height:1.5;min-height:44px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · Vertiefung 3 — Vorurteile abbauen</h1>
+<p class="page-sub">Sozialpsychologie · Vertiefungsseminar M5.2 · anwendungsorientiert + interaktiv · Klausur 14.07.2026 (MC)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Stereotyp/Vorurteil/Diskriminierung · 2. Ingroup Love ≠ Outgroup Hate (Brewer) · 3. Intergroup Threat Theory · 4. Kontakthypothese (Allport) · 5. Fallstudie Fußball-Irak (Mousa) · 6. weitere Wege & Grenzen des Vorurteilsabbaus
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Grundbegriffe</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Ingroup vs. Outgroup</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Threat Theory</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Kontakthypothese</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Fallstudie Irak</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Wege zum Abbau</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Grenzen</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Anwendung</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Grundbegriffe ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Stereotyp, Vorurteil, Diskriminierung</div>
+    <div class="sec-lz">Die drei Ebenen sauber trennen: Denken, Fühlen, Handeln (+ Ingroup-Favoritismus).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Ich glaube, Gruppe X ist faul.“ — „Ich mag Gruppe X nicht.“ — „Ich stelle niemanden aus Gruppe X ein.“ Sind das drei Mal dasselbe, oder drei verschiedene Dinge?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Drei Ebenen: <strong>Stereotyp</strong> (Denken), <strong>Vorurteil</strong> (Fühlen/Bewerten), <strong>Diskriminierung</strong> (Handeln). Sie hängen zusammen, sind aber nicht identisch — und man kann auf jeder Ebene ansetzen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Ebenen</div>
+    <strong>Stereotyp (kognitiv):</strong> verallgemeinerte Überzeugung über Merkmale einer Gruppe. <strong>Vorurteil (affektiv):</strong> eine — meist negative — Bewertung/Gefühl gegenüber einer Gruppe. <strong>Diskriminierung (Verhalten):</strong> die tatsächliche Benachteiligung.
+  </div>
+  <div class="card">
+    <div class="card-title">Ingroup-Favoritismus</div>
+    Oft geht es nicht um Hass nach außen, sondern um <strong>Bevorzugung der eigenen Gruppe</strong> (Vertrauen, Hilfe, Vorteile) — ein eigener Mechanismus, den wir gleich von Outgroup-Feindseligkeit trennen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    Die Ebenen können <strong>auseinanderfallen</strong>: Man kann ein Stereotyp „im Kopf“ haben, ohne danach zu handeln — und umgekehrt diskriminieren, ohne bewussten Hass. Interventionen setzen je nach Ebene unterschiedlich an.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Begriff → Bedeutung</div>
+    <div class="corr-item" id="aa">Stereotyp
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'stereotyp')">verallgemeinerte Überzeugung über Gruppenmerkmale (Denken)</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'vorurteil')">negative Bewertung/Gefühl gegenüber einer Gruppe (Fühlen)</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'diskrim')">benachteiligendes Verhalten gegenüber einer Gruppe (Handeln)</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'ingroup')">Bevorzugung der eigenen Gruppe (auch ohne Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Vorurteil
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'stereotyp')">verallgemeinerte Überzeugung über Gruppenmerkmale (Denken)</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'vorurteil')">negative Bewertung/Gefühl gegenüber einer Gruppe (Fühlen)</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'diskrim')">benachteiligendes Verhalten gegenüber einer Gruppe (Handeln)</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'ingroup')">Bevorzugung der eigenen Gruppe (auch ohne Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">Diskriminierung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'stereotyp')">verallgemeinerte Überzeugung über Gruppenmerkmale (Denken)</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'vorurteil')">negative Bewertung/Gefühl gegenüber einer Gruppe (Fühlen)</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'diskrim')">benachteiligendes Verhalten gegenüber einer Gruppe (Handeln)</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'ingroup')">Bevorzugung der eigenen Gruppe (auch ohne Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Ingroup-Favoritismus
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'stereotyp')">verallgemeinerte Überzeugung über Gruppenmerkmale (Denken)</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'vorurteil')">negative Bewertung/Gefühl gegenüber einer Gruppe (Fühlen)</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'diskrim')">benachteiligendes Verhalten gegenüber einer Gruppe (Handeln)</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'ingroup')">Bevorzugung der eigenen Gruppe (auch ohne Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Ingroup vs. Outgroup ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Ingroup Love ≠ Outgroup Hate (Brewer)</div>
+    <div class="sec-lz">Warum Bindung an die eigene Gruppe keine Feindseligkeit gegen andere erfordert.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du liebst deinen Verein, deine Stadt, dein Land. Heißt das automatisch, dass du andere Vereine, Städte, Länder ablehnst oder gar hasst?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Nein. Brewer zeigt: <strong>Ingroup-Liebe und Outgroup-Hass sind trennbar.</strong> Bindung an die eigene Gruppe ist „psychologisch primär“ — Feindseligkeit gegen andere kommt nur unter Zusatzbedingungen hinzu.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die zentrale Unterscheidung</div>
+    <strong>Ingroup-Favoritismus ≠ Outgroup-Feindseligkeit.</strong> Man kann die eigene Gruppe bevorzugen, ohne anderen aktiv zu schaden. In 30 ostafrikanischen Gruppen korrelierte die Zuneigung zur eigenen Gruppe praktisch <strong>null</strong> mit der Distanz zu anderen.
+  </div>
+  <div class="card">
+    <div class="card-title">Diskriminierung als „Vorenthalten“</div>
+    Viel reale Diskriminierung heißt: Vertrauen, Hilfe und Vorteile gehen <strong>nur an die eigene Gruppe</strong> — nicht: man fügt der anderen aktiv Schaden zu. Wichtig fürs Verständnis (und für Gegenmaßnahmen).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Aber: es kann kippen</div>
+    Unter bestimmten Bedingungen wird aus Ingroup-Liebe doch Outgroup-Hass. Welche das sind, deckst du gleich Schritt für Schritt auf.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Wann kippt Ingroup-Liebe in Outgroup-Hass? — Schritt für Schritt</div>
+    <div id="step1">
+      <div class="step-item"><strong>1. Wahrgenommene Bedrohung.</strong> Die eigene Gruppe fühlt sich in Ressourcen, Sicherheit oder Werten bedroht.</div>
+      <div class="step-item"><strong>2. Nullsummen-Denken.</strong> „Was die bekommen, fehlt uns“ — der Gewinn der anderen gilt als unser Verlust.</div>
+      <div class="step-item"><strong>3. Gemeinsamer Feind.</strong> Ein äußerer Gegner schweißt die Ingroup zusammen und richtet Aggression nach außen.</div>
+      <div class="step-item"><strong>4. Moralische Überlegenheit.</strong> Die eigene Gruppe gilt als besser/legitimer — die andere wird abgewertet und entmenschlicht.</div>
+      <div class="step-item"><strong>Fazit:</strong> Ingroup-Bindung ist nicht das Problem. Erst Bedrohung, Konkurrenz und Abwertung machen aus „Liebe“ Feindseligkeit — genau dort setzt Prävention an.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Threat Theory ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Warum Konflikte entstehen: Intergroup Threat Theory</div>
+    <div class="sec-lz">Realistische vs. symbolische Bedrohung. Interaktiv: der Bedrohungs-Regler.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum schlägt Distanz manchmal in echte Feindseligkeit um? Was muss dazukommen, damit aus „die sind anders“ ein Konflikt wird?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Bedrohung.</strong> Die Intergroup Threat Theory unterscheidet zwei Arten: <strong>realistische</strong> (Ressourcen, Sicherheit, Macht) und <strong>symbolische</strong> (Werte, Identität). Je stärker beide erlebt werden, desto mehr Vorurteil.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Realistische Bedrohung</div>
+    (Wahrgenommene) <strong>Konkurrenz um konkrete Güter</strong>: Arbeitsplätze, Wohnraum, Sicherheit, politische Macht. „Die nehmen uns etwas weg.“
+  </div>
+  <div class="card">
+    <div class="card-title">Symbolische Bedrohung</div>
+    Gefahr für <strong>Werte, Weltbild und Identität</strong>: Sprache, Religion, Traditionen, Lebensweise. „Die verändern, wer wir sind.“ Hinzu kommen oft <strong>Intergruppenangst</strong> und <strong>negative Stereotype</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    Entscheidend ist die <strong>wahrgenommene</strong> Bedrohung — sie muss nicht real sein. Genau deshalb können Politik und Medien Bedrohungsgefühle gezielt schüren (oder entschärfen).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Der Bedrohungs-Regler</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Stell ein, wie stark sich eine Gruppe realistisch und symbolisch bedroht fühlt — und beobachte das Vorurteils-Risiko.</p>
+    <div class="sim-box">
+      <div class="sim-row">
+        <span class="sim-lbl">Realistische Bedrohung (Ressourcen/Sicherheit)</span>
+        <input type="range" class="sim-slider" id="itt-real" min="0" max="10" value="2" oninput="ittCalc()">
+        <span class="sim-val" id="itt-realv">2</span>
+      </div>
+      <div class="sim-row">
+        <span class="sim-lbl">Symbolische Bedrohung (Werte/Identität)</span>
+        <input type="range" class="sim-slider" id="itt-sym" min="0" max="10" value="2" oninput="ittCalc()">
+        <span class="sim-val" id="itt-symv">2</span>
+      </div>
+      <div class="sim-lbl">Vorurteils-Risiko</div>
+      <div class="sim-barwrap"><div class="sim-barfill" id="itt-bar"></div></div>
+      <div class="sim-verdict" id="itt-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Kontakthypothese ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Die Kontakthypothese (Allport)</div>
+    <div class="sec-lz">Die vier Bedingungen für wirksamen Kontakt. Interaktiv: Bedingungs-Check.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Bringt die Gruppen einfach zusammen, dann vertragen sie sich schon.“ Stimmt das — reicht bloßer Kontakt, um Vorurteile abzubauen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Nicht ohne Weiteres. Kontakt wirkt nur unter <strong>Allports Bedingungen</strong>: Kooperation, gemeinsames Ziel, gleicher Status und Unterstützung durch Autoritäten. Bloße Nähe — oder Konkurrenz — kann sogar schaden.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Kontakthypothese (Allport)</div>
+    Kontakt zwischen Gruppen reduziert Vorurteile <strong>unter vier Bedingungen</strong>: (1) <strong>Kooperation</strong> statt Konkurrenz, (2) ein <strong>gemeinsames Ziel</strong>, (3) <strong>gleicher Status</strong> in der Situation, (4) <strong>Unterstützung durch Autoritäten</strong>/Institutionen.
+  </div>
+  <div class="card">
+    <div class="card-title">Wie Kontakt wirkt</div>
+    Guter Kontakt baut Vorurteile ab, indem er <strong>Gemeinsamkeiten sichtbar</strong> macht, <strong>Freundschaften</strong> ermöglicht, <strong>Intergruppenangst senkt</strong> und <strong>Empathie</strong> weckt.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Qualität vor Quantität</div>
+    <strong>Bloße Nähe ohne diese Bedingungen</strong> — erst recht Konkurrenz oder negativer Kontakt — kann Vorurteile <strong>verstärken</strong>. Es kommt nicht auf die Menge, sondern auf die Art des Kontakts an.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Kontakt-Bedingungs-Check</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Schalte die vier Bedingungen an/aus und sieh, wie sich die Kontaktqualität verändert.</p>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn" id="kc-coop" onclick="kcToggle('coop')">Kooperation</button>
+        <button class="sim-tbtn" id="kc-goal" onclick="kcToggle('goal')">gemeinsames Ziel</button>
+        <button class="sim-tbtn" id="kc-status" onclick="kcToggle('status')">gleicher Status</button>
+        <button class="sim-tbtn" id="kc-auth" onclick="kcToggle('auth')">Autoritäts-Unterstützung</button>
+      </div>
+      <div class="sim-lbl">Kontaktqualität</div>
+      <div class="sim-barwrap"><div class="sim-barfill" id="kc-bar"></div></div>
+      <div class="sim-verdict" id="kc-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Fallstudie Irak ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Fallstudie: Fußball im Nachkriegs-Irak</div>
+    <div class="sec-lz">Was gemischte Teams bewirkten — und wo die Generalisierung scheiterte.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Funktioniert die Kontakthypothese auch dort, wo es am schwersten ist — nach einem Völkermord? Eine Feldstudie im Nachkriegs-Irak hat es getestet.</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Teils ja: Von ISIS vertriebene Christen wurden per Zufall rein-christlichen oder <strong>gemischten</strong> Fußballteams zugelost. Kontakt verbesserte das <strong>Verhalten gegenüber den Mitspielern</strong> — aber kaum gegenüber Muslimen außerhalb des Teams.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Design (ein echtes Feldexperiment)</div>
+    Christliche Amateurspieler wurden <strong>randomisiert</strong> auf rein-christliche oder gemischte Teams (~25 % Muslime) verteilt. Die Liga erfüllte Allports Bedingungen: Kooperation, gemeinsames Ziel, gleicher Status, lokale Rückendeckung.
+  </div>
+  <div class="card">
+    <div class="card-title">Was wirkte (auf dem Platz)</div>
+    Spieler in gemischten Teams stimmten häufiger für einen muslimischen Spieler beim Fairness-Preis (+26 Prozentpunkte) und trainierten 6 Monate später deutlich häufiger mit Muslimen (+49 Prozentpunkte).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Was nicht wirkte (außerhalb)</div>
+    Kein messbarer Effekt auf Verhalten <strong>außerhalb</strong> des Sports (Restaurant in Mossul, gemischte Feste) und kaum auf <strong>Einstellungen</strong>. Das Generalisierungsproblem in Reinform.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Studie verstehen — Schritt für Schritt</div>
+    <div id="step4">
+      <div class="step-item"><strong>1. Ausgangslage.</strong> Nach dem ISIS-Völkermord: tiefes Misstrauen und Segregation zwischen Christen und Muslimen im Nordirak.</div>
+      <div class="step-item"><strong>2. Eingriff.</strong> Zufallszuweisung zu rein-christlichem vs. gemischtem Team — ein sauberes Experiment im echten Leben.</div>
+      <div class="step-item"><strong>3. Ergebnis auf dem Platz.</strong> Mehr tolerantes Verhalten gegenüber den muslimischen Mitspielern, bis 6 Monate danach.</div>
+      <div class="step-item"><strong>4. Grenze.</strong> Keine Übertragung auf muslimische Fremde und kaum auf Einstellungen — Kontakt baut Beziehungen zu Bekannten auf, nicht automatisch zur ganzen Gruppe.</div>
+      <div class="step-item"><strong>5. Lehre.</strong> Selbst nach Krieg kann gut gestalteter Kontakt tolerantes Verhalten erzeugen — die Generalisierung bleibt die große Herausforderung (erfolgreiche, intensive Begegnungen helfen am ehesten).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Wege zum Abbau ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Weitere Wege zum Vorurteilsabbau</div>
+    <div class="sec-lz">Kontakt, Rekategorisierung, Perspektivübernahme, Normen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kontakt ist nicht der einzige Hebel. Welche weiteren, gut belegten Wege gibt es, Vorurteile zu verringern?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Vier wirksame Ansätze: <strong>Kontakt</strong> (unter den richtigen Bedingungen), <strong>Rekategorisierung</strong> (gemeinsame Identität), <strong>Perspektivübernahme</strong> (Empathie) und das Verändern von <strong>Normen</strong> (was als akzeptabel gilt).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kontakt &amp; Rekategorisierung</div>
+    <strong>Kontakt</strong> nach Allports Bedingungen wirkt. <strong>Rekategorisierung</strong> (Common Ingroup Identity): aus „wir vs. die“ wird ein übergeordnetes <strong>gemeinsames „Wir“</strong> (z. B. ein Team, eine Schule, „wir alle hier“).
+  </div>
+  <div class="card">
+    <div class="card-title">Perspektivübernahme &amp; Normen</div>
+    <strong>Perspektivübernahme:</strong> sich aktiv in die Lage der anderen versetzen → mehr Empathie, weniger Vorurteil. <strong>Normen verändern:</strong> sichtbar machen, dass Toleranz erwartet wird (Vorbilder, Mehrheitsverhalten) — Menschen orientieren sich stark an dem, was „man“ tut.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kombinieren</div>
+    Diese Ansätze <strong>ergänzen</strong> einander. Reden über Empathie ersetzt keinen echten Kontakt; Kontakt ohne gemeinsame Identität generalisiert schlecht.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Methode → Bedeutung</div>
+    <div class="corr-item" id="ba">Kontakthypothese
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'kontakt')">kooperativer Kontakt auf Augenhöhe mit gemeinsamem Ziel</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'rekat')">eine übergeordnete gemeinsame „Wir“-Identität schaffen</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'perspektive')">sich aktiv in die Lage der anderen Gruppe versetzen</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'normen')">sichtbar verschieben, was als akzeptabel gilt</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Rekategorisierung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'kontakt')">kooperativer Kontakt auf Augenhöhe mit gemeinsamem Ziel</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'rekat')">eine übergeordnete gemeinsame „Wir“-Identität schaffen</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'perspektive')">sich aktiv in die Lage der anderen Gruppe versetzen</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'normen')">sichtbar verschieben, was als akzeptabel gilt</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">Perspektivübernahme
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'kontakt')">kooperativer Kontakt auf Augenhöhe mit gemeinsamem Ziel</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'rekat')">eine übergeordnete gemeinsame „Wir“-Identität schaffen</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'perspektive')">sich aktiv in die Lage der anderen Gruppe versetzen</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'normen')">sichtbar verschieben, was als akzeptabel gilt</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Normen verändern
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'kontakt')">kooperativer Kontakt auf Augenhöhe mit gemeinsamem Ziel</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'rekat')">eine übergeordnete gemeinsame „Wir“-Identität schaffen</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'perspektive')">sich aktiv in die Lage der anderen Gruppe versetzen</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'normen')">sichtbar verschieben, was als akzeptabel gilt</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Grenzen ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Grenzen: Generalisierung & Konflikt</div>
+    <div class="sec-lz">Warum sich Effekte schwer übertragen — besonders nach Gewalt.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Vorurteilsabbau klingt einfach — ist es aber nicht. Was sind die größten Hürden, an denen gut gemeinte Maßnahmen scheitern?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Vor allem das <strong>Generalisierungsproblem</strong> (Effekt überträgt sich nicht auf die ganze Gruppe), dazu <strong>anhaltende Bedrohung/Trauma nach Konflikten</strong> und der <strong>Minderheitenstatus</strong>, der Effekte verdünnt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Generalisierungsproblem</div>
+    Positiver Kontakt mit <strong>einzelnen</strong> Personen überträgt sich oft <strong>nicht</strong> auf die gesamte Fremdgruppe — besonders, wenn die Begegnung als Ausnahme („die ist ja anders“) erlebt wird.
+  </div>
+  <div class="card">
+    <div class="card-title">Konflikt, Trauma, Minderheitenstatus</div>
+    Nach Gewalt sind Misstrauen und Bedrohungsgefühle hoch — genau das Gegenteil der Kontaktbedingungen. Für <strong>Minderheiten</strong> wirken Kontakteffekte zudem oft schwächer, und <strong>negativer Kontakt</strong> prägt stärker als positiver.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Realismus</div>
+    Vorurteilsabbau ist möglich, aber <strong>kein Selbstläufer</strong>. Qualität, Wiederholung und eine gemeinsame Identität entscheiden, ob aus einer guten Begegnung breitere Toleranz wird.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Szenario → Phänomen</div>
+    <div class="corr-item" id="ca">Zwei Gruppen konkurrieren um knappe Jobs und Wohnungen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'realistisch')">realistische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'symbolisch')">symbolische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'generalisierung')">Generalisierungsproblem</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'ingroupfav')">Ingroup-Favoritismus (≠ Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">Eine Gruppe fühlt ihre Werte und Lebensweise bedroht.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'realistisch')">realistische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'symbolisch')">symbolische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'generalisierung')">Generalisierungsproblem</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'ingroupfav')">Ingroup-Favoritismus (≠ Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">Nach gemeinsamem Sport mag man die Mitspieler, Fremde derselben Gruppe aber weiterhin nicht.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'realistisch')">realistische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'symbolisch')">symbolische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'generalisierung')">Generalisierungsproblem</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'ingroupfav')">Ingroup-Favoritismus (≠ Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">Man bevorzugt die eigene Gruppe, ohne der anderen aktiv zu schaden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'realistisch')">realistische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'symbolisch')">symbolische Bedrohung</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'generalisierung')">Generalisierungsproblem</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'ingroupfav')">Ingroup-Favoritismus (≠ Outgroup-Hass)</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Anwendung ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Anwendung: Vorurteile in der Praxis abbauen</div>
+    <div class="sec-lz">Interventionen für ein Nachbarschafts-Szenario auswählen. Interaktiv: Interventions-Picker.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du berätst eine Nachbarschaft mit Spannungen zwischen zwei Gruppen. Welche Maßnahmen wählst du — und welche verschlimmern es eher?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Setze auf <strong>kooperative gemeinsame Projekte</strong> (Allport-Bedingungen) und eine <strong>gemeinsame Identität</strong>; entschärfe Bedrohungsgefühle. Vermeide Trennung und Konkurrenz — sie verstärken Gräben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vom Wissen zum Handeln</div>
+    Gute Praxis kombiniert: <strong>kooperative Projekte</strong> mit gemeinsamem Ziel und Augenhöhe, <strong>institutionelle Unterstützung</strong>, eine <strong>gemeinsame übergeordnete Identität</strong> und das gezielte <strong>Entschärfen von Bedrohungsgefühlen</strong> (realistisch wie symbolisch).
+  </div>
+  <div class="card">
+    <div class="card-title">Was man vermeidet</div>
+    <strong>Trennung</strong> (verfestigt Stereotype), <strong>Konkurrenz mit Verlierern</strong> (erzeugt realistische Bedrohung) und das <strong>Betonen von Unterschieden</strong> (verstärkt „wir vs. die“).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Interventions-Picker</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle für jedes Szenario die wirksamste Maßnahme.</p>
+    <div class="sim-box">
+      <div class="sim-lbl" id="iv-prog"></div>
+      <div class="sim-post" id="iv-scenario"></div>
+      <div class="sim-toggle" id="iv-btns"></div>
+      <div class="sim-verdict" id="iv-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die klausurkritischen Gegensatzpaare dieser Vertiefung sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ingroup-Favoritismus</h4>
+      <p>eigene Gruppe bevorzugen</p>
+      <p>Vorteile/Vertrauen nach innen</p>
+      <p>kein aktiver Schaden nötig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Outgroup-Hass</h4>
+      <p>Fremdgruppe aktiv abwerten/schädigen</p>
+      <p>Feindseligkeit nach außen</p>
+      <p>erfordert Zusatzbedingungen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ingroup-Favoritismus und Outgroup-Hass sind dasselbe und treten immer zusammen auf.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Realistische Bedrohung</h4>
+      <p>Konkurrenz um Ressourcen</p>
+      <p>Jobs, Sicherheit, Macht</p>
+      <p>materiell/handfest</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Symbolische Bedrohung</h4>
+      <p>Gefahr für Werte/Identität</p>
+      <p>Weltbild, Kultur, Religion</p>
+      <p>ideell</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine symbolische Bedrohung betrifft Arbeitsplätze und Wohnraum, eine realistische Bedrohung die Werte einer Gruppe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Stereotyp</h4>
+      <p>kognitiv (Denken)</p>
+      <p>verallgemeinerte Annahme</p>
+      <p>noch keine Handlung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Diskriminierung</h4>
+      <p>Verhalten (Handeln)</p>
+      <p>tatsächliche Benachteiligung</p>
+      <p>sichtbare Folge</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Stereotyp ist bereits das benachteiligende Verhalten, Diskriminierung nur ein Gedanke.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Optimaler Kontakt</h4>
+      <p>kooperativ, gemeinsames Ziel</p>
+      <p>gleicher Status + Autoritäts-Stützung</p>
+      <p>baut Vorurteile ab</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bloße Nähe / Konkurrenz</h4>
+      <p>wortlos oder konkurrierend</p>
+      <p>ohne gemeinsames Ziel</p>
+      <p>kann Vorurteile verstärken</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Schon bloße räumliche Nähe ohne weitere Bedingungen ist die wirksamste Form des Vorurteilsabbaus.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verhalten gegenüber Peers</h4>
+      <p>bekannte Mitspieler</p>
+      <p>im Irak-Experiment verbessert</p>
+      <p>relativ leicht änderbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Generalisierung auf Fremde</h4>
+      <p>unbekannte Outgroup-Mitglieder</p>
+      <p>im Experiment kaum verändert</p>
+      <p>schwer, v. a. nach Krieg</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im Fußball-Experiment generalisierte die Toleranz problemlos auf alle Muslime außerhalb des Teams.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl23</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl23';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Du denkst „ältere Menschen sind technikfeindlich“, ohne eine konkrete Person zu meinen. Was ist das?",
+      "opts": [
+        "Ein Stereotyp — eine verallgemeinerte kognitive Annahme über eine Gruppe.",
+        "Eine Diskriminierung — ein sichtbares, benachteiligendes Verhalten gegenüber der Gruppe.",
+        "Ein Vorurteil im engeren Sinne — ein negatives Gefühl gegenüber der Gruppe.",
+        "Eine zutreffende Einzelfallbeschreibung, die für jedes Mitglied der Gruppe ausnahmslos gilt."
+      ],
+      "c": 0,
+      "e": "Stereotyp = kognitive, verallgemeinerte Annahme über eine Gruppe (oft falsch/überzogen) — noch keine Bewertung und kein Verhalten."
+    },
+    {
+      "id": "s0q2",
+      "q": "Eine Vermieterin lädt Bewerber:innen mit ausländischem Namen seltener zur Besichtigung ein. Welcher Begriff trifft am genauesten?",
+      "opts": [
+        "Ein bloßes Stereotyp — eine rein gedankliche Verallgemeinerung ohne Verhalten.",
+        "Diskriminierung — ein benachteiligendes Verhalten gegenüber einer Gruppe.",
+        "Ingroup-Favoritismus — Bevorzugung der eigenen Gruppe ohne jede Folge für andere.",
+        "Ein rein innerlicher Denkprozess ohne jede Auswirkung auf andere Menschen."
+      ],
+      "c": 1,
+      "e": "Diskriminierung = die Verhaltensebene: tatsächliche Benachteiligung. Stereotyp (Denken) und Vorurteil (Fühlen) sind die Vorstufen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Brewer fragt: „Ingroup Love oder Outgroup Hate?“ Was ist die Kernantwort?",
+      "opts": [
+        "Bindung an die eigene Gruppe erzeugt zwangsläufig Feindseligkeit gegenüber allen anderen Gruppen.",
+        "Nur wer andere Gruppen aktiv hasst, kann seine eigene Gruppe überhaupt lieben.",
+        "Ingroup-Liebe und Outgroup-Hass sind trennbar — die eine erfordert nicht die andere.",
+        "Zuneigung zur eigenen Gruppe und Abwertung anderer Gruppen sind laut Brewer dasselbe Phänomen."
+      ],
+      "c": 2,
+      "e": "Brewer (mit Allport): Ingroup-Favoritismus ist nicht dasselbe wie Outgroup-Feindseligkeit — beide sind empirisch trennbar."
+    },
+    {
+      "id": "s1q2",
+      "q": "Viel alltägliche Diskriminierung besteht laut Brewer worin?",
+      "opts": [
+        "In offener körperlicher Gewalt gegen Mitglieder der Fremdgruppe im Alltag.",
+        "In gezielter Schädigung der Fremdgruppe aus reinem Hass gegenüber ihr.",
+        "Ausschließlich in gesetzlich verbotenen, klar strafbaren Handlungen gegen die Gruppe.",
+        "Im Vorenthalten von Vorteilen für die Fremdgruppe, ohne zu schaden."
+      ],
+      "c": 3,
+      "e": "Oft ist es „Ingroup-Bevorzugung“ (Hilfe, Vertrauen, Vorteile nur für die eigene Gruppe), nicht aktive Schädigung der Outgroup — eine wichtige Differenzierung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Zwei Gruppen konkurrieren um knappe Jobs und Wohnungen, die Spannung steigt. Welche Art von Bedrohung ist das laut Intergroup Threat Theory?",
+      "opts": [
+        "Eine realistische Bedrohung — Konkurrenz um Ressourcen, Sicherheit oder Macht.",
+        "Eine symbolische Bedrohung — es geht um Werte, Weltbild und Identität der Gruppe.",
+        "Gar keine Bedrohung — die Konkurrenz hat mit Vorurteilen nichts zu tun.",
+        "Eine rein eingebildete Bedrohung ohne jeden Zusammenhang zu realen Ressourcen oder Macht."
+      ],
+      "c": 0,
+      "e": "Realistische Bedrohung: (wahrgenommene) Konkurrenz um konkrete Güter — Ressourcen, Arbeitsplätze, Sicherheit, Macht."
+    },
+    {
+      "id": "s2q2",
+      "q": "Eine Gruppe fühlt ihre Werte, Traditionen und Lebensweise durch eine andere bedroht. Welche Bedrohung ist das?",
+      "opts": [
+        "Eine realistische Bedrohung — es geht um Konkurrenz um Ressourcen und Macht.",
+        "Eine symbolische Bedrohung — sie betrifft Weltbild und Identität der Gruppe.",
+        "Reiner Ingroup-Favoritismus — Bevorzugung der eigenen Gruppe ohne Bedrohungsgefühl.",
+        "Eine materielle Bedrohung, die sich nur auf Geld, Wohnraum und Arbeitsplätze bezieht."
+      ],
+      "c": 1,
+      "e": "Symbolische Bedrohung: Gefahr für die eigenen Werte, Normen und die kulturelle/religiöse Identität — unabhängig von materieller Konkurrenz."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Nach der Kontakthypothese reduziert Kontakt Vorurteile nur unter bestimmten Bedingungen. Welche gehört dazu?",
+      "opts": [
+        "Die Gruppen sollten immer in klarer Konkurrenz um knappe Ressourcen zueinander stehen.",
+        "Eine Gruppe sollte gegenüber der anderen deutlich höheren sozialen Status haben.",
+        "Die Beteiligten arbeiten kooperativ auf ein gemeinsames, übergeordnetes Ziel hin.",
+        "Der Kontakt sollte möglichst flüchtig und ohne jede gemeinsame Aufgabe stattfinden."
+      ],
+      "c": 2,
+      "e": "Allports Bedingungen: Kooperation auf ein gemeinsames Ziel, gleicher Status, Unterstützung durch Autoritäten — bloße Nähe reicht nicht."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was passiert mit bloßem, unstrukturiertem Nebeneinander (wortlose Nähe, Konkurrenz) ohne diese Bedingungen?",
+      "opts": [
+        "Es reduziert Vorurteile stärker als jede andere bekannte Form von Intergruppenkontakt.",
+        "Es hat garantiert gar keinen Effekt auf die Vorurteile zwischen den beiden beteiligten Gruppen, egal wie.",
+        "Es verwandelt sich automatisch in optimalen, kooperativen Kontakt mit gemeinsamem Ziel, trotz Konkurrenz.",
+        "Es kann Vorurteile sogar verstärken — negativer oder konkurrierender Kontakt vertieft die Abgrenzung."
+      ],
+      "c": 3,
+      "e": "Ohne die Bedingungen (v. a. bei Konkurrenz/negativem Kontakt) kann Kontakt Vorurteile sogar erhöhen. Qualität schlägt bloße Quantität."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Im Fußball-Experiment im Nachkriegs-Irak: Was bewirkten die gemischten Teams bei den christlichen Spielern?",
+      "opts": [
+        "Mehr tolerantes Verhalten gegenüber muslimischen Mitspielern, etwa mehr gemeinsames Training.",
+        "Eine sofortige, vollständige Versöhnung mit allen Muslimen weltweit, auch außerhalb des Teams.",
+        "Eine deutliche Zunahme der Feindseligkeit gegenüber den muslimischen Mitspielern im Team.",
+        "Eine messbare Verschlechterung der sozialen Beziehungen innerhalb und außerhalb der Mannschaft."
+      ],
+      "c": 0,
+      "e": "Gemischte Teams steigerten tolerantes Verhalten gegenüber den muslimischen Mitspielern (Award-Stimme +26pp, gemeinsames Training 6 Monate später +49pp)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was war die wichtigste Einschränkung des Erfolgs?",
+      "opts": [
+        "Die Effekte verschwanden bereits nach einer einzigen Woche wieder vollständig und restlos.",
+        "Kaum Generalisierung auf Muslime außerhalb des Teams oder auf Einstellungen.",
+        "Nur die Einstellungen änderten sich messbar, nicht jedoch das tatsächliche Verhalten.",
+        "Die Spieler wurden gegenüber Muslimen im Team messbar feindseliger als zu Studienbeginn."
+      ],
+      "c": 1,
+      "e": "Generalisierungsproblem: Toleranz galt den bekannten Mitspielern, nicht Muslimen als Fremden (Restaurant in Mossul, Events) — und Einstellungen änderten sich kaum."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Man bildet aus zwei rivalisierenden Teams ein gemeinsames Projektteam mit neuem Namen und gemeinsamem Ziel. Welche Strategie ist das?",
+      "opts": [
+        "Bloße räumliche Trennung der beiden rivalisierenden Gruppen voneinander.",
+        "Verstärkung der bestehenden Gruppengrenzen zwischen den beiden Teams.",
+        "Rekategorisierung — übergeordnete gemeinsame „Wir“-Identität bilden.",
+        "Eine Betonung der alten Gruppenzugehörigkeiten, damit niemand die Kategorie wechselt."
+      ],
+      "c": 2,
+      "e": "Rekategorisierung / gemeinsame Identität (Common Ingroup Identity): aus „wir vs. die“ wird ein übergeordnetes „wir“ — reduziert Bias."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was bewirkt aktive Perspektivübernahme („sich in die andere Person hineinversetzen“) typischerweise?",
+      "opts": [
+        "Sie verstärkt verlässlich die ohnehin bestehenden Vorurteile, statt sie zu verringern.",
+        "Sie hat nachweislich nie irgendeinen messbaren Effekt auf Empathie oder Vorurteile.",
+        "Sie ersetzt jede Notwendigkeit für echten, kooperativen Kontakt vollständig.",
+        "Sie kann Empathie erhöhen und Vorurteile gegenüber der anderen Gruppe verringern."
+      ],
+      "c": 3,
+      "e": "Perspektivübernahme fördert Empathie und reduziert Vorurteile — sie ergänzt Kontakt, ersetzt ihn aber nicht."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Nach einem gemeinsamen Projekt mögen die Beteiligten ihre konkreten Projektpartner aus der anderen Gruppe — Fremde derselben Gruppe aber weiterhin nicht. Wie heißt dieses Problem?",
+      "opts": [
+        "Das Generalisierungsproblem — der Effekt überträgt sich nicht auf die ganze Outgroup.",
+        "Eine realistische Bedrohung durch Konkurrenz um Ressourcen zwischen den beiden Gruppen.",
+        "Reiner Publikationsbias in der Forschung zu Intergruppenkontakt und Vorurteilsabbau.",
+        "Ein vollständiger Transfer des Effekts auf sämtliche Mitglieder der Fremdgruppe weltweit."
+      ],
+      "c": 0,
+      "e": "Generalisierung ist die Achillesferse: positiver Kontakt mit Einzelnen überträgt sich oft nicht automatisch auf die gesamte Fremdgruppe."
+    },
+    {
+      "id": "s6q2",
+      "q": "Warum ist Vorurteilsabbau nach gewaltvollen Konflikten besonders schwer?",
+      "opts": [
+        "Weil Vorurteile nach einem Krieg generell sofort und vollständig von selbst verschwinden.",
+        "Weil Misstrauen, Trauma und anhaltende Bedrohungsgefühle kooperativen Kontakt erschweren.",
+        "Weil Kontakt zwischen verfeindeten Gruppen in nahezu allen Konflikten immer perfekt funktioniert.",
+        "Weil es nach bewaffneten Konflikten erwiesenermaßen überhaupt keine Vorurteile mehr gibt."
+      ],
+      "c": 1,
+      "e": "Krieg verfestigt Gruppengrenzen und erzeugt anhaltende Bedrohung/Trauma — genau das Gegenteil der Bedingungen, die guten Kontakt ermöglichen."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "In einer Nachbarschaft mit Spannungen zwischen zwei Gruppen — welche Maßnahme ist am ehesten wirksam?",
+      "opts": [
+        "Die Gruppen strikt voneinander getrennt halten, ohne jeden gemeinsamen Kontakt.",
+        "Einen Wettbewerb veranstalten, bei dem am Ende nur eine der beiden Gruppen gewinnen kann.",
+        "Ein gemeinsames Projekt mit gemeinsamem Ziel auf Augenhöhe, unterstützt von Autoritäten.",
+        "Beide Gruppen nur über die jeweils andere reden lassen, ohne persönliche Begegnung."
+      ],
+      "c": 2,
+      "e": "Optimaler Kontakt: Kooperation + gemeinsames Ziel + gleicher Status + Rückendeckung durch Autoritäten — genau die Bedingungen der Kontakthypothese."
+    },
+    {
+      "id": "s7q2",
+      "q": "Du willst den Effekt einer gelungenen Begegnung möglichst auf die ganze Gruppe übertragen. Was hilft?",
+      "opts": [
+        "Den Kontakt möglichst ganz geheim halten und ihn nicht mit anderen aus der Gruppe teilen.",
+        "Bei jeder Gelegenheit betonen, wie grundlegend fremd sich die beiden Gruppen seien.",
+        "Den Kontakt einmalig und beiläufig lassen, ohne ihn je zu wiederholen.",
+        "Die Begegnung als typisch rahmen, wiederholen und mit gemeinsamer Identität verbinden."
+      ],
+      "c": 3,
+      "e": "Generalisierung gelingt eher, wenn der Kontakt als typisch (nicht als Ausnahme) erlebt wird, wiederholt wird und eine gemeinsame Identität entsteht."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Eine Person spendet bevorzugt für die eigene Gemeinde, ohne anderen zu schaden. Was zeigt das?",
+    "opts": [
+      "Ingroup-Favoritismus — Bevorzugung der eigenen Gruppe, ohne Outgroup-Feindseligkeit.",
+      "Offenen Hass auf alle Fremdgruppen, die um dieselben Ressourcen konkurrieren.",
+      "Eine realistische Bedrohung durch Konkurrenz um knappe Ressourcen der Gemeinde.",
+      "Einen Automatismus, wonach Unterstützung der eigenen Gruppe stets andere Gruppen schädigt."
+    ],
+    "c": 0,
+    "e": "Bevorzugung der Ingroup ohne Schaden für andere = Ingroup-Favoritismus; das ist nicht dasselbe wie Outgroup-Hass."
+  },
+  {
+    "id": "bq2",
+    "q": "Politische Rhetorik warnt, „die anderen“ nähmen uns Arbeitsplätze und Sicherheit weg. Welche Bedrohung wird hier aktiviert?",
+    "opts": [
+      "Eine symbolische Bedrohung, die Werte und kulturelle Identität der Gruppe betrifft.",
+      "Eine realistische Bedrohung, nämlich Konkurrenz um Ressourcen und Sicherheit.",
+      "Ein bloßes Stereotyp ohne jede Bewertung der fremden Gruppe als gut oder schlecht.",
+      "Eine ausschließlich kulturelle Bedrohung, die nur abstrakte Werte und Symbole betrifft."
+    ],
+    "c": 1,
+    "e": "„Sie nehmen uns Jobs/Sicherheit“ = realistische Bedrohung (Konkurrenz um Ressourcen). Werte/Identität wäre symbolisch."
+  },
+  {
+    "id": "bq3",
+    "q": "Welche Bedingung macht Intergruppenkontakt zuverlässig wirksamer?",
+    "opts": [
+      "Wettbewerb zwischen den Gruppen mit einem klaren Verlierer und einem klaren Gewinner.",
+      "Eine strikte Statushierarchie zwischen den beiden beteiligten Gruppen.",
+      "Unterstützung durch Autoritäten und Institutionen bei gemeinsamer Kooperation.",
+      "Das Fehlen jeder gemeinsamen Aufgabe und jeglicher institutioneller Unterstützung."
+    ],
+    "c": 2,
+    "e": "Institutionelle/autoritative Unterstützung ist eine von Allports Kernbedingungen — neben Kooperation, gemeinsamem Ziel und gleichem Status."
+  },
+  {
+    "id": "bq4",
+    "q": "Was war NICHT ein Ergebnis der Fußball-Studie im Irak?",
+    "opts": [
+      "Mehr gemeinsames Training mit den muslimischen Mitspielern schon nach sechs Monaten.",
+      "Eine höhere Bereitschaft, für einen muslimischen Mitspieler beim Fairness-Preis zu stimmen.",
+      "Eine höhere Bereitschaft, künftig freiwillig einem gemischten statt rein christlichen Team beizutreten.",
+      "Eine breite Einstellungsänderung gegenüber Muslimen außerhalb des Sports, etwa mehr Stadtteilbesuche."
+    ],
+    "c": 3,
+    "e": "Genau das blieb aus: keine Generalisierung auf Fremde/Einstellungen. Verbessert wurde das Verhalten gegenüber den bekannten Mitspielern."
+  },
+  {
+    "id": "bq5",
+    "q": "Welche Aussage trifft das Verhältnis von Ingroup-Liebe und Outgroup-Hass am besten?",
+    "opts": [
+      "Man kann die eigene Gruppe schätzen, ohne andere abzuwerten — beides ist trennbar.",
+      "Wer die eigene Gruppe liebt, muss zwangsläufig alle anderen Gruppen hassen.",
+      "Outgroup-Hass entsteht laut Brewer immer automatisch vor der Ingroup-Liebe.",
+      "Zuneigung zur eigenen und Feindseligkeit gegenüber fremden Gruppen sind untrennbar dasselbe."
+    ],
+    "c": 0,
+    "e": "Kernbotschaft von Brewer: Ingroup-Bindung erfordert keine Outgroup-Feindseligkeit; erst Zusatzbedingungen (Bedrohung, Konkurrenz) koppeln beides."
+  },
+  {
+    "id": "bq6",
+    "q": "Zwei verfeindete Schulklassen sollen sich vertragen. Welche Maßnahme passt zur gemeinsamen Identität?",
+    "opts": [
+      "Jede Klasse bekommt eine eigene, getrennte Auszeichnung ohne gemeinsames Ziel.",
+      "Beide Klassen bilden gemeinsam ein Schulteam mit gemeinsamem Namen und Ziel.",
+      "Man betont täglich, wie unterschiedlich und fremd sich die beiden Klassen sind.",
+      "Man verschärft den Wettbewerb, bis feststeht, welche Klasse die überlegene ist."
+    ],
+    "c": 1,
+    "e": "Rekategorisierung zu einem gemeinsamen übergeordneten „Wir“ (ein Schulteam) baut Bias ab — getrennte Auszeichnungen/Wettbewerb verstärken ihn."
+  },
+  {
+    "id": "bq7",
+    "q": "Warum reicht es selten, Gruppen einfach nur räumlich zusammenzubringen?",
+    "opts": [
+      "Weil bloße räumliche Nähe automatisch enge Freundschaft zwischen den Gruppen erzeugt.",
+      "Weil bloße Nähe ohne Kooperation und gemeinsames Ziel Vorurteile verstärken kann.",
+      "Weil Kontakt zwischen den beiden Gruppen grundsätzlich völlig wirkungslos ist.",
+      "Weil räumliche Nähe ganz ohne weitere Bedingungen alle Vorurteile sofort auflöst."
+    ],
+    "c": 1,
+    "e": "Ohne Allports Bedingungen (v. a. Kooperation/gemeinsames Ziel) kann bloßes Nebeneinander — gerade bei Konkurrenz — Vorurteile verschärfen."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Gesamtbotschaft zum Vorurteilsabbau ist am angemessensten?",
+    "opts": [
+      "Vorurteile sind grundsätzlich für immer unveränderlich, jeder Abbauversuch bleibt von vornherein sinnlos.",
+      "Ein einziger netter Kontakt löst jedes Gruppenproblem sofort und für immer dauerhaft.",
+      "Allein darüber zu reden genügt völlig, eine echte persönliche Begegnung ist unnötig.",
+      "Guter Kontakt wirkt, aber Qualität und gemeinsame Identität entscheiden, ob er sich verallgemeinert."
+    ],
+    "c": 3,
+    "e": "Realistisch: Kontakt wirkt unter den richtigen Bedingungen; die Generalisierung auf die ganze Gruppe ist die eigentliche Herausforderung."
+  }
+];
+
+var corrCorrect = {
+  "aa": "stereotyp",
+  "ab": "vorurteil",
+  "ac": "diskrim",
+  "ad": "ingroup",
+  "ba": "kontakt",
+  "bb": "rekat",
+  "bc": "perspektive",
+  "bd": "normen",
+  "ca": "realistisch",
+  "cb": "symbolisch",
+  "cc": "generalisierung",
+  "cd": "ingroupfav"
+};
+var corrExpl = {
+  "aa": "Stereotyp = verallgemeinerte Überzeugung über Gruppenmerkmale (kognitiv).",
+  "ab": "Vorurteil = negative Bewertung/Gefühl gegenüber einer Gruppe (affektiv).",
+  "ac": "Diskriminierung = benachteiligendes Verhalten gegenüber einer Gruppe (Verhalten).",
+  "ad": "Ingroup-Favoritismus = Bevorzugung der eigenen Gruppe — auch ohne Outgroup-Feindseligkeit.",
+  "ba": "Kontakthypothese = kooperativer Kontakt auf Augenhöhe mit gemeinsamem Ziel (+ Autoritäts-Unterstützung).",
+  "bb": "Rekategorisierung = eine übergeordnete gemeinsame „Wir“-Identität schaffen.",
+  "bc": "Perspektivübernahme = sich aktiv in die Lage der anderen Gruppe versetzen → mehr Empathie.",
+  "bd": "Normen verändern = sichtbar verschieben, was als akzeptabel gilt.",
+  "ca": "Konkurrenz um Jobs/Wohnraum/Sicherheit = realistische Bedrohung.",
+  "cb": "Bedrohte Werte/Identität/Lebensweise = symbolische Bedrohung.",
+  "cc": "Toleranz nur gegenüber bekannten Personen, nicht der ganzen Gruppe = Generalisierungsproblem.",
+  "cd": "Eigene Gruppe bevorzugen, ohne anderen zu schaden = Ingroup-Favoritismus (≠ Outgroup-Hass)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── Intergroup Threat Theory — Bedrohungs-Regler ── */
+function ittCalc(){
+  var r=document.getElementById('itt-real'), s=document.getElementById('itt-sym');
+  if(!r||!s) return;
+  var rv=parseInt(r.value,10), sv=parseInt(s.value,10);
+  document.getElementById('itt-realv').textContent=rv;
+  document.getElementById('itt-symv').textContent=sv;
+  var risk=Math.round((rv+sv)/2*10);
+  var bar=document.getElementById('itt-bar');
+  if(bar){ bar.style.width=risk+'%'; bar.textContent=risk+'%'; bar.style.background = risk>=60?'var(--red)':(risk>=35?'var(--yellow)':'var(--green)'); }
+  var v=document.getElementById('itt-v'); if(!v) return;
+  if(rv<=3 && sv<=3) v.innerHTML='<strong>Geringes Risiko:</strong> kaum erlebte Bedrohung → wenig Nährboden für Vorurteile.';
+  else if(rv>=6 && sv>=6) v.innerHTML='<strong>Hohes Risiko:</strong> realistische <em>und</em> symbolische Bedrohung treffen zusammen — der gefährlichste Mix.';
+  else if(rv>sv) v.innerHTML='<strong>Vor allem realistische Bedrohung:</strong> wahrgenommene Konkurrenz um Ressourcen/Sicherheit treibt das Vorurteil.';
+  else if(sv>rv) v.innerHTML='<strong>Vor allem symbolische Bedrohung:</strong> Werte und Identität scheinen gefährdet — das treibt das Vorurteil.';
+  else v.innerHTML='<strong>Beide Bedrohungen mittel:</strong> realistische und symbolische Anteile halten sich die Waage.';
+}
+
+/* ── Kontakthypothese — Bedingungs-Check ── */
+var kc={coop:false,goal:false,status:false,auth:false};
+var KCLBL={coop:'Kooperation',goal:'gemeinsames Ziel',status:'gleicher Status',auth:'Autoritäts-Unterstützung'};
+function kcToggle(key){ kc[key]=!kc[key]; var b=document.getElementById('kc-'+key); if(b) b.classList.toggle('on',kc[key]); kcRender(); }
+function kcRender(){
+  var n=0; for(var k in kc){ if(kc[k]) n++; }
+  var pct=Math.round(n/4*100);
+  var bar=document.getElementById('kc-bar');
+  if(bar){ bar.style.width=pct+'%'; bar.textContent=n+'/4'; bar.style.background = n===4?'var(--green)':(n>=2?'var(--yellow)':'var(--red)'); }
+  var v=document.getElementById('kc-v'); if(!v) return;
+  if(n===4) v.innerHTML='<strong>Optimaler Kontakt:</strong> alle vier Bedingungen erfüllt → Kontakt baut Vorurteile am wirksamsten ab.';
+  else if(n===0) v.innerHTML='<strong>Bloße Nähe:</strong> keine Bedingung erfüllt → Kontakt wirkt kaum und kann bei Konkurrenz Vorurteile sogar verstärken.';
+  else v.innerHTML='<strong>Teilweise erfüllt ('+n+'/4):</strong> der Effekt ist unsicher. Je mehr Bedingungen, desto verlässlicher der Vorurteilsabbau.';
+}
+
+/* ── Interventions-Picker ── */
+var IV=[
+  {s:"Eine Nachbarschaft mit Spannungen zwischen zwei Gruppen. Was tust du?", o:[
+    {t:"Die Gruppen strikt getrennt halten", ok:false},
+    {t:"Ein gemeinsames Stadtteilfest-Projekt mit gemeinsamem Ziel, von der Gemeinde unterstützt", ok:true},
+    {t:"Einen Wettbewerb „welcher Block ist besser“ veranstalten", ok:false}
+  ], fb:"Kooperatives Projekt mit gemeinsamem Ziel + Rückendeckung = Allport-Bedingungen. Trennung und Konkurrenz verschärfen die Lage."},
+  {s:"Eine Begegnung lief hervorragend. Wie überträgst du das auf die ganze Gruppe?", o:[
+    {t:"Sie als seltene Ausnahme behandeln („die ist halt anders“)", ok:false},
+    {t:"Sie als typisch rahmen, wiederholen und mit einer gemeinsamen Identität verbinden", ok:true},
+    {t:"Sie geheim halten", ok:false}
+  ], fb:"Generalisierung gelingt, wenn der Kontakt als typisch erlebt, wiederholt und in ein gemeinsames „Wir“ eingebettet wird."},
+  {s:"Politische Rhetorik schürt: „Die nehmen uns die Jobs weg.“", o:[
+    {t:"Die wahrgenommene realistische Bedrohung mit Fakten entkräften und Nullsummen-Denken aufbrechen", ok:true},
+    {t:"Die eigene Gruppe als überlegen darstellen", ok:false},
+    {t:"Das Thema komplett ignorieren", ok:false}
+  ], fb:"Hier wirkt eine realistische Bedrohung — sie gezielt zu entkräften (und Nullsummen-Denken aufzubrechen) nimmt dem Vorurteil den Treibstoff."}
+];
+var ivI=0;
+function ivRender(){
+  var sc=document.getElementById('iv-scenario'); if(!sc) return;
+  var bt=document.getElementById('iv-btns'), fb=document.getElementById('iv-fb'), pr=document.getElementById('iv-prog');
+  if(ivI>=IV.length){ sc.textContent='✅ Alle '+IV.length+' Szenarien gelöst!'; if(bt) bt.innerHTML=''; if(fb) fb.textContent=''; if(pr) pr.textContent=''; return; }
+  var cur=IV[ivI];
+  sc.textContent=cur.s;
+  if(pr) pr.textContent='Szenario '+(ivI+1)+' / '+IV.length;
+  if(fb) fb.textContent='';
+  if(bt){ bt.innerHTML=''; cur.o.forEach(function(opt,idx){ var b=document.createElement('button'); b.className='sim-tbtn'; b.textContent=opt.t; b.onclick=function(){ ivPick(idx); }; bt.appendChild(b); }); }
+}
+function ivPick(idx){
+  var cur=IV[ivI], fb=document.getElementById('iv-fb');
+  if(cur.o[idx].ok){ if(fb){ fb.style.color='var(--green)'; fb.innerHTML='✓ '+cur.fb; } ivI++; setTimeout(ivRender,1400); }
+  else { if(fb){ fb.style.color='var(--red)'; fb.textContent='✗ Das verschärft die Lage eher — versuch eine andere Maßnahme.'; } }
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* Init der bespoke-Simulatoren */
+  ittCalc(); kcRender(); ivRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

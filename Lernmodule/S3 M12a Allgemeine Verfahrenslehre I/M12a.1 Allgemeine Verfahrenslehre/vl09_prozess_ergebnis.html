@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.1 · VL09 Prozess-Ergebnis-Forschung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a1-vl09
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Faktoren-Simulator (vl09) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.1 · VL09 Prozess-Ergebnis-Forschung</h1>
+<p class="page-sub">Allgemeine Verfahrenslehre I · Teil 1 (Böge) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Gemeinsame vs spezifische Faktoren · 2. Allianz: Definition & Messung · 3. Allianz: Befunde & Kausalität · 4. Allianzrupturen · 5. Theoriespezifische Faktoren & Kausalität · 6. Mediationsmodelle · 7. Wirkmechanismen der KVT · 8. Gruppen- vs Individualebene
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Gemeinsam vs spezifisch</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Allianz: Definition</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Allianz: Befunde</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Allianzrupturen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Spezifische Faktoren</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Mediationsmodelle</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Wirkmechanismen KVT</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Gruppe vs Individuum</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Gemeinsam vs spezifisch ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Gemeinsame vs. spezifische Faktoren</div>
+    <div class="sec-lz">Prozess-Ergebnisforschung fragt nach Wirkmechanismen; gemeinsame (Allianz, Empathie) vs (theorie-)spezifische Faktoren; Einteilung nicht trennscharf (Wampold)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wirkt Psychotherapie durch das, was alle Verfahren gemeinsam haben — oder durch das Spezifische einer Schule? Und ist diese Trennung überhaupt sauber?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die Prozess-Ergebnisforschung fragt nach den <strong>Wirkmechanismen</strong>. Man unterscheidet <strong>gemeinsame</strong> (Allianz, Empathie) und <strong>theoriespezifische</strong> Faktoren — die Einteilung ist aber <strong>nicht trennscharf</strong> (dieselbe Variable bedeutet je nach Schule Verschiedenes).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Prozess-Ergebnisforschung</div>
+    Zentrale Frage: <strong>Durch welche Mechanismen wirkt Psychotherapie?</strong> Was an den Sitzungen löst die Veränderung aus? Ein generisches Modell unterscheidet <strong>gemeinsame Faktoren / allgemeine Effekte</strong> und <strong>(theorie-)spezifische Faktoren</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Abgrenzungsproblem</div>
+    Klassischer „gemeinsamer" Faktor: die <strong>therapeutische Beziehung</strong>. Aber: Meint „Beziehung" in PDT, VT und Gesprächspsychotherapie dasselbe? Allgemeine und spezifische Faktoren <strong>interagieren</strong> wahrscheinlich, statt unabhängig zu wirken — die Einteilung ist teils irreführend und subjektiv (Wampold et al. 2018).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Dieselbe Variable kann <strong>gemeinsam UND spezifisch</strong> ausgeprägt sein (z. B. Beziehung als Basis vs. unbewusste Determinanten als PDT-Spezifikum). Die Trennung ist nicht trennscharf.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gemeinsamer oder spezifischer Faktor?</div>
+    <div class="corr-item" id="c0a">Therapeutische Allianz / Empathie
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'gemeinsam')">Gemeinsam</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'spezifisch')">Spezifisch</button>
+      </div><div class="corr-fb" id="c0a-fb"></div>
+    </div>
+    <div class="corr-item" id="c0b">Hausaufgaben in der Verhaltenstherapie
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'gemeinsam')">Gemeinsam</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'spezifisch')">Spezifisch</button>
+      </div><div class="corr-fb" id="c0b-fb"></div>
+    </div>
+    <div class="corr-item" id="c0c">Fokus auf unbewusste Determinanten (PDT)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'gemeinsam')">Gemeinsam</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'spezifisch')">Spezifisch</button>
+      </div><div class="corr-fb" id="c0c-fb"></div>
+    </div>
+    <div class="corr-item" id="c0d">Erwartungen / Zielkonsens
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0d',this,'gemeinsam')">Gemeinsam</button>
+        <button class="corr-btn" onclick="checkCorr('c0d',this,'spezifisch')">Spezifisch</button>
+      </div><div class="corr-fb" id="c0d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Allianz: Definition ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Allianz: Definition & Messung</div>
+    <div class="sec-lz">Arbeitsallianz = kollaborative, dyadische Qualität (zusammenarbeiten, nicht lieben); Teilaspekt der Beziehung; Messung mit Working Alliance Inventory (WAI)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Allianz" ist eine der meistuntersuchten Variablen der PT-Forschung. Was genau ist damit gemeint — und wie misst man sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die <strong>Arbeitsallianz</strong> ist die kollaborative, dyadische Qualität: <strong>vertrauensvolles Arbeiten an gemeinsamen Zielen</strong> („nicht lieben, sondern zusammenarbeiten"). Teilaspekt der Beziehung; gemessen mit dem <strong>Working Alliance Inventory (WAI)</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition Arbeitsallianz</div>
+    Die <strong>kollaborative, dyadische Qualität</strong> von Patient*in und Therapeut*in: ein auf die Sache gerichtetes, <strong>vertrauensvolles</strong> Arbeiten an gemeinsamen Zielen und Wegen. Verkürzt: „Therapeut und Patient müssen sich nicht lieben; sie müssen <strong>zusammenarbeiten</strong>." (Manche Definitionen betonen stärker die affektive Komponente: Vertrauen, Respekt, „liking & caring".)
+  </div>
+  <div class="card">
+    <div class="card-title">Messung</div>
+    <strong>Working Alliance Inventory (WAI)</strong> (Horvath & Greenberg, 1989). Beispiel-Items (Patientensicht): „Meine Therapeut*in und ich achten einander"; „...stimmen überein, woran zu arbeiten ist"; „Ich glaube, meine Therapeut*in mag mich." Erfassung aus <strong>Patient*innen- ODER Therapeut*innensicht</strong> möglich.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Die Allianz ist <strong>ein Teilaspekt</strong> der therapeutischen Beziehung — nicht mit der gesamten Beziehung gleichzusetzen. Zentral ist das <strong>vertrauensvolle Zusammenarbeiten</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Was gehört zur Arbeitsallianz?</div>
+    <div id="allianz">
+      <div class="step-item"><strong>Bond:</strong> tragfähige, vertrauensvolle affektive Bindung.</div>
+      <div class="step-item"><strong>Goals:</strong> Übereinstimmung über die Therapieziele.</div>
+      <div class="step-item"><strong>Tasks:</strong> Einigkeit über die Wege/Aufgaben dorthin.</div>
+      <div class="step-item"><strong>Kern:</strong> kollaborativ &amp; dyadisch — „zusammenarbeiten, nicht lieben".</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'allianz')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Allianz: Befunde ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Allianz: Befunde & Kausalität</div>
+    <div class="sec-lz">r≈0,28 (295 Studien); aggregiert ~15 % des Erfolgs; dyadisch + nested; Kausalrichtung unklar (frühe Besserung wirkt zurück)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die Allianz hängt mit dem Therapieerfolg zusammen — aber wie stark, und ist sie wirklich die Ursache?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Konsistent positiv, aber <strong>moderat: r ≈ 0,28</strong> (aggregiert ~15 % des Erfolgs). Die <strong>Kausalrichtung ist unklar</strong>: frühe Symptombesserung kann auf die Allianz rückwirken; zudem sind die Daten dyadisch und nested.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Empirische Befunde</div>
+    Höhere Allianz → besserer Therapieerfolg: <strong>r ≈ 0,28</strong> (95 %-CI [0,26; 0,30]; 295 Studien, &gt; 30.000 Patient*innen). Eine <strong>einzelne</strong> Anfangssitzung erklärt ~5 %, eine <strong>aggregierte</strong> Messung über 6 Sitzungen ~15 % des Erfolgs.
+  </div>
+  <div class="card">
+    <div class="card-title">Methodische Schwierigkeiten</div>
+    Allianz ist <strong>dyadisch</strong> (Patient*in UND Therapeut*in tragen bei). Sie ist <strong>nested</strong> (geschachtelt) — in vielen Studien nicht berücksichtigt. Trägt eher die <strong>Patient*innen</strong>-Seite (Motivation, Bindung) oder die <strong>Therapeut*innen</strong>-Seite (Allianzkompetenz) bei? Therapeut*innen unterschätzen die Allianz tendenziell.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kausalitätsproblem</div>
+    Eine hohe Allianz ist <strong>nicht zwingend die Ursache</strong> für Besserung: frühe Symptomverbesserungen können auf die Allianz <strong>zurückwirken</strong> (umgekehrte Kausalität). Korrelation ≠ Kausalität.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Allianz–Erfolg: Befund vs. Vorsicht</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="bef" onclick="switchTab(this,'allbef')">Befund</button>
+      <button class="tab-btn" data-tab="vor" onclick="switchTab(this,'allbef')">Vorsicht</button>
+    </div>
+    <div class="tab-group" data-group="allbef">
+      <div class="tab-content active" data-tab="bef"><strong>Befund:</strong> r ≈ 0,28 (295 Studien, &gt;30.000 Patient*innen); aggregierte Messung über 6 Sitzungen ~15 % des Erfolgs.</div>
+      <div class="tab-content" data-tab="vor"><strong>Vorsicht:</strong> Kausalrichtung unklar (frühe Besserung wirkt zurück); dyadisch + nested; Therapeut*innen unterschätzen die Allianz tendenziell.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Allianzrupturen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Allianzrupturen: Typen & Auflösung</div>
+    <div class="sec-lz">Rückzugsbrüche (passiv) vs Konfrontationsbrüche (offen); nicht per se schädlich; erfolgreicher „repair“ (Safran & Muran) kann therapeutisch wirken</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Brüche in der Allianz („Rupturen") gibt es in zwei Typen. Wie unterscheiden sie sich — und sind sie immer schädlich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Rückzugsbrüche</strong> (passiv: ausweichen, Aufgaben nicht erledigen) vs. <strong>Konfrontationsbrüche</strong> (offen: Beschwerden). Rupturen sind <strong>nicht per se schädlich</strong> — bei erfolgreichem „repair" können sie sogar therapeutisch wirken.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Allianzbrüche — zwei Typen</div>
+    Allianzbrüche zeigen sich in: mangelnder Übereinstimmung über Ziele, mangelnder Zusammenarbeit bei Aufgaben, belasteter affektiver Beziehung. <strong>Verdeckte Rückzugsbrüche:</strong> Patient*in zieht sich zurück (ausweichendes Erzählen, Aufgaben nicht erledigen). <strong>Konfrontationsbrüche:</strong> offene Auseinandersetzung (Beschwerden über Therapeut*in, Rahmen oder Vorgehen).
+  </div>
+  <div class="card">
+    <div class="card-title">Auflösung („repair", Safran &amp; Muran / Muran &amp; Eubanks)</div>
+    Drei Reparaturstrategien — jede beginnt mit <strong>„Acknowledging Rupture"</strong> und führt idealerweise zu einer <strong>„New Relational Experience"</strong>: (1) Verständnis klären/Gefühle validieren · (2) Aufgaben/Ziele neu aushandeln · (3) Ruptur gemeinsam auf der Meta-Ebene explorieren.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Rupturen sind nicht per se schädlich</div>
+    Frühere Annahme: Rupturen verschlechtern immer. Heute: bei <strong>erfolgreicher Auflösung</strong> können sie sogar <strong>günstige Bedingungen</strong> für Veränderung schaffen. Entscheidend ist der gelungene „repair".
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rückzugs- oder Konfrontationsbruch?</div>
+    <div class="corr-item" id="c3a">Ausweichendes Erzählen, Aufgaben werden nicht erledigt
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'rueckzug')">Rückzugsbruch</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'konfront')">Konfrontationsbruch</button>
+      </div><div class="corr-fb" id="c3a-fb"></div>
+    </div>
+    <div class="corr-item" id="c3b">Offene Beschwerde über das therapeutische Vorgehen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'rueckzug')">Rückzugsbruch</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'konfront')">Konfrontationsbruch</button>
+      </div><div class="corr-fb" id="c3b-fb"></div>
+    </div>
+    <div class="corr-item" id="c3c">Patient*in zieht sich still zurück, ohne zu konfrontieren
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'rueckzug')">Rückzugsbruch</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'konfront')">Konfrontationsbruch</button>
+      </div><div class="corr-fb" id="c3c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Spezifische Faktoren ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Theoriespezifische Faktoren & Kausalität</div>
+    <div class="sec-lz">Wampold: gemeinsame Faktoren (d~0,3–0,65) > spezifische (d~0–0,2); Gegenthese; Hormonersatz-Beispiel: Korrelation ≠ Kausalität (Drittvariable SES)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wampold sagt: vor allem gemeinsame Faktoren wirken. Was hält die Gegenseite dagegen — und warum reichen korrelative Befunde für Kausalaussagen nicht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>Wampold:</strong> gemeinsame Faktoren (d~0,3–0,65) &gt; spezifische (d~0–0,2). <strong>Gegenthese:</strong> spezifische Wirkmechanismen sind für Ausbildung/Praxis unverzichtbar. <strong>Hormonersatz-Beispiel:</strong> Korrelation ≠ Kausalität (Drittvariable SES).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Wampolds These</div>
+    In der „Psychotherapie-Debatte" (Wampold et al. 2018): der wesentliche Effekt beruht auf <strong>methodenübergreifenden (gemeinsamen) Faktoren</strong> — Zielkonsens, Empathie, Allianz, Wertschätzung, Echtheit, Erwartungen (d ≈ 0,3–0,65). <strong>Spezifische Komponenten</strong> (Behandlungsunterschiede, Protokolltreue, spezifische Bestandteile) zeigen kleinere Effekte (d ≈ 0–0,2). Kontroverse Position!
+  </div>
+  <div class="card">
+    <div class="card-title">Gegenthese</div>
+    Verfahrensübergreifende Basiskompetenzen sind unbestritten und <strong>trainierbar</strong>. ABER: Die Theorien postulieren unterschiedliche Wirkmechanismen — solange in Verfahren ausgebildet wird, muss man <strong>wissen, wie wirksam sie sind und welche Mechanismen entscheidend sind</strong>. Beide Positionen schließen sich nicht aus.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Korrelation ≠ Kausalität (Hormonersatz)</div>
+    Hormonersatztherapie schien korrelativ <strong>kardioprotektiv</strong> — eine <strong>Drittvariable</strong> (höherer SES) erzeugte den Zusammenhang. <strong>RCTs</strong> zeigten später sogar ein erhöhtes KHK-Risiko. Lehre: korrelative Befunde belegen keine Kausalität — auch in der PT-Forschung braucht es RCTs/Mediationsanalysen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Faktoren-Simulator (Wampold) — gemeinsam vs. spezifisch</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="wp-gem" onclick="wpSet('gem')">Gemeinsame Faktoren</button>
+        <button class="sim-tbtn" id="wp-spez" onclick="wpSet('spez')">Spezifische Komponenten</button>
+      </div>
+      <div class="sim-verdict" id="wp-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Wampolds Kernbefund (Contextual Model): <strong>gemeinsame Faktoren tragen deutlich mehr zum Erfolg bei</strong> als die spezifischen Technik-Komponenten — Grundlage des Dodo-Bird-Verdikts.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Mediationsmodelle ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Mediationsmodelle</div>
+    <div class="sec-lz">Mediator erklärt Behandlung→Ergebnis; Baron & Kenny (4 Bedingungen); MacArthur (Kraemer): Mediator muss dem Ergebnis zeitlich vorangehen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Um einen Wirkmechanismus zu belegen, nutzt man Mediationsmodelle. Was ist ein Mediator — und welche Bedingung fügt das MacArthur-Modell hinzu?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Ein <strong>Mediator</strong> erklärt (ganz/teilweise) den Zusammenhang Behandlung→Ergebnis. <strong>Baron &amp; Kenny:</strong> 4 Bedingungen. <strong>MacArthur (Kraemer):</strong> der Mediator muss dem Ergebnis <strong>zeitlich vorangehen</strong> (z. B. Kognitionen ändern sich vor den Symptomen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was ist ein Mediator?</div>
+    Eine Variable, die <strong>(ganz oder teilweise) den Zusammenhang zwischen Behandlung und Ergebnis erklärt</strong> — der vermutete Wirkmechanismus. Beispiel KT bei Depression: KT → <em>Kognitionen</em> → Depression (Standardmodell).
+  </div>
+  <div class="card">
+    <div class="card-title">Baron &amp; Kenny: vier Bedingungen</div>
+    (1) EG und KG zeigen unterschiedliche Ergebnisse · (2) EG und KG zeigen unterschiedlichen Zusammenhang zum Mediator · (3) ändert sich der Mediator, ändert sich das Ergebnis · (4) kontrolliert man den Mediator statistisch, <strong>sinkt</strong> die durch EG/KG erklärte Ergebnisvarianz.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ MacArthur-Modell (Kraemer et al. 2011)</div>
+    Ergänzung: Der Mediator muss dem Behandlungsergebnis <strong>zeitlich vorangehen</strong> (Temporalität) — die Kognitionsänderung muss <em>vor</em> der Symptomänderung kommen, sonst kein Wirkmechanismus.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Mediation am Beispiel KVT → Gedanken → Depression</div>
+    <div id="media">
+      <div class="step-item"><strong>1.</strong> Depression nimmt in der KVT-Gruppe stärker ab als in der Wartegruppe.</div>
+      <div class="step-item"><strong>2.</strong> Die Gedankenveränderung wird in der KVT-Gruppe über die Zeit stärker.</div>
+      <div class="step-item"><strong>3.</strong> Mehr Gedankenveränderung hängt mit nachfolgender Abnahme der Depression zusammen.</div>
+      <div class="step-item"><strong>4.</strong> Kontrolliert man die Gedankenveränderung, sinkt der direkte KVT→Depression-Effekt.</div>
+      <div class="step-item"><strong>+ MacArthur:</strong> die Gedankenveränderung muss der Symptomänderung zeitlich vorangehen.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'media')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Wirkmechanismen KVT ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Wirkmechanismen der KVT</div>
+    <div class="sec-lz">Kognitionsveränderung NICHT KVT-spezifisch (Cristea 2015); Bewältigungsfertigkeiten bessere Befundlage für KVT-Spezifität (nur 1 Studie)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wirkt die KVT, weil sie Gedanken verändert — oder weil sie Bewältigungsfertigkeiten vermittelt? Was sagt die Befundlage?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Kognitionsveränderung:</strong> NICHT KVT-spezifisch (auch andere Therapien erzielen sie) → Befundlage nicht überzeugend. <strong>Bewältigungsfertigkeiten:</strong> bessere Befundlage für KVT-Spezifität — aber bislang nur in <strong>einer</strong> Studie als spezifischer Mediator gezeigt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Wirkannahmen der KT</div>
+    Zentral: depressogene Kognitionen. Annahmen zur Wirkweise: KT <strong>verändert</strong> Schemata (Hollon 1990); KT <strong>deaktiviert</strong> Schemata, die aber bestehen bleiben (Ingram & Hollon 1986); KT vermittelt <strong>Bewältigungsfertigkeiten</strong> zur Unterdrückung dysfunktionaler Kognitionen (Barber & DeRubeis 1992).
+  </div>
+  <div class="card">
+    <div class="card-title">Befundlage: Kognitionsveränderung</div>
+    KVT verändert dysfunktionale Gedanken — <strong>aber andere Therapien auch</strong> (Cristea et al. 2015). Das Ausmaß der Gedankenveränderung hängt mit der Symptomveränderung zusammen — <strong>ebenfalls nicht KVT-spezifisch</strong> (Garratt et al. 2007). → Befundlage noch nicht überzeugend.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Befundlage: Bewältigungsfertigkeiten</div>
+    Verbesserte Bewältigungsfertigkeiten reduzieren depressive Symptome (Barber & DeRubeis 2001) und Rückfälle (Strunk 2007). Eine Vergleichsstudie KVT vs. PDT zeigt: dieser Effekt ist <strong>KVT-spezifisch</strong> — bessere Befundlage, aber <strong>nur in einer Studie</strong> demonstriert. Nicht mit der Kognitionsveränderung gleichsetzen!
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Mechanismus ist KVT-spezifisch?</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="kog" onclick="switchTab(this,'mech')">Kognitionen</button>
+      <button class="tab-btn" data-tab="bew" onclick="switchTab(this,'mech')">Bewältigung</button>
+    </div>
+    <div class="tab-group" data-group="mech">
+      <div class="tab-content active" data-tab="kog"><strong>Kognitionsveränderung:</strong> NICHT KVT-spezifisch — auch andere Therapien verändern dysfunktionale Gedanken (Cristea 2015; Garratt 2007). Befundlage nicht überzeugend.</div>
+      <div class="tab-content" data-tab="bew"><strong>Bewältigungsfertigkeiten:</strong> bessere Befundlage für KVT-Spezifität (Barber & DeRubeis 2001; Strunk 2007) — aber bisher nur in einer Studie als spezifischer Mediator gezeigt.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Gruppe vs Individuum ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Gruppen- vs Individualebene & Klinik</div>
+    <div class="sec-lz">Gruppenbefunde ≠ individuelle Prozesse (Tippfehler-Analogie); idiographische Ansätze nötig; klinische Schlüsse (Allianz, Bewältigung, emotionale Aktivierung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Befund über viele Patient*innen — gilt der auch für die einzelne Person? Und welche praktischen Konsequenzen zieht die Forschung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Nicht ohne Weiteres:</strong> Gruppenbefunde ≠ individuelle Prozesse (Tippfehler-Analogie: zwischen Personen negativ, innerhalb einer Person umgekehrt) → idiographische Ansätze nötig. Klinisch u. a.: Allianz fördern, Bewältigung lehren, bei Exposition emotionale Aktivierung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gruppen- vs. Individualebene</div>
+    Eigentlich interessieren <strong>Veränderungen innerhalb einer Person</strong> — erforscht werden aber meist <strong>Unterschiede zwischen Gruppen</strong>. Befunde auf Gruppenebene lassen sich <strong>nicht ohne Weiteres</strong> auf individuelle Veränderungsprozesse übertragen.
+  </div>
+  <div class="card">
+    <div class="card-title">Tippfehler-Analogie</div>
+    <strong>Zwischen Personen:</strong> wer schneller tippt, macht weniger Fehler (Drittvariable: Tipperfahrung). <strong>Innerhalb einer Person:</strong> je schneller ich tippe, desto <strong>mehr</strong> Fehler. Der Zusammenhang kehrt sich um → für Wirkmechanismen sind <strong>idiographische</strong> Analysen (mehrere Messungen pro Person) nötig.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Klinische Schlussfolgerungen</div>
+    Bei Depression Bewältigungsstrategien lehren · bei Exposition <strong>emotionale Aktivierung</strong> fördern · kognitive Strategien (Tagesordnung, Hausaufgaben) nutzen · bei PTBS traumabezogene Überzeugungen modifizieren · in PDT Introspektion fördern · <strong>alle</strong>: Allianz beobachten/fördern und auf Rupturen reagieren.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Tippfehler-Analogie — Schritt für Schritt</div>
+    <div id="tippfehler">
+      <div class="step-item"><strong>Zwischen Personen:</strong> Schnelltipper machen weniger Fehler (negativer Zusammenhang).</div>
+      <div class="step-item"><strong>Drittvariable:</strong> Tipperfahrung erklärt diesen Zwischen-Personen-Befund.</div>
+      <div class="step-item"><strong>Innerhalb einer Person:</strong> mehrere Messungen → schneller tippen = mehr Fehler (positiv!).</div>
+      <div class="step-item"><strong>Lehre:</strong> Gruppenbefunde ≠ individuelle Prozesse → idiographische Ansätze nötig.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'tippfehler')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL09 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gemeinsame Faktoren</h4>
+      <p>Wirken verfahrensübergreifend</p>
+      <p>z. B. Allianz, Empathie, Erwartungen</p>
+      <p>Effekte ~0,3–0,65 (Wampold)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Theoriespezifische Faktoren</h4>
+      <p>An ein bestimmtes Verfahren gebunden</p>
+      <p>z. B. Hausaufgaben (VT), unbewusste Determinanten (PDT)</p>
+      <p>Effekte ~0–0,2; Einteilung nicht trennscharf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Gemeinsame Faktoren wie die therapeutische Beziehung haben in allen Therapieverfahren dieselbe Bedeutung und Funktion.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verdeckte Rückzugsbrüche</h4>
+      <p>Indirekt und passiv</p>
+      <p>z. B. ausweichendes Erzählen, Aufgaben nicht erledigen</p>
+      <p>Still und verdeckt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Konfrontationsbrüche</h4>
+      <p>Direkt und aktiv</p>
+      <p>z. B. Beschwerden über Therapeut*in/Vorgehen/Rahmen</p>
+      <p>Offener Konflikt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Allianzbrüche sind immer als offene Konflikte erkennbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Korrelation (Allianz–Erfolg)</h4>
+      <p>Konsistent belegt (r ≈ 0,28)</p>
+      <p>Zusammenhang, keine Ursache</p>
+      <p>Richtung methodisch offen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kausalität (Allianz → Erfolg)</h4>
+      <p>Würde bedeuten: Allianz verursacht Erfolg</p>
+      <p>Frühe Besserung kann zurückwirken</p>
+      <p>Nicht aus Korrelation ableitbar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine hohe Allianz ist immer die Ursache für Symptomverbesserung und nicht umgekehrt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kognitionsveränderung (KVT-Mechanismus)</h4>
+      <p>NICHT KVT-spezifisch</p>
+      <p>Auch andere Therapien verändern Kognitionen</p>
+      <p>Cristea 2015; Garratt 2007 → noch nicht überzeugend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bewältigungsfertigkeiten (KVT-Mechanismus)</h4>
+      <p>Bessere Befundlage für KVT-Spezifität</p>
+      <p>Reduzieren Symptome & Rückfälle</p>
+      <p>Als spezifischer Mediator nur in 1 Studie gezeigt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Da KVT dysfunktionale Kognitionen verändert und Kognitionen mit Symptomreduktion zusammenhängen, ist die kognitive Veränderung der spezifische Wirkmechanismus der KVT.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gruppenebenen-Befunde</h4>
+      <p>Vergleich zwischen Gruppen von Personen</p>
+      <p>z. B. Gruppe mit Kognitionsreduktion = weniger Symptome</p>
+      <p>Nicht direkt auf Individuen übertragbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Individuelle Veränderungsprozesse</h4>
+      <p>Veränderung innerhalb einer Person</p>
+      <p>Können umgekehrt verlaufen (Tippfehler-Analogie)</p>
+      <p>Erfordern idiographische Ansätze</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wenn auf Gruppenebene gezeigt wird, dass Kognitionsreduktion mit Symptomreduktion zusammenhängt, gilt dieser Zusammenhang auch für jeden einzelnen Patienten.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a1-vl09</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a1-vl09';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was untersucht die Prozess-Ergebnisforschung?",
+      "opts": [
+        "Durch welche Mechanismen Psychotherapie wirkt (was in den Sitzungen die Veränderung auslöst).",
+        "Die Prozess-Ergebnisforschung untersucht ausschließlich, ob Psychotherapie insgesamt besser wirkt als eine unbehandelte Wartelisten-Kontrollgruppe, ganz ohne Interesse an den zugrundeliegenden Wirkmechanismen.",
+        "Ausschließlich die Kosten der Behandlung pro Sitzung.",
+        "Ausschließlich die Diagnostik vor Therapiebeginn."
+      ],
+      "c": 0,
+      "e": "Prozess-Ergebnisforschung: WIE / durch welche Mechanismen wirkt Psychotherapie? Klassische Unterscheidung: gemeinsame (allgemeine) vs. (theorie-)spezifische Faktoren."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was ist das Problem der Einteilung in gemeinsame vs. spezifische Faktoren?",
+      "opts": [
+        "Die Einteilung ist vollkommen trennscharf und objektiv: Jede Variable lässt sich eindeutig und überschneidungsfrei genau einer der beiden Kategorien zuordnen, und beide Faktorengruppen wirken nachweislich völlig unabhängig voneinander.",
+        "Sie ist nicht trennscharf — dieselbe Variable (z. B. Beziehung) bedeutet je nach Schule Verschiedenes; die Faktoren interagieren eher.",
+        "Es gibt überhaupt keine gemeinsamen Faktoren.",
+        "Spezifische Faktoren existieren gar nicht."
+      ],
+      "c": 1,
+      "e": "Einteilung nicht trennscharf/teils subjektiv (Wampold et al. 2018): „therapeutische Beziehung“ meint in PDT/VT/GT Verschiedenes; allgemeine und spezifische Faktoren interagieren eher, als unabhängig zu wirken."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was kennzeichnet die Arbeitsallianz?",
+      "opts": [
+        "Dass sich Therapeut*in und Patient*in romantisch zugetan sein müssen.",
+        "Eine rein einseitige Bewertung allein durch die Therapeut*in.",
+        "Die kollaborative, dyadische Qualität: vertrauensvolles Arbeiten an gemeinsamen Zielen („müssen zusammenarbeiten, nicht lieben“).",
+        "Die Arbeitsallianz bezeichnet ausschließlich die Anzahl der absolvierten Therapiesitzungen sowie die formale Einhaltung des vereinbarten Behandlungsrahmens, völlig unabhängig von Vertrauen oder gemeinsamer Zielsetzung."
+      ],
+      "c": 2,
+      "e": "Arbeitsallianz: kollaborative, dyadische Qualität — vertrauensvolles Arbeiten an gemeinsamen Zielen und Aufgaben. „Therapeut und Patient müssen sich nicht lieben; sie müssen zusammenarbeiten.“ Teilaspekt der therapeutischen Beziehung."
+    },
+    {
+      "id": "s1q2",
+      "q": "Womit wird die Allianz typischerweise gemessen?",
+      "opts": [
+        "Die Allianz wird ausschließlich über bildgebende Verfahren (z. B. fMRT) erfasst, die während jeder einzelnen Therapiesitzung in Echtzeit die neuronale Aktivität beider beteiligten Personen aufzeichnen.",
+        "Über einen standardisierten Intelligenztest der Patient*in.",
+        "Über die verordnete Medikamentendosis.",
+        "Mit dem Working Alliance Inventory (WAI; Horvath & Greenberg, 1989) — aus Patient*innen- oder Therapeut*innensicht."
+      ],
+      "c": 3,
+      "e": "Messinstrument: Working Alliance Inventory (WAI; Horvath & Greenberg 1989), z. B. „Meine Therapeut*in und ich achten einander“. Erfassung aus beiden Perspektiven möglich."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie stark ist der Zusammenhang zwischen Allianz und Therapieerfolg?",
+      "opts": [
+        "Konsistent positiv, aber moderat (r ≈ 0,28; aggregierte Messung erklärt ~15 %).",
+        "Der Zusammenhang ist in allen Meta-Analysen durchgehend nahezu perfekt (r ≈ 0,95), sodass die Allianz praktisch den gesamten Behandlungserfolg vollständig und allein erklärt.",
+        "Es gibt keinen Zusammenhang (r ≈ 0).",
+        "Er ist durchgängig stark negativ."
+      ],
+      "c": 0,
+      "e": "Allianz–Erfolg: r ≈ 0,28 (295 Studien, >30.000 Patient*innen). Einzelne Anfangssitzung ~5 %, aggregierte Messung von 6 Sitzungen ~15 % des Erfolgs."
+    },
+    {
+      "id": "s2q2",
+      "q": "Welches methodische Problem erschwert die Kausalinterpretation der Allianz?",
+      "opts": [
+        "Es besteht überhaupt kein methodisches Problem: Da die Allianz stets vor jeder Symptomveränderung gemessen wird, ist zweifelsfrei und endgültig belegt, dass sie die alleinige Ursache des Therapieerfolgs ist.",
+        "Frühe Symptomverbesserungen können auf die Allianz rückwirken (Kausalrichtung unklar); zudem sind die Daten dyadisch/nested.",
+        "Die Allianz lässt sich grundsätzlich gar nicht messen.",
+        "Es gibt keine Patient*innenperspektive auf die Allianz."
+      ],
+      "c": 1,
+      "e": "Kausalitätsproblem: frühe Symptomverbesserung kann auf die Allianz rückwirken (umgekehrte Kausalität); Allianz ist dyadisch (beide tragen bei) und Daten sind nested (meist nicht berücksichtigt). Therapeut*innen unterschätzen die Allianz tendenziell."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was unterscheidet Rückzugs- von Konfrontationsbrüchen?",
+      "opts": [
+        "Rückzugsbrüche sind laut und offen, Konfrontationsbrüche dagegen still und verdeckt.",
+        "Es gibt zwischen beiden keinen Unterschied.",
+        "Rückzug = indirekt/passiv (ausweichen, Aufgaben nicht erledigen); Konfrontation = direkt/offen (Beschwerden).",
+        "Rückzugsbrüche treten ausschließlich in der Verhaltenstherapie auf, während Konfrontationsbrüche definitionsgemäß nur in der psychodynamischen Langzeittherapie und niemals in anderen Verfahren vorkommen können."
+      ],
+      "c": 2,
+      "e": "Verdeckte Rückzugsbrüche: indirekt/passiv (ausweichendes Erzählen, Aufgaben nicht erledigen). Konfrontationsbrüche: direkt/offen (Beschwerden über Therapeut*in/Vorgehen/Rahmen)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was gilt heute für die Auswirkung von Allianzrupturen?",
+      "opts": [
+        "Allianzrupturen sind ausnahmslos und unter allen Umständen schädlich; sie sagen immer eine Symptomverschlechterung voraus und müssen daher in jedem Fall unbedingt von vornherein vermieden werden.",
+        "Sie sind grundsätzlich immer völlig folgenlos.",
+        "Sie beenden zwangsläufig jede Therapie.",
+        "Nicht per se schädlich — bei erfolgreicher Auflösung („repair“) können sie sogar therapeutisch wirksam werden."
+      ],
+      "c": 3,
+      "e": "Rupturen sind nicht per se schädlich: entscheidend ist die erfolgreiche Auflösung („repair“). Gelingt sie, können sie günstige Bedingungen für Veränderung schaffen. Jede Reparaturstrategie beginnt mit „Acknowledging Rupture“ (Safran & Muran / Muran & Eubanks)."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was argumentiert Wampold in der „Psychotherapie-Debatte“?",
+      "opts": [
+        "Der wesentliche Effekt beruht auf gemeinsamen Faktoren (Allianz, Empathie, Erwartungen; d ≈ 0,3–0,65), die größer sind als spezifische Komponenten (d ≈ 0–0,2).",
+        "Wampold argumentiert, dass ausschließlich die technisch-spezifischen Bestandteile eines Verfahrens (z. B. Protokolltreue, spezifische Interventionen) den gesamten Therapieerfolg erklären und allgemeine Faktoren völlig bedeutungslos seien.",
+        "Dass Psychotherapie generell unwirksam ist.",
+        "Dass ausschließlich Medikamente wirken."
+      ],
+      "c": 0,
+      "e": "Wampold (2018): gemeinsame Faktoren (Zielkonsens, Empathie, Allianz, Wertschätzung, Echtheit, Erwartungen) zeigen größere Effekte (~0,3–0,65) als spezifische Komponenten (~0–0,2). Kontroverse Position."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was zeigt das Hormonersatztherapie-Beispiel?",
+      "opts": [
+        "Das Beispiel der Hormonersatztherapie belegt eindrücklich, dass ein in mehreren großen korrelativen Studien gefundener Zusammenhang immer und zwingend einen echten kausalen Schutzeffekt widerspiegelt und durch RCTs nur bestätigt wird.",
+        "Korrelation ≠ Kausalität: eine Drittvariable (höherer sozioökonomischer Status) erzeugte den Schein-Schutzeffekt; RCTs zeigten sogar Schaden.",
+        "Dass Hormone zuverlässig gegen Depression wirken.",
+        "Dass korrelative Studien für Kausalaussagen immer ausreichen."
+      ],
+      "c": 1,
+      "e": "Hormonersatztherapie: korrelativ schien sie kardioprotektiv (Drittvariable: höherer SES), RCTs zeigten aber erhöhtes KHK-Risiko. Lehre: korrelative Befunde belegen keine Kausalität — auch in der PT-Forschung braucht es RCTs/Mediationsanalysen."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist ein Mediator?",
+      "opts": [
+        "Eine Variable, die die Therapeut*in im Behandlungsprozess ersetzt.",
+        "Eine reine Kontrollgruppe ohne aktive Behandlung.",
+        "Eine Variable, die (ganz oder teilweise) den Zusammenhang zwischen Behandlung und Behandlungsergebnis erklärt.",
+        "Ein Mediator ist eine Variable, die ausschließlich die Stärke (nicht aber das Zustandekommen) eines Zusammenhangs verändert und dabei selbst völlig unabhängig von Behandlung und Behandlungsergebnis bleibt."
+      ],
+      "c": 2,
+      "e": "Mediator = Variable, die (ganz/teilweise) den Zusammenhang zwischen Behandlung und Ergebnis erklärt (Wirkmechanismus). Baron & Kenny: vier Bedingungen. (Die letzte Option beschreibt einen Moderator.)"
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche zusätzliche Bedingung fordert das MacArthur-Modell (Kraemer et al.) über Baron & Kenny hinaus?",
+      "opts": [
+        "Das MacArthur-Modell verlangt zusätzlich, dass der Mediator unter allen Umständen exakt zeitgleich mit dem Behandlungsergebnis gemessen werden muss und keinesfalls vorher oder nachher erhoben werden darf.",
+        "Dass es im Modell gar keinen Mediator geben darf.",
+        "Dass ausschließlich eine einzige Gruppe untersucht wird.",
+        "Der Mediator muss dem Behandlungsergebnis zeitlich vorangehen (z. B. Kognitionen ändern sich VOR den Symptomen)."
+      ],
+      "c": 3,
+      "e": "MacArthur-Modell (Kraemer et al. 2011): der Mediator muss dem Ergebnis zeitlich vorangehen (Temporalität) — z. B. Kognitionsänderung vor Symptomänderung. Ergänzt die vier Baron-&-Kenny-Bedingungen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was zeigt die Befundlage zur Veränderung dysfunktionaler Kognitionen als KVT-Wirkmechanismus?",
+      "opts": [
+        "Sie ist NICHT KVT-spezifisch — auch andere Therapien verändern dysfunktionale Kognitionen (Cristea et al. 2015).",
+        "Die Befundlage zeigt eindeutig und abschließend, dass ausschließlich die KVT überhaupt in der Lage ist, dysfunktionale Kognitionen zu verändern, und dass dieser Mechanismus damit hochspezifisch für die KVT belegt ist.",
+        "Dass sich dysfunktionale Kognitionen grundsätzlich nie verändern lassen.",
+        "Dass ausschließlich Medikamente Kognitionen verändern können."
+      ],
+      "c": 0,
+      "e": "Veränderung dysfunktionaler Kognitionen ist NICHT KVT-spezifisch — auch andere Therapien erzielen sie (Cristea et al. 2015; Garratt et al. 2007). Die Befundlage für die kognitive Mediation ist noch nicht überzeugend."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was gilt für Bewältigungsfertigkeiten als KVT-Wirkmechanismus?",
+      "opts": [
+        "Bewältigungsfertigkeiten spielen für die Wirkung der KVT nachweislich keinerlei Rolle und zeigen in sämtlichen Studien überhaupt keinen Zusammenhang mit der Reduktion depressiver Symptome oder der Rückfallhäufigkeit.",
+        "Bessere Befundlage für KVT-Spezifität (reduzieren Symptome/Rückfälle), aber bislang nur in einer Studie als spezifischer Mediator gezeigt.",
+        "Sie sind identisch mit der Veränderung dysfunktionaler Kognitionen.",
+        "Sie wirken ausschließlich in der psychodynamischen Therapie."
+      ],
+      "c": 1,
+      "e": "Bewältigungsfertigkeiten: reduzieren depressive Symptome (Barber & DeRubeis 2001) und Rückfälle (Strunk 2007); KVT-spezifischer Mediationseffekt — aber bisher nur in EINER Studie demonstriert. Nicht mit der Kognitionsveränderung gleichsetzen."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was illustriert die „Tippfehler-Analogie“?",
+      "opts": [
+        "Dass schnelleres Tippen grundsätzlich und ausnahmslos immer zu weniger Fehlern führt.",
+        "Dass Gruppen- und Individualebene in der Veränderungsforschung immer exakt identische Zusammenhänge zeigen.",
+        "Gruppenbefunde lassen sich nicht ohne Weiteres auf Individuen übertragen — der Zusammenhang kann innerhalb einer Person umgekehrt sein.",
+        "Die Tippfehler-Analogie belegt, dass Befunde, die auf Gruppenebene zwischen verschiedenen Personen gefunden werden, stets uneingeschränkt und ohne jede methodische Einschränkung auch für jeden einzelnen Patienten gelten."
+      ],
+      "c": 2,
+      "e": "Tippfehler-Analogie: zwischen Personen tippen Schnellere weniger Fehler (Drittvariable Erfahrung); innerhalb einer Person macht schnelleres Tippen MEHR Fehler. → Gruppenbefunde ≠ individuelle Prozesse; idiographische Analysen nötig."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welche klinische Schlussfolgerung zieht die Prozess-Ergebnisforschung u. a.?",
+      "opts": [
+        "Aus der Prozess-Ergebnisforschung folgt, dass Therapeut*innen die Allianz vollständig ignorieren können und sich ausschließlich auf die korrekte, manualgetreue Abarbeitung technischer Interventionsschritte konzentrieren sollten.",
+        "Dass das Erlernen von Bewältigungsstrategien für depressive Patient*innen irrelevant ist.",
+        "Dass Exposition möglichst ohne jede emotionale Aktivierung durchgeführt werden soll.",
+        "Allianz beobachten/fördern und auf Rupturen reagieren; bei Depression Bewältigungsstrategien vermitteln; bei Exposition emotionale Aktivierung fördern."
+      ],
+      "c": 3,
+      "e": "Klinische Schlüsse (Crits-Christoph & Gibbons 2021): Allianz beobachten/fördern + auf Rupturen reagieren; bei Depression Bewältigungsstrategien lehren; bei Exposition emotionale Aktivierung fördern; bei PTBS traumabezogene Überzeugungen modifizieren; in PDT Introspektion fördern."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Variable galt klassisch als „gemeinsamer Faktor“ aller Psychotherapie?",
+    "opts": [
+      "Die therapeutische Beziehung / Allianz.",
+      "Als klassischer gemeinsamer Faktor aller Psychotherapieverfahren galt seit jeher ausschließlich die in der Verhaltenstherapie verankerte Vergabe von strukturierten schriftlichen Hausaufgaben zwischen den einzelnen Sitzungen.",
+      "Die psychoanalytische Traumdeutung.",
+      "Die manualgetreue Protokolltreue."
+    ],
+    "c": 0,
+    "e": "Klassischer gemeinsamer Faktor: die therapeutische Beziehung/Allianz. Problem: bedeutet je nach Schule Verschiedenes; gemeinsame und spezifische Faktoren interagieren."
+  },
+  {
+    "id": "bq2",
+    "q": "Wie schätzen Therapeut*innen die Allianz tendenziell ein?",
+    "opts": [
+      "Therapeut*innen und Patient*innen stimmen in ihrer Allianzeinschätzung stets vollkommen exakt überein, und Therapeut*innen überschätzen die Qualität der Allianz dabei durchgängig und systematisch sehr deutlich.",
+      "Sie stimmen mit Patient*innen nicht zwingend überein und unterschätzen die Allianz tendenziell.",
+      "Sie können die Allianz grundsätzlich gar nicht einschätzen.",
+      "Sie überschätzen die Allianz grundsätzlich immer massiv."
+    ],
+    "c": 1,
+    "e": "Therapeut*innen und Patient*innen stimmen in der Allianzeinschätzung nicht unbedingt überein; Therapeut*innen unterschätzen die Allianz tendenziell."
+  },
+  {
+    "id": "bq3",
+    "q": "Was ist der erste, unverzichtbare Schritt jeder Reparaturstrategie (Muran & Eubanks)?",
+    "opts": [
+      "Der sofortige Abbruch der laufenden Therapie.",
+      "Eine Neuverhandlung der Honorarvereinbarung.",
+      "Die Anerkennung, dass es einen Bruch gegeben hat („Acknowledging Rupture“).",
+      "Der erste unverzichtbare Schritt besteht darin, der Patientin ohne jede vorherige Anerkennung des Bruchs umgehend eine vollständig neue Therapiemethode aus einem anderen Verfahren vorzuschreiben."
+    ],
+    "c": 2,
+    "e": "Jede Reparaturstrategie beginnt mit „Acknowledging Rupture“ und soll zu einer „New Relational Experience“ führen. Drei Strategien: Verständnis klären/Gefühle validieren; Aufgaben/Ziele neu aushandeln; Ruptur gemeinsam explorieren (Meta-Ebene)."
+  },
+  {
+    "id": "bq4",
+    "q": "Was belegt das Hormonersatztherapie-Beispiel methodisch?",
+    "opts": [
+      "Es belegt, dass korrelative Studien und randomisiert-kontrollierte Studien grundsätzlich immer zu exakt demselben Ergebnis gelangen und daher der zusätzliche Aufwand für RCTs in der Forschung vollkommen überflüssig ist.",
+      "Dass eine Hormonersatztherapie eindeutig und zweifelsfrei kardioprotektiv wirkt.",
+      "Dass Drittvariablen für die Interpretation korrelativer Befunde keine Rolle spielen.",
+      "Korrelation belegt keine Kausalität — eine Drittvariable (SES) täuschte den Schutzeffekt vor (RCTs zeigten Schaden)."
+    ],
+    "c": 3,
+    "e": "Hormonersatztherapie: korrelativ kardioprotektiv (Drittvariable: höherer SES), RCTs aber erhöhtes KHK-Risiko → Korrelation ≠ Kausalität, auch in der Psychotherapieforschung."
+  },
+  {
+    "id": "bq5",
+    "q": "Wie hoch ist der Zusammenhang zwischen Allianz und Therapieerfolg ungefähr?",
+    "opts": [
+      "r ≈ 0,28 (konsistent über viele Meta-Analysen).",
+      "Der Zusammenhang liegt konstant und zweifelsfrei bei r ≈ 0,90, was bedeuten würde, dass die Allianz allein rund 80 % der gesamten Varianz im Therapieerfolg vollständig erklärt.",
+      "r ≈ 0,00 (kein Zusammenhang).",
+      "r ≈ -0,50 (deutlich negativ)."
+    ],
+    "c": 0,
+    "e": "r ≈ 0,28 (295 Studien, >30.000 Patient*innen). Einzelmessung ~5 %, aggregierte 6 Sitzungen ~15 % des Erfolgs."
+  },
+  {
+    "id": "bq6",
+    "q": "Was besagt die Gegenthese zu Wampolds Position?",
+    "opts": [
+      "Die Gegenthese behauptet, dass verfahrensübergreifende Basiskompetenzen vollkommen irrelevant sind und dass der Therapieerfolg ausschließlich durch die buchstabengetreue Befolgung eines einzigen, für alle Störungen identischen Manuals bestimmt wird.",
+      "Theoriespezifische Wirkmechanismen sind für Ausbildung und Praxis unverzichtbar — man muss wissen, was die Verfahren wirksam macht.",
+      "Dass die therapeutische Allianz für den Erfolg schädlich ist.",
+      "Dass es überhaupt keine gemeinsamen Faktoren gibt."
+    ],
+    "c": 1,
+    "e": "Gegenthese: verfahrensübergreifende Basiskompetenzen sind unbestritten und trainierbar; solange in Verfahren ausgebildet wird, muss man deren Wirksamkeit und Mechanismen kennen. Beide Positionen schließen sich nicht aus."
+  },
+  {
+    "id": "bq7",
+    "q": "Welche der vier Baron-&-Kenny-Bedingungen für eine Mediation trifft zu?",
+    "opts": [
+      "Der Mediator darf sich im Verlauf der Behandlung unter keinen Umständen verändern.",
+      "Experimental- und Kontrollgruppe müssen identische Behandlungsergebnisse zeigen.",
+      "Berücksichtigt man den Mediator statistisch, verringert sich die durch EG/KG erklärte Varianz im Ergebnis.",
+      "Eine Mediation liegt bereits dann zweifelsfrei vor, wenn Experimental- und Kontrollgruppe zu jedem Messzeitpunkt exakt dasselbe Behandlungsergebnis und denselben Mediatorwert aufweisen."
+    ],
+    "c": 2,
+    "e": "Baron & Kenny: (1) EG/KG unterschiedliche Ergebnisse; (2) EG/KG unterschiedlicher Zusammenhang zum Mediator; (3) ändert sich der Mediator, ändert sich das Ergebnis; (4) kontrolliert man den Mediator, sinkt die durch EG/KG erklärte Ergebnisvarianz."
+  },
+  {
+    "id": "bq8",
+    "q": "Warum sind idiographische (Individualebenen-)Analysen wichtig?",
+    "opts": [
+      "Idiographische Analysen sind ausschließlich deshalb wichtig, weil sie die Datenerhebung deutlich kostengünstiger machen und mit nur einer einzigen Messung pro Patientengruppe auskommen, ohne dass mehrere Messzeitpunkte erforderlich wären.",
+      "Weil Befunde auf Gruppenebene ohnehin immer uneingeschränkt auf jedes Individuum zutreffen.",
+      "Weil man mit ihnen Drittvariablen vollständig ignorieren kann.",
+      "Weil Gruppenbefunde nicht ohne Weiteres auf individuelle Veränderungsprozesse übertragbar sind (Tippfehler-Analogie)."
+    ],
+    "c": 3,
+    "e": "Idiographische Ansätze (mehrere Messungen pro Person) sind nötig, weil Befunde auf Gruppenebene nicht ohne Weiteres auf individuelle Veränderungsprozesse übertragbar sind — der Zusammenhang kann innerhalb der Person umgekehrt sein (Tippfehler-Analogie)."
+  }
+];
+
+var corrCorrect = {
+  "c0a": "gemeinsam",
+  "c0b": "spezifisch",
+  "c0c": "spezifisch",
+  "c0d": "gemeinsam",
+  "c3a": "rueckzug",
+  "c3b": "konfront",
+  "c3c": "rueckzug"
+};
+var corrExpl = {
+  "c0a": "Therapeutische Allianz/Empathie wirken verfahrensübergreifend → gemeinsamer Faktor.",
+  "c0b": "Hausaufgaben sind ein einzigartiger, an die VT gebundener Bestandteil → spezifischer Faktor.",
+  "c0c": "Fokus auf unbewusste Determinanten ist einzigartig für die psychodynamische Therapie → spezifischer Faktor.",
+  "c0d": "Erwartungen/Zielkonsens wirken verfahrensübergreifend → gemeinsamer Faktor.",
+  "c3a": "Ausweichendes Erzählen und Nicht-Erledigen von Aufgaben = verdeckter Rückzugsbruch (passiv).",
+  "c3b": "Offene Beschwerde über das therapeutische Vorgehen = Konfrontationsbruch (direkter offener Konflikt).",
+  "c3c": "Stiller Rückzug ohne offene Konfrontation = verdeckter Rückzugsbruch."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Faktoren-Simulator (Sektion ⑤, Wampold) */
+var wpData = {
+  gem: {e:'≈ 0,3–0,65 (substanziell)', d:'Gemeinsame Faktoren: Zielkonsens/Kollaboration, Empathie, Allianz, positive Wertschätzung, Kongruenz/Echtheit, Erwartungen.'},
+  spez:{e:'≈ 0–0,2 (klein)', d:'Spezifische Komponenten: Behandlungsunterschiede, Kompetenzratings, Protokolltreue, spezifische Technik-Bestandteile.'}
+};
+function wpSet(k){
+  ['gem','spez'].forEach(function(x){ var b=document.getElementById('wp-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('wp-out'); if(!o) return;
+  var d=wpData[k];
+  o.innerHTML='<strong>Typische Effektgröße:</strong> '+d.e+'<br>'+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  wpSet('gem');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

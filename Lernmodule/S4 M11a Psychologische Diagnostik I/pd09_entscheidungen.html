@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD09 Diagnostische Entscheidungen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl09
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD09 bespoke learning widgets */
+.stoffkarte{background:linear-gradient(135deg,rgba(56,189,248,.08),rgba(129,140,248,.08));border:1px solid rgba(56,189,248,.28);border-radius:14px;padding:16px;margin:0 0 20px}
+.stoffkarte h2{font-size:1rem;margin-bottom:8px}.stoff-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stoff-node{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:.78rem;color:var(--text2)}
+.stoff-node strong{display:block;color:var(--text);margin-bottom:2px}.source-chip{display:inline-block;font-size:.66rem;font-family:ui-monospace,monospace;color:var(--cyan);border:1px solid rgba(56,189,248,.3);border-radius:999px;padding:2px 7px;margin:2px 3px 2px 0}
+.compare-grid,.metric-grid,.triple-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.triple-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.compare-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}.compare-card h3{font-size:.9rem;margin-bottom:6px}.compare-card p{font-size:.82rem;color:var(--text2)}
+.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#020617;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;font-size:1rem;color:var(--cyan);margin:10px 0}
+.formula small{display:block;color:var(--text3);font-family:inherit;font-size:.7rem;margin-top:4px}.source-note{font-size:.76rem;color:var(--text2);border-left:3px solid var(--yellow);padding:8px 10px;background:rgba(251,191,36,.06);margin:10px 0}
+.study-table td:first-child{min-width:98px}.study-table .result{color:var(--text);font-weight:650}.tight-list li{margin-bottom:5px}
+.widget{background:linear-gradient(135deg,rgba(15,23,42,.95),rgba(30,41,59,.95));border:1px solid rgba(129,140,248,.35);border-radius:16px;padding:16px;margin-bottom:12px}
+.widget h3{font-size:1rem;margin-bottom:5px}.widget-intro{font-size:.8rem;color:var(--text2);margin-bottom:12px}.widget-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:10px 0}.control{display:flex;flex-direction:column;gap:4px;min-width:120px;flex:1}.control label,.control legend{font-size:.72rem;color:var(--text2);font-weight:700}.control input[type=number],.control select,.control input[type=range]{width:100%}.control input[type=number],.control select{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px;min-height:42px}
+fieldset.control{border:0;padding:0;margin:0}.radio-row{display:flex;gap:8px;flex-wrap:wrap}.radio-pill{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:7px 10px;font-size:.78rem;color:var(--text2)}
+.widget-output{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:10px;font-size:.82rem;color:var(--text2)}.widget-output strong{color:var(--text)}
+.ladder{counter-reset:step}.ladder-step{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 12px 12px 44px;margin:8px 0;font-size:.82rem;color:var(--text2)}.ladder-step:before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:11px;width:23px;height:23px;border-radius:50%;background:var(--accent);color:white;display:grid;place-items:center;font-weight:800;font-size:.72rem}.ladder-step strong{color:var(--text)}
+.plot-wrap{display:grid;grid-template-columns:minmax(260px,1.25fr) minmax(190px,.75fr);gap:14px;align-items:start}.plot-panel{background:#f8fafc;border-radius:12px;padding:8px;border:1px solid var(--border)}.plot-panel svg{display:block;width:100%;height:auto}.plot-legend{font-size:.75rem;color:var(--text2)}.plot-legend li{margin-bottom:5px}.plot-fallback{font-size:.75rem;color:var(--text2);margin-top:8px}
+.point-label{font-size:10px;font-weight:800;fill:#0f172a}.axis-label{font-size:10px;fill:#0f172a}.axis-tick{font-size:8px;fill:#334155}.decision-point{fill:#a3e635;stroke:#365314;stroke-width:1.5}.accepted{fill:#34d399}.rejected{fill:#fca5a5}.boundary{stroke:#7c3aed;stroke-width:2;stroke-dasharray:6 4}.cut-line{stroke:#ea580c;stroke-width:2;stroke-dasharray:5 4}
+.matrix{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}.matrix caption{text-align:left;font-size:.75rem;color:var(--text2);padding-bottom:6px}.matrix th,.matrix td{border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}.matrix th{font-size:.72rem;color:var(--text2);background:var(--bg)}.matrix td{font-weight:800;font-size:.9rem;background:var(--surface2)}.matrix td span{display:block;font-size:.68rem;color:var(--text2);font-weight:500}.matrix input{width:72px;max-width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:6px;text-align:center}
+.metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px}.metric{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px}.metric b{display:block;color:var(--cyan);font-size:.98rem}.metric span{font-size:.68rem;color:var(--text2)}
+.corr-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.corr-compact .corr-item{margin:0}.corr-btns button{min-height:38px}
+.forecast-box{background:rgba(129,140,248,.08);border:1px dashed rgba(129,140,248,.5);border-radius:10px;padding:12px;margin-bottom:10px}.forecast-box strong{color:var(--accent)}
+.effect-map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.effect-cell{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}.effect-cell b{display:block;font-size:.78rem}.effect-cell span{font-size:.68rem;color:var(--text2)}
+.roc-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:8px}.roc-meta div{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px;text-align:center}.roc-meta b{display:block;color:var(--cyan)}.roc-meta span{font-size:.65rem;color:var(--text2)}
+.scroll-table{overflow:auto;border-radius:10px}.scroll-table table{min-width:650px}.highlight-row td{background:rgba(163,230,53,.12);color:var(--text)}.highlight-cell{background:rgba(163,230,53,.22)!important;color:var(--text)!important;font-weight:800}.table-note{font-size:.72rem;color:var(--text2);margin-top:6px}
+.phase-summary{border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.06);border-radius:12px;padding:12px;margin:12px 0;font-size:.8rem;color:var(--text2)}.phase-summary strong{color:var(--green)}
+@media(max-width:680px){.stoff-grid,.compare-grid,.triple-grid,.effect-map,.metric-grid,.corr-compact{grid-template-columns:1fr}.plot-wrap{grid-template-columns:1fr}.roc-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.matrix th,.matrix td{padding:7px 4px}.matrix input{width:58px}}
+
+</style>
+</head>
+<body><a class="sr-only" href="#s0">Direkt zum Lerninhalt</a>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD09 Diagnostische Entscheidungen</h1>
+<p class="page-sub">Psychologische Diagnostik · interaktives Offline-Lernmodul</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie werden diagnostische Daten integriert? · Welche Entscheidungsregel passt? · Wie liest man Vierfeldertafel, ROC und Taylor-Russell?
+</div>
+
+<div class="stoffkarte" data-source-id="PD09-F02 PD09-F06 PD09-F12 PD09-F16 PD09-F20 PD09-F24 PD09-F25 PD09-F26" data-slides="2–26" data-source-status="integriert" data-learning-objective="LZ-01–LZ-08" data-widget-type="Orientierung">
+  <h2>Stoffkarte: vom Urteil zur optimalen Entscheidung</h2>
+  <div class="stoff-grid">
+    <div class="stoff-node"><strong>1. Daten integrieren</strong>Klinisch-erfahrungsbasiert oder statistisch/mechanisch nach Regel.</div>
+    <div class="stoff-node"><strong>2. Regel auswählen</strong>Kompensatorisch, Oder, Und, Pareto oder kombiniert.</div>
+    <div class="stoff-node"><strong>3. Entscheidung prüfen</strong>Vierfeldertafel, Basis- und Selektionsrate sowie vier Gütemaße.</div>
+    <div class="stoff-node"><strong>4. Cutoff optimieren</strong>Parameterwirkungen, ROC, Youden-Index und Taylor-Russell.</div>
+  </div>
+</div>
+
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Urteile</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Strategien</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Vierfelder</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Cutoffs</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Einfluss</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ ROC</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Optimieren</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">🎯 SRS-Mix</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Urteile ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+  data-source-id="PD09-F02 PD09-F03 PD09-F04 PD09-F05" data-slides="2–5" data-source-status="direkt+integriert"
+  data-learning-objective="LZ-01+LZ-02" data-widget-type="W1+W4+W9" data-cognitive-task="unterscheiden, befundinterpretieren, formelbasiert entscheiden">
+  <div class="sec-head">
+    <div class="sec-title">① Klinische und mechanische Urteilsbildung</div>
+    <div class="sec-lz">Integrationslogiken unterscheiden, Studienbefunde einordnen und Grenzen mechanischer Prognosen erklären.</div>
+    <div class="source-meta">Folien 2–5 · Quellen PD09-F02 PD09-F03 PD09-F04 PD09-F05 · Widget W1+W4+W9</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine erfahrene Diagnostikerin kennt einen außergewöhnlichen Einzelfall. Darf sie eine vorhandene statistische Prognoseformel deshalb grundsätzlich ignorieren?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Mechanische Vorhersage wird als regelbasierter Standard dargestellt. Eine klinische Korrektur ist nur in begründeten Ausnahmefällen vorgesehen („broken leg cue“); zugleich sind Modelle fortlaufend zu prüfen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="compare-grid" data-source-id="PD09-F02" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1">
+  <article class="compare-card"><h3>Klinische Urteilsbildung</h3><p>Verschiedene diagnostische Daten werden durch eine Expertin oder einen Experten <strong>individuell und erfahrungsbasiert</strong> zu einem Gesamturteil integriert.</p></article>
+  <article class="compare-card"><h3>Statistisch/mechanische Urteilsbildung</h3><p>Daten werden nach einer <strong>festgelegten Formel oder Regel</strong> verrechnet, etwa als Summenwert oder Regressionsgewichtung. Die Entscheidung kann anschließend über einen Cutoff erfolgen.</p></article>
+</div>
+<div class="card" id="goldberg-lerntext" data-source-id="PD09-F02" data-slides="2" data-source-status="direkt+integriert" data-learning-objective="LZ-01" data-widget-type="W4+W5">
+  <div class="card-title">Mechanisches Beispiel: Goldberg-Index</div>
+  <p>Das Beispiel kombiniert fünf MMPI-T-Werte. Die auf der Folie genannten Skalen sind L (Lügenskala), Pa (Paranoia), Sc (Schizophrenie), Hy (Hysterie) und Pt (Psychastenie).</p>
+  <div class="formula" aria-label="Goldberg-Index ist L plus Pa plus Sc minus Hy minus Pt">Goldberg-Index = L + Pa + Sc − Hy − Pt<small>Im konkreten Beispiel: Index &gt; 45 → Klassifikation als psychotisch.</small></div>
+  <div class="ladder">
+    <div class="ladder-step"><strong>Vollständiges Beispiel:</strong> 50 + 60 + 70 − 40 − 30 = 110. Der Übungswert liegt über 45.</div>
+    <div class="ladder-step"><strong>Fading:</strong> Addiere zuerst L, Pa und Sc; ziehe anschließend Hy und Pt ab.</div>
+    <div class="ladder-step"><strong>Transfer:</strong> Rechne mit neuen Werten im Widget und interpretiere das Ergebnis nur innerhalb dieses Quellenbeispiels.</div>
+  </div>
+</div>
+<div class="card" data-source-id="PD09-F03 PD09-F04" data-slides="3–4" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W10">
+  <div class="card-title">Was berichten die Metaanalysen?</div>
+  <div class="scroll-table"><table class="study-table"><thead><tr><th>Arbeit</th><th>Grundlage</th><th class="result">Berichteter Befund</th></tr></thead><tbody>
+    <tr><td>Meehl (1954)</td><td>22 Studien</td><td class="result">Überlegenheit statistischer Urteilsbildung.</td></tr>
+    <tr><td>Grove et al. (2000)</td><td>136 Studien</td><td class="result">Mittleres d = .089: sehr klein, aber große Streuung. Kein Moderatoreffekt für Publikationsmerkmale, Domäne, Profession, Training/Vorerfahrung oder erweiterten Datenzugriff; mit Interviewdaten etwas größerer relativer Vorteil statistischer Vorhersagen.</td></tr>
+    <tr><td>Aegisdottir et al. (2006)</td><td>48 Effektstärken aus 41 Studien</td><td class="result">d = −0.12 und als Überlegenheit statistischer Urteilsbildung interpretiert. Lineare Modelle (−0.15) und Cutoffs (−0.10) waren logisch konstruierten Regeln (−0.03) überlegen. Identische Informationen: −0.06; zusätzliche klinische Informationen: −0.13. Eigenes Setting: −0.14; fremde Informationen: −0.06.</td></tr>
+  </tbody></table></div>
+  <div class="source-note"><strong>Quellenbesonderheit:</strong> Die Vorzeichenkonvention der Effektstärken wird nicht erläutert. Deshalb werden Zahlen und verbale Schlussfolgerungen quellentreu zusammen berichtet, ohne die Vorzeichen eigenständig zu harmonisieren.</div>
+</div>
+<div class="card" data-source-id="PD09-F05" data-slides="5" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W11">
+  <div class="card-title">Grenzen mechanischer Prognosen</div>
+  <ul class="tight-list"><li>Mechanische Vorhersage ist keine Universallösung.</li><li>Die benötigten Daten müssen für alle Personen vorliegen; außerdem werden große Fallzahlen zu einer einheitlichen Fragestellung benötigt.</li><li>In begründeten Ausnahmefällen kann eine statistische Aussage klinisch korrigiert werden („broken leg cue“).</li><li>Modelle sollen stetig überprüft werden; Kreuzvalidierung wird als Standard gegen Overfitting genannt.</li><li>Die Wirkmechanismen einbezogener Variablen sollen möglichst verstanden werden.</li></ul>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W1+W4+W9</div>
+  
+<div class="widget" id="goldberg-widget" data-source-id="PD09-F02 PD09-F05" data-slides="2, 5" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-01+LZ-02" data-widget-type="W4+W9">
+  <h3>Formula Ladder: Goldberg-Index selbst anwenden</h3>
+  <p class="widget-intro">Trage fünf Übungswerte ein. Die Rechnung wird vollständig ausgegeben; die Klassifikation gilt ausschließlich für das dargestellte Goldberg-Beispiel.</p>
+  <div class="widget-controls">
+    <div class="control"><label for="gL">L</label><input id="gL" type="number" value="48"></div>
+    <div class="control"><label for="gPa">Pa</label><input id="gPa" type="number" value="57"></div>
+    <div class="control"><label for="gSc">Sc</label><input id="gSc" type="number" value="62"></div>
+    <div class="control"><label for="gHy">Hy</label><input id="gHy" type="number" value="44"></div>
+    <div class="control"><label for="gPt">Pt</label><input id="gPt" type="number" value="38"></div>
+  </div>
+  <button type="button" class="btn btn-accent" onclick="calcGoldberg()">Rechnen und entscheiden</button>
+  <div class="widget-output" id="goldberg-out" role="status" aria-live="polite">Noch keine Rechnung durchgeführt.</div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Strategien ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+  data-source-id="PD09-F06 PD09-F07 PD09-F08 PD09-F09 PD09-F10 PD09-F11" data-slides="6–11" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ-03" data-widget-type="W7+W9" data-cognitive-task="entscheidungsgrenzen lesen und Fälle klassifizieren">
+  <div class="sec-head">
+    <div class="sec-title">② Entscheidungsstrategien im Zwei-Test-Raum</div>
+    <div class="sec-lz">Kompensatorische, disjunkte, konjunktive, Pareto- und kombinierte Regeln korrekt anwenden.</div>
+    <div class="source-meta">Folien 6–11 · Quellen PD09-F06 PD09-F07 PD09-F08 PD09-F09 PD09-F10 PD09-F11 · Widget W7+W9</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Person ist in Test 1 sehr stark, verfehlt aber den Cutoff in Test 2. Welche Entscheidungsregeln könnten sie trotzdem akzeptieren?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1" aria-hidden="true">Eine kompensatorische Regel kann den niedrigen Wert ausgleichen; eine disjunkte Oder-Regel akzeptiert die Person, wenn der Cutoff in Test 1 erreicht ist. Eine konjunktive Und-Regel würde sie ablehnen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD09-F06" data-slides="6" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W7">
+  <div class="card-title">Gemeinsamer Zwei-Test-Raum</div>
+  <p>Sechs Personen liegen in einem Koordinatensystem mit Test 1 auf der x-Achse und Test 2 auf der y-Achse, jeweils ungefähr von 80 bis 130. Dieselben Punkte werden mit verschiedenen Entscheidungsgrenzen beurteilt. Dadurch wird sichtbar: <strong>Die Daten bleiben gleich; die Regel verändert die Entscheidung.</strong></p>
+</div>
+<div class="card" data-source-id="PD09-F07 PD09-F08 PD09-F09 PD09-F10 PD09-F11" data-slides="7–11" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W1+W3">
+  <div class="card-title">Fünf Integrationslogiken</div>
+  <table><thead><tr><th>Strategie</th><th>Entscheidungslogik</th><th>Grafische Signatur</th></tr></thead><tbody>
+    <tr><td>Kompensatorisch</td><td>Prädiktoren können sich ausgleichen; ein gewichteter Gesamtwert wird gebildet.</td><td>Diagonale Grenze; Formel ŷ = g₁·x₁ + g₂·x₂.</td></tr>
+    <tr><td>Disjunkt · Oder</td><td>Für jeden Prädiktor gibt es einen Cutoff; mindestens einer muss erreicht werden.</td><td>Nur der gemeinsame untere linke Bereich scheidet aus.</td></tr>
+    <tr><td>Konjunktiv · Und</td><td>Alle einzelnen Cutoffs müssen erreicht werden.</td><td>Nur der obere rechte Bereich erfüllt die Regel.</td></tr>
+    <tr><td>Pareto-optimal</td><td>Eine Person ist unterlegen, wenn eine andere in allen Kriterien bessere Werte hat.</td><td>Im Beispiel bleiben die nicht dominierten Punkte 2 und 4.</td></tr>
+    <tr><td>Kombiniert</td><td>Regeln können gekoppelt werden, etwa kompensatorischer Gesamtwert plus Mindestwert in Test 2.</td><td>Diagonale Grenze plus zusätzlicher horizontaler Cutoff.</td></tr>
+  </tbody></table>
+</div>
+<div class="phase-summary"><strong>Merksatz:</strong> Kompensation fragt nach dem Gesamtwert; Oder nach mindestens einem Cutoff; Und nach allen Cutoffs; Pareto nach Dominanz; Kombinationen verbinden mehrere Bedingungen.</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7+W9</div>
+  
+<div class="widget" id="decision-boundary-widget" data-source-id="PD09-F06 PD09-F07 PD09-F08 PD09-F09 PD09-F10 PD09-F11" data-slides="6–11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W7+W9">
+  <h3>Dynamische Entscheidungsgrenzen</h3>
+  <div class="forecast-box"><strong>Prognose zuerst:</strong> Wähle eine Regel und sage voraus, welche Personen akzeptiert werden. Ändere danach die Parameter und prüfe die Klassifikation.</div>
+  <div class="widget-controls">
+    <div class="control"><label for="strategy-select">Strategie</label><select id="strategy-select" onchange="updateDecisionPlot()"><option value="comp">kompensatorisch</option><option value="or">disjunkt · Oder</option><option value="and">konjunktiv · Und</option><option value="pareto">Pareto-optimal</option><option value="combined">kompensatorisch + Test-2-Cutoff</option></select></div>
+    <div class="control"><label for="xcut-strat">Test-1-Cutoff <output id="xcut-strat-val">85</output></label><input id="xcut-strat" type="range" min="80" max="115" step="5" value="85" oninput="updateDecisionPlot()"></div>
+    <div class="control"><label for="ycut-strat">Test-2-Cutoff <output id="ycut-strat-val">95</output></label><input id="ycut-strat" type="range" min="80" max="115" step="5" value="95" oninput="updateDecisionPlot()"></div>
+    <div class="control"><label for="sumcut-strat">Gesamtgrenze x₁+x₂ <output id="sumcut-strat-val">190</output></label><input id="sumcut-strat" type="range" min="175" max="220" step="5" value="190" oninput="updateDecisionPlot()"></div>
+  </div>
+  <div class="plot-wrap">
+    <div class="plot-panel"><svg id="decision-svg" viewBox="0 0 390 320" role="img" aria-labelledby="decision-title decision-desc"><title id="decision-title">Zwei-Test-Diagramm mit sechs Personen und veränderbarer Entscheidungsgrenze</title><desc id="decision-desc">Test 1 liegt auf der horizontalen, Test 2 auf der vertikalen Achse. Grün bedeutet akzeptiert, rosa bedeutet abgelehnt; zusätzlich wird die Entscheidung als Text ausgegeben.</desc></svg></div>
+    <div><ul class="plot-legend"><li><strong>Person 1:</strong> etwa (80, 110)</li><li><strong>Person 2:</strong> etwa (100, 120)</li><li><strong>Person 3:</strong> etwa (80, 90)</li><li><strong>Person 4:</strong> etwa (130, 108)</li><li><strong>Person 5:</strong> etwa (120, 80)</li><li><strong>Person 6:</strong> etwa (100, 90)</li></ul><div class="widget-output" id="decision-out" role="status" aria-live="polite"></div></div>
+  </div>
+</div>
+<div class="corr-compact" aria-label="Strategien zuordnen">
+  <div class="corr-item"><strong>Fall A:</strong> Ein niedriger Wert darf durch einen hohen Wert ausgeglichen werden.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('strat-a',this,'kompensatorisch')">kompensatorisch</button><button class="corr-btn" onclick="checkCorr('strat-a',this,'konjunktiv')">konjunktiv</button></div><div class="corr-fb" id="strat-a-fb" role="status"></div></div>
+  <div class="corr-item"><strong>Fall B:</strong> Ein einziger erreichter Cutoff genügt.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('strat-b',this,'disjunkt')">disjunkt</button><button class="corr-btn" onclick="checkCorr('strat-b',this,'pareto')">Pareto</button></div><div class="corr-fb" id="strat-b-fb" role="status"></div></div>
+  <div class="corr-item"><strong>Fall C:</strong> Jeder einzelne Cutoff muss erreicht sein.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('strat-c',this,'konjunktiv')">konjunktiv</button><button class="corr-btn" onclick="checkCorr('strat-c',this,'disjunkt')">disjunkt</button></div><div class="corr-fb" id="strat-c-fb" role="status"></div></div>
+  <div class="corr-item"><strong>Fall D:</strong> Niemand darf die Person in allen Kriterien übertreffen.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('strat-d',this,'pareto')">Pareto</button><button class="corr-btn" onclick="checkCorr('strat-d',this,'kompensatorisch')">kompensatorisch</button></div><div class="corr-fb" id="strat-d-fb" role="status"></div></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Vierfelder ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+  data-source-id="PD09-F12 PD09-F13 PD09-F14 PD09-F15" data-slides="12–15" data-source-status="direkt+visuell_rekonstruiert"
+  data-learning-objective="LZ-04+LZ-05" data-widget-type="W6+W4+W5" data-cognitive-task="matrix lesen, Bezugsrichtung bestimmen, Kennwerte berechnen">
+  <div class="sec-head">
+    <div class="sec-title">③ Vierfeldertafel und Entscheidungsgütemaße</div>
+    <div class="sec-lz">FN, TP, TN und FP lokalisieren sowie Basisrate, Selektionsrate, Sensitivität, Spezifität und Prädiktionswerte berechnen.</div>
+    <div class="source-meta">Folien 12–15 · Quellen PD09-F12 PD09-F13 PD09-F14 PD09-F15 · Widget W6+W4+W5</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Test ist positiv. Kann man daraus bereits die Sensitivität ablesen?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Sensitivität bedingt auf den tatsächlichen Zustand und benötigt alle tatsächlich positiven Fälle: TP/(TP+FN). Bei einem positiven Testergebnis ist dagegen der positive Prädiktionswert TP/(TP+FP) die passende Bezugsrichtung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD09-F12" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W9">
+  <div class="card-title">Von einem Cutoff zu vier Entscheidungsausgängen</div>
+  <p>Im einfachsten Fall entscheidet ein Test anhand eines Cutoffs: <strong>xᵢ &gt; x<sub>cut</sub> → Zustand liegt vor</strong>, andernfalls nicht. Das Kriterium wird ebenfalls dichotom betrachtet. Testentscheidung und tatsächliche Kategorie können übereinstimmen oder nicht; daraus entstehen vier Kombinationen.</p>
+</div>
+<div class="card" data-source-id="PD09-F13 PD09-F14 PD09-F15" data-slides="13–15" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04+LZ-05" data-widget-type="W6">
+  <div class="card-title">Vierfeldertafel: erst die Achsen, dann die Abkürzung</div>
+  <table class="matrix"><caption>Zeilen: Wahrheit/Kriterium. Spalten: Testentscheidung.</caption><thead><tr><th scope="col">Wahrheit ↓ / Test →</th><th scope="col">Test negativ</th><th scope="col">Test positiv</th></tr></thead><tbody><tr><th scope="row">Zustand liegt vor</th><td>FN<span>false negative</span></td><td>TP<span>true positive</span></td></tr><tr><th scope="row">Zustand liegt nicht vor</th><td>TN<span>true negative</span></td><td>FP<span>false positive</span></td></tr></tbody></table>
+  <p class="table-note">„True/false“ beschreibt die Übereinstimmung; „positive/negative“ beschreibt die Testentscheidung.</p>
+</div>
+<div class="card" data-source-id="PD09-F13 PD09-F14 PD09-F15" data-slides="13–15" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W4">
+  <div class="card-title">Sechs zentrale Kennwerte</div>
+  <table><thead><tr><th>Kennwert</th><th>Formel</th><th>Bedingungsrichtung</th></tr></thead><tbody>
+    <tr><td>Basisrate BR</td><td>(FN+TP)/N</td><td>Anteil tatsächlich positiver Fälle.</td></tr>
+    <tr><td>Selektionsrate SR</td><td>(TP+FP)/N</td><td>Anteil positiver Testentscheidungen.</td></tr>
+    <tr><td>Sensitivität</td><td>TP/(TP+FN)</td><td>P(Test positiv | Zustand positiv).</td></tr>
+    <tr><td>Spezifität</td><td>TN/(TN+FP)</td><td>P(Test negativ | Zustand negativ).</td></tr>
+    <tr><td>Positiver Prädiktionswert PP</td><td>TP/(TP+FP)</td><td>P(Zustand positiv | Test positiv).</td></tr>
+    <tr><td>Negativer Prädiktionswert NP</td><td>TN/(TN+FN)</td><td>P(Zustand negativ | Test negativ).</td></tr>
+  </tbody></table>
+  <div class="source-note"><strong>Trennkriterium:</strong> Sensitivität und Spezifität teilen die <em>Zeilen</em> nach dem tatsächlichen Zustand; Prädiktionswerte teilen die <em>Spalten</em> nach dem Testergebnis.</div>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W6+W4+W5</div>
+  
+<div class="widget" id="matrix-widget" data-source-id="PD09-F13 PD09-F14 PD09-F15" data-slides="13–15" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-04+LZ-05" data-widget-type="W6+W4+W5">
+  <h3>Matrix Reader und Formula Ladder</h3>
+  <p class="widget-intro">Bearbeite den didaktischen Übungsfall. Alle Formeln stammen aus den Folien; die Häufigkeiten sind Übungswerte.</p>
+  <table class="matrix"><caption>Veränderbare Vierfeldertafel für N = TP + FN + TN + FP.</caption><thead><tr><th scope="col">Wahrheit ↓ / Test →</th><th scope="col">Test negativ</th><th scope="col">Test positiv</th></tr></thead><tbody>
+    <tr><th scope="row">Zustand liegt vor</th><td><label for="mFN">FN</label><input id="mFN" type="number" min="0" value="4" oninput="calcMatrix()"></td><td><label for="mTP">TP</label><input id="mTP" type="number" min="0" value="36" oninput="calcMatrix()"></td></tr>
+    <tr><th scope="row">Zustand liegt nicht vor</th><td><label for="mTN">TN</label><input id="mTN" type="number" min="0" value="45" oninput="calcMatrix()"></td><td><label for="mFP">FP</label><input id="mFP" type="number" min="0" value="15" oninput="calcMatrix()"></td></tr>
+  </tbody></table>
+  <div class="metric-grid" id="matrix-metrics" aria-live="polite"></div>
+  <div class="widget-output" id="matrix-expl">Ändere eine Zelle und beobachte, welche Nenner betroffen sind.</div>
+</div>
+<div class="corr-compact" aria-label="Vierfelderzellen zuordnen">
+  <div class="corr-item"><strong>Zustand positiv, Test negativ</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('cell-fn',this,'FN')">FN</button><button class="corr-btn" onclick="checkCorr('cell-fn',this,'FP')">FP</button></div><div class="corr-fb" id="cell-fn-fb"></div></div>
+  <div class="corr-item"><strong>Zustand positiv, Test positiv</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('cell-tp',this,'TN')">TN</button><button class="corr-btn" onclick="checkCorr('cell-tp',this,'TP')">TP</button></div><div class="corr-fb" id="cell-tp-fb"></div></div>
+  <div class="corr-item"><strong>Zustand negativ, Test negativ</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('cell-tn',this,'TN')">TN</button><button class="corr-btn" onclick="checkCorr('cell-tn',this,'FN')">FN</button></div><div class="corr-fb" id="cell-tn-fb"></div></div>
+  <div class="corr-item"><strong>Zustand negativ, Test positiv</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('cell-fp',this,'TP')">TP</button><button class="corr-btn" onclick="checkCorr('cell-fp',this,'FP')">FP</button></div><div class="corr-fb" id="cell-fp-fb"></div></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Cutoffs ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+  data-source-id="PD09-F16 PD09-F17 PD09-F18 PD09-F19" data-slides="16–19" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ-06" data-widget-type="W7+W3" data-cognitive-task="Parameterwirkung prognostizieren und räumliche Zuordnung erklären">
+  <div class="sec-head">
+    <div class="sec-title">④ Cutoffs, Raten und Fehlerbereiche</div>
+    <div class="sec-lz">Die Wirkung von Kriteriums- und Testcutoff prognostizieren und die vier Fehlerbereiche im Test-Kriterium-Raum zuordnen.</div>
+    <div class="source-meta">Folien 16–19 · Quellen PD09-F16 PD09-F17 PD09-F18 PD09-F19 · Widget W7+W3</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn der Testcutoff x_cut erhöht wird: Sinkt die Basisrate oder die Selektionsrate?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3" aria-hidden="true">Die Selektionsrate sinkt, weil weniger Personen als testpositiv klassifiziert werden. Die Basisrate beschreibt den tatsächlichen Kriteriumsanteil und wird über y_cut verändert.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="compare-grid">
+  <article class="compare-card" data-source-id="PD09-F16" data-slides="16" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W3"><h3>Kriteriumscutoff y<sub>cut</sub></h3><p>Die horizontale Grenze trennt tatsächlich positive und negative Zustände. <strong>Je größer y<sub>cut</sub>, desto geringer die Basisrate</strong>, also der Anteil tatsächlich positiver Fälle.</p></article>
+  <article class="compare-card" data-source-id="PD09-F17 PD09-F18" data-slides="17–18" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W3"><h3>Testcutoff x<sub>cut</sub></h3><p>Die vertikale Grenze trennt negative und positive Testentscheidungen. <strong>Je größer x<sub>cut</sub>, desto geringer die Selektionsrate</strong>, also der Anteil diagnostizierter Personen. Folie 18 wiederholt diese Grafik und Aussage sichtbar.</p></article>
+</div>
+<div class="card" data-source-id="PD09-F19" data-slides="19" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W6">
+  <div class="card-title">Die vier räumlichen Bereiche</div>
+  <table><thead><tr><th>Bereich</th><th>Kriterium</th><th>Test</th><th>Klasse</th></tr></thead><tbody><tr><td>oben links</td><td>positiv</td><td>negativ</td><td>FN</td></tr><tr><td>oben rechts</td><td>positiv</td><td>positiv</td><td>TP</td></tr><tr><td>unten links</td><td>negativ</td><td>negativ</td><td>TN</td></tr><tr><td>unten rechts</td><td>negativ</td><td>positiv</td><td>FP</td></tr></tbody></table>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7+W3</div>
+  
+<div class="widget" id="cutoff-widget" data-source-id="PD09-F16 PD09-F17 PD09-F18 PD09-F19" data-slides="16–19" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W7+W3">
+  <h3>Diagram Manipulator: x<sub>cut</sub> und y<sub>cut</sub></h3>
+  <div class="forecast-box"><strong>Prognose:</strong> Bewege zunächst gedanklich eine Grenze nach rechts oder oben. Welche Rate muss kleiner werden? Prüfe danach im Diagramm.</div>
+  <div class="widget-controls"><div class="control"><label for="cutX">x<sub>cut</sub> <output id="cutX-val">55</output></label><input id="cutX" type="range" min="25" max="80" value="55" oninput="updateCutoffPlot()"></div><div class="control"><label for="cutY">y<sub>cut</sub> <output id="cutY-val">55</output></label><input id="cutY" type="range" min="25" max="80" value="55" oninput="updateCutoffPlot()"></div></div>
+  <div class="plot-wrap"><div class="plot-panel"><svg id="cutoff-svg" viewBox="0 0 390 320" role="img" aria-labelledby="cutoff-title cutoff-desc"><title id="cutoff-title">Test-Kriterium-Raum mit veränderbarem Test- und Kriteriumscutoff</title><desc id="cutoff-desc">Eine Punktwolke wird durch eine vertikale und horizontale Linie in FN, TP, TN und FP geteilt. Die Textausgabe nennt Zellen und Raten.</desc></svg></div><div><div class="widget-output" id="cutoff-out" role="status" aria-live="polite"></div><p class="plot-fallback">Textalternative: x<sub>cut</sub> steuert positive Testentscheidungen; y<sub>cut</sub> steuert den tatsächlich positiven Kriteriumsbereich.</p></div></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Einfluss ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+  data-source-id="PD09-F20 PD09-F21 PD09-F22 PD09-F23" data-slides="20–23" data-source-status="direkt+visuell_rekonstruiert"
+  data-learning-objective="LZ-06" data-widget-type="W7+W11" data-cognitive-task="vergleichend prognostizieren und Einflussmuster begründen">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Validität, Basisrate und Selektionsrate</div>
+    <div class="sec-lz">Erkennen, welche Entscheidungsgütemaße durch Validität, Basisrate und Selektionsrate besonders beeinflusst werden.</div>
+    <div class="source-meta">Folien 20–23 · Quellen PD09-F20 PD09-F21 PD09-F22 PD09-F23 · Widget W7+W11</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Veränderung betrifft eher die Prädiktionswerte: eine verschobene Basisrate oder eine verschobene Selektionsrate?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4" aria-hidden="true">Eine Veränderung der Basisrate wirkt laut Darstellung vor allem auf positiven und negativen Prädiktionswert. Eine Veränderung der Selektionsrate wirkt vor allem auf Sensitivität und Spezifität.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD09-F20" data-slides="20" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W7">
+  <div class="card-title">Validität verändert die Trennschärfe der Punktwolke</div><p>Die Vergleichsgrafik stellt eine schmale, diagonal orientierte Ellipse einer runderen Punktwolke gegenüber. Bei gleichen Cutoffs sind in der runderen Wolke die Fehlklassifikationsbereiche größer. Die Aussage lautet: <strong>Je höher die Validität, desto höher sind bei sonst gleichen Bedingungen Sensitivität, Spezifität sowie positiver und negativer Prädiktionswert.</strong></p>
+</div>
+<div class="compare-grid">
+  <article class="compare-card" data-source-id="PD09-F21 PD09-F22" data-slides="21–22" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W11"><h3>Basisrate verändern</h3><p>In der Grafik wird y<sub>cut</sub> verschoben. Das beeinflusst <strong>vor allem PP und NP</strong>, weniger Sensitivität und Spezifität. Folie 22 wiederholt dieselbe Darstellung und Aussage.</p></article>
+  <article class="compare-card" data-source-id="PD09-F23" data-slides="23" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W11"><h3>Selektionsrate verändern</h3><p>In der Grafik wird x<sub>cut</sub> verschoben. Das beeinflusst <strong>vor allem Sensitivität und Spezifität</strong>, weniger positiven und negativen Prädiktionswert.</p></article>
+</div>
+<div class="effect-map"><div class="effect-cell"><b>Validität ↑</b><span>alle vier Gütemaße ↑</span></div><div class="effect-cell"><b>Basisrate verändert</b><span>PP/NP besonders betroffen</span></div><div class="effect-cell"><b>Selektionsrate verändert</b><span>Sensitivität/Spezifität besonders betroffen</span></div></div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7+W11</div>
+  
+<div class="widget" id="influence-widget" data-source-id="PD09-F20 PD09-F21 PD09-F22 PD09-F23" data-slides="20–23" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W7+W11">
+  <h3>Prognose → Veränderung → Erklärung</h3>
+  <p class="widget-intro">Wähle einen Parameter. Entscheide zuerst, welche Kennwerte besonders betroffen sind; danach wird die quellenbasierte Veränderungslogik gezeigt.</p>
+  <div class="widget-controls"><div class="control"><label for="effect-param">Parameter</label><select id="effect-param"><option value="validity">Validität erhöhen</option><option value="base">Basisrate verändern</option><option value="selection">Selektionsrate verändern</option></select></div><div class="control"><label for="effect-pred">Meine Prognose</label><select id="effect-pred"><option value="all">alle vier Gütemaße</option><option value="pred">vor allem PP und NP</option><option value="sensspec">vor allem Sensitivität und Spezifität</option></select></div></div>
+  <button type="button" class="btn btn-accent" onclick="runInfluence()">Prognose prüfen</button>
+  <div class="plot-wrap" style="margin-top:12px"><div class="plot-panel"><svg id="effect-svg" viewBox="0 0 390 280" role="img" aria-labelledby="effect-title effect-desc"><title id="effect-title">Qualitative Darstellung von Validität, Basisrate und Selektionsrate</title><desc id="effect-desc">Die Validität verändert die Form der Punktwolke; Basisrate verschiebt den horizontalen Cutoff; Selektionsrate verschiebt den vertikalen Cutoff.</desc></svg></div><div class="widget-output" id="effect-out" role="status" aria-live="polite">Noch keine Prognose geprüft.</div></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ ROC ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+  data-source-id="PD09-F24" data-slides="24" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ-07" data-widget-type="W7+W9" data-cognitive-task="Kurve lesen, Richtung deuten und diagnostisch entscheiden">
+  <div class="sec-head">
+    <div class="sec-title">⑥ ROC-Kurve, Schwellenwerte und Fehlerkosten</div>
+    <div class="sec-lz">Den Sensitivitäts-Spezifitäts-Trade-off erklären, ROC-Punkte lesen und Fehlerkosten in die Cutoff-Wahl einbeziehen.</div>
+    <div class="source-meta">Folien 24 · Quellen PD09-F24 · Widget W7+W9</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Cutoff wird abgesenkt. Steigen dann Sensitivität und Spezifität gleichzeitig?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Die Darstellung beschreibt eine reziproke Relation: Ein niedrigerer Schwellenwert erhöht typischerweise die Sensitivität, geht aber mit einer höheren Falsch-Positiv-Rate und damit geringerer Spezifität einher.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD09-F24" data-slides="24" data-source-status="direkt" data-learning-objective="LZ-07" data-widget-type="W1">
+  <div class="card-title">Der Trade-off</div><p>Sensitivität und Spezifität stehen in reziproker Relation. Ein Cutoff kann daher nicht beide Kennwerte unabhängig maximieren. Welche Fehlerart schwerer wiegt, hängt vom Anwendungskontext ab; als Beispiel wird die Suizidalitätseinschätzung in einem stufenweisen Verfahren genannt.</p>
+</div>
+<div class="card" data-source-id="PD09-F24" data-slides="24" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-07" data-widget-type="W7">
+  <div class="card-title">ROC-Kurve lesen</div><ul class="tight-list"><li>y-Achse: Sensitivität.</li><li>x-Achse: 1 − Spezifität, also Falsch-Positiv-Rate.</li><li>Die Diagonale dient als Referenzlinie.</li><li>Höhere Schwellenwerte liegen in Richtung links unten; niedrigere in Richtung rechts oben.</li><li>Der hervorgehobene Punkt liegt bei 1−Spezifität = 0,24 und Sensitivität = 0,94; daraus folgt Spezifität = 0,76.</li></ul>
+  <div class="source-note"><strong>Sichtbare Quelleigenheit:</strong> Der vorletzte x-Achsentick ist auf der Folie als „0.9“ beschriftet. Diese Beschriftung wird im Lernmodul dokumentiert und nicht still korrigiert.</div>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7+W9</div>
+  
+<div class="widget" id="roc-widget" data-source-id="PD09-F24 PD09-F25" data-slides="24–25" data-source-status="visuell_rekonstruiert+integriert" data-learning-objective="LZ-07" data-widget-type="W7+W9">
+  <h3>ROC-Schwellenwert erkunden</h3>
+  <div class="forecast-box"><strong>Prognose zuerst:</strong> Höherer Schwellenwert — steigt oder sinkt die Sensitivität? Nutze anschließend den Regler.</div>
+  <div class="widget-controls"><div class="control"><label for="roc-threshold">Schwellenwert <output id="roc-threshold-val">18.5</output></label><input id="roc-threshold" type="range" min="0" max="10" step="1" value="4" oninput="updateROC()"></div></div>
+  <div class="plot-wrap"><div class="plot-panel"><svg id="roc-svg" viewBox="0 0 390 330" role="img" aria-labelledby="roc-title roc-desc"><title id="roc-title">ROC-Kurve mit Schwellenwerten 14,5 bis 24,5</title><desc id="roc-desc">Die x-Achse zeigt 1 minus Spezifität, die y-Achse Sensitivität. Ein Regler hebt den gewählten Schwellenwert hervor.</desc></svg></div><div><div class="roc-meta"><div><b id="roc-sens">0.94</b><span>Sensitivität</span></div><div><b id="roc-spec">0.76</b><span>Spezifität</span></div><div><b id="roc-fpr">0.24</b><span>1−Spezifität</span></div><div><b id="roc-j">0.70</b><span>Youden J</span></div></div><div class="widget-output" id="roc-out" role="status" aria-live="polite"></div></div></div>
+  <div class="widget-controls"><button type="button" class="btn btn-ghost" onclick="showErrorCost('fn')">FN wiegt schwerer</button><button type="button" class="btn btn-ghost" onclick="showErrorCost('fp')">FP wiegt schwerer</button></div>
+  <div class="widget-output" id="cost-out">Wähle eine Fehlerart, um die qualitative Cutoff-Konsequenz zu prüfen.</div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Optimieren ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6"
+  data-source-id="PD09-F25 PD09-F26" data-slides="25–26" data-source-status="direkt+visuell_rekonstruiert"
+  data-learning-objective="LZ-08" data-widget-type="W4+W5+W6" data-cognitive-task="formelbasiert optimieren und Matrixwerte lokalisieren">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Youden-Index und Taylor-Russell-Tafel</div>
+    <div class="sec-lz">Den Youden-Index stufenweise berechnen und positive Prädiktionswerte aus einer Taylor-Russell-Tafel ablesen.</div>
+    <div class="source-meta">Folien 25–26 · Quellen PD09-F25 PD09-F26 · Widget W4+W5+W6</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist der Schwellenwert mit der höchsten Sensitivität automatisch der beste Schwellenwert?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6" aria-hidden="true">Nein. Der Youden-Index kombiniert Sensitivität und Spezifität. In der Tabelle ist J bei 18,5 mit 0,70 maximal, obwohl die Sensitivität bei niedrigeren Schwellenwerten höher ist.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="card" data-source-id="PD09-F25" data-slides="25" data-source-status="direkt" data-learning-objective="LZ-08" data-widget-type="W4+W5">
+  <div class="card-title">Youden-Index</div><p>Der Index kann Werte zwischen 0 und 1 annehmen. Er wird berechnet als:</p><div class="formula" aria-label="J ist Sensitivität plus Spezifität minus eins">J = Sensitivität + Spezifität − 1</div><p>Der Schwellenwert mit der größten Summe aus Sensitivität und Spezifität — und damit dem größten J — trennt die beiden Gruppen in der dargestellten Tabelle am besten.</p>
+  <div class="scroll-table"><table><caption>Youden-Tabelle der Quelle</caption><thead><tr><th>Schwellenwert</th><th>Sensitivität</th><th>Spezifität</th><th>Youden J</th></tr></thead><tbody>
+  <tr><td>14.5</td><td>1.00</td><td>0.45</td><td>0.45</td></tr><tr><td>15.5</td><td>0.99</td><td>0.54</td><td>0.53</td></tr><tr><td>16.5</td><td>0.99</td><td>0.62</td><td>0.61</td></tr><tr><td>17.5</td><td>0.97</td><td>0.70</td><td>0.67</td></tr><tr class="highlight-row"><td>18.5</td><td>0.94</td><td>0.76</td><td>0.70</td></tr><tr><td>19.5</td><td>0.87</td><td>0.82</td><td>0.69</td></tr><tr><td>20.5</td><td>0.80</td><td>0.86</td><td>0.66</td></tr><tr><td>21.5</td><td>0.70</td><td>0.90</td><td>0.60</td></tr><tr><td>22.5</td><td>0.59</td><td>0.93</td><td>0.52</td></tr><tr><td>23.5</td><td>0.45</td><td>0.95</td><td>0.40</td></tr><tr><td>24.5</td><td>0.34</td><td>0.97</td><td>0.31</td></tr>
+  </tbody></table></div>
+</div>
+<div class="card" data-source-id="PD09-F26" data-slides="26" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-08" data-widget-type="W6">
+  <div class="card-title">Taylor-Russell-Tafel bei Basisrate 0,60</div><p>Wenn statt Sensitivität und Spezifität die Kriteriumsvalidität berichtet wird, kann aus <strong>Testvalidität, Selektionsrate und Basisrate</strong> der positive Prädiktionswert abgelesen werden. Die dargestellte Tafel gilt für Basisrate 0,60.</p>
+  <div class="scroll-table"><table id="tr-table"><caption>Positive Prädiktionswerte bei Basisrate 0,60</caption><thead><tr><th scope="col">Validität \ Selektionsrate</th><th>.05</th><th class="highlight-cell">.10</th><th>.20</th><th>.30</th><th>.40</th><th>.50</th><th>.60</th><th>.70</th><th>.80</th><th>.90</th><th>.95</th></tr></thead><tbody><tr class="highlight-row"><th scope="row">.00</th><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td><td>.60</td></tr><tr><th scope="row">.05</th><td>.64</td><td>.63</td><td>.63</td><td>.62</td><td>.62</td><td>.62</td><td>.61</td><td>.61</td><td>.61</td><td>.60</td><td>.60</td></tr><tr class="highlight-row"><th scope="row">.10</th><td>.68</td><td>.67</td><td>.65</td><td>.64</td><td>.64</td><td>.63</td><td>.63</td><td>.62</td><td>.61</td><td>.61</td><td>.60</td></tr><tr><th scope="row">.15</th><td>.71</td><td>.70</td><td>.68</td><td>.67</td><td>.66</td><td>.65</td><td>.64</td><td>.63</td><td>.62</td><td>.61</td><td>.61</td></tr><tr><th scope="row">.20</th><td>.75</td><td>.73</td><td>.71</td><td>.69</td><td>.67</td><td>.66</td><td>.65</td><td>.64</td><td>.63</td><td>.62</td><td>.61</td></tr><tr><th scope="row">.25</th><td>.78</td><td>.76</td><td>.73</td><td>.71</td><td>.69</td><td>.68</td><td>.66</td><td>.65</td><td>.63</td><td>.62</td><td>.61</td></tr><tr><th scope="row">.30</th><td>.82</td><td>.79</td><td>.76</td><td>.73</td><td>.71</td><td>.69</td><td>.68</td><td>.66</td><td>.64</td><td>.62</td><td>.61</td></tr><tr class="highlight-row"><th scope="row">.35</th><td>.85</td><td class="highlight-cell">.82</td><td>.78</td><td>.75</td><td>.73</td><td>.71</td><td>.69</td><td>.67</td><td>.65</td><td>.63</td><td>.62</td></tr><tr><th scope="row">.40</th><td>.88</td><td>.85</td><td>.81</td><td>.78</td><td>.75</td><td>.73</td><td>.70</td><td>.68</td><td>.66</td><td>.63</td><td>.62</td></tr><tr><th scope="row">.45</th><td>.90</td><td>.87</td><td>.83</td><td>.80</td><td>.77</td><td>.74</td><td>.72</td><td>.69</td><td>.66</td><td>.64</td><td>.62</td></tr><tr><th scope="row">.50</th><td>.93</td><td>.90</td><td>.86</td><td>.82</td><td>.79</td><td>.76</td><td>.73</td><td>.70</td><td>.67</td><td>.64</td><td>.62</td></tr></tbody></table></div>
+  <p class="table-note">Die Quelle hebt die Spalte .10, die Zeilen .00, .10 und .35 sowie den Schnittpunkt Validität .35 × Selektionsrate .10 = .82 hervor.</p>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W4+W5+W6</div>
+  
+<div class="widget" id="optim-widget" data-source-id="PD09-F25 PD09-F26" data-slides="25–26" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-08" data-widget-type="W4+W5+W6">
+  <h3>Faded Worked Example + Taylor-Russell-Lesetraining</h3>
+  <div class="ladder"><div class="ladder-step"><strong>Vollständig:</strong> Bei 18,5 gilt J = 0,94 + 0,76 − 1 = 0,70.</div><div class="ladder-step"><strong>Teilweise ausgeblendet:</strong> Berechne J für 19,5 aus Sensitivität 0,87 und Spezifität 0,82.</div><div class="ladder-step"><strong>Selbstständig:</strong> Wähle unten zwei Werte und prüfe deine Rechnung.</div></div>
+  <div class="widget-controls"><div class="control"><label for="you-sens">Sensitivität</label><input id="you-sens" type="number" min="0" max="1" step=".01" value=".87"></div><div class="control"><label for="you-spec">Spezifität</label><input id="you-spec" type="number" min="0" max="1" step=".01" value=".82"></div><div class="control"><label for="you-answer">Dein J</label><input id="you-answer" type="number" min="0" max="1" step=".01" value=".69"></div></div>
+  <button type="button" class="btn btn-accent" onclick="checkYouden()">Rechnung prüfen</button><div class="widget-output" id="you-out" role="status"></div>
+  <hr style="border:0;border-top:1px solid var(--border);margin:16px 0">
+  <h3>Taylor-Russell-Wert lokalisieren</h3><div class="widget-controls"><div class="control"><label for="tr-valid">Testvalidität</label><select id="tr-valid" onchange="lookupTR()"></select></div><div class="control"><label for="tr-select">Selektionsrate</label><select id="tr-select" onchange="lookupTR()"></select></div></div><div class="widget-output" id="tr-out" role="status"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Bezugsrichtung, Entscheidungslogik und Fehlerklassen sicher auseinanderhalten</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Klinische Urteilsbildung</h4>
+      <p>individuelle Integration</p>
+      <p>erfahrungsbasierte Einschätzung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Statistisch/mechanische Urteilsbildung</h4>
+      <p>festgelegte Regel oder Formel</p>
+      <p>Entscheidung kann über Cutoff erfolgen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Mechanische Modelle sind ohne einheitliche Datenbasis für jede Fragestellung einsetzbar.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Disjunkt · Oder</h4>
+      <p>mindestens ein Cutoff genügt</p>
+      <p>gemeinsamer unterer linker Bereich scheidet aus</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Konjunktiv · Und</h4>
+      <p>alle Cutoffs müssen erreicht sein</p>
+      <p>nur der obere rechte Bereich erfüllt die Regel</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Bei der Oder-Strategie müssen alle Cutoffs erreicht werden.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sensitivität</h4>
+      <p>TP/(TP+FN)</p>
+      <p>Bedingung: tatsächlich positiver Zustand</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Positiver Prädiktionswert</h4>
+      <p>TP/(TP+FP)</p>
+      <p>Bedingung: positives Testergebnis</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „TP/(TP+FN) ist der positive Prädiktionswert.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Basisrate</h4>
+      <p>(FN+TP)/N</p>
+      <p>Anteil tatsächlich positiver Fälle</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Selektionsrate</h4>
+      <p>(TP+FP)/N</p>
+      <p>Anteil positiver Testentscheidungen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Basisrate und Selektionsrate sind bei gleichem Cutoff automatisch identisch.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Falsch negativ · FN</h4>
+      <p>Zustand liegt vor</p>
+      <p>Test entscheidet negativ</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Falsch positiv · FP</h4>
+      <p>Zustand liegt nicht vor</p>
+      <p>Test entscheidet positiv</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Ein falsch positives Ergebnis gehört zur tatsächlich positiven Zeile.“</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl09</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+<footer class="source-note" style="margin-top:24px">Offline-Lernmodul auf Grundlage der freigegebenen PD09-Primärquelle. Keine externen Fachquellen oder externen Laufzeitabhängigkeiten.</footer>
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl09';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd09-s0-q1",
+      "q": "Wodurch unterscheiden sich klinische und statistisch/mechanische Urteilsbildung?",
+      "opts": [
+        "Klinisch integriert individuell; mechanisch verrechnet nach einer festgelegten Regel.",
+        "Klinisch nutzt feste Cutoffs; mechanisch beruht auf individueller Berufserfahrung.",
+        "Klinisch verlangt große Fallzahlen; mechanisch kann ohne einheitliche Daten arbeiten.",
+        "Klinisch und mechanisch unterscheiden sich nur durch die Zahl der Prädiktoren."
+      ],
+      "c": 0,
+      "e": "Die zentrale Differenz liegt in der Integrationslogik: klinisch individuell-erfahrungsbasiert, statistisch/mechanisch regel- oder formelbasiert.",
+      "oe": [
+        "Richtig: Die Quelle grenzt individuelle Expertise von einer vorab festgelegten Verrechnungsregel ab.",
+        "Vertauscht: Feste Cutoffs gehören zur mechanischen, individuelle Erfahrung zur klinischen Urteilsbildung.",
+        "Falsch: Einheitliche Daten und große Fallzahlen sind gerade Voraussetzungen mechanischer Modelle.",
+        "Falsch: Nicht die Zahl der Prädiktoren, sondern die Art ihrer Integration ist entscheidend."
+      ],
+      "mt": [
+        null,
+        "integrationslogik_vertauscht",
+        "voraussetzungen_vertauscht",
+        "irrelevantes_trennkriterium"
+      ],
+      "source_ids": [
+        "PD09-F02"
+      ],
+      "concept_id": "urteilsformen",
+      "learning_objective_id": "LZ-01"
+    },
+    {
+      "id": "pd09-s0-q2",
+      "q": "L = 50, Pa = 60, Sc = 70, Hy = 40 und Pt = 30. Welchen Goldberg-Index ergibt die Formel L + Pa + Sc − Hy − Pt?",
+      "opts": [
+        "Der Index beträgt 90 Punkte und bleibt damit unter der Beispielgrenze.",
+        "Der Index beträgt 110 Punkte und liegt damit über der Beispielgrenze.",
+        "Der Index beträgt 150 Punkte, weil nur Hy vom Summenwert abgezogen wird.",
+        "Der Index beträgt 10 Punkte, weil Hy und Pt zuerst addiert werden."
+      ],
+      "c": 1,
+      "e": "Einsetzen ergibt 50 + 60 + 70 − 40 − 30 = 110. Im konkreten Folienbeispiel liegt dieser Wert über dem Cutoff 45.",
+      "oe": [
+        "Falsch gerechnet: Beide negativen Terme Hy und Pt müssen subtrahiert werden.",
+        "Richtig: Die drei positiven Skalen werden addiert, Hy und Pt werden abgezogen.",
+        "Falsch: Auch Pt wird subtrahiert; der Wert 150 lässt einen negativen Term unberücksichtigt.",
+        "Falsch: Die Formel bildet keine Differenz zwischen zwei separat gebildeten Summen dieser Art."
+      ],
+      "mt": [
+        "rechenfehler",
+        null,
+        "vorzeichenfehler",
+        "formelumstellung_falsch"
+      ],
+      "source_ids": [
+        "PD09-F02"
+      ],
+      "concept_id": "goldberg_index",
+      "learning_objective_id": "LZ-01"
+    },
+    {
+      "id": "pd09-s0-q3",
+      "q": "Welche Maßnahme wird für bestehende Prognosemodelle ausdrücklich genannt, um Overfitting zu vermeiden?",
+      "opts": [
+        "Eine zusätzliche klinische Einschätzung ohne dokumentierten Ausnahmegrund.",
+        "Eine Vergrößerung des Cutoffs unabhängig von Daten und Fragestellung.",
+        "Eine stetige Modellprüfung mit Kreuzvalidierung als Standardverfahren.",
+        "Eine Beschränkung auf Variablen, deren Wirkmechanismen unbekannt bleiben."
+      ],
+      "c": 2,
+      "e": "Die Folie nennt die stetige Überprüfung von Prognosemodellen und ausdrücklich Kreuzvalidierung als Standard, um Overfitting zu vermeiden.",
+      "oe": [
+        "Falsch: Klinische Korrektur ist nur in begründeten Ausnahmefällen als „broken leg cue“ vorgesehen.",
+        "Falsch: Eine pauschale Cutoff-Erhöhung ist keine genannte Strategie gegen Overfitting.",
+        "Richtig: Kreuzvalidierung dient der fortlaufenden Prüfung und soll Überanpassung vermeiden.",
+        "Falsch: Die Wirkmechanismen der einbezogenen Variablen sollen möglichst verstanden werden."
+      ],
+      "mt": [
+        "broken_leg_ueberdehnt",
+        "cutoff_als_allzweckloesung",
+        null,
+        "mechanismus_unwichtig"
+      ],
+      "source_ids": [
+        "PD09-F05"
+      ],
+      "concept_id": "modellgrenzen",
+      "learning_objective_id": "LZ-02"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd09-s1-q1",
+      "q": "Eine Person wird ausgewählt, sobald sie entweder den Cutoff in Test 1 oder den Cutoff in Test 2 erreicht. Welche Strategie liegt vor?",
+      "opts": [
+        "Eine kompensatorische Strategie mit einem gewichteten Gesamtwert aus beiden Tests.",
+        "Eine disjunkte Strategie, bei der mindestens ein einzelner Cutoff genügt.",
+        "Eine konjunktive Strategie, bei der alle festgelegten Cutoffs erfüllt sein müssen.",
+        "Eine Pareto-Regel, bei der nur nicht dominierte Personen berücksichtigt werden."
+      ],
+      "c": 1,
+      "e": "Die Oder-Logik kennzeichnet die disjunkte Strategie: Für jeden Prädiktor gibt es einen Cutoff, aber mindestens einer genügt.",
+      "oe": [
+        "Falsch: Bei der kompensatorischen Strategie werden Prädiktoren zu einem Gesamtwert verrechnet.",
+        "Richtig: Disjunkt bedeutet Oder; mindestens ein Cutoff muss erreicht sein.",
+        "Falsch: Konjunktiv bedeutet Und; dort müssen alle Cutoffs erreicht sein.",
+        "Falsch: Pareto-Optimalität prüft Dominanz in allen Kriterien, nicht das Erreichen eines einzelnen Cutoffs."
+      ],
+      "mt": [
+        "gesamtwert_statt_oder",
+        null,
+        "oder_und_vertauscht",
+        "pareto_mit_cutoff_verwechselt"
+      ],
+      "source_ids": [
+        "PD09-F08"
+      ],
+      "concept_id": "entscheidungsstrategien",
+      "learning_objective_id": "LZ-03"
+    },
+    {
+      "id": "pd09-s1-q2",
+      "q": "Welche Aussage beschreibt eine konjunktive Entscheidungsstrategie?",
+      "opts": [
+        "Ein niedriger Wert kann durch einen hohen Wert in einem anderen Test ausgeglichen werden.",
+        "Die Person genügt, sobald sie in wenigstens einem Prädiktor den Cutoff erreicht.",
+        "Die Person bleibt übrig, sofern niemand in allen Kriterien bessere Werte aufweist.",
+        "Die Person genügt nur dann, wenn sie die Cutoffs in allen Prädiktoren erreicht."
+      ],
+      "c": 3,
+      "e": "Konjunktiv bedeutet Und-Verknüpfung: Für jeden Prädiktor wird ein Cutoff definiert, und alle müssen erreicht werden.",
+      "oe": [
+        "Falsch: Das gegenseitige Ausgleichen ist das Kennzeichen einer kompensatorischen Strategie.",
+        "Falsch: Mindestens ein Cutoff beschreibt die disjunkte Oder-Strategie.",
+        "Falsch: Diese Formulierung beschreibt die Pareto-optimale Teilmenge.",
+        "Richtig: Bei der konjunktiven Strategie müssen alle einzelnen Cutoffs erreicht werden."
+      ],
+      "mt": [
+        "kompensation_statt_und",
+        "oder_und_vertauscht",
+        "pareto_statt_und",
+        null
+      ],
+      "source_ids": [
+        "PD09-F09"
+      ],
+      "concept_id": "entscheidungsstrategien",
+      "learning_objective_id": "LZ-03"
+    },
+    {
+      "id": "pd09-s1-q3",
+      "q": "Wann ist eine Person nach der dargestellten Pareto-Logik unterlegen?",
+      "opts": [
+        "Wenn sie in einem Kriterium schlechter ist, auch wenn sie im anderen Kriterium besser abschneidet.",
+        "Wenn ihr gewichteter Gesamtwert knapp unter einer diagonalen Entscheidungsgrenze liegt.",
+        "Wenn mindestens eine andere Person in allen betrachteten Kriterien bessere Werte besitzt.",
+        "Wenn sie keinen der beiden festgelegten Einzelcutoffs erreicht, unabhängig von Dominanz."
+      ],
+      "c": 2,
+      "e": "Eine Person ist Pareto-unterlegen, wenn es mindestens eine andere Person gibt, die in allen betrachteten Kriterien bessere Werte aufweist.",
+      "oe": [
+        "Falsch: Ein Nachteil in nur einem Kriterium genügt nicht, wenn ein Vorteil im anderen besteht.",
+        "Falsch: Eine diagonale Grenze gehört zur kompensatorischen Strategie.",
+        "Richtig: Dominanz in allen Kriterien macht die betrachtete Person Pareto-unterlegen.",
+        "Falsch: Das Nichterreichen von Einzelcutoffs ist eine andere Entscheidungslogik."
+      ],
+      "mt": [
+        "ein_kriterium_genuegt",
+        "kompensation_statt_pareto",
+        null,
+        "cutoff_statt_dominanz"
+      ],
+      "source_ids": [
+        "PD09-F10"
+      ],
+      "concept_id": "pareto",
+      "learning_objective_id": "LZ-03"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd09-s2-q1",
+      "q": "Der Zustand liegt tatsächlich vor, der Test entscheidet jedoch „Zustand liegt nicht vor“. Welche Zelle der Vierfeldertafel ist gemeint?",
+      "opts": [
+        "Richtig positiv, weil Zustand und Testentscheidung beide positiv sein müssten.",
+        "Richtig negativ, weil allein die negative Testentscheidung maßgeblich wäre.",
+        "Falsch positiv, weil Wahrheit und Testentscheidung nicht übereinstimmen.",
+        "Falsch negativ, weil der Zustand vorliegt, aber negativ entschieden wird."
+      ],
+      "c": 3,
+      "e": "Bei tatsächlich vorliegendem Zustand und negativer Testentscheidung handelt es sich um ein falsch negatives Ergebnis (FN).",
+      "oe": [
+        "Falsch: Richtig positiv verlangt zusätzlich eine positive Testentscheidung.",
+        "Falsch: Richtig negativ verlangt einen tatsächlich nicht vorliegenden Zustand.",
+        "Falsch: Falsch positiv bedeutet positiver Test bei tatsächlich negativem Zustand.",
+        "Richtig: Der Zustand ist positiv, die Testentscheidung aber negativ; das ist FN."
+      ],
+      "mt": [
+        "wahrheit_allein",
+        "testentscheidung_allein",
+        "fp_fn_vertauscht",
+        null
+      ],
+      "source_ids": [
+        "PD09-F13"
+      ],
+      "concept_id": "vierfeldertafel",
+      "learning_objective_id": "LZ-04"
+    },
+    {
+      "id": "pd09-s2-q2",
+      "q": "Welche Formel und Bezugsrichtung gehören zur Sensitivität?",
+      "opts": [
+        "TP/(TP+FN): Anteil positiver Testentscheidungen unter tatsächlich positiven Fällen.",
+        "TN/(TN+FP): Anteil negativer Testentscheidungen unter tatsächlich negativen Fällen.",
+        "TP/(TP+FP): Anteil tatsächlich positiver Fälle unter positiven Testentscheidungen.",
+        "TN/(TN+FN): Anteil tatsächlich negativer Fälle unter negativen Testentscheidungen."
+      ],
+      "c": 0,
+      "e": "Sensitivität ist TP/(TP+FN) und bedingt auf den tatsächlich vorliegenden positiven Zustand: P(positiver Test | positiver Zustand).",
+      "oe": [
+        "Richtig: Der Nenner umfasst alle tatsächlich positiven Fälle; TP ist der korrekt erkannte Anteil.",
+        "Das ist die Spezifität und bezieht sich auf tatsächlich negative Fälle.",
+        "Das ist der positive Prädiktionswert und bedingt auf ein positives Testergebnis.",
+        "Das ist der negative Prädiktionswert und bedingt auf ein negatives Testergebnis."
+      ],
+      "mt": [
+        null,
+        "sensitivitaet_spezifitaet",
+        "sensitivitaet_ppv",
+        "sensitivitaet_npv"
+      ],
+      "source_ids": [
+        "PD09-F14"
+      ],
+      "concept_id": "sensitivitaet",
+      "learning_objective_id": "LZ-05"
+    },
+    {
+      "id": "pd09-s2-q3",
+      "q": "Welche Aussage grenzt Sensitivität und positiven Prädiktionswert korrekt ab?",
+      "opts": [
+        "Beide Kennwerte verwenden denselben Nenner und unterscheiden sich nur durch den Zähler.",
+        "Sensitivität bedingt auf den Zustand; der positive Prädiktionswert auf ein positives Testergebnis.",
+        "Sensitivität bedingt auf ein positives Testergebnis; der positive Prädiktionswert auf den Zustand.",
+        "Beide Kennwerte beschreiben den Anteil negativer Entscheidungen in der Stichprobe."
+      ],
+      "c": 1,
+      "e": "Der Bezugswechsel ist entscheidend: Sensitivität fragt unter tatsächlich Positiven nach positiven Tests; PP fragt unter positiven Tests nach tatsächlich Positiven.",
+      "oe": [
+        "Falsch: Sensitivität nutzt TP+FN, der positive Prädiktionswert TP+FP als Nenner.",
+        "Richtig: Zustand als Bedingung bei Sensitivität, Testentscheidung als Bedingung beim PP.",
+        "Vertauscht: Diese Aussage kehrt die beiden Bedingungsrichtungen um.",
+        "Falsch: Beide Kennwerte beziehen sich auf positive Zustände beziehungsweise positive Testentscheidungen."
+      ],
+      "mt": [
+        "nenner_identisch",
+        null,
+        "bedingung_vertauscht",
+        "negative_kennwerte"
+      ],
+      "source_ids": [
+        "PD09-F14",
+        "PD09-F15"
+      ],
+      "concept_id": "bezugsrichtung",
+      "learning_objective_id": "LZ-05"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd09-s3-q1",
+      "q": "Was geschieht laut Diagramm, wenn der Kriteriumscutoff y_cut erhöht wird?",
+      "opts": [
+        "Die Selektionsrate sinkt, weil weniger Personen testpositiv klassifiziert werden.",
+        "Die Sensitivität steigt, während die Spezifität unverändert bleibt.",
+        "Die Basisrate sinkt, weil ein kleinerer Anteil das Kriterium als positiv erfüllt.",
+        "Der positive Prädiktionswert wird bei allen übrigen Bedingungen gleich eins."
+      ],
+      "c": 2,
+      "e": "Ein höheres y_cut verschiebt die Grenze für den tatsächlichen Zustand nach oben; dadurch erfüllt ein kleinerer Anteil das positive Kriterium und die Basisrate sinkt.",
+      "oe": [
+        "Falsch: Die Selektionsrate wird über die Testentscheidung und damit x_cut beschrieben.",
+        "Falsch: Eine automatische isolierte Sensitivitätssteigerung wird nicht behauptet.",
+        "Richtig: y_cut definiert den tatsächlich positiven Kriteriumsbereich und damit die Basisrate.",
+        "Falsch: Ein Prädiktionswert von eins folgt daraus nicht."
+      ],
+      "mt": [
+        "ycut_xcut_vertauscht",
+        "einzelkennwert_automatisch",
+        null,
+        "perfektion_folgt_cutoff"
+      ],
+      "source_ids": [
+        "PD09-F16"
+      ],
+      "concept_id": "cutoff_dynamik",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd09-s3-q2",
+      "q": "Was geschieht laut Diagramm, wenn der Testcutoff x_cut erhöht wird?",
+      "opts": [
+        "Die Selektionsrate sinkt, weil weniger Personen rechts vom Testcutoff liegen.",
+        "Die Basisrate sinkt, weil weniger Personen den tatsächlichen Zustand aufweisen.",
+        "Die Validität steigt, weil die Punktwolke durch den Cutoff schmaler wird.",
+        "Die Zahl der tatsächlich positiven Fälle nimmt unabhängig vom Kriterium ab."
+      ],
+      "c": 0,
+      "e": "Ein höheres x_cut verkleinert den Bereich positiver Testentscheidungen; deshalb sinkt die Selektionsrate, also der Anteil diagnostizierter Personen.",
+      "oe": [
+        "Richtig: x_cut steuert den Anteil positiver Testentscheidungen und damit die Selektionsrate.",
+        "Falsch: Die Basisrate hängt vom tatsächlichen Kriterium und y_cut ab.",
+        "Falsch: Der Cutoff verändert nicht die Form beziehungsweise Validität der Punktwolke.",
+        "Falsch: Tatsächliche Zustände werden durch die Testentscheidung nicht verändert."
+      ],
+      "mt": [
+        null,
+        "xcut_ycut_vertauscht",
+        "cutoff_macht_validitaet",
+        "test_veraendert_wahrheit"
+      ],
+      "source_ids": [
+        "PD09-F17",
+        "PD09-F18"
+      ],
+      "concept_id": "cutoff_dynamik",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd09-s3-q3",
+      "q": "Welche Zuordnung gilt im Test-Kriterium-Raum mit horizontalem y_cut und vertikalem x_cut?",
+      "opts": [
+        "Oben links liegt FP, oben rechts TN, unten links TP und unten rechts FN.",
+        "Oben links liegt TN, oben rechts FN, unten links FP und unten rechts TP.",
+        "Oben links liegt TP, oben rechts FN, unten links FP und unten rechts TN.",
+        "Oben links liegt FN, oben rechts TP, unten links TN und unten rechts FP."
+      ],
+      "c": 3,
+      "e": "Oberhalb von y_cut ist der Zustand positiv, rechts von x_cut ist der Test positiv. Daher: oben links FN, oben rechts TP, unten links TN, unten rechts FP.",
+      "oe": [
+        "Falsch: Oben ist der Zustand tatsächlich positiv; FP und TN gehören in den unteren Bereich.",
+        "Falsch: Die Kombinationen von Wahrheit und Testentscheidung sind mehrfach vertauscht.",
+        "Falsch: Oben rechts müssen Wahrheit und Test positiv sein, also TP.",
+        "Richtig: Die räumliche Zuordnung folgt direkt aus den beiden Cutoff-Richtungen."
+      ],
+      "mt": [
+        "quadranten_vertieft_vertauscht",
+        "quadranten_vertauscht",
+        "tp_falsch_platziert",
+        null
+      ],
+      "source_ids": [
+        "PD09-F19"
+      ],
+      "concept_id": "fehlerquadranten",
+      "learning_objective_id": "LZ-06"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd09-s4-q1",
+      "q": "Welche Folge hat eine höhere Validität bei sonst gleich bleibenden Bedingungen laut Vergleichsgrafik?",
+      "opts": [
+        "Nur der positive Prädiktionswert steigt, während die übrigen Kennwerte unverändert bleiben.",
+        "Sensitivität, Spezifität sowie positiver und negativer Prädiktionswert steigen.",
+        "Nur Sensitivität und Spezifität steigen, die Prädiktionswerte sinken dagegen.",
+        "Die Basisrate und Selektionsrate werden dadurch identisch und erreichen den Maximalwert."
+      ],
+      "c": 1,
+      "e": "Die Folie formuliert ausdrücklich: Höhere Validität verbessert bei sonst gleichen Bedingungen alle vier dargestellten Gütemaße.",
+      "oe": [
+        "Falsch: Die Wirkung wird nicht auf einen einzigen Prädiktionswert begrenzt.",
+        "Richtig: Alle vier Kennwerte werden bei höherer Validität als höher beschrieben.",
+        "Falsch: Die Prädiktionswerte werden ebenfalls als verbessert genannt.",
+        "Falsch: Validität macht Basisrate und Selektionsrate nicht automatisch gleich."
+      ],
+      "mt": [
+        "nur_ein_kennwert",
+        null,
+        "praediktionswerte_ausgenommen",
+        "raten_gleichsetzung"
+      ],
+      "source_ids": [
+        "PD09-F20"
+      ],
+      "concept_id": "einfluss_validitaet",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd09-s4-q2",
+      "q": "Welche Kennwerte werden durch eine Veränderung der Basisrate laut Folie besonders beeinflusst?",
+      "opts": [
+        "Vor allem Sensitivität und Spezifität, deutlich weniger positive und negative Prädiktionswerte.",
+        "Vor allem TP und TN, während relative Kennwerte weitgehend unverändert bleiben.",
+        "Vor allem positiver und negativer Prädiktionswert, weniger Sensitivität und Spezifität.",
+        "Alle Kennwerte ähnlich stark, weil nur der Kriteriumscutoff verschoben wird."
+      ],
+      "c": 2,
+      "e": "Eine Basisratenänderung wirkt laut Folie vor allem auf positiven und negativen Prädiktionswert und weniger auf Sensitivität und Spezifität.",
+      "oe": [
+        "Vertauscht: Dieses Muster wird auf der Folie der Selektionsratenänderung zugeschrieben.",
+        "Falsch: Die Folie beschreibt ausdrücklich Auswirkungen auf relative Gütemaße.",
+        "Richtig: Prädiktionswerte reagieren besonders auf die Basisrate.",
+        "Falsch: Die Einflüsse werden gerade nicht als gleich stark dargestellt."
+      ],
+      "mt": [
+        "basisrate_selektionsrate_vertauscht",
+        "nur_absolute_haeufigkeiten",
+        null,
+        "alle_gleich"
+      ],
+      "source_ids": [
+        "PD09-F21",
+        "PD09-F22"
+      ],
+      "concept_id": "einfluss_basisrate",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd09-s4-q3",
+      "q": "Welche Kennwerte werden durch eine Veränderung der Selektionsrate laut Folie besonders beeinflusst?",
+      "opts": [
+        "Vor allem Sensitivität und Spezifität, weniger positiver und negativer Prädiktionswert.",
+        "Vor allem die beiden Prädiktionswerte, während Sensitivität und Spezifität stabil bleiben.",
+        "Nur die Basisrate, weil Test- und Kriteriumscutoff dieselbe Grenze darstellen.",
+        "Nur der negative Prädiktionswert, da positive Testentscheidungen unverändert bleiben."
+      ],
+      "c": 0,
+      "e": "Eine Selektionsratenänderung wirkt laut Folie vor allem auf Sensitivität und Spezifität und weniger auf die beiden Prädiktionswerte.",
+      "oe": [
+        "Richtig: Dieses Einflussmuster wird für eine Veränderung von x_cut beziehungsweise Selektionsrate genannt.",
+        "Vertauscht: Dieses Muster gehört zur Basisratenänderung.",
+        "Falsch: Test- und Kriteriumscutoff definieren verschiedene Achsen und Raten.",
+        "Falsch: Die Veränderung positiver Testentscheidungen betrifft nicht nur den negativen Prädiktionswert."
+      ],
+      "mt": [
+        null,
+        "basisrate_selektionsrate_vertauscht",
+        "cutoffs_gleichgesetzt",
+        "nur_npv"
+      ],
+      "source_ids": [
+        "PD09-F23"
+      ],
+      "concept_id": "einfluss_selektionsrate",
+      "learning_objective_id": "LZ-06"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd09-s5-q1",
+      "q": "Wie verändert sich die Position auf der dargestellten ROC-Kurve bei einem höheren Schwellenwert?",
+      "opts": [
+        "Sie wandert zur oberen rechten Ecke mit hoher Sensitivität und hoher Falsch-Positiv-Rate.",
+        "Sie bleibt an derselben Stelle, weil ROC-Punkte nur von der Testvalidität und nicht vom Cutoff abhängen.",
+        "Sie wandert nur nach rechts, während die Sensitivität trotz verändertem Schwellenwert konstant bleibt.",
+        "Sie verschiebt sich nach links unten: Sensitivität und Falsch-Positiv-Rate werden geringer."
+      ],
+      "c": 3,
+      "e": "Die Beschriftung der ROC-Grafik weist höhere Schwellenwerte in Richtung links unten aus; niedrigere Schwellenwerte führen in Richtung rechts oben.",
+      "oe": [
+        "Falsch: Rechts oben ist in der Grafik die Richtung niedrigerer Schwellenwerte.",
+        "Falsch: Verschiedene Schwellenwerte erzeugen gerade verschiedene ROC-Punkte.",
+        "Falsch: Sensitivität und 1−Spezifität verändern sich gemeinsam entlang der Kurve.",
+        "Richtig: Ein höherer Schwellenwert reduziert positive Entscheidungen und verschiebt den Punkt links unten."
+      ],
+      "mt": [
+        "schwellenrichtung_vertauscht",
+        "roc_nur_validitaet",
+        "nur_x_aendert",
+        null
+      ],
+      "source_ids": [
+        "PD09-F24"
+      ],
+      "concept_id": "roc_tradeoff",
+      "learning_objective_id": "LZ-07"
+    },
+    {
+      "id": "pd09-s5-q2",
+      "q": "Welche zusätzliche Information kann die Wahl eines optimalen Cutoffs bestimmen?",
+      "opts": [
+        "Nur die Anzahl der verwendeten Prädiktoren, unabhängig von Fehlklassifikationen.",
+        "Die unterschiedliche Schwere beziehungsweise Konsequenz von FN- und FP-Fehlern.",
+        "Nur der Mittelwert des Testwerts, unabhängig von Sensitivität und Spezifität.",
+        "Die Forderung, Sensitivität und Spezifität in jedem Fall exakt gleichzusetzen."
+      ],
+      "c": 1,
+      "e": "Die Folie betont, dass Fehlerarten je nach Anwendungskontext unterschiedlich schwer wiegen können; diese Konsequenzen müssen in die Cutoff-Wahl eingehen.",
+      "oe": [
+        "Falsch: Die Anzahl der Prädiktoren sagt nichts über die Konsequenzen der Fehlerarten aus.",
+        "Richtig: Unterschiedliche Kosten von FN und FP können einen anderen Cutoff rechtfertigen.",
+        "Falsch: Der Mittelwert allein bestimmt keinen optimalen diagnostischen Schwellenwert.",
+        "Falsch: Ein optimaler Cutoff verlangt nicht zwingend identische Sensitivität und Spezifität."
+      ],
+      "mt": [
+        "praediktorzahl_statt_fehlerkosten",
+        null,
+        "mittelwert_als_cutoff",
+        "gleichheit_als_optimum"
+      ],
+      "source_ids": [
+        "PD09-F24"
+      ],
+      "concept_id": "fehlerkosten",
+      "learning_objective_id": "LZ-07"
+    },
+    {
+      "id": "pd09-s5-q3",
+      "q": "Ein markierter ROC-Punkt liegt bei Sensitivität 0,94 und 1−Spezifität 0,24. Welche Spezifität gehört dazu?",
+      "opts": [
+        "Eine Spezifität von 0,24, weil der x-Achsenwert unmittelbar als Spezifität gelesen wird.",
+        "Eine Spezifität von 0,70, weil Sensitivität und Spezifität addiert werden.",
+        "Eine Spezifität von 0,76, denn aus 1 − Spezifität = 0,24 folgt 1 − 0,24.",
+        "Eine Spezifität von 0,94, weil beide Achsen denselben diagnostischen Kennwert abbilden."
+      ],
+      "c": 2,
+      "e": "Die x-Achse zeigt 1−Spezifität. Daher ist Spezifität = 1−0,24 = 0,76; dies entspricht auch der Youden-Tabelle für 18,5.",
+      "oe": [
+        "Falsch: 0,24 ist die Falsch-Positiv-Rate beziehungsweise 1−Spezifität.",
+        "Falsch: Eine bloße Addition liefert keine Spezifität.",
+        "Richtig: Die Achsenbeschriftung verlangt die Rückrechnung 1−0,24.",
+        "Falsch: Die y-Achse zeigt Sensitivität, nicht Spezifität."
+      ],
+      "mt": [
+        "x_achse_direkt",
+        "kennwerte_addiert",
+        null,
+        "achsen_gleichgesetzt"
+      ],
+      "source_ids": [
+        "PD09-F24",
+        "PD09-F25"
+      ],
+      "concept_id": "roc_lesen",
+      "learning_objective_id": "LZ-07"
+    }
+  ],
+  "6": [
+    {
+      "id": "pd09-s6-q1",
+      "q": "Wie groß ist der Youden-Index bei Sensitivität 0,94 und Spezifität 0,76?",
+      "opts": [
+        "J = 0,70, weil nach der Formel 0,94 + 0,76 − 1 gerechnet wird.",
+        "J = 0,18, weil nach einer falschen Differenzformel 0,94 − 0,76 gerechnet wird.",
+        "J = 1,70, weil nach einer falschen Summenformel die Korrektur um eins entfällt.",
+        "J = 0,71, weil nach einer falschen Produktformel 0,94 · 0,76 gerechnet wird."
+      ],
+      "c": 0,
+      "e": "Der Youden-Index wird mit J = Sensitivität + Spezifität − 1 berechnet. Eingesetzt ergibt sich 0,70.",
+      "oe": [
+        "Richtig: 0,94 + 0,76 − 1 = 0,70.",
+        "Falsch: Die Formel verwendet keine Differenz Sensitivität minus Spezifität.",
+        "Falsch: Von der Summe muss eins abgezogen werden.",
+        "Falsch: Der Youden-Index ist kein Produkt der beiden Kennwerte."
+      ],
+      "mt": [
+        null,
+        "formel_differenz",
+        "minus_eins_vergessen",
+        "formel_produkt"
+      ],
+      "source_ids": [
+        "PD09-F25"
+      ],
+      "concept_id": "youden",
+      "learning_objective_id": "LZ-08"
+    },
+    {
+      "id": "pd09-s6-q2",
+      "q": "Welcher Schwellenwert trennt die Gruppen in der dargestellten Youden-Tabelle am besten?",
+      "opts": [
+        "17,5 mit J = 0,67, weil dort die Sensitivität noch besonders hoch ist.",
+        "19,5 mit J = 0,69, weil dort die Spezifität erstmals über 0,80 liegt.",
+        "20,5 mit J = 0,66, weil ein höherer Schwellenwert die Gruppen besser trennen soll.",
+        "18,5 mit J = 0,70, weil dort der Youden-Index sein Tabellenmaximum erreicht."
+      ],
+      "c": 3,
+      "e": "Der optimale Tabellenwert ist 18,5: Sensitivität 0,94 und Spezifität 0,76 ergeben das maximale J von 0,70.",
+      "oe": [
+        "Falsch: Entscheidend ist nicht die Sensitivität allein, sondern das Maximum von J.",
+        "Falsch: 0,69 ist knapp kleiner als das Maximum 0,70.",
+        "Falsch: Höhere Schwellenwerte sind nicht grundsätzlich besser.",
+        "Richtig: Die hervorgehobene Zeile 18,5 besitzt den größten Youden-Index."
+      ],
+      "mt": [
+        "sensitivitaet_allein",
+        "spezifitaet_schwelle",
+        "hoeher_ist_besser",
+        null
+      ],
+      "source_ids": [
+        "PD09-F25"
+      ],
+      "concept_id": "youden",
+      "learning_objective_id": "LZ-08"
+    },
+    {
+      "id": "pd09-s6-q3",
+      "q": "Welcher positive Prädiktionswert wird in der Taylor-Russell-Tafel bei Basisrate 0,60, Testvalidität 0,35 und Selektionsrate 0,10 abgelesen?",
+      "opts": [
+        "Ein positiver Prädiktionswert von 0,60, weil die Basisrate direkt übernommen wird.",
+        "Ein positiver Prädiktionswert von 0,82 am Schnittpunkt von Zeile 0,35 und Spalte 0,10.",
+        "Ein positiver Prädiktionswert von 0,35, weil die Testvalidität den Tabellenwert festlegt.",
+        "Ein positiver Prädiktionswert von 0,10, weil die Selektionsrate den Tabellenwert bestimmt."
+      ],
+      "c": 1,
+      "e": "Bei festgehaltener Basisrate 0,60 wird die Zeile Testvalidität 0,35 mit der Spalte Selektionsrate 0,10 gekreuzt; der Tabellenwert ist 0,82.",
+      "oe": [
+        "Falsch: Die Basisrate legt die verwendete Tafel fest, ist aber nicht automatisch der PPV.",
+        "Richtig: Der markierte Schnittpunkt liefert 0,82.",
+        "Falsch: Die Validität bestimmt die Zeile, nicht unmittelbar den Ergebniswert.",
+        "Falsch: Die Selektionsrate bestimmt die Spalte, nicht unmittelbar den Ergebniswert."
+      ],
+      "mt": [
+        "basisrate_als_ppv",
+        null,
+        "zeilenkopf_als_ergebnis",
+        "spaltenkopf_als_ergebnis"
+      ],
+      "source_ids": [
+        "PD09-F26"
+      ],
+      "concept_id": "taylor_russell",
+      "learning_objective_id": "LZ-08"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd09-b-q1",
+    "q": "Welches zusammenfassende Ergebnis berichtete Meehl nach dem Vergleich von 22 Studien?",
+    "opts": [
+      "Eine Gleichwertigkeit beider Urteilsformen über die ausgewerteten diagnostischen Fragestellungen.",
+      "Eine Überlegenheit klinischer Urteile bei der Nutzung zusätzlicher Interviewinformationen.",
+      "Eine Überlegenheit der statistischen Urteilsbildung im ausgewerteten Studienbestand.",
+      "Eine Unbrauchbarkeit mechanischer Regeln bei kleinen oder heterogenen Stichproben."
+    ],
+    "c": 2,
+    "e": "Die Quelle fasst Meehls Auswertung von 22 Studien als Überlegenheit der statistischen Urteilsbildung zusammen.",
+    "source_ids": [
+      "PD09-F03"
+    ],
+    "learning_objective_id": "LZ-02"
+  },
+  {
+    "id": "pd09-b-q2",
+    "q": "Für welchen Bereich fand Grove et al. keinen Moderatoreneffekt auf den Vergleich mechanischer und klinischer Urteile?",
+    "opts": [
+      "Für Publikationsmerkmale, Domäne, Profession, Training und erweiterten Datenzugriff.",
+      "Für Interviewdaten und Datenzugriff, nicht jedoch für Profession, Training oder Domäne.",
+      "Für medizinische und forensische Domänen, nicht jedoch für Bildung und Finanzen.",
+      "Für keinen Bereich, weil alle Moderatoren die Unterschiede der Urteilsformen erklärten."
+    ],
+    "c": 0,
+    "e": "Die Nullbefunde umfassten Publikationsmerkmale, Domäne, Profession, Training/Vorerfahrung und erweiterten Datenzugriff.",
+    "source_ids": [
+      "PD09-F03"
+    ],
+    "learning_objective_id": "LZ-02"
+  },
+  {
+    "id": "pd09-b-q3",
+    "q": "Wie veränderte sich der Unterschied in Aegisdottir et al., wenn klinisch Urteilende genau dieselben Informationen erhielten?",
+    "opts": [
+      "Er wurde größer als bei zusätzlichen Informationen für klinisch Urteilende.",
+      "Er blieb mit d = −0,13 gleich groß, weil die Informationsmenge keinen Moderator bildete.",
+      "Er kehrte sich zugunsten klinischer Urteilsbildung um und blieb dort bestehen.",
+      "Er war mit d = −0,06 geringer als bei zusätzlichen Informationen mit d = −0,13."
+    ],
+    "c": 3,
+    "e": "Bei identischer Informationsmenge war der berichtete Unterschied geringer; die Vorzeichenkonvention wird in der Quelle nicht erläutert.",
+    "source_ids": [
+      "PD09-F04"
+    ],
+    "learning_objective_id": "LZ-02"
+  },
+  {
+    "id": "pd09-b-q4",
+    "q": "Welche Kombination von Entscheidungsregeln wird im Zwei-Test-Beispiel ausdrücklich gezeigt?",
+    "opts": [
+      "Eine Pareto-Regel mit zusätzlichem horizontalen Mindestwert allein für Test 1.",
+      "Ein kompensatorisches Modell ergänzt um einen zusätzlichen Cutoff für Test 2.",
+      "Eine disjunkte Regel mit einer Gewichtung, die beide Einzelcutoffs ersetzt.",
+      "Eine konjunktive Regel ohne Cutoffs, aber mit einem einfachen Summenwert."
+    ],
+    "c": 1,
+    "e": "Die Folie kombiniert eine kompensatorische diagonale Grenze mit einem zusätzlichen horizontalen Cutoff für Test 2.",
+    "source_ids": [
+      "PD09-F11"
+    ],
+    "learning_objective_id": "LZ-03"
+  },
+  {
+    "id": "pd09-b-q5",
+    "q": "Welche Formel beschreibt die Basisrate beziehungsweise Prävalenzrate?",
+    "opts": [
+      "BR = (TP + FP)/N, also der Anteil positiver Testentscheidungen.",
+      "BR = TP/(TP + FN), also die Sensitivität des Verfahrens.",
+      "BR = (FN + TP)/N, also der Anteil tatsächlich positiver Fälle.",
+      "BR = TN/(TN + FP), also die Spezifität des Verfahrens."
+    ],
+    "c": 2,
+    "e": "Die Basisrate umfasst alle tatsächlich positiven Fälle, also FN und TP, bezogen auf die Gesamtzahl N.",
+    "source_ids": [
+      "PD09-F13"
+    ],
+    "learning_objective_id": "LZ-05"
+  },
+  {
+    "id": "pd09-b-q6",
+    "q": "Welche Formel beschreibt die Selektionsrate?",
+    "opts": [
+      "SR = (TP + FP)/N, also der Anteil positiver Testentscheidungen an allen Fällen.",
+      "SR = (FN + TP)/N, also der Anteil tatsächlich positiver Fälle in der gesamten Stichprobe.",
+      "SR = TP/(TP + FP), also der Anteil korrekter Fälle unter positiven Tests.",
+      "SR = TN/(TN + FN), also der Anteil korrekter Fälle unter negativen Tests."
+    ],
+    "c": 0,
+    "e": "Die Selektionsrate ist der Anteil der Personen, für die der Test positiv entscheidet: TP und FP geteilt durch N.",
+    "source_ids": [
+      "PD09-F13"
+    ],
+    "learning_objective_id": "LZ-05"
+  },
+  {
+    "id": "pd09-b-q7",
+    "q": "Welche Formel beschreibt den negativen Prädiktionswert?",
+    "opts": [
+      "NP = TN/(TN + FP), also der Anteil korrekter negativer Fälle unter tatsächlich Negativen.",
+      "NP = TP/(TP + FN), also der Anteil erkannter positiver Fälle unter tatsächlich Positiven.",
+      "NP = TP/(TP + FP), also der Anteil korrekter Positiver unter positiven Testergebnissen.",
+      "NP = TN/(TN + FN), also der Anteil korrekter Negativer unter negativen Testergebnissen."
+    ],
+    "c": 3,
+    "e": "Der negative Prädiktionswert bedingt auf negative Testergebnisse; sein Nenner umfasst TN und FN.",
+    "source_ids": [
+      "PD09-F15"
+    ],
+    "learning_objective_id": "LZ-05"
+  }
+];
+
+var corrCorrect = {
+  "strat-a": "kompensatorisch",
+  "strat-b": "disjunkt",
+  "strat-c": "konjunktiv",
+  "strat-d": "pareto",
+  "cell-fn": "FN",
+  "cell-tp": "TP",
+  "cell-tn": "TN",
+  "cell-fp": "FP"
+};
+var corrExpl = {
+  "strat-a": "Ein hoher Wert kann einen niedrigen Wert im anderen Prädiktor ausgleichen; entscheidend ist der gewichtete Gesamtwert.",
+  "strat-b": "Mindestens einer der beiden Cutoffs genügt; das ist die Oder-Strategie.",
+  "strat-c": "Beide Cutoffs müssen erreicht werden; das ist die Und-Strategie.",
+  "strat-d": "Eine Person bleibt nur dann in der Pareto-Menge, wenn niemand sie in allen Kriterien dominiert.",
+  "cell-fn": "Der Zustand liegt vor, aber der Test entscheidet negativ.",
+  "cell-tp": "Der Zustand liegt vor und der Test entscheidet positiv.",
+  "cell-tn": "Der Zustand liegt nicht vor und der Test entscheidet negativ.",
+  "cell-fp": "Der Zustand liegt nicht vor, aber der Test entscheidet positiv."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+
+/* PD09 bespoke widgets */
+function nval(id){var el=document.getElementById(id);var x=Number(el&&el.value);return Number.isFinite(x)?x:0;}
+function fmt(x){return Number.isFinite(x)?x.toFixed(2):'–';}
+function calcGoldberg(){var L=nval('gL'),Pa=nval('gPa'),Sc=nval('gSc'),Hy=nval('gHy'),Pt=nval('gPt');var index=L+Pa+Sc-Hy-Pt;var cls=index>45?'über 45: im Goldberg-Beispiel als psychotisch klassifiziert':'nicht über 45: im Goldberg-Beispiel nicht als psychotisch klassifiziert';document.getElementById('goldberg-out').innerHTML='<strong>Rechenweg:</strong> '+L+' + '+Pa+' + '+Sc+' − '+Hy+' − '+Pt+' = <strong>'+index+'</strong><br><strong>Entscheidung:</strong> '+cls+'.';}
+
+var decisionPts=[{id:1,x:80,y:110},{id:2,x:100,y:120},{id:3,x:80,y:90},{id:4,x:130,y:108},{id:5,x:120,y:80},{id:6,x:100,y:90}];
+function sx(x){return 45+(x-70)*4.5;}function sy(y){return 275-(y-70)*4.5;}
+function isPareto(p){return !decisionPts.some(function(o){return o.id!==p.id&&o.x>p.x&&o.y>p.y;});}
+function updateDecisionPlot(){var svg=document.getElementById('decision-svg');if(!svg)return;var st=document.getElementById('strategy-select').value,xc=nval('xcut-strat'),yc=nval('ycut-strat'),sc=nval('sumcut-strat');document.getElementById('xcut-strat-val').textContent=xc;document.getElementById('ycut-strat-val').textContent=yc;document.getElementById('sumcut-strat-val').textContent=sc;var h='<rect x="0" y="0" width="390" height="320" fill="#f8fafc"/><line x1="45" y1="275" x2="350" y2="275" stroke="#0f172a" stroke-width="2"/><line x1="45" y1="275" x2="45" y2="20" stroke="#0f172a" stroke-width="2"/><text x="180" y="308" class="axis-label">Test 1</text><text x="12" y="155" class="axis-label" transform="rotate(-90 12 155)">Test 2</text>';[80,90,100,110,120,130].forEach(function(t){h+='<text x="'+(sx(t)-6)+'" y="292" class="axis-tick">'+t+'</text><text x="20" y="'+(sy(t)+3)+'" class="axis-tick">'+t+'</text>';});if(st==='comp'||st==='combined'){var x1=70,y1=sc-x1,x2=135,y2=sc-x2;h+='<line class="boundary" x1="'+sx(x1)+'" y1="'+sy(y1)+'" x2="'+sx(x2)+'" y2="'+sy(y2)+'"/>';if(st==='combined')h+='<line class="cut-line" x1="'+sx(70)+'" y1="'+sy(yc)+'" x2="'+sx(135)+'" y2="'+sy(yc)+'"/>';}else if(st==='or'||st==='and'){h+='<line class="cut-line" x1="'+sx(xc)+'" y1="'+sy(135)+'" x2="'+sx(xc)+'" y2="'+sy(70)+'"/><line class="cut-line" x1="'+sx(70)+'" y1="'+sy(yc)+'" x2="'+sx(135)+'" y2="'+sy(yc)+'"/>';}var accepted=[];decisionPts.forEach(function(p){var ok=st==='comp'?(p.x+p.y>=sc):st==='or'?(p.x>=xc||p.y>=yc):st==='and'?(p.x>=xc&&p.y>=yc):st==='pareto'?isPareto(p):(p.x+p.y>=sc&&p.y>=yc);if(ok)accepted.push(p.id);h+='<circle cx="'+sx(p.x)+'" cy="'+sy(p.y)+'" r="9" class="decision-point '+(ok?'accepted':'rejected')+'"/><text x="'+(sx(p.x)-3)+'" y="'+(sy(p.y)+3)+'" class="point-label">'+p.id+'</text>';});svg.innerHTML=h;var names={comp:'kompensatorischen Gesamtwertregel',or:'disjunkten Oder-Regel',and:'konjunktiven Und-Regel',pareto:'Pareto-Regel',combined:'kombinierten Regel'};document.getElementById('decision-out').innerHTML='<strong>Akzeptiert:</strong> '+(accepted.length?accepted.join(', '):'niemand')+'.<br>Die Klassifikation folgt der '+names[st]+'.';}
+
+function calcMatrix(){var FN=nval('mFN'),TP=nval('mTP'),TN=nval('mTN'),FP=nval('mFP'),N=FN+TP+TN+FP;function r(a,b){return b?fmt(a/b):'–';}var vals=[['N',N],['Basisrate',r(FN+TP,N)],['Selektionsrate',r(TP+FP,N)],['Sensitivität',r(TP,TP+FN)],['Spezifität',r(TN,TN+FP)],['PP',r(TP,TP+FP)],['NP',r(TN,TN+FN)]];document.getElementById('matrix-metrics').innerHTML=vals.map(function(v){return '<div class="metric"><b>'+v[1]+'</b><span>'+v[0]+'</span></div>';}).join('');document.getElementById('matrix-expl').innerHTML='<strong>Nenner prüfen:</strong> Zustand-positive Zeile = '+(TP+FN)+', Zustand-negative Zeile = '+(TN+FP)+', Test-positive Spalte = '+(TP+FP)+', Test-negative Spalte = '+(TN+FN)+'.';}
+
+var cutoffPts=[[22,28],[28,36],[34,31],[36,45],[42,39],[45,52],[48,46],[52,58],[55,50],[58,66],[62,55],[65,73],[68,62],[72,78],[76,68],[80,85],[38,58],[57,38],[70,48],[47,70],[60,80],[30,50],[75,58],[52,30]];
+function cx(v){return 45+v*3;}function cy(v){return 275-v*2.45;}
+function updateCutoffPlot(){var svg=document.getElementById('cutoff-svg');if(!svg)return;var xc=nval('cutX'),yc=nval('cutY');document.getElementById('cutX-val').textContent=xc;document.getElementById('cutY-val').textContent=yc;var counts={FN:0,TP:0,TN:0,FP:0};var h='<rect width="390" height="320" fill="#f8fafc"/><line x1="45" y1="275" x2="355" y2="275" stroke="#0f172a" stroke-width="2"/><line x1="45" y1="275" x2="45" y2="20" stroke="#0f172a" stroke-width="2"/><text x="180" y="308" class="axis-label">Test</text><text x="12" y="155" class="axis-label" transform="rotate(-90 12 155)">Kriterium</text><line class="cut-line" x1="'+cx(xc)+'" y1="20" x2="'+cx(xc)+'" y2="275"/><line class="cut-line" x1="45" y1="'+cy(yc)+'" x2="355" y2="'+cy(yc)+'"/><text x="'+(cx(xc)+5)+'" y="292" class="axis-label">x_cut</text><text x="6" y="'+(cy(yc)-5)+'" class="axis-label">y_cut</text>';cutoffPts.forEach(function(p){var truth=p[1]>=yc,test=p[0]>=xc,key=truth?(test?'TP':'FN'):(test?'FP':'TN');counts[key]++;h+='<circle cx="'+cx(p[0])+'" cy="'+cy(p[1])+'" r="4" fill="#64748b"/>';});h+='<text x="80" y="'+(cy(yc)-12)+'" class="point-label">FN</text><text x="'+(cx(xc)+40)+'" y="'+(cy(yc)-12)+'" class="point-label">TP</text><text x="80" y="'+(cy(yc)+28)+'" class="point-label">TN</text><text x="'+(cx(xc)+40)+'" y="'+(cy(yc)+28)+'" class="point-label">FP</text>';svg.innerHTML=h;var N=cutoffPts.length,br=(counts.FN+counts.TP)/N,sr=(counts.TP+counts.FP)/N;document.getElementById('cutoff-out').innerHTML='<strong>Zellen:</strong> FN '+counts.FN+', TP '+counts.TP+', TN '+counts.TN+', FP '+counts.FP+'.<br><strong>Basisrate:</strong> '+fmt(br)+' · <strong>Selektionsrate:</strong> '+fmt(sr)+'.<br>Erhöhe y_cut → der tatsächlich positive Bereich wird kleiner. Erhöhe x_cut → der testpositive Bereich wird kleiner.';}
+
+function drawEffect(param){var svg=document.getElementById('effect-svg');if(!svg)return;var ellipse=param==='validity'?'<ellipse cx="195" cy="145" rx="125" ry="40" transform="rotate(-30 195 145)" fill="rgba(163,230,53,.25)" stroke="#365314" stroke-width="2"/>':'<ellipse cx="195" cy="145" rx="125" ry="55" transform="rotate(-30 195 145)" fill="rgba(163,230,53,.25)" stroke="#365314" stroke-width="2"/>';var x=param==='selection'?135:195,y=param==='base'?105:145;svg.innerHTML='<rect width="390" height="280" fill="#f8fafc"/><line x1="40" y1="245" x2="355" y2="245" stroke="#0f172a" stroke-width="2"/><line x1="40" y1="245" x2="40" y2="20" stroke="#0f172a" stroke-width="2"/>'+ellipse+'<line class="cut-line" x1="'+x+'" y1="20" x2="'+x+'" y2="245"/><line class="cut-line" x1="40" y1="'+y+'" x2="355" y2="'+y+'"/><text x="180" y="272" class="axis-label">Test</text><text x="12" y="150" class="axis-label" transform="rotate(-90 12 150)">Kriterium</text>';} 
+function runInfluence(){var p=document.getElementById('effect-param').value,pred=document.getElementById('effect-pred').value;var target=p==='validity'?'all':p==='base'?'pred':'sensspec';var labels={all:'alle vier Gütemaße',pred:'vor allem PP und NP',sensspec:'vor allem Sensitivität und Spezifität'};var expl=p==='validity'?'Höhere Validität verbessert bei sonst gleichen Bedingungen Sensitivität, Spezifität, PP und NP.':p==='base'?'Eine Basisratenänderung verschiebt y_cut und betrifft besonders PP und NP; die Folien 21 und 22 zeigen dieselbe Aussage.':'Eine Selektionsratenänderung verschiebt x_cut und betrifft besonders Sensitivität und Spezifität.';drawEffect(p);document.getElementById('effect-out').innerHTML='<strong>'+(pred===target?'Prognose stimmt.':'Prognose korrigieren.')+'</strong><br>Erwartetes Muster: '+labels[target]+'.<br>'+expl;}
+
+var rocData=[{t:14.5,se:1.00,sp:.45},{t:15.5,se:.99,sp:.54},{t:16.5,se:.99,sp:.62},{t:17.5,se:.97,sp:.70},{t:18.5,se:.94,sp:.76},{t:19.5,se:.87,sp:.82},{t:20.5,se:.80,sp:.86},{t:21.5,se:.70,sp:.90},{t:22.5,se:.59,sp:.93},{t:23.5,se:.45,sp:.95},{t:24.5,se:.34,sp:.97}];
+function rx(v){return 45+v*290;}function ry(v){return 275-v*235;}
+function updateROC(){var svg=document.getElementById('roc-svg');if(!svg)return;var idx=Math.round(nval('roc-threshold')),d=rocData[idx];document.getElementById('roc-threshold-val').textContent=d.t.toFixed(1);var h='<rect width="390" height="330" fill="#f8fafc"/><line x1="45" y1="275" x2="345" y2="275" stroke="#0f172a" stroke-width="2"/><line x1="45" y1="275" x2="45" y2="30" stroke="#0f172a" stroke-width="2"/><line x1="45" y1="275" x2="335" y2="40" stroke="#64748b" stroke-dasharray="5 4"/><text x="170" y="315" class="axis-label">1 − Spezifität</text><text x="12" y="155" class="axis-label" transform="rotate(-90 12 155)">Sensitivität</text>';var xt=[0,.2,.4,.6,.9,1];xt.forEach(function(v){h+='<text x="'+(rx(v)-6)+'" y="293" class="axis-tick">'+v.toFixed(1)+'</text>';});[0,.2,.4,.6,.8,1].forEach(function(v){h+='<text x="20" y="'+(ry(v)+3)+'" class="axis-tick">'+v.toFixed(1)+'</text>';});var path=rocData.map(function(o,i){return (i?'L':'M')+rx(1-o.sp)+' '+ry(o.se);}).join(' ');h+='<path d="'+path+'" fill="none" stroke="#2563eb" stroke-width="3"/>';rocData.forEach(function(o,i){h+='<circle cx="'+rx(1-o.sp)+'" cy="'+ry(o.se)+'" r="'+(i===idx?7:4)+'" fill="'+(i===idx?'#f97316':'#0f172a')+'"/>';});h+='<line x1="'+rx(1-d.sp)+'" y1="'+ry(d.se)+'" x2="'+rx(1-d.sp)+'" y2="275" stroke="#f97316" stroke-dasharray="4 3"/><line x1="45" y1="'+ry(d.se)+'" x2="'+rx(1-d.sp)+'" y2="'+ry(d.se)+'" stroke="#f97316" stroke-dasharray="4 3"/><text x="'+(rx(1-d.sp)+8)+'" y="'+(ry(d.se)-8)+'" class="point-label">'+d.t.toFixed(1)+'</text>';svg.innerHTML=h;var j=d.se+d.sp-1;document.getElementById('roc-sens').textContent=d.se.toFixed(2);document.getElementById('roc-spec').textContent=d.sp.toFixed(2);document.getElementById('roc-fpr').textContent=(1-d.sp).toFixed(2);document.getElementById('roc-j').textContent=j.toFixed(2);document.getElementById('roc-out').innerHTML='<strong>Schwellenwert '+d.t.toFixed(1)+':</strong> Mit steigendem Schwellenwert sinkt in der Tabelle die Sensitivität, während die Spezifität steigt.';}
+function showErrorCost(type){var el=document.getElementById('cost-out');if(type==='fn')el.innerHTML='<strong>FN wiegt schwerer:</strong> Ein niedrigerer Schwellenwert kann sinnvoll sein, weil mehr tatsächlich positive Fälle erkannt werden; dabei steigt die Falsch-Positiv-Rate.';else el.innerHTML='<strong>FP wiegt schwerer:</strong> Ein höherer Schwellenwert kann sinnvoll sein, weil weniger tatsächlich negative Fälle positiv klassifiziert werden; dabei sinkt die Sensitivität.';}
+
+var trRates=['.05','.10','.20','.30','.40','.50','.60','.70','.80','.90','.95'];var trVals={'.00':['.60','.60','.60','.60','.60','.60','.60','.60','.60','.60','.60'],'.05':['.64','.63','.63','.62','.62','.62','.61','.61','.61','.60','.60'],'.10':['.68','.67','.65','.64','.64','.63','.63','.62','.61','.61','.60'],'.15':['.71','.70','.68','.67','.66','.65','.64','.63','.62','.61','.61'],'.20':['.75','.73','.71','.69','.67','.66','.65','.64','.63','.62','.61'],'.25':['.78','.76','.73','.71','.69','.68','.66','.65','.63','.62','.61'],'.30':['.82','.79','.76','.73','.71','.69','.68','.66','.64','.62','.61'],'.35':['.85','.82','.78','.75','.73','.71','.69','.67','.65','.63','.62'],'.40':['.88','.85','.81','.78','.75','.73','.70','.68','.66','.63','.62'],'.45':['.90','.87','.83','.80','.77','.74','.72','.69','.66','.64','.62'],'.50':['.93','.90','.86','.82','.79','.76','.73','.70','.67','.64','.62']};
+function checkYouden(){var se=nval('you-sens'),sp=nval('you-spec'),ans=nval('you-answer'),j=se+sp-1,ok=Math.abs(j-ans)<.005;document.getElementById('you-out').innerHTML='<strong>'+(ok?'Richtig.':'Noch einmal prüfen.')+'</strong> J = '+se.toFixed(2)+' + '+sp.toFixed(2)+' − 1 = '+j.toFixed(2)+'.';}
+function initTR(){var v=document.getElementById('tr-valid'),s=document.getElementById('tr-select');if(!v||!s)return;v.innerHTML=Object.keys(trVals).map(function(x){return '<option value="'+x+'"'+(x==='.35'?' selected':'')+'>'+x+'</option>';}).join('');s.innerHTML=trRates.map(function(x){return '<option value="'+x+'"'+(x==='.10'?' selected':'')+'>'+x+'</option>';}).join('');lookupTR();}
+function lookupTR(){var v=document.getElementById('tr-valid'),s=document.getElementById('tr-select'),out=document.getElementById('tr-out');if(!v||!s||!out)return;var ri=trRates.indexOf(s.value),val=trVals[v.value][ri];out.innerHTML='<strong>Basisrate 0,60 · Validität '+v.value+' · Selektionsrate '+s.value+':</strong> positiver Prädiktionswert = <strong>'+val+'</strong>.';}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  calcGoldberg();
+  updateDecisionPlot();
+  calcMatrix();
+  updateCutoffPlot();
+  drawEffect('validity');
+  updateROC();
+  initTR();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

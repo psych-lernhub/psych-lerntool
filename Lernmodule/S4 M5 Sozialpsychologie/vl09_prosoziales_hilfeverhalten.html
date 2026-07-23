@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL09 Prosoziales & Hilfeverhalten</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl09
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Bystander-Fünfstufen-Simulator (VL09) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL09 Prosoziales & Hilfeverhalten</h1>
+<p class="page-sub">Sozialpsychologie · Prof. Dr. Susanne Veit · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Eine Studentin hilft, denkt aber bewusst an den guten Eindruck bei der Dozentin — ist das prosoziales Verhalten? · 2. Welche Formen der Hilfe unterscheidet Nadler (Machtbeziehung), und welche ist „besser“? · 3. Was besagt der Bystander-Effekt, und welche drei Phänomene tragen dazu bei?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Begriffe</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Evolutionäre Mechanismen</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Altruismus vs. Egoismus</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Kosten-Belohnungs-Modell</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Soziale Identität</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Macht & Formen der Hilfe</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Notlagen & Persönlichkeit</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Bystander-Effekt</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Begriffe ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Hilfeverhalten · prosozial · Altruismus</div>
+    <div class="sec-lz">Lernfrage 1: vier Begriffe abgrenzen — prosozial kann eigennützig sein, Altruismus nicht</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Studentin hilft einem Kommilitonen geduldig — denkt dabei aber bewusst, dass sie damit bei der Dozentin gut dasteht. Ist das noch <em>prosoziales Verhalten</em>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Ja. Prosoziales Verhalten ist über das <strong>Ergebnis</strong> definiert (es nützt anderen) und schließt eigennützige Motive ausdrücklich ein. Nur <strong>Altruismus</strong> verlangt rein uneigennützige Motivation — die Hilfe hier ist also prosozial, aber nicht altruistisch.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vier Begriffe, ein System</div>
+    <strong>Empathische Anteilnahme</strong> = Gefühlszustand (Mitgefühl, Wärme, Sorge) — ein Auslöser von Hilfe.<br>
+    <strong>Hilfeverhalten</strong> = eine konkrete Handlung zum Nutzen einer anderen Person.<br>
+    <strong>Prosoziales Verhalten</strong> = Oberbegriff, von der Gesellschaft als nützlich definiert; auch eigennützig möglich.<br>
+    <strong>Altruismus</strong> = Unterform: ausschließlich empathisch motiviert, ohne erwartete Belohnung.
+  </div>
+  <div class="card">
+    <div class="card-title">Die entscheidende Grenze</div>
+    Prosozial ist <em>nicht</em> automatisch altruistisch: Eigennutz schließt prosoziales Verhalten nicht aus, Altruismus aber schon. Wichtig: rein <strong>beruflich verpflichtetes</strong> Helfen zählt definitionsgemäß nicht als prosoziales Verhalten.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Empathie ist noch kein Helfen</div>
+    Empathische Anteilnahme ist ein <strong>Gefühl</strong> und ein möglicher Auslöser — aber selbst noch keine Hilfehandlung. Wer mitfühlt, hilft nicht automatisch.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher Begriff trifft zu?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Beispiel dem passenden Begriff zu</div>
+    <div class="corr-item" id="bg0">Mitgefühl und Sorge beim Anblick einer leidenden Person — ohne (noch) zu handeln.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bg0',this,'empathie')">Empathische Anteilnahme</button>
+        <button class="corr-btn" onclick="checkCorr('bg0',this,'hilfe')">Hilfeverhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg0',this,'prosozial')">Prosoziales Verhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg0',this,'altruismus')">Altruismus</button>
+      </div><div class="corr-fb" id="bg0-fb"></div>
+    </div>
+    <div class="corr-item" id="bg1">Eine konkrete Handlung, die einer anderen Person direkt nützt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bg1',this,'empathie')">Empathische Anteilnahme</button>
+        <button class="corr-btn" onclick="checkCorr('bg1',this,'hilfe')">Hilfeverhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg1',this,'prosozial')">Prosoziales Verhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg1',this,'altruismus')">Altruismus</button>
+      </div><div class="corr-fb" id="bg1-fb"></div>
+    </div>
+    <div class="corr-item" id="bg2">Helfen, das auch dem eigenen Ansehen dient — aber anderen nützt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bg2',this,'empathie')">Empathische Anteilnahme</button>
+        <button class="corr-btn" onclick="checkCorr('bg2',this,'hilfe')">Hilfeverhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg2',this,'prosozial')">Prosoziales Verhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg2',this,'altruismus')">Altruismus</button>
+      </div><div class="corr-fb" id="bg2-fb"></div>
+    </div>
+    <div class="corr-item" id="bg3">Helfen ausschließlich aus Mitgefühl, ohne jede erwartete Belohnung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bg3',this,'empathie')">Empathische Anteilnahme</button>
+        <button class="corr-btn" onclick="checkCorr('bg3',this,'hilfe')">Hilfeverhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg3',this,'prosozial')">Prosoziales Verhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg3',this,'altruismus')">Altruismus</button>
+      </div><div class="corr-fb" id="bg3-fb"></div>
+    </div>
+    <div class="corr-item" id="bg4">Das warme Gefühl der Anteilnahme an der Not eines anderen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bg4',this,'empathie')">Empathische Anteilnahme</button>
+        <button class="corr-btn" onclick="checkCorr('bg4',this,'hilfe')">Hilfeverhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg4',this,'prosozial')">Prosoziales Verhalten</button>
+        <button class="corr-btn" onclick="checkCorr('bg4',this,'altruismus')">Altruismus</button>
+      </div><div class="corr-fb" id="bg4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Evolutionäre Mechanismen ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Evolutionäre Mechanismen</div>
+    <div class="sec-lz">Verwandtenselektion · reziproker Altruismus · Gruppenselektion</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Helfen kostet Zeit, Energie, manchmal das Leben — warum hat die Evolution es nicht einfach „wegselektiert"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Weil Helfen unter bestimmten Bedingungen <strong>adaptiv</strong> ist. Drei Mechanismen erklären das — sie ergänzen einander: <strong>Verwandtenselektion</strong>, <strong>reziproker Altruismus</strong> und <strong>Gruppenselektion</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Verwandtenselektion</div>
+    Helfen von Verwandten erhöht die <strong>indirekte Fitness</strong> (Teil der Gesamtfitness) — über sie verbreiten sich gemeinsame Gene weiter. Beispiele: Löwinnen säugen verwandte Junge; Arbeiterbienen versorgen die Larven der Königin statt sich selbst fortzupflanzen.
+  </div>
+  <div class="card">
+    <div class="card-title">Reziproker Altruismus</div>
+    Helfen lohnt sich durch eine erwartete <strong>Gegenleistung</strong> — Verwandtschaft ist <em>nicht</em> nötig. Grundlage ist die <strong>Reziprozitätsnorm</strong>: Erhaltene Hilfe erzeugt das Gefühl, etwas schuldig zu sein.
+  </div>
+  <div class="card">
+    <div class="card-title">Gruppenselektion</div>
+    Gruppen mit vielen Helfern und <strong>starker Reziprozität</strong> (Kooperation belohnen, Egoismus bestrafen) überleben besser als unkooperative Gruppen — ein Vorteil für die ganze Gruppe.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher Mechanismus?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Beispiel dem passenden Mechanismus zu</div>
+    <div class="corr-item" id="ev0">Eltern bringen für ihre eigenen Kinder große Opfer.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ev0',this,'verwandt')">Verwandtenselektion</button>
+        <button class="corr-btn" onclick="checkCorr('ev0',this,'reziprok')">Reziproker Altruismus</button>
+        <button class="corr-btn" onclick="checkCorr('ev0',this,'gruppe')">Gruppenselektion</button>
+      </div><div class="corr-fb" id="ev0-fb"></div>
+    </div>
+    <div class="corr-item" id="ev1">„Ich helfe dir heute, dann hilfst du mir morgen."
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ev1',this,'verwandt')">Verwandtenselektion</button>
+        <button class="corr-btn" onclick="checkCorr('ev1',this,'reziprok')">Reziproker Altruismus</button>
+        <button class="corr-btn" onclick="checkCorr('ev1',this,'gruppe')">Gruppenselektion</button>
+      </div><div class="corr-fb" id="ev1-fb"></div>
+    </div>
+    <div class="corr-item" id="ev2">Eine Gruppe mit vielen Helfern überlebt besser als eine ohne.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ev2',this,'verwandt')">Verwandtenselektion</button>
+        <button class="corr-btn" onclick="checkCorr('ev2',this,'reziprok')">Reziproker Altruismus</button>
+        <button class="corr-btn" onclick="checkCorr('ev2',this,'gruppe')">Gruppenselektion</button>
+      </div><div class="corr-fb" id="ev2-fb"></div>
+    </div>
+    <div class="corr-item" id="ev3">Arbeiterbienen versorgen die Larven der Königin statt eigener Nachkommen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ev3',this,'verwandt')">Verwandtenselektion</button>
+        <button class="corr-btn" onclick="checkCorr('ev3',this,'reziprok')">Reziproker Altruismus</button>
+        <button class="corr-btn" onclick="checkCorr('ev3',this,'gruppe')">Gruppenselektion</button>
+      </div><div class="corr-fb" id="ev3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Altruismus vs. Egoismus ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Altruismus-Egoismus-Debatte</div>
+    <div class="sec-lz">Empathie-Altruismus-Hypothese vs. Modell des Stimmungsabbaus</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gibt es <em>echtes</em> selbstloses Helfen — oder ist alle Hilfe letztlich eigennützig?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Beide Motive existieren und schließen sich <strong>nicht</strong> aus. Starke <strong>Empathie</strong> spricht für echten Altruismus (man hilft auch bei leichter Fluchtmöglichkeit); Helfen kann aber auch der eigenen <strong>Stimmung</strong> dienen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Empathie-Altruismus-Hypothese</div>
+    Starke Empathie erzeugt <strong>altruistische</strong> Motivation: Man hilft sogar dann, wenn man die Situation leicht verlassen könnte. Würde nur Eigennutz zählen, würde man bei einfacher Flucht eher gehen.
+  </div>
+  <div class="card">
+    <div class="card-title">Modell des Stimmungsabbaus</div>
+    Die Gegenposition: Die Not anderer erzeugt eigene <strong>negative Stimmung</strong>; Helfen baut diese ab. Helfen dient damit dem eigenen Wohlbefinden — also <strong>egoistisch</strong> motiviert.
+  </div>
+  <div class="card">
+    <div class="card-title">Was treibt Freiwillige an? Zwei große Befunde</div>
+    Ein <strong>Ländervergleich</strong> von Freiwilligen-Motiven (Weltwerte-Befragung, 33 Länder) zeigt: Ob eigennützige und gemeinnützige Motive zusammenhängen, <em>variiert mit Wohlstand und Klima des Landes</em> — Motive sind also auch kulturell geformt. Und über Studien hinweg (Hubbard et al., 2016) erklärt eine übergeordnete Wohlwollens-Dimension (<strong>„General Benevolence"</strong>) prosoziales Verhalten über drei unterschiedliche Messmethoden hinweg — Selbstbericht, Spendenverhalten und ein bildgebendes Verfahren (fMRI) — mit dem Alter nimmt diese Tendenz <strong>zu</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Gegensatz oder Ergänzung?</div>
+    Heutige Sicht: kein Entweder-oder. Altruistische und egoistische Motive können <strong>gleichzeitig</strong> wirken; ihr Zusammenhang variiert sogar kulturell. Ein genuin altruistischer Kern ist messbar — schließt Eigennutz aber nicht aus.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Zwei Erklärungen im Vergleich</div>
+  <div class="card">
+    <div class="card-title">Altruistisch oder egoistisch? — umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="emp" onclick="switchTab(this,'aedeb')">Empathie-Altruismus</button>
+      <button class="tab-btn" data-tab="stim" onclick="switchTab(this,'aedeb')">Stimmungsabbau</button>
+    </div>
+    <div class="tab-group" data-group="aedeb">
+      <div class="tab-content active" data-tab="emp">
+        <strong>Motiv:</strong> altruistisch — echte Sorge um den anderen.<br>
+        <strong>Auslöser:</strong> starke Empathie.<br>
+        <strong>Vorhersage:</strong> Hilfe auch bei leichter Fluchtmöglichkeit.
+      </div>
+      <div class="tab-content" data-tab="stim">
+        <strong>Motiv:</strong> egoistisch — die eigene negative Stimmung loswerden.<br>
+        <strong>Auslöser:</strong> Traurigkeit durch die Not des anderen.<br>
+        <strong>Vorhersage:</strong> bei schwacher Empathie und leichter Flucht eher Flucht.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Kosten-Belohnungs-Modell ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Erregung-Kosten-Belohnungs-Modell</div>
+    <div class="sec-lz">Erregung → Abwägung; impulsives Helfen umgeht die Kalkulation</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du siehst einen Notfall und spürst sofort Anspannung. Was passiert dann im Kopf, bevor du handelst?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Die <strong>Erregung</strong> ist unangenehm und nimmt zu; ihr begegnet man durch eine <strong>Kosten-Nutzen-Abwägung</strong> (helfen oder nicht). <strong>Impulsives Helfen</strong> kann diese Abwägung umgehen — es erfolgt unmittelbar, ohne bewussten Entscheidungsprozess und ohne dass die Aufmerksamkeit auf andere Zuschauende gerichtet wird.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Grundidee</div>
+    Das Beobachten einer Notlage erzeugt <strong>Erregung</strong>, die fortlaufend unangenehmer wird. Die Person begegnet ihr — unter Berücksichtigung von Kosten und Belohnungen —, indem sie hilft oder nicht hilft.
+  </div>
+  <div class="card">
+    <div class="card-title">Kosten und Belohnungen</div>
+    <strong>Helfen:</strong> + Dank, Selbstwert · − Zeit, Gefahr, Anstrengung.<br>
+    <strong>Nicht-Helfen:</strong> + keine Unterbrechung · − Tadel, Schuldgefühle.<br>
+    Die Abwägung bestimmt die Reaktion: direktes Eingreifen, indirekte Hilfe, Flucht oder Umdeutung.
+  </div>
+  <div class="card">
+    <div class="card-title">Impulsives Helfen</div>
+    Eine <strong>unmittelbare, nicht überlegte</strong> Form von Hilfeverhalten: Hilfe erfolgt ohne bewussten Entscheidungsprozess und ohne dass die Aufmerksamkeit auf andere Zuschauer gerichtet wird.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das Modell Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Von der Notlage zur Reaktion</div>
+    <div id="kb">
+      <div class="step-item"><strong>Schritt 1:</strong> Eine Notlage wird beobachtet.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Es entsteht unangenehme, zunehmende Erregung.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Abwägung — Kosten des Helfens vs. Kosten des Nicht-Helfens.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Reaktion: helfen, fliehen oder die Situation umdeuten.</div>
+      <div class="step-item"><strong>Ausnahme:</strong> Impulsives Helfen — unmittelbar, ohne bewussten Entscheidungsprozess, ohne Abwägung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'kb')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Soziale Identität ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Soziale Identität & Hilfeverhalten</div>
+    <div class="sec-lz">Eigengruppen-Bias; Salienz der übergeordneten Identität entscheidet</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Hilfst du einem Gestürzten eher, wenn er das Trikot <em>deines</em> Vereins trägt — und was, wenn er das des Erzrivalen trägt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Ja — die wahrgenommene gemeinsame <strong>Gruppenidentität</strong> fördert Hilfe. Entscheidend ist die <em>situativ salient gemachte</em> Identität: Wird die <strong>übergeordnete</strong> Identität betont, gilt auch der Rivale als „einer von uns".</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Eigengruppe wird bevorzugt</div>
+    Wir helfen eher denen, die wir als „einer von uns" wahrnehmen — der <strong>Eigengruppen-Bias</strong> beim Helfen ist robust und kulturübergreifend belegt (auch in Feldstudien, etwa während der Pandemie).
+  </div>
+  <div class="card">
+    <div class="card-title">Salienz entscheidet</div>
+    Nicht nur die objektive Zugehörigkeit zählt, sondern welche Identität gerade <strong>salient</strong> ist. Wird eine <em>übergeordnete</em> Identität betont (z. B. „Fußballfan allgemein" statt „Fan von Verein X"), gehört auch der frühere Gegner zur Eigengruppe — und erhält Hilfe.
+  </div>
+  <div class="card">
+    <div class="card-title">Anwendung</div>
+    Über <strong>Rekategorisierung</strong> (ein gemeinsames, größeres „wir") lässt sich Hilfsbereitschaft auch gegenüber Fremdgruppen erhöhen — eine Brücke zum Vorurteilsabbau aus VL08.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das Fußballfan-Experiment</div>
+  <div class="card">
+    <div class="card-title">Schritt für Schritt durch die Studie</div>
+    <div id="lev">
+      <div class="step-item"><strong>Stufe 1 — Setup:</strong> Fans eines bestimmten Vereins nehmen an einer Studie teil.</div>
+      <div class="step-item"><strong>Stufe 2 — Zwischenfall:</strong> Auf dem Weg stürzt ein Jogger und scheint verletzt.</div>
+      <div class="step-item"><strong>Stufe 3 — Variation:</strong> Er trägt das Trikot des eigenen Vereins, des Rivalen oder ein neutrales Trikot.</div>
+      <div class="step-item"><strong>Stufe 4 — Befund:</strong> Geholfen wird vor allem dem eigenen Trikot, kaum dem Rivalen oder dem neutralen.</div>
+      <div class="step-item"><strong>Stufe 5 — Wende:</strong> Wird zuvor „Fußballfan allgemein" salient gemacht, hilft man auch dem gegnerischen Fan.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'lev')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Macht & Formen der Hilfe ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Sozialer Kontext & Macht — Nadler</div>
+    <div class="sec-lz">Lernfrage 2: abhängigkeits- vs. autonomieorientierte Hilfe</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Hilft man jemandem besser, indem man ihm die <em>Lösung</em> gibt — oder das <em>Werkzeug</em>, sie selbst zu finden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Das Werkzeug. <strong>Autonomieorientierte</strong> Hilfe ist besser fürs Selbstwertgefühl und nachhaltiger. <strong>Abhängigkeitsorientierte</strong> Hilfe (die fertige Lösung) suggeriert Unfähigkeit und erzeugt Abhängigkeit. Denn: Hilfe ist immer auch eine <strong>Machtbeziehung</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Hilfe ist eine Machtbeziehung</div>
+    Der Helfende hat, was der andere braucht. Hilfe kann als <strong>Machtdemonstration</strong> wirken — und das Annehmen von Hilfe kann das (kollektive) <strong>Selbstwertgefühl</strong> des Empfängers belasten.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Formen der Hilfe</div>
+    <strong>Abhängigkeitsorientiert</strong> = die fertige Lösung liefern; suggeriert Unfähigkeit, erzeugt Abhängigkeit; oft von statushohen Gruppen bevorzugt.<br>
+    <strong>Autonomieorientiert</strong> = die Mittel zum Selbstlösen geben; besser fürs Selbstwertgefühl, nachhaltiger; von statusniedrigeren Gruppen bevorzugt.
+  </div>
+  <div class="card">
+    <div class="card-title">Sozialer Kontext: das Experiment der verlorenen Briefe</div>
+    Feldexperiment: <strong>2000 frankierte Briefe</strong> wurden in <strong>52 Berliner Nachbarschaften</strong> „verloren". Ergebnis: <strong>mehr</strong> Briefe kamen aus <em>wohlhabenden, homogenen</em> Gegenden zurück, <strong>weniger</strong> aus ärmeren und/oder kulturell vielfältigeren Ortsteilen (und aus Ost-Berliner Ortsteilen). Alltagshilfe hängt also messbar vom <strong>sozialen Kontext</strong> ab — nicht nur von der Persönlichkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Merksatz</div>
+    „Gib einem Hungernden einen Fisch — er ist einmal satt; lehre ihn fischen — er hungert nie wieder." Ungefragte Hilfe von Machthöheren kann zudem als <strong>anmaßend</strong> erlebt werden.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Zwei Formen der Hilfe im Vergleich</div>
+  <div class="card">
+    <div class="card-title">Abhängigkeits- vs. autonomieorientiert — umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="abh" onclick="switchTab(this,'nadler')">Abhängigkeitsorientiert</button>
+      <button class="tab-btn" data-tab="aut" onclick="switchTab(this,'nadler')">Autonomieorientiert</button>
+    </div>
+    <div class="tab-group" data-group="nadler">
+      <div class="tab-content active" data-tab="abh">
+        <strong>Was:</strong> die fertige Lösung liefern.<br>
+        <strong>Wirkung:</strong> suggeriert Unfähigkeit, erzeugt Abhängigkeit.<br>
+        <strong>Bevorzugt von:</strong> eher statushohen Gruppen.
+      </div>
+      <div class="tab-content" data-tab="aut">
+        <strong>Was:</strong> die Werkzeuge zum Selbstlösen geben.<br>
+        <strong>Wirkung:</strong> besser fürs Selbstwertgefühl, nachhaltiger.<br>
+        <strong>Bevorzugt von:</strong> eher statusniedrigeren Gruppen.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Notlagen & Persönlichkeit ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Notsituationen & prosoziale Persönlichkeit</div>
+    <div class="sec-lz">Solidarität nach Panik; dauerhafte Hilfsbereitschaft als Disposition</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gilt in echten Katastrophen „Ich zuerst" — oder doch eher „Frauen und Kinder zuerst"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Oft das Zweite: Nach einer ersten Panik besinnen sich Menschen häufig auf <strong>Normen und Solidarität</strong> (z. B. geordnete Evakuierungen). Manche helfen zudem dauerhaft über Situationen hinweg — Ausdruck einer <strong>prosozialen Persönlichkeit</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Notsituationen</div>
+    Notlagen werden oft als <strong>gemeinsames Schicksal</strong> erlebt — nach erster Panik überwiegt häufig geordnete Solidarität statt Dauerpanik: Beim Untergang der Titanic überlebten relativ mehr Frauen und Kinder als Männer, die Flucht aus dem World Trade Center 2001 verlief vergleichsweise geordnet, und nach dem Bombenattentat in London 2005 gab es wenig Panik, aber viel gegenseitige Unterstützung.
+  </div>
+  <div class="card">
+    <div class="card-title">Prosoziale Persönlichkeit</div>
+    Eine <strong>überdauernde Tendenz</strong>, an das Wohl anderer zu denken und entsprechend zu handeln. Sie erklärt <em>langfristige</em> Hilfe (Ehrenamt, regelmäßiges Spenden) über Situationen hinweg — anders als situativ ausgelöstes Helfen.
+  </div>
+  <div class="card">
+    <div class="card-title">Situativ vs. dispositional</div>
+    Manches Helfen erklärt die <strong>Situation</strong> (Eindeutigkeit, gemeinsames Schicksal), manches die <strong>Person</strong> (stabile prosoziale Disposition). Beide Ebenen ergänzen einander.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Situation oder Persönlichkeit?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Aussage der passenden Ebene zu</div>
+    <div class="corr-item" id="np0">Beim Untergang der Titanic überlebten relativ mehr Frauen und Kinder als Männer.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('np0',this,'situativ')">Notsituation (situativ)</button>
+        <button class="corr-btn" onclick="checkCorr('np0',this,'dispositional')">Prosoziale Persönlichkeit</button>
+      </div><div class="corr-fb" id="np0-fb"></div>
+    </div>
+    <div class="corr-item" id="np1">Jemand engagiert sich seit Jahren ehrenamtlich.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('np1',this,'situativ')">Notsituation (situativ)</button>
+        <button class="corr-btn" onclick="checkCorr('np1',this,'dispositional')">Prosoziale Persönlichkeit</button>
+      </div><div class="corr-fb" id="np1-fb"></div>
+    </div>
+    <div class="corr-item" id="np2">Nach erster Panik überwiegt geordnete Solidarität.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('np2',this,'situativ')">Notsituation (situativ)</button>
+        <button class="corr-btn" onclick="checkCorr('np2',this,'dispositional')">Prosoziale Persönlichkeit</button>
+      </div><div class="corr-fb" id="np2-fb"></div>
+    </div>
+    <div class="corr-item" id="np3">Eine überdauernde Neigung, an das Wohl anderer zu denken.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('np3',this,'situativ')">Notsituation (situativ)</button>
+        <button class="corr-btn" onclick="checkCorr('np3',this,'dispositional')">Prosoziale Persönlichkeit</button>
+      </div><div class="corr-fb" id="np3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Bystander-Effekt ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Bystander-Effekt & 5-Stufen-Modell</div>
+    <div class="sec-lz">Lernfrage 3: pluralistische Ignoranz, Verantwortungsdiffusion, Hemmung durch Publikum</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In einer vollen U-Bahn wird jemandem schlecht — und <em>gerade weil</em> so viele Menschen da sind, hilft niemand. Wie kann das sein?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Das ist der <strong>Bystander-Effekt</strong>: Mehr Anwesende senken die individuelle Hilfewahrscheinlichkeit. Drei Prozesse tragen bei: <strong>pluralistische Ignoranz</strong>, <strong>Verantwortungsdiffusion</strong> und <strong>Hemmung durch ein Publikum</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Der Bystander-Effekt</div>
+    Je mehr Zeugen anwesend sind, desto <strong>unwahrscheinlicher und langsamer</strong> hilft die einzelne Person. Der Effekt ist experimentell robust — er tritt aber bei hohem Gefahrenpotenzial (Gewalt) so nicht auf, und er ist geringer bei hohem Verantwortungsgefühl und hoher Selbstwirksamkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Hemm-Prozesse</div>
+    <strong>Pluralistische Ignoranz</strong> — die Untätigkeit der anderen gilt als Entwarnung (wirkt auf die <em>Deutung</em>).<br>
+    <strong>Verantwortungsdiffusion</strong> — die Verantwortung verteilt sich auf viele (wirkt auf die <em>Verantwortungsübernahme</em>).<br>
+    <strong>Hemmung durch ein Publikum</strong> — Angst, sich zu blamieren (wirkt auf die <em>Umsetzung</em>; verwandt: <strong>Bewertungsangst</strong> — und hohe <strong>Selbstwirksamkeit</strong> puffert dagegen). Historische Fußnote: Die klassische „38-untätige-Zeugen"-Darstellung des auslösenden Kriminalfalls wurde später <em>relativiert</em> (einige riefen doch an, der Ort war kaum einsehbar). Vertiefung mit Rethinking-Befunden: VT04.
+  </div>
+  <div class="card">
+    <div class="card-title">Fünf-Stufen-Modell</div>
+    Helfen ist ein <strong>mehrstufiger Prozess</strong>: bemerken → als Notfall deuten → Verantwortung übernehmen → wissen, wie → handeln. An <em>jeder</em> Stufe kann es scheitern.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Gegenmaßnahme</div>
+    Eine einzelne Person <strong>direkt und namentlich</strong> ansprechen („Sie im blauen Mantel, rufen Sie den Notruf!") hebt die Verantwortungsdiffusion auf — die Verantwortung lässt sich dann nicht mehr verteilen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das Fünf-Stufen-Modell</div>
+  <div class="card">
+    <div class="card-title">An jeder Stufe kann Helfen scheitern</div>
+    <div id="by">
+      <div class="step-item"><strong>Stufe 1:</strong> Das Ereignis überhaupt bemerken.</div>
+      <div class="step-item"><strong>Stufe 2:</strong> Die Situation als Notfall deuten. <em>(Hemmt: pluralistische Ignoranz)</em></div>
+      <div class="step-item"><strong>Stufe 3:</strong> Persönliche Verantwortung übernehmen. <em>(Hemmt: Verantwortungsdiffusion)</em></div>
+      <div class="step-item"><strong>Stufe 4:</strong> Wissen, wie man helfen kann.</div>
+      <div class="step-item"><strong>Stufe 5:</strong> Die Hilfe tatsächlich umsetzen. <em>(Hemmt: Hemmung durch ein Publikum)</em></div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'by')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎛️ Simulator: Der Fünfstufen-Durchlauf</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Wähle eine Stufe — was passiert hier, und welcher Hemmprozess setzt an?</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="bs-1" onclick="bsSet(1)">1 Bemerken</button>
+        <button class="sim-tbtn" id="bs-2" onclick="bsSet(2)">2 Interpretieren</button>
+        <button class="sim-tbtn" id="bs-3" onclick="bsSet(3)">3 Verantwortung</button>
+        <button class="sim-tbtn" id="bs-4" onclick="bsSet(4)">4 Handlungswissen</button>
+        <button class="sim-tbtn" id="bs-5" onclick="bsSet(5)">5 Umsetzen</button>
+      </div>
+      <div class="sim-verdict" id="bs-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 10 häufigsten Verwechslungen aus VL09</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Altruismus</h4>
+      <p>Motivational definiert: uneigennützig, fremdnützig</p>
+      <p>Unterform des prosozialen Verhaltens</p>
+      <p>Keine extrinsische Belohnung erwartet</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Prosoziales Verhalten</h4>
+      <p>Oberbegriff für Handeln zum Wohl anderer</p>
+      <p>Kann auch eigennützig motiviert sein</p>
+      <p>Von der Gesellschaft als nützlich definiert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Jedes prosoziale Verhalten ist automatisch altruistisch, weil es anderen nützt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Empathische Anteilnahme</h4>
+      <p>Eine emotionale Reaktion (Mitgefühl, Sorge)</p>
+      <p>Möglicher Auslöser von Hilfe</p>
+      <p>Selbst noch kein Verhalten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Hilfeverhalten</h4>
+      <p>Eine konkrete Unterstützungshandlung</p>
+      <p>Sichtbar und wirksam für andere</p>
+      <p>Kann, muss aber nicht aus Empathie folgen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer Empathie empfindet, hilft automatisch — Empathie und Helfen sind dasselbe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verwandtenselektion</h4>
+      <p>Erklärt Helfen über gemeinsame Gene</p>
+      <p>Erhöht die indirekte Fitness</p>
+      <p>Setzt genetische Verwandtschaft voraus</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Reziproker Altruismus</h4>
+      <p>Erklärt Helfen über erwartete Gegenleistung</p>
+      <p>Verwandtschaft ist nicht nötig</p>
+      <p>Beruht auf der Reziprozitätsnorm</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Reziproker Altruismus bedeutet, dass man nur Verwandten hilft, weil man eine Gegenleistung erwartet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verantwortungsdiffusion</h4>
+      <p>Verantwortung verteilt sich auf alle Zeugen</p>
+      <p>Jeder fühlt sich weniger persönlich zuständig</p>
+      <p>Wirkt auf die Verantwortungsübernahme</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Pluralistische Ignoranz</h4>
+      <p>Lage wird über die Reaktion anderer gedeutet</p>
+      <p>Untätigkeit anderer gilt als Entwarnung</p>
+      <p>Wirkt auf die Situationsdeutung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Verantwortungsdiffusion und pluralistische Ignoranz sind dasselbe Phänomen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bystander-Effekt</h4>
+      <p>Hemmung der Hilfe in Notlagen</p>
+      <p>Ausgelöst durch die Anwesenheit anderer</p>
+      <p>Betrifft Hilfeverhalten in Notsituationen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Soziales Faulenzen (Social Loafing — Gruppenprozesse, hier nur zur Abgrenzung)</h4>
+      <p>Geringere individuelle Anstrengung</p>
+      <p>Tritt bei gemeinsamen Gruppenaufgaben auf</p>
+      <p>Betrifft Leistung, nicht Hilfe in Notlagen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Bystander-Effekt ist dasselbe wie Social Loafing — man tut weniger, weil andere da sind.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Reziproker Altruismus</h4>
+      <p>Ein evolutionäres Konzept</p>
+      <p>Letztlich eigennützig (erwartete Gegenleistung)</p>
+      <p>Verwandtschaft nicht nötig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Altruismus (psychologisch)</h4>
+      <p>Uneigennützige Motivation</p>
+      <p>Keine Gegenleistung erwartet</p>
+      <p>Ausschließlich empathisch motiviert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Reziproker Altruismus ist eine Form echten Altruismus, weil man ja anderen hilft.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Impulsives Hilfeverhalten</h4>
+      <p>Unmittelbare, nicht überlegte Reaktion</p>
+      <p>Kein bewusster Entscheidungsprozess beteiligt</p>
+      <p>Aufmerksamkeit nicht auf andere Zuschauer gerichtet</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kalkuliertes Hilfeverhalten</h4>
+      <p>Bewusste Kosten-Nutzen-Abwägung</p>
+      <p>Folgt dem Erregung-Kosten-Belohnungs-Modell</p>
+      <p>Reaktion hängt von der Abwägung ab</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Erregung-Kosten-Belohnungs-Modell erklärt auch impulsives Helfen vollständig.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gruppenselektion</h4>
+      <p>Vorteil kooperativer Gruppen gegenüber anderen</p>
+      <p>Unabhängig von Verwandtschaft</p>
+      <p>Starke Reziprozität hält die Gruppe kooperativ</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verwandtenselektion</h4>
+      <p>Vorteil über gemeinsame Gene</p>
+      <p>Setzt genetische Verwandtschaft voraus</p>
+      <p>Erhöht die indirekte Fitness</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Gruppenselektion und Verwandtenselektion sind dasselbe, weil Gruppen oft aus Verwandten bestehen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Empathie-Altruismus-Hypothese (Batson)</h4>
+      <p>Empathische Anteilnahme → echtes Ziel: dem anderen geht es besser</p>
+      <p>Hilfe auch, wenn man der Situation leicht entkommen könnte</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Abbau negativer Stimmung (Cialdini)</h4>
+      <p>Helfen, um das EIGENE Unbehagen loszuwerden — egoistisches Motiv</p>
+      <p>Wer sich anders erleichtern kann, hilft seltener</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Nach Cialdinis Modell hilft man auch dann zuverlässig, wenn sich die eigene schlechte Stimmung bequemer auf anderem Weg beheben ließe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bystander-Effekt</h4>
+      <p>Das PHÄNOMEN: Je mehr Anwesende, desto unwahrscheinlicher/langsamer die Hilfe</p>
+      <p>Erklärt durch DREI Prozesse gemeinsam</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verantwortungsdiffusion</h4>
+      <p>EINER der drei Erklärungsprozesse (Stufe 3: Verantwortung)</p>
+      <p>Die gefühlte Zuständigkeit verteilt sich auf alle Anwesenden</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bystander-Effekt und Verantwortungsdiffusion bezeichnen exakt dasselbe Phänomen.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl09</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl09';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Eine Studentin hilft einem Kommilitonen geduldig — denkt dabei aber bewusst, dass sie so bei der Dozentin gut dasteht. Ist das prosoziales Verhalten?",
+      "opts": [
+        "Ja — prosoziales Verhalten umfasst auch eigennützig motiviertes Helfen",
+        "Nein — sobald Eigennutz mitspielt, ist die Handlung keine echte Hilfe",
+        "Nein — prosozial ist es nur dann, wenn es zugleich rein altruistisch ist",
+        "Ja — aber nur, weil dabei zugleich echte empathische Anteilnahme mitschwingt"
+      ],
+      "c": 0,
+      "e": "Prosoziales Verhalten ist über das Ergebnis definiert (es nützt anderen) und schließt eigennützige Motive ausdrücklich ein. Nur Altruismus verlangt rein uneigennützige Motivation — deshalb ist die Hilfe hier prosozial, aber nicht altruistisch."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was kennzeichnet Altruismus im Unterschied zu prosozialem Verhalten allgemein?",
+      "opts": [
+        "Dass die Handlung von der Gesellschaft als nützlich für andere gilt",
+        "Dass ausschließlich empathische Motivation ohne erwartete Belohnung wirkt",
+        "Dass die Hilfe stets im Rahmen einer beruflichen Verpflichtung erfolgt",
+        "Dass die Handlung immer eine konkrete körperliche Kraftanstrengung erfordert"
+      ],
+      "c": 1,
+      "e": "Altruismus ist motivational definiert: Hilfe ausschließlich aus empathischer Motivation, ohne Erwartung extrinsischer Belohnung. Prosoziales Verhalten ist der weitere Oberbegriff und lässt auch egoistische Motive zu."
+    },
+    {
+      "id": "s0q3",
+      "q": "Jemand empfindet tiefes Mitgefühl beim Anblick einer notleidenden Person, handelt aber (noch) nicht. Was beschreibt diesen Zustand?",
+      "opts": [
+        "Hilfeverhalten — die konkrete Unterstützungshandlung für die Person",
+        "Altruismus — die uneigennützige Hilfe ohne Erwartung einer Belohnung",
+        "Empathische Anteilnahme — Mitgefühl und Sorge, ein Auslöser von Hilfe",
+        "Reziprozität — die Erwartung einer späteren Gegenleistung des anderen"
+      ],
+      "c": 2,
+      "e": "Empathische Anteilnahme ist ein Gefühlszustand (Mitgefühl, Wärme, Sorge) und ein möglicher Auslöser von Hilfe — aber selbst noch kein Verhalten. Hilfeverhalten wäre erst die konkrete Handlung."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Eine Löwin säugt auch die Jungen anderer Weibchen ihres Rudels — mit denen sie fast immer verwandt ist. Welcher evolutionäre Mechanismus erklärt das?",
+      "opts": [
+        "Reziproker Altruismus — sie erwartet dafür später eine Gegenleistung",
+        "Gruppenselektion — kooperative Rudel überleben besser als andere",
+        "Soziale Verantwortungsnorm — sie folgt einer erlernten sozialen Regel",
+        "Verwandtenselektion — sie fördert die Weitergabe gemeinsamer Gene"
+      ],
+      "c": 3,
+      "e": "Da die Tiere fast immer verwandt sind, erhöht die Hilfe die Weitergabe gemeinsamer Gene (indirekte Fitness — Teil der Gesamtfitness) — das ist Verwandtenselektion. Reziproker Altruismus bräuchte eine erwartete Gegenleistung, keine Verwandtschaft."
+    },
+    {
+      "id": "s1q2",
+      "q": "Ich helfe einem Nachbarn beim Umzug — ohne Verwandtschaft, aber in der Erwartung, dass er mir später auch hilft. Welcher Mechanismus ist das?",
+      "opts": [
+        "Reziproker Altruismus — Helfen lohnt sich durch erwartete Gegenleistung",
+        "Verwandtenselektion — die gemeinsamen Gene machen das Helfen vorteilhaft",
+        "Gruppenselektion — die ganze Gruppe profitiert vom Zusammenhalt",
+        "Empathische Anteilnahme — reines Mitgefühl treibt die Handlung an"
+      ],
+      "c": 0,
+      "e": "Reziproker Altruismus erklärt Helfen durch die Erwartung einer späteren Gegenleistung — Verwandtschaft ist nicht nötig. Die Reziprozitätsnorm erzeugt das Gefühl, etwas schuldig zu sein."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Bei starker Empathie wird auch dann geholfen, wenn man die Situation leicht verlassen könnte. Welche These erklärt das?",
+      "opts": [
+        "Das Modell des Stimmungsabbaus — Helfen bessert die eigene Laune spürbar auf",
+        "Die Empathie-Altruismus-Hypothese — echte Empathie erzeugt starke Hilfsmotivation",
+        "Die Reziprozitätsnorm — man rechnet fest mit einer späteren Gegenleistung",
+        "Die Gruppenselektion — kooperative Gruppen haben einen klaren Überlebensvorteil"
+      ],
+      "c": 1,
+      "e": "Wird auch bei leichter Fluchtmöglichkeit geholfen, spricht das für altruistische Motivation durch Empathie (Empathie-Altruismus-Hypothese). Egoistische Erklärungen würden hier eher Flucht vorhersagen."
+    },
+    {
+      "id": "s2q2",
+      "q": "Eine Erklärung lautet: Wir helfen, um unsere eigene durch die Notlage ausgelöste schlechte Stimmung wieder loszuwerden. Welches Modell ist das?",
+      "opts": [
+        "Die Empathie-Altruismus-Hypothese — echtes Mitgefühl treibt die Hilfe an",
+        "Die Verwandtenselektion — Helfen sichert vor allem die eigenen Gene ab",
+        "Das Modell des Stimmungsabbaus — Helfen dient dem eigenen Wohlbefinden",
+        "Die soziale Verantwortungsnorm — man folgt dabei einer moralischen Pflicht"
+      ],
+      "c": 2,
+      "e": "Das Modell des Abbaus negativer Stimmung erklärt Helfen egoistisch: Die Not anderer erzeugt eigene negative Stimmung, und Helfen baut diese ab. Es steht der altruistischen Empathie-Erklärung gegenüber."
+    },
+    {
+      "id": "s2q3",
+      "q": "Wie stehen altruistische und egoistische Motive beim Helfen nach heutiger Sicht zueinander?",
+      "opts": [
+        "Sie schließen sich strikt aus — Hilfe ist entweder das eine oder das andere",
+        "Egoistische Motive gibt es beim menschlichen Helfen in Wahrheit gar nicht",
+        "Altruistische Motive sind wissenschaftlich inzwischen vollständig widerlegt",
+        "Sie schließen sich nicht aus und können gleichzeitig wirksam sein"
+      ],
+      "c": 3,
+      "e": "Altruistische und egoistische Motive sind keine strikten Gegensätze, sondern können gemeinsam vorliegen — ihr Zusammenhang variiert sogar kulturell. Ein genuin altruistischer Kern ist messbar, schließt Eigennutz aber nicht aus."
+    },
+    {
+      "id": "s2q4",
+      "q": "Über drei verschiedene Messarten hinweg — Selbstberichte, Spendenentscheidungen und ein bildgebendes Verfahren (fMRI) — zeigt sich: Wer in einem Bereich prosozial ist, ist es meist auch in den anderen, und diese Tendenz nimmt mit dem Alter zu. Wofür spricht dieser Befund (Hubbard et al., 2016)?",
+      "opts": [
+        "Für rein situationsabhängiges Helfen, unabhängig von jeder Personeneigenschaft",
+        "Dafür, dass jede der drei Messarten ein eigenes, unabhängiges Motiv erfasst",
+        "Für eine bereichsübergreifende Wohlwollens-Dimension namens General Benevolence",
+        "Dafür, dass nur junge Menschen echte Hilfsbereitschaft und tiefe Empathie zeigen"
+      ],
+      "c": 2,
+      "e": "Eine starke übergeordnete Dimension („General Benevolence“) erklärt laut Hubbard et al. (2016) die Varianz über die drei Messbereiche Selbstberichte, Spenden und fMRI hinweg — Hilfsbereitschaft ist auch eine Personeneigenschaft, und sie nimmt mit dem Alter zu."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Eine Person beobachtet einen Notfall, fühlt unangenehme Erregung und wägt dann ab, ob Helfen sich „lohnt“. Welches Modell beschreibt das?",
+      "opts": [
+        "Das Erregung-Kosten-Belohnungs-Modell — Erregung stößt unmittelbar eine Abwägung an",
+        "Die Empathie-Altruismus-Hypothese — Mitgefühl führt direkt zur Hilfe",
+        "Das fünfstufige Entscheidungsmodell des Zuschauerverhaltens in Notlagen",
+        "Die Reziprozitätsnorm — man hilft wegen einer erwarteten Gegenleistung"
+      ],
+      "c": 0,
+      "e": "Das Erregung-Kosten-Belohnungs-Modell besagt: Eine Notlage erzeugt unangenehme Erregung, der die Person durch eine Kosten-Nutzen-Abwägung begegnet — sie hilft oder hilft nicht."
+    },
+    {
+      "id": "s3q2",
+      "q": "Manchmal springt jemand ohne jedes Abwägen sofort helfend ein. Wie passt das zum Kosten-Belohnungs-Modell?",
+      "opts": [
+        "Es widerlegt das gesamte Modell vollständig — eine Abwägung gibt es gar nicht",
+        "Impulsives Helfen erfolgt unmittelbar, ohne bewussten Entscheidungsprozess",
+        "Es zeigt, dass Helfen immer rein rational durchkalkuliert abläuft",
+        "Es beweist, dass spontan ausschließlich Verwandten geholfen wird"
+      ],
+      "c": 1,
+      "e": "Die Erweiterung des Modells berücksichtigt impulsives Helfen: Es erfolgt unmittelbar und ohne bewussten Entscheidungsprozess — die helfende Person richtet ihre Aufmerksamkeit dabei auch nicht auf die Anwesenheit anderer Zuschauender."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Fußballfans halfen einem Gestürzten viel eher, wenn er das Trikot des eigenen Vereins trug. Was zeigt dieser Befund?",
+      "opts": [
+        "Dass Hilfe allein von der Schwere der sichtbaren Verletzung abhängt",
+        "Dass die bloße Anwesenheit anderer Personen das Helfen stets hemmt",
+        "Dass die wahrgenommene gemeinsame Gruppenidentität Hilfe fördert",
+        "Dass Menschen letztlich ausschließlich nahen Verwandten helfen"
+      ],
+      "c": 2,
+      "e": "Geholfen wurde vor allem der Eigengruppe (gleiches Trikot) — die wahrgenommene gemeinsame Gruppenidentität steuert das Hilfeverhalten. Verletzungsschwere oder Verwandtschaft erklären den Befund nicht."
+    },
+    {
+      "id": "s4q2",
+      "q": "Im selben Experiment half man auch einem gegnerischen Fan — sobald zuvor die Identität „Fußballfan allgemein“ betont worden war. Was war hier entscheidend?",
+      "opts": [
+        "Dass der gegnerische Fan zufällig persönlich gut bekannt gewesen ist",
+        "Dass die Verletzung in diesem Durchgang deutlich schwerer ausgesehen hat",
+        "Dass deutlich weniger Zuschauer als in den anderen Fällen anwesend waren",
+        "Dass eine gemeinsame übergeordnete Identität salient gemacht wurde"
+      ],
+      "c": 3,
+      "e": "Wird die übergeordnete Identität (Fußballfan allgemein) salient, zählt auch der gegnerische Fan zur Eigengruppe — und erhält Hilfe. Entscheidend ist die situativ salient gemachte Identität."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Statt die Lösung zu liefern, gibt ein Helfer dem anderen die Werkzeuge, das Problem selbst zu lösen. Welche Form der Hilfe ist das — und wie ist sie zu bewerten?",
+      "opts": [
+        "Autonomieorientierte Hilfe — besser fürs Selbstwertgefühl und langfristig nachhaltiger",
+        "Abhängigkeitsorientierte Hilfe — sie erzeugt eine dauerhafte starke Abhängigkeit",
+        "Impulsive Hilfe — sie erfolgt spontan und ganz ohne jedes vorherige Abwägen",
+        "Reziproke Hilfe — sie zielt in erster Linie auf eine spätere Gegenleistung ab"
+      ],
+      "c": 0,
+      "e": "Autonomieorientierte Hilfe stellt die Mittel zum eigenständigen Lösen bereit — sie schont das Selbstwertgefühl und ist nachhaltiger. Abhängigkeitsorientierte Hilfe liefert die fertige Lösung und erzeugt Abhängigkeit."
+    },
+    {
+      "id": "s5q2",
+      "q": "Ein statushoher Helfer löst das Problem komplett für den anderen und signalisiert damit indirekt dessen Unfähigkeit. Welche Form der Hilfe ist das?",
+      "opts": [
+        "Autonomieorientierte Hilfe — sie stärkt gezielt die Eigenständigkeit",
+        "Abhängigkeitsorientierte Hilfe — sie erzeugt Abhängigkeit",
+        "Altruistische Hilfe — sie erfolgt ganz ohne jedes Eigeninteresse",
+        "Reziproke Hilfe — sie beruht auf einem gegenseitigen Austausch"
+      ],
+      "c": 1,
+      "e": "Die fertige Lösung zu liefern, suggeriert Unfähigkeit und erzeugt Abhängigkeit — das ist abhängigkeitsorientierte Hilfe, oft von statushohen Gruppen bevorzugt."
+    },
+    {
+      "id": "s5q3",
+      "q": "Warum kann es das Selbstwertgefühl des Empfängers belasten, Hilfe anzunehmen?",
+      "opts": [
+        "Weil das Annehmen von Hilfe immer eine spätere Gegenleistung erzwingt",
+        "Weil Hilfe in aller Regel ausschließlich von Verwandten angenommen wird",
+        "Weil Hilfe auch eine Machtbeziehung ausdrückt: einer hat, was der andere braucht",
+        "Weil Hilfe grundsätzlich impulsiv und völlig ohne jedes Nachdenken geleistet wird"
+      ],
+      "c": 2,
+      "e": "Hilfe ist immer auch eine Machtbeziehung — der Helfende hat, was der andere braucht. Sie kann als Machtdemonstration wirken und das (kollektive) Selbstwertgefühl des Empfängers belasten."
+    },
+    {
+      "id": "s5q4",
+      "q": "In einem Feldexperiment werden tausende frankierte Briefe in verschiedenen Stadtteilen „verloren“. In welchen Nachbarschaften werden die meisten eingeworfen — und was zeigt das?",
+      "opts": [
+        "In den ärmsten Vierteln — Armut schafft dort besonders starke Solidarität",
+        "In wohlhabenden, homogenen Gegenden prägt der soziale Kontext die Alltagshilfe stark",
+        "Überall ziemlich gleich — Hilfeverhalten hängt praktisch nur von der Persönlichkeit ab",
+        "In keiner Nachbarschaft: Verlorene Briefe werden dort so gut wie nie zurückgeschickt"
+      ],
+      "c": 1,
+      "e": "Das Experiment der verlorenen Briefe (2000 Briefe, 52 Berliner Nachbarschaften): mehr Rückgaben in wohlhabenden, homogenen Gegenden; weniger in ärmeren und/oder kulturell vielfältigeren Ortsteilen. Alltagshilfe hängt messbar vom sozialen Kontext ab — nicht nur von Personen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was ist typisch für das Verhalten in echten Katastrophen, etwa bei geordneten Evakuierungen?",
+      "opts": [
+        "Es herrscht fast immer dauerhafte, blinde und unkontrollierbare Massenpanik",
+        "Jeder denkt von Anfang bis Ende ausnahmslos nur an den eigenen Vorteil",
+        "Hilfeverhalten kommt in akuten Notlagen praktisch überhaupt nicht vor",
+        "Nach erster Panik besinnen sich Menschen doch oft auf Normen und Solidarität"
+      ],
+      "c": 3,
+      "e": "Notlagen werden oft als gemeinsames Schicksal erlebt: Nach einer initialen Panikreaktion überwiegen häufig soziale Normen und Solidarität (z. B. geordnete Evakuierungen) — nicht dauerhafte Panik."
+    },
+    {
+      "id": "s6q2",
+      "q": "Manche Menschen helfen dauerhaft und über viele Situationen hinweg — etwa durch Ehrenamt oder regelmäßiges Spenden. Was beschreibt das?",
+      "opts": [
+        "Eine prosoziale Persönlichkeit — eine überdauernde Tendenz zu helfen",
+        "Den Bystander-Effekt — die Hemmung der Hilfe durch andere Anwesende",
+        "Reziproken Altruismus — Helfen nur gegen eine erwartete Gegenleistung",
+        "Pluralistische Ignoranz — die Fehldeutung einer Lage als unkritisch"
+      ],
+      "c": 0,
+      "e": "Die prosoziale Persönlichkeit ist eine überdauernde Tendenz, an das Wohl anderer zu denken und entsprechend zu handeln — sie erklärt langfristiges Helfen über Situationen hinweg."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "In einer vollen U-Bahn wird jemandem schlecht — doch niemand hilft, gerade weil so viele Menschen da sind. Wie heißt dieses Phänomen?",
+      "opts": [
+        "Pluralistische Ignoranz — die Fehldeutung der Lage als ungefährlich",
+        "Der Bystander-Effekt — mehr Anwesende senken die Hilfewahrscheinlichkeit spürbar",
+        "Soziales Faulenzen — die geringere Anstrengung in einer Gruppenaufgabe",
+        "Hemmung durch ein Publikum — die Angst, sich vor den anderen zu blamieren"
+      ],
+      "c": 1,
+      "e": "Der Bystander-Effekt beschreibt genau dieses Phänomen: Je mehr Anwesende, desto unwahrscheinlicher hilft die einzelne Person. Pluralistische Ignoranz und Hemmung durch Publikum sind beitragende Teilprozesse."
+    },
+    {
+      "id": "s7q2",
+      "q": "Je mehr Zeugen anwesend sind, desto weniger fühlt sich die einzelne Person persönlich zuständig. Welcher Prozess ist das?",
+      "opts": [
+        "Pluralistische Ignoranz — man deutet die Lage anhand der anderen als ungefährlich",
+        "Hemmung durch ein Publikum — die Angst, sich vor anderen zu blamieren",
+        "Verantwortungsdiffusion — die Verantwortung verteilt sich auf alle Anwesenden",
+        "Bewertungsangst — die Erregung durch eine erwartete Beurteilung durch andere"
+      ],
+      "c": 2,
+      "e": "Verantwortungsdiffusion: Mit der Zahl der Zeugen sinkt das individuelle Verantwortungsgefühl — jeder verlässt sich darauf, dass jemand anderes eingreift. Sie wirkt auf die Stufe der Verantwortungsübernahme."
+    },
+    {
+      "id": "s7q3",
+      "q": "Wie lässt sich die Verantwortungsdiffusion in einem Notfall am wirksamsten durchbrechen?",
+      "opts": [
+        "Möglichst lange abwarten, ob jemand anderes von selbst eingreift",
+        "Die Notlage gegenüber der umstehenden Menge eher herunterspielen",
+        "Sich beim eigenen Verhalten an den umstehenden Personen orientieren",
+        "Eine einzelne Person direkt und namentlich um Hilfe ansprechen"
+      ],
+      "c": 3,
+      "e": "Direkte, namentliche Ansprache einer einzelnen Person hebt die Verantwortungsdiffusion auf: Die Verantwortung lässt sich dann nicht mehr auf andere verteilen."
+    },
+    {
+      "id": "s7q4",
+      "q": "Im Wartezimmer riecht es plötzlich nach Rauch. Alle schauen sich um — niemand reagiert. Lena denkt: „Wenn keiner etwas tut, ist es wohl harmlos.“ Welcher Hemmprozess auf welcher Stufe des Fünfstufenmodells?",
+      "opts": [
+        "Pluralistische Ignoranz, Stufe 2 — täuscht über den echten Notfall",
+        "Verantwortungsdiffusion, Stufe 3 — Verantwortung verteilt sich auf alle",
+        "Hemmung durch Publikum auf Stufe 5 — Angst, sich beim Eingreifen zu blamieren",
+        "Bewertungsangst auf Stufe 1 — das Ereignis wird gar nicht erst bemerkt"
+      ],
+      "c": 0,
+      "e": "Pluralistische Ignoranz betrifft die INTERPRETATION (Stufe 2): Alle beobachten die Untätigkeit der anderen und schließen fälschlich „kein Notfall“. Verantwortungsdiffusion setzt bei Stufe 3 (Verantwortung) an, Publikumshemmung bei der Umsetzung (Stufe 4/5)."
+    },
+    {
+      "id": "s7q5",
+      "q": "Ein Passant wird am helllichten Tag gewaltsam angegriffen; viele Menschen sind anwesend. Nach neueren Befunden zum Bystander-Effekt gilt hier:",
+      "opts": [
+        "Der Effekt wirkt bei Gewalt besonders stark, sicherer schaut dann jeder nur zu",
+        "Niemand hilft je, weil der Bystander-Effekt ein festes Naturgesetz ist",
+        "Hilfe hängt nur von der Anzahl der Anwesenden ab, nicht von der Art der Notlage",
+        "Der Effekt hat Grenzen: Bei hohem Gefahrenpotenzial tritt er so nicht auf"
+      ],
+      "c": 3,
+      "e": "Der Bystander-Effekt gilt NICHT uneingeschränkt: Bei hohem Gefahrenpotenzial (Gewalt) tritt das übliche Absinken der Hilfewahrscheinlichkeit mit mehr Anwesenden nicht auf; bei hohem Verantwortungsgefühl und hoher Selbstwirksamkeit ist er geringer. Auch die klassische „38-Zeugen“-Darstellung wurde später relativiert. (Vertiefung: VT04.)"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "In einer mehrdeutigen Lage bleibt jeder passiv, weil alle anderen passiv bleiben — und schließt daraus, es sei kein Notfall. Welcher Prozess ist das?",
+    "opts": [
+      "Pluralistische Ignoranz — die Untätigkeit der anderen gilt als Entwarnung",
+      "Verantwortungsdiffusion — die Verantwortung verteilt sich auf viele Zeugen",
+      "Reziprozitätsnorm — die Erwartung einer späteren Gegenleistung des anderen",
+      "Verwandtenselektion — die bevorzugte Hilfe für genetisch Verwandte"
+    ],
+    "c": 0,
+    "e": "Pluralistische Ignoranz: Da niemand reagiert, deuten alle die Untätigkeit der anderen als Hinweis, dass keine echte Notlage vorliegt. Sie wirkt auf die Stufe der Situationsdeutung."
+  },
+  {
+    "id": "bq2",
+    "q": "Gruppen mit vielen hilfsbereiten Mitgliedern überleben eher als unkooperative Gruppen. Welcher evolutionäre Mechanismus ist gemeint?",
+    "opts": [
+      "Verwandtenselektion — Helfen sichert vor allem die gemeinsamen Gene",
+      "Gruppenselektion — kooperative Gruppen sind im Überlebensvorteil",
+      "Reziproker Altruismus — Helfen erfolgt gegen erwartete Gegenleistung",
+      "Empathische Anteilnahme — Mitgefühl ist der alleinige Antrieb dazu"
+    ],
+    "c": 1,
+    "e": "Gruppenselektion erklärt Altruismus über den Selektionsvorteil kooperativer Gruppen — unabhängig von Verwandtschaft. Starke Reziprozität hält die Gruppe kooperativ und überlebensfähig."
+  },
+  {
+    "id": "bq3",
+    "q": "Im fünfstufigen Modell des Helfens: Was ist die allererste Voraussetzung, damit überhaupt geholfen werden kann?",
+    "opts": [
+      "Dass man bereits genau weiß, welche konkrete Hilfe jetzt nötig wäre",
+      "Dass man die persönliche Verantwortung für das Eingreifen übernommen hat",
+      "Dass man das Ereignis in der Situation überhaupt erst bemerkt",
+      "Dass man die Situation eindeutig als einen echten Notfall deutet"
+    ],
+    "c": 2,
+    "e": "Stufe 1 des Modells ist das bloße Bemerken des Ereignisses. Wird es nicht bemerkt, kann keine der folgenden Stufen (Deutung, Verantwortung, Handlungswissen, Umsetzung) erreicht werden."
+  },
+  {
+    "id": "bq4",
+    "q": "Feldstudien zeigen: Menschen helfen eher, wenn der Hilfsbedürftige als „einer von uns“ wahrgenommen wird. Wie heißt dieser Befund?",
+    "opts": [
+      "Pluralistische Ignoranz — das kollektive Abwarten in völlig unklaren Lagen",
+      "Reziprozitätsnorm — das Helfen bei einer erwarteten Gegenleistung",
+      "Impulsives Helfen — die sofortige Reaktion ohne jede Abwägung",
+      "Eigengruppen-Bias — die bevorzugte Hilfe für die wahrgenommene Eigengruppe"
+    ],
+    "c": 3,
+    "e": "Der Eigengruppen-Bias beim Helfen ist robust belegt: Wer als Teil der eigenen (auch übergeordneten) Gruppe wahrgenommen wird, erhält eher Hilfe. Die situativ saliente Identität moderiert den Effekt."
+  }
+];
+
+var corrCorrect = {
+  "bg0": "empathie",
+  "bg1": "hilfe",
+  "bg2": "prosozial",
+  "bg3": "altruismus",
+  "bg4": "empathie",
+  "ev0": "verwandt",
+  "ev1": "reziprok",
+  "ev2": "gruppe",
+  "ev3": "verwandt",
+  "np0": "situativ",
+  "np1": "dispositional",
+  "np2": "situativ",
+  "np3": "dispositional"
+};
+var corrExpl = {
+  "bg0": "Mitgefühl und Sorge ohne (noch) zu handeln — ein Gefühlszustand, kein Verhalten: empathische Anteilnahme.",
+  "bg1": "Eine konkrete Handlung, die einer anderen Person direkt nützt — Hilfeverhalten.",
+  "bg2": "Helfen, das auch dem eigenen Ansehen dient, aber anderen nützt — prosozial (eigennützig erlaubt), nicht altruistisch.",
+  "bg3": "Helfen ausschließlich aus Mitgefühl, ohne erwartete Belohnung — Altruismus.",
+  "bg4": "Das warme Gefühl der Anteilnahme an der Not eines anderen — empathische Anteilnahme.",
+  "ev0": "Eltern bringen Opfer für die eigenen Kinder — sie sichern gemeinsame Gene (Verwandtenselektion).",
+  "ev1": "„Ich helfe dir heute, du hilfst mir morgen“ — Helfen gegen erwartete Gegenleistung (reziproker Altruismus).",
+  "ev2": "Eine Gruppe mit vielen Helfern überlebt besser als eine ohne — Gruppenselektion.",
+  "ev3": "Arbeiterbienen versorgen die Larven der Königin statt sich selbst fortzupflanzen — Verwandtenselektion.",
+  "np0": "Relativ mehr Frauen und Kinder als Männer überlebten die Titanic-Katastrophe — ein Beispiel für situativ ausgelöste Solidarität in einer Notlage (Folie 36).",
+  "np1": "Jahrelanges ehrenamtliches Engagement — Ausdruck einer überdauernden prosozialen Persönlichkeit.",
+  "np2": "Nach erster Panik überwiegt Solidarität — ein situativer Verlauf in Notlagen.",
+  "np3": "Eine überdauernde Neigung, an das Wohl anderer zu denken — prosoziale Persönlichkeit."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Bystander-Fünfstufen-Simulator (Sektion ⑧): Stufe → Leitfrage + Hemmprozess */
+var bsState = {stufe: 1};
+function bsSet(n){
+  bsState.stufe = n;
+  for(var i=1;i<=5;i++){
+    var b = document.getElementById('bs-'+i);
+    if(b) b.classList.toggle('on', i === n);
+  }
+  bsRender();
+}
+function bsRender(){
+  var o = document.getElementById('bs-out');
+  if(!o) return;
+  var m = {
+    1: '<strong>Stufe 1 — Ereignis bemerken.</strong> Leitfrage: „Habe ich überhaupt etwas wahrgenommen?" Wer abgelenkt ist oder in Eile, verlässt den Hilfepfad schon hier. Bei „Nein" endet der Prozess: keine Hilfe.',
+    2: '<strong>Stufe 2 — Als Notsituation interpretieren.</strong> Leitfrage: „Ist das ein Notfall?" Hier setzt die <strong>pluralistische Ignoranz</strong> an: Alle schauen auf die reglosen anderen — und deuten deren Untätigkeit als Entwarnung. Mehrdeutige Lagen kippen so ins „Nein".',
+    3: '<strong>Stufe 3 — Persönliche Verantwortung übernehmen.</strong> Leitfrage: „Bin ICH zuständig?" Hier wirkt die <strong>Verantwortungsdiffusion</strong>: Je mehr Anwesende, desto kleiner fühlt sich der eigene Anteil an — jeder denkt, ein anderer werde es tun.',
+    4: '<strong>Stufe 4 — Handlungswissen verfügbar?</strong> Leitfrage: „Weiß ich, WIE ich helfen kann?" Fehlende Kompetenz (z. B. keine Erste-Hilfe-Kenntnisse) stoppt den Pfad — hohe <strong>Selbstwirksamkeit</strong> wirkt hier als Puffer.',
+    5: '<strong>Stufe 5 — Eingreifen umsetzen.</strong> Leitfrage: „Tue ich es jetzt wirklich?" Hier hemmt das <strong>Publikum</strong> (Bewertungsangst): die Sorge, sich vor allen zu blamieren, falls es doch kein Notfall war. Erst mit fünfmal „Ja" kommt Hilfe zustande.'
+  };
+  o.innerHTML = m[bsState.stufe];
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  bsRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

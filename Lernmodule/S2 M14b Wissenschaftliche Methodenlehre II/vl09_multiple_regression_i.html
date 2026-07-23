@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14b · VL09 Multiple Regression I</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m14b-vl09
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Simulator (M14b) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-axis{font-size:.78rem;color:var(--text2);margin:8px 0 4px}
+.sim-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.82rem}
+.sim-row > span.lab{flex:0 0 160px;color:var(--text2)}
+.sim-row input[type=range]{flex:1}
+.sim-row > span.val{flex:0 0 76px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M14b · VL09 Multiple Regression I</h1>
+<p class="page-sub">Wissenschaftliche Methodenlehre II (Statistik 2) · Dirk Lubbe · Klausur Sept 2026 (WH) · Freitext/Rechnen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Einfache vs. multiple Regression & Skalenniveaus · 2. Statistische Kontrolle/Kovariate · 3. Regressionskoeffizienten · 4. Partielle Steigung (für konstanten anderen Prädiktor) · 5. Beta-Gewichte · 6. Anpassungsgüte R²/R²korr · 7. Inferenz in 2 Schritten · 8. Toleranz & VIF
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Einfach vs. multipel</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Statist. Kontrolle</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Koeffizienten</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Partielle Steigung</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Beta-Gewichte</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Anpassungsgüte</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Inferenz (2 Schritte)</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Toleranz & VIF</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Einfach vs. multipel ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Einfache und multiple Regression</div>
+    <div class="sec-lz">ŷ = b0 + b1·x1 + … + bk·xk; Kriterium metrisch, Prädiktoren metrisch/dichotom (nominal → Dummy); KQ-Kriterium.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sie wollen den Body-Mass-Index nicht nur aus der Trainingsintensität, sondern zugleich aus der Ernährungsqualität vorhersagen. Welches Verfahren brauchen Sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die <strong>multiple Regression</strong>: ŷ = b0 + b1·x1 + b2·x2. Sie setzt EIN Kriterium mit zwei oder mehr Prädiktoren in Beziehung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Einfach vs. multipel</div>
+    Einfache Regression (1 Prädiktor): ŷ = a + b·x. Multiple Regression (≥2 Prädiktoren): ŷ = b0 + b1·x1 + b2·x2 + … + b<sub>k</sub>·x<sub>k</sub>. Stets <strong>ein</strong> Kriterium, mehrere Prädiktoren.
+  </div>
+  <div class="card">
+    <div class="card-title">Skalenniveaus</div>
+    Kriterium y: <strong>metrisch</strong>. Prädiktoren: <strong>metrisch oder dichotom</strong>. Nominale Prädiktoren werden per <strong>Dummycodierung</strong> in mehrere dichotome Variablen übersetzt → ebenfalls analysierbar.
+  </div>
+  <div class="card">
+    <div class="card-title">Schätzung</div>
+    Die Koeffizienten b0, b1, b2 werden wie in der einfachen Regression nach dem <strong>Kleinste-Quadrate-Kriterium</strong> bestimmt: Σ e²<sub>i</sub> → min, mit e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Von der einfachen zur multiplen Regression</div>
+    <div id="step0">
+      <div class="step-item"><strong>Einfache Regression:</strong> ŷ = a + b·x (ein Prädiktor).</div>
+      <div class="step-item"><strong>Zwei Prädiktoren:</strong> ŷ = b0 + b1·x1 + b2·x2.</div>
+      <div class="step-item"><strong>Allgemein (k Prädiktoren):</strong> ŷ = b0 + b1·x1 + … + b<sub>k</sub>·x<sub>k</sub> — Interpretation &amp; Inferenz übertragen sich, mit dem Zusatz der statistischen Kontrolle.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Statist. Kontrolle ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Statistische Kontrolle & Kovariate</div>
+    <div class="sec-lz">Weitere Prädiktoren = Kontrolle/Bereinigung; Kovariate = potenzielle Konfundierungsvariable.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum nimmt man die Ernährungsqualität überhaupt ins Modell auf, wenn man sich eigentlich nur für den Trainingseffekt interessiert?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Um sie zu <strong>kontrollieren</strong>: Die Ernährung ist eine <strong>Kovariate</strong>, die den Trainingseffekt verzerren (konfundieren) könnte. Erst durch ihre Aufnahme wird der Trainingseffekt um sie bereinigt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Statistische Kontrolle</div>
+    In der multiplen Regression werden Prädiktoren durch die <strong>Berücksichtigung weiterer Prädiktoren</strong> statistisch kontrolliert — also von deren Einfluss bereinigt.
+  </div>
+  <div class="card">
+    <div class="card-title">Kovariate (Kontrollvariable)</div>
+    Eine Variable, die den wahren Einfluss eines Prädiktors auf das Kriterium <strong>verzerren (konfundieren)</strong> könnte und deshalb ins Modell aufgenommen wird, um kontrolliert zu werden.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Beispiel: Konfundierung</div>
+    Kriterium BMI (y), Prädiktor Training (x1), Kovariate Ernährung (x2). Wer viel trainiert, achtet evtl. auch stärker auf gesunde Ernährung → ohne Kontrolle von x2 würde der Trainingseffekt <strong>überschätzt</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Wie eine Kovariate den Effekt bereinigt</div>
+    <div id="step1">
+      <div class="step-item"><strong>Ohne Kontrolle:</strong> einfache Regression BMI ← Training liefert b = −1,343.</div>
+      <div class="step-item"><strong>Problem:</strong> Training und Ernährung hängen zusammen (r12 = 0,601) → der Trainingseffekt enthält noch Ernährungseinfluss.</div>
+      <div class="step-item"><strong>Mit Kontrolle:</strong> in der multiplen Regression sinkt der bereinigte Trainingseffekt auf b1 = −0,75.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Koeffizienten ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Schätzung der Regressionskoeffizienten</div>
+    <div class="sec-lz">b0 = ȳ − b1·x̄1 − b2·x̄2; b1/b2 aus ry1, ry2, r12 und SDs; KQ-Kriterium Σe²→min.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Woraus berechnet man die Steigung b1, wenn man nur Mittelwerte, Standardabweichungen und die drei Korrelationen kennt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">b1 = (r<sub>y1</sub> − r<sub>y2</sub>·r12)/(1 − r²12) · (sy/s1). Auch b1 berücksichtigt also schon die Interkorrelation r12 der Prädiktoren.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Formeln</div>
+    y-Achsenabschnitt: b0 = ȳ − b1·x̄1 − b2·x̄2. Steigungen: b1 = (r<sub>y1</sub> − r<sub>y2</sub>·r12)/(1 − r²12)·(sy/s1) und b2 = (r<sub>y2</sub> − r<sub>y1</sub>·r12)/(1 − r²12)·(sy/s2).
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel (n=9)</div>
+    ȳ=22,44, x̄1=3,33, x̄2=5,11; sy=3,504, s1=2,121, s2=2,028; ry1=−0,813, ry2=−0,870, r12=0,601 → <strong>b1 = −0,750, b2 = −1,032, b0 = 30,2</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Bedeutung von b0</div>
+    Wie in der einfachen Regression meist <strong>nicht inhaltlich interessant</strong>. b0 entspricht dem durchschnittlichen Kriteriumswert, wenn alle Prädiktoren <strong>zugleich null</strong> sind.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg b1 (Schritt für Schritt)</div>
+    <div id="step2">
+      <div class="step-item">Zähler: r<sub>y1</sub> − r<sub>y2</sub>·r12 = −0,813 − (−0,870·0,601) = −0,813 + 0,523 = −0,290.</div>
+      <div class="step-item">Nenner: 1 − r²12 = 1 − 0,601² = 0,639.</div>
+      <div class="step-item">Skalierung: ·(sy/s1) = ·(3,504/2,121) = ·1,652.</div>
+      <div class="step-item">b1 = (−0,290/0,639)·1,652 = −0,454·1,652 ≈ <strong>−0,75</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step2')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Partielle Steigung ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Interpretation der Steigung (partieller Regressionskoeffizient)</div>
+    <div class="sec-lz">bj = Änderung von y je +1 xj BEI KONSTANTEN übrigen Prädiktoren (bereinigter Effekt).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was ist der EINE entscheidende Zusatz, der die Interpretation der Steigung b1 in der multiplen von der in der einfachen Regression unterscheidet?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Der Zusatz <strong>„für konstanten Prädiktor x2"</strong>. b1 ist der vom zweiten Prädiktor <strong>bereinigte</strong> Einfluss von x1 → ein <strong>partieller</strong> Regressionskoeffizient.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Partieller Regressionskoeffizient</div>
+    b1 = erwartete Veränderung von y je Erhöhung von x1 um eine Einheit — <strong>für konstanten Prädiktor x2</strong>. Genau dieser Zusatz unterscheidet sie von der einfachen Regression; b1 stellt den vom zweiten Prädiktor bereinigten Einfluss von x1 dar.
+  </div>
+  <div class="card">
+    <div class="card-title">Beleg</div>
+    ŷ(x1+1, x2) − ŷ(x1, x2) = [b0 + b1(x1+1) + b2·x2] − [b0 + b1·x1 + b2·x2] = <strong>b1</strong>. (x2 bleibt unverändert.)
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel</div>
+    b1 = −0,75: Bei +1 Einheit Trainingsintensität sinkt der BMI um 0,75 Punkte, <strong>wenn die Ernährungsqualität konstant bleibt</strong>. Vergleich ohne Kontrolle: einfache Regression b = −1,343 → die Differenz geht auf die statistische Kontrolle zurück.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Warum die Differenz herauskürzt = b1</div>
+    <div id="step3">
+      <div class="step-item">Vorhersage an der Stelle (x1+1, x2): b0 + b1(x1+1) + b2·x2.</div>
+      <div class="step-item">Vorhersage an der Stelle (x1, x2): b0 + b1·x1 + b2·x2.</div>
+      <div class="step-item">Differenz: b0 und b2·x2 kürzen sich weg, übrig bleibt b1·(x1+1) − b1·x1 = <strong>b1</strong>.</div>
+      <div class="step-item">→ b1 ist die Änderung von y je +1 x1 bei <strong>konstantem x2</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step3')">Nächster Schritt</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Vorhersage-Simulator — ŷ = 50 + 2·x₁ − 1,5·x₂</div>
+    <div class="sim-box">
+      <div class="sim-row"><span class="lab">x₁ (b₁ = +2)</span><input type="range" id="rg-x1" min="0" max="20" value="10" oninput="rgCalc()"><span class="val" id="rg-x1v">10</span></div>
+      <div class="sim-row"><span class="lab">x₂ (b₂ = −1,5)</span><input type="range" id="rg-x2" min="0" max="20" value="10" oninput="rgCalc()"><span class="val" id="rg-x2v">10</span></div>
+      <div class="sim-verdict" id="rg-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Der partielle Regressionskoeffizient b₁ ist der Effekt von x₁ <strong>bei konstant gehaltenem x₂</strong>: Erhöht man x₁ um 1, steigt ŷ um 2 — egal, wo x₂ steht.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Beta-Gewichte ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Beta-Gewichte (standardisierte Koeffizienten)</div>
+    <div class="sec-lz">Bj = bj·sj/sy; einheitenfrei → vergleichbar; B0 = 0; |B| kann > 1 sein.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Beispiel ist b2 = −1,032 betragsmäßig größer als b1 = −0,75. Darf man daraus schließen, die Ernährung sei der wichtigere Prädiktor?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Nein! Die b-Werte hängen von den <strong>Messeinheiten</strong> ab (Kilojoule vs. Rating) und sind nicht vergleichbar. Dafür braucht man die standardisierten <strong>Beta-Gewichte</strong> B1, B2.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Warum standardisieren?</div>
+    Unstandardisierte b1 und b2 sind wegen <strong>unterschiedlicher Messeinheiten</strong> der Prädiktoren NICHT direkt vergleichbar — ihre absolute Höhe sagt nichts über die relative Wichtigkeit aus.
+  </div>
+  <div class="card">
+    <div class="card-title">Beta-Gewichte</div>
+    Standardisierte Gleichung: ẑy = B0 + B1·z1 + B2·z2. Beziehung: <strong>Bj = bj·(sj/sy)</strong>; notwendigerweise <strong>B0 = 0</strong>. Da einheitenfrei, sind B1 und B2 direkt vergleichbar. Beispiel: B1 = −0,454, B2 = −0,597.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Häufiger Irrtum</div>
+    Man könnte vermuten, |B| könne 1 nicht überschreiten — diese Vermutung ist <strong>NICHT korrekt</strong>. Beta-Gewichte können betragsmäßig &gt; 1 werden.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Unstandardisiert (b) oder standardisiert (Beta-Gewicht B)?</div>
+    <div class="corr-item" id="aa">Hängt von den Messeinheiten der Prädiktoren ab; nicht direkt vergleichbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'unstand')">unstandardisiert (b)</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'stand')">Beta-Gewicht (B)</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Einheitenfrei; B1 und B2 sind direkt vergleichbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'unstand')">unstandardisiert (b)</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'stand')">Beta-Gewicht (B)</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">Der zugehörige y-Achsenabschnitt ist notwendigerweise 0.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'unstand')">unstandardisiert (b)</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'stand')">Beta-Gewicht (B)</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Gibt die Änderung von y in Originaleinheiten je 1 Einheit xj an.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'unstand')">unstandardisiert (b)</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'stand')">Beta-Gewicht (B)</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Anpassungsgüte ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Determinationskoeffizient & multiple Korrelation</div>
+    <div class="sec-lz">R² = QSŷ/QSy = r²_yŷ (0…1); R²korr = 1 − s²e/s²y; multiple Korrelation r_yŷ.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie gut passt das Gesamtmodell zu den Daten — und warum genügt das rohe R² dafür nicht ganz?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">R² gibt die <strong>Varianzaufklärung</strong> an (= r²<sub>yŷ</sub>), <strong>überschätzt</strong> aber den Populationswert. Deshalb berichtet man zusätzlich das um die Freiheitsgrade korrigierte <strong>R²korr</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Determinationskoeffizient</div>
+    Zerlegung QSy = QSŷ + QSe. R² = QSŷ/QSy = 1 − QSe/QSy = prozentuale <strong>Varianzaufklärung</strong> durch die Prädiktoren.
+  </div>
+  <div class="card">
+    <div class="card-title">Multiple Korrelation</div>
+    Es gilt <strong>R² = r²<sub>yŷ</sub></strong>. Die Größe r<sub>yŷ</sub> heißt <strong>multiple Korrelation</strong> — die Korrelation von y mit der optimalen Linearkombination der Prädiktoren. Wertebereich: <strong>0 bis 1</strong> (nicht negativ).
+  </div>
+  <div class="card">
+    <div class="card-title">Korrigiertes R²</div>
+    R² überschätzt die Population → R²korr = 1 − s²e/s²y = 1 − [QSe/(n−k−1)]/[QSy/(n−1)]. Beispiel: R² = 0,889, se = 1,350, sy = 3,504 → <strong>R²korr = 0,852</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg R²korr (Beispiel)</div>
+    <div id="step5">
+      <div class="step-item">Gegeben: R² = 0,889, se = 1,350, sy = 3,504.</div>
+      <div class="step-item">s²e = 1,350² = 1,8225; s²y = 3,504² = 12,278.</div>
+      <div class="step-item">R²korr = 1 − s²e/s²y = 1 − 1,8225/12,278 = 1 − 0,148.</div>
+      <div class="step-item">R²korr ≈ <strong>0,852</strong> — nur unwesentlich kleiner als R² = 0,889.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Inferenz (2 Schritte) ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Inferenz in zwei Schritten</div>
+    <div class="sec-lz">(1) F = R²/(1−R²)·(n−k−1)/k, H0: P²=0; (2) nur bei Signifikanz: t = bj/s_bj, df = n−k−1.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Darf man sofort jeden einzelnen Prädiktor mit einem t-Test prüfen — oder gibt es eine Reihenfolge?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Es gibt eine <strong>Reihenfolge</strong>: erst der F-Test des Gesamtmodells (H0: P²=0). NUR wenn dieser signifikant ist, folgen die t-Tests der einzelnen Steigungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Schritt 1 — F-Test (Gesamtmodell)</div>
+    H0: P² = 0 (Determinationskoeffizient in der Population null; äquivalent zu β1 = … = βk = 0). Prüfgröße <strong>F = R²/(1−R²)·(n−k−1)/k</strong>, df: Zähler k, Nenner n−k−1. Beispiel: F = 24,0; F(2,6;0,95) = 5,41 → H0 verworfen.
+  </div>
+  <div class="card">
+    <div class="card-title">Schritt 2 — t-Tests (einzelne Steigungen)</div>
+    <strong>Nur zulässig, wenn Schritt 1 signifikant war!</strong> H0: βj = 0; t = bj/s_bj; df = n − k − 1. Beispiel: t1 = −2,66, t2 = −3,505; t(6;0,975) = 2,447 → beide Prädiktoren signifikant.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Reihenfolge</div>
+    Wird der F-Test (Schritt 1) NICHT signifikant, <strong>entfallen die t-Tests</strong>. Man prüft die einzelnen Steigungen also nicht „auf Verdacht".
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Schritt 1 (F-Test) oder Schritt 2 (t-Test)?</div>
+    <div class="corr-item" id="ba">H0: P² = 0 (Determinationskoeffizient in der Population).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'schritt1')">Schritt 1 (F)</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'schritt2')">Schritt 2 (t)</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Prüfgröße F = R²/(1−R²)·(n−k−1)/k.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'schritt1')">Schritt 1 (F)</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'schritt2')">Schritt 2 (t)</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">H0: βj = 0 (eine einzelne Steigung).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'schritt1')">Schritt 1 (F)</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'schritt2')">Schritt 2 (t)</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Prüfgröße t = bj/s_bj (df = n−k−1); nur nach signifikantem Gesamttest.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'schritt1')">Schritt 1 (F)</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'schritt2')">Schritt 2 (t)</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Toleranz & VIF ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Standardfehler, Toleranz & VIF</div>
+    <div class="sec-lz">s_bj = se/√(QSj·Tolj); Tolj = 1−R²j (2 Präd.: 1−r²12); VIF = 1/Tol; Tol<0,1 = Multikollinearität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum ist der Standardfehler einer Steigung in der multiplen Regression komplizierter als in der einfachen — und was passiert, wenn zwei Prädiktoren stark korrelieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Weil die <strong>Interkorrelation</strong> der Prädiktoren eingeht: s_bj = se/√(QSj·<strong>Tolj</strong>). Korrelieren Prädiktoren stark (kleine Toleranz), wird der Standardfehler groß → <strong>Multikollinearität</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Standardfehler der Steigung</div>
+    Anders als in der einfachen Regression: <strong>s_bj = se/√(QS*j)</strong> mit QS*j = QSj·Tolj. Die Interkorrelation des Prädiktors j mit den übrigen muss berücksichtigt werden. (se = √(QSe/(n−k−1)).)
+  </div>
+  <div class="card">
+    <div class="card-title">Toleranz</div>
+    Tolj = Anteil der Prädiktorvariabilität, der <strong>NICHT</strong> durch die übrigen Prädiktoren erklärbar ist: <strong>Tolj = 1 − R²j</strong> (R²j aus der Regression von Prädiktor j auf alle anderen). Bei 2 Prädiktoren: Tol = 1 − r²12 = 1 − 0,601² = 0,639.
+  </div>
+  <div class="card">
+    <div class="card-title">VIF & Multikollinearität</div>
+    <strong>VIF = 1/Tol</strong>. Tol &lt; 0,1 (VIF &gt; 10) = erhebliche Redundanz (<strong>Multikollinearität</strong>); bei Tol = 0,1 ist die Steigungsvarianz <strong>verzehnfacht</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Kennwert wird beschrieben?</div>
+    <div class="corr-item" id="ca">Anteil der Kriteriumsvarianz, der durch die Prädiktoren aufgeklärt wird.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'R2')">R² (Determination)</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'toleranz')">Toleranz</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'vif')">VIF</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">Anteil der Prädiktorvarianz, der NICHT durch die übrigen Prädiktoren erklärbar ist.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'R2')">R² (Determination)</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'toleranz')">Toleranz</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'vif')">VIF</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">Kehrwert der Toleranz; misst die Aufblähung der Steigungsvarianz.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'R2')">R² (Determination)</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'toleranz')">Toleranz</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'vif')">VIF</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">= 1 − R²j (Prädiktor j auf alle anderen regrediert); bei 2 Prädiktoren 1 − r²12.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'R2')">R² (Determination)</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'toleranz')">Toleranz</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'vif')">VIF</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einfache Regression</h4>
+      <p>1 Prädiktor: ŷ = a + b·x</p>
+      <p>Steigung b nicht bereinigt</p>
+      <p>s_b = se/√QSx</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Multiple Regression</h4>
+      <p>≥2 Prädiktoren: ŷ = b0 + b1·x1 + b2·x2</p>
+      <p>partielle (bereinigte) Steigung</p>
+      <p>s_bj = se/√(QSj·Tolj)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> In der multiplen Regression ist die Steigung b1 ein unbereinigter Effekt wie in der einfachen Regression.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Unstandardisierte Steigung b</h4>
+      <p>in Originaleinheiten der Variablen</p>
+      <p>NICHT direkt zwischen Prädiktoren vergleichbar</p>
+      <p>b0 i. d. R. ≠ 0</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Beta-Gewicht B</h4>
+      <p>in Standardabweichungen (z-Werte)</p>
+      <p>einheitenfrei → direkt vergleichbar</p>
+      <p>B0 = 0; |B| kann > 1 sein</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die unstandardisierten Steigungen b1 und b2 lassen sich anhand ihrer absoluten Höhe direkt in ihrer Wichtigkeit vergleichen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>R² (Determinationskoeffizient)</h4>
+      <p>= QSŷ/QSy = r²_yŷ</p>
+      <p>überschätzt den Populationswert</p>
+      <p>wird durch jeden Prädiktor nie kleiner</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>R²korr (korrigiert)</h4>
+      <p>= 1 − s²e/s²y</p>
+      <p>korrigiert um df (n−k−1 bzw. n−1)</p>
+      <p>kann durch unnütze Prädiktoren sinken</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das korrigierte R²korr ist stets größer als das unkorrigierte R².</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Schritt 1: F-Test (Gesamtmodell)</h4>
+      <p>H0: P² = 0</p>
+      <p>F = R²/(1−R²)·(n−k−1)/k</p>
+      <p>df: k und n−k−1</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Schritt 2: t-Tests (einzelne Steigungen)</h4>
+      <p>H0: βj = 0</p>
+      <p>t = bj/s_bj, df = n−k−1</p>
+      <p>NUR nach signifikantem Schritt 1!</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die t-Tests der einzelnen Steigungen dürfen unabhängig davon durchgeführt werden, ob der F-Test des Gesamtmodells signifikant war.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Toleranz (Tolj)</h4>
+      <p>= 1 − R²j</p>
+      <p>eigenständiger Prädiktor-Varianzanteil</p>
+      <p>Tol < 0,1 = Multikollinearität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>VIF (Varianz-Inflations-Faktor)</h4>
+      <p>= 1/Tolj</p>
+      <p>Aufblähung der Steigungsvarianz</p>
+      <p>Tol = 0,1 → Varianz verzehnfacht</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine hohe Toleranz (nahe 1) ist ein Warnzeichen für starke Multikollinearität unter den Prädiktoren.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m14b-vl09</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m14b-vl09';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wodurch unterscheidet sich die multiple von der einfachen Regression?",
+      "opts": [
+        "Sie verwendet zwei oder mehr Prädiktoren zur Vorhersage eines Kriteriums (ŷ = b0 + b1·x1 + b2·x2 + …).",
+        "Sie verwendet zwei oder mehr Kriterien gleichzeitig.",
+        "Sie verzichtet vollständig auf einen y-Achsenabschnitt.",
+        "Sie sagt grundsätzlich mehrere voneinander unabhängige Kriteriumsvariablen gleichzeitig aus einem einzigen Prädiktor vorher und ersetzt dabei die Methode der kleinsten Quadrate durch ein iteratives Maximum-Likelihood-Verfahren."
+      ],
+      "c": 0,
+      "e": "Multiple Regression = mehrere Prädiktoren für EIN Kriterium: ŷ = b0 + b1·x1 + … + bk·xk."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Skalenniveaus sind in der multiplen Regression zulässig?",
+      "opts": [
+        "Kriterium und Prädiktoren müssen alle dichotom sein.",
+        "Kriterium metrisch; Prädiktoren metrisch oder dichotom (nominale per Dummycodierung).",
+        "Alle beteiligten Variablen müssen nominalskaliert sein.",
+        "Das Kriterium darf ausschließlich nominalskaliert sein, während für die Prädiktoren grundsätzlich jedes beliebige Skalenniveau ohne jede vorherige Umcodierung direkt zulässig ist."
+      ],
+      "c": 1,
+      "e": "Kriterium metrisch; Prädiktoren metrisch oder dichotom. Nominale Prädiktoren werden per Dummycodierung in dichotome Variablen übersetzt."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was bewirkt die Aufnahme einer Kovariate in das Regressionsmodell?",
+      "opts": [
+        "Sie erhöht das Kriterium künstlich.",
+        "Sie entfernt den interessierenden Prädiktor aus dem Modell.",
+        "Der interessierende Prädiktor wird um den (konfundierenden) Einfluss der Kovariate bereinigt — statistisch kontrolliert.",
+        "Sie sorgt dafür, dass das Bestimmtheitsmaß des Modells per Definition immer exakt gleich bleibt, weil zusätzliche Prädiktoren die aufgeklärte Varianz nachweislich niemals verändern können."
+      ],
+      "c": 2,
+      "e": "Eine Kovariate (Kontrollvariable) wird aufgenommen, um den interessierenden Prädiktor von ihrem (konfundierenden) Einfluss zu bereinigen = statistische Kontrolle."
+    },
+    {
+      "id": "s1q2",
+      "q": "Im BMI-Beispiel: Was wäre die Folge, wenn man die Kovariate Ernährungsqualität IGNORIERT?",
+      "opts": [
+        "Der Trainingseffekt würde exakt korrekt geschätzt.",
+        "Der wahre Trainingseffekt würde systematisch deutlich unterschätzt, da trainingsintensive Probandinnen sich erwiesenermaßen durchgängig schlechter ernähren und dieser Umstand den BMI zusätzlich nach oben verzerrt.",
+        "Es gäbe gar keinen Trainingseffekt mehr.",
+        "Der Trainingseffekt würde überschätzt (er bliebe mit der Ernährungsqualität konfundiert)."
+      ],
+      "c": 3,
+      "e": "Wer viel trainiert, ernährt sich evtl. auch besser → ohne Kontrolle würde der Trainingseffekt überschätzt (konfundiert)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Nach welchem Kriterium werden die Regressionskoeffizienten geschätzt?",
+      "opts": [
+        "Nach dem Kleinste-Quadrate-Kriterium: Σ e²i → min, mit e = y − ŷ.",
+        "Nach dem Maximum der aufgeklärten Varianz minus eins.",
+        "Nach dem Median der Residuen.",
+        "Nach dem Kriterium, dass die Summe der einfachen (nicht quadrierten) Residuen maximiert wird, wodurch die Vorhersagefehler über alle Beobachtungen hinweg möglichst groß ausfallen."
+      ],
+      "c": 0,
+      "e": "Kleinste-Quadrate-Kriterium: die Summe der quadrierten Residuen Σe²i wird minimiert (e = y − ŷ)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was beschreibt der y-Achsenabschnitt b0 in der multiplen Regression?",
+      "opts": [
+        "Die Steigung des wichtigsten Prädiktors.",
+        "Den durchschnittlichen Kriteriumswert, wenn alle Prädiktoren zugleich null sind (meist nicht inhaltlich interessant).",
+        "Die Korrelation zwischen den Prädiktoren.",
+        "Den erwarteten Anstieg des Kriteriums, der sich ergibt, wenn man sämtliche Prädiktoren gleichzeitig um jeweils genau eine ihrer Standardabweichungen erhöht und die Residualvarianz konstant hält."
+      ],
+      "c": 1,
+      "e": "b0 = ȳ − b1·x̄1 − b2·x̄2 = Kriteriumswert bei allen Prädiktoren = 0; meist nicht inhaltlich interessant."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wie interpretiert man die partielle Steigung b1 in der multiplen Regression?",
+      "opts": [
+        "Erwartete Änderung von y je 1 Einheit x1, ganz ohne Bezug auf x2.",
+        "Die bivariate Korrelation zwischen x1 und y.",
+        "Erwartete Änderung von y je 1 Einheit x1, WENN x2 konstant gehalten wird (um x2 bereinigter Effekt).",
+        "Die durchschnittliche Veränderung beider Prädiktoren x1 und x2 gemeinsam, die einer Erhöhung des Kriteriums y um genau eine Einheit entspricht, gemittelt über alle Beobachtungen."
+      ],
+      "c": 2,
+      "e": "Partieller Regressionskoeffizient: Änderung von y je +1 x1 BEI KONSTANTEM x2 — der vom zweiten Prädiktor bereinigte Effekt."
+    },
+    {
+      "id": "s3q2",
+      "q": "Im Beispiel ist b1 = −0,75 (kontrolliert), die einfache Regression ergibt b = −1,343. Worauf geht die Differenz zurück?",
+      "opts": [
+        "Auf einen Rechenfehler.",
+        "Auf die unterschiedliche Stichprobengröße der beiden Analysen.",
+        "Ausschließlich darauf, dass der partielle Regressionskoeffizient aus rein mathematischen Gründen stets einen kleineren Betrag annehmen muss als die Steigung der entsprechenden einfachen Regression.",
+        "Auf die statistische Kontrolle der Ernährungsqualität (x2) in der multiplen Regression."
+      ],
+      "c": 3,
+      "e": "Die Differenz zwischen einfacher (b) und multipler (b1) Steigung entsteht durch die statistische Kontrolle von x2. (Dass |b| > |b1| gilt hier, ist aber keine allgemeine Regel.)"
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Warum berechnet man Beta-Gewichte?",
+      "opts": [
+        "Um die Steigungen unabhängig von den Messeinheiten der Variablen direkt vergleichbar zu machen.",
+        "Um den y-Achsenabschnitt zu maximieren.",
+        "Um die Stichprobe zu vergrößern.",
+        "Weil unstandardisierte Regressionskoeffizienten grundsätzlich nicht inferenzstatistisch absicherbar sind und sich ausschließlich standardisierte Gewichte überhaupt einem Signifikanztest unterziehen lassen."
+      ],
+      "c": 0,
+      "e": "Beta-Gewichte sind standardisiert (einheitenfrei) → die Höhe von B1 und B2 ist direkt vergleichbar, anders als bei den unstandardisierten b."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche Aussage über Beta-Gewichte ist korrekt?",
+      "opts": [
+        "Das Beta-Gewicht B0 ist meist sehr groß.",
+        "B0 ist notwendigerweise 0, und der Betrag eines Beta-Gewichts kann 1 überschreiten.",
+        "Beta-Gewichte sind nie negativ.",
+        "Der Betrag eines Beta-Gewichts kann den Wert 1 grundsätzlich niemals überschreiten, weil standardisierte Koeffizienten definitionsgemäß stets im Intervall von minus eins bis plus eins liegen müssen."
+      ],
+      "c": 1,
+      "e": "B0 = 0 (notwendigerweise). Die Vermutung, |B| könne 1 nicht überschreiten, ist NICHT korrekt — Beta-Gewichte können betragsmäßig > 1 sein."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was gibt der Determinationskoeffizient R² an?",
+      "opts": [
+        "Die Steigung des besten Prädiktors.",
+        "Die Korrelation zwischen den beiden Prädiktoren.",
+        "Den Anteil der Kriteriumsvarianz, der durch die Prädiktoren aufgeklärt wird (R² = QSŷ/QSy).",
+        "Die durchschnittliche absolute Abweichung der vorhergesagten Werte von den beobachteten Werten, ausgedrückt in den Originaleinheiten des Kriteriums und korrigiert um die Stichprobengröße."
+      ],
+      "c": 2,
+      "e": "R² = QSŷ/QSy = 1 − QSe/QSy = prozentuale Varianzaufklärung durch die Prädiktoren."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ist die multiple Korrelation r_yŷ?",
+      "opts": [
+        "Die kleinste der bivariaten Prädiktor-Kriterium-Korrelationen.",
+        "Identisch mit dem Beta-Gewicht des ersten Prädiktors.",
+        "Eine Korrelationsgröße, die wie jede gewöhnliche Produkt-Moment-Korrelation den gesamten Wertebereich von minus eins bis plus eins durchläuft und somit auch deutlich negative Werte annehmen kann.",
+        "Die Korrelation des Kriteriums mit der optimalen Linearkombination der Prädiktoren; es gilt R² = r²_yŷ, Wertebereich 0 bis 1."
+      ],
+      "c": 3,
+      "e": "r_yŷ = multiple Korrelation = Korrelation von y mit der optimalen Linearkombination der Prädiktoren. R² = r²_yŷ; Wertebereich 0 bis 1 (nicht negativ)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie ist das Vorgehen bei der Inferenz der multiplen Regression?",
+      "opts": [
+        "Zweistufig: zuerst ein F-Test für H0: P²=0, danach (nur bei Signifikanz) t-Tests der einzelnen Steigungen.",
+        "Nur ein einziger t-Test für alle Koeffizienten gemeinsam.",
+        "Nur ein Chi-Quadrat-Test des Gesamtmodells.",
+        "Man testet ausschließlich jeden einzelnen Steigungskoeffizienten getrennt und verzichtet dabei vollständig auf eine vorgeschaltete Gesamtprüfung des Modells, da diese keinerlei zusätzliche Information liefern würde."
+      ],
+      "c": 0,
+      "e": "Zwei Schritte: (1) F-Test für H0: P²=0; (2) nur bei Signifikanz t-Tests der einzelnen Steigungen."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wie lautet die Prüfgröße für H0: P² = 0?",
+      "opts": [
+        "t = R²/(1−R²).",
+        "F = R²/(1−R²) · (n−k−1)/k, mit df Zähler k und Nenner n−k−1.",
+        "z = R²·√n.",
+        "Ein Chi-Quadrat-Wert, der sich als Produkt aus dem Determinationskoeffizienten und der um die Anzahl der Prädiktoren verminderten Stichprobengröße ergibt und mit k mal n Freiheitsgraden verglichen wird."
+      ],
+      "c": 1,
+      "e": "F = R²/(1−R²)·(n−k−1)/k. df: Zähler k, Nenner n−k−1. Äquivalent zu H0: β1 = … = βk = 0."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was gibt die Toleranz eines Prädiktors an?",
+      "opts": [
+        "Wie stark der Prädiktor mit dem Kriterium korreliert.",
+        "Den Anteil der Kriteriumsvarianz, den der Prädiktor erklärt.",
+        "Den Anteil der Variabilität des Prädiktors, der NICHT durch die übrigen Prädiktoren erklärbar ist (Tolj = 1 − R²j).",
+        "Den maximal zulässigen Messfehler, den ein Prädiktor aufweisen darf, bevor er aus dem Regressionsmodell ausgeschlossen und durch eine besser reliable Ersatzvariable getauscht werden muss."
+      ],
+      "c": 2,
+      "e": "Toleranz Tolj = 1 − R²j = der nicht durch die übrigen Prädiktoren erklärbare (eigenständige) Varianzanteil des Prädiktors j."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was bedeutet ein VIF-Wert (Varianz-Inflations-Faktor)?",
+      "opts": [
+        "Er ist per Definition exakt identisch mit dem Determinationskoeffizienten R² des Gesamtmodells und gibt deshalb unmittelbar an, welcher Anteil der Kriteriumsvarianz insgesamt durch alle Prädiktoren gemeinsam aufgeklärt wird.",
+        "Er entspricht dem Beta-Gewicht des Prädiktors.",
+        "Er ist immer kleiner als 1.",
+        "Er ist der Kehrwert der Toleranz (VIF = 1/Tol); hohe Werte (Tol < 0,1) zeigen Multikollinearität an."
+      ],
+      "c": 3,
+      "e": "VIF = 1/Tol. Tol < 0,1 (VIF > 10) = erhebliche Redundanz/Multikollinearität; bei Tol = 0,1 ist die Steigungsvarianz verzehnfacht."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "n=9, R²=0,889, k=2. Wie groß ist die F-Prüfgröße (H0: P²=0)?",
+    "opts": [
+      "≈ 24,0 — denn F = 0,889/(1−0,889)·(9−2−1)/2 = 8,01·3.",
+      "≈ 0,11.",
+      "≈ 5,41 (das ist in Wahrheit der kritische Wert).",
+      "≈ 2,00, weil zur Bildung der Prüfgröße der Determinationskoeffizient direkt durch die Anzahl der Prädiktoren geteilt und anschließend mit der unkorrigierten Stichprobengröße multipliziert wird."
+    ],
+    "c": 0,
+    "e": "F = 0,889/0,111 · 6/2 = 8,01·3 = 24,0. df Zähler k=2, Nenner n−k−1=6; F(2,6;0,95)=5,41 → H0 verworfen."
+  },
+  {
+    "id": "bq2",
+    "q": "R²=0,889, se=1,350, sy=3,504. Wie groß ist das korrigierte R²korr?",
+    "opts": [
+      "≈ 0,889 (unverändert).",
+      "≈ 0,852 — denn 1 − 1,350²/3,504² = 1 − 1,8225/12,278.",
+      "≈ 0,111.",
+      "≈ 0,963, da der korrigierte Determinationskoeffizient den unkorrigierten Wert grundsätzlich nach oben anpasst, um die durch die Stichprobenziehung entstandene Unterschätzung der Populationsvarianz auszugleichen."
+    ],
+    "c": 1,
+    "e": "R²korr = 1 − s²e/s²y = 1 − 1,8225/12,278 = 0,852 (nur unwesentlich kleiner als R² = 0,889). R² überschätzt die Population."
+  },
+  {
+    "id": "bq3",
+    "q": "Zwei Prädiktoren mit r12 = 0,601. Wie groß ist die Toleranz Tol1?",
+    "opts": [
+      "≈ 0,601.",
+      "≈ 0,361.",
+      "≈ 0,639 — denn Tol = 1 − r²12 = 1 − 0,601² = 1 − 0,361.",
+      "≈ 1,361, weil sich die Toleranz als Summe aus eins und der quadrierten Interkorrelation der beiden beteiligten Prädiktoren des Regressionsmodells ergibt."
+    ],
+    "c": 2,
+    "e": "Bei genau 2 Prädiktoren: Tol = 1 − r²12 = 1 − 0,361 = 0,639 (gilt für Tol1 und Tol2)."
+  },
+  {
+    "id": "bq4",
+    "q": "Mit Tol = 0,639. Wie groß ist der zugehörige VIF?",
+    "opts": [
+      "≈ 0,639 (gleich der Toleranz).",
+      "≈ 0,361.",
+      "Der Varianz-Inflations-Faktor beträgt unabhängig vom konkreten Toleranzwert grundsätzlich exakt eins, da er lediglich anzeigt, ob überhaupt mehr als ein Prädiktor im Modell enthalten ist.",
+      "≈ 1,565 — denn VIF = 1/Tol = 1/0,639."
+    ],
+    "c": 3,
+    "e": "VIF = 1/Tol = 1/0,639 ≈ 1,565. (Ein VIF nahe 1 ist unkritisch; Tol < 0,1 bzw. VIF > 10 = Multikollinearität.)"
+  },
+  {
+    "id": "bq5",
+    "q": "b1 = −0,75, s1 = 2,121, sy = 3,504. Wie groß ist das Beta-Gewicht B1?",
+    "opts": [
+      "≈ −0,454 — denn B1 = b1·s1/sy = −0,75·2,121/3,504.",
+      "≈ −0,75 (identisch mit b1).",
+      "≈ −1,239.",
+      "≈ −0,214, weil das Beta-Gewicht als Produkt der unstandardisierten Steigung mit dem Verhältnis der Kriteriums- zur Prädiktorstandardabweichung gebildet wird und nicht umgekehrt."
+    ],
+    "c": 0,
+    "e": "B1 = b1·s1/sy = −0,75·2,121/3,504 = −0,454. (Option d verwechselt das Verhältnis sj/sy mit sy/sj.)"
+  },
+  {
+    "id": "bq6",
+    "q": "b1 = −0,75, s_b1 = 0,282, n=9, k=2. Wie lautet der t-Wert und sein df?",
+    "opts": [
+      "t ≈ −2,66, df = 9 − 2 = 7.",
+      "t ≈ −2,66, df = n − k − 1 = 9 − 2 − 1 = 6.",
+      "t ≈ −0,38, df = 6.",
+      "t ≈ −2,66 mit n − 1 = 8 Freiheitsgraden, da bei jedem t-Test eines einzelnen Regressionskoeffizienten ausschließlich die Stichprobengröße abzüglich eins maßgeblich ist."
+    ],
+    "c": 1,
+    "e": "t = bj/s_bj = −0,75/0,282 = −2,66; df = n − k − 1 = 9 − 2 − 1 = 6. t(6;0,975) = 2,447 → signifikant."
+  },
+  {
+    "id": "bq7",
+    "q": "Schritt 1 (F-Test) ergibt KEINE Signifikanz (F < F_krit). Was folgt?",
+    "opts": [
+      "Man testet trotzdem alle einzelnen Steigungen weiter.",
+      "Man erhöht automatisch die Stichprobe.",
+      "Die einzelnen t-Tests der Steigungen entfallen — sie sind nur zulässig, wenn Schritt 1 signifikant war.",
+      "Man interpretiert das nicht signifikante Gesamtmodell so, dass mindestens einer der Prädiktoren mit Sicherheit einen bedeutsamen Effekt hat, und berichtet diesen als das zentrale Ergebnis der Analyse."
+    ],
+    "c": 2,
+    "e": "Die t-Tests der einzelnen Steigungen sind NUR zulässig, wenn der F-Test (Schritt 1) signifikant war. Sonst entfallen sie."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Begriffe nennt die VL ausdrücklich als ‚zum Wiederholen‘ (Folie 49)?",
+    "opts": [
+      "Phi-Koeffizient, punkt-biseriale Korrelation, Sphärizität, Mauchly-Test, orthogonale Kontraste, Scheffé-Prozedur sowie die Greenhouse-Geisser- und die Huynh-Feldt-Korrektur der Freiheitsgrade.",
+      "Mittelwert, Median, Modus, Varianz, Spannweite, Quartil, Perzentil.",
+      "ANOVA, t-Test, Chi-Quadrat, Mann-Whitney, Wilcoxon, Kruskal-Wallis, Friedman.",
+      "Partieller Regressionskoeffizient, Beta-Gewichte, (korrigierter) Determinationskoeffizient, multiple Korrelation, Toleranz, Varianz-Inflations-Faktor."
+    ],
+    "c": 3,
+    "e": "Folie 49: partieller Regressionskoeffizient, Beta-Gewichte, Determinationskoeffizient, korrigierter Determinationskoeffizient, multiple Korrelation, Toleranz, VIF."
+  }
+];
+
+var corrCorrect = {
+  "aa": "unstand",
+  "ab": "stand",
+  "ac": "stand",
+  "ad": "unstand",
+  "ba": "schritt1",
+  "bb": "schritt1",
+  "bc": "schritt2",
+  "bd": "schritt2",
+  "ca": "R2",
+  "cb": "toleranz",
+  "cc": "vif",
+  "cd": "toleranz"
+};
+var corrExpl = {
+  "aa": "Hängt von den Messeinheiten der Prädiktoren ab → unstandardisierter Koeffizient b (nicht direkt vergleichbar).",
+  "ab": "Einheitenfrei und direkt vergleichbar → Beta-Gewicht B (standardisiert).",
+  "ac": "B0 = 0 notwendigerweise → das ist eine Eigenschaft der standardisierten Lösung (Beta).",
+  "ad": "Änderung von y in Originaleinheiten je 1 Einheit xj → unstandardisierter Koeffizient b.",
+  "ba": "H0: P² = 0 betrifft den Determinationskoeffizienten des Gesamtmodells → Schritt 1 (F-Test).",
+  "bb": "F = R²/(1−R²)·(n−k−1)/k ist die Prüfgröße des Gesamtmodells → Schritt 1.",
+  "bc": "H0: βj = 0 betrifft eine einzelne Steigung → Schritt 2 (t-Test).",
+  "bd": "t = bj/s_bj (df n−k−1) prüft eine einzelne Steigung → Schritt 2 (nur nach signifikantem Schritt 1).",
+  "ca": "Anteil der durch die Prädiktoren aufgeklärten Kriteriumsvarianz → Determinationskoeffizient R².",
+  "cb": "Eigenständiger, nicht durch die übrigen Prädiktoren erklärbarer Varianzanteil → Toleranz.",
+  "cc": "Kehrwert der Toleranz, misst die Aufblähung der Steigungsvarianz → VIF.",
+  "cd": "= 1 − R²j (Prädiktor j auf alle anderen); bei 2 Prädiktoren 1 − r²12 → Toleranz."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Vorhersage-Simulator (vl09): ŷ = 50 + 2·x1 − 1.5·x2 */
+function rgCalc(){
+  var a=document.getElementById('rg-x1'), b=document.getElementById('rg-x2'), o=document.getElementById('rg-out');
+  if(!a||!b||!o) return;
+  var x1=+a.value, x2=+b.value;
+  document.getElementById('rg-x1v').textContent=x1;
+  document.getElementById('rg-x2v').textContent=x2;
+  var y=50+2*x1-1.5*x2;
+  o.innerHTML='<strong>ŷ = '+y.toFixed(1).replace('.',',')+'</strong> = 50 + 2·'+x1+' − 1,5·'+x2+'. Schiebe nur x₁: jede +1-Stufe hebt ŷ um exakt 2 — unabhängig von x₂ (= partieller Koeffizient).';
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  rgCalc();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

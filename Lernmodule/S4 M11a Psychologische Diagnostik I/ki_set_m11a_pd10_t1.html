@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · 🤖 KI-Übungsset PD10 Probabilistische Testtheorie · Teil 1/3 — 29 Fragen</title>
+<!--
+  Altklausur-HTML von build_altklausur.py erzeugt (Engine = scaffold_lernmodul.py
+  + Quiz-Runner). Echte, geprüfte Altklausurfragen. Storage-Key: lm-m11a-vl55
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Quiz-Runner */
+.mc-opt.qr-sel{border-color:var(--accent)!important;background:rgba(129,140,248,.12)!important;color:var(--text)!important}
+.mc-opt.qr-sel .ltr{color:var(--accent)}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-review .card{margin-bottom:10px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.exp-btn{background:none;border:1px solid rgba(56,189,248,.35);color:var(--cyan);border-radius:8px;
+  padding:6px 12px;font-size:.75rem;font-weight:600;cursor:pointer;margin-top:8px;margin-right:8px;transition:.15s}
+.exp-btn:hover{background:rgba(56,189,248,.08)}
+.mc-hint{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.28);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2)}
+.mc-hint .lbl{font-size:.63rem;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · 🤖 KI-Übungsset PD10 Probabilistische Testtheorie · Teil 1/3 — 29 Fragen</h1>
+<p class="page-sub">Psychologische Diagnostik I · PD10 Probabilistische Testtheorie · Teil 1 von 3 · MCQ-Kette V5.1.0</p>
+<div class="lf-bar">
+  <strong>🤖 PD10·1/3</strong> Teil 1 von 3 des PD10-Fragensets (29 von 85 Fragen; die Teile folgen der Reihenfolge der Vorlesung und überschneiden sich nicht). Distraktoren fehlkonzept-basiert nach Regelwerk V5.1.0, quellengebunden an die Ground-Truth-Extraktion, jeder Distraktor mit Falschheitsbeleg; formal gate-geprüft (Musterprüfungen + fachblinde Blind-Rate).
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">🎯 Quiz starten</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">📋 Alle Fragen</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — Quiz-Runner ═══════════ -->
+<section class="section active" id="s0">
+  <div id="quizRunner"></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — Alle Fragen (Durchblättern) ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">📋 Alle Altklausurfragen (29)</div>
+    <div class="sec-lz">29 KI-Fragen zu PD10 (Probabilistische Testtheorie / IRT), Teil 1 von 3.</div>
+  </div>
+  <div id="sq0"></div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(0)">← Zum Quiz</button>
+  </div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl55';
+var OPT_SHUF = true;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "q1",
+      "q": "Welcher Kritikpunkt wird an den Axiomen und Annahmen der klassischen Testtheorie hervorgehoben?",
+      "opts": [
+        "Sie werden als durchweg unhaltbar und empirisch längst widerlegt zurückgewiesen.",
+        "Sie werden als zu großzügig und empirisch problemlos überprüfbar bemängelt.",
+        "Sie werden als sehr streng, nicht testbar und teilweise unplausibel kritisiert.",
+        "Sie werden als mathematisch widersprüchlich und in sich unlogisch verworfen."
+      ],
+      "c": 2,
+      "e": "Folie 2 führt die Kritik an der klassischen Testtheorie wörtlich auf: Ihre Axiome und Annahmen gelten als sehr streng, nicht testbar und teilweise unplausibel. Genau diese drei Merkmale – Strenge, fehlende Testbarkeit und nur teilweise Unplausibilität – bilden den Kern der richtigen Aussage. Das Trennmerkmal zu den übrigen Aussagen ist die Reichweite und die Richtung der Kritik: abgestuft ('teilweise') und auf Prüfbarkeit und Plausibilität bezogen, nicht auf die formale Logik. Die Aussage, die Annahmen seien durchweg unhaltbar und empirisch längst widerlegt, übergeneralisiert – Folie 2 spricht nur von 'teilweise unplausibel', und was 'nicht testbar' ist, kann gar nicht empirisch widerlegt werden. Die Aussage, sie seien zu großzügig und problemlos überprüfbar, dreht die Kritik ins Gegenteil, denn Folie 2 nennt sie gerade 'sehr streng' und 'nicht testbar'. Die Aussage, sie seien mathematisch widersprüchlich und in sich unlogisch, verwechselt Unplausibilität mit logischem Widerspruch – von innerer Widersprüchlichkeit ist auf Folie 2 nirgends die Rede.",
+      "h": "Achte auf die Reichweite und die Richtung der Kritik. Eine abgestufte Bewertung ist etwas anderes als eine pauschale Totalablehnung, und ein Vorwurf gegen die Prüfbarkeit einer Annahme ist etwas anderes als der Vorwurf, sie sei in sich logisch fehlerhaft. Welche Formulierung entspricht genau der Wortwahl der Grenzen-Folie?"
+    },
+    {
+      "id": "q2",
+      "q": "Welche Kritik betrifft das Skalenniveau von Testwerten in der klassischen Testtheorie?",
+      "opts": [
+        "Für Testwerte wird unzulässig Verhältnisskalenniveau statt Intervallskaleniveau angenommen.",
+        "Für Testwerte wird lediglich Ordinalskaleniveau angenommen, obwohl Intervallskaleniveau vorliegt.",
+        "Für Testwerte wird Intervallskaleniveau vorausgesetzt, ohne dass dieses geprüft wird.",
+        "Das vorausgesetzte Intervallskaleniveau wird empirisch geprüft, aber regelmäßig verworfen."
+      ],
+      "c": 2,
+      "e": "Folie 2 nennt als Skalenniveau-Kritik: Für die Testwerte wird Intervallskaleniveau vorausgesetzt, 'eine Prüfung bleibt allerdings aus'. Entscheidend ist beides zusammen – die Voraussetzung eines Intervallskaleniveaus UND das Fehlen einer Überprüfung. Das Trennmerkmal zu den übrigen Aussagen liegt genau in diesem ungeprüften Voraussetzen. Die Aussage, das Intervallskaleniveau werde empirisch geprüft und dann verworfen, widerspricht Folie 2 direkt, denn dort bleibt eine Prüfung gerade aus – es wird also nicht getestet und schon gar nicht 'verworfen'. Die Aussage, es werde Verhältnisskalenniveau angenommen, benennt das falsche Skalenniveau, denn kritisiert wird das vorausgesetzte Intervallskaleniveau. Die Aussage, es werde nur Ordinalskaleniveau angenommen, obwohl Intervallskaleniveau vorliege, dreht die Kritik um: Nicht ein zu niedrig angesetztes, sondern ein unbelegt hoch angesetztes und ungeprüftes Intervallskaleniveau ist der eigentliche Kritikpunkt.",
+      "h": "Zwei Bausteine gehören zusammen: welches Skalenniveau unterstellt wird und ob diese Unterstellung überhaupt kontrolliert wurde. Welche Option trifft genau das unbelegte Annehmen – und nicht ein Vertauschen der Niveaustufe und nicht einen tatsächlich durchgeführten, dann gescheiterten Test?"
+    },
+    {
+      "id": "q3",
+      "q": "Welche Abhängigkeit der in der klassischen Testtheorie gewonnenen Kennwerte wird kritisiert?",
+      "opts": [
+        "Die Kennwerte sind itemunabhängig.",
+        "Die Kennwerte sind populationsstabil.",
+        "Die Kennwerte sind stichprobenneutral.",
+        "Die Kennwerte sind stichprobenabhängig."
+      ],
+      "c": 3,
+      "e": "Folie 2 kritisiert an der KTT, dass die im Rahmen der klassischen Testtheorie gewonnenen Kennwerte stichprobenabhängig sind – ihre Höhe hängt also von der jeweils untersuchten Personenstichprobe ab. Das ist das Trennmerkmal: Abhängigkeit, nicht Unabhängigkeit. Die Aussage, die Kennwerte seien stichprobenneutral, kehrt genau diesen Punkt um; die Stichprobenunabhängigkeit (spezifische Objektivität) ist laut Folie 8 eine Eigenschaft des Rasch-Modells und gilt in der KTT ausdrücklich nicht. Die Aussage, sie seien populationsstabil, überträgt dieselbe Rasch-Eigenschaft fälschlich auf die KTT, denn stabile Werte über Populationen hinweg wären das Gegenteil von Stichprobenabhängigkeit. Die Aussage, sie seien itemunabhängig, meint die itembezogene Variante der spezifischen Objektivität: Nach Folie 8 führt in der KTT gerade eine Teilmenge leichter Items zu höheren Personenscores, KTT-Kennwerte sind also weder item- noch stichprobenunabhängig.",
+      "h": "Geht es um Abhängigkeit oder um Unabhängigkeit? Der kritisierte Punkt beschreibt, dass sich die Werte mit der jeweils gezogenen Personengruppe verändern. Aussagen, die Konstanz über Gruppen, Items oder Populationen behaupten, beschreiben eine Eigenschaft des probabilistischen Modells, nicht die bemängelte Eigenschaft der klassischen Werte."
+    },
+    {
+      "id": "q4",
+      "q": "Welche probabilistische Modellklasse wird zur Quantifizierung von Personenmerkmalen bei dichotomem Antwortformat verwendet?",
+      "opts": [
+        "Ordinale IRT-Modellklasse.",
+        "Klassische Testtheorie.",
+        "Dichotome Rasch-Modelle.",
+        "Latent-Class-Klassifikation."
+      ],
+      "c": 2,
+      "e": "Nach Folie 2 werden zur Quantifizierung von Personenmerkmalen bei einem dichotomen Antwortformat dichotome Rasch-Modelle eingesetzt; sie sind der auf dieser Folie ausdrücklich behandelte Fall, mit dem sich die Vorlesung weiter beschäftigt. Das Trennmerkmal ist die Kombination aus dichotomem Format und quantifizierendem, dimensionalem Ziel. Ordinale IRT-Modelle sind laut Folie 2 den Ratingskalen zugeordnet, also ordinalen statt dichotomen Antworten. Die Latent-Class-Klassifikation gehört zur Latent-Class-Analyse, die laut Folie 2 der Klassifikation von Personen dient und nicht der dimensionalen Quantifizierung. Die klassische Testtheorie schließlich ist gar keine probabilistische Modellklasse, sondern die auf Folie 2 kritisierte Ausgangstheorie, zu der die PTT/IRT erst die Alternative bildet.",
+      "h": "Zwei Bedingungen müssen gleichzeitig passen: das Antwortformat und das diagnostische Ziel. Gesucht ist die Modellklasse für ein zweistufiges Format, mit dem eine Ausprägung auf einem Merkmal quantifiziert wird – nicht die Klasse für Ratingskalen, nicht die für eine Personenklassifikation und keine der klassischen Ausgangstheorien."
+    },
+    {
+      "id": "q5",
+      "q": "Welche probabilistische Modellklasse wird Ratingskalen zugeordnet?",
+      "opts": [
+        "2-Parameter-Modelle.",
+        "Ordinale IRT-Modelle.",
+        "Dichotome Modelle.",
+        "Latent-Class-Analysen."
+      ],
+      "c": 1,
+      "e": "Folie 2 ordnet den Ratingskalen ordinale IRT-Modelle zu – das ordinale, mehrstufig geordnete Antwortformat verlangt eine entsprechende Modellklasse. Das Trennmerkmal ist die Ordinalität des Ratingformats. Latent-Class-Analysen dienen laut Folie 2 der Klassifikation von Personen und nicht der Modellierung geordneter Ratingstufen. Dichotome Modelle passen laut Folie 2 zum dichotomen, zweistufigen Antwortformat und damit gerade nicht zu abgestuften Ratings. 2-Parameter-Modelle sind nach Folie 22 eine Erweiterung des dichotomen Rasch-Modells um die Trennschärfe (Birnbaum 1968) und bleiben ein Modell für dichotome Items; sie sind daher nicht die den Ratingskalen zugeordnete Klasse. Nur die ordinalen IRT-Modelle treffen das geordnete Ratingformat.",
+      "h": "Richte dich nach dem Antwortformat: Gefragt ist die Modellklasse für gestufte, geordnete Ratingurteile. Ein zweistufiges Format oder eine reine Personenklassifikation führt in die Irre, und auch eine um die Trennschärfe erweiterte Variante des dichotomen Grundmodells trifft das geordnete Format nicht."
+    },
+    {
+      "id": "q6",
+      "q": "Welche probabilistische Modellklasse dient der Klassifikation von Personen?",
+      "opts": [
+        "Ordinale Ratingmodelle.",
+        "Dichotome Rasch-Modelle.",
+        "Latent-Class-Analysen.",
+        "Klassische Testverfahren."
+      ],
+      "c": 2,
+      "e": "Nach Folie 2 werden Latent-Class-Analysen bei der Klassifikation von Personen eingesetzt; ihr Ziel ist die Zuordnung von Personen zu Klassen, nicht die Verortung auf einem stetigen Merkmalskontinuum. Das Trennmerkmal ist also das klassifikatorische, typenbildende Ziel. Ordinale Ratingmodelle gehören laut Folie 2 zu den Ratingskalen und modellieren geordnete Stufen, nicht Klassen. Dichotome Rasch-Modelle dienen laut Folie 2 der Quantifizierung von Personenmerkmalen bei dichotomem Format, also einer dimensionalen Verortung statt einer Klassenbildung. Klassische Testverfahren schließlich beruhen auf der KTT und sind keine probabilistische Modellklasse zur Personenklassifikation, sondern gehören zur auf Folie 2 kritisierten Ausgangstheorie.",
+      "h": "Frag nach dem diagnostischen Ziel: Gesucht ist die Modellklasse, die Personen Gruppen oder Typen zuordnet, statt sie auf einer stetigen Dimension zu verorten. Geordnete Ratingstufen und dichotome Quantifizierung zielen auf Dimensionen, klassische Verfahren sind gar keine probabilistische Klasse."
+    },
+    {
+      "id": "q7",
+      "q": "Wovon hängt die Lösungswahrscheinlichkeit eines Items im dichotomen Rasch-Modell ab?",
+      "opts": [
+        "Von der Personenfähigkeit und der Itemschwierigkeit, genauer von ihrer Differenz θ_i−δ_j.",
+        "Allein von der individuellen Personenfähigkeit θ_i, ohne Einfluss der Itemschwierigkeit.",
+        "Von der Summe aus Personenfähigkeit und Itemschwierigkeit, also θ_i+δ_j.",
+        "Von der Differenz aus Itemschwierigkeit und Personenfähigkeit, also δ_j−θ_i."
+      ],
+      "c": 0,
+      "e": "Folie 3 nennt als Ziel die Lösungswahrscheinlichkeit eines Items in Abhängigkeit von der Fähigkeit der Person und der Schwierigkeit des Items. Die Folien 5 bis 7 präzisieren, dass die Erfolgswahrscheinlichkeit von der Differenz aus Personenfähigkeitsparameter θ_i und Aufgabenschwierigkeitsparameter δ_j abhängt: P(1)=exp(θ_i−δ_j)/(1+exp(θ_i−δ_j)). Das Trennmerkmal ist die richtige Rechenoperation und ihre Richtung, nämlich die Differenz θ_i minus δ_j. Die Variante mit δ_j−θ_i dreht das Vorzeichen um und würde hohe Fähigkeit fälschlich lösungsunwahrscheinlicher machen. Die Variante mit der Summe θ_i+δ_j ersetzt die Differenz durch eine Addition; nach Folie 7 ist die Lösungswahrscheinlichkeit aber genau dann 0,5, wenn θ_i−δ_j=0 ist. Die Variante, die allein die Personenfähigkeit heranzieht, lässt die Itemschwierigkeit weg – nach Folie 3 hängt die Wahrscheinlichkeit jedoch von beiden Parametern gemeinsam ab.",
+      "h": "Zwei Größen wirken zusammen, nicht nur eine: der Kennwert der Person und der des Items. Achte außerdem auf die Rechenoperation und ihre Richtung – ob subtrahiert oder addiert wird und in welcher Reihenfolge die beiden Parameter stehen. Ein gedrehtes Vorzeichen kehrt die Wirkung der Personenausprägung um."
+    },
+    {
+      "id": "q8",
+      "q": "Was stellt eine Item Characteristic Curve (ICC) dar?",
+      "opts": [
+        "Den Zusammenhang zwischen der Position auf dem Merkmalskontinuum und der Messgenauigkeit eines Items.",
+        "Den funktionalen Zusammenhang zwischen der Trennschärfe eines Items und der beobachteten Fähigkeit der untersuchten Personen.",
+        "Den empirisch beobachteten Zusammenhang zwischen dem erzielten Summenscore und der Schwierigkeit eines einzelnen Items.",
+        "Den theoretischen Zusammenhang zwischen der latenten Merkmalsdimension und der Lösungswahrscheinlichkeit eines Items."
+      ],
+      "c": 3,
+      "e": "Folie 4 definiert die Item Characteristic Curve (ICC) als grafische Darstellung des theoretischen Zusammenhangs zwischen der latenten Merkmalsdimension und der Lösungswahrscheinlichkeit eines Items. Das Trennmerkmal sind die beiden korrekten Bezugsgrößen: die latente Dimension und die Lösungswahrscheinlichkeit, und zwar theoretisch, nicht empirisch. Die Variante mit Position auf dem Merkmalskontinuum und Messgenauigkeit beschreibt die Item-Informationsfunktion aus Folie 12, nicht die ICC. Die Variante mit beobachtetem Summenscore und Itemschwierigkeit ersetzt die latente Dimension und die Wahrscheinlichkeit durch beobachtete Kennwerte – die ICC ist laut Folie 4 aber ein theoretischer Zusammenhang über die latente Merkmalsdimension. Die Variante mit Trennschärfe und Fähigkeit bringt den Trennschärfeparameter ins Spiel, der erst im 2PL-Modell auf Folie 22 hinzukommt; die ICC selbst bildet die Lösungswahrscheinlichkeit über der Merkmalsdimension ab.",
+      "h": "Kläre die beiden Bezugsgrößen und ihren Status: Welche Größe steht dem Merkmal gegenüber, und ist der abgebildete Bezug ein theoretisch angenommener oder ein empirisch beobachteter? Verwechsle die Kurve nicht mit der Funktion für die Messgenauigkeit und nicht mit dem erst später ergänzten Trennschärfeparameter."
+    },
+    {
+      "id": "q9",
+      "q": "Welche Funktionsform beschreibt den Verlauf der Lösungswahrscheinlichkeit in Abhängigkeit von Fähigkeit und Schwierigkeit am besten?",
+      "opts": [
+        "Eine logistische, S-förmige Funktion.",
+        "Eine linear ansteigende Funktion.",
+        "Eine stufenförmige Sprungfunktion.",
+        "Eine unregelmäßig ansteigende Funktion."
+      ],
+      "c": 0,
+      "e": "Folie 5 hält fest, dass eine logistische Funktion den Verlauf der Lösungswahrscheinlichkeit in Abhängigkeit von Fähigkeit und Schwierigkeit am besten beschreibt; die Kurve verläuft S-förmig und nähert sich asymptotisch an 0 und 1 an. Das Trennmerkmal ist die Kombination aus glattem, monotonem Anstieg und beidseitiger Sättigung. Ein unregelmäßig ansteigender Verlauf (Kurve B auf Folie 4) ist zwar monoton, aber nicht glatt und wird ausdrücklich nicht als bestes Modell gewählt. Ein linear ansteigender Verlauf (Kurve D, Folie 4) nähert sich nicht asymptotisch an 0 und 1 an und überschreitet diese Grenzen rechnerisch. Eine stufenförmige Sprungfunktion (Kurve A, Folie 4) springt an der Schwierigkeit deterministisch von 0 auf 1 und bildet damit keine probabilistische, graduell steigende Lösungswahrscheinlichkeit ab.",
+      "h": "Vier Kurvenformen aus der ICC-Betrachtung stehen zur Wahl. Achte darauf, welche Form gleichzeitig glatt und monoton ansteigt und sich an beiden Enden einem festen Grenzwert annähert, statt sprunghaft, geradlinig oder unregelmäßig zu verlaufen."
+    },
+    {
+      "id": "q10",
+      "q": "An welche Wahrscheinlichkeitswerte nähert sich die logistische ICC asymptotisch an?",
+      "opts": [
+        "An 0,0 und 0,5.",
+        "An 0,0 und 2,0.",
+        "An 0,0 und 1,0.",
+        "An 0,5 und 1,0."
+      ],
+      "c": 2,
+      "e": "Nach Folie 5 nähert sich die logistische ICC asymptotisch an die Wahrscheinlichkeitswerte 0 und 1 an, ohne sie zu erreichen; das entspricht dem Wertebereich der Lösungswahrscheinlichkeit auf der y-Achse von 0.0 bis 1.0. Das Trennmerkmal sind die beiden Extremwerte des Wahrscheinlichkeitsbereichs. Der Wert 0,5 ist laut Folie 5 der Scheitelpunkt, an dem Erfolgs- und Misserfolgswahrscheinlichkeit gleich groß sind und über den die Itemschwierigkeit definiert wird — also kein Grenzwert; deshalb sind sowohl 0,5 als untere wie als obere Asymptote falsch. Ein Wert von 2,0 liegt außerhalb des möglichen Wahrscheinlichkeitsbereichs und kann von der Kurve nicht angenähert werden.",
+      "h": "Gefragt sind die beiden waagerechten Grenzwerte, denen sich die Kurve an ihren Enden annähert. Zu unterscheiden ist dieser Grenzwert vom mittleren Scheitelpunkt bei 0,5 und von Werten, die den Wahrscheinlichkeitsbereich überschreiten."
+    },
+    {
+      "id": "q11",
+      "q": "Welche mathematische Größe beeinflusst im Rasch-Modell die Erfolgswahrscheinlichkeit unmittelbar?",
+      "opts": [
+        "Die Differenz aus Itemschwierigkeit und Personenfähigkeit, δ_j−θ_i.",
+        "Die Differenz zwischen Personenfähigkeit und Itemschwierigkeit, θ_i−δ_j.",
+        "Das Produkt aus Personenfähigkeit und Itemschwierigkeit, θ_i·δ_j.",
+        "Die Summe aus Personenfähigkeit und Itemschwierigkeit, θ_i+δ_j."
+      ],
+      "c": 1,
+      "e": "Folie 5 nennt als eine Kerneigenschaft, dass die Differenz von Personenfähigkeit und Itemschwierigkeit die Erfolgswahrscheinlichkeit beeinflusst; auf Folie 6 und 7 steht diese Differenz θ_i−δ_j im Exponenten der logistischen Funktion. Das Trennmerkmal ist die richtungsabhängige Subtraktion Fähigkeit minus Schwierigkeit. Eine Summe θ_i+δ_j wäre falsch, weil dann bei gleicher Fähigkeit und Schwierigkeit nicht der Wert 0 (und damit P=0,5, Folie 7) entstünde. Ein Produkt θ_i·δ_j verknüpft die Parameter multiplikativ, während die Quelle eine Differenz im Exponenten angibt. Die umgekehrte Differenz δ_j−θ_i drehte das Vorzeichen um, sodass höhere Fähigkeit die Erfolgswahrscheinlichkeit senken würde — ein Widerspruch zur auf Folie 7 beschriebenen Monotonie.",
+      "h": "Zwei Parameter sind im Spiel: die Personenfähigkeit und die Itemschwierigkeit. Entscheidend ist, mit welcher Rechenoperation und in welcher Reihenfolge sie verknüpft werden, damit gleiche Werte zu einer mittleren Wahrscheinlichkeit und höhere Fähigkeit zu einer höheren führen."
+    },
+    {
+      "id": "q12",
+      "q": "Welche Lösungswahrscheinlichkeit ergibt sich im Rasch-Modell, wenn Personenfähigkeit und Itemschwierigkeit gleich sind?",
+      "opts": [
+        "Sie beträgt genau 1,00.",
+        "Sie beträgt genau 0,00.",
+        "Sie beträgt genau 0,25.",
+        "Sie beträgt genau 0,50."
+      ],
+      "c": 3,
+      "e": "Nach Folie 7 gilt: Entspricht die Personenfähigkeit der Itemschwierigkeit, ist also θ_i−δ_j=0, dann beträgt die Lösungswahrscheinlichkeit 0,5, weil exp(0)=1 und damit 1/(1+1)=0,5 ergibt. Folie 5 bezeichnet diesen Punkt als Scheitelpunkt, an dem Erfolgs- und Misserfolgswahrscheinlichkeit gleich groß sind. Das Trennmerkmal ist die exakte Gleichheit beider Wahrscheinlichkeiten. Ein Wert von 1,00 unterstellt fälschlich, dass gleiche Parameter eine sichere Lösung bedeuten; 0,00 unterstellt das Gegenteil, eine sichere Nicht-Lösung. Beide widersprechen exp(0)=1. Ein Wert von 0,25 liegt unterhalb der hälftigen Wahrscheinlichkeit und ergibt sich rechnerisch nicht aus θ_i−δ_j=0.",
+      "h": "Setze gedanklich die Differenz aus Fähigkeit und Schwierigkeit auf null und überlege, welchen Wert der Exponentialterm dann annimmt. Am Scheitelpunkt sind Erfolg und Misserfolg gerade gleich wahrscheinlich — das grenzt den gesuchten Wert klar von Sicherheit oder Unmöglichkeit ab."
+    },
+    {
+      "id": "q13",
+      "q": "Wie ist die Itemschwierigkeit auf dem Merkmalskontinuum über die ICC definiert?",
+      "opts": [
+        "Als der Punkt, an dem die Lösungswahrscheinlichkeit 0,5 beträgt.",
+        "Als der Punkt, an dem die Lösungswahrscheinlichkeit 1,0 erreicht.",
+        "Als der Punkt, an dem die Trennschärfe des Items bestimmt wird.",
+        "Als der Punkt, an dem die Personenfähigkeit gleich null ist."
+      ],
+      "c": 0,
+      "e": "Folie 5 definiert die Itemschwierigkeit als den Punkt auf dem Merkmalskontinuum, an dem die Lösungswahrscheinlichkeit 0,5 beträgt (Scheitelpunkt der ICC). Das Trennmerkmal ist der 0,5-Wert der Lösungswahrscheinlichkeit, nicht ein anderer Schwellen- oder Parameterbezug. Ein Punkt mit Lösungswahrscheinlichkeit 1,0 existiert bei der logistischen Kurve nicht als erreichter Wert, da sich die Kurve der 1 nur asymptotisch annähert (Folie 5). Die Trennschärfe ist im Rasch-Modell für alle Items gleich (Folie 7) bzw. im 2PL ein eigener Parameter β_j (Folie 22) und definiert nicht die Schwierigkeit. Der Punkt, an dem die Personenfähigkeit null ist, betrifft den Nullpunkt der Fähigkeitsskala, nicht die über die 0,5-Lösungswahrscheinlichkeit definierte Schwierigkeit.",
+      "h": "Die Definition knüpft an einen bestimmten Wert auf der Kurve an. Zu klären ist, welcher Wahrscheinlichkeitswert genau diese Stelle markiert — und dass es dabei nicht um Trennschärfe oder den Nullpunkt der Fähigkeit geht."
+    },
+    {
+      "id": "q14",
+      "q": "Wie lautet die Erfolgswahrscheinlichkeit P(1|θ_i,δ_j) im dichotomen Rasch-Modell?",
+      "opts": [
+        "exp(θ_i−δ_j) / [1+exp(θ_i−δ_j)].",
+        "exp(θ_i+δ_j) / [1+exp(θ_i+δ_j)].",
+        "exp(δ_j−θ_i) / [1+exp(δ_j−θ_i)].",
+        "exp(θ_i−δ_j) / [1−exp(θ_i−δ_j)]."
+      ],
+      "c": 0,
+      "e": "Folie 6 gibt die Erfolgswahrscheinlichkeit (x_ij=1) im dichotomen Rasch-Modell als exp(θ_i−δ_j) geteilt durch 1+exp(θ_i−δ_j) an; dieselbe Formel steht auf Folie 7. Das Trennmerkmal ist der Zähler exp(θ_i−δ_j) zusammen mit dem Nenner 1+exp(θ_i−δ_j). Eine im Exponenten umgekehrte Differenz δ_j−θ_i drehte die Richtung um und widerspräche der Monotonie (Folie 7). Ein Nenner mit 1−exp(θ_i−δ_j) kann negative Werte oder Werte über 1 erzeugen und verletzt den Wahrscheinlichkeitsbereich 0 bis 1 (Folie 5). Eine Summe θ_i+δ_j im Exponenten wäre falsch, weil bei gleicher Fähigkeit und Schwierigkeit nicht der für P=0,5 nötige Exponent 0 entstünde (Folie 7).",
+      "h": "Gefragt ist die Erfolgswahrscheinlichkeit. Prüfe im Exponenten die Reihenfolge der beiden Parameter und im Nenner das Vorzeichen vor dem Exponentialterm; beide müssen so gewählt sein, dass nur Werte zwischen 0 und 1 herauskommen und höhere Fähigkeit die Wahrscheinlichkeit erhöht."
+    },
+    {
+      "id": "q15",
+      "q": "Wie lautet die Misserfolgswahrscheinlichkeit P(0|θ_i,δ_j) im dichotomen Rasch-Modell?",
+      "opts": [
+        "1 / [1+exp(θ_i+δ_j)].",
+        "1 / [1−exp(θ_i−δ_j)].",
+        "1 / [1+exp(δ_j−θ_i)].",
+        "1 / [1+exp(θ_i−δ_j)]."
+      ],
+      "c": 3,
+      "e": "Folie 6 gibt die Misserfolgswahrscheinlichkeit (x_ij=0) im dichotomen Rasch-Modell als 1 geteilt durch 1+exp(θ_i−δ_j) an. Das Trennmerkmal ist der Zähler 1 bei gleichem Nenner 1+exp(θ_i−δ_j). Eine im Exponenten umgekehrte Differenz δ_j−θ_i drehte die Richtung des Zusammenhangs um und widerspräche der Monotonie (Folie 7). Ein Nenner mit 1−exp(θ_i−δ_j) verletzt den Wahrscheinlichkeitsbereich 0 bis 1, weil er negative oder über 1 liegende Werte erzeugen kann (Folie 5). Eine Summe θ_i+δ_j im Exponenten ist falsch, da laut Folie 6 im Nenner die Differenz θ_i−δ_j steht; nur mit ihr ergänzen sich Erfolgs- und Misserfolgswahrscheinlichkeit zu 1.",
+      "h": "Gefragt ist die Gegenwahrscheinlichkeit zum Erfolg. Im Zähler steht ein fester Wert; zu prüfen sind im Nenner die Reihenfolge der Parameter im Exponenten und das Vorzeichen davor, damit sich Erfolg und Misserfolg zu eins ergänzen."
+    },
+    {
+      "id": "q16",
+      "q": "Wie verändert sich bei konstanter Itemschwierigkeit die Lösungswahrscheinlichkeit, wenn die Personenfähigkeit steigt?",
+      "opts": [
+        "Sie fällt monoton ab.",
+        "Sie steigt monoton an.",
+        "Sie bleibt unverändert.",
+        "Sie steigt geradlinig an."
+      ],
+      "c": 1,
+      "e": "Folie 7 nennt die Monotonie als Eigenschaft des Rasch-Modells: Eine höhere Fähigkeit führt bei konstanter Itemschwierigkeit monoton zu einer höheren Lösungswahrscheinlichkeit. Das Trennmerkmal ist der stetige, aber nicht notwendig gleichmäßige Anstieg. Ein geradliniger Anstieg wäre falsch, weil der Verlauf laut Folie 5 logistisch und S-förmig ist und sich an 0 und 1 asymptotisch annähert, statt linear zuzunehmen. Ein monotones Abfallen kehrte die auf Folie 7 beschriebene Richtung um. Ein unverändertes Verhalten widerspräche der Monotonie, nach der die Lösungswahrscheinlichkeit mit der Fähigkeit zunimmt.",
+      "h": "Betrachtet wird die Richtung des Zusammenhangs zwischen wachsender Fähigkeit und Lösungswahrscheinlichkeit bei fester Schwierigkeit. Zu unterscheiden ist ein stetiger Anstieg von einem streng geradlinigen Verlauf, einem Abfall und einem gleichbleibenden Verhalten."
+    },
+    {
+      "id": "q17",
+      "q": "Liegt die Personenfähigkeit über der Itemschwierigkeit, wie liegt die Lösungswahrscheinlichkeit relativ zu 0,5?",
+      "opts": [
+        "Sie liegt bei 0,5.",
+        "Sie liegt bei 1.",
+        "Sie liegt unter 0,5.",
+        "Sie liegt über 0,5."
+      ],
+      "c": 3,
+      "e": "Das Rasch-Modell koppelt die Lösungswahrscheinlichkeit an die Differenz θ_i−δ_j aus Personenfähigkeit und Itemschwierigkeit (Folie 6). Ist diese Differenz positiv, liegt die Fähigkeit also über der Schwierigkeit, dann treibt die logistische Funktion die Erfolgswahrscheinlichkeit über den Scheitelwert von 0,5 hinaus; dieser Scheitelwert markiert nach Folie 5 und 7 genau den Fall θ_i−δ_j=0, bei dem exp(0)=1 und damit P=0,5 gilt. Das entscheidende Trennmerkmal ist somit das Vorzeichen der Differenz: positiv bedeutet oberhalb von 0,5. Die Option 'unter 0,5' dreht die Richtung um und gilt für den umgekehrten Fall θ_i<δ_j. Die Option 'bei 0,5' beschreibt allein den Gleichheitsfall θ_i=δ_j und übersieht, dass hier eine echte positive Differenz vorliegt. Die Option 'bei 1' übergeneralisiert die Asymptote: die Kurve nähert sich 1 laut Folie 5 nur im Grenzwert an, eine bloß positive Differenz erreicht diesen Wert nie.",
+      "h": "Achte auf das Vorzeichen der Differenz aus Personenfähigkeit und Itemschwierigkeit und darauf, welcher Wahrscheinlichkeitswert den Scheitelpunkt der logistischen Kurve bildet. Frag dich, wohin eine positive Differenz die Erfolgswahrscheinlichkeit relativ zu diesem Scheitelpunkt verschiebt."
+    },
+    {
+      "id": "q18",
+      "q": "Liegt die Personenfähigkeit unter der Itemschwierigkeit, wie liegt die Lösungswahrscheinlichkeit relativ zu 0,5?",
+      "opts": [
+        "Sie liegt gleich 1,0.",
+        "Sie liegt oberhalb 0,5.",
+        "Sie liegt genau bei 0,5.",
+        "Sie liegt unter 0,5."
+      ],
+      "c": 3,
+      "e": "Die Erfolgswahrscheinlichkeit im Rasch-Modell hängt vom Vorzeichen der Differenz θ_i−δ_j ab (Folie 6 und 7). Liegt die Personenfähigkeit unter der Itemschwierigkeit, ist die Differenz negativ und die logistische Funktion fällt unter den Scheitelwert 0,5, der nach Folie 7 nur bei θ_i−δ_j=0 (da exp(0)=1) erreicht wird. Trennmerkmal ist also das negative Vorzeichen der Differenz. Die Option 'oberhalb 0,5' vertauscht die Richtung und beschreibt den Fall θ_i>δ_j. Die Option 'genau bei 0,5' greift den Gleichheitsfall θ_i=δ_j heraus und ignoriert, dass hier eine negative Differenz vorliegt. Die Option 'gleich 1,0' übergeneralisiert die obere Asymptote, an die sich die Kurve laut Folie 5 nur im Grenzwert annähert; bei negativer Differenz liegt die Wahrscheinlichkeit sogar unter 0,5 und niemals bei 1.",
+      "h": "Bestimme das Vorzeichen der Differenz aus Fähigkeit und Schwierigkeit und vergleiche es mit dem Scheitelpunkt der logistischen Kurve. Eine Fähigkeit unterhalb der Schwierigkeit verschiebt die Erfolgswahrscheinlichkeit in eine bestimmte Richtung; überlege, in welche."
+    },
+    {
+      "id": "q19",
+      "q": "Wie unterscheiden sich die Trennschärfen der Items im Rasch-Modell?",
+      "opts": [
+        "Sie unterscheiden sich nicht; alle Items haben die gleiche Trennschärfe.",
+        "Sie unterscheiden sich frei; jedes Item wird einzeln geschätzt.",
+        "Sie unterscheiden sich mit der jeweiligen Itemschwierigkeit.",
+        "Sie unterscheiden sich nicht; kein Item besitzt eine Trennschärfe."
+      ],
+      "c": 0,
+      "e": "Im Rasch-Modell (1PL) unterscheiden sich die Items ausschließlich in ihrer Schwierigkeit; alle ICCs sind gleich steil und gehen nur durch horizontale Verschiebung entlang der x-Achse auseinander hervor (Folie 7). Gleiche Steilheit bedeutet gleiche Trennschärfe, und genau das ist das Trennmerkmal. Dass die Trennschärfe je Item frei geschätzt würde, gilt erst im 2PL-/Birnbaum-Modell, das die Trennschärfe als zweiten Parameter β_j aufnimmt (Folie 22); im Rasch-Modell existiert dieser Freiheitsgrad nicht. Dass sie mit der jeweiligen Itemschwierigkeit variiere, koppelt fälschlich zwei getrennte Größen: nach Folie 7 variiert allein die Schwierigkeit, während die Trennschärfe konstant bleibt. Und dass kein Item eine Trennschärfe besitze, verwechselt Gleichheit mit Abwesenheit; die Items haben sehr wohl eine gemeinsame, von null verschiedene Trennschärfe, sie ist nur für alle identisch.",
+      "h": "Überlege, welcher der beiden Itemparameter im einfachsten IRT-Modell variieren darf und welcher für jedes Item festliegt. Die Steilheit der ICC-Kurven trägt die Antwort; und 'für jedes Item gleich' ist etwas anderes als 'gar nicht vorhanden'."
+    },
+    {
+      "id": "q20",
+      "q": "Wodurch unterscheiden sich Items im Rasch-Modell voneinander?",
+      "opts": [
+        "Nur durch ihre Schwierigkeit.",
+        "Durch ihre Personenfähigkeit.",
+        "Nur durch ihre Trennschärfen.",
+        "Durch Ratewahrscheinlichkeit."
+      ],
+      "c": 0,
+      "e": "Das Rasch-Modell ist ein 1PL-Modell: jedes Item wird durch genau einen Parameter beschrieben, die Itemschwierigkeit (Folie 22). Entsprechend unterscheiden sich Items laut Folie 7 nur durch ihre Schwierigkeit, während ihre Trennschärfen alle gleich sind; das ist das Trennmerkmal. Die Trennschärfen als Unterscheidungsdimension gehören zum 2PL-Modell (Birnbaum 1968), das β_j als zweiten Parameter einführt (Folie 22), und sind im Rasch-Modell gerade nicht itemspezifisch. Die Personenfähigkeit θ_i ist nach Folie 6 ein Personen-, kein Itemparameter; sie unterscheidet Personen, nicht Items. Die Ratewahrscheinlichkeit kommt erst im 3PL-Modell als dritter Parameter hinzu (Folie 22) und spielt im Rasch-Modell keine Rolle.",
+      "h": "Zähl die Parameter, mit denen das einfachste logistische Modell ein einzelnes Item beschreibt. Trenne dabei sauber, was ein Merkmal der Person und was ein Merkmal des Items ist, und in welchem erweiterten Modell weitere Itemparameter erst dazukommen."
+    },
+    {
+      "id": "q21",
+      "q": "Zwei Items besitzen gleich steile ICCs; die ICC eines Items liegt weiter rechts. Wie ist dieses Item relativ zum anderen zu beurteilen?",
+      "opts": [
+        "Es ist einfacher.",
+        "Es steigt steiler.",
+        "Es ist ebenso schwer.",
+        "Es ist schwieriger."
+      ],
+      "c": 3,
+      "e": "Eine ICC, die weiter rechts liegt, erreicht den Punkt mit der Lösungswahrscheinlichkeit 0,5 erst bei höherer Fähigkeit; genau dieser Punkt definiert die Itemschwierigkeit (Folie 5). Weiter rechts bedeutet also höhere Schwierigkeit, das Item ist schwieriger (Folie 7). Da beide ICCs gleich steil sind, ist die Trennschärfe identisch, und die Verschiebung betrifft allein die Schwierigkeit. Die Option 'einfacher' dreht die Richtung um: rechts steht für mehr, nicht für weniger Schwierigkeit. Die Option 'ebenso schwer' übersieht die Verschiebung, obwohl nach Folie 7 gerade die horizontale Verschiebung die Schwierigkeiten unterscheidet. Die Option 'steigt steiler' verwechselt die horizontale Lage mit der Steilheit; die Steilheit als Ausdruck der Trennschärfe ist laut Aufgabenstellung für beide Items gleich und ändert sich durch horizontale Verschiebung nicht.",
+      "h": "Verknüpfe die horizontale Lage der ICC mit dem Punkt, an dem die Lösungswahrscheinlichkeit 0,5 erreicht wird. Halte die Steilheit gedanklich konstant, denn sie ist für beide Kurven gleich, und frag dich, was eine Rechtsverschiebung allein über die Schwierigkeit aussagt."
+    },
+    {
+      "id": "q22",
+      "q": "Welche gemeinsame Eigenschaft haben zwei Rasch-Items, deren ICCs dieselbe Form und Steilheit besitzen und nur horizontal verschoben sind?",
+      "opts": [
+        "Sie haben die gleiche Trennschärfe.",
+        "Sie haben die gleiche Schwierigkeit.",
+        "Sie haben unterschiedliche Trennschärfen.",
+        "Sie haben die gleiche Ratewahrscheinlichkeit."
+      ],
+      "c": 0,
+      "e": "Die Steilheit einer ICC entspricht der Trennschärfe des Items. Zwei ICCs, die dieselbe Form und Steilheit haben und nur horizontal verschoben sind, teilen deshalb dieselbe Trennschärfe und unterscheiden sich allein in der Schwierigkeit; genau so beschreibt Folie 7 das Rasch-Modell, in dem alle Kurven durch Verschiebung entlang der x-Achse auseinander hervorgehen. Das Trennmerkmal ist die identische Steilheit. 'Gleiche Schwierigkeit' ist falsch, weil gerade die horizontale Verschiebung unterschiedliche Schwierigkeiten bedeutet (Folie 5 und 7). 'Unterschiedliche Trennschärfen' widerspricht der vorausgesetzten gleichen Steilheit; unterschiedlich steile, sich schneidende ICCs treten erst im 2PL-Modell auf (Folie 22 und 23). 'Gleiche Ratewahrscheinlichkeit' beruft sich auf einen Parameter, den erst das 3PL-Modell kennt (Folie 22); im Rasch-Modell existiert er nicht.",
+      "h": "Übersetze 'gleiche Form und Steilheit der ICC' in die zugehörige Itemeigenschaft und trenne sie von dem, was die horizontale Verschiebung ausdrückt. Frag dich außerdem, welche Parameter im einfachen Rasch-Modell überhaupt vorkommen."
+    },
+    {
+      "id": "q23",
+      "q": "Was verlangt die Annahme der Eindimensionalität beziehungsweise Rasch-Homogenität?",
+      "opts": [
+        "Das Antwortverhalten soll auf mehreren latenten Fähigkeiten beruhen.",
+        "Das Antwortverhalten soll aufgrund einer einzigen latenten Fähigkeit zustande kommen.",
+        "Die Itemantworten sollen bei konstanter Fähigkeit voneinander unabhängig sein.",
+        "Die gesamte Information soll allein im Summenscore der Person liegen."
+      ],
+      "c": 1,
+      "e": "Die Eindimensionalität beziehungsweise Rasch-Homogenität verlangt, dass sich das Antwortverhalten der Personen nur anhand eines einzigen Kontinuums beschreiben lässt; dazu ist es zwingend notwendig, dass das Antwortverhalten auch nur aufgrund einer einzigen (latenten) Fähigkeit zustande kommt (Folie 8). Das Trennmerkmal ist diese Ein-Fähigkeits-Anforderung. 'Auf mehreren latenten Fähigkeiten beruhen' kehrt die Annahme in ihr Gegenteil: Mehrdimensionalität ist genau das, was die Eindimensionalität ausschließt. 'Bei konstanter Fähigkeit voneinander unabhängig' beschreibt eine andere Modellannahme, die lokale stochastische Unabhängigkeit (Folie 8), und nicht die Dimensionalität. 'Alle Information im Summenscore' benennt die erschöpfende (suffiziente) Statistik (Folie 8), also ebenfalls eine eigenständige Annahme und nicht die Eindimensionalität.",
+      "h": "Achte darauf, wie viele latente Fähigkeiten das Antwortverhalten hervorbringen dürfen, damit ein einziges Merkmalskontinuum genügt. Grenze diese Forderung sauber von den übrigen Rasch-Annahmen ab, die andere Aspekte des Antwortverhaltens betreffen."
+    },
+    {
+      "id": "q24",
+      "q": "Was bedeutet lokale stochastische Unabhängigkeit im Rasch-Modell?",
+      "opts": [
+        "Das Antwortverhalten kommt allein aufgrund einer einzigen latenten Fähigkeit zustande, sodass sich alle Items auf demselben eindimensionalen Merkmalskontinuum abbilden lassen.",
+        "Die Antworten auf zwei Items sind stets voneinander unabhängig, ganz gleich ob die Personenfähigkeit dabei konstant gehalten wird oder über die Personen hinweg frei variieren darf.",
+        "Bei konstant gehaltener Personenfähigkeit liefert die Lösungswahrscheinlichkeit eines Items keine Information über die Lösungswahrscheinlichkeit anderer Items und umgekehrt.",
+        "Bei konstant gehaltener Personenfähigkeit verrät die Lösungswahrscheinlichkeit eines Items bereits die Lösungswahrscheinlichkeit aller übrigen Items."
+      ],
+      "c": 2,
+      "e": "Lokale stochastische Unabhängigkeit heißt, dass der Zusammenhang zwischen den Antworten auf zwei Items ausschließlich über die latente Fähigkeit zustande kommen soll. Hält man die Personenfähigkeit konstant, lässt sich aus der Lösungswahrscheinlichkeit eines Items nichts über die der anderen Items ableiten, und umgekehrt (Folie 8). Das Trennmerkmal ist die Bedingung der konstant gehaltenen Fähigkeit. Die Aussage, die Items seien stets unabhängig, ganz gleich ob die Fähigkeit konstant sei oder variiere, lässt genau diese Bedingung weg; ohne Konditionierung auf die Fähigkeit hängen die Items gerade zusammen. Die Aussage, das Antwortverhalten komme allein aufgrund einer einzigen latenten Fähigkeit zustande und alle Items lägen auf einem Kontinuum, beschreibt die Eindimensionalität (Folie 8), eine andere Annahme. Und dass ein Item die Lösungswahrscheinlichkeit der übrigen bereits verrate, dreht die Aussage in ihr Gegenteil; bei konstanter Fähigkeit liefert es eben keine solche Information (Folie 8).",
+      "h": "Halte fest, unter welcher Bedingung die Items einander keine Information liefern dürfen. Prüfe jede Aussage darauf, ob diese Konditionierung auf die Fähigkeit erhalten bleibt oder ob stattdessen eine andere Modellannahme beschrieben wird."
+    },
+    {
+      "id": "q25",
+      "q": "Wodurch soll der Zusammenhang zwischen Antworten auf zwei Items im Rasch-Modell ausschließlich zustande kommen?",
+      "opts": [
+        "Durch Fähigkeitsunterschiede in der latenten Variablen.",
+        "Durch verschiedene Trennschärfen der beiden Items.",
+        "Durch eine unmittelbare Wirkung eines Items auf das andere.",
+        "Durch gemeinsame Tendenzen bei konstanter Fähigkeit."
+      ],
+      "c": 0,
+      "e": "Folie 8 nennt als Modellannahme die lokal stochastische Unabhängigkeit: Der Zusammenhang zwischen den Antworten auf zwei Items soll ausschließlich durch die Fähigkeitsunterschiede in der latenten Variablen zustande kommen. Das ist das Trennmerkmal — die gemeinsame latente Fähigkeit erzeugt die Kovariation, nichts anderes. Bei konstant gehaltener Personenfähigkeit lässt sich laut Folie 8 aus der Lösungswahrscheinlichkeit eines Items nichts über die anderen Items ableiten. Eine unmittelbare Wirkung eines Items auf das andere ist damit ausgeschlossen (keine direkte Item-Item-Kausalität). Verschiedene Trennschärfen scheiden aus, weil im Rasch-Modell nach Folie 7 alle Items dieselbe Trennschärfe besitzen; ein Trennschärfeunterschied existiert erst im 2PL-Modell (Folie 22). Und gemeinsame Tendenzen bei konstanter Fähigkeit widersprechen der Annahme direkt: genau bei konstanter Fähigkeit soll kein Zusammenhang mehr bestehen.",
+      "h": "Frag Dich, worüber die Modellannahme der lokalen Unabhängigkeit die Kovariation zweier Items erklärt — und was übrig bleibt, wenn man die Personenfähigkeit konstant hält. Prüfe außerdem, ob sich Items im 1PL überhaupt in ihrer Trennschärfe unterscheiden dürfen."
+    },
+    {
+      "id": "q26",
+      "q": "Was bedeutet es, dass der Summenscore im Rasch-Modell eine suffiziente Statistik ist?",
+      "opts": [
+        "Für den Personenscore zählt, welche konkreten Items eine Person gelöst hat, nicht deren Anzahl.",
+        "Aus dem Summenscore lässt sich das genaue Antwortmuster einer Person eindeutig rekonstruieren.",
+        "Der Summenwert bildet nur einen kleinen Teil der in den Antworten enthaltenen Personeninformation ab.",
+        "Für den Personenscore zählt, wie viele Items gelöst wurden, nicht welche Items gelöst wurden."
+      ],
+      "c": 3,
+      "e": "Folie 8 und der Kasten auf Folie 11 stellen klar: Alle Informationen über eine Person sind in ihrem Summenwert enthalten; für den Score spielt es keine Rolle, welche Items beantwortet wurden, sondern nur wie viele. Deshalb heißt der Summenscore erschöpfende (suffiziente) Statistik. Das Trennmerkmal ist also Anzahl statt Identität der gelösten Items. Die Umkehrung — es käme auf die konkreten Items an — widerspricht Folie 8 unmittelbar. Dass sich aus dem Summenscore das genaue Antwortmuster rekonstruieren ließe, ist ebenfalls falsch: Die Zählervereinfachung auf Folie 11 zeigt, dass ganz unterschiedliche Muster denselben Score liefern, das Muster also gerade nicht eindeutig zurückgewinnbar ist. Und der Summenwert bildet nicht nur einen kleinen Teil der Information ab, sondern nach Folie 8 die gesamte personenbezogene Information.",
+      "h": "Überlege, was 'suffizient' bzw. 'erschöpfend' über das Verhältnis von Anzahl und konkreter Zusammensetzung der gelösten Items aussagt. Achte auf die Richtung der Aussage und darauf, ob aus einem einzigen Kennwert das vollständige Antwortmuster zurückgewonnen werden kann."
+    },
+    {
+      "id": "q27",
+      "q": "Zwei Personen lösen jeweils gleich viele Items, aber unterschiedliche konkrete Items. Welche Information ist für ihren Personenscore im Rasch-Modell entscheidend?",
+      "opts": [
+        "Das konkrete Muster der gelösten Items entscheidet über ihre Personenscores.",
+        "Der gleiche Summenscore; die konkrete Auswahl der gelösten Items ist dafür nicht entscheidend.",
+        "Die mittlere Schwierigkeit der jeweils gelösten Items ist ausschlaggebend.",
+        "Die Trennschärfe der von ihnen jeweils bearbeiteten Items ist entscheidend."
+      ],
+      "c": 1,
+      "e": "Die Frage wendet die Suffizienzannahme an (Folie 8, Folie 11): Weil der Summenscore eine erschöpfende Statistik ist, zählt für den Personenscore allein die Anzahl gelöster Items, nicht deren konkrete Auswahl. Zwei Personen mit gleich vielen, aber unterschiedlichen gelösten Items erhalten deshalb denselben Personenscore — das ist das Trennmerkmal. Dass das konkrete Muster entscheide, kehrt die Aussage von Folie 8 um ('nur wie viele, nicht welche'). Die mittlere Schwierigkeit der gelösten Items ist ebenfalls irrelevant: Die Zählervereinfachung auf Folie 11 zeigt, dass nur die Anzahl in den Score eingeht. Und die Trennschärfe der bearbeiteten Items kann nichts bestimmen, weil im Rasch-Modell alle Items dieselbe Trennschärfe haben (Folie 7); ein Trennschärfeeffekt entsteht erst im 2PL-Modell (Folie 22).",
+      "h": "Zwei Antwortmuster mit gleicher Trefferzahl treffen auf eine Modellannahme, die nur die Menge zählt. Frag Dich, welche Größe daraus für beide Personen zwingend gleich ist — und ob Schwierigkeit oder Trennschärfe der konkret gelösten Items daran noch etwas ändern."
+    },
+    {
+      "id": "q28",
+      "q": "Was besagt spezifische Objektivität für die Schätzung der Personenfähigkeit?",
+      "opts": [
+        "Die geschätzte Personenfähigkeit ist von der Auswahl der Items aus der Itempopulation unabhängig.",
+        "Die Personenfähigkeit lässt sich ausschließlich mit genau der kalibrierten Itemmenge zuverlässig schätzen.",
+        "Die geschätzte Personenfähigkeit fällt höher aus, wenn leichtere Items vorgegeben werden.",
+        "Auch die Genauigkeit der Personenschätzung ist von jeder gewählten Personen- und Itemstichprobe unabhängig."
+      ],
+      "c": 0,
+      "e": "Spezifische Objektivität (Stichprobenunabhängigkeit der Parameterschätzung) besagt nach Folie 8: Die Schätzung der Personenfähigkeit ist unabhängig von der Auswahl der Items aus der Itempopulation; jede Teilmenge der Items führt im Allgemeinen zu denselben Personenscores. Das Trennmerkmal ist die Invarianz gegenüber der Itemauswahl. Der stärkste Distraktor verwechselt diese Invarianz mit Präzision: Folie 8 hält ausdrücklich fest, dass die Genauigkeit der Schätzungen sehr wohl von der Wahl der Personen- und Itemstichproben abhängt — 'unabhängig von jeder Stichprobe' gilt also nicht. Dass die Fähigkeit höher ausfiele, wenn leichtere Items vorgegeben werden, beschreibt gerade die KTT (Folie 8 nennt dies als Kontrast) und widerspricht der spezifischen Objektivität. Und die Einschränkung auf genau eine kalibrierte Itemmenge verkennt, dass laut Folie 8 jede Teilmenge zum gleichen Ergebnis führt.",
+      "h": "Trenne zwei Dinge, die leicht verschmelzen: die Invarianz des Fähigkeitswerts gegenüber der Itemauswahl und die Genauigkeit dieser Schätzung. Prüfe außerdem, welches Verhalten — leichtere Items, höhere Werte — laut Quelle gerade die klassische, nicht die probabilistische Testtheorie kennzeichnet."
+    },
+    {
+      "id": "q29",
+      "q": "Welche entsprechende Unabhängigkeit gilt bei spezifischer Objektivität für Itemparameter?",
+      "opts": [
+        "Die Itemparameter gelten nur für genau die Personenstichprobe ihrer Schätzung.",
+        "Die Itemparameterschätzung soll von der Auswahl der Personen unabhängig sein.",
+        "Die Itemparameterschätzung soll von der Auswahl der Items unabhängig sein.",
+        "Die Itemschwierigkeit hängt vom Fähigkeitsniveau der Personenstichprobe ab."
+      ],
+      "c": 1,
+      "e": "Folie 8 formuliert die spezifische Objektivität symmetrisch: Nicht nur die Personenfähigkeit ist unabhängig von der Itemauswahl, auch umgekehrt soll die Schätzung der Itemparameter unabhängig von der Auswahl der Personen sein ('und umgekehrt'). Das Trennmerkmal dieser Umkehrrichtung ist die Unabhängigkeit von der Personenstichprobe. Der Distraktor 'unabhängig von der Auswahl der Items' vertauscht den Bezug — für Itemparameter geht es um Personen, nicht um Items. Dass die Itemschwierigkeit vom Fähigkeitsniveau der Stichprobe abhinge, beschreibt die stichprobenabhängige KTT (Folie 2, Folie 8) und ist das Gegenteil der spezifischen Objektivität. Und die Behauptung, Itemparameter gälten nur für die konkrete Personenstichprobe ihrer Schätzung, widerspricht der Invarianz direkt: gerade diese Bindung soll im Rasch-Modell entfallen.",
+      "h": "Spezifische Objektivität wirkt in beide Richtungen. Für die eine Parametersorte fällt die Abhängigkeit von der jeweils anderen Erhebungseinheit weg — überlege, welche Stichprobe für die Itemseite gemeint ist, und verwechsle den Bezug nicht mit der Itemauswahl."
+    }
+  ]
+};
+
+var bonusFragen = [];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var view = OPT_SHUF ? _shufCopy(q) : {opts:q.opts, c:q.c};
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+view.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* ─── Options-Shuffle: bei JEDEM Rendern/Durchgang frisch (nicht mehr nur einmal
+   pro Seitenladung), damit sich die Position der richtigen Antwort bei erneuten
+   Versuchen/Durchgängen ändert. Gibt eine NEUE {opts,c}-Kopie zurück, mutiert q
+   NICHT — die Originaldaten (data.json-Reihenfolge) bleiben als Quelle erhalten.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufCopy(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number'||_hasLtrRef(q.e)) return {opts:(q?q.opts:[]), c:(q?q.c:0)};
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  return {opts:idx.map(function(i){return q.opts[i];}), c:idx.indexOf(q.c)};
+}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+/* ═══ Altklausur Quiz-Runner (Üben + Klausur) ═══════════════════════════ */
+var ALLE = (sofortFragen['0'] || []);
+/* RUN.shuf[qi] = {opts, c} — frisch gemischte Optionsansicht je Frage, neu erzeugt
+   bei jedem _quizBegin() (Start/Fällige/Nur-falsche/nach Reset), damit die Position
+   der richtigen Antwort sich bei jedem neuen Durchgang ändert statt fix zu bleiben. */
+var RUN = {mode:'ueben', shuffle:false, order:[], pos:0, answers:{}, started:false, finished:false, lastWrong:[], expOpen:false, hintOpen:false, shuf:{}};
+var LTRS = ['a','b','c','d'];
+
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function quizModeUeben(){RUN.mode='ueben'; if(!RUN.started) quizRender();}
+function quizModeKlausur(){RUN.mode='klausur'; if(!RUN.started) quizRender();}
+function quizToggleShuffle(){RUN.shuffle=!RUN.shuffle; if(!RUN.started) quizRender();}
+function quizToggleExp(){RUN.expOpen=!RUN.expOpen; quizRender();}
+function quizToggleHint(){RUN.hintOpen=!RUN.hintOpen; quizRender();}
+
+/* ── Persistenz (teilt den Store mit dem „Alle Fragen"-Tab; load/save aus der Engine) ── */
+function _qSched(qid, correct){
+  var p=load(), now=Date.now(), DAY=86400000;
+  var card=p[qid]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(correct){ card.stability*=2.5; card.due=now+Math.max(DAY,card.stability*DAY); card.state='review'; }
+  else { card.lapses++; card.stability=Math.max(1,card.stability*0.5); card.due=now+600000; card.state='learning'; }
+  card.reps++; p[qid]=card; save(p);
+}
+function _qStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ALLE.forEach(function(q){ var c=p[q.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ALLE.length};
+}
+function _qDueIdx(){
+  var p=load(), now=Date.now(), idx=[];
+  ALLE.forEach(function(q,i){ var c=p[q.id]; if(!c||c.state==='new'||c.due<=now||c.lapses>0) idx.push(i); });
+  return idx;
+}
+function quizDueMode(){ var idx=_qDueIdx(); if(idx.length) _quizBegin(idx); }
+function quizResetProgress(){ var p=load(); ALLE.forEach(function(q){ delete p[q.id]; }); save(p); RUN.lastWrong=[]; quizRestart(); }
+
+function quizStart(){_quizBegin(ALLE.map(function(_,i){return i;}));}
+function quizOnlyWrong(){if(RUN.lastWrong.length) _quizBegin(RUN.lastWrong.slice());}
+function _quizBegin(idx){
+  RUN.order = RUN.shuffle ? _shuffle(idx) : idx.slice();
+  RUN.shuf={}; RUN.order.forEach(function(qi){ RUN.shuf[qi]=_shufCopy(ALLE[qi]); });
+  RUN.pos=0; RUN.answers={}; RUN.expOpen=false; RUN.hintOpen=false; RUN.started=true; RUN.finished=false; quizRender();
+}
+function quizRestart(){RUN.started=false; RUN.finished=false; quizRender();}
+
+function quizAnswer(i){
+  var qi=RUN.order[RUN.pos];
+  if(RUN.mode==='ueben' && RUN.answers[qi]!==undefined) return;  /* Üben: nach Antwort fixiert */
+  RUN.answers[qi]=i;
+  if(RUN.mode==='ueben') _qSched(ALLE[qi].id, i===RUN.shuf[qi].c);  /* Üben: Schwäche sofort einplanen (Key = Frage-ID) */
+  quizRender();
+}
+function quizNext(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos<RUN.order.length-1){RUN.pos++; quizRender();} else quizSubmit();}
+function quizPrev(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos>0){RUN.pos--; quizRender();}}
+function quizSubmit(){
+  RUN.finished=true;
+  RUN.lastWrong=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+  if(RUN.mode==='klausur') RUN.order.forEach(function(qi){
+    if(RUN.answers[qi]!==undefined) _qSched(ALLE[qi].id, RUN.answers[qi]===RUN.shuf[qi].c);
+  });
+  quizRender();
+}
+
+function _optsHTML(q, qi){
+  var view=RUN.shuf[qi]||{opts:q.opts,c:q.c};
+  var chosen=RUN.answers[qi], answered=chosen!==undefined, h='<div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    var cls='mc-opt', dis='';
+    if(RUN.mode==='ueben' && answered){
+      if(i===view.c) cls+=' correct'; else if(i===chosen) cls+=' wrong';
+      dis=' disabled';
+    } else if(RUN.mode==='klausur' && i===chosen){ cls+=' qr-sel'; }
+    h+='<button class="'+cls+'"'+dis+' onclick="quizAnswer('+i+')">'+(OPT_SHUF?'':'<span class="ltr">'+LTRS[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  return h+'</div>';
+}
+
+function quizRender(){
+  var c=document.getElementById('quizRunner'); if(!c) return;
+  /* ── Startbildschirm ── */
+  if(!RUN.started){
+    var st=_qStats(), dueIdx=_qDueIdx();
+    var statLine = st.learned>0
+      ? '<p class="qr-stat">📊 '+st.learned+' / '+st.total+' gelernt · '+st.due+' fällig (Lernstand wird gespeichert)</p>'
+      : '<p class="qr-stat">Lernstand wird auf diesem Gerät gespeichert.</p>';
+    c.innerHTML='<div class="card"><div class="card-title">Quiz starten</div>'
+      +'<p>Modus wählen, dann starten — '+ALLE.length+' Fragen.</p>'
+      + statLine
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.mode==='ueben'?' active':'')+'" onclick="quizModeUeben()">📝 Üben · Sofort-Feedback</button>'
+        +'<button class="nav-btn'+(RUN.mode==='klausur'?' active':'')+'" onclick="quizModeKlausur()">🎓 Klausur · Auswertung am Ende</button>'
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.shuffle?' active':'')+'" onclick="quizToggleShuffle()">🔀 Reihenfolge mischen: '+(RUN.shuffle?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="quizStart()">▶ Alle Fragen starten</button>'
+      +(st.learned>0 && dueIdx.length?'<button class="btn btn-accent" onclick="quizDueMode()">🔁 Fällige & Schwächen ('+dueIdx.length+')</button>':'')
+      +(RUN.lastWrong.length?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur '+RUN.lastWrong.length+' falsche wiederholen</button>':'')
+      +(st.learned>0?'<button class="btn btn-ghost" onclick="quizResetProgress()" style="font-size:.7rem;padding:5px 9px">↺ Fortschritt zurücksetzen</button>':'')
+      +'</div></div>';
+    return;
+  }
+  /* ── Auswertung ── */
+  if(RUN.finished){
+    var total=RUN.order.length;
+    var correct=RUN.order.filter(function(qi){return RUN.answers[qi]===RUN.shuf[qi].c;}).length;
+    var wrong=total-correct, pct=total?Math.round(correct/total*100):0;
+    var icon=pct>=80?'🎉':(pct>=50?'💪':'📚');
+    var h='<div class="done-box"><div class="done-icon">'+icon+'</div>'
+      +'<div class="done-title">'+correct+' / '+total+' richtig ('+pct+'%)</div>'
+      +'<div class="done-sub">Modus: '+(RUN.mode==='klausur'?'Klausur':'Üben')+'</div>'
+      +'<div class="done-stats">'
+        +'<div class="done-stat"><div class="dn" style="color:var(--green)">'+correct+'</div><div class="dl">Richtig</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--red)">'+wrong+'</div><div class="dl">Falsch</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div>'
+      +'</div></div>'
+      +'<div class="qr-ctrl" style="justify-content:center">'
+        +'<button class="btn btn-accent" onclick="quizRestart()">🔁 Neuer Durchgang</button>'
+        +(wrong?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur falsche ('+wrong+') wiederholen</button>':'')
+        +(_qDueIdx().length?'<button class="btn btn-ghost" onclick="quizDueMode()">🔁 Fällige & Schwächen</button>':'')
+        +'<button class="btn btn-ghost" onclick="goTo(1)">📋 Alle Fragen</button>'
+      +'</div>';
+    var wrongQ=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+    if(wrongQ.length){
+      h+='<div class="phase-label">Falsch beantwortet</div><div class="qr-review">';
+      wrongQ.forEach(function(qi){
+        var q=ALLE[qi], view=RUN.shuf[qi], ch=RUN.answers[qi];
+        h+='<div class="card"><p style="color:var(--text);font-weight:600">'+q.q+'</p>'
+          +(ch===undefined?'<p style="color:var(--red);font-size:.84rem">Keine Antwort gegeben</p>'
+                          :'<p style="color:var(--red);font-size:.84rem">Deine Antwort: '+view.opts[ch]+'</p>')
+          +'<p style="color:var(--green);font-size:.84rem">Richtig: '+view.opts[view.c]+'</p>'
+          +'<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div></div>';
+      });
+      h+='</div>';
+    } else { h+='<div class="hinweis"><strong>Perfekt!</strong> Alle Fragen richtig beantwortet.</div>'; }
+    c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'}); return;
+  }
+  /* ── Fragebildschirm ── */
+  var qi=RUN.order[RUN.pos], q=ALLE[qi], N=RUN.order.length;
+  var answered=RUN.answers[qi]!==undefined;
+  var ansCount=RUN.order.filter(function(x){return RUN.answers[x]!==undefined;}).length;
+  var scoreNow=RUN.order.filter(function(x){return RUN.answers[x]===RUN.shuf[x].c;}).length;
+  var meta='Frage '+(RUN.pos+1)+' / '+N+'  ·  '+(RUN.mode==='klausur'?'🎓 Klausur':'📝 Üben')
+          +(RUN.mode==='ueben'?'  ·  Score '+scoreNow+'/'+ansCount:'');
+  var h='<div class="trainer-top"><span class="trainer-meta">'+meta+'</span>'
+      +'<button class="btn btn-ghost" onclick="quizRestart()" style="font-size:.7rem;padding:5px 9px">✕ Beenden</button></div>'
+      +'<div class="prog-bar"><div class="prog-fill" style="width:'+Math.round((RUN.pos+1)/N*100)+'%"></div></div>'
+      +'<div class="mc-wrap"><div class="mc-q-text">'+q.q+'</div>'+_optsHTML(q,qi);
+  if(RUN.mode==='ueben'){
+    if(answered){ h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>'; }
+    else {
+      if(q.h) h+='<button class="exp-btn" onclick="quizToggleHint()">'+(RUN.hintOpen?'💡 Erklärung ausblenden':'💡 Erklärung anzeigen')+'</button>';
+      h+='<button class="exp-btn" onclick="quizToggleExp()">'+(RUN.expOpen?'🔓 Lösung ausblenden':'🔓 Lösung anzeigen')+'</button>';
+      if(RUN.hintOpen && q.h) h+='<div class="mc-hint"><div class="lbl">Erklärung — ohne Lösung</div>'+q.h+'</div>';
+      if(RUN.expOpen) h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>';
+    }
+  }
+  h+='</div><div class="qr-ctrl" style="justify-content:flex-end">';
+  if(RUN.mode==='klausur'){
+    if(RUN.pos>0) h+='<button class="btn btn-ghost" onclick="quizPrev()">← Zurück</button>';
+    if(RUN.pos<N-1) h+='<button class="btn btn-accent" onclick="quizNext()">Weiter →</button>';
+    h+='<button class="btn btn-accent" onclick="quizSubmit()">✓ Abgeben</button>';
+  } else {
+    if(answered) h+='<button class="btn btn-accent" onclick="quizNext()">'+(RUN.pos<N-1?'Weiter →':'Abschließen ✓')+'</button>';
+    else h+='<span class="trainer-meta">Antwort wählen …</span>';
+  }
+  h+='</div>';
+  c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'});
+}
+/* 💡/🔓-Buttons im „Alle Fragen"-Tab — „Erklärung" = spoilerfreier Konzept-Hinweis (h-Feld,
+   eigenes .mc-hint-Div), „Lösung" = togglet das versteckte #exp-<id> der Engine (Label per DOM
+   auf „Lösung" umbenannt). Rein additiv: renderMC/answerMC der geteilten Engine bleiben unberührt. */
+function _injectExpButtons(){
+  var byId={}; ALLE.forEach(function(q){ byId[q.id]=q; });
+  document.querySelectorAll('#s1 .mc-wrap').forEach(function(w){
+    var exp=w.querySelector('.mc-exp'); if(!exp||w.querySelector('.exp-btn')) return;
+    var lbl=exp.querySelector('.lbl'); if(lbl) lbl.textContent='Lösung';
+    var q=byId[(w.id||'').replace('mcq-','')];
+    var hd=null;
+    if(q && q.h){
+      var hb=document.createElement('button'); hb.className='exp-btn'; hb.textContent='💡 Erklärung anzeigen';
+      hd=document.createElement('div'); hd.className='mc-hint'; hd.style.display='none';
+      hd.innerHTML='<div class="lbl">Erklärung — ohne Lösung</div>'+q.h;
+      hb.onclick=function(){
+        var vis=hd.style.display!=='none';
+        hd.style.display=vis?'none':'block';
+        hb.textContent=vis?'💡 Erklärung anzeigen':'💡 Erklärung ausblenden';
+      };
+      exp.parentNode.insertBefore(hb, exp);
+    }
+    var b=document.createElement('button'); b.className='exp-btn'; b.textContent='🔓 Lösung anzeigen';
+    b.onclick=function(){
+      var vis=exp.style.display==='block';
+      exp.style.display=vis?'':'block';
+      b.textContent=vis?'🔓 Lösung anzeigen':'🔓 Lösung ausblenden';
+    };
+    exp.parentNode.insertBefore(b, exp);
+    if(hd) exp.parentNode.insertBefore(hd, exp);
+  });
+}
+(function(){ quizRender(); _injectExpButtons(); })();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

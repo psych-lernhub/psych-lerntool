@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD13 Leistungstests</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  Inhalt und Daten sind vollständig eingebettet.
+  Storage-Key: lm-m11a-vl13
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD13-spezifische Lernwidgets */
+.source-meta{font-size:.7rem;color:var(--text3);margin-top:5px}.source-note{font-size:.72rem;color:var(--text3);border-top:1px dashed var(--border);padding-top:8px;margin-top:10px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}.stat b{display:block;font-size:1.25rem;color:var(--cyan)}
+.concept-chip{display:inline-block;padding:2px 8px;border-radius:999px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:var(--green);font-weight:700}.quote{border-left:4px solid #84cc16;padding:10px 14px;background:rgba(132,204,22,.07);border-radius:0 10px 10px 0;color:var(--text)}
+.widget{background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(129,140,248,.06));border:1px solid rgba(56,189,248,.25);border-radius:14px;padding:16px;margin-bottom:14px}.widget h3{font-size:.95rem;margin-bottom:8px}.widget p{font-size:.86rem;color:var(--text2)}
+.choice-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.choice-row button,.mini-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;padding:8px 11px;cursor:pointer;min-height:42px}.choice-row button:hover,.mini-btn:hover{border-color:var(--accent)}
+.metric-table{width:100%;border-collapse:collapse;font-size:.8rem}.metric-table caption{text-align:left;font-weight:700;color:var(--text);padding:0 0 8px}.metric-table th,.metric-table td{border-bottom:1px solid var(--border);padding:8px;text-align:left}.metric-table th{color:var(--text);background:rgba(255,255,255,.03)}.metric-table td:last-child{font-weight:800;text-align:right;white-space:nowrap}.pos{color:var(--green)}.neg{color:var(--red)}
+.study-card{border-left:4px solid var(--accent)}.study-line{display:grid;grid-template-columns:120px 1fr;gap:8px;margin:7px 0;font-size:.85rem}.study-line span:first-child{color:var(--text3);font-weight:700}.study-line span:last-child{color:var(--text2)}
+.effect-controls{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.effect-controls button{border:1px solid var(--border);background:var(--surface2);color:var(--text2);border-radius:8px;padding:7px 10px;cursor:pointer}.effect-controls button:focus-visible{outline:3px solid var(--cyan)}.effect-summary{background:var(--bg);border-radius:9px;padding:10px;margin-top:8px;color:var(--text);font-size:.83rem}
+.process{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:12px 0}.node{border:1px solid var(--border);background:var(--bg);border-radius:9px;padding:9px 12px;min-width:110px;text-align:center}.arrow{color:var(--accent);font-size:1.2rem}.mapper-row{display:grid;grid-template-columns:150px 1fr;gap:8px;align-items:center;margin:8px 0}.mapper-row select{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:9px}
+.symbol-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}.symbol-field{font-family:ui-monospace,monospace;letter-spacing:2px;line-height:1.55;background:#eef2f7;color:#111827;border-radius:8px;padding:10px;overflow:auto;font-size:.72rem}.symbol-field .target{font-weight:900;background:#fbbf24;border-radius:50%}.legend{font-size:.72rem;color:var(--text3);margin-top:6px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.form-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}.form-card h4{color:var(--cyan);font-size:.85rem;margin-bottom:5px}.form-card p{font-size:.79rem;margin:0}
+.req{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px;margin:7px 0}.req .mark{font-weight:900;color:var(--accent)}
+.callout-good{border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.07);border-radius:10px;padding:11px;color:var(--text2)}
+@media(max-width:620px){.grid-2,.grid-3,.symbol-wrap,.form-grid{grid-template-columns:1fr}.study-line,.mapper-row{grid-template-columns:1fr}.process{align-items:stretch}.node{flex:1 1 100%}.arrow{transform:rotate(90deg);text-align:center}}
+@media(prefers-reduced-motion:reduce){.bar-fill,.nav-btn,.btn{transition:none!important}html{scroll-behavior:auto}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD13 Leistungstests</h1>
+<p class="page-sub">Psychologische Diagnostik · Leistungsmessung · offline nutzbares Lernmodul</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie wird Testleistung bestimmt? · Welche Einflüsse verändern sie? · Wie unterscheiden sich Aufmerksamkeit und Konzentration?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Grundlagen</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Motivation & Übung</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Testangst</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Arten & Relevanz</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Aufmerksamkeit</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Konzentration</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">🎯 Gemischter Abruf</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Grundlagen ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+ data-source-id="PD13-F01 PD13-E-01-01 PD13-E-01-02 PD13-E-01-03 PD13-E-01-04 PD13-E-01-05" data-slides="1–3" data-source-status="direkt"
+ data-learning-objective="LZ-01" data-widget-type="W1 Concept Duel" data-cognitive-task="Begriffe unterscheiden und Messlogiken zuordnen">
+ <div class="sec-head"><div class="sec-title">① Was ist Testleistung?</div><div class="sec-lz">Testleistung quantifizieren, als Indikator einordnen und von typischem Verhalten abgrenzen.</div><div class="source-meta">Folien 1–3 · Widget W1 Concept Duel</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Eine Person löst 42 Aufgaben in zehn Minuten. Eine andere bearbeitet ein festes Aufgabenpaket in acht Minuten. Wird in beiden Fällen dieselbe Messlogik benutzt?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Im ersten Fall ist bei fester Zeit die <strong>Anzahl</strong> gelöster Aufgaben relevant; im zweiten Fall die <strong>benötigte Zeit</strong> für ein festes Aufgabenpaket.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-F01" data-slides="1" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="Orientierung"><div class="card-title">Deck und Gegenstand</div><p><strong>LEISTUNGS-MESSUNG</strong> · Modul 11a Psychologische Diagnostik · BSc. Psychologie (Präsenz) · Dr. Nadine Wedderhoff · MHB Medizinische Hochschule Brandenburg.</p></div>
+<div class="card" data-source-id="PD13-E-01-01 PD13-E-01-02" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1"><div class="card-title">Testleistung ist beobachtbare Arbeit</div><p>Die in einem Leistungstest geleistete Arbeit heißt <span class="concept-chip">Testleistung</span>. Sie kann auf zwei Arten quantifiziert werden:</p><div class="grid-2"><div class="stat"><b>Menge</b><span>Anzahl gelöster Aufgaben in feststehender Bearbeitungszeit</span></div><div class="stat"><b>Zeit</b><span>Zeit zur Bearbeitung einzelner oder aller Aufgaben</span></div></div></div>
+<div class="card" data-source-id="PD13-E-01-03" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1"><div class="card-title">Indikator, nicht Gleichsetzung</div><p>Testleistung kann als Indikator für eine <strong>Fähigkeit</strong> (Beispiel: fluide Intelligenz), eine <strong>Fertigkeit</strong> (Beispiel: Beherrschen der Grundrechenarten) oder <strong>Wissen</strong> verstanden werden. Fähigkeit wird als Potenzial zum Erwerb von Fertigkeiten und Wissen beschrieben. Die Übergänge sind fließend.</p><div class="hinweis"><strong>Abgrenzung:</strong> Die beobachtete Testleistung ist nicht automatisch identisch mit dem zugrunde liegenden Konstrukt.</div></div>
+<div class="card" data-source-id="PD13-E-01-04 PD13-E-01-05" data-slides="3" data-source-status="direkt" data-learning-objective="LZ-01 LZ-02" data-widget-type="W1"><div class="card-title">Maximal möglich versus typisch</div><div class="grid-2"><div class="stat"><b>Leistungstest</b><span>maximal mögliches Verhalten</span></div><div class="stat"><b>Persönlichkeitstest</b><span>typisches Verhalten</span></div></div><p style="margin-top:12px">Gleiche Fähigkeiten, Fertigkeiten und gleiches Wissen garantieren keine gleiche Testleistung. Zusätzlich wirken mangelnde Reliabilität, unterschiedliche Motivation, Übungs- und Trainingseffekte sowie Testangst.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · Concept Duel</div>
+<div class="widget" data-source-id="PD13-E-01-02" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1"><h3>Ordne die Messlogik zu</h3><div class="corr-item"><strong>Fall A:</strong> Alle Personen haben 12 Minuten Zeit. Verglichen wird, wie viele Aufgaben sie lösen.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s0-measure-1',this,'menge')">Mengenlogik</button><button class="corr-btn" onclick="checkCorr('s0-measure-1',this,'zeit')">Zeitlogik</button></div><div class="corr-fb" id="s0-measure-1-fb"></div></div><div class="corr-item"><strong>Fall B:</strong> Alle bearbeiten dasselbe Aufgabenpaket. Verglichen wird die benötigte Dauer.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s0-measure-2',this,'menge')">Mengenlogik</button><button class="corr-btn" onclick="checkCorr('s0-measure-2',this,'zeit')">Zeitlogik</button></div><div class="corr-fb" id="s0-measure-2-fb"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq0"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Motivation & Übung ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+ data-source-id="PD13-E-02-01 PD13-E-02-02 PD13-E-02-03 PD13-E-02-04 PD13-E-03-01 PD13-E-03-02 PD13-E-03-03 PD13-G-F05" data-slides="4–5" data-source-status="direkt+visuell_rekonstruiert"
+ data-learning-objective="LZ-02" data-widget-type="W10 Study Reconstruction + W7 Diagram Manipulator" data-cognitive-task="Studienbefunde rekonstruieren und Effektgrößen vergleichen">
+ <div class="sec-head"><div class="sec-title">② Motivation, Übung und Training</div><div class="sec-lz">Korrelative Motivationsbefunde und Bedingungen von Übungs- und Coachingeffekten korrekt lesen.</div><div class="source-meta">Folien 4–5 · Widget W10 Study Reconstruction + W7 Diagram Manipulator</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Welche Bedingung erzeugte den größten der angegebenen Übungs- oder Trainingseffekte: reine Wiederholung, derselbe Test, dritte Durchführung oder gezieltes Coaching?</p><div class="choice-row"><button onclick="checkCorr('s1-predict',this,'wiederholung')">Reine Wiederholung</button><button onclick="checkCorr('s1-predict',this,'derselbe')">Derselbe Test</button><button onclick="checkCorr('s1-predict',this,'dritte')">Dritte Durchführung</button><button onclick="checkCorr('s1-predict',this,'coaching')">Gezieltes Coaching</button></div><div class="corr-fb" id="s1-predict-fb"></div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-E-02-01 PD13-E-02-02 PD13-E-02-03 PD13-E-02-04" data-slides="4" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W10"><div class="card-title">Motivation: drei Befundkontexte</div><p>Ein Zusammenhang zwischen Testleistung und allgemeiner sowie aktueller testspezifischer Motivation ist möglich. Die drei Befunde müssen nach Stichprobe, Messung und Kennwert auseinandergehalten werden.</p><div class="grid-3"><div class="card study-card"><strong>Allgemeine Leistungsmotivation</strong><p>100 Studierende<br>SPM ↔ OLMT<br><b>r = .35</b></p></div><div class="card study-card"><strong>Testspezifische Motivation</strong><p>zwei kognitive Tests<br>Beispielitem zur Motivation<br><b>r = .37 / .40</b></p></div><div class="card study-card"><strong>Reales Auswahlsetting</strong><p>1750 Bewerber*innen<br>Wissenstest ↔ Testmotivation<br><b>r = .19</b></p></div></div><div class="hinweis"><strong>Range Restriction:</strong> Laut Quelle fallen Korrelationen in realen Auswahlsettings wahrscheinlich geringer aus, weil die Varianz der Testmotivation eingeschränkt ist. Das ist eine Interpretation der geringeren Korrelation, keine Kausalitätsaussage.</div></div>
+<div class="card" data-source-id="PD13-E-03-01 PD13-E-03-02" data-slides="5" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W10"><div class="card-title">Metaanalyse zu Übungs- und Trainingseffekten</div><p>Die Leitfrage lautet, wie gezielte Testvorbereitung und einschlägige Testerfahrung die Testleistung verändern. Hausknecht et al. (2007): <strong>k = 50 Studien</strong>, <strong>n = 130 000</strong>, gemittelter Effekt <strong>d = .24</strong> (klein).</p><table class="metric-table"><caption>Bedingungen mit den angegebenen Effektgrößen</caption><thead><tr><th scope="col">Vergleich</th><th scope="col">Bedingung 1</th><th scope="col">Bedingung 2</th></tr></thead><tbody><tr><td>Testerfahrung</td><td>derselbe Test: d = .40</td><td>ähnlicher Test: d = .22</td></tr><tr><td>Durchführung</td><td>zweite: d = .24</td><td>dritte: d = .51</td></tr><tr><td>Vorbereitung</td><td>Coaching: d = .64</td><td>Wiederholung: d = .21</td></tr></tbody></table></div>
+<div class="card" data-source-id="PD13-E-03-03 PD13-G-F05" data-slides="5" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-02" data-widget-type="W7"><div class="card-title">Coachingeffekt in Standardwertpunkten</div><p>Für Coaching wird eine durchschnittliche Verbesserung um <strong>6.4 Standardwertpunkte</strong> angegeben. Die Folie visualisiert dies als Rechtsverschiebung einer Normalverteilung um <strong>+0.64</strong>.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · Prognose und Diagramm</div>
+<div class="widget" data-source-id="PD13-G-F05 PD13-E-03-02" data-slides="5" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-02" data-widget-type="W7"><h3>Quellenwerte vergleichen und Verteilung verschieben</h3><p>Wähle eine Bedingung. Die graue Kurve bleibt bei 0; die zweite Kurve wird anhand des angegebenen d-Werts schematisch nach rechts verschoben.</p><div class="effect-controls"><button onclick="setEffect(.21,'Reine Testwiederholung','')">Wiederholung .21</button><button onclick="setEffect(.22,'Ähnlicher Test','')">Ähnlicher Test .22</button><button onclick="setEffect(.24,'Zweite Durchführung / Gesamteffekt','')">d = .24</button><button onclick="setEffect(.40,'Derselbe Test','')">Derselbe Test .40</button><button onclick="setEffect(.51,'Dritte Durchführung','')">Dritte .51</button><button onclick="setEffect(.64,'Gezieltes Coaching','6.4')">Coaching .64</button></div><svg viewBox="0 0 520 190" role="img" aria-label="Schematische Normalverteilung mit Ausgangskurve bei null und verschiebbarer Vergleichskurve"><line x1="40" y1="160" x2="490" y2="160" stroke="currentColor" opacity=".5"/><path d="M80 160 C160 160 175 35 260 35 C345 35 360 160 440 160" fill="none" stroke="#64748b" stroke-width="4"/><g id="effectCurve"><path d="M80 160 C160 160 175 35 260 35 C345 35 360 160 440 160" fill="none" stroke="#38bdf8" stroke-width="4"/></g><line x1="260" y1="165" x2="260" y2="174" stroke="currentColor"/><text x="255" y="186" fill="currentColor" font-size="12">0</text></svg><div class="effect-summary"><strong id="effectValue">d = .00</strong><div id="effectText" aria-live="polite">Wähle eine Bedingung, um die Quellenrelation sichtbar zu machen.</div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq1"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Testangst ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+ data-source-id="PD13-E-04-01 PD13-E-04-02 PD13-E-04-03 PD13-E-04-04 PD13-E-05-01 PD13-G-F07" data-slides="6–7" data-source-status="direkt"
+ data-learning-objective="LZ-02" data-widget-type="W3 Arrow Mapper + W6 Matrix Reader" data-cognitive-task="Kausalrichtungen unterscheiden und Tabellenwerte lokalisieren">
+ <div class="sec-head"><div class="sec-title">③ Testangst und Größenordnung der Einflüsse</div><div class="sec-lz">Angst- und Defizithypothese trennen sowie Befunde und Standardwertveränderungen einordnen.</div><div class="source-meta">Folien 6–7 · Widget W3 Arrow Mapper + W6 Matrix Reader</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>„Angst senkt die Leistung“ und „niedrige Leistungsfähigkeit erzeugt Angst“ klingen ähnlich. Zeigen beide Aussagen dieselbe Kausalrichtung?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Die Angsthypothese setzt Angst vor die Leistungsminderung; die Defizithypothese setzt erkannte niedrige Leistungsfähigkeit vor die Angst.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-E-04-01 PD13-E-04-02" data-slides="6" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W3"><div class="card-title">Korrelation und konkurrierende Erklärungen</div><p>Für Testangst und Testleistung wird <strong>r = -.28</strong> berichtet: Je größer die Angst, desto schwächer die Leistung. Die <strong>Kausalität ist unklar</strong>.</p><div class="grid-2"><div class="stat"><b>Angsthypothese</b><span>Angst → Leistungsminderung während der Bearbeitung</span></div><div class="stat"><b>Defizithypothese</b><span>erkannte niedrige Leistungsfähigkeit → Angst</span></div></div></div>
+<div class="card" data-source-id="PD13-E-04-03 PD13-E-04-04" data-slides="6" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W10"><div class="card-title">Gemischte empirische Befunde</div><p><strong>Sommer & Arendasy (2015):</strong> Bei 1700 Bewerber*innen passte das 1PL-Modell gut; die Parameterschätzungen waren gegenüber Testangst invariant.</p><p><strong>Hembree (1988):</strong> Interventionen gegen Testangst zeigten Effekte von <strong>d = .32</strong> für systematische Desensibilisierung und <strong>d = .52</strong> für verschiedene kognitiv-behaviorale Ansätze.</p></div>
+<div class="card" data-source-id="PD13-E-05-01 PD13-G-F07" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W6"><div class="card-title">Bedeutung der Einflussfaktoren auf die Testleistung</div><table class="metric-table"><caption>Veränderungen in Standardwertpunkten (SW)</caption><thead><tr><th scope="col">Einflussfaktor</th><th scope="col">Veränderung</th></tr></thead><tbody><tr><td>Hohe Leistungs- und Testmotivation (Forschungskontext)</td><td class="pos">+8 SW</td></tr><tr><td>Hohe Testmotivation bei Auswahltests</td><td class="pos">+4 SW</td></tr><tr><td>Test früher schon einmal durchgeführt</td><td class="pos">+3 SW</td></tr><tr><td>Intensive Übung (10 Durchgänge) bei Konzentrationstests</td><td class="pos">+26 SW</td></tr><tr><td>Gezielte Testvorbereitung (Coaching)</td><td class="pos">+6 SW</td></tr><tr><td>Hohe Testangst (bei Intelligenztests)</td><td class="neg">-6 SW</td></tr><tr><td>Faking bad (bei Konzentrationstests)</td><td class="neg">-19 SW</td></tr></tbody></table></div>
+<div class="phase-label">Phase 3 — Anwenden · Kausalrichtung und Tabellenleser</div>
+<div class="widget" data-source-id="PD13-E-04-02 PD13-E-05-01" data-slides="6–7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W3+W6"><h3>1. Hypothesen zuordnen</h3><div class="corr-item">Angst steht am Anfang und mindert die Leistung.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s2-hyp-a',this,'angst')">Angsthypothese</button><button class="corr-btn" onclick="checkCorr('s2-hyp-a',this,'defizit')">Defizithypothese</button></div><div class="corr-fb" id="s2-hyp-a-fb"></div></div><div class="corr-item">Erkannte niedrige Leistungsfähigkeit steht am Anfang; Angst ist Ausdruck davon.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s2-hyp-d',this,'angst')">Angsthypothese</button><button class="corr-btn" onclick="checkCorr('s2-hyp-d',this,'defizit')">Defizithypothese</button></div><div class="corr-fb" id="s2-hyp-d-fb"></div></div><h3 style="margin-top:14px">2. Extremwerte lokalisieren</h3><div class="corr-item">Größte positive Veränderung?<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s2-maxpos',this,'plus8')">+8 SW</button><button class="corr-btn" onclick="checkCorr('s2-maxpos',this,'plus26')">+26 SW</button><button class="corr-btn" onclick="checkCorr('s2-maxpos',this,'plus6')">+6 SW</button></div><div class="corr-fb" id="s2-maxpos-fb"></div></div><div class="corr-item">Stärkste negative Veränderung?<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s2-maxneg',this,'minus6')">-6 SW</button><button class="corr-btn" onclick="checkCorr('s2-maxneg',this,'minus19')">-19 SW</button></div><div class="corr-fb" id="s2-maxneg-fb"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq2"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Arten & Relevanz ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+ data-source-id="PD13-E-06-01 PD13-F09 PD13-E-07-01 PD13-E-07-02 PD13-E-07-03" data-slides="8–10" data-source-status="direkt"
+ data-learning-objective="LZ-03+LZ-04" data-widget-type="W9 Diagnostic Case Decision" data-cognitive-task="Kategorien und Anwendungsbereiche zuordnen">
+ <div class="sec-head"><div class="sec-title">④ Arten von Leistungstests und diagnostische Relevanz</div><div class="sec-lz">Testarten aufzählen und die Relevanz von Aufmerksamkeit und Konzentration in Anwendungsbereichen zuordnen.</div><div class="source-meta">Folien 8–10 · Widget W9 Diagnostic Case Decision</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Ein schulisches Leistungsproblem kann durch eingeschränkte Aufmerksamkeit und Konzentration mitbedingt sein. Welcher diagnostische Anwendungsbereich ist hier angesprochen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Pädagogische Psychologie. Die Quelle ordnet schulische Leistungsprobleme diesem Bereich zu.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-E-06-01" data-slides="8" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W1"><div class="card-title">Arten von Leistungstests</div><p>Im deutschen Sprachraum sind mehrere hundert etablierte Leistungstests verfügbar. Genannt werden:</p><ul><li><span class="concept-chip">Allgemeine Leistungstests</span></li><li>Intelligenztests</li><li>Spezielle Funktions- oder Eignungstests</li><li>Entwicklungstests</li><li>Schultests</li></ul></div>
+<div class="card" data-source-id="PD13-F09" data-slides="9" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="Orientierung"><div class="card-title">Abschnittswechsel</div><p><strong>Aufmerksamkeit und Konzentration</strong></p><p class="source-note">Die Originalfolie enthält nur diesen Abschnittstitel; es werden hier keine zusätzlichen Inhalte der Folie zugeschrieben.</p></div>
+<div class="card" data-source-id="PD13-E-07-01 PD13-E-07-02" data-slides="10" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W9"><div class="card-title">Allgemeine Leistungsfähigkeit</div><p>Viele Leistungen setzen neben Intelligenz, speziellem Wissen oder Fertigkeiten die Grundfähigkeit voraus, sich Aufgaben effizient zuzuwenden: <strong>Aufmerksamkeit und Konzentrationsfähigkeit</strong>.</p><div class="grid-2"><div class="stat"><b>vorübergehend</b><span>zum Beispiel durch Alkoholkonsum</span></div><div class="stat"><b>länger andauernd</b><span>durch Verletzungen oder Erkrankungen des Gehirns</span></div></div><p style="margin-top:10px">Bei Einschränkung fällt die Leistung gegenüber dem Normalzustand stark ab.</p></div>
+<div class="card" data-source-id="PD13-E-07-03" data-slides="10" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W9"><div class="card-title">Vier Anwendungsbereiche</div><div class="form-grid"><div class="form-card"><h4>Klinische Psychologie</h4><p>Beeinträchtigungen können auf psychische Störungen hinweisen.</p></div><div class="form-card"><h4>Neuropsychologie</h4><p>Bei hirnorganischen Störungen sind die Funktionen oft eingeschränkt.</p></div><div class="form-card"><h4>Pädagogische Psychologie</h4><p>Schulische Leistungsprobleme können dadurch bedingt sein.</p></div><div class="form-card"><h4>Berufseignungsdiagnostik</h4><p>Berufe stellen unterschiedlich hohe Anforderungen.</p></div></div></div>
+<div class="phase-label">Phase 3 — Anwenden · Diagnostic Case Decision</div>
+<div class="widget" data-source-id="PD13-E-07-03" data-slides="10" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W9"><h3>Ordne vier Kurzfälle zu</h3><div class="corr-item"><strong>Hinweis auf psychische Störung</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s3-case-clin',this,'klinisch')">Klinisch</button><button class="corr-btn" onclick="checkCorr('s3-case-clin',this,'neuro')">Neuro</button><button class="corr-btn" onclick="checkCorr('s3-case-clin',this,'paed')">Pädagogisch</button><button class="corr-btn" onclick="checkCorr('s3-case-clin',this,'beruf')">Beruf</button></div><div class="corr-fb" id="s3-case-clin-fb"></div></div><div class="corr-item"><strong>Hirnorganische Störung</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s3-case-neuro',this,'klinisch')">Klinisch</button><button class="corr-btn" onclick="checkCorr('s3-case-neuro',this,'neuro')">Neuro</button><button class="corr-btn" onclick="checkCorr('s3-case-neuro',this,'paed')">Pädagogisch</button><button class="corr-btn" onclick="checkCorr('s3-case-neuro',this,'beruf')">Beruf</button></div><div class="corr-fb" id="s3-case-neuro-fb"></div></div><div class="corr-item"><strong>Leistungsproblem in der Schule</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s3-case-paed',this,'klinisch')">Klinisch</button><button class="corr-btn" onclick="checkCorr('s3-case-paed',this,'neuro')">Neuro</button><button class="corr-btn" onclick="checkCorr('s3-case-paed',this,'paed')">Pädagogisch</button><button class="corr-btn" onclick="checkCorr('s3-case-paed',this,'beruf')">Beruf</button></div><div class="corr-fb" id="s3-case-paed-fb"></div></div><div class="corr-item"><strong>Hohe Anforderungen eines Berufs</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s3-case-beruf',this,'klinisch')">Klinisch</button><button class="corr-btn" onclick="checkCorr('s3-case-beruf',this,'neuro')">Neuro</button><button class="corr-btn" onclick="checkCorr('s3-case-beruf',this,'paed')">Pädagogisch</button><button class="corr-btn" onclick="checkCorr('s3-case-beruf',this,'beruf')">Beruf</button></div><div class="corr-fb" id="s3-case-beruf-fb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq3"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Aufmerksamkeit ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+ data-source-id="PD13-E-08-01 PD13-E-08-02 PD13-G-F11 PD13-E-09-01 PD13-G-F12 PD13-E-09-02 PD13-E-09-03 PD13-E-09-04 PD13-E-09-05 PD13-E-09-06 PD13-E-09-07" data-slides="11–13" data-source-status="direkt+visuell_rekonstruiert"
+ data-learning-objective="LZ-04" data-widget-type="W3 Arrow Mapper + W1 Concept Duel" data-cognitive-task="Pfeilbeziehungen und Aufmerksamkeitsformen klassifizieren">
+ <div class="sec-head"><div class="sec-title">⑤ Aufmerksamkeit und Konzentration abgrenzen</div><div class="sec-lz">Prozesszuordnung, Messprinzip und Formen der Aufmerksamkeit sicher unterscheiden.</div><div class="source-meta">Folien 11–13 · Widget W3 Arrow Mapper + W1 Concept Duel</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Aufmerksamkeit und Konzentration fallen beide unter allgemeine Leistungstests. Sind sie deshalb gleichzusetzen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true">Nein. Im Prozessdiagramm ist Aufmerksamkeit der Wahrnehmung zugeordnet; Konzentration umfasst Wahrnehmung und Weiterverarbeitung.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-E-08-01 PD13-E-08-02 PD13-G-F11" data-slides="11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W3"><div class="card-title">Prozessbezogene Abgrenzung</div><div class="process" aria-label="Reiz führt zu Wahrnehmung, dann Weiterverarbeitung, dann Reaktion"><div class="node">Reiz</div><div class="arrow">→</div><div class="node">Wahrnehmung<br><small>Aufmerksamkeit + Konzentration</small></div><div class="arrow">→</div><div class="node">Weiterverarbeitung<br><small>Konzentration</small></div><div class="arrow">→</div><div class="node">Reaktion</div></div><p>Beide gehören zum Oberbegriff allgemeiner Leistungstests, dürfen aber nicht als Synonyme behandelt werden.</p></div>
+<div class="card" data-source-id="PD13-E-09-01 PD13-G-F12" data-slides="12" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W1"><div class="card-title">Definition und sichtbare Beispielgrafik</div><p class="quote">Aufmerksamkeit ist die Fähigkeit, ganz bestimmte Reize oder Ereignisse unter vielen willentlich oder nicht willentlich wirksam zu betrachten.</p><div class="symbol-wrap"><div><div class="symbol-field">n nn nnn nn n nnn<br>nnn n nn nnn nn n<br>n nnn nn n nnn nn<br>nn nn nnn n nn nnn</div><div class="legend">Linkes sichtbares Feld: viele kleine „n“ in wechselnden Gruppierungen.</div></div><div><div class="symbol-field">○ ○ ○ ○ ○ ○ ○ ○<br>○ ○ ○ <span class="target">●</span> ○ ○ ○ ○<br>○ ○ ○ ○ ○ ○ ○ ○<br>○ ○ ○ ○ ○ ○ ○ ○</div><div class="legend">Rechtes sichtbares Feld: viele hohle Kreise und ein ausgefüllter Kreis.</div></div></div><p class="source-note">Die Quelle zeigt diese Symbolfelder ohne sichtbare Aufgabeninstruktion; das Modul erfindet deshalb keine Originalaufgabe dazu.</p></div>
+<div class="card" data-source-id="PD13-E-09-02" data-slides="13" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W1"><div class="card-title">Messprinzip</div><p>Aufmerksamkeitstests erfassen, wie <strong>schnell</strong> und <strong>genau</strong> eine Testperson kritische Reize identifiziert. Die jeweiligen Testbedingungen bestimmen, welche Form der Aufmerksamkeit erfasst wird.</p></div>
+<div class="form-grid" data-source-id="PD13-E-09-03 PD13-E-09-04 PD13-E-09-05 PD13-E-09-06 PD13-E-09-07" data-slides="13" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W1"><div class="form-card"><h4>Alertness</h4><p>Basale Ansprechbarkeit auf Reize; Beispiel: Reaktion auf ein Kreuz auf dem Bildschirm.</p></div><div class="form-card"><h4>Selektive Aufmerksamkeit</h4><p>Kritische Reize aus einer Reizklasse.</p></div><div class="form-card"><h4>Geteilte Aufmerksamkeit</h4><p>Mindestens je ein kritischer Reiz aus zwei Reizklassen, z. B. akustisch und visuell.</p></div><div class="form-card"><h4>Daueraufmerksamkeit</h4><p>Selektive oder geteilte Aufmerksamkeit über längere Zeit; gleichartige Tests werden verlängert.</p></div><div class="form-card"><h4>Konzentrierte Aufmerksamkeit</h4><p>Gleiche Itemart wie Daueraufmerksamkeit, aber self-paced statt computergetaktet other-paced.</p></div><div class="form-card"><h4>Vigilanz</h4><p>Seltene Reize über längere Zeit; Beispiel „Doppelsprung“, Dauer 30, 35 oder 70 Minuten.</p></div></div>
+<div class="phase-label">Phase 3 — Anwenden · Arrow Mapper und Concept Duel</div>
+<div class="widget" data-source-id="PD13-E-08-02" data-slides="11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W3"><h3>Ordne die Prozessabschnitte zu</h3><div class="mapper-row"><label for="map-att">Aufmerksamkeit</label><select id="map-att"><option value="">Bitte wählen</option><option value="w">Wahrnehmung</option><option value="v">Weiterverarbeitung</option><option value="r">Reaktion</option><option value="ww">Wahrnehmung + Weiterverarbeitung</option></select></div><div class="mapper-row"><label for="map-kon">Konzentration</label><select id="map-kon"><option value="">Bitte wählen</option><option value="w">Wahrnehmung</option><option value="v">Weiterverarbeitung</option><option value="r">Reaktion</option><option value="ww">Wahrnehmung + Weiterverarbeitung</option></select></div><button class="btn btn-accent" onclick="checkProcessMap()">Zuordnung prüfen</button><div id="map-fb" role="status" aria-live="polite" style="margin-top:10px"></div></div>
+<div class="widget" data-source-id="PD13-E-09-03 PD13-E-09-04 PD13-E-09-07" data-slides="13" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W1"><h3>Formen klassifizieren</h3><div class="corr-item">Basale Ansprechbarkeit auf einen Reiz.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s4-form-alert',this,'alert')">Alertness</button><button class="corr-btn" onclick="checkCorr('s4-form-alert',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="s4-form-alert-fb"></div></div><div class="corr-item">Kritische Reize aus einer Reizklasse.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s4-form-select',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('s4-form-select',this,'geteilt')">Geteilt</button></div><div class="corr-fb" id="s4-form-select-fb"></div></div><div class="corr-item">Akustische und visuelle Zielreize gleichzeitig.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s4-form-geteilt',this,'selektiv')">Selektiv</button><button class="corr-btn" onclick="checkCorr('s4-form-geteilt',this,'geteilt')">Geteilt</button></div><div class="corr-fb" id="s4-form-geteilt-fb"></div></div><div class="corr-item">Seltene Zielreize über längere Zeit.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s4-form-vigil',this,'dauer')">Daueraufmerksamkeit</button><button class="corr-btn" onclick="checkCorr('s4-form-vigil',this,'vigilanz')">Vigilanz</button></div><div class="corr-fb" id="s4-form-vigil-fb"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq4"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Konzentration ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+ data-source-id="PD13-E-10-01 PD13-E-10-02" data-slides="14–15" data-source-status="direkt"
+ data-learning-objective="LZ-05" data-widget-type="W11 Misconception Debugger" data-cognitive-task="Definitionsbestandteile und Anforderungen diagnostisch prüfen">
+ <div class="sec-head"><div class="sec-title">⑥ Konzentrationstests</div><div class="sec-lz">Konzentration definieren und die vollständigen Anforderungen an Konzentrationstests prüfen.</div><div class="source-meta">Folien 14–15 · Widget W11 Misconception Debugger</div></div>
+ 
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Reicht es für einen Konzentrationstest, nur möglichst viele Reaktionen in kurzer Zeit zu zählen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Geschwindigkeit und Sorgfalt sowie Quantität und Qualität müssen gemeinsam abgebildet beziehungsweise geeignet verrechnet werden.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD13-E-10-01" data-slides="14–15" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W11"><div class="card-title">Definition von Konzentration</div><p>Konzentration ist die Fähigkeit, sich über mehr oder weniger lange Zeit einer Tätigkeit <strong>effizient</strong> zuzuwenden. Die Effizienz zeigt sich an <strong>Quantität</strong> und <strong>Qualität</strong> der erbrachten Leistung. Die Leistung muss in Bezug auf die für die Tätigkeit benötigten Fähigkeiten, Fertigkeiten und/oder Kompetenzen relativiert werden.</p></div>
+<div class="card" data-source-id="PD13-E-10-02" data-slides="14–15" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W11"><div class="card-title">Vollständige Anforderungen an Konzentrationstests</div><div class="req"><span class="mark">1</span><span>Leistung soll durch Geschwindigkeit und Sorgfalt abgebildet werden.</span></div><div class="req"><span class="mark">2</span><span>Quantität und Qualität müssen in geeigneter Form miteinander verrechnet werden.</span></div><div class="req"><span class="mark">3</span><span>Die Reize sollen einfach, klar und eindeutig wahrzunehmen sein.</span></div><div class="req"><span class="mark">4</span><span>Einfach zu erinnernde Regeln sollen auf die Reize angewendet werden.</span></div><div class="req"><span class="mark">5</span><span>Die Ausführung absichtsvoller Teilhandlungen ist notwendig.</span></div></div>
+<div class="phase-label">Phase 3 — Anwenden · Misconception Debugger</div>
+<div class="widget" data-source-id="PD13-E-10-02" data-slides="14–15" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W11"><h3>Prüfe vier Aussagen</h3><div class="corr-item">Geschwindigkeit und Sorgfalt sollen beide abgebildet werden.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s5-req-1',this,'ja')">Trifft zu</button><button class="corr-btn" onclick="checkCorr('s5-req-1',this,'nein')">Trifft nicht zu</button></div><div class="corr-fb" id="s5-req-1-fb"></div></div><div class="corr-item">Die Reize sollen möglichst komplex und mehrdeutig sein.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s5-req-2',this,'ja')">Trifft zu</button><button class="corr-btn" onclick="checkCorr('s5-req-2',this,'nein')">Trifft nicht zu</button></div><div class="corr-fb" id="s5-req-2-fb"></div></div><div class="corr-item">Einfach erinnerbare Regeln sollen auf die Reize angewendet werden.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s5-req-3',this,'ja')">Trifft zu</button><button class="corr-btn" onclick="checkCorr('s5-req-3',this,'nein')">Trifft nicht zu</button></div><div class="corr-fb" id="s5-req-3-fb"></div></div><div class="corr-item">Absichtsvolle Teilhandlungen sind erforderlich.<div class="corr-btns"><button class="corr-btn" onclick="checkCorr('s5-req-4',this,'ja')">Trifft zu</button><button class="corr-btn" onclick="checkCorr('s5-req-4',this,'nein')">Trifft nicht zu</button></div><div class="corr-fb" id="s5-req-4-fb"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq5"></div></div>
+
+ <div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6" data-source-id="PD13-E-01-04 PD13-E-04-02 PD13-E-09-04 PD13-E-09-05 PD13-E-09-07" data-slides="2–3, 6, 13" data-source-status="integriert" data-learning-objective="LZ-01 LZ-02 LZ-04" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Gezieltes Verwechslungslernen</div>
+    <div class="sec-lz">Trennkriterien statt bloßer Schlagwörter abrufen</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Leistungstest</h4>
+      <p>maximal mögliches Verhalten</p>
+      <p>beobachtete Testleistung quantifizierbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Persönlichkeitstest</h4>
+      <p>typisches Verhalten</p>
+      <p>nicht dieselbe Zielrichtung wie Maximalleistung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Testarten messen typisches Verhalten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Angsthypothese</h4>
+      <p>Angst wirkt leistungsmindernd</p>
+      <p>Angst steht am Anfang der Wirkannahme</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Defizithypothese</h4>
+      <p>erkannte niedrige Leistung steht am Anfang</p>
+      <p>Angst ist Ausdruck dieses Defizits</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Hypothesen unterstellen dieselbe Kausalrichtung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Selektive Aufmerksamkeit</h4>
+      <p>kritische Reize aus einer Reizklasse</p>
+      <p>Trennkriterium: eine Klasse</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Geteilte Aufmerksamkeit</h4>
+      <p>kritische Reize aus mindestens zwei Klassen</p>
+      <p>z. B. akustisch und visuell</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Geteilte Aufmerksamkeit meint nur mehrere Reize derselben Klasse.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Daueraufmerksamkeit</h4>
+      <p>selektive oder geteilte Aufmerksamkeit über längere Zeit</p>
+      <p>gleichartige Tests werden verlängert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Vigilanz</h4>
+      <p>seltene Reize über längere Zeit</p>
+      <p>Beispiel: Doppelsprung erkennen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Vigilanz ist bloß ein anderer Name für jede verlängerte Aufmerksamkeitsaufgabe.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl13</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl13';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd13-s0-q1",
+      "q": "Wie wird Testleistung bei feststehender Bearbeitungszeit quantifiziert?",
+      "opts": [
+        "Über die Zahl gelöster Aufgaben",
+        "Über die Dauer aller Aufgaben",
+        "Über die Stärke der Motivation",
+        "Über die Art des Zielkonstrukts"
+      ],
+      "c": 0,
+      "e": "Bei feststehender Bearbeitungszeit ist die Anzahl gelöster Aufgaben die relevante Quantifizierungsdimension; die Bearbeitungsdauer ist die alternative Messlogik.",
+      "oe": [
+        "Richtig: Bei gleicher Zeit wird die Aufgabenanzahl verglichen.",
+        "Das wäre die Zeitlogik, nicht die Mengenlogik bei fester Zeit.",
+        "Motivation kann beeinflussen, ist aber nicht die Messgröße dieser Frage.",
+        "Das Zielkonstrukt wird interpretiert, aber nicht als Leistungsmaß gezählt."
+      ],
+      "mt": [
+        null,
+        "Mengen- und Zeitlogik vertauscht",
+        "Einflussfaktor mit Messgröße verwechselt",
+        "Konstrukt mit beobachteter Leistung verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-01-01",
+        "PD13-E-01-02"
+      ]
+    },
+    {
+      "id": "pd13-s0-q2",
+      "q": "Welche Einordnung von Fähigkeit trifft die Quellenbeschreibung am besten?",
+      "opts": [
+        "Bereits vorhandene Fertigkeiten und Wissensbestände",
+        "Potenzial für Fertigkeits- und Wissenserwerb",
+        "Typische Verhaltensweisen in Alltagssituationen",
+        "Benötigte Bearbeitungszeit für einzelne Aufgaben"
+      ],
+      "c": 1,
+      "e": "Fähigkeit wird als Potenzial zum Erwerb von Fertigkeiten und Wissen beschrieben. Zugleich werden die Übergänge zwischen den Bereichen als fließend gekennzeichnet.",
+      "oe": [
+        "Das beschreibt Wissen, nicht das in der Quelle bezeichnete Potenzial.",
+        "Richtig: Fähigkeit bezeichnet hier ein Erwerbspotenzial.",
+        "Typisches Verhalten gehört zur Abgrenzung von Persönlichkeitstests.",
+        "Zeitbedarf ist eine Quantifizierungsdimension der Testleistung."
+      ],
+      "mt": [
+        "Fähigkeit mit Wissen gleichgesetzt",
+        null,
+        "Leistungs- und Persönlichkeitstest verwechselt",
+        "Konstrukt und Messgröße verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-01-03"
+      ]
+    },
+    {
+      "id": "pd13-s0-q3",
+      "q": "Welche Kombination beschreibt die Zielrichtung der beiden Testarten korrekt?",
+      "opts": [
+        "Leistungstest: typisch; Persönlichkeitstest: maximal",
+        "Leistungstest: stabil; Persönlichkeitstest: variabel",
+        "Leistungstest: maximal; Persönlichkeitstest: typisch",
+        "Leistungstest: schnell; Persönlichkeitstest: sorgfältig"
+      ],
+      "c": 2,
+      "e": "Leistungstests sollen maximal mögliches Verhalten erfassen, während Persönlichkeitstests auf typisches Verhalten zielen.",
+      "oe": [
+        "Die beiden Zielrichtungen sind vertauscht.",
+        "Stabilität und Variabilität sind hier nicht das Trennkriterium.",
+        "Richtig: maximal möglich versus typisch ist die zentrale Abgrenzung.",
+        "Geschwindigkeit und Sorgfalt betreffen andere Leistungsaspekte."
+      ],
+      "mt": [
+        "Richtung vertauscht",
+        "Falsches Trennkriterium",
+        null,
+        "Konzentrationsanforderung übertragen"
+      ],
+      "source_ids": [
+        "PD13-E-01-04"
+      ]
+    }
+  ],
+  "1": [
+    {
+      "id": "pd13-s1-q1",
+      "q": "Welche Korrelation wurde im realen Auswahlsetting mit 1750 Bewerber*innen berichtet?",
+      "opts": [
+        "r = .35 beim SPM-OLMT-Zusammenhang mit 100 Studierenden",
+        "r = .37 beim ersten testspezifischen Leistungstest",
+        "r = .40 beim zweiten testspezifischen Leistungstest",
+        "r = .19 beim Wissenstest-Testmotivations-Zusammenhang"
+      ],
+      "c": 3,
+      "e": "Im Auswahlsetting mit 1750 Bewerber*innen betrug die Korrelation zwischen fachspezifischem Wissenstest und Testmotivation r = .19.",
+      "oe": [
+        "Dieser Wert gehört zur Studie mit 100 Studierenden.",
+        "Dieser Wert gehört zu einem der zwei kognitiven Tests.",
+        "Dieser Wert gehört zum zweiten kognitiven Test.",
+        "Richtig: r = .19 ist der Wert im realen Auswahlsetting."
+      ],
+      "mt": [
+        "Studienkontext verwechselt",
+        "Studienkontext verwechselt",
+        "Studienkontext verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD13-E-02-04"
+      ]
+    },
+    {
+      "id": "pd13-s1-q2",
+      "q": "Welche Bedingung zeigte in der Metaanalyse den stärksten angegebenen Übungseffekt?",
+      "opts": [
+        "Gezieltes Coaching mit d = .64",
+        "Dritte Durchführung mit d = .51",
+        "Derselbe Test mit d = .40",
+        "Zweite Durchführung mit d = .24"
+      ],
+      "c": 0,
+      "e": "Der größte auf der Folie angegebene Effekt entfällt auf gezieltes Coaching mit d = .64; reine Testwiederholung lag bei d = .21.",
+      "oe": [
+        "Richtig: d = .64 ist der höchste genannte Wert.",
+        "d = .51 ist hoch, bleibt aber unter dem Coachingeffekt.",
+        "d = .40 ist geringer als Coaching und dritte Durchführung.",
+        "d = .24 entspricht dem gemittelten bzw. zweiten Durchgang."
+      ],
+      "mt": [
+        null,
+        "Rangfolge der Effekte verwechselt",
+        "Rangfolge der Effekte verwechselt",
+        "Gesamteffekt mit Maximum verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-03-02"
+      ]
+    },
+    {
+      "id": "pd13-s1-q3",
+      "q": "Wie ist d = .24 im dargestellten Gesamtbefund eingeordnet?",
+      "opts": [
+        "Als sehr großer Gesamteffekt",
+        "Als kleiner gemittelter Effekt",
+        "Als negativer Trainingseffekt",
+        "Als Korrelation der Motivation"
+      ],
+      "c": 1,
+      "e": "Der über 50 Studien und 130 000 Personen gemittelte Effekt wird mit d = .24 angegeben und auf der Folie als klein bezeichnet.",
+      "oe": [
+        "Die Quelle bezeichnet den Wert ausdrücklich nicht als sehr groß.",
+        "Richtig: d = .24 ist der kleine gemittelte Effekt.",
+        "Das Vorzeichen ist positiv; ein negativer Effekt wird nicht berichtet.",
+        "d ist hier eine Effektgröße der Übung, kein Korrelationskoeffizient."
+      ],
+      "mt": [
+        "Effektgröße überhöht",
+        null,
+        "Vorzeichenfehler",
+        "Kennwerttyp verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-03-02"
+      ]
+    }
+  ],
+  "2": [
+    {
+      "id": "pd13-s2-q1",
+      "q": "Welche Aussage entspricht der Defizithypothese zur Testangst?",
+      "opts": [
+        "Angst mindert während der Bearbeitung direkt die Leistung",
+        "Angst verbessert bei schwierigen Aufgaben die Leistung",
+        "Angst ist Ausdruck erkannter niedriger Leistungsfähigkeit",
+        "Angst verändert ausschließlich die Testmotivation"
+      ],
+      "c": 2,
+      "e": "Die Defizithypothese versteht Testangst als Ausdruck einer selbst erkannten niedrigen Leistungsfähigkeit; die Angsthypothese nimmt die umgekehrte Wirkungsrichtung an.",
+      "oe": [
+        "Das ist die Angsthypothese, nicht die Defizithypothese.",
+        "Eine leistungssteigernde Wirkung wird nicht behauptet.",
+        "Richtig: erkanntes Leistungsdefizit wird als Ausgangspunkt gesehen.",
+        "Eine ausschließliche Wirkung über Motivation steht nicht in der Quelle."
+      ],
+      "mt": [
+        "Kausalrichtung vertauscht",
+        "Nicht belegte Wirkung",
+        null,
+        "Unbelegte Monokausalität"
+      ],
+      "source_ids": [
+        "PD13-E-04-02"
+      ]
+    },
+    {
+      "id": "pd13-s2-q2",
+      "q": "Was lässt sich aus r = -.28 zwischen Testangst und Testleistung ableiten?",
+      "opts": [
+        "Mehr Angst geht mit besserer Testleistung einher",
+        "Testangst verursacht sicher eine geringere Testleistung",
+        "Geringe Leistung verursacht sicher eine stärkere Testangst",
+        "Mehr Angst geht mit schwächerer Testleistung einher"
+      ],
+      "c": 3,
+      "e": "Der negative Zusammenhang bedeutet: höhere Angst geht mit schwächerer Leistung einher. Die Folie betont ausdrücklich, dass die Kausalität unklar bleibt.",
+      "oe": [
+        "Das Vorzeichen zeigt die entgegengesetzte Richtung.",
+        "Die Kausalität ist ausdrücklich nicht geklärt.",
+        "Auch diese Kausalrichtung ist nicht gesichert.",
+        "Richtig: Das ist die zulässige korrelative Aussage."
+      ],
+      "mt": [
+        "Vorzeichenfehler",
+        "Korrelation kausal interpretiert",
+        "Korrelation kausal interpretiert",
+        null
+      ],
+      "source_ids": [
+        "PD13-E-04-01"
+      ]
+    },
+    {
+      "id": "pd13-s2-q3",
+      "q": "Welcher Einflussfaktor zeigt in der Übersicht die größte positive Veränderung?",
+      "opts": [
+        "Intensive Übung mit zehn Durchgängen: +26 SW",
+        "Hohe Leistungs- und Testmotivation im Kontext: +8 SW",
+        "Gezielte Vorbereitung durch Coaching: +6 SW",
+        "Hohe Testmotivation bei Auswahltests: +4 SW"
+      ],
+      "c": 0,
+      "e": "Die größte positive Veränderung der Tabelle ist +26 Standardwertpunkte bei intensiver Übung mit zehn Durchgängen in Konzentrationstests.",
+      "oe": [
+        "Richtig: +26 SW ist der höchste positive Tabellenwert.",
+        "+8 SW ist deutlich kleiner als +26 SW.",
+        "+6 SW liegt unter den beiden höheren Werten.",
+        "+4 SW ist ein kleinerer positiver Tabellenwert."
+      ],
+      "mt": [
+        null,
+        "Tabellenrangfolge verwechselt",
+        "Tabellenrangfolge verwechselt",
+        "Tabellenrangfolge verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-05-01"
+      ]
+    }
+  ],
+  "3": [
+    {
+      "id": "pd13-s3-q1",
+      "q": "Welche Kategorie gehört zur Liste der Arten von Leistungstests?",
+      "opts": [
+        "Projektive Verfahren zur Persönlichkeitsmessung",
+        "Allgemeine Leistungstests als Testkategorie",
+        "Unstrukturierte diagnostische Interviews",
+        "Biografische Fragebögen zur Selbstauskunft"
+      ],
+      "c": 1,
+      "e": "Die Liste umfasst allgemeine Leistungstests, Intelligenztests, spezielle Funktions- oder Eignungstests, Entwicklungstests und Schultests.",
+      "oe": [
+        "Diese Kategorie ist nicht Teil der dargestellten Liste.",
+        "Richtig: allgemeine Leistungstests sind ausdrücklich genannt.",
+        "Diese Methode ist keine der fünf genannten Testarten.",
+        "Diese Methode ist keine der fünf genannten Testarten."
+      ],
+      "mt": [
+        "Fachfremde Testkategorie",
+        null,
+        "Methode statt Testart",
+        "Methode statt Testart"
+      ],
+      "source_ids": [
+        "PD13-E-06-01"
+      ]
+    },
+    {
+      "id": "pd13-s3-q2",
+      "q": "Welche Einschränkung wird als vorübergehend eingeordnet?",
+      "opts": [
+        "Eine schwere Verletzung des Gehirns",
+        "Eine Erkrankung des Gehirns",
+        "Vorübergehender Alkoholkonsum",
+        "Eine hirnorganische Störung"
+      ],
+      "c": 2,
+      "e": "Alkoholkonsum wird als Beispiel einer vorübergehenden Einschränkung genannt; Verletzungen oder Erkrankungen des Gehirns werden als länger andauernd beschrieben.",
+      "oe": [
+        "Das wird als mögliche länger andauernde Ursache eingeordnet.",
+        "Das wird als mögliche länger andauernde Ursache eingeordnet.",
+        "Richtig: Alkoholkonsum steht für eine vorübergehende Einschränkung.",
+        "Das ist ein Anwendungsbezug, nicht das vorübergehende Beispiel."
+      ],
+      "mt": [
+        "Zeitliche Einordnung verwechselt",
+        "Zeitliche Einordnung verwechselt",
+        null,
+        "Anwendungsbereich mit Ursache verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-07-02"
+      ]
+    },
+    {
+      "id": "pd13-s3-q3",
+      "q": "Welcher Anwendungsbereich nennt Leistungsprobleme in der Schule?",
+      "opts": [
+        "Klinisch-psychologischer Bereich",
+        "Neuropsychologischer Bereich",
+        "Berufseignungsdiagnostischer Bereich",
+        "Pädagogisch-psychologischer Bereich"
+      ],
+      "c": 3,
+      "e": "In der pädagogischen Psychologie können schulische Leistungsprobleme durch Einschränkungen von Aufmerksamkeit und Konzentration bedingt sein.",
+      "oe": [
+        "Dort werden Hinweise auf psychische Störungen genannt.",
+        "Dort werden hirnorganische Einschränkungen hervorgehoben.",
+        "Dort geht es um unterschiedlich hohe berufliche Anforderungen.",
+        "Richtig: Der Schulbezug gehört zur pädagogischen Psychologie."
+      ],
+      "mt": [
+        "Anwendungsbereiche verwechselt",
+        "Anwendungsbereiche verwechselt",
+        "Anwendungsbereiche verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD13-E-07-03"
+      ]
+    }
+  ],
+  "4": [
+    {
+      "id": "pd13-s4-q1",
+      "q": "Welchem Prozessabschnitt ist Aufmerksamkeit im Diagramm zugeordnet?",
+      "opts": [
+        "Direkt dem Prozessschritt der Wahrnehmung zugeordnet",
+        "Direkt dem Prozessschritt der Weiterverarbeitung zugeordnet",
+        "Direkt dem Prozessschritt der Reaktion zugeordnet",
+        "Direkt der vollständigen Prozesskette insgesamt zugeordnet"
+      ],
+      "c": 0,
+      "e": "Im Prozessdiagramm zeigt der Aufmerksamkeitspfeil auf die Wahrnehmung. Konzentration ist dagegen Wahrnehmung und Weiterverarbeitung zugeordnet.",
+      "oe": [
+        "Richtig: Aufmerksamkeit zeigt auf Wahrnehmung.",
+        "Weiterverarbeitung gehört zusätzlich zur Konzentration.",
+        "Die Reaktion wird keinem der beiden Konzepte direkt zugeordnet.",
+        "Die Quelle zeigt eine spezifische, nicht globale Zuordnung."
+      ],
+      "mt": [
+        null,
+        "Aufmerksamkeit und Konzentration gleichgesetzt",
+        "Pfeilziel verwechselt",
+        "Spezifische Zuordnung übergeneralisiert"
+      ],
+      "source_ids": [
+        "PD13-E-08-02"
+      ]
+    },
+    {
+      "id": "pd13-s4-q2",
+      "q": "Wodurch unterscheiden sich selektive und geteilte Aufmerksamkeit?",
+      "opts": [
+        "Durch die Länge der gesamten Bearbeitungszeit",
+        "Durch die Zahl unterschiedlicher Reizklassen",
+        "Durch die Seltenheit der jeweils gezeigten Zielreize",
+        "Durch das von der Testperson selbst gewählte Tempo"
+      ],
+      "c": 1,
+      "e": "Selektive Aufmerksamkeit bezieht sich auf kritische Reize aus einer Reizklasse; geteilte Aufmerksamkeit auf mindestens je einen kritischen Reiz aus zwei Reizklassen.",
+      "oe": [
+        "Die Dauer grenzt andere Aufmerksamkeitsformen ab.",
+        "Richtig: Eine versus mindestens zwei Reizklassen ist das Trennkriterium.",
+        "Seltene Reize über längere Zeit kennzeichnen Vigilanz.",
+        "Selbstgewähltes Tempo grenzt konzentrierte Aufmerksamkeit ab."
+      ],
+      "mt": [
+        "Dauer statt Reizklassen verwechselt",
+        null,
+        "Vigilanz übertragen",
+        "Taktung übertragen"
+      ],
+      "source_ids": [
+        "PD13-E-09-04"
+      ]
+    },
+    {
+      "id": "pd13-s4-q3",
+      "q": "Welche Beschreibung kennzeichnet Vigilanz?",
+      "opts": [
+        "Basale Ansprechbarkeit auf Reize",
+        "Mehrere Reizklassen gleichzeitig",
+        "Seltene Reize über längere Zeit",
+        "Selbstgewähltes Arbeitstempo"
+      ],
+      "c": 2,
+      "e": "Vigilanz bezeichnet die Beachtung seltener Reize über längere Zeit. Als Beispiel wird das Erkennen eines Doppelsprungs in einem länger dauernden Test genannt.",
+      "oe": [
+        "Das beschreibt Alertness.",
+        "Das beschreibt geteilte Aufmerksamkeit.",
+        "Richtig: Seltenheit und lange Dauer sind entscheidend.",
+        "Das kennzeichnet konzentrierte Aufmerksamkeit."
+      ],
+      "mt": [
+        "Alertness verwechselt",
+        "Geteilte Aufmerksamkeit verwechselt",
+        null,
+        "Konzentrierte Aufmerksamkeit verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-09-07"
+      ]
+    }
+  ],
+  "5": [
+    {
+      "id": "pd13-s5-q1",
+      "q": "Welche Definition entspricht Konzentration?",
+      "opts": [
+        "Kurzzeitige Reaktion auf einen einzelnen Zielreiz",
+        "Auswahl einer Reizklasse aus mehreren Zielreizen",
+        "Beachtung seltener Reize über einen langen Zeitraum",
+        "Effiziente Zuwendung zu einer Tätigkeit über Zeit"
+      ],
+      "c": 3,
+      "e": "Konzentration wird als Fähigkeit beschrieben, sich über mehr oder weniger lange Zeit einer Tätigkeit effizient zuzuwenden.",
+      "oe": [
+        "Das beschreibt eher eine elementare Reaktion, nicht die Definition.",
+        "Das beschreibt selektive Aufmerksamkeit.",
+        "Das beschreibt Vigilanz.",
+        "Richtig: Zeitdauer, Tätigkeit und Effizienz sind zentrale Bestandteile."
+      ],
+      "mt": [
+        "Definition verkürzt",
+        "Selektive Aufmerksamkeit verwechselt",
+        "Vigilanz verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD13-E-10-01"
+      ]
+    },
+    {
+      "id": "pd13-s5-q2",
+      "q": "Welche zwei Leistungsdimensionen sollen Konzentrationstests abbilden?",
+      "opts": [
+        "Geschwindigkeit und Sorgfalt",
+        "Motivation und aktuelle Testangst",
+        "Fähigkeit und vorhandenes Wissen",
+        "Alertness und dauerhafte Vigilanz"
+      ],
+      "c": 0,
+      "e": "Konzentrationstests sollen Geschwindigkeit und Sorgfalt abbilden; Quantität und Qualität der Leistung müssen geeignet verrechnet werden.",
+      "oe": [
+        "Richtig: Geschwindigkeit und Sorgfalt sind die genannten Dimensionen.",
+        "Das sind Einflussfaktoren, keine Zielmetriken des Konzentrationstests.",
+        "Das sind mögliche Bezugsgrößen von Testleistung, nicht dieses Anforderungspaar.",
+        "Das sind Aufmerksamkeitsformen, nicht das geforderte Dimensionspaar."
+      ],
+      "mt": [
+        null,
+        "Einflussfaktoren mit Anforderungen verwechselt",
+        "Indikatorbereiche verwechselt",
+        "Aufmerksamkeitsformen verwechselt"
+      ],
+      "source_ids": [
+        "PD13-E-10-02"
+      ]
+    },
+    {
+      "id": "pd13-s5-q3",
+      "q": "Welche Anforderung wird auf der abschließenden Folie zusätzlich genannt?",
+      "opts": [
+        "Komplexe Reize mit wechselnder Bedeutung",
+        "Einfache und eindeutig wahrnehmbare Reize",
+        "Regeln, die währenddessen neu gelernt werden",
+        "Unwillkürliche Reaktionen ohne Teilhandlungen"
+      ],
+      "c": 1,
+      "e": "Zusätzlich genannt werden einfache, klar wahrnehmbare Reize, einfach erinnerbare Regeln und die Notwendigkeit absichtsvoller Teilhandlungen.",
+      "oe": [
+        "Die Quelle fordert gerade einfache und eindeutige Reize.",
+        "Richtig: Diese Reizanforderung ist ausdrücklich genannt.",
+        "Die Regeln sollen einfach erinnerbar sein, nicht laufend neu gelernt werden.",
+        "Absichtsvolle Teilhandlungen werden ausdrücklich vorausgesetzt."
+      ],
+      "mt": [
+        "Richtung der Reizanforderung vertauscht",
+        null,
+        "Regelanforderung vertauscht",
+        "Absichtlichkeit vertauscht"
+      ],
+      "source_ids": [
+        "PD13-E-10-02"
+      ]
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd13-b-q1",
+    "q": "Zwei Personen besitzen gleiche Fähigkeiten, zeigen aber verschiedene Testleistungen. Welche Erklärung passt?",
+    "opts": [
+      "Fähigkeit und beobachtete Testleistung sind vollständig identisch",
+      "Persönlichkeitstests messen stets maximale Leistung",
+      "Zusätzliche Einflussfaktoren wirken auf die Testleistung",
+      "Eine Zeitmessung verhindert jede mögliche Leistungsdifferenz"
+    ],
+    "c": 2,
+    "e": "Gleiche Fähigkeit garantiert keine gleiche Testleistung, weil Reliabilität, Motivation, Übungs- und Trainingseffekte sowie Testangst zusätzlich wirken können.",
+    "oe": [
+      "Die Quelle trennt Indikator und zugrunde liegendes Konstrukt.",
+      "Persönlichkeitstests zielen auf typisches Verhalten.",
+      "Richtig: Die beobachtete Testleistung hat zusätzliche Einflussquellen.",
+      "Zeitmessung ist eine Messlogik, keine Garantie gleicher Werte."
+    ],
+    "mt": [
+      "Konstrukt und Indikator gleichgesetzt",
+      "Testarten verwechselt",
+      null,
+      "Messmethode überinterpretiert"
+    ],
+    "source_ids": [
+      "PD13-E-01-05"
+    ]
+  },
+  {
+    "id": "pd13-b-q2",
+    "q": "Warum kann r = .19 im Auswahlsetting geringer ausfallen als andere Motivationskorrelationen?",
+    "opts": [
+      "Wegen höherer Reliabilität aller Auswahltests",
+      "Wegen längerer Bearbeitungszeiten im Wissenstest",
+      "Wegen einer größeren Zahl bearbeiteter Testaufgaben",
+      "Wegen eingeschränkter Varianz der Testmotivation"
+    ],
+    "c": 3,
+    "e": "Als wahrscheinliche Erklärung nennt die Quelle Range Restriction: In realen Auswahlsettings ist die Varianz der Testmotivation eingeschränkt.",
+    "oe": [
+      "Eine höhere Reliabilität wird nicht als Erklärung angegeben.",
+      "Die Bearbeitungszeit ist nicht die genannte Erklärung.",
+      "Die Aufgabenanzahl ist nicht die genannte Erklärung.",
+      "Richtig: eingeschränkte Varianz kann die Korrelation abschwächen."
+    ],
+    "mt": [
+      "Unbelegte Erklärung",
+      "Messdauer verwechselt",
+      "Aufgabenzahl verwechselt",
+      null
+    ],
+    "source_ids": [
+      "PD13-E-02-04"
+    ]
+  },
+  {
+    "id": "pd13-b-q3",
+    "q": "Welche Gegenüberstellung ist korrekt?",
+    "opts": [
+      "Derselbe Test d = .40; ähnlicher Test d = .22",
+      "Derselbe Test d = .22; ähnlicher Test d = .40",
+      "Zweite Durchführung d = .51; dritte d = .24",
+      "Coaching d = .21; Wiederholung d = .64"
+    ],
+    "c": 0,
+    "e": "Für die vorherige Durchführung desselben Tests wird d = .40 berichtet, für einen ähnlichen Test d = .22; die anderen Paare sind vertauscht.",
+    "oe": [
+      "Richtig: Die Werte und Bedingungen sind korrekt zugeordnet.",
+      "Die beiden Werte sind vertauscht.",
+      "Zweite und dritte Durchführung sind vertauscht.",
+      "Coaching und reine Wiederholung sind vertauscht."
+    ],
+    "mt": [
+      null,
+      "Werte vertauscht",
+      "Werte vertauscht",
+      "Werte vertauscht"
+    ],
+    "source_ids": [
+      "PD13-E-03-02"
+    ]
+  },
+  {
+    "id": "pd13-b-q4",
+    "q": "Was bedeutet Invarianz der Parameterschätzungen gegenüber Testangst im berichteten 1PL-Befund?",
+    "opts": [
+      "Das 1PL-Modell passte überhaupt nicht zu den Daten",
+      "Das 1PL-Modell passte gut und Parameter blieben stabil",
+      "Testangst erklärte vollständig alle Leistungsunterschiede",
+      "Testangst wurde durch das Modell experimentell verursacht"
+    ],
+    "c": 1,
+    "e": "Berichtet wird, dass das 1PL-Modell gut passte und die Parameterschätzungen gegenüber Testangst invariant waren; daraus folgt keine vollständige Kausalerklärung.",
+    "oe": [
+      "Die Quelle berichtet ausdrücklich eine gute Modellpassung.",
+      "Richtig: gute Passung und Invarianz sind die Kernaussagen.",
+      "Eine vollständige Erklärung wird nicht behauptet.",
+      "Ein experimentelles Verursachen von Angst wird nicht berichtet."
+    ],
+    "mt": [
+      "Befund umgekehrt",
+      null,
+      "Invarianz überinterpretiert",
+      "Design erfunden"
+    ],
+    "source_ids": [
+      "PD13-E-04-03"
+    ]
+  },
+  {
+    "id": "pd13-b-q5",
+    "q": "Welcher Tabellenwert beschreibt Faking bad bei Konzentrationstests?",
+    "opts": [
+      "+26 Standardwertpunkte",
+      "+8 Standardwertpunkte",
+      "-19 Standardwertpunkte",
+      "-6 Standardwertpunkte"
+    ],
+    "c": 2,
+    "e": "Faking bad bei Konzentrationstests ist mit -19 Standardwertpunkten der stärkste negative Wert in der Übersicht.",
+    "oe": [
+      "Das ist intensive Übung mit zehn Durchgängen.",
+      "Das ist hohe Leistungs- und Testmotivation im Forschungskontext.",
+      "Richtig: Faking bad ist mit -19 SW angegeben.",
+      "Das ist hohe Testangst bei Intelligenztests."
+    ],
+    "mt": [
+      "Zeile verwechselt",
+      "Zeile verwechselt",
+      null,
+      "Zeile verwechselt"
+    ],
+    "source_ids": [
+      "PD13-E-05-01"
+    ]
+  },
+  {
+    "id": "pd13-b-q6",
+    "q": "Ein Test prüft gleichzeitig akustische und visuelle Zielreize. Welche Form ist gemeint?",
+    "opts": [
+      "Alertness als basale Reizansprechbarkeit",
+      "Selektive Aufmerksamkeit innerhalb einer Reizklasse",
+      "Vigilanz für seltene Reize über längere Zeit",
+      "Geteilte Aufmerksamkeit zweier Reizklassen"
+    ],
+    "c": 3,
+    "e": "Mindestens je ein kritischer Reiz aus zwei unterschiedlichen Reizklassen kennzeichnet geteilte Aufmerksamkeit.",
+    "oe": [
+      "Alertness betrifft basale Ansprechbarkeit.",
+      "Selektive Aufmerksamkeit bleibt bei einer Reizklasse.",
+      "Vigilanz ist durch seltene Reize und lange Dauer gekennzeichnet.",
+      "Richtig: zwei Reizklassen kennzeichnen geteilte Aufmerksamkeit."
+    ],
+    "mt": [
+      "Alertness verwechselt",
+      "Selektiv/geteilt verwechselt",
+      "Vigilanz verwechselt",
+      null
+    ],
+    "source_ids": [
+      "PD13-E-09-04"
+    ]
+  },
+  {
+    "id": "pd13-b-q7",
+    "q": "Worin liegt die Taktungsbesonderheit konzentrierter Aufmerksamkeit?",
+    "opts": [
+      "Die Testperson bestimmt ihr Arbeitstempo selbst",
+      "Der Computer bestimmt durchgängig das Arbeitstempo",
+      "Nur seltene Reize bestimmen das Arbeitstempo",
+      "Zwei Reizklassen bestimmen das Arbeitstempo"
+    ],
+    "c": 0,
+    "e": "Bei konzentrierter Aufmerksamkeit ist die Bearbeitung self-paced: Die Testperson bestimmt ihr Tempo selbst, statt einer computergegebenen Taktung.",
+    "oe": [
+      "Richtig: self-paced ist das entscheidende Merkmal.",
+      "Das beschreibt die gegenübergestellte other-paced Bedingung.",
+      "Seltene Reize kennzeichnen Vigilanz, nicht die Taktung.",
+      "Reizklassen trennen selektive und geteilte Aufmerksamkeit."
+    ],
+    "mt": [
+      null,
+      "Taktung vertauscht",
+      "Vigilanz übertragen",
+      "Reizklassen übertragen"
+    ],
+    "source_ids": [
+      "PD13-E-09-06"
+    ]
+  },
+  {
+    "id": "pd13-b-q8",
+    "q": "Welche Prozesszuordnung ist vollständig korrekt?",
+    "opts": [
+      "Aufmerksamkeit: Reaktion; Konzentration: Wahrnehmung, Verarbeitung und Reaktion",
+      "Aufmerksamkeit: Wahrnehmung; Konzentration: Wahrnehmung und Weiterverarbeitung",
+      "Aufmerksamkeit: Verarbeitung; Konzentration: Wahrnehmung und Reaktion",
+      "Aufmerksamkeit: gesamter Ablauf; Konzentration: Reiz und Reaktion"
+    ],
+    "c": 1,
+    "e": "Das Diagramm ordnet Aufmerksamkeit der Wahrnehmung zu; Konzentration umfasst die Zuordnung zu Wahrnehmung und Weiterverarbeitung.",
+    "oe": [
+      "Beide Pfeilziele sind falsch zugeordnet.",
+      "Richtig: Dies entspricht der sichtbaren Pfeilstruktur.",
+      "Aufmerksamkeit und Konzentration sind vertauscht bzw. verschoben.",
+      "Die Quelle zeigt keine globale bzw. reine Reizzuteilung."
+    ],
+    "mt": [
+      "Pfeilziele verwechselt",
+      null,
+      "Pfeilziele verwechselt",
+      "Zuordnung übergeneralisiert"
+    ],
+    "source_ids": [
+      "PD13-E-08-02"
+    ]
+  },
+  {
+    "id": "pd13-b-q9",
+    "q": "Welche Aussage zur Konzentrationsleistung ist korrekt?",
+    "opts": [
+      "Sie wird nur über die Anzahl richtiger Reaktionen bestimmt",
+      "Sie wird nur über die benötigte Bearbeitungszeit bestimmt",
+      "Sie verbindet Quantität und Qualität der Leistung",
+      "Sie entspricht ausschließlich der allgemeinen Motivation"
+    ],
+    "c": 2,
+    "e": "Die Effizienz der Konzentrationsleistung zeigt sich an Quantität und Qualität; Konzentrationstests sollen beide Größen geeignet verrechnen.",
+    "oe": [
+      "Die Quelle verlangt zusätzlich die Berücksichtigung der Qualität.",
+      "Die Quelle verlangt zusätzlich die Berücksichtigung der Quantität.",
+      "Richtig: Beide Leistungsdimensionen müssen zusammengeführt werden.",
+      "Motivation ist ein Einflussfaktor, nicht die Definition der Konzentrationsleistung."
+    ],
+    "mt": [
+      "Qualität ausgelassen",
+      "Quantität ausgelassen",
+      null,
+      "Einflussfaktor mit Definition verwechselt"
+    ],
+    "source_ids": [
+      "PD13-E-10-01",
+      "PD13-E-10-02"
+    ]
+  },
+  {
+    "id": "pd13-b-q10",
+    "q": "Welche vollständige Liste enthält nur genannte Einflussfaktoren der Testleistung?",
+    "opts": [
+      "Validität, Motivation, Vigilanz und allgemeine Testangst",
+      "Reliabilität, Wissen, Alertness und gezieltes Coaching",
+      "Fertigkeit, Motivation, Reizklasse und hohe Testangst",
+      "Reliabilität, Motivation, Übung/Training und Testangst"
+    ],
+    "c": 3,
+    "e": "Genannt werden mangelnde Reliabilität, unterschiedliche Motivation, Übungs- und Trainingseffekte sowie Testangst.",
+    "oe": [
+      "Validität und Vigilanz gehören nicht zu dieser Viererliste.",
+      "Wissen und Alertness sind keine genannten Zusatzfaktoren dieser Liste.",
+      "Fertigkeit und Reizklasse sind keine genannten Zusatzfaktoren dieser Liste.",
+      "Richtig: Alle vier Faktoren stammen aus der Quellenliste."
+    ],
+    "mt": [
+      "Kategorien aus anderen Abschnitten gemischt",
+      "Kategorien aus anderen Abschnitten gemischt",
+      "Kategorien aus anderen Abschnitten gemischt",
+      null
+    ],
+    "source_ids": [
+      "PD13-E-01-05"
+    ]
+  }
+];
+
+var corrCorrect = {
+  "s0-measure-1": "menge",
+  "s0-measure-2": "zeit",
+  "s1-predict": "coaching",
+  "s2-hyp-a": "angst",
+  "s2-hyp-d": "defizit",
+  "s2-maxpos": "plus26",
+  "s2-maxneg": "minus19",
+  "s3-case-clin": "klinisch",
+  "s3-case-neuro": "neuro",
+  "s3-case-paed": "paed",
+  "s3-case-beruf": "beruf",
+  "s4-form-alert": "alert",
+  "s4-form-select": "selektiv",
+  "s4-form-geteilt": "geteilt",
+  "s4-form-vigil": "vigilanz",
+  "s5-req-1": "ja",
+  "s5-req-2": "nein",
+  "s5-req-3": "ja",
+  "s5-req-4": "ja"
+};
+var corrExpl = {
+  "s0-measure-1": "Bei fester Zeit wird Leistung über die Anzahl gelöster Aufgaben quantifiziert.",
+  "s0-measure-2": "Bei festgelegtem Aufgabenpaket ist die benötigte Bearbeitungszeit die Messgröße.",
+  "s1-predict": "Gezieltes Coaching zeigt mit d = .64 den größten der genannten Effekte.",
+  "s2-hyp-a": "Die Angsthypothese setzt Angst als leistungsmindernde Ursache während der Bearbeitung an.",
+  "s2-hyp-d": "Die Defizithypothese setzt erkannte niedrige Leistungsfähigkeit vor die Angst.",
+  "s2-maxpos": "Intensive Übung mit zehn Durchgängen ist mit +26 SW der größte positive Wert.",
+  "s2-maxneg": "Faking bad bei Konzentrationstests ist mit -19 SW der stärkste negative Wert.",
+  "s3-case-clin": "Hinweise auf psychische Störungen gehören zum Bereich Klinische Psychologie.",
+  "s3-case-neuro": "Hirnorganische Störungen und entsprechende Einschränkungen gehören zur Neuropsychologie.",
+  "s3-case-paed": "Schulische Leistungsprobleme werden der Pädagogischen Psychologie zugeordnet.",
+  "s3-case-beruf": "Unterschiedliche berufliche Anforderungen gehören zur Berufseignungsdiagnostik.",
+  "s4-form-alert": "Basale Ansprechbarkeit auf Reize bezeichnet Alertness.",
+  "s4-form-select": "Eine kritische Reizklasse kennzeichnet selektive Aufmerksamkeit.",
+  "s4-form-geteilt": "Mindestens zwei Reizklassen kennzeichnen geteilte Aufmerksamkeit.",
+  "s4-form-vigil": "Seltene Reize über längere Zeit kennzeichnen Vigilanz.",
+  "s5-req-1": "Geschwindigkeit und Sorgfalt sollen beide abgebildet werden.",
+  "s5-req-2": "Die Reize sollen einfach, klar und eindeutig wahrnehmbar sein, nicht komplex.",
+  "s5-req-3": "Die Regeln sollen einfach erinnerbar sein und auf Reize angewendet werden.",
+  "s5-req-4": "Absichtsvolle Teilhandlungen sind als Anforderung ausdrücklich genannt."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+
+function setEffect(d,label,sw){
+  var curve=document.getElementById('effectCurve'), txt=document.getElementById('effectText'), out=document.getElementById('effectValue');
+  if(curve) curve.setAttribute('transform','translate('+(Number(d)*75)+',0)');
+  if(out) out.textContent='d = '+Number(d).toFixed(2).replace('0.','.')+(sw?' · '+sw+' SW':'');
+  if(txt) txt.textContent=label+': Die zweite Kurve ist entsprechend dem Quellenwert nach rechts verschoben.';
+}
+function checkProcessMap(){
+  var a=document.getElementById('map-att').value, k=document.getElementById('map-kon').value, fb=document.getElementById('map-fb');
+  var ok=a==='w'&&k==='ww';
+  fb.textContent=(ok?'✓ Richtig: ':'✗ Noch einmal: ')+(ok?'Aufmerksamkeit ist der Wahrnehmung zugeordnet; Konzentration der Wahrnehmung und Weiterverarbeitung.':'Achte auf die sichtbaren Pfeilziele: Aufmerksamkeit → Wahrnehmung; Konzentration → Wahrnehmung und Weiterverarbeitung.');
+  fb.className=ok?'callout-good':'hinweis';
+}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'], px=isFinal?'final-':'';
+  var h='<div class="mc-wrap" id="mcq-'+px+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+px+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+px+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+px+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  var px=isFinal?'final-':'';
+  document.querySelectorAll('[id^="opt-'+px+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+px+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+px+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+px+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+px+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var px=isFinal?'final-':'';
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+px+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    fallback('Lokal gespeichert und als Datei heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

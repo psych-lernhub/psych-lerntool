@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD11 Verhaltensbeobachtung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  Vollständig erzeugtes PD11-Lernmodul; keine offenen Platzhalter.
+  Storage-Key: lm-m11a-vl11
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+
+/* PD11 bespoke learning widgets */
+.source-meta{font-size:.7rem;color:var(--text3);margin-top:5px}.source-note{font-size:.72rem!important;color:var(--text3)!important;margin-top:9px}.compact-list{columns:2;column-gap:28px}.compare-grid,.study-grid,.nr-grid,.error-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}.concept-card,.nr-grid article,.error-grid article{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}.concept-card h3,.nr-grid h3,.error-grid h3{font-size:.95rem;margin-bottom:8px}.concept-card p,.nr-grid p,.error-grid p{font-size:.85rem;color:var(--text2)}
+.visual-collage{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:10px 0}.visual-collage span{min-height:62px;border:1px solid var(--border);border-radius:8px;background:linear-gradient(135deg,var(--surface2),var(--bg));display:flex;align-items:center;justify-content:center;text-align:center;font-size:.72rem;color:var(--text2);padding:6px}.study-controls{display:flex;gap:8px;flex-wrap:wrap}.study-board{margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:14px;min-height:110px}.study-board .step{border-left:3px solid var(--accent);padding:8px 10px;margin:8px 0;background:rgba(129,140,248,.06)}
+.dimension-table{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}.dimension-table [role=row]{display:grid;grid-template-columns:minmax(130px,.7fr) minmax(0,1.5fr);background:var(--surface)}.dimension-table [role=cell]{padding:9px;font-size:.82rem;color:var(--text2)}.dimension-table [role=cell]:first-child{font-weight:700;color:var(--text)}
+.process-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.process-flow article{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}.process-flow article>span{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent);font-weight:800}.process-flow h3{font-size:.92rem;margin:8px 0 4px}.process-flow p{font-size:.82rem;color:var(--text2)}.move-list{list-style:none!important;padding:0!important}.move-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px;margin:7px 0}.move-list button{min-width:40px;min-height:40px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:7px;cursor:pointer}.widget-fb{margin-top:10px;padding:9px 11px;border-radius:8px;background:rgba(56,189,248,.07);color:var(--text2);min-height:0}.widget-fb:empty{display:none}
+.system-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.system-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}.system-panel h3{font-size:1rem;margin-bottom:8px}.system-panel table,.matrix-wrap table,.card table{width:100%;border-collapse:collapse;font-size:.78rem}.system-panel th,.system-panel td,.matrix-wrap th,.matrix-wrap td{padding:7px;border:1px solid var(--border);text-align:left;vertical-align:top}.system-panel th,.matrix-wrap th{background:var(--bg);color:var(--text)}caption{text-align:left;font-weight:700;margin-bottom:7px;color:var(--text)}.criteria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.criteria-grid div{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px}.criteria-grid b,.criteria-grid span{display:block}.criteria-grid span{font-size:.74rem;color:var(--text2)}.tree{margin-top:12px}.tree-root{text-align:center;border:1px solid var(--accent);border-radius:9px;padding:9px;font-weight:700}.tree-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.tree-cols>div{border:1px solid var(--border);border-radius:10px;padding:12px}.tree h4{color:var(--cyan);margin-bottom:7px}.tree h5{margin:9px 0 4px}.tree li{font-size:.78rem;color:var(--text2)}.rating-row{border-top:1px solid var(--border);padding:12px 0}.rating-row label,.rating-row output{display:block;font-size:.82rem}.rating-row input{width:100%;margin:8px 0}.rating-row output{color:var(--cyan)}
+.formula-card,.matrix-wrap,.worked-example{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}.formula{font-size:1.35rem;text-align:center;background:var(--bg);border-radius:10px;padding:12px;margin:10px 0}.var-list>div{display:grid;grid-template-columns:70px 1fr;padding:7px 0;border-bottom:1px solid var(--border)}.var-list dt{font-weight:800}.var-list dd{color:var(--text2);font-size:.82rem}.matrix-wrap{overflow-x:auto}.matrix-wrap .diag{background:rgba(52,211,153,.18);font-weight:800}.matrix-wrap .diag:focus{outline:3px solid var(--cyan)}.matrix-wrap .margin{background:rgba(129,140,248,.12);font-weight:700}.worked-example details{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0}.worked-example summary{cursor:pointer;font-weight:700}.worked-example input{display:block;width:min(220px,100%);margin:5px 0 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px}.matrix-actions{display:flex;gap:8px;flex-wrap:wrap}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.import-label{position:relative}.import-label input{position:absolute;opacity:0;width:1px;height:1px}.storage-warning{display:none;background:rgba(248,113,113,.1);border:1px solid var(--red);border-radius:8px;padding:10px;margin-bottom:10px}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:640px){.compare-grid,.study-grid,.nr-grid,.error-grid,.process-flow,.tree-cols{grid-template-columns:1fr}.compact-list{columns:1}.criteria-grid{grid-template-columns:1fr}.dimension-table [role=row]{grid-template-columns:1fr}.dimension-table [role=cell]:first-child{padding-bottom:1px}.dimension-table [role=cell]:last-child{padding-top:1px}.wrap{padding:16px 12px 50px}.matrix-wrap{padding:10px;max-width:100%}.card table{table-layout:fixed}.card th,.card td{overflow-wrap:anywhere;word-break:break-word;min-width:0!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD11 Verhaltensbeobachtung</h1>
+<p class="page-sub">Psychologische Diagnostik · vollständiges Offline-Lernmodul</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Beobachtung und Beurteilung trennen · Designs einordnen · Systeme anwenden · Cohens κ berechnen · Fehlerquellen erkennen
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<div class="card" data-source-id="PD11-F01" data-slides="1" data-source-status="integriert_abgedeckt" data-learning-objective="Orientierung" data-widget-type="Stoffkarte"><div class="card-title">Stoffkarte</div><p><strong>Begriffe → Designs → Konstruktion → Systeme → nicht-reaktive Verfahren → Übereinstimmung → Fehlerquellen.</strong> Die Navigation folgt dieser diagnostischen Verarbeitungskette.</p></div>
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Grundlagen</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Anwendungen</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Designs</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Konstruktion</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Systeme</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Nicht-reaktiv</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Kappa</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Fehler</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s9" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(9)" id="nb9">🎯 SRS-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Grundlagen ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+  data-source-id="PD11-F01 PD11-F02 PD11-F03 PD11-F04" data-slides="1–3" data-source-status="direkt"
+  data-learning-objective="LZ-01" data-widget-type="W1 Concept Duel" data-cognitive-task="Begriffe unterscheiden und auf Aussagen anwenden">
+  <div class="sec-head">
+    <div class="sec-title">① Beobachten oder beurteilen?</div>
+    <div class="sec-lz">Verhaltensbeobachtung und Verhaltensbeurteilung funktional unterscheiden.</div>
+    <div class="source-meta">Folien 1–3 · Quellen PD11-F01 PD11-F02 PD11-F03 PD11-F04 · Widget W1 Concept Duel</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist der Satz „Die Person wirkt unzuverlässig“ bereits eine Beobachtung?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Sichtbar wäre etwa „Die Person erscheint 18 Minuten nach Beginn“. „Unzuverlässig“ ist bereits eine Schlussfolgerung und damit Verhaltensbeurteilung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="compare-grid" data-source-id="PD11-F02 PD11-F03" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1">
+    <article class="concept-card"><h3>Verhaltensbeobachtung</h3><p>Freie oder systematische Beobachtung des Verhaltens einer oder mehrerer Personen in einer näher bestimmten Situation. Das Beobachtete wird in geeigneter Form so weit wie möglich <strong>frei von Wertungen und Schlussfolgerungen</strong> protokolliert.</p><p class="source-note">Schmidt-Atzert, Krumm &amp; Amelang (2021)</p></article>
+    <article class="concept-card"><h3>Verhaltensbeurteilung</h3><p>Aus beobachtetem Verhalten werden <strong>Schlussfolgerungen</strong> gezogen. Diese können sich auf Eigenschaften oder Verhaltensmuster der beobachteten Person oder Personen beziehen.</p><p class="source-note">Schmidt-Atzert, Krumm &amp; Amelang (2021); Auslassung […] im Quellentext</p></article>
+  </div>
+  <div class="card" data-source-id="PD11-F04" data-slides="3" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="Lernprosa">
+    <div class="card-title">Warum Verhalten überhaupt zentral ist</div>
+    <p>Psychologie wird im Deck als Wissenschaft von den <strong>Formen und Gesetzmäßigkeiten des inneren Erlebens und des äußeren Verhaltens</strong> definiert. Der eingebettete Artikelausschnitt „Psychology as the Science of Self-Reports and Finger Movements – Whatever Happened to Actual Behavior?“ markiert visuell die Bedeutung tatsächlichen Verhaltens neben Selbstberichten und Reaktionsmessungen.</p>
+    <p class="source-note">Brockhaus (2021); Artikelausschnitt mit Roy F. Baumeister, Kathleen D. Vohs und David C. Funder. Die kleingedruckte Affiliationszeile ist nicht lernrelevant und wurde nicht ergänzt.</p>
+  </div>
+  <div class="hinweis"><strong>Trennregel:</strong> Beschreibt der Satz, <em>was sichtbar geschah</em>, ist er beobachtungsnah. Behauptet er, <em>wie jemand ist</em>, enthält er eine Beurteilung.</div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W1 Concept Duel</div>
+  <div class="card" data-source-id="PD11-F02 PD11-F03" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1">
+    <div class="card-title">Aussagen klassifizieren</div>
+    <div class="corr-item"><strong>„Die Person unterbricht die Gesprächspartnerin viermal.“</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-ob-1',this,'beobachtung')">Beobachtung</button><button class="corr-btn" onclick="checkCorr('c-ob-1',this,'beurteilung')">Beurteilung</button></div><div class="corr-fb" id="c-ob-1-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>„Die Person ist wenig zuverlässig.“</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-ob-2',this,'beobachtung')">Beobachtung</button><button class="corr-btn" onclick="checkCorr('c-ob-2',this,'beurteilung')">Beurteilung</button></div><div class="corr-fb" id="c-ob-2-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>„Während zehn Minuten schaut die Person sechsmal auf das Telefon.“</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-ob-3',this,'beobachtung')">Beobachtung</button><button class="corr-btn" onclick="checkCorr('c-ob-3',this,'beurteilung')">Beurteilung</button></div><div class="corr-fb" id="c-ob-3-fb" aria-live="polite"></div></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Anwendungen ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+  data-source-id="PD11-F05 PD11-F06 PD11-F07 PD11-F08 PD11-F09" data-slides="4–6" data-source-status="direkt"
+  data-learning-objective="LZ-02" data-widget-type="W10 Study Reconstruction" data-cognitive-task="Studienbestandteile rekonstruieren und Variablen zuordnen">
+  <div class="sec-head">
+    <div class="sec-title">② Anwendungsspektrum und Beispielstudien</div>
+    <div class="sec-lz">Beobachtungsanwendungen und die Designs von Marienthal sowie Klauer et al. rekonstruieren.</div>
+    <div class="source-meta">Folien 4–6 · Quellen PD11-F05 PD11-F06 PD11-F07 PD11-F08 PD11-F09 · Widget W10 Study Reconstruction</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Kann eine Beobachtungsstudie zugleich statistische Daten, Befragungen und Interviews enthalten?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq1" aria-hidden="true">Ja. Die Marienthal-Studie ist gerade durch einen mehrmethodalen Feldzugang gekennzeichnet; strukturierte und verdeckte Beobachtungen bilden darin einen Teil des Gesamtansatzes.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card" data-source-id="PD11-F05" data-slides="4" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="Beispielmatrix">
+    <div class="card-title">Breites Anwendungsspektrum</div>
+    <ul class="compact-list"><li>verdecktes Einschleusen und Beobachten von Mitgliedern selektiver Gruppen</li><li>Mutter-Kind-Interaktion hinter einer Einwegscheibe</li><li>Bewerberverhalten in Assessment-Center-Übungen</li><li>Laufzeit einer Ratte im Labyrinth</li><li>Selbstbeobachtung über Tagebucheinträge</li><li>weitere Anwendungen („etc.“)</li></ul>
+  </div>
+  <div class="study-grid">
+    <article class="card" data-source-id="PD11-F06 PD11-F07 PD11-F08" data-slides="5" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W10">
+      <div class="card-title">Beobachtungs-Feldstudie: Die Arbeitslosen von Marienthal</div>
+      <p><strong>Kontext:</strong> kleiner Ort in Niederösterreich; 1930 schloss der einzige größere Arbeitgeber. Im Dezember 1931 waren von 478 Familien 367 ohne Arbeitsstelle.</p>
+      <p><strong>Fragestellung:</strong> Reaktionen auf Arbeitslosigkeit – Apathie versus Radikalisierung.</p>
+      <p><strong>Methoden:</strong> statistische Daten (u. a. Bibliotheksausleihe, Vereinsmitglieder, Wahlergebnisse, Händlerumsätze), schriftliche Befragungen (u. a. Kinderaufsätze und Ernährungsprotokolle), Interviews zur Lebensgeschichte, strukturierte Beobachtung der Wohn- und Familienverhältnisse sowie verdeckte Zeitmessung der Gehgeschwindigkeit auf standardisierter Strecke.</p>
+      <p><strong>Ergebnis:</strong> ungebrochene, resignierte, verzweifelte und apathische Familien.</p>
+      <p class="source-note">Jahoda, Lazarsfeld &amp; Zeisel (1933); die Folie zeigt Porträts von Marie Jahoda und Paul F. Lazarsfeld. Der sichtbare Schreibfehler „Kleiderbdarf“ wird hier transparent als „Kleiderbedarf“ normalisiert.</p>
+    </article>
+    <article class="card" data-source-id="PD11-F09" data-slides="6" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-02" data-widget-type="W10">
+      <div class="card-title">Klauer et al. (2006): Unaufmerksamkeit und Unfallrisiko</div>
+      <div class="visual-collage" role="img" aria-label="Textuelle Rekonstruktion der vierteiligen Fahrsituations-Collage: Kopfbereich, Straße, Fahrzeuginnenraum und bewaldete Straße"><span>Kopfbereich</span><span>Straße</span><span>Fahrzeuginnenraum</span><span>bewaldete Straße</span></div>
+      <p><strong>Operationalisierung der Unaufmerksamkeit:</strong> sekundäre Tätigkeiten, fahrbezogene Unaufmerksamkeit, Müdigkeit und unspezifische Abwendung der Blickrichtung; jeweils mit quantitativen Abstufungen.</p>
+      <p><strong>Abhängige Variable:</strong> Auftretenshäufigkeit eines Unfalls oder Beinaheunfalls.</p>
+      <p><strong>Kennwert:</strong> Odds Ratios.</p>
+    </article>
+  </div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W10 Study Reconstruction</div>
+  <div class="card" data-source-id="PD11-F06 PD11-F07 PD11-F08 PD11-F09" data-slides="5–6" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-02" data-widget-type="W10">
+    <div class="card-title">Studienkette aufdecken</div>
+    <p>Wähle zuerst eine Studie. Decke danach Fragestellung, Operationalisierung/Methoden, Kennwert beziehungsweise Ergebnis in sinnvoller Reihenfolge auf.</p>
+    <div class="study-controls" role="group" aria-label="Studie wählen"><button class="btn btn-ghost" onclick="setStudy('mar')">Marienthal</button><button class="btn btn-ghost" onclick="setStudy('kla')">Klauer et al.</button></div>
+    <div id="studyBoard" class="study-board" aria-live="polite"><p>Eine Studie wählen.</p></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Designs ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+  data-source-id="PD11-F10 PD11-F11" data-slides="7" data-source-status="direkt"
+  data-learning-objective="LZ-02" data-widget-type="W1 Concept Duel" data-cognitive-task="Designmerkmale klassifizieren und Abgrenzungen begründen">
+  <div class="sec-head">
+    <div class="sec-title">③ Beobachtungsdesigns systematisch einordnen</div>
+    <div class="sec-lz">Dimensionen von Beobachtungen sowie Zeit-/Ereignisstichprobe und EMA unterscheiden.</div>
+    <div class="source-meta">Folien 7 · Quellen PD11-F10 PD11-F11 · Widget W1 Concept Duel</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Ist eine Videoaufzeichnung „indirekte Beobachtung“, weil sie nicht live betrachtet wird?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Das Verhalten selbst bleibt sichtbar, aber technisch vermittelt. Indirekt wäre etwa die Auswertung von Fingerabdrücken oder Verkaufsstatistiken als Verhaltensspuren.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card" data-source-id="PD11-F10" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W1">
+    <div class="card-title">Acht Unterscheidungsdimensionen</div>
+    <div class="dimension-table" role="table" aria-label="Unterscheidungsmerkmale von Beobachtungen">
+      <div role="row"><span role="cell">Ort</span><span role="cell">Feld ↔ Labor; offline ↔ virtuell</span></div>
+      <div role="row"><span role="cell">Systematisierung</span><span role="cell">frei ↔ systematisch</span></div>
+      <div role="row"><span role="cell">Zugang</span><span role="cell">direkt ↔ vermittelt (Video) ↔ indirekt (Verhaltensspuren)</span></div>
+      <div role="row"><span role="cell">Situation</span><span role="cell">natürlich ↔ hergestellt</span></div>
+      <div role="row"><span role="cell">Offenheit</span><span role="cell">offen – Problem Reaktivität ↔ verdeckt – Problem ethische Vertretbarkeit</span></div>
+      <div role="row"><span role="cell">Teilnahme bei offener Beobachtung</span><span role="cell">nicht-teilnehmend ↔ teilnehmend; Beispiel Ethnographie über längere Zeit</span></div>
+      <div role="row"><span role="cell">Stichprobenlogik</span><span role="cell">Zeitstichprobe (z. B. alle 10 Minuten) ↔ Ereignisstichprobe (jedes Auftreten von X)</span></div>
+      <div role="row"><span role="cell">Beobachterrolle</span><span role="cell">Fremdbeobachtung ↔ Selbstbeobachtung</span></div>
+    </div>
+  </div>
+  <div class="card" data-source-id="PD11-F11" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="Begriffskarte">
+    <div class="card-title">Drei Formen des Ecological Momentary Assessment (EMA)</div>
+    <ul><li><strong>Experience Sampling Method</strong> (Csikszentmihalyi &amp; Larson, 1987)</li><li><strong>Day Reconstruction Method</strong> (Kahnemann et al., 2004)</li><li><strong>Event Reconstruction Method</strong> (Grube et al., 2008)</li></ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W1 Concept Duel</div>
+  <div class="card" data-source-id="PD11-F10" data-slides="7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W1">
+    <div class="card-title">Designfälle einordnen</div>
+    <div class="corr-item"><strong>Eine aufgezeichnete Interaktion wird später kodiert.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-dim-1',this,'direkt')">direkt</button><button class="corr-btn" onclick="checkCorr('c-dim-1',this,'vermittelt')">vermittelt</button><button class="corr-btn" onclick="checkCorr('c-dim-1',this,'indirekt')">indirekt</button></div><div class="corr-fb" id="c-dim-1-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Fingerabdrücke an Schaufenstern werden ausgewertet.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-dim-2',this,'direkt')">direkt</button><button class="corr-btn" onclick="checkCorr('c-dim-2',this,'vermittelt')">vermittelt</button><button class="corr-btn" onclick="checkCorr('c-dim-2',this,'indirekt')">indirekt</button></div><div class="corr-fb" id="c-dim-2-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Jedes Auftreten von Verhalten X wird registriert.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-dim-3',this,'zeit')">Zeitstichprobe</button><button class="corr-btn" onclick="checkCorr('c-dim-3',this,'ereignis')">Ereignisstichprobe</button></div><div class="corr-fb" id="c-dim-3-fb" aria-live="polite"></div></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Konstruktion ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+  data-source-id="PD11-F12 PD11-F13 PD11-F14 PD11-F15" data-slides="8" data-source-status="direkt"
+  data-learning-objective="LZ-03" data-widget-type="W2 Process Builder" data-cognitive-task="Prozessreihenfolge rekonstruieren und Funktionen erklären">
+  <div class="sec-head">
+    <div class="sec-title">④ Vom Verhaltensfluss zum Beobachtungswert</div>
+    <div class="sec-lz">Selektion, Segmentierung, Quantifizierung und Standardisierung als zusammenhängenden Prozess erläutern.</div>
+    <div class="source-meta">Folien 8 · Quellen PD11-F12 PD11-F13 PD11-F14 PD11-F15 · Widget W2 Process Builder</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Kann Beobachtung ein neutrales „Abbild“ der physikalischen Welt sein?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Nein. Schon vor dem Zahlenwert wird ausgewählt, in Abschnitte gegliedert und quantifiziert. Jede Stufe enthält Entscheidungen darüber, was als relevantes Verhalten gilt.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="process-flow" data-source-id="PD11-F12 PD11-F13 PD11-F14" data-slides="8" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-03" data-widget-type="W2">
+    <article><span>1</span><h3>Selektion</h3><p>Nur bestimmte Aspekte des Verhaltens werden beachtet.</p></article>
+    <article><span>2</span><h3>Segmentierung</h3><p>Der Verhaltensfluss wird in Abschnitte unterteilt und mit Bedeutung versehen.</p></article>
+    <article><span>3</span><h3>Quantifizierung</h3><p>Intensität, Dauer und Häufigkeit werden beschrieben.</p></article>
+  </div>
+  <div class="card" data-source-id="PD11-F15" data-slides="8" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="Lernprosa"><div class="card-title">Standardisierung als Querschnittsaufgabe</div><p>Bei standardisierten Beobachtungen sollen Selektion, Segmentierung und Quantifizierung sowie die Beobachtungsbedingungen möglichst vereinheitlicht werden. Das Ziel sind <strong>möglichst gleiche Ergebnisse mehrerer Beobachtender</strong>.</p><div class="hinweis"><strong>Nicht verwechseln:</strong> Standardisierung erzwingt nicht, dass beobachtete Personen dasselbe Verhalten zeigen. Sie vereinheitlicht die Regeln der Beobachtung.</div></div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W2 Process Builder</div>
+  <div class="card" data-source-id="PD11-F12 PD11-F13 PD11-F14 PD11-F15" data-slides="8" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-03" data-widget-type="W2">
+    <div class="card-title">Prozess in die richtige Reihenfolge bringen</div>
+    <p>Verschiebe die Schritte mit den Tasten nach oben oder unten. Drag-and-drop ist nicht erforderlich.</p>
+    <ol id="processList" class="move-list">
+      <li data-key="quant"><span>Intensität, Dauer und Häufigkeit bestimmen</span><span><button aria-label="Schritt nach oben" onclick="moveProcess(this,-1)">↑</button><button aria-label="Schritt nach unten" onclick="moveProcess(this,1)">↓</button></span></li>
+      <li data-key="select"><span>Relevante Verhaltensaspekte auswählen</span><span><button aria-label="Schritt nach oben" onclick="moveProcess(this,-1)">↑</button><button aria-label="Schritt nach unten" onclick="moveProcess(this,1)">↓</button></span></li>
+      <li data-key="segment"><span>Verhaltensfluss in bedeutungsvolle Abschnitte gliedern</span><span><button aria-label="Schritt nach oben" onclick="moveProcess(this,-1)">↑</button><button aria-label="Schritt nach unten" onclick="moveProcess(this,1)">↓</button></span></li>
+    </ol>
+    <button class="btn btn-accent" onclick="checkProcess()">Reihenfolge prüfen</button><div id="processFb" class="widget-fb" aria-live="polite"></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Systeme ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+  data-source-id="PD11-F16 PD11-F17 PD11-F18 PD11-F19 PD11-F20 PD11-F21 PD11-F22" data-slides="9–11" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ-04" data-widget-type="W6 Matrix Reader + W1" data-cognitive-task="Tabellen und Hierarchien lesen, Verhalten zuordnen, Skalen interpretieren">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Zeichen-, Kategorien- und Ratingsysteme</div>
+    <div class="sec-lz">Die drei Systemtypen, ihre Qualitätsanforderungen und Beispiele sicher unterscheiden.</div>
+    <div class="source-meta">Folien 9–11 · Quellen PD11-F16 PD11-F17 PD11-F18 PD11-F19 PD11-F20 PD11-F21 PD11-F22 · Widget W6 Matrix Reader + W1</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Ist „Kind stapelt Holzklötze“ eine Kategorie oder ein konkretes Verhaltensbeispiel?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true">Es ist ein konkretes Verhaltensbeispiel. Im Zeichensystem wird es der Verhaltensklasse „Angemessenes Spiel“ zugeordnet.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="system-tabs" data-source-id="PD11-F16 PD11-F18 PD11-F21" data-slides="9–11" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W1" role="tablist" aria-label="Systemtypen">
+    <button class="tab-btn active" aria-selected="true" onclick="showSystem(this,'sys-sign')">Zeichensystem</button><button class="tab-btn" aria-selected="false" onclick="showSystem(this,'sys-cat')">Kategoriensystem</button><button class="tab-btn" aria-selected="false" onclick="showSystem(this,'sys-rate')">Ratingskala</button>
+  </div>
+  <div id="sys-sign" class="system-panel active" data-source-id="PD11-F16 PD11-F17" data-slides="9–11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W6">
+    <h3>Zeichensystem: konkrete Verhaltensvorkommen klassifizieren</h3><p>Verhaltensklassen nehmen konkrete Verhaltensweisen auf. Das Folienbeispiel erfasst kindlichen Autismus (Lovaas et al., 1973).</p>
+    <table><caption>Verhaltensklassen und sichtbare Beispiele</caption><thead><tr><th scope="col">Klasse</th><th scope="col">Beispiele</th></tr></thead><tbody><tr><th scope="row">Selbststimulation</th><td>Augen rollen; mit dem Kopf nicken; …</td></tr><tr><th scope="row">Echolalie</th><td>einzelne Wörter wiederholen; Sätze des Erziehers nachsprechen; …</td></tr><tr><th scope="row">Angepasste Sprache</th><td>Frage beantworten; sich mit dem Erzieher unterhalten; …</td></tr><tr><th scope="row">Soziales nonverbales Verhalten</th><td>Erzieher an der Hand führen; Anweisungen folgen; …</td></tr><tr><th scope="row">Angemessenes Spiel</th><td>Holzklötze stapeln; Stifte in eine Schachtel stecken; …</td></tr></tbody></table>
+  </div>
+  <div id="sys-cat" class="system-panel" hidden data-source-id="PD11-F18 PD11-F19 PD11-F20" data-slides="10–11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W6">
+    <h3>Kategoriensystem: jedes Verhalten einer Kategorie zuordnen</h3>
+    <div class="criteria-grid"><div><b>Genauigkeit</b><span>Kategorien klar definieren</span></div><div><b>Exklusivität</b><span>jedes Verhalten nur einer Kategorie</span></div><div><b>Exhaustivität</b><span>relevantes Spektrum erschöpfend abbilden</span></div></div>
+    <div class="tree" aria-label="Textuelle Rekonstruktion des Bales-Kategoriensystems"><div class="tree-root">Verhalten eines Mitglieds einer Kleingruppe</div><div class="tree-cols"><div><h4>Aufgabenorientiert</h4><h5>Antworten / Lösungsversuche</h5><ul><li>macht Vorschläge</li><li>vermittelt Meinung</li><li>vermittelt Information</li></ul><h5>Fragen</h5><ul><li>bittet um Orientierung</li><li>bittet um Meinung</li><li>bittet um Vorschläge</li></ul></div><div><h4>Sozial-emotional</h4><h5>Positiv</h5><ul><li>zeigt Solidarität</li><li>zeigt Spannungsreduktion</li><li>stimmt zu</li></ul><h5>Negativ</h5><ul><li>stimmt nicht zu / widerspricht</li><li>zeigt Anspannung</li><li>zeigt sich feindselig</li></ul></div></div><p class="source-note">Kategoriensystem zur Beobachtung von Interaktionsprozessen in Kleingruppen, nach Bales (1975).</p></div>
+  </div>
+  <div id="sys-rate" class="system-panel" hidden data-source-id="PD11-F21 PD11-F22" data-slides="11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-04" data-widget-type="W7">
+    <h3>Ratingskalen: Verhaltensausprägung auf einer abgestuften Skala bewerten</h3><p>Beispiel: Messskala zum kindlichen Gruppenverhalten (Charlton et al., 1974). Jede Skala reicht von −3 über 0 bis +3.</p>
+    <div class="rating-row"><label for="rate1">gehemmt <span id="rate1v">0</span> gelöst</label><input id="rate1" type="range" aria-describedby="rate1out" min="-3" max="3" value="0" oninput="rateText('rate1','rate1v','gehemmt','gelöst')"><output id="rate1out" for="rate1">Mittelpunkt zwischen gehemmt und gelöst</output></div>
+    <div class="rating-row"><label for="rate2">schweigsam <span id="rate2v">0</span> gesprächig</label><input id="rate2" type="range" aria-describedby="rate2out" min="-3" max="3" value="0" oninput="rateText('rate2','rate2v','schweigsam','gesprächig')"><output id="rate2out" for="rate2">Mittelpunkt zwischen schweigsam und gesprächig</output></div>
+    <div class="rating-row"><label for="rate3">ruhig <span id="rate3v">0</span> erregt</label><input id="rate3" type="range" aria-describedby="rate3out" min="-3" max="3" value="0" oninput="rateText('rate3','rate3v','ruhig','erregt')"><output id="rate3out" for="rate3">Mittelpunkt zwischen ruhig und erregt</output></div>
+  </div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W6 Matrix Reader + W1</div>
+  <div class="card" data-source-id="PD11-F17" data-slides="9" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W6"><div class="card-title">Verhaltensbeispiele im Zeichensystem lokalisieren</div>
+    <div class="corr-item"><strong>Kind rollt die Augen.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-sign-1',this,'Selbststimulation')">Selbststimulation</button><button class="corr-btn" onclick="checkCorr('c-sign-1',this,'Echolalie')">Echolalie</button><button class="corr-btn" onclick="checkCorr('c-sign-1',this,'Angemessenes Spiel')">Angemessenes Spiel</button></div><div class="corr-fb" id="c-sign-1-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Kind spricht einen Satz des Erziehers nach.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-sign-2',this,'Selbststimulation')">Selbststimulation</button><button class="corr-btn" onclick="checkCorr('c-sign-2',this,'Echolalie')">Echolalie</button><button class="corr-btn" onclick="checkCorr('c-sign-2',this,'Angepasste Sprache')">Angepasste Sprache</button></div><div class="corr-fb" id="c-sign-2-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Kind stapelt Holzklötze.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-sign-3',this,'Soziales nonverbales Verhalten')">Soziales nonverbales Verhalten</button><button class="corr-btn" onclick="checkCorr('c-sign-3',this,'Angemessenes Spiel')">Angemessenes Spiel</button><button class="corr-btn" onclick="checkCorr('c-sign-3',this,'Angepasste Sprache')">Angepasste Sprache</button></div><div class="corr-fb" id="c-sign-3-fb" aria-live="polite"></div></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Nicht-reaktiv ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+  data-source-id="PD11-F23 PD11-F24 PD11-F25 PD11-F26" data-slides="12" data-source-status="direkt"
+  data-learning-objective="LZ-05" data-widget-type="W11 Misconception Debugger" data-cognitive-task="Verfahren anhand ihres Erfassungsprinzips identifizieren">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Nicht-reaktive Verfahren und Verhaltensspuren</div>
+    <div class="sec-lz">Nicht-reaktive Verfahren definieren und die genannten Techniken sowie Spuren zuordnen.</div>
+    <div class="source-meta">Folien 12 · Quellen PD11-F23 PD11-F24 PD11-F25 PD11-F26 · Widget W11 Misconception Debugger</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Warum kann eine Verkaufsstatistik als Beobachtungsdatum gelten, obwohl niemand das Kaufverhalten direkt gesehen hat?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true">Sie ist eine Verhaltensspur: vergangenes Verhalten hinterlässt ein auswertbares Ergebnis. Der Zugang ist indirekt und kann nicht-reaktiv sein.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card" data-source-id="PD11-F23" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="Lernprosa"><div class="card-title">Definition</div><p>Nicht-reaktive Verfahren nehmen <strong>keinen Einfluss auf die untersuchten Personen oder Prozesse</strong>. Die Folie enthält die grammatisch auffällige Form „die untersuchten Person oder Prozesse“; hier wird sie lesbar normalisiert, ohne den Inhalt zu verändern.</p></div>
+  <div class="nr-grid" data-source-id="PD11-F24 PD11-F25 PD11-F26" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W11">
+    <article><h3>Verdeckte Beobachtung</h3><p>Beobachtung ohne offen sichtbaren Einfluss auf die Situation.</p></article>
+    <article><h3>Lost-Letter-Technik</h3><p>Häufigkeit eines Verhaltens registrieren, etwa Zurückschicken eines gefundenen Briefes oder einer Geldbörse (Milgram et al., 1965).</p></article>
+    <article><h3>Verwähltechnik</h3><p>Eine angeblich falsch verbundene Person bittet um einen Anruf bei einer angeblichen Werkstatt, weil ihr Geld ausgegangen sei; registriert wird das folgende Verhalten.</p></article>
+    <article><h3>Verhaltensspuren</h3><p>Physische Spuren, Schilder, Print-/Fernseh-/digitale Medien und Verkaufsstatistiken.</p></article>
+  </div>
+  <div class="card" data-source-id="PD11-F25 PD11-F26" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="Beispieltabelle"><div class="card-title">Vier Spurtypen und ihre sichtbaren Beispiele</div><table><caption>Verhaltensspuren</caption><thead><tr><th scope="col">Spurtyp</th><th scope="col">Beispiel und Indikator</th></tr></thead><tbody><tr><th scope="row">Physische Spuren</th><td>Fingerabdrücke an Schaufenstern als Indikator für die Beliebtheit von Schuhmodellen</td></tr><tr><th scope="row">Schilder</th><td>Zahl der „Vorsicht: Bissiger Hund“-Schilder als Indikator für Besucherfeindlichkeit</td></tr><tr><th scope="row">Medien</th><td>Zahl der Kommentare unter einem Foto als Indikator wahrgenommener Interessantheit</td></tr><tr><th scope="row">Verkaufsstatistiken</th><td>Zahl verkaufter Filme als Indikator für Beliebtheit</td></tr></tbody></table><p class="source-note">Fortschreitende Technologien eröffnen darüber hinaus weitere Anwendungskontexte nicht-reaktiver Untersuchungen.</p></div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W11 Misconception Debugger</div>
+  <div class="card" data-source-id="PD11-F24 PD11-F25" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W11"><div class="card-title">Methode oder Spur erkennen</div>
+    <div class="corr-item"><strong>Ein gefundener Brief wird zurückgeschickt oder liegen gelassen.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-nr-1',this,'Lost-Letter')">Lost-Letter</button><button class="corr-btn" onclick="checkCorr('c-nr-1',this,'Verwähltechnik')">Verwähltechnik</button><button class="corr-btn" onclick="checkCorr('c-nr-1',this,'Verhaltensspur')">Verhaltensspur</button></div><div class="corr-fb" id="c-nr-1-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Eine angeblich falsch verbundene Person bittet um einen Anruf bei einer Werkstatt.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-nr-2',this,'Lost-Letter')">Lost-Letter</button><button class="corr-btn" onclick="checkCorr('c-nr-2',this,'Verwähltechnik')">Verwähltechnik</button><button class="corr-btn" onclick="checkCorr('c-nr-2',this,'Verhaltensspur')">Verhaltensspur</button></div><div class="corr-fb" id="c-nr-2-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Verkaufszahlen werden als Indikator für Beliebtheit ausgewertet.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-nr-3',this,'Lost-Letter')">Lost-Letter</button><button class="corr-btn" onclick="checkCorr('c-nr-3',this,'Verwähltechnik')">Verwähltechnik</button><button class="corr-btn" onclick="checkCorr('c-nr-3',this,'Verhaltensspur')">Verhaltensspur</button></div><div class="corr-fb" id="c-nr-3-fb" aria-live="polite"></div></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Kappa ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6"
+  data-source-id="PD11-F27 PD11-F28 PD11-F29 PD11-F30 PD11-F31 PD11-F32 PD11-F33 PD11-F34" data-slides="13–14" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ-06" data-widget-type="W4 Formula Ladder + W5 + W6" data-cognitive-task="Matrixwerte lokalisieren, Formelvariablen zuordnen, rechnen und interpretieren">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Beurteilerübereinstimmung mit Cohens κ</div>
+    <div class="sec-lz">Den Koeffizienten nach Skalenniveau wählen, die Matrix lesen und das Beispiel schrittweise berechnen.</div>
+    <div class="source-meta">Folien 13–14 · Quellen PD11-F27 PD11-F28 PD11-F29 PD11-F30 PD11-F31 PD11-F32 PD11-F33 PD11-F34 · Widget W4 Formula Ladder + W5 + W6</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>Zwei Urteilende stimmen in 70 % der Fälle überein. Ist Cohens κ deshalb ebenfalls 0,70?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq6" aria-hidden="true">Nein. Kappa korrigiert die beobachtete Übereinstimmung um die aufgrund der Randverteilungen erwartete Übereinstimmung. Im Beispiel sinkt der Wert von pₒ = 0,70 auf κ = 0,47.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card" data-source-id="PD11-F27" data-slides="13" data-source-status="direkt" data-learning-objective="LZ-06" data-widget-type="W4"><div class="card-title">Koeffizient nach Skalenniveau</div><table><caption>Auswahl des Übereinstimmungskoeffizienten</caption><thead><tr><th scope="col">Beobachtungsvariable</th><th scope="col">Genannter Koeffizient</th></tr></thead><tbody><tr><th scope="row">kategorial / nominal</th><td>Cohens κ</td></tr><tr><th scope="row">metrisch / intervallskaliert</th><td>Intraklassenkorrelationskoeffizienten; im Deck nicht weiter behandelt</td></tr></tbody></table></div>
+  <div class="formula-card" data-source-id="PD11-F28 PD11-F29" data-slides="14" data-source-status="direkt" data-learning-objective="LZ-06" data-widget-type="W4">
+    <div class="card-title">Zufallskorrigierte Übereinstimmung</div>
+    <p class="formula" aria-label="Kappa ist beobachtete Übereinstimmung minus erwartete Übereinstimmung geteilt durch eins minus erwartete Übereinstimmung"><var>κ</var> = (<var>p</var><sub>o</sub> − <var>p</var><sub>e</sub>) / (1 − <var>p</var><sub>e</sub>)</p>
+    <dl class="var-list"><div><dt><var>p</var><sub>o</sub></dt><dd>beobachtete Übereinstimmung: Summe der Diagonalhäufigkeiten geteilt durch <var>n</var></dd></div><div><dt><var>p</var><sub>e</sub></dt><dd>aufgrund der Randverteilungen erwartete Übereinstimmung</dd></div><div><dt><var>h</var><sub>ii</sub></dt><dd>Häufigkeiten auf der Hauptdiagonale</dd></div><div><dt><var>h</var><sub>i•</sub>, <var>h</var><sub>•i</sub></dt><dd>Zeilen- und Spaltensummen</dd></div></dl>
+  </div>
+  <div class="matrix-wrap" data-source-id="PD11-F30" data-slides="14" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ-06" data-widget-type="W6">
+    <table id="kappaMatrix"><caption>Urteilertabelle mit Randhäufigkeiten; Diagonalzellen markieren beobachtete Übereinstimmung</caption><thead><tr><th scope="col">B \ A</th><th scope="col">kein Kontakt</th><th scope="col">Zuwendung</th><th scope="col">Abwendung</th><th scope="col">h<sub>i•</sub></th></tr></thead><tbody><tr><th scope="row">kein Kontakt</th><td class="diag" tabindex="0">15</td><td>2</td><td>3</td><td class="margin">20</td></tr><tr><th scope="row">Zuwendung</th><td>1</td><td class="diag" tabindex="0">3</td><td>2</td><td class="margin">6</td></tr><tr><th scope="row">Abwendung</th><td>0</td><td>1</td><td class="diag" tabindex="0">3</td><td class="margin">4</td></tr><tr><th scope="row">h<sub>•i</sub></th><td class="margin">16</td><td class="margin">6</td><td class="margin">8</td><td class="margin">30</td></tr></tbody></table>
+  </div>
+  <div class="worked-example" data-source-id="PD11-F31 PD11-F32 PD11-F33 PD11-F34" data-slides="14" data-source-status="direkt" data-learning-objective="LZ-06" data-widget-type="W5">
+    <details open><summary>1 · Vollständiges Beispiel</summary><p><var>p</var><sub>o</sub> = (15 + 3 + 3) / 30 = 0,70</p><p><var>p</var><sub>e</sub> = (20·16 + 6·6 + 4·8) / 30² = 0,43</p><p><var>κ</var> = (0,70 − 0,43) / (1 − 0,43) = 0,47</p></details>
+    <details><summary>2 · Teilweise ausgeblendeter Rechenweg</summary><p>Diagonalwerte: 15, 3, 3. Ergänze: <var>p</var><sub>o</sub> = <input id="fadePo" inputmode="decimal" aria-label="p o eingeben">. Randprodukte ergeben <var>p</var><sub>e</sub> = 0,43.</p><button class="btn btn-ghost" onclick="checkFade()">Zwischenschritt prüfen</button><div id="fadeFb" class="widget-fb" aria-live="polite"></div></details>
+    <details><summary>3 · Selbstständig rechnen</summary><label for="poInput">pₒ</label><input id="poInput" inputmode="decimal" placeholder="0,70"><label for="peInput">pₑ</label><input id="peInput" inputmode="decimal" placeholder="0,43"><label for="kInput">κ</label><input id="kInput" inputmode="decimal" placeholder="0,47"><button class="btn btn-accent" onclick="checkKappa()">Berechnung prüfen</button><div id="kappaFb" class="widget-fb" aria-live="polite"></div></details>
+    <details><summary>4 · Transfer</summary><p>Bei gleicher beobachteter Übereinstimmung wird κ kleiner, wenn die zufällig erwartete Übereinstimmung größer wird. Begründe dies anhand des Terms (pₒ − pₑ)/(1 − pₑ).</p><button class="btn btn-ghost" onclick="toggleTransfer()">Musterbegründung anzeigen</button><div id="transferFb" class="widget-fb" hidden>Ein größeres pₑ verkleinert den über Zufall hinausgehenden Anteil pₒ − pₑ. Die gleiche rohe Übereinstimmung liefert deshalb weniger zufallskorrigierte Übereinstimmung.</div></details>
+  </div>
+  <div class="hinweis"><strong>Foliendaumenregel:</strong> κ &gt; .70 → gute Übereinstimmung. Im Beispiel liegt κ = 0,47 darunter.</div>
+
+  <div class="phase-label">Phase 3 — Anwenden · W4 + W5 + W6</div>
+  <div class="card" data-source-id="PD11-F30 PD11-F31 PD11-F32 PD11-F33" data-slides="14" data-source-status="integriert_abgedeckt" data-learning-objective="LZ-06" data-widget-type="W4 W5 W6"><div class="card-title">Matrix-Lesetraining</div><p>Nutze die Tabelle oben und beantworte nacheinander:</p><ol><li>Welche Zellen zeigen direkte Übereinstimmung?</li><li>Welche Randwerte werden für die Zufallserwartung multipliziert?</li><li>Warum ist κ kleiner als pₒ?</li></ol><div class="matrix-actions"><button class="btn btn-ghost" onclick="matrixHint(1)">1 · Diagonale</button><button class="btn btn-ghost" onclick="matrixHint(2)">2 · Randprodukte</button><button class="btn btn-ghost" onclick="matrixHint(3)">3 · Interpretation</button></div><div id="matrixHint" class="widget-fb" aria-live="polite"></div></div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Fehler ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7"
+  data-source-id="PD11-F35 PD11-F36 PD11-F37 PD11-F38" data-slides="15" data-source-status="direkt"
+  data-learning-objective="LZ-07" data-widget-type="W11 Misconception Debugger" data-cognitive-task="Fehlerszenarien diagnostizieren und Verwechslungen korrigieren">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Fehlerquellen bei Beobachtung und Beurteilung</div>
+    <div class="sec-lz">Sechs Fehlerquellen anhand ihres Mechanismus voneinander abgrenzen.</div>
+    <div class="source-meta">Folien 15 · Quellen PD11-F35 PD11-F36 PD11-F37 PD11-F38 · Widget W11 Misconception Debugger</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q"><p>„Die Person wirkt gepflegt, also ist sie bestimmt gewissenhaft.“ Welcher Fehler steckt darin?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq7" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq7" aria-hidden="true">Ein Halo-Effekt: Von einem sichtbaren Merkmal wird auf ein unbekanntes Merkmal geschlossen.</div></div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="error-grid" data-source-id="PD11-F35 PD11-F36 PD11-F37 PD11-F38" data-slides="15" data-source-status="direkt" data-learning-objective="LZ-07" data-widget-type="W11">
+    <article><h3>Halo-Effekt</h3><p>Schluss von bekannten oder sichtbaren Merkmalen auf unbekannte Merkmale.</p></article>
+    <article><h3>Logische Fehler</h3><p>Implizite, aber nicht empirisch belegte Annahmen über die logische Zusammengehörigkeit bestimmter Merkmale.</p></article>
+    <article><h3>Primacy / Recency</h3><p>Beobachtungen am Anfang oder am Ende der Phase werden übermäßig stark gewichtet.</p></article>
+    <article><h3>Beobachterdrift</h3><p>Die Genauigkeit der Beobachtung nimmt im Verlauf ab oder zu.</p></article>
+    <article><h3>Reaktivität</h3><p>Das Verhalten verändert sich durch das Wissen um die Beobachtung.</p></article>
+    <article><h3>Antworttendenzen</h3><p>Strenge-/Milde-Effekt und Tendenz zur Mitte.</p></article>
+  </div>
+  <div class="hinweis"><strong>Mechanismus statt Etikett lernen:</strong> Halo und logischer Fehler sind Schlussfehler; Primacy/Recency sind Positionsgewichte; Drift betrifft die Kodierung; Reaktivität betrifft das beobachtete Verhalten; Antworttendenzen betreffen die Nutzung einer Urteilsskala.</div>
+  <p class="source-note">Die Folie enthält bei „logische Fehler“ eine auffällige Klammerstellung. Der Inhalt wird hier lesbar normalisiert, ohne die fachliche Aussage zu verändern.</p>
+
+  <div class="phase-label">Phase 3 — Anwenden · W11 Misconception Debugger</div>
+  <div class="card" data-source-id="PD11-F35 PD11-F36 PD11-F37 PD11-F38" data-slides="15" data-source-status="direkt" data-learning-objective="LZ-07" data-widget-type="W11"><div class="card-title">Fehlerszenarien diagnostizieren</div>
+    <div class="corr-item"><strong>„Gepflegtes Auftreten bedeutet sicher hohe Gewissenhaftigkeit.“</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-err-1',this,'Halo-Effekt')">Halo-Effekt</button><button class="corr-btn" onclick="checkCorr('c-err-1',this,'Logischer Fehler')">Logischer Fehler</button><button class="corr-btn" onclick="checkCorr('c-err-1',this,'Reaktivität')">Reaktivität</button></div><div class="corr-fb" id="c-err-1-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Ein abschließender Konflikt dominiert die Gesamtbeurteilung der gesamten Sitzung.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-err-2',this,'Primacy-Effekt')">Primacy</button><button class="corr-btn" onclick="checkCorr('c-err-2',this,'Recency-Effekt')">Recency</button><button class="corr-btn" onclick="checkCorr('c-err-2',this,'Beobachterdrift')">Drift</button></div><div class="corr-fb" id="c-err-2-fb" aria-live="polite"></div></div>
+    <div class="corr-item"><strong>Nach vielen Kodierungen werden die Kategorien zunehmend ungenau angewendet.</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('c-err-3',this,'Reaktivität')">Reaktivität</button><button class="corr-btn" onclick="checkCorr('c-err-3',this,'Antworttendenz')">Antworttendenz</button><button class="corr-btn" onclick="checkCorr('c-err-3',this,'Beobachterdrift')">Beobachterdrift</button></div><div class="corr-fb" id="c-err-3-fb" aria-live="polite"></div></div>
+  </div>
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Entscheidende Trennmerkmale ohne formale Lösungshinweise abrufen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verhaltensbeobachtung</h4>
+      <p>sichtbares Verhalten protokollieren</p>
+      <p>möglichst ohne Wertung und Schlussfolgerung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verhaltensbeurteilung</h4>
+      <p>aus Verhalten Schlüsse ziehen</p>
+      <p>Bezug auf Eigenschaften oder Verhaltensmuster</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Beobachtung und Beurteilung unterscheiden sich nur durch Feld versus Labor.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Vermittelte Beobachtung</h4>
+      <p>Verhalten bleibt Gegenstand</p>
+      <p>Zugang über Video oder ein anderes Medium</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Indirekte Beobachtung</h4>
+      <p>kein unmittelbarer Verhaltenszugang</p>
+      <p>Auswertung von Verhaltensspuren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Jede technisch aufgezeichnete Beobachtung ist bereits indirekt.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Zeichensystem</h4>
+      <p>konkretes Verhalten einer Verhaltensklasse zuordnen</p>
+      <p>Vorkommen bestimmter Zeichen erfassen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Ratingskala</h4>
+      <p>Ausprägung auf abgestufter Skala bewerten</p>
+      <p>im Beispiel zwischen −3 und +3</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Eine Ratingskala ordnet jedes Verhalten nur einer qualitativen Klasse zu.“</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Beobachterdrift</h4>
+      <p>Genauigkeit nimmt im Verlauf ab oder zu</p>
+      <p>Fehler liegt bei der Beobachtung/Kodierung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Reaktivität</h4>
+      <p>Verhalten verändert sich durch Beobachtungswissen</p>
+      <p>Fehler liegt in der Reaktion der beobachteten Person</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> „Reaktivität bedeutet, dass die Beobachtenden mit der Zeit ungenauer werden.“</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" role="tabpanel" aria-hidden="true" aria-labelledby="nb9" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl11</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl11';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd11-s0-q1",
+      "q": "Worin liegt der zentrale Unterschied zwischen Verhaltensbeobachtung und Verhaltensbeurteilung?",
+      "opts": [
+        "Beobachtung protokolliert direkt Verhalten; Beurteilung zieht daraus Schlüsse.",
+        "Beobachtung erklärt Eigenschaften; Beurteilung zählt nur Häufigkeiten.",
+        "Beobachtung nutzt vorwiegend Labore; Beurteilung findet typischerweise im Feld statt.",
+        "Beobachtung ist meist verdeckt; Beurteilung ist überwiegend offen angelegt."
+      ],
+      "c": 0,
+      "e": "Verhaltensbeobachtung hält Verhalten möglichst wertungs- und schlussfolgerungsfrei fest. Verhaltensbeurteilung leitet aus diesem Verhalten Aussagen über Eigenschaften oder Verhaltensmuster ab.",
+      "source_ids": [
+        "PD11-F02",
+        "PD11-F03"
+      ],
+      "oe": [
+        "Richtig: Entscheidend ist die Funktion – Protokollieren gegenüber Schlussfolgern.",
+        "Falsch: Die Rollen sind vertauscht; Beobachtung erklärt keine Eigenschaften.",
+        "Falsch: Feld und Labor sind mögliche Settings, aber kein Definitionsunterschied.",
+        "Falsch: Offenheit oder Verdecktheit sind Designmerkmale, nicht das Trennkriterium."
+      ],
+      "mt": [
+        null,
+        "rollenvertauschung",
+        "setting_statt_funktion",
+        "offenheit_statt_funktion"
+      ],
+      "concept_id": "W001",
+      "learning_objective_id": "LZ-01"
+    },
+    {
+      "id": "pd11-s0-q2",
+      "q": "Welche Gegenstandsbestimmung der Psychologie wird im Deck verwendet?",
+      "opts": [
+        "Die Regeln innerer Urteile und äußerer Diagnosen werden hier gemeinsam untersucht.",
+        "Die Formen und Gesetzmäßigkeiten des inneren Erlebens und des äußeren Verhaltens.",
+        "Die Häufigkeit sichtbarer Handlungen und die Güte psychologischer Tests.",
+        "Die Ursachen psychischer Störungen und die Wirkung therapeutischer Verfahren."
+      ],
+      "c": 1,
+      "e": "Die verwendete Definition bestimmt Psychologie als Wissenschaft von den Formen und Gesetzmäßigkeiten des inneren Erlebens und des äußeren Verhaltens.",
+      "source_ids": [
+        "PD11-F04"
+      ],
+      "oe": [
+        "Falsch: Diese Formulierung verändert beide Gegenstandsbereiche.",
+        "Richtig: Inneres Erleben und äußeres Verhalten bilden die beiden Bereiche.",
+        "Falsch: Diagnostik und Testgüte sind Teilgebiete, aber nicht diese Definition.",
+        "Falsch: Klinische Themen sind enger als die angegebene Gegenstandsbestimmung."
+      ],
+      "mt": [
+        "umformulierte_definition",
+        null,
+        "teilgebiet_verallgemeinert",
+        "klinische_verengung"
+      ],
+      "concept_id": "W002",
+      "learning_objective_id": "LZ-01"
+    },
+    {
+      "id": "pd11-s0-q3",
+      "q": "Eine Beobachterin notiert: „Die Person schaut während 30 Sekunden dreimal zur Tür.“ Wie ist diese Aussage einzuordnen?",
+      "opts": [
+        "Als Eigenschaftsdiagnose, weil eine stabile Tendenz angenommen wird.",
+        "Als Verhaltensbeurteilung, weil die Person als unruhig bezeichnet wird.",
+        "Als Verhaltensbeobachtung, da sichtbares Verhalten protokolliert wird.",
+        "Als Ratingskala, weil Dauer und Häufigkeit gemeinsam erfasst werden."
+      ],
+      "c": 2,
+      "e": "Die Aussage beschreibt sichtbares Verhalten mit Dauer und Häufigkeit, ohne daraus eine Eigenschaft abzuleiten. Damit bleibt sie auf der Ebene der Verhaltensbeobachtung.",
+      "source_ids": [
+        "PD11-F02",
+        "PD11-F14"
+      ],
+      "oe": [
+        "Falsch: Eine stabile Eigenschaft wird gerade nicht behauptet.",
+        "Falsch: Es wird keine wertende Eigenschaft wie „unruhig“ zugeschrieben.",
+        "Richtig: Beobachtbares Verhalten wird möglichst konkret protokolliert.",
+        "Falsch: Quantifizierung allein macht noch keine Ratingskala aus."
+      ],
+      "mt": [
+        "eigenschaftsfehlschluss",
+        "beurteilung_hineingelesen",
+        null,
+        "quantifizierung_mit_rating_verwechselt"
+      ],
+      "concept_id": "W001",
+      "learning_objective_id": "LZ-01"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd11-s1-q1",
+      "q": "Welche Methodenkombination kennzeichnet die Marienthal-Studie?",
+      "opts": [
+        "Nur Interviews und standardisierte Leistungstests in einem Labor.",
+        "Nur verdeckte Zeitmessung und medizinische Aktenauswertung im Feld.",
+        "Nur schriftliche Befragungen und amtliche Beschäftigungsstatistiken.",
+        "Statistische Daten, Befragungen, Interviews und Beobachtungen."
+      ],
+      "c": 3,
+      "e": "Die Studie verband statistische Daten, schriftliche Befragungen, Interviews, strukturierte Beobachtungen der Wohn- und Familienverhältnisse sowie eine verdeckte Zeitmessung der Gehgeschwindigkeit.",
+      "source_ids": [
+        "PD11-F06",
+        "PD11-F07"
+      ],
+      "oe": [
+        "Falsch: Die Studie war mehrmethodal und keine reine Laboruntersuchung.",
+        "Falsch: Die verdeckte Zeitmessung war nur ein Teil des Designs.",
+        "Falsch: Interviews und Beobachtungen würden dabei fehlen.",
+        "Richtig: Die Studie kombinierte mehrere Daten- und Beobachtungszugänge."
+      ],
+      "mt": [
+        "methodische_verengung",
+        "einzelmethode_verallgemeinert",
+        "beobachtung_ausgelassen",
+        null
+      ],
+      "concept_id": "W004",
+      "learning_objective_id": "LZ-02"
+    },
+    {
+      "id": "pd11-s1-q2",
+      "q": "Wie wurde Unaufmerksamkeit in der Studie von Klauer et al. operationalisiert?",
+      "opts": [
+        "Über vier Verhaltenskategorien mit jeweils quantitativen Abstufungen.",
+        "Über eine einzige Selbstauskunft zur subjektiv erlebten Fahrunsicherheit.",
+        "Über die Zahl der Fahrkilometer und die technische Ausstattung des Fahrzeugs.",
+        "Über Persönlichkeitsratings und allgemeine Intelligenzwerte der Fahrenden."
+      ],
+      "c": 0,
+      "e": "Unaufmerksamkeit wurde über sekundäre Tätigkeiten, fahrbezogene Unaufmerksamkeit, Müdigkeit und unspezifische Blickabwendung operationalisiert; jede Kategorie erhielt quantitative Abstufungen.",
+      "source_ids": [
+        "PD11-F09"
+      ],
+      "oe": [
+        "Richtig: Vier Verhaltenskategorien bildeten die Operationalisierung.",
+        "Falsch: Eine einzelne Selbstauskunft entspricht nicht dem beschriebenen Design.",
+        "Falsch: Exposition und Fahrzeugtechnik waren nicht die genannte Operationalisierung.",
+        "Falsch: Persönlichkeits- und Intelligenzratings sind im Deck nicht genannt."
+      ],
+      "mt": [
+        null,
+        "selbstbericht_statt_beobachtung",
+        "exposition_statt_unaufmerksamkeit",
+        "unbelegte_variablen"
+      ],
+      "concept_id": "W005",
+      "learning_objective_id": "LZ-02"
+    },
+    {
+      "id": "pd11-s1-q3",
+      "q": "Welches Beispiel beschreibt Selbstbeobachtung?",
+      "opts": [
+        "Eine Fachkraft beobachtet eine Interaktion durch eine Einwegscheibe.",
+        "Eine Patientin protokolliert das eigene Verhalten über mehrere Tage.",
+        "Ein Team bewertet Bewerbende während Übungen im Assessment Center.",
+        "Eine Kamera zeichnet das Verhalten einer Kleingruppe für spätere Auswertung auf."
+      ],
+      "c": 1,
+      "e": "Bei der Selbstbeobachtung sind beobachtende und beobachtete Person identisch. Das trifft auf das eigene Tagebuchprotokoll zu.",
+      "source_ids": [
+        "PD11-F05"
+      ],
+      "oe": [
+        "Falsch: Das ist Fremdbeobachtung hinter einer Einwegscheibe.",
+        "Richtig: Die Patientin beobachtet und dokumentiert das eigene Verhalten.",
+        "Falsch: Beobachtende und beobachtete Personen sind verschieden.",
+        "Falsch: Die Videoaufzeichnung ist vermittelte Fremdbeobachtung."
+      ],
+      "mt": [
+        "fremdbeobachtung",
+        null,
+        "fremdbeobachtung",
+        "vermittlung_statt_beobachterrolle"
+      ],
+      "concept_id": "W003",
+      "learning_objective_id": "LZ-02"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd11-s2-q1",
+      "q": "Wie ist eine spätere Auswertung einer Videoaufzeichnung einzuordnen?",
+      "opts": [
+        "Als direkte Beobachtung ohne technische Vermittlung des Verhaltens.",
+        "Als indirekte Beobachtung anhand hinterlassener Verhaltensspuren.",
+        "Als vermittelte Beobachtung über ein technisches Medium.",
+        "Als Selbstbeobachtung, da die Aufzeichnung später betrachtet wird."
+      ],
+      "c": 2,
+      "e": "Eine Videoaufzeichnung vermittelt den Zugang zum Verhalten. Indirekte Beobachtung würde dagegen etwa Verhaltensspuren auswerten.",
+      "source_ids": [
+        "PD11-F10"
+      ],
+      "oe": [
+        "Falsch: Der Zugang erfolgt nicht unmittelbar, sondern über ein Medium.",
+        "Falsch: Ein Video ist keine hinterlassene Verhaltensspur im gemeinten Sinn.",
+        "Richtig: Die Aufzeichnung vermittelt die Beobachtung.",
+        "Falsch: Die zeitliche Verzögerung bestimmt nicht die Beobachterrolle."
+      ],
+      "mt": [
+        "direkt_vermittelt_verwechselt",
+        "vermittelt_indirekt_verwechselt",
+        null,
+        "zeitpunkt_mit_rolle_verwechselt"
+      ],
+      "concept_id": "W006",
+      "learning_objective_id": "LZ-02"
+    },
+    {
+      "id": "pd11-s2-q2",
+      "q": "Welche Problemzuordnung ist korrekt?",
+      "opts": [
+        "Offene Beobachtung: ethische Vertretbarkeit; verdeckte Beobachtung: Reaktivität.",
+        "Offene Beobachtung: fehlende Quantifizierung; verdeckte Beobachtung: Segmentierung.",
+        "Offene Beobachtung: Beobachterdrift; verdeckte Beobachtung: Halo-Effekt.",
+        "Offene Beobachtung: Reaktivität; verdeckte Beobachtung: ethische Vertretbarkeit."
+      ],
+      "c": 3,
+      "e": "Das Wissen um offene Beobachtung kann Verhalten verändern und damit Reaktivität auslösen. Verdeckte Beobachtung wirft besonders die Frage der ethischen Vertretbarkeit auf.",
+      "source_ids": [
+        "PD11-F10"
+      ],
+      "oe": [
+        "Falsch: Die beiden typischen Probleme sind vertauscht.",
+        "Falsch: Quantifizierung und Segmentierung sind allgemeine Konstruktionsfragen.",
+        "Falsch: Drift und Halo-Effekt sind andere Fehlerquellen.",
+        "Richtig: Reaktivität gehört zur offenen, Ethik zur verdeckten Beobachtung."
+      ],
+      "mt": [
+        "probleme_vertauscht",
+        "konstruktion_statt_offenheit",
+        "fehlerquelle_statt_designproblem",
+        null
+      ],
+      "concept_id": "W006",
+      "learning_objective_id": "LZ-02"
+    },
+    {
+      "id": "pd11-s2-q3",
+      "q": "Was unterscheidet Zeitstichprobe und Ereignisstichprobe?",
+      "opts": [
+        "Zeitstichproben folgen Zeitpunkten; Ereignisstichproben festgelegtem Verhalten.",
+        "Zeitstichproben erfassen nur Dauer; Ereignisstichproben erfassen nur Intensität.",
+        "Zeitstichproben nutzen offene Settings; Ereignisstichproben verdeckte Settings.",
+        "Zeitstichproben sind nur im Labor; Ereignisstichproben sind nur im Feld möglich."
+      ],
+      "c": 0,
+      "e": "Bei der Zeitstichprobe wird zu vorgegebenen Zeitpunkten oder Intervallen protokolliert. Bei der Ereignisstichprobe steuert das Auftreten eines festgelegten Verhaltens die Erfassung.",
+      "source_ids": [
+        "PD11-F10"
+      ],
+      "oe": [
+        "Richtig: Auswahlkriterium ist Zeit versus Auftreten des Ereignisses.",
+        "Falsch: Dauer und Intensität sind Quantifizierungsdimensionen.",
+        "Falsch: Offenheit ist von der Stichprobenlogik unabhängig.",
+        "Falsch: Beide Formen können in unterschiedlichen Settings eingesetzt werden."
+      ],
+      "mt": [
+        null,
+        "quantifizierung_statt_stichprobe",
+        "offenheit_statt_stichprobe",
+        "setting_statt_stichprobe"
+      ],
+      "concept_id": "W007",
+      "learning_objective_id": "LZ-02"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd11-s3-q1",
+      "q": "Was bedeutet Selektion bei der Verhaltensbeobachtung?",
+      "opts": [
+        "Der Verhaltensfluss wird in bedeutungstragende Abschnitte unterteilt.",
+        "Aus der Gesamtheit werden nur bestimmte Verhaltensaspekte beachtet.",
+        "Intensität, Dauer und Häufigkeit werden numerisch beschrieben.",
+        "Alle Beobachtenden erhalten identische Bewertungsurteile vorgegeben."
+      ],
+      "c": 1,
+      "e": "Selektion bezeichnet die Auswahl: Beobachtung berücksichtigt nur bestimmte Aspekte des gesamten Verhaltensgeschehens.",
+      "source_ids": [
+        "PD11-F12"
+      ],
+      "oe": [
+        "Falsch: Das beschreibt Segmentierung.",
+        "Richtig: Selektion legt fest, welche Aspekte überhaupt beachtet werden.",
+        "Falsch: Das beschreibt Quantifizierung.",
+        "Falsch: Standardisierung vereinheitlicht Bedingungen, nicht Urteile."
+      ],
+      "mt": [
+        "segmentierung_verwechselt",
+        null,
+        "quantifizierung_verwechselt",
+        "standardisierung_ueberzogen"
+      ],
+      "concept_id": "W009",
+      "learning_objective_id": "LZ-03"
+    },
+    {
+      "id": "pd11-s3-q2",
+      "q": "Was ist mit Segmentierung gemeint?",
+      "opts": [
+        "Nur besonders auffällige Aspekte werden für die Beobachtung ausgewählt.",
+        "Mehrere Beobachtende werden auf dieselben Ergebniswerte festgelegt.",
+        "Der Verhaltensfluss wird in bedeutungstragende Abschnitte gegliedert.",
+        "Häufigkeit, Intensität und Dauer werden in einer Kennzahl zusammengefasst."
+      ],
+      "c": 2,
+      "e": "Segmentierung unterteilt einen kontinuierlichen Verhaltensfluss in einzelne Abschnitte, denen Bedeutung zugeschrieben wird.",
+      "source_ids": [
+        "PD11-F13"
+      ],
+      "oe": [
+        "Falsch: Das ist Selektion.",
+        "Falsch: Standardisierung soll Bedingungen vereinheitlichen, nicht Ergebnisse diktieren.",
+        "Richtig: Der kontinuierliche Strom wird in bedeutungsvolle Einheiten gegliedert.",
+        "Falsch: Das ist eine unzulässige Verengung der Quantifizierung."
+      ],
+      "mt": [
+        "selektion_verwechselt",
+        "standardisierung_als_ergebniszwang",
+        null,
+        "quantifizierung_verwechselt"
+      ],
+      "concept_id": "W009",
+      "learning_objective_id": "LZ-03"
+    },
+    {
+      "id": "pd11-s3-q3",
+      "q": "Welches Ziel verfolgt die Standardisierung von Beobachtungen?",
+      "opts": [
+        "Nur eine besonders erfahrene Person soll alle Beobachtungen durchführen.",
+        "Jede beobachtete Person soll exakt dasselbe Verhalten zeigen müssen.",
+        "Alle spontanen Verhaltensformen sollen aus der Untersuchung entfernt werden.",
+        "Vereinheitlichte Bedingungen fördern vergleichbare Beobachterergebnisse."
+      ],
+      "c": 3,
+      "e": "Standardisierung betrifft Selektion, Segmentierung, Quantifizierung und weitere Bedingungen. Ziel ist, dass mehrere Beobachtende unter vergleichbaren Regeln möglichst zu gleichen Ergebnissen kommen.",
+      "source_ids": [
+        "PD11-F15"
+      ],
+      "oe": [
+        "Falsch: Mehrere Beobachtende bleiben gerade relevant.",
+        "Falsch: Standardisiert werden Beobachtungsbedingungen, nicht das Verhalten selbst.",
+        "Falsch: Natürliches Verhalten muss nicht grundsätzlich entfernt werden.",
+        "Richtig: Vergleichbare Bedingungen sollen die Übereinstimmung fördern."
+      ],
+      "mt": [
+        "einbeobachter_loesung",
+        "verhalten_statt_bedingungen",
+        "spontaneitaet_entfernen",
+        null
+      ],
+      "concept_id": "W010",
+      "learning_objective_id": "LZ-03"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd11-s4-q1",
+      "q": "Welche Aussage beschreibt ein Zeichensystem?",
+      "opts": [
+        "Konkretes Verhalten wird in dafür festgelegte Verhaltensklassen eingeordnet.",
+        "Jedes Verhalten wird auf einer vorgegebenen bipolaren Skala eingeschätzt.",
+        "Nur die Gesamtpersönlichkeit wird ohne Bezug auf Einzelverhalten beurteilt.",
+        "Randhäufigkeiten werden zur erwarteten Beurteilerübereinstimmung verrechnet."
+      ],
+      "c": 0,
+      "e": "Ein Zeichensystem stellt Verhaltensklassen bereit, in die das Vorkommen konkreter Verhaltensweisen eingeordnet werden kann.",
+      "source_ids": [
+        "PD11-F16",
+        "PD11-F17"
+      ],
+      "oe": [
+        "Richtig: Verhaltensbeispiele werden Zeichen- beziehungsweise Verhaltensklassen zugeordnet.",
+        "Falsch: Das beschreibt Ratingskalen.",
+        "Falsch: Zeichensysteme bleiben auf konkrete Verhaltensvorkommen bezogen.",
+        "Falsch: Das gehört zur Berechnung von Cohens Kappa."
+      ],
+      "mt": [
+        null,
+        "rating_statt_zeichen",
+        "globale_beurteilung",
+        "kappa_statt_system"
+      ],
+      "concept_id": "W011",
+      "learning_objective_id": "LZ-04"
+    },
+    {
+      "id": "pd11-s4-q2",
+      "q": "Welche drei Gütekriterien werden für Kategoriensysteme genannt?",
+      "opts": [
+        "Objektivität, Reliabilität und Validität der gesamten Untersuchung.",
+        "Genauigkeit, Exklusivität und Exhaustivität der Kategorien.",
+        "Sensitivität, Spezifität und positiver Vorhersagewert der Kategorien.",
+        "Mittelwert, Streuung und Normalverteilung der Beobachtungswerte."
+      ],
+      "c": 1,
+      "e": "Kategorien sollen klar definiert sein (Genauigkeit), jedes Verhalten nur einer Kategorie zuordnen (Exklusivität) und das relevante Spektrum erschöpfend abbilden (Exhaustivität).",
+      "source_ids": [
+        "PD11-F18",
+        "PD11-F19"
+      ],
+      "oe": [
+        "Falsch: Das sind allgemeine Gütekriterien, aber nicht die hier genannte Dreiergruppe.",
+        "Richtig: Genauigkeit, Exklusivität und Exhaustivität sind die drei Kriterien.",
+        "Falsch: Diese Kennwerte gehören zu diagnostischen Entscheidungen.",
+        "Falsch: Diese statistischen Begriffe beschreiben keine Kategorienlogik."
+      ],
+      "mt": [
+        "allgemeine_guetekriterien",
+        null,
+        "entscheidungskennwerte",
+        "deskriptivstatistik"
+      ],
+      "concept_id": "W012",
+      "learning_objective_id": "LZ-04"
+    },
+    {
+      "id": "pd11-s4-q3",
+      "q": "Was kennzeichnet eine Ratingskala?",
+      "opts": [
+        "Konkretes Verhalten wird nur gezählt, ohne eine abgestufte Bewertung vorzunehmen.",
+        "Jedes Verhalten muss genau einer qualitativ verschiedenen Kategorie zugeordnet werden.",
+        "Verhalten wird auf einer vorgegebenen abgestuften Skala zwischen Polen bewertet.",
+        "Beobachterübereinstimmung wird aus den Diagonalhäufigkeiten der Matrix bestimmt."
+      ],
+      "c": 2,
+      "e": "Ratingskalen bewerten Verhaltensweisen auf einer abgestuften Skala. Im Beispiel reichen die bipolaren Skalen von −3 über 0 bis +3.",
+      "source_ids": [
+        "PD11-F21",
+        "PD11-F22"
+      ],
+      "oe": [
+        "Falsch: Reines Zählen bildet keine Ratingskala.",
+        "Falsch: Das entspricht eher einem Kategoriensystem.",
+        "Richtig: Ratings ordnen eine Ausprägung zwischen festgelegten Polen ein.",
+        "Falsch: Die Aussage verwechselt Rating mit Übereinstimmungsberechnung."
+      ],
+      "mt": [
+        "zaehlen_statt_rating",
+        "kategorie_statt_rating",
+        null,
+        "kappa_statt_rating"
+      ],
+      "concept_id": "W014",
+      "learning_objective_id": "LZ-04"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd11-s5-q1",
+      "q": "Was kennzeichnet nicht-reaktive Verfahren?",
+      "opts": [
+        "Sie verändern die untersuchten Prozesse gezielt, um Reaktionen auszulösen.",
+        "Sie setzen eine offene Teilnahme der beobachteten Personen voraus.",
+        "Sie erfassen vor allem Selbstauskünfte zu vergangenen Ereignissen.",
+        "Sie nehmen keinen Einfluss auf die untersuchten Personen oder Prozesse."
+      ],
+      "c": 3,
+      "e": "Nicht-reaktive Verfahren sollen die untersuchten Personen oder Prozesse nicht beeinflussen. Das Deck nennt unter anderem verdeckte Beobachtung und Verhaltensspuren.",
+      "source_ids": [
+        "PD11-F23"
+      ],
+      "oe": [
+        "Falsch: Ein gezielter Einfluss widerspricht der Definition.",
+        "Falsch: Offene Teilnahme ist keine notwendige Bedingung.",
+        "Falsch: Nicht-reaktive Verfahren sind nicht auf Selbstauskunft beschränkt.",
+        "Richtig: Der fehlende Einfluss auf Personen oder Prozesse ist das Kernmerkmal."
+      ],
+      "mt": [
+        "reaktiv_statt_nichtreaktiv",
+        "offenheit_verallgemeinert",
+        "selbstbericht_verengung",
+        null
+      ],
+      "concept_id": "W015",
+      "learning_objective_id": "LZ-05"
+    },
+    {
+      "id": "pd11-s5-q2",
+      "q": "Was wird bei der Lost-Letter-Technik registriert?",
+      "opts": [
+        "Die Häufigkeit eines Verhaltens wie das Zurückschicken eines Fundstücks.",
+        "Die Bewertung eines Fundstücks auf einer Skala von −3 bis +3.",
+        "Die Übereinstimmung zweier Personen bei der Einordnung eines Fundstücks.",
+        "Die subjektive Erinnerung an frühere Begegnungen mit verlorenen Briefen."
+      ],
+      "c": 0,
+      "e": "Bei der Lost-Letter-Technik wird erfasst, wie häufig ein bestimmtes Verhalten auftritt, etwa das Zurückschicken eines gefundenen Briefes oder einer Geldbörse.",
+      "source_ids": [
+        "PD11-F24"
+      ],
+      "oe": [
+        "Richtig: Registriert wird die Häufigkeit des beobachtbaren Rücksendeverhaltens.",
+        "Falsch: Eine bipolare Ratingskala wird nicht beschrieben.",
+        "Falsch: Beurteilerübereinstimmung ist nicht der Kern der Technik.",
+        "Falsch: Eine retrospektive Selbstauskunft ist nicht gemeint."
+      ],
+      "mt": [
+        null,
+        "rating_statt_verhalten",
+        "uebereinstimmung_statt_technik",
+        "selbstbericht_statt_spur"
+      ],
+      "concept_id": "W015",
+      "learning_objective_id": "LZ-05"
+    },
+    {
+      "id": "pd11-s5-q3",
+      "q": "Welche Gruppe besteht vollständig aus Verhaltensspuren?",
+      "opts": [
+        "Interviews, Tagebücher, Ratingskalen und Leistungstests.",
+        "Physische Spuren, Schilder, Medien und Verkaufsstatistiken.",
+        "Einwegscheiben, Videoaufnahmen, Laborräume und Feldsettings.",
+        "Primacy-Effekte, Halo-Effekte, Reaktivität und Beobachterdrift."
+      ],
+      "c": 1,
+      "e": "Als Verhaltensspuren nennt die Folie physische Spuren, Schilder, Print-, Fernseh- und digitale Medien sowie Verkaufsstatistiken.",
+      "source_ids": [
+        "PD11-F25"
+      ],
+      "oe": [
+        "Falsch: Diese Gruppe enthält Erhebungs- und Testformen statt Verhaltensspuren.",
+        "Richtig: Alle vier Elemente sind auf der Folie als Verhaltensspuren aufgeführt.",
+        "Falsch: Das sind Beobachtungsmedien oder Settings.",
+        "Falsch: Das sind Fehlerquellen, keine Verhaltensspuren."
+      ],
+      "mt": [
+        "methoden_statt_spuren",
+        null,
+        "setting_statt_spuren",
+        "fehler_statt_spuren"
+      ],
+      "concept_id": "W015",
+      "learning_objective_id": "LZ-05"
+    }
+  ],
+  "6": [
+    {
+      "id": "pd11-s6-q1",
+      "q": "Welcher Koeffizient wird für kategoriale nominale Beobachtungen genannt?",
+      "opts": [
+        "Die Intraklassenkorrelation für intervallskalierte Messwerte.",
+        "Der Odds Ratio für das Auftreten eines Beinaheunfalls.",
+        "Cohens Kappa für die Übereinstimmung nominaler Urteile.",
+        "Eine Ratingskala von −3 bis +3 für bipolare Merkmale."
+      ],
+      "c": 2,
+      "e": "Cohens Kappa wird für kategoriale nominale Beobachtungen verwendet. Für metrische intervallskalierte Beobachtungen nennt die Folie Intraklassenkorrelationskoeffizienten.",
+      "source_ids": [
+        "PD11-F27"
+      ],
+      "oe": [
+        "Falsch: Die Intraklassenkorrelation gehört zu metrischen Beobachtungen.",
+        "Falsch: Odds Ratios quantifizieren im Studienbeispiel das Unfallrisiko.",
+        "Richtig: Kappa ist der genannte Koeffizient für nominale Urteile.",
+        "Falsch: Eine Ratingskala ist kein Übereinstimmungskoeffizient."
+      ],
+      "mt": [
+        "skalenniveau_verwechselt",
+        "studienkennwert_verwechselt",
+        null,
+        "skala_statt_koeffizient"
+      ],
+      "concept_id": "W016",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd11-s6-q2",
+      "q": "Wie wird die beobachtete Übereinstimmung pₒ im Beispiel bestimmt?",
+      "opts": [
+        "Aus dem Produkt der Zeilen- und Spaltensummen, geteilt durch n².",
+        "Aus der Summe aller Nebendiagonalwerte, geteilt durch die Kategorienzahl.",
+        "Aus der Differenz zwischen Randhäufigkeiten und Diagonalhäufigkeiten.",
+        "Aus der Summe der Diagonalwerte 15, 3 und 3, geteilt durch 30."
+      ],
+      "c": 3,
+      "e": "Beobachtete Übereinstimmung liegt auf der Hauptdiagonale. Im Beispiel gilt pₒ = (15 + 3 + 3) / 30 = 0,70.",
+      "source_ids": [
+        "PD11-F30",
+        "PD11-F31"
+      ],
+      "oe": [
+        "Falsch: Das beschreibt die erwartete Übereinstimmung pₑ.",
+        "Falsch: Übereinstimmung liegt auf der Hauptdiagonale, nicht daneben.",
+        "Falsch: Eine solche Differenz ist nicht die Formel für pₒ.",
+        "Richtig: Die drei Diagonalhäufigkeiten werden durch n geteilt."
+      ],
+      "mt": [
+        "pe_statt_po",
+        "nebendiagonale_statt_diagonale",
+        "unbelegte_formel",
+        null
+      ],
+      "concept_id": "W017",
+      "learning_objective_id": "LZ-06"
+    },
+    {
+      "id": "pd11-s6-q3",
+      "q": "Welches Ergebnis ergibt sich im Rechenbeispiel für Cohens Kappa?",
+      "opts": [
+        "K = 0,47; damit liegt der Wert unter der auf der Folie genannten .70-Daumenregel.",
+        "K = 0,70; damit entspricht K direkt der beobachteten Übereinstimmung pₒ.",
+        "K = 0,43; damit entspricht K direkt der erwarteten Übereinstimmung pₑ.",
+        "K = 1,00; damit stimmen beide Urteilenden nach Zufallskorrektur ohne Abweichung überein."
+      ],
+      "c": 0,
+      "e": "Mit pₒ = 0,70 und pₑ = 0,43 ergibt sich K = (0,70 − 0,43)/(1 − 0,43) = 0,47. Das liegt unter der auf der Folie genannten Daumenregel K > .70.",
+      "source_ids": [
+        "PD11-F32",
+        "PD11-F33",
+        "PD11-F34"
+      ],
+      "oe": [
+        "Richtig: 0,47 ist das zufallskorrigierte Ergebnis und liegt unter .70.",
+        "Falsch: 0,70 ist pₒ, nicht K.",
+        "Falsch: 0,43 ist pₑ, nicht K.",
+        "Falsch: Vollständige Übereinstimmung würde K = 1 erfordern."
+      ],
+      "mt": [
+        null,
+        "po_mit_k_verwechselt",
+        "pe_mit_k_verwechselt",
+        "perfekte_uebereinstimmung_angenommen"
+      ],
+      "concept_id": "W017",
+      "learning_objective_id": "LZ-06"
+    }
+  ],
+  "7": [
+    {
+      "id": "pd11-s7-q1",
+      "q": "Welcher Fehler liegt vor, wenn von einem sichtbaren Merkmal auf ein unbekanntes Merkmal geschlossen wird?",
+      "opts": [
+        "Halo-Effekt: Sichtbares wird dann auf unbekannte Merkmale übertragen.",
+        "Beobachterdrift durch allmähliche Veränderung der Kodiergenauigkeit.",
+        "Tendenz zur Mitte durch Vermeidung extremer Skalenurteile.",
+        "Recency-Effekt durch übermäßige Gewichtung der letzten Beobachtungen."
+      ],
+      "c": 0,
+      "e": "Der Halo-Effekt besteht im Schluss von bekannten oder sichtbaren Merkmalen auf unbekannte Merkmale.",
+      "source_ids": [
+        "PD11-F35"
+      ],
+      "oe": [
+        "Richtig: Ein sichtbarer Eindruck „strahlt“ auf unbekannte Merkmale aus.",
+        "Falsch: Drift betrifft eine Veränderung der Genauigkeit über die Zeit.",
+        "Falsch: Die Tendenz zur Mitte ist eine Antworttendenz.",
+        "Falsch: Recency betrifft die zeitliche Position der Beobachtung."
+      ],
+      "mt": [
+        null,
+        "drift_verwechselt",
+        "antworttendenz_verwechselt",
+        "recency_verwechselt"
+      ],
+      "concept_id": "W018",
+      "learning_objective_id": "LZ-07"
+    },
+    {
+      "id": "pd11-s7-q2",
+      "q": "Was kennzeichnet Primacy- und Recency-Effekte?",
+      "opts": [
+        "Eine implizite Annahme, bestimmte Merkmale gehörten logisch zusammen.",
+        "Eine übermäßige Gewichtung von Beobachtungen am Anfang oder am Ende.",
+        "Eine Verhaltensänderung, weil die beobachtete Person von der Beobachtung weiß.",
+        "Eine systematische Bevorzugung mittlerer oder besonders milder Urteile."
+      ],
+      "c": 1,
+      "e": "Primacy- und Recency-Effekte entstehen, wenn der Anfang beziehungsweise das Ende der Beobachtungsphase übermäßig stark in die Beurteilung eingeht.",
+      "source_ids": [
+        "PD11-F36"
+      ],
+      "oe": [
+        "Falsch: Das beschreibt logische Fehler.",
+        "Richtig: Entscheidend ist die übermäßige Gewichtung zeitlicher Randpositionen.",
+        "Falsch: Das beschreibt Reaktivität.",
+        "Falsch: Das beschreibt Antworttendenzen."
+      ],
+      "mt": [
+        "logischer_fehler",
+        null,
+        "reaktivitaet",
+        "antworttendenz"
+      ],
+      "concept_id": "W018",
+      "learning_objective_id": "LZ-07"
+    },
+    {
+      "id": "pd11-s7-q3",
+      "q": "Welche Zuordnung ist korrekt?",
+      "opts": [
+        "Beobachterdrift: Verhalten ändert sich durch das Wissen um Beobachtung.",
+        "Reaktivität: Genauigkeit der Beobachtung nimmt im Verlauf ab oder zu.",
+        "Antworttendenzen: Strenge-/Milde-Effekt und Tendenz zur Mitte.",
+        "Logischer Fehler: die letzte Beobachtung wird besonders stark gewichtet."
+      ],
+      "c": 2,
+      "e": "Zu den Antworttendenzen gehören Strenge-/Milde-Effekt und Tendenz zur Mitte. Beobachterdrift betrifft veränderte Genauigkeit, Reaktivität verändertes Verhalten durch Beobachtungswissen.",
+      "source_ids": [
+        "PD11-F35",
+        "PD11-F37",
+        "PD11-F38"
+      ],
+      "oe": [
+        "Falsch: Das beschreibt Reaktivität.",
+        "Falsch: Das beschreibt Beobachterdrift.",
+        "Richtig: Beide genannten Phänomene sind Antworttendenzen.",
+        "Falsch: Die letzte Beobachtung betrifft den Recency-Effekt."
+      ],
+      "mt": [
+        "drift_reaktivitaet_vertauscht",
+        "reaktivitaet_drift_vertauscht",
+        null,
+        "logisch_recency_verwechselt"
+      ],
+      "concept_id": "W018",
+      "learning_objective_id": "LZ-07"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd11-bq1",
+    "q": "Welche vier Familientypen nennt das Ergebnis der Marienthal-Studie?",
+    "opts": [
+      "Aktive, passive, organisierte und desorganisierte Familien.",
+      "Ungebrochene, resignierte, verzweifelte und apathische Familien.",
+      "Optimistische, realistische, pessimistische und radikale Familien.",
+      "Beschäftigte, arbeitslose, teilerwerbstätige und pensionierte Familien."
+    ],
+    "c": 1,
+    "e": "Als Ergebnis wird die Typologie ungebrochener, resignierter, verzweifelter und apathischer Familien genannt.",
+    "source_ids": [
+      "PD11-F08"
+    ]
+  },
+  {
+    "id": "pd11-bq2",
+    "q": "Welche drei Formen des Ecological Momentary Assessment werden genannt?",
+    "opts": [
+      "Feldexperiment, Laborexperiment und virtuelle Simulation.",
+      "Direktbeobachtung, Videoanalyse und Verhaltensspurenanalyse.",
+      "Experience Sampling sowie Day- und Event-Reconstruction.",
+      "Zeitstichprobe, Ereignisstichprobe und Zufallsstichprobe."
+    ],
+    "c": 2,
+    "e": "Die Folie nennt Experience Sampling Method, Day Reconstruction Method und Event Reconstruction Method.",
+    "source_ids": [
+      "PD11-F11"
+    ]
+  },
+  {
+    "id": "pd11-bq3",
+    "q": "Welche Zuordnung gehört im Bales-System zu „Fragen“?",
+    "opts": [
+      "Vorschläge, Meinung oder Information vermitteln.",
+      "Solidarität, Spannungsreduktion oder Zustimmung zeigen.",
+      "Widerspruch, Anspannung oder Feindseligkeit zeigen.",
+      "Um Orientierung, Meinung oder Vorschläge bitten."
+    ],
+    "c": 3,
+    "e": "Im aufgabenorientierten Bereich gehören Bitten um Orientierung, Meinung oder Vorschläge zum Ast „Fragen“.",
+    "source_ids": [
+      "PD11-F20"
+    ]
+  },
+  {
+    "id": "pd11-bq4",
+    "q": "Welche Skalenpole gehören zum Beispiel der Ratingskalen?",
+    "opts": [
+      "Passiv–aktiv, freundlich–feindselig und langsam–schnell.",
+      "Gehemmt–gelöst, schweigsam–gesprächig und ruhig–erregt.",
+      "Unaufmerksam–aufmerksam, müde–wach und ruhig–impulsiv.",
+      "Introvertiert–extravertiert, stabil–labil und offen–verschlossen."
+    ],
+    "c": 1,
+    "e": "Das Beispiel nennt die drei bipolaren Skalen gehemmt–gelöst, schweigsam–gesprächig und ruhig–erregt.",
+    "source_ids": [
+      "PD11-F22"
+    ]
+  },
+  {
+    "id": "pd11-bq5",
+    "q": "Wie wird pₑ im Kappa-Beispiel berechnet?",
+    "opts": [
+      "Aus der Summe der Diagonalwerte, geteilt durch die Gesamtzahl 30.",
+      "Aus der Differenz von beobachteter und erwarteter Übereinstimmung.",
+      "Randprodukte der Zeilen- und Spaltensummen, geteilt durch 30².",
+      "Aus dem Mittelwert der drei Kategorienhäufigkeiten beider Urteilenden."
+    ],
+    "c": 2,
+    "e": "Die erwartete Übereinstimmung wird aus den Randhäufigkeiten berechnet: (20·16 + 6·6 + 4·8)/30² = 0,43.",
+    "source_ids": [
+      "PD11-F32"
+    ]
+  },
+  {
+    "id": "pd11-bq6",
+    "q": "Welche Aussage beschreibt Exklusivität eines Kategoriensystems?",
+    "opts": [
+      "Jede Kategorie wird mit mindestens zwei Beispielen erläutert.",
+      "Alle Kategorien werden auf einer metrischen Skala bewertet.",
+      "Alle beobachtenden Personen verwenden identische Antworttendenzen.",
+      "Jedes Verhalten lässt sich nur einer Kategorie zuordnen."
+    ],
+    "c": 3,
+    "e": "Exklusivität verlangt, dass jedes Verhalten eindeutig nur einer Kategorie zugeordnet werden kann.",
+    "source_ids": [
+      "PD11-F19"
+    ]
+  }
+];
+
+var corrCorrect = {
+  "c-ob-1": "beobachtung",
+  "c-ob-2": "beurteilung",
+  "c-ob-3": "beobachtung",
+  "c-dim-1": "vermittelt",
+  "c-dim-2": "indirekt",
+  "c-dim-3": "ereignis",
+  "c-sign-1": "Selbststimulation",
+  "c-sign-2": "Echolalie",
+  "c-sign-3": "Angemessenes Spiel",
+  "c-nr-1": "Lost-Letter",
+  "c-nr-2": "Verwähltechnik",
+  "c-nr-3": "Verhaltensspur",
+  "c-err-1": "Halo-Effekt",
+  "c-err-2": "Recency-Effekt",
+  "c-err-3": "Beobachterdrift"
+};
+var corrExpl = {
+  "c-ob-1": "Konkretes sichtbares Verhalten wird ohne Eigenschaftsschluss protokolliert.",
+  "c-ob-2": "„Unzuverlässig“ ist eine Schlussfolgerung über eine Eigenschaft.",
+  "c-ob-3": "Die Häufigkeit eines sichtbaren Verhaltens wird festgehalten.",
+  "c-dim-1": "Video vermittelt den Zugang zum Verhalten.",
+  "c-dim-2": "Fingerabdrücke sind eine Verhaltensspur und damit indirekter Zugang.",
+  "c-dim-3": "Erfasst wird jedes Auftreten eines festgelegten Verhaltens.",
+  "c-sign-1": "Augenrollen und Kopfnicken sind den Beispielen der Selbststimulation zugeordnet.",
+  "c-sign-2": "Das Nachsprechen einzelner Wörter oder Sätze gehört zur Echolalie.",
+  "c-sign-3": "Holzklötze stapeln ist als angemessenes Spiel aufgeführt.",
+  "c-nr-1": "Registriert wird, ob ein gefundenes Schriftstück zurückgeschickt wird.",
+  "c-nr-2": "Die angeblich falsch verbundene Person bittet um einen Hilfsanruf.",
+  "c-nr-3": "Verkaufszahlen bleiben als Spur vergangenen Verhaltens zurück.",
+  "c-err-1": "Vom sichtbaren gepflegten Auftreten wird auf ein unbekanntes Merkmal geschlossen.",
+  "c-err-2": "Das zuletzt beobachtete Verhalten erhält übermäßiges Gewicht.",
+  "c-err-3": "Die Kodiergenauigkeit verändert sich im Zeitverlauf."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+var studyData={
+ mar:[['Fragestellung','Reaktionen auf Arbeitslosigkeit: Apathie versus Radikalisierung.'],['Methoden','Statistische Daten, schriftliche Befragungen, Interviews, strukturierte Beobachtung und verdeckte Zeitmessung.'],['Beobachtung','Wohn- und Familienverhältnisse; Gehgeschwindigkeit auf standardisierter Strecke.'],['Ergebnis','Ungebrochene, resignierte, verzweifelte und apathische Familien.']],
+ kla:[['Fragestellung','Einfluss von Unaufmerksamkeit auf das Unfallrisiko.'],['Operationalisierung','Sekundäre Tätigkeiten, fahrbezogene Unaufmerksamkeit, Müdigkeit und unspezifische Blickabwendung; quantitative Abstufungen.'],['AV','Auftretenshäufigkeit eines Unfalls oder Beinaheunfalls.'],['Kennwert','Odds Ratios.']]
+};
+function setStudy(key){var board=document.getElementById('studyBoard');var rows=studyData[key];board.innerHTML='';rows.forEach(function(r,i){var b=document.createElement('button');b.className='btn btn-ghost';b.textContent=(i+1)+' · '+r[0]+' aufdecken';b.style.margin='4px';b.onclick=function(){var d=document.createElement('div');d.className='step';d.innerHTML='<strong>'+r[0]+':</strong> '+r[1];board.appendChild(d);b.disabled=true;};board.appendChild(b);});}
+function moveProcess(btn,dir){var li=btn.closest('li'), list=li.parentNode;if(dir<0&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);if(dir>0&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);}
+function checkProcess(){var keys=[].map.call(document.querySelectorAll('#processList li'),function(li){return li.dataset.key;});var ok=keys.join(',')==='select,segment,quant';var fb=document.getElementById('processFb');fb.textContent=ok?'✓ Richtig: auswählen → gliedern → quantifizieren. Standardisierung vereinheitlicht die Regeln über alle Schritte.':'Noch nicht: Erst relevante Aspekte auswählen, dann den Verhaltensfluss gliedern, danach Intensität, Dauer oder Häufigkeit quantifizieren.';}
+function showSystem(btn,id){document.querySelectorAll('.system-tabs .tab-btn').forEach(function(b){b.classList.remove('active');b.setAttribute('aria-selected','false');});document.querySelectorAll('.system-panel').forEach(function(p){p.classList.remove('active');p.hidden=true;});btn.classList.add('active');btn.setAttribute('aria-selected','true');var p=document.getElementById(id);p.hidden=false;p.classList.add('active');}
+function rateText(id,vid,left,right){var el=document.getElementById(id),v=Number(el.value),label=document.getElementById(vid),out=document.getElementById(id+'out');label.textContent=(v>0?'+':'')+v;if(v===0)out.textContent='Mittelpunkt zwischen '+left+' und '+right;else if(v<0)out.textContent='Ausprägung in Richtung „'+left+'“';else out.textContent='Ausprägung in Richtung „'+right+'“';}
+function numval(id){return Number(String(document.getElementById(id).value).replace(',','.'));}
+function checkFade(){var ok=Math.abs(numval('fadePo')-.70)<.011;document.getElementById('fadeFb').textContent=ok?'✓ pₒ = (15+3+3)/30 = 0,70.':'Die drei Diagonalwerte 15, 3 und 3 ergeben 21; geteilt durch 30 folgt 0,70.';}
+function checkKappa(){var po=numval('poInput'),pe=numval('peInput'),k=numval('kInput');var ok=Math.abs(po-.70)<.011&&Math.abs(pe-.43)<.011&&Math.abs(k-.47)<.011;document.getElementById('kappaFb').textContent=ok?'✓ Vollständig richtig: pₒ = 0,70, pₑ = 0,43 und κ = 0,47.':'Prüfe getrennt: Diagonale/n = 0,70; Randprodukte/n² = 0,43; danach (0,70−0,43)/(1−0,43) = 0,47.';}
+function toggleTransfer(){var e=document.getElementById('transferFb');e.hidden=!e.hidden;}
+function matrixHint(n){var t={1:'Die Hauptdiagonale enthält 15, 3 und 3. Diese Fälle wurden von A und B gleich kategorisiert.',2:'Für pₑ werden passende Randhäufigkeiten multipliziert: 20·16, 6·6 und 4·8; anschließend durch 30² teilen.',3:'pₒ enthält auch zufällig erwartbare Übereinstimmung. κ zieht diesen Anteil über pₑ ab und liegt deshalb hier bei 0,47 statt 0,70.'};document.getElementById('matrixHint').textContent=t[n];}
+
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

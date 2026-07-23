@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · Vertiefung 2 — Social Media, Persuasion & Desinformation</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl22
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── Bespoke-Simulatoren (Vertiefungsmodul) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.sim-slider{flex:1;min-width:150px;accent-color:var(--accent)}
+.sim-val{font-variant-numeric:tabular-nums;font-weight:700;color:var(--text);min-width:32px;text-align:right}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0}
+.sim-barwrap{height:26px;background:var(--surface2);border-radius:6px;overflow:hidden;margin:2px 0 12px}
+.sim-barfill{height:100%;width:0;transition:width .4s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#0f172a;font-weight:700;font-size:.78rem;white-space:nowrap}
+.sim-verdict{margin-top:6px;font-size:.86rem;color:var(--text);background:var(--surface);border-left:3px solid var(--accent);padding:9px 12px;border-radius:6px;line-height:1.5}
+.sim-post{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:12px 14px;margin:6px 0 12px;font-size:.92rem;color:var(--text);line-height:1.5;min-height:48px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · Vertiefung 2 — Social Media, Persuasion & Desinformation</h1>
+<p class="page-sub">Sozialpsychologie · Vertiefungsseminar M5.2 · anwendungsorientiert + interaktiv · Klausur 14.07.2026 (MC)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Persuasion: zentrale vs. periphere Route (ELM) · 2. Kognitive Dissonanz · 3. Wie Desinformation wirkt + 6 Manipulationstechniken · 4. Prebunking/Inoculation · 5. Social Media & Selbst (Instagram, Bias-Feedback) · 6. kritischer Medienkonsum
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Zwei Routen (ELM)</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Dissonanz</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Desinformation klebt</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ 6 Techniken</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Prebunking</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Instagram & Selbst</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Bias-Feedback</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Anwendung</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Zwei Routen (ELM) ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Persuasion: die zwei Routen (ELM)</div>
+    <div class="sec-lz">Zentrale vs. periphere Route — wann zählt das Argument, wann der Cue? Interaktiv: Routen-Klassifikator.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Dieselbe Werbebotschaft überzeugt deine fachkundige, hellwache Freundin ganz anders als deinen müden Bruder, der nebenbei am Handy ist. Warum wirkt bei beiden etwas völlig anderes?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Weil sie auf <strong>unterschiedlichen Routen</strong> verarbeiten: Wer Motivation <em>und</em> Fähigkeit hat, geht die <strong>zentrale Route</strong> (Argumentqualität); wer nicht, die <strong>periphere Route</strong> (oberflächliche Cues).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Elaboration-Likelihood-Modell (ELM)</div>
+    Überzeugung läuft über zwei Routen. Wie tief eine Botschaft verarbeitet wird, hängt von <strong>Motivation</strong> (ist mir das Thema wichtig?) und <strong>Fähigkeit</strong> (kann ich gerade nachdenken?) ab — der „Elaboration“.
+  </div>
+  <div class="card">
+    <div class="card-title">Zentrale vs. periphere Route</div>
+    <strong>Zentrale Route</strong> (hohe Elaboration): die <strong>Qualität der Argumente</strong> entscheidet → stabilere, verhaltenswirksamere Einstellung. <strong>Periphere Route</strong> (niedrige Elaboration): <strong>Cues</strong> wie Attraktivität, Expertenstatus oder die bloße <em>Anzahl</em> der Argumente entscheiden → leichter, aber labiler.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Anwendung</div>
+    Desinformation zielt fast immer auf die <strong>periphere Route</strong>: Emotion, Wiederholung, scheinbare Expert:innen. Wer <em>bewusst</em> zentral verarbeitet (Argumente prüfen), ist schwerer zu manipulieren.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Routen-Klassifikator</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Stell Motivation und Fähigkeit der Zielperson ein — welche Route greift, und was überzeugt sie dann?</p>
+    <div class="sim-box">
+      <div class="sim-row">
+        <span class="sim-lbl">Motivation (Thema wichtig?)</span>
+        <input type="range" class="sim-slider" id="elm-mot" min="0" max="10" value="8" oninput="elmCalc()">
+        <span class="sim-val" id="elm-motv">8</span>
+      </div>
+      <div class="sim-row">
+        <span class="sim-lbl">Fähigkeit (kann nachdenken?)</span>
+        <input type="range" class="sim-slider" id="elm-ab" min="0" max="10" value="8" oninput="elmCalc()">
+        <span class="sim-val" id="elm-abv">8</span>
+      </div>
+      <div class="sim-lbl">Verarbeitungstiefe (Elaboration)</div>
+      <div class="sim-barwrap"><div class="sim-barfill" id="elm-bar"></div></div>
+      <div class="sim-verdict" id="elm-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Dissonanz ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Kognitive Dissonanz</div>
+    <div class="sec-lz">Warum Handeln gegen die eigene Einstellung diese verändert. Interaktiv: 1 $ vs. 20 $.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du erzählst einem Wartenden, ein todlangweiliges Experiment sei „richtig spannend“ gewesen. Wann glaubst du das hinterher selbst eher — wenn du dafür 1 $ oder wenn du 20 $ bekommen hast?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Überraschend: bei <strong>1 $</strong>. Wenig Geld ist kaum Rechtfertigung für die Lüge → die Spannung („ich lüge ohne Grund“) lässt sich nur auflösen, indem man die <strong>Einstellung anpasst</strong>: „So langweilig war’s eigentlich gar nicht.“</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kognitive Dissonanz</div>
+    Passen <strong>Verhalten und Einstellung</strong> nicht zusammen, entsteht ein <strong>unangenehmes Spannungsgefühl</strong>. Weil das Verhalten schon geschehen ist, ändert man oft den leichter veränderbaren Teil: die <strong>Einstellung</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Die Rolle der äußeren Rechtfertigung</div>
+    Je <strong>weniger</strong> äußere Rechtfertigung (z. B. wenig Geld, kein Zwang), desto <strong>größer</strong> die Dissonanz — und desto stärker die Einstellungsänderung. Viel Geld liefert eine bequeme Ausrede („ich hab’s nur fürs Geld gesagt“) und dämpft die Dissonanz.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Alltag</div>
+    Wer sich freiwillig und ohne große Belohnung für etwas anstrengt, redet es sich danach eher schön (Aufwand-Rechtfertigung). Kleine „Ja“-Schritte können so große Einstellungsänderungen anstoßen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: 1 $ vs. 20 $</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Wähle die Belohnung für die „Notlüge“ und beobachte, wie stark sich die Einstellung danach ändert.</p>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ds-1" onclick="dsShow('one')">Belohnung: 1 $</button>
+        <button class="sim-tbtn" id="ds-20" onclick="dsShow('twenty')">Belohnung: 20 $</button>
+      </div>
+      <div class="sim-lbl">innere Dissonanz</div><div class="sim-barwrap"><div class="sim-barfill" id="ds-dis"></div></div>
+      <div class="sim-lbl">Einstellungsänderung</div><div class="sim-barwrap"><div class="sim-barfill" id="ds-att"></div></div>
+      <div class="sim-verdict" id="ds-v"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Desinformation klebt ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Warum Desinformation „klebt“</div>
+    <div class="sec-lz">Continued Influence Effect, „Fakten ja, Gefühle nein“, Post-Truth, Falscherinnerungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Falschmeldung wird offiziell und deutlich richtiggestellt. Reicht das, damit sie aus den Köpfen verschwindet?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Leider nein. Korrekturen „kleben“ schlechter als der Mythos (<strong>Continued Influence Effect</strong>) — und selbst wenn der einzelne Fakt korrigiert wird, bleiben die zugehörigen <strong>Gefühle und Einstellungen</strong> oft bestehen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Continued Influence Effect</div>
+    Auch nach einer verstandenen Korrektur stützen Menschen ihre Schlussfolgerungen weiter auf die <strong>widerlegte</strong> Information. Beispiel: Beim Irak-Krieg glaubten viele noch Jahre nach dem offiziellen Dementi an „Massenvernichtungswaffen“.
+  </div>
+  <div class="card">
+    <div class="card-title">„Fakten korrigierbar, Gefühle nicht“</div>
+    Man kann den Glauben an eine <strong>einzelne Aussage</strong> korrigieren — aber die <strong>Einstellung</strong> (z. B. Sympathie für eine Politikerin) und die Wahlabsicht ändern sich dadurch oft <strong>nicht</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Post-Truth &amp; Tempo</div>
+    In einer <strong>„Post-Truth“</strong>-Lage zählen Emotion und Überzeugung mehr als objektive Fakten. Verschärfend: Falschnachrichten verbreiten sich <strong>schneller und weiter</strong> als Korrekturen, und es entstehen sogar lebhafte <strong>Falscherinnerungen</strong> an nie geschehene Ereignisse.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Begriff → Bedeutung</div>
+    <div class="corr-item" id="aa">Continued Influence Effect
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'cie')">Trotz Korrektur verlässt man sich weiter auf die Falschinfo</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'posttruth')">Emotion/Überzeugung zählen mehr als objektive Fakten</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'feelings')">Glaube an die Einzelaussage sinkt, Einstellung/Wahl bleiben</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'falsemem')">lebhafte Erinnerung an ein nie geschehenes Ereignis</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Post-Truth
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'cie')">Trotz Korrektur verlässt man sich weiter auf die Falschinfo</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'posttruth')">Emotion/Überzeugung zählen mehr als objektive Fakten</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'feelings')">Glaube an die Einzelaussage sinkt, Einstellung/Wahl bleiben</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'falsemem')">lebhafte Erinnerung an ein nie geschehenes Ereignis</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">„Fakten korrigierbar, Gefühle nicht“
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'cie')">Trotz Korrektur verlässt man sich weiter auf die Falschinfo</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'posttruth')">Emotion/Überzeugung zählen mehr als objektive Fakten</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'feelings')">Glaube an die Einzelaussage sinkt, Einstellung/Wahl bleiben</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'falsemem')">lebhafte Erinnerung an ein nie geschehenes Ereignis</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Falscherinnerung
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'cie')">Trotz Korrektur verlässt man sich weiter auf die Falschinfo</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'posttruth')">Emotion/Überzeugung zählen mehr als objektive Fakten</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'feelings')">Glaube an die Einzelaussage sinkt, Einstellung/Wahl bleiben</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'falsemem')">lebhafte Erinnerung an ein nie geschehenes Ereignis</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ 6 Techniken ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Die 6 Manipulationstechniken (Bad News)</div>
+    <div class="sec-lz">Impersonation, Emotion, Polarisierung, Verschwörung, Diskreditierung, Trolling. Interaktiv: Strategie-Spotter.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Das Lernspiel „Bad News“ lässt dich ausgerechnet selbst zum Fake-News-Produzenten werden. Warum sollte ausgerechnet <em>das</em> gegen Desinformation helfen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Prinzip <strong>Inoculation</strong>: Wer die immer gleichen <strong>sechs Tricks</strong> einmal aus der Täterperspektive durchschaut hat, erkennt sie später in echten Posts wieder — wie eine „Impfung“ gegen Manipulation.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die 6 Techniken (Teil 1)</div>
+    <strong>Impersonation:</strong> sich als echte Person/Marke ausgeben (leicht abgewandelter Name, kopiertes Logo). · <strong>Emotion:</strong> gezielt Angst, Wut oder Empörung schüren — emotionale Inhalte werden mehr geteilt. · <strong>Polarisierung:</strong> Wir-gegen-die-Gräben künstlich verschärfen.
+  </div>
+  <div class="card">
+    <div class="card-title">Die 6 Techniken (Teil 2)</div>
+    <strong>Verschwörung:</strong> eine geheime, bösartige Elite als Erklärung erfinden. · <strong>Diskreditierung (Deflection):</strong> Quelle/Kritiker pauschal angreifen statt die Sache zu prüfen („alle lügen“). · <strong>Trolling:</strong> bewusst provozieren, um eine Überreaktion auszulösen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Die Techniken zielen auf die <strong>periphere Route</strong> und auf <strong>Emotion</strong> — nicht auf gute Argumente. Sie zu kennen heißt, sie zu durchschauen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Interaktiv: Strategie-Spotter</div>
+    <p style="font-size:.84rem;color:var(--text2);margin-bottom:8px">Welche Manipulationstechnik steckt im Post? Ordne jedes Beispiel der richtigen Technik zu.</p>
+    <div class="sim-box">
+      <div class="sim-lbl" id="spot-prog"></div>
+      <div class="sim-post" id="spot-post"></div>
+      <div class="sim-toggle" id="spot-btns">
+        <button class="sim-tbtn" onclick="spotPick('impersonation')">Impersonation</button>
+        <button class="sim-tbtn" onclick="spotPick('emotion')">Emotion</button>
+        <button class="sim-tbtn" onclick="spotPick('polarization')">Polarisierung</button>
+        <button class="sim-tbtn" onclick="spotPick('conspiracy')">Verschwörung</button>
+        <button class="sim-tbtn" onclick="spotPick('discredit')">Diskreditierung</button>
+        <button class="sim-tbtn" onclick="spotPick('trolling')">Trolling</button>
+      </div>
+      <div class="sim-verdict" id="spot-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Prebunking ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Prebunking & Inoculation — die „Impfung“</div>
+    <div class="sec-lz">Vorwarnen statt nur nachkorrigieren — das Prinzip des Bad-News-Spiels und gute Debunking-Regeln.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn nachträgliche Korrekturen so schlecht „kleben“ — was kann man stattdessen oder zusätzlich tun, um Menschen gegen Fake News zu wappnen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>Vorbeugen statt nachkorrigieren:</strong> Prebunking/Inoculation wappnet, <em>bevor</em> der Mythos sich festsetzt. Und falls man doch korrigieren muss: die <strong>Wahrheit voranstellen</strong>, den Mythos nicht ins Zentrum rücken.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Inoculation-Prinzip</div>
+    Wie eine Impfung: Man gibt eine <strong>abgeschwächte Dosis</strong> der Manipulation plus eine <strong>Vorwarnung</strong> → der Geist bildet „Abwehrkräfte“ und erkennt den echten Angriff später. Funktioniert sogar bei schon Betroffenen („therapeutisch“).
+  </div>
+  <div class="card">
+    <div class="card-title">Breitband-Impfung &amp; aktiv schlägt passiv</div>
+    Statt gegen <em>einen</em> Inhalt zu impfen, impft man gegen die <strong>Technik</strong> → Schutz über viele Themen hinweg („Breitband“). Und: sich die Tricks <strong>aktiv selbst zu erarbeiten</strong> (wie im Bad-News-Spiel) wirkt besser als nur passiv eine Widerlegung zu lesen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    Prebunking ersetzt Faktenchecks nicht — es <strong>ergänzt</strong> sie. Beides zusammen ist stärker als Korrigieren allein.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gute Debunking-Regeln — Schritt für Schritt</div>
+    <div id="step4">
+      <div class="step-item"><strong>1. Wahrheit zuerst.</strong> Beginne mit der korrekten Kernaussage — klar und einprägsam, nicht mit dem Mythos.</div>
+      <div class="step-item"><strong>2. Mythos nur kurz + Warnung.</strong> Nenne den Mythos höchstens einmal und kündige ihn als falsch an („Achtung, das ist ein Irrtum: …“) — nicht prominent wiederholen.</div>
+      <div class="step-item"><strong>3. Den Trick erklären.</strong> Zeig, <em>warum</em> der Mythos verfängt bzw. welche Technik dahintersteckt (z. B. falsche Experten, Rosinenpickerei).</div>
+      <div class="step-item"><strong>4. Lücke füllen.</strong> Ersetze die Falschinfo durch eine plausible <strong>Alternativerklärung</strong> — sonst bleibt die alte Erklärung im Kopf (Continued Influence).</div>
+      <div class="step-item"><strong>5. Noch besser: vorbeugen.</strong> Wo möglich <strong>prebunken</strong> — die Technik vorab zeigen, bevor der Mythos überhaupt wirkt.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächste Regel zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Instagram & Selbst ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Instagram & Persönlichkeit</div>
+    <div class="sec-lz">Was Profile/Fotos verraten: Narzissmus → Selbstdarstellung, Einsamkeit → passives Browsen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann man allein aus den Fotos eines Instagram-Profils etwas über die Persönlichkeit der Person ablesen — etwa wie selbstverliebt oder einsam sie ist?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Erstaunlich gut für manches: <strong>Narzissmus</strong> und <strong>Einsamkeit</strong> ließen sich aus Fotomerkmalen brauchbar vorhersagen — die <strong>Lebenszufriedenheit</strong> dagegen nicht. Profile sind ein Spiegel der Persönlichkeit, aber kein vollständiger.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Profile spiegeln Persönlichkeit</div>
+    Social-Media-Inhalte sind <strong>Ausdruck</strong> der Person. <strong>Narzissmus</strong> (unrealistisch positives Selbstbild) sagt mehr <strong>selbstdarstellende</strong> Inhalte und Selfies voraus; <strong>Einsamkeit</strong> hängt eher mit <strong>passivem Browsen</strong> und dem Preisgeben persönlicher Infos zusammen als mit aktivem Austausch.
+  </div>
+  <div class="card">
+    <div class="card-title">Vorhersagbar — und Grenzen</div>
+    Aus reinen Bildmerkmalen (Computer-Vision) waren <strong>Narzissmus &amp; Einsamkeit</strong> vorhersagbar, die <strong>Lebenszufriedenheit nicht</strong>. Was Menschen <em>zeigen</em>, verrät also manches über sie — aber nicht alles.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Das Highlight-Reel</div>
+    Profile zeigen meist die <strong>kuratierten, positivsten Momente</strong> (das „Highlight-Reel“). Vergleicht man sein eigenes Alltagsleben damit, zieht man fast immer den Kürzeren — ein Grund, warum Scrollen die Stimmung drücken kann.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Begriff → Bedeutung</div>
+    <div class="corr-item" id="ba">Narzissmus
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'narz')">unrealistisch positives Selbstbild; postet mehr Selbstdarstellung/Selfies</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'einsam')">unangenehmes Gefühl aus der Bewertung eigener Beziehungen; eher passives Browsen</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'lebenszufr')">Gesamtbewertung der eigenen Lebensqualität; aus Fotos kaum vorhersagbar</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'highlight')">man zeigt v. a. die kuratierten, positivsten Momente</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Einsamkeit
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'narz')">unrealistisch positives Selbstbild; postet mehr Selbstdarstellung/Selfies</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'einsam')">unangenehmes Gefühl aus der Bewertung eigener Beziehungen; eher passives Browsen</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'lebenszufr')">Gesamtbewertung der eigenen Lebensqualität; aus Fotos kaum vorhersagbar</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'highlight')">man zeigt v. a. die kuratierten, positivsten Momente</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">Lebenszufriedenheit
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'narz')">unrealistisch positives Selbstbild; postet mehr Selbstdarstellung/Selfies</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'einsam')">unangenehmes Gefühl aus der Bewertung eigener Beziehungen; eher passives Browsen</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'lebenszufr')">Gesamtbewertung der eigenen Lebensqualität; aus Fotos kaum vorhersagbar</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'highlight')">man zeigt v. a. die kuratierten, positivsten Momente</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Highlight-Reel
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'narz')">unrealistisch positives Selbstbild; postet mehr Selbstdarstellung/Selfies</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'einsam')">unangenehmes Gefühl aus der Bewertung eigener Beziehungen; eher passives Browsen</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'lebenszufr')">Gesamtbewertung der eigenen Lebensqualität; aus Fotos kaum vorhersagbar</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'highlight')">man zeigt v. a. die kuratierten, positivsten Momente</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Bias-Feedback ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Feedback über (impliziten) Bias</div>
+    <div class="sec-lz">Warum Bias-Rückmeldung bedroht — Abwehr vs. Einsicht (Compunction).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Person hält sich für vorurteilsfrei und bekommt dann eine Rückmeldung (z. B. aus einem Impliziten Assoziationstest), die das Gegenteil nahelegt. Warum ist das so unangenehm — und was macht sie damit?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Die Rückmeldung <strong>bedroht das egalitäre Selbstbild</strong>. Daraus folgen zwei Wege: <strong>Abwehr</strong> (Rückmeldung abwerten, alles bleibt) oder <strong>Compunction</strong> (Verantwortung annehmen, sich ändern wollen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Warum Bias-Feedback bedroht</div>
+    Rückmeldung über (impliziten) Bias trifft, wenn sie (1) vom <strong>eigenen egalitären Selbstbild abweicht</strong> und (2) <strong>sozial/persönlich inakzeptabel</strong> ist. Das erzeugt unangenehme Anspannung — gemessen oft per <strong>IAT</strong> (Impliziter Assoziationstest).
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Wege aus dem Unbehagen</div>
+    <strong>Abwehr:</strong> Verantwortung ablehnen → den Test/die Quelle abwerten („Unsinn“) → keine Änderung. <strong>Compunction:</strong> Verantwortung annehmen → Schuld/Unbehagen → <strong>Änderungsabsicht</strong>. Abwehr ist stärker bei Mehrheitsgruppen und bei „ich bin weniger voreingenommen als andere“.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Was hilft</div>
+    Menschen das Feedback <strong>vorab antizipieren</strong> lassen und ihre <strong>Selbstwirksamkeit</strong> stärken („du kannst deinen Bias beeinflussen“) verschiebt sie von Abwehr zu Einsicht. Schuldzuweisung reduzieren wirkt nur gemischt.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vom Feedback zur Reaktion — Schritt für Schritt</div>
+    <div id="step6">
+      <div class="step-item"><strong>1. Auslöser.</strong> Die Rückmeldung weicht vom Selbstbild ab und ist sozial unangenehm.</div>
+      <div class="step-item"><strong>2. Unbehagen.</strong> Es entsteht eine unangenehme psychologische Anspannung.</div>
+      <div class="step-item"><strong>3a. Pfad Abwehr.</strong> Verantwortung wird abgelehnt → Test/Quelle abwerten, Ergebnis bestreiten → <em>kein</em> verändertes Verhalten.</div>
+      <div class="step-item"><strong>3b. Pfad Compunction.</strong> Verantwortung wird angenommen → Schuldgefühl/Reue → Absicht, sich zu ändern.</div>
+      <div class="step-item"><strong>4. Hebel.</strong> Feedback vorab antizipieren + Selbstwirksamkeit stärken → schiebt Menschen vom Abwehr- auf den Einsichts-Pfad.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Anwendung ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Anwendung: dein Social-Media-Alltag</div>
+    <div class="sec-lz">Techniken erkennen, bei starken Gefühlen innehalten, vor dem Teilen prüfen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du scrollst abends durch deinen Feed: eine wütende Schlagzeile, perfekte Urlaubsfotos, ein „die lügen doch alle“-Post. Wie wendest du das Gelernte konkret an?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Drei Reflexe: <strong>starke Gefühle = Warnsignal</strong> (kurz innehalten), <strong>Profile = Highlight-Reel</strong> (nicht 1:1 vergleichen), und vor dem Teilen <strong>Quelle &amp; Technik prüfen</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Alltagsreflexe</div>
+    <strong>1. Emotion als Bremse:</strong> Wenn ein Beitrag dich sofort sehr wütend/empört macht, ist das oft Absicht — innehalten, bevor du teilst. <strong>2. Vergleichs-Falle:</strong> Du siehst andere Highlight-Reels, kennst aber dein eigenes Hinter-den-Kulissen. <strong>3. Prüfen statt teilen:</strong> Quelle, Absicht und Technik checken.
+  </div>
+  <div class="card">
+    <div class="card-title">Die goldene Mitte</div>
+    Weder alles glauben noch alles für Lüge halten. Ziel ist <strong>kalibriertes Vertrauen</strong>: Techniken kennen, kurz nachdenken, bei sich selbst auf Abwehr-Reflexe achten.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen: Szenario → passende Reaktion</div>
+    <div class="corr-item" id="ca">Eine Schlagzeile macht dich sofort wütend.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'emotion')">Emotions-Technik erkennen, kurz innehalten</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'vergleich')">Highlight-Reel bedenken, sich nicht 1:1 vergleichen</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'diskredit')">Diskreditierungs-Technik (Quelle pauschal entwertet)</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'prebunk')">Wahrheit zuerst, Mythos nicht betonen (Prebunking)</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">Beim Instagram-Scrollen fühlst du dich plötzlich schlechter als vorher.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'emotion')">Emotions-Technik erkennen, kurz innehalten</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'vergleich')">Highlight-Reel bedenken, sich nicht 1:1 vergleichen</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'diskredit')">Diskreditierungs-Technik (Quelle pauschal entwertet)</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'prebunk')">Wahrheit zuerst, Mythos nicht betonen (Prebunking)</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">Ein Post behauptet: „Die etablierten Medien lügen doch sowieso alle.“
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'emotion')">Emotions-Technik erkennen, kurz innehalten</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'vergleich')">Highlight-Reel bedenken, sich nicht 1:1 vergleichen</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'diskredit')">Diskreditierungs-Technik (Quelle pauschal entwertet)</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'prebunk')">Wahrheit zuerst, Mythos nicht betonen (Prebunking)</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">Du willst einen kursierenden Mythos in deiner Gruppe richtigstellen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'emotion')">Emotions-Technik erkennen, kurz innehalten</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'vergleich')">Highlight-Reel bedenken, sich nicht 1:1 vergleichen</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'diskredit')">Diskreditierungs-Technik (Quelle pauschal entwertet)</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'prebunk')">Wahrheit zuerst, Mythos nicht betonen (Prebunking)</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die klausurkritischen Gegensatzpaare dieser Vertiefung sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Zentrale Route</h4>
+      <p>hohe Motivation + Fähigkeit</p>
+      <p>Argumentqualität entscheidet</p>
+      <p>stabilere Einstellungsänderung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Periphere Route</h4>
+      <p>geringe Motivation/Fähigkeit</p>
+      <p>Cues entscheiden (Attraktivität, Anzahl)</p>
+      <p>leichter, aber labiler</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Auf der peripheren Route überzeugt die Qualität der Argumente, auf der zentralen Route zählen nur oberflächliche Hinweisreize.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Debunking</h4>
+      <p>NACH der Falschinfo</p>
+      <p>widerlegt einen konkreten Mythos</p>
+      <p>kämpft gegen den Continued Influence Effect</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Prebunking (Inoculation)</h4>
+      <p>VOR der Falschinfo</p>
+      <p>warnt + zeigt die Technik abgeschwächt</p>
+      <p>baut themenübergreifend „Immunität“ auf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Prebunking findet erst nach dem Kontakt mit der Falschinfo statt, Debunking dagegen vorbeugend davor.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Abwehr (Defensiveness)</h4>
+      <p>Verantwortung wird abgelehnt</p>
+      <p>Quelle/Test wird abgewertet</p>
+      <p>keine Verhaltensänderung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Compunction</h4>
+      <p>Verantwortung wird angenommen</p>
+      <p>Schuld/Unbehagen</p>
+      <p>Absicht, sich zu ändern</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Abwehr führt zu Änderungsbereitschaft, während Compunction die Rückmeldung abwertet und alles beim Alten lässt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>1 $ Belohnung</h4>
+      <p>wenig äußere Rechtfertigung</p>
+      <p>große innere Dissonanz</p>
+      <p>starke Einstellungsänderung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>20 $ Belohnung</h4>
+      <p>genug äußere Rechtfertigung</p>
+      <p>wenig Dissonanz</p>
+      <p>kaum Einstellungsänderung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die hohe Belohnung (20 $) erzeugt die stärkere Einstellungsänderung, weil viel Geld die Dissonanz vergrößert.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Impersonation</h4>
+      <p>fremde Identität fälschen</p>
+      <p>leicht abgewandelter Name/Logo</p>
+      <p>erschleicht Glaubwürdigkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Diskreditierung</h4>
+      <p>Quelle/Kritiker angreifen</p>
+      <p>statt die Sache zu prüfen</p>
+      <p>„alle lügen doch“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Impersonation bedeutet, Kritiker pauschal anzugreifen, während Diskreditierung das Fälschen einer fremden Identität meint.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl22</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl22';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Du willst eine hoch motivierte, sachkundige Person von einem Produkt überzeugen. Welche Verarbeitungsroute greift laut Elaboration-Likelihood-Modell?",
+      "opts": [
+        "Die zentrale Route: Die Qualität und Stichhaltigkeit der Argumente entscheidet.",
+        "Die periphere Route: Allein die Attraktivität der Werbequelle entscheidet.",
+        "Gar keine — sachkundige Personen lassen sich grundsätzlich nicht überzeugen.",
+        "Die affektive Sofortroute: Nur die Stimmung im Moment entscheidet, nicht die Argumente."
+      ],
+      "c": 0,
+      "e": "Hohe Motivation + Fähigkeit → zentrale Route: man verarbeitet die Argumente gründlich, ihre Qualität entscheidet."
+    },
+    {
+      "id": "s0q2",
+      "q": "Ein müder, unmotivierter Zuschauer sieht abends Werbung. Worauf spricht er eher an?",
+      "opts": [
+        "Auf die Detailtiefe der wissenschaftlichen Belege im Kleingedruckten der Anzeige.",
+        "Auf periphere Hinweisreize wie Attraktivität, Prominenz oder die schiere Anzahl der Argumente.",
+        "Auf gar nichts — Müdigkeit macht ihn nach Ansicht mancher völlig immun gegen jede Werbebotschaft.",
+        "Vor allem auf eine lückenlose, sorgfältig abgewogene logische Beweiskette trotz seiner Müdigkeit."
+      ],
+      "c": 1,
+      "e": "Geringe Motivation/Fähigkeit → periphere Route: nicht die Argumentqualität, sondern Cues (Attraktivität, Expertenstatus, Anzahl) wirken."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Jemand handelt gegen seine eigene Einstellung, ohne starke äußere Rechtfertigung. Was passiert nach der Dissonanztheorie häufig?",
+      "opts": [
+        "Die Einstellung bleibt völlig unverändert, weil Verhalten und Einstellung nichts miteinander zu tun haben.",
+        "Die Person vergisst das eigene abweichende Verhalten einfach vollständig und dauerhaft.",
+        "Die Person passt ihre Einstellung an das Verhalten an, um das unangenehme Spannungsgefühl zu verringern.",
+        "Die Person entwickelt eine Gedächtnisstörung, die ausschließlich die fragliche Entscheidung betrifft."
+      ],
+      "c": 2,
+      "e": "Kognitive Dissonanz: Verhalten ↔ Einstellung passen nicht → unangenehme Spannung → man ändert oft die Einstellung (der leichter änderbare Teil)."
+    },
+    {
+      "id": "s1q2",
+      "q": "Im klassischen Experiment beschreiben Teilnehmende eine sterbenslangweilige Aufgabe gegenüber anderen als „spannend“. Wer ändert danach seine eigene Einstellung STÄRKER?",
+      "opts": [
+        "Wer dafür sehr viel Geld bekommt, weil hohe Belohnungen die Erinnerung an die Langeweile zuverlässig verdrängen.",
+        "Beide Gruppen ändern ihre Einstellung danach exakt gleich stark, unabhängig von der Bezahlung.",
+        "Wer 20 $ für die Aufgabe bekommt — die hohe Belohnung erzeugt dabei angeblich die größere innere Dissonanz.",
+        "Wer nur 1 $ bekommt — die geringe Rechtfertigung erlaubt nur eine Einstellungsänderung als Ausweg."
+      ],
+      "c": 3,
+      "e": "1 $ = kaum externe Rechtfertigung → die Lüge lässt sich nur durch „eigentlich war es ganz interessant“ rechtfertigen → stärkere Einstellungsänderung. 20 $ liefern genug äußere Rechtfertigung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Eine Falschmeldung wird später klar und deutlich richtiggestellt. Was zeigt die Forschung über die Wirkung?",
+      "opts": [
+        "Viele stützen sich trotz der Korrektur weiterhin auf die längst widerlegte Falschinformation.",
+        "Die Korrektur löscht die ursprüngliche Falschinformation zuverlässig und vollständig aus dem Gedächtnis.",
+        "Korrekturen führen erfahrungsgemäß immer dazu, dass man stattdessen das Gegenteil der Falschmeldung glaubt.",
+        "Eine ausgesprochene Richtigstellung wirkt so rückwirkend, dass die Person die Falschinfo nie gehört hat."
+      ],
+      "c": 0,
+      "e": "Continued Influence Effect: Auch nach einer verstandenen Korrektur stützt man Schlussfolgerungen weiter auf die widerlegte Information."
+    },
+    {
+      "id": "s2q2",
+      "q": "Man korrigiert bei Anhänger:innen erfolgreich eine falsche Behauptung ihres Lieblingspolitikers. Was ändert sich danach oft NICHT?",
+      "opts": [
+        "Der reine Glaube an die einzelne, konkret korrigierte Tatsachenbehauptung selbst und sonst nichts.",
+        "Die Sympathie für den Politiker bzw. seine Absicht, bei der nächsten Wahl für ihn zu stimmen.",
+        "Das Verständnis der Korrektur selbst — die Person hat sie inhaltlich klar erfasst.",
+        "Die Fähigkeit, die korrigierte Aussage kurz danach korrekt als falsch wiederzugeben."
+      ],
+      "c": 1,
+      "e": "„Fakten korrigierbar, Gefühle nicht“: Der Glaube an die Einzelaussage sinkt, die Einstellung/Wahlabsicht bleibt aber oft unberührt."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Ein Account nennt sich @BBCNewsHQ (statt @BBCNews), kopiert das Logo und verbreitet eine Falschmeldung. Welche Manipulationstechnik ist das?",
+      "opts": [
+        "Trolling — das gezielte, wiederholte Provozieren einer emotionalen Reaktion beim Publikum.",
+        "Polarisierung — das bewusste Vertiefen von Gräben zwischen der eigenen Gruppe und Fremdgruppen.",
+        "Impersonation — das Fälschen einer glaubwürdigen fremden Identität, etwa per Logo oder Konto.",
+        "Die zentrale Route, bei der ausschließlich nachprüfbare Belege und offengelegte Quellen zählen."
+      ],
+      "c": 2,
+      "e": "Impersonation: sich als echte Person/Organisation ausgeben (leicht abgewandelter Name, kopiertes Logo), um Glaubwürdigkeit zu erschleichen."
+    },
+    {
+      "id": "s3q2",
+      "q": "„Teile diesen Beitrag, wenn auch DU genug hast von DENEN da oben, die UNS ganz normale Leute verachten!“ — welche Technik steckt dahinter?",
+      "opts": [
+        "Eine besonders sachliche, ausgewogene Darstellung, die beide Konfliktseiten abwägt.",
+        "Impersonation — das Vortäuschen einer fremden, täuschend echten Identität im Internet.",
+        "Trolling im engeren Sinne, also das bloße gezielte Hinterherjagen einzelner Personen im Netz.",
+        "Polarisierung — bestehende Gräben zwischen den Gruppen werden bewusst verschärft."
+      ],
+      "c": 3,
+      "e": "Polarisierung: Gruppengegensätze (wir vs. die) künstlich verstärken, um Empörung und Zugehörigkeit zu mobilisieren."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was bedeutet „Prebunking“ bzw. psychologische Inoculation gegen Fake News?",
+      "opts": [
+        "Menschen vorab vor Manipulationstechniken warnen und sie in abgeschwächter Form zeigen, um „Immunität“ aufzubauen.",
+        "Falschmeldungen grundsätzlich erst nach ihrer breiten Verbreitung mühsam einzeln widerlegen.",
+        "Alle zweifelhaften Inhalte automatisch und ohne menschliche Prüfung durch Algorithmen löschen.",
+        "Eine Methode, bei der man erst nach dem Kontakt mit Desinformation wiederholt denselben Faktencheck lesen lässt."
+      ],
+      "c": 0,
+      "e": "Inoculation/Prebunking (McGuire): vorwarnen + schwache Dosis der Manipulation zeigen → man erkennt den Trick später und ist „immun“. Proaktiv statt nachträglich."
+    },
+    {
+      "id": "s4q2",
+      "q": "Warum reicht nachträgliches Fact-Checking allein oft nicht aus?",
+      "opts": [
+        "Weil Faktenchecks nach dieser Sichtweise grundsätzlich völlig inhaltlich falsch, wertlos und überflüssig sind.",
+        "Wegen des Continued Influence Effects wirkt Falschinfo trotz Korrektur fort; Falsches verbreitet sich zudem schneller.",
+        "Weil so gut wie niemand jemals irgendwelche Faktenchecks überhaupt liest, teilt oder ernsthaft beachtet.",
+        "Weil eine Korrektur die Falschmeldung beim Publikum meist deutlich ins genaue Gegenteil verkehrt und neue Fehlannahmen erzeugt."
+      ],
+      "c": 1,
+      "e": "Korrekturen kommen spät und „kleben“ schlechter als der Mythos (Continued Influence Effect); zudem verbreitet sich Falsches schneller. Darum braucht es zusätzlich Prebunking."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Laut der Instagram-Studie: Welche Eigenschaft sagt eher mehr selbstdarstellende Inhalte und Selfies voraus?",
+      "opts": [
+        "Eine besonders hohe Lebenszufriedenheit und allgemeine Zufriedenheit mit dem eigenen Leben.",
+        "Eine ausgeprägte Schüchternheit im Umgang mit anderen Menschen im echten Leben.",
+        "Narzissmus — ein unrealistisch positives, überhöhtes Selbstbild der eigenen Person.",
+        "Die vollständige Abwesenheit jeglicher Persönlichkeitsmerkmale, die mit den Fotos zusammenhing."
+      ],
+      "c": 2,
+      "e": "Narzissmus (unrealistisch positives Selbstbild) sagte mehr selbstpromotende Inhalte/Selfies voraus."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ließ sich in der Studie aus den Fotomerkmalen NICHT gut vorhersagen?",
+      "opts": [
+        "Die Vorhersage gelang für jedes Merkmal exakt gleich gut, ohne erkennbare Unterschiede.",
+        "Der Grad an Narzissmus, also das unrealistisch positive Selbstbild der Person.",
+        "Das Ausmaß an Einsamkeit, also das Gefühl fehlender sozialer Verbundenheit.",
+        "Die allgemeine Lebenszufriedenheit, also die Zufriedenheit mit dem eigenen Leben."
+      ],
+      "c": 3,
+      "e": "Narzissmus und Einsamkeit waren aus Fotomerkmalen brauchbar vorhersagbar — die Lebenszufriedenheit dagegen nicht."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Jemand erhält eine Rückmeldung (z. B. aus einem IAT), die auf einen eigenen Bias hindeutet, und erklärt sofort, „der Test sei doch Unsinn“. Welcher Reaktionspfad ist das?",
+      "opts": [
+        "Abwehr — Verantwortung wird klar abgelehnt, die Rückmeldung wird dabei zugleich abgewertet.",
+        "Compunction — ein Schuldgefühl verbunden mit der ernsthaften Absicht, das eigene Verhalten zu ändern.",
+        "Eine neutrale, rein sachliche Prüfung des eigenen Testergebnisses ganz ohne jede erkennbare Emotion.",
+        "Ein unmittelbarer Abbau des Bias, der allein durch das Infragestellen der Testgültigkeit entsteht."
+      ],
+      "c": 0,
+      "e": "Abwehr (Defensiveness): Verantwortung ablehnen → Quelle/Test abwerten → keine Verhaltensänderung."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wann führt Rückmeldung über einen Bias eher zu echter Änderungsbereitschaft (Compunction)?",
+      "opts": [
+        "Wenn die Person die Rückmeldung möglichst schnell wieder vergisst und verdrängt.",
+        "Wenn die Person Verantwortung übernimmt und Schuldgefühl in Änderungsabsicht umsetzt.",
+        "Wenn die Rückmeldung besonders bedrohlich, beschämend und pauschal formuliert wird.",
+        "Wenn der Person versichert wird, dass sie als einzige überhaupt keinerlei Bias besitzt."
+      ],
+      "c": 1,
+      "e": "Compunction: persönliche Verantwortung annehmen → Schuld/Unbehagen wird in Änderungsabsicht umgesetzt. Hilfreich: Feedback vorab antizipieren, Selbstwirksamkeit stärken."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Eine Schlagzeile macht dich sofort sehr wütend, und du willst sie ungelesen weiterteilen. Was ist die klügste Reaktion?",
+      "opts": [
+        "Sofort teilen — starke Wut gilt hier als sehr verlässliches Zeichen für die Wahrheit der Meldung.",
+        "Die Quelle pauschal und ohne jede weitere Prüfung als reine „Lügenpresse“ abtun und ignorieren.",
+        "Kurz innehalten — heftige Wut ist ein typischer Manipulations-Hebel, die sogenannte Emotions-Technik.",
+        "Die Schlagzeile rasch an möglichst viele Menschen weiterleiten, weil starke Wut angeblich Faktentreue beweist."
+      ],
+      "c": 2,
+      "e": "Emotion (v. a. Wut/Empörung) ist eine der Kerntechniken der Desinformation. Innehalten und prüfen, bevor man teilt."
+    },
+    {
+      "id": "s7q2",
+      "q": "Du möchtest einen bereits kursierenden Mythos richtigstellen. Wie machst du es am wirksamsten?",
+      "opts": [
+        "Den Mythos möglichst oft und an prominenter Stelle wiederholen, damit alle genau wissen, was falsch war.",
+        "Gar nichts tun, weil Korrekturen nach dieser Auffassung ohnehin grundsätzlich unmöglich und wirkungslos sind.",
+        "Den Mythos mit vielen drastischen Details ausschmücken, bevor man am Ende beiläufig erwähnt, dass er falsch ist.",
+        "Zuerst die Wahrheit klar voranstellen und den Mythos nicht betonen — oder besser vorab warnen, also Prebunking betreiben."
+      ],
+      "c": 3,
+      "e": "Gute Korrektur stellt die Wahrheit voran und vermeidet, den Mythos prominent zu wiederholen (sonst stärkt man ihn). Noch besser ist Vorbeugen (Prebunking)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Eine Werbung richtet sich an Fachpublikum, das genau hinschaut. Worauf sollte sie setzen?",
+    "opts": [
+      "Auf starke, stichhaltige Sachargumente, also die zentrale Route des Elaboration-Likelihood-Modells.",
+      "Auf möglichst viele attraktive Models, ganz unabhängig vom eigentlichen inhaltlichen Argument.",
+      "Auf eine besonders große Zahl beliebiger Argumente, egal wie schwach diese im Einzelnen sind.",
+      "Auf eine rein dekorative Gestaltung, da fachkundige Empfänger angeblich nur auf Farbe und Layout achten."
+    ],
+    "c": 0,
+    "e": "Aufmerksames, fähiges Publikum → zentrale Route: Argumentqualität zählt, schwache Argumente fallen auf."
+  },
+  {
+    "id": "bq2",
+    "q": "Du sollst etwas tun, das dir widerstrebt, bekommst dafür aber eine sehr hohe Belohnung. Wie wirkt das auf deine Einstellung?",
+    "opts": [
+      "Die Einstellung kippt garantiert ins komplette Gegenteil um, ganz ohne Ausnahme.",
+      "Die hohe Belohnung liefert genug Rechtfertigung — die Einstellung muss sich kaum ändern.",
+      "Die Einstellung ändert sich dabei sogar am stärksten von allen überhaupt denkbaren Fällen.",
+      "Die Belohnung bewirkt, dass die Einstellung vollständig aus dem Bewusstsein verschwindet."
+    ],
+    "c": 1,
+    "e": "Hohe externe Rechtfertigung (viel Geld) → wenig Dissonanz → kaum Einstellungsänderung. Gerade die geringe Belohnung erzeugt die stärkere Änderung."
+  },
+  {
+    "id": "bq3",
+    "q": "„Eine kleine Gruppe geheimer Strippenzieher steuert in Wahrheit alles. #WachtAuf“ — welche Technik?",
+    "opts": [
+      "Impersonation, also das Fälschen einer fremden, täuschend echt wirkenden Identität.",
+      "Emotion, also das gezielte Schüren starker Wut, Angst oder Empörung beim Publikum.",
+      "Verschwörungserzählung — eine geheime, böswillige Elite wird als alternative Erklärung angeführt.",
+      "Eine transparente Quellenarbeit, bei der jede Behauptung durch offen einsehbare Belege gestützt wird."
+    ],
+    "c": 2,
+    "e": "Verschwörungserzählung: Ereignisse werden einer geheimen, meist bösartigen Elite zugeschrieben."
+  },
+  {
+    "id": "bq4",
+    "q": "„Die etablierten Medien wurden bei so vielen Lügen erwischt — man kann ihnen kein Wort glauben.“ Welche Technik?",
+    "opts": [
+      "Eine differenzierte Medienkritik, die konkrete Fehler belegt und auf Verbesserung statt Entwertung zielt.",
+      "Polarisierung, also das bewusste Vertiefen von Gräben zwischen der eigenen Gruppe und Fremdgruppen.",
+      "Emotion, also das gezielte und wiederholte Schüren starker Wut oder Empörung beim Publikum.",
+      "Diskreditierung — die Quelle bzw. deren Kritiker pauschal angreifen, statt die Sache zu prüfen."
+    ],
+    "c": 3,
+    "e": "Diskreditierung/Deflection: nicht das Argument, sondern die Glaubwürdigkeit der Quelle pauschal attackieren („alle lügen“)."
+  },
+  {
+    "id": "bq5",
+    "q": "Was ist ein zentraler Vorteil von Prebunking gegenüber reinem Nachkorrigieren?",
+    "opts": [
+      "Es wirkt, BEVOR sich die Falschinfo festsetzt, und überträgt sich auf viele verschiedene Themen.",
+      "Es löscht rückwirkend angeblich alle bereits geglaubten Falschmeldungen vollständig und endgültig.",
+      "Es macht dadurch jede Form von nachträglichem Faktencheck für immer völlig überflüssig.",
+      "Es sorgt angeblich dafür, dass Menschen keine Nachrichten mehr konsumieren und so geschützt sind."
+    ],
+    "c": 0,
+    "e": "Prebunking setzt vorbeugend an (Immunität, bevor der Mythos klebt) und schützt als „Breitband-Impfung“ themenübergreifend gegen die Techniken."
+  },
+  {
+    "id": "bq6",
+    "q": "Laut der Instagram-Studie hängt Einsamkeit eher mit welchem Nutzungsmuster zusammen?",
+    "opts": [
+      "Mit dem kompletten und dauerhaften Verzicht auf jegliche Nutzung sozialer Medien im Alltag.",
+      "Eher mit passivem Browsen und dem Preisgeben persönlicher Infos statt aktivem Austausch.",
+      "Ausschließlich mit dem Hochladen besonders vieler fröhlicher Gruppenfotos mit Freunden und Familie.",
+      "Mit einer erhöhten Schlagfertigkeit in Kommentarspalten, die einsame Nutzer:innen deutlich unterscheidet."
+    ],
+    "c": 1,
+    "e": "Einsamkeit hing eher mit passivem Konsum/Selbstoffenbarung zusammen; das Maß ist zudem aus Fotomerkmalen brauchbar vorhersagbar."
+  },
+  {
+    "id": "bq7",
+    "q": "Bei wem fällt die Abwehr gegen unliebsames Bias-Feedback laut Forschung tendenziell stärker aus?",
+    "opts": [
+      "Nur bei Personen, denen das ganze Thema völlig gleichgültig, egal und unwichtig ist.",
+      "Ausschließlich bei Menschen ganz ohne jede Art von Schul- oder akademischer Bildung überhaupt vorhanden.",
+      "Bei der Mehrheitsgruppe und bei Menschen, die sich für „weniger voreingenommen als andere“ halten.",
+      "Nur bei Personen, die den Test selbst entwickelt haben und dessen Schwächen genau kennen."
+    ],
+    "c": 2,
+    "e": "Abwehr ist stärker, wenn das Feedback vom Selbstbild abweicht und sozial inakzeptabel ist — v. a. bei Mehrheitsgruppen und „besser-als-der-Durchschnitt“-Überzeugung."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Gesamthaltung für den eigenen Social-Media-Alltag folgt aus diesem Modul am besten?",
+    "opts": [
+      "Schlicht allen Inhalten blind vertrauen, solange sie genügend Likes und Shares gesammelt haben.",
+      "Social Media komplett und dauerhaft meiden, weil jede Nutzung angeblich zwangsläufig schadet.",
+      "Nur noch Inhalte glauben, die ohnehin die eigene, bereits bestehende Meinung bestätigen.",
+      "Die Manipulations-Techniken kennen, bei starken Gefühlen innehalten und vor dem Teilen Quelle/Absicht prüfen."
+    ],
+    "c": 3,
+    "e": "Kompetenter Umgang: Techniken erkennen, Emotionen als Warnsignal nehmen, vor dem Teilen Quelle/Absicht prüfen — weder blindes Vertrauen noch Totalverweigerung."
+  }
+];
+
+var corrCorrect = {
+  "aa": "cie",
+  "ab": "posttruth",
+  "ac": "feelings",
+  "ad": "falsemem",
+  "ba": "narz",
+  "bb": "einsam",
+  "bc": "lebenszufr",
+  "bd": "highlight",
+  "ca": "emotion",
+  "cb": "vergleich",
+  "cc": "diskredit",
+  "cd": "prebunk"
+};
+var corrExpl = {
+  "aa": "Trotz verstandener Korrektur stützt man sich weiter auf die Falschinfo = Continued Influence Effect.",
+  "ab": "Emotion und persönliche Überzeugung zählen mehr als objektive Fakten = Post-Truth.",
+  "ac": "Glaube an die korrigierte Einzelaussage sinkt, Einstellung/Wahl bleiben = „Fakten ja, Gefühle nein“.",
+  "ad": "Lebhafte Erinnerung an ein nie geschehenes Ereignis = Falscherinnerung.",
+  "ba": "Unrealistisch positives Selbstbild, postet mehr Selbstdarstellung/Selfies = Narzissmus.",
+  "bb": "Unangenehmes Gefühl aus der Bewertung eigener Beziehungen, eher passives Browsen = Einsamkeit.",
+  "bc": "Gesamtbewertung der eigenen Lebensqualität; aus Fotos kaum vorhersagbar = Lebenszufriedenheit.",
+  "bd": "Man zeigt v. a. die kuratierten, positivsten Momente = Highlight-Reel / Selbstdarstellung.",
+  "ca": "Sofortige starke Wut → Emotions-Technik erkennen und kurz innehalten.",
+  "cb": "Schlechteres Gefühl beim Scrollen → an das Highlight-Reel denken, sich nicht 1:1 vergleichen.",
+  "cc": "„Die Medien lügen alle“ → Diskreditierungs-Technik (Quelle pauschal entwerten).",
+  "cd": "Mythos richtigstellen → Wahrheit zuerst, Mythos nicht betonen; besser vorab warnen (Prebunking)."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── ELM — Routen-Klassifikator ── */
+function elmCalc(){
+  var m=document.getElementById('elm-mot'), a=document.getElementById('elm-ab');
+  if(!m||!a) return;
+  var mot=parseInt(m.value,10), ab=parseInt(a.value,10);
+  document.getElementById('elm-motv').textContent=mot;
+  document.getElementById('elm-abv').textContent=ab;
+  var ela=Math.round((mot+ab)/2*10); /* 0..100 */
+  var bar=document.getElementById('elm-bar');
+  if(bar){ bar.style.width=ela+'%'; bar.textContent=ela+'%'; bar.style.background = ela>=60?'var(--green)':(ela>=35?'var(--yellow)':'var(--orange)'); }
+  var v=document.getElementById('elm-v'); if(!v) return;
+  if(mot>=6 && ab>=6) v.innerHTML='<strong>Zentrale Route:</strong> hohe Motivation + Fähigkeit → die <em>Qualität der Argumente</em> entscheidet. Stabile, verhaltenswirksame Einstellung.';
+  else v.innerHTML='<strong>Periphere Route:</strong> Motivation oder Fähigkeit zu gering → <em>Cues</em> entscheiden (Attraktivität, Expertenstatus, Anzahl der Argumente). Leichter, aber labiler — und das Einfallstor für Manipulation.';
+}
+
+/* ── Dissonanz — 1 $ vs. 20 $ ── */
+function dsBar(id,pct,txt,col){ var b=document.getElementById(id); if(!b) return; b.style.width=pct+'%'; b.style.background=col; b.textContent=txt; }
+function dsShow(which){
+  var o=document.getElementById('ds-1'), t=document.getElementById('ds-20');
+  if(o) o.classList.toggle('on', which==='one');
+  if(t) t.classList.toggle('on', which==='twenty');
+  if(which==='one'){
+    dsBar('ds-dis',85,'hoch','var(--orange)');
+    dsBar('ds-att',82,'stark','var(--green)');
+    var v=document.getElementById('ds-v'); if(v) v.innerHTML='<strong>1 $:</strong> kaum äußere Rechtfertigung → große Dissonanz → man ändert die <em>Einstellung</em> („war doch ganz interessant“).';
+  } else {
+    dsBar('ds-dis',20,'gering','var(--green)');
+    dsBar('ds-att',18,'schwach','var(--text3)');
+    var v2=document.getElementById('ds-v'); if(v2) v2.innerHTML='<strong>20 $:</strong> genug äußere Rechtfertigung („ich hab’s fürs Geld gesagt“) → wenig Dissonanz → kaum Einstellungsänderung.';
+  }
+}
+
+/* ── Strategie-Spotter (6 Manipulationstechniken) ── */
+var SPOT=[
+  {post:"Account „@BBCNewsHQ“ (statt @BBCNews) mit kopiertem Logo meldet: „Royals bestätigen geheime Hochzeit.“", tech:"impersonation"},
+  {post:"„Diese widerlichen Politiker zerstören ABSICHTLICH dein Land. Wie kann man da NICHT außer sich vor Wut sein?!“", tech:"emotion"},
+  {post:"„Teile, wenn auch DU genug hast von DENEN da oben, die UNS normale Leute insgeheim verachten!“", tech:"polarization"},
+  {post:"„Aufgedeckt: Eine kleine Gruppe geheimer Strippenzieher steuert in Wahrheit Wirtschaft und Medien. #WachtAuf“", tech:"conspiracy"},
+  {post:"„Die etablierten Medien wurden bei so vielen Lügen erwischt — kein einziges Wort von denen ist noch glaubwürdig.“", tech:"discredit"},
+  {post:"Kommentar unter einem Post: „lol beweis es doch, du Schaf 🐑 — oder hast du etwa Angst zu antworten?“", tech:"trolling"}
+];
+var SPOTLABEL={impersonation:"Impersonation",emotion:"Emotion",polarization:"Polarisierung",conspiracy:"Verschwörung",discredit:"Diskreditierung",trolling:"Trolling"};
+var spotI=0;
+function spotRender(){
+  var p=document.getElementById('spot-post'); if(!p) return;
+  var fb=document.getElementById('spot-fb'), pr=document.getElementById('spot-prog'), bt=document.getElementById('spot-btns');
+  if(spotI>=SPOT.length){
+    p.textContent='✅ Stark — alle '+SPOT.length+' Beispiele erkannt!';
+    if(fb) fb.textContent=''; if(pr) pr.textContent=''; if(bt) bt.style.display='none';
+    return;
+  }
+  p.textContent=SPOT[spotI].post;
+  if(fb) fb.textContent='';
+  if(pr) pr.textContent='Beispiel '+(spotI+1)+' / '+SPOT.length;
+  if(bt) bt.style.display='flex';
+}
+function spotPick(t){
+  var fb=document.getElementById('spot-fb'); if(!fb||spotI>=SPOT.length) return;
+  if(t===SPOT[spotI].tech){
+    fb.style.color='var(--green)';
+    fb.textContent='✓ Richtig: '+SPOTLABEL[t]+'.';
+    spotI++;
+    setTimeout(spotRender,900);
+  } else {
+    fb.style.color='var(--red)';
+    fb.textContent='✗ Nicht ganz — sieh genauer hin und versuch es nochmal.';
+  }
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* Init der bespoke-Simulatoren */
+  elmCalc(); dsShow('one'); spotRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

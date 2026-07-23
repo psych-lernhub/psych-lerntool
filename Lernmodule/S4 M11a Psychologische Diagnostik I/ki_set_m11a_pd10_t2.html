@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · 🤖 KI-Übungsset PD10 Probabilistische Testtheorie · Teil 2/3 — 28 Fragen</title>
+<!--
+  Altklausur-HTML von build_altklausur.py erzeugt (Engine = scaffold_lernmodul.py
+  + Quiz-Runner). Echte, geprüfte Altklausurfragen. Storage-Key: lm-m11a-vl56
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Quiz-Runner */
+.mc-opt.qr-sel{border-color:var(--accent)!important;background:rgba(129,140,248,.12)!important;color:var(--text)!important}
+.mc-opt.qr-sel .ltr{color:var(--accent)}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-review .card{margin-bottom:10px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.exp-btn{background:none;border:1px solid rgba(56,189,248,.35);color:var(--cyan);border-radius:8px;
+  padding:6px 12px;font-size:.75rem;font-weight:600;cursor:pointer;margin-top:8px;margin-right:8px;transition:.15s}
+.exp-btn:hover{background:rgba(56,189,248,.08)}
+.mc-hint{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.28);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2)}
+.mc-hint .lbl{font-size:.63rem;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · 🤖 KI-Übungsset PD10 Probabilistische Testtheorie · Teil 2/3 — 28 Fragen</h1>
+<p class="page-sub">Psychologische Diagnostik I · PD10 Probabilistische Testtheorie · Teil 2 von 3 · MCQ-Kette V5.1.0</p>
+<div class="lf-bar">
+  <strong>🤖 PD10·2/3</strong> Teil 2 von 3 des PD10-Fragensets (28 von 85 Fragen; die Teile folgen der Reihenfolge der Vorlesung und überschneiden sich nicht). Distraktoren fehlkonzept-basiert nach Regelwerk V5.1.0, quellengebunden an die Ground-Truth-Extraktion, jeder Distraktor mit Falschheitsbeleg; formal gate-geprüft (Musterprüfungen + fachblinde Blind-Rate).
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">🎯 Quiz starten</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">📋 Alle Fragen</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — Quiz-Runner ═══════════ -->
+<section class="section active" id="s0">
+  <div id="quizRunner"></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — Alle Fragen (Durchblättern) ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">📋 Alle Altklausurfragen (28)</div>
+    <div class="sec-lz">28 KI-Fragen zu PD10 (Probabilistische Testtheorie / IRT), Teil 2 von 3.</div>
+  </div>
+  <div id="sq0"></div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(0)">← Zum Quiz</button>
+  </div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl56';
+var OPT_SHUF = true;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "q30",
+      "q": "Welche Einschränkung gilt trotz spezifischer Objektivität für die Parameterschätzungen?",
+      "opts": [
+        "Die Rangordnung der Personen kehrt sich bei einer anderen Auswahl der vorgegebenen Items teilweise um.",
+        "Auch die inhaltliche Bedeutung der geschätzten Parameter verändert sich mit jeder neu gezogenen Stichprobe.",
+        "Die geschätzten Parameterwerte selbst fallen je nach Itemstichprobe systematisch unterschiedlich aus.",
+        "Die Genauigkeit der Schätzungen hängt weiterhin von der gewählten Personen- und Itemstichprobe ab."
+      ],
+      "c": 3,
+      "e": "Folie 8 enthält zur spezifischen Objektivität einen ausdrücklichen Zusatz: Die Genauigkeit der Schätzungen hängt allerdings von der Wahl der Personen- und Itemstichproben ab. Das Trennmerkmal ist die Unterscheidung von Invarianz und Präzision: Die Parameterbeziehung bleibt über Teilmengen invariant (gleiche Scores), aber wie genau die Werte geschätzt werden, bleibt stichprobenabhängig. Der Distraktor, auch die inhaltliche Bedeutung der Parameter ändere sich, übergeneralisiert die Einschränkung auf die Invarianz selbst, die laut Folie 8 gerade erhalten bleibt. Dass die geschätzten Parameterwerte je nach Itemstichprobe systematisch unterschiedlich ausfielen, widerspricht der Aussage, dass jede Teilmenge zu gleichen Scores führt. Und eine Umkehr der Personen-Rangordnung bei anderer Itemauswahl ist ausgeschlossen, weil die Personenscores nach Folie 8 gerade unabhängig von der Itemauswahl sind.",
+      "h": "Die hervorgehobene Eigenschaft sichert, dass die Parameterbeziehung über verschiedene Teilmengen gleich bleibt. Frag Dich, was davon unberührt bleibt und was trotzdem noch von der konkreten Personen- und Item-Stichprobe abhängt — Invarianz und Messgenauigkeit sind nicht dasselbe."
+    },
+    {
+      "id": "q31",
+      "q": "Welche Eigenschaft des Rasch-Modells bildet die Grundlage für adaptives Testen?",
+      "opts": [
+        "Die spezifische Objektivität.",
+        "Die Eindimensionalität.",
+        "Die gleiche Trennschärfe.",
+        "Die Suffizienz des Scores."
+      ],
+      "c": 0,
+      "e": "Folie 8 hebt eine Eigenschaft besonders hervor: Die spezifische Objektivität ist eine besonders hervorzuhebende Eigenschaft des Rasch-Modells und bildet auch die Grundlage für adaptives Testen. Damit ist die Antwort eindeutig — das Trennmerkmal ist der ausdrückliche Bezug der spezifischen Objektivität zum adaptiven Testen. Die anderen genannten Eigenschaften sind zwar reale Merkmale des Modells, werden von Folie 8 aber nicht als Grundlage adaptiven Testens ausgewiesen: Die Eindimensionalität (Rasch-Homogenität) ist eine Modellannahme über eine einzige latente Fähigkeit; die gleiche Trennschärfe aller Items ist eine Eigenschaft der ICCs (Folie 7), die im 2PL gerade aufgegeben wird (Folie 22); und die Suffizienz des Summenscores betrifft, dass nur die Anzahl gelöster Items zählt. Nur die Stichprobenunabhängigkeit der Parameterschätzung erlaubt es, jeder Person andere Items vorzulegen und dennoch vergleichbare Werte zu erhalten — die Voraussetzung adaptiven Testens.",
+      "h": "Adaptives Testen legt verschiedenen Personen unterschiedliche Items vor und will die Werte trotzdem vergleichen können. Überlege, welche der Rasch-Eigenschaften genau das ermöglicht — und welche nur die Dimensionalität, die Trennschärfegleichheit oder den Summenscore betrifft."
+    },
+    {
+      "id": "q32",
+      "q": "Nach welchem Kriterium werden Personen- und Itemparameter mithilfe der Likelihood geschätzt?",
+      "opts": [
+        "So, dass die Summe aller geschätzten Itemschwierigkeiten insgesamt möglichst klein bleibt.",
+        "So, dass die Abweichung zwischen beobachteten und vorhergesagten Itemantworten möglichst gering ausfällt.",
+        "So, dass das Modell unabhängig vom beobachteten Datenmuster die größtmögliche Likelihood erzielen kann.",
+        "So, dass das beobachtete Datenmuster unter dem dichotomen Rasch-Modell möglichst wahrscheinlich ist."
+      ],
+      "c": 3,
+      "e": "Folie 9 beschreibt das Schätzprinzip: Personen- und Itemparameter werden über eine Likelihood-Funktion so geschätzt, dass unter Annahme der Geltung des dichotomen Rasch-Modells das vorliegende Datenmuster möglichst wahrscheinlich ist. Das Trennmerkmal ist die Maximierung der Wahrscheinlichkeit des beobachteten Datenmusters (Maximum-Likelihood), nicht irgendeine andere Zielgröße. Die Minimierung der Abweichung zwischen beobachteten und vorhergesagten Antworten ist ein anderes Schätzprinzip (kleinste Quadrate) und steht nicht in Folie 9. Die Summe der Itemschwierigkeiten zu minimieren ist kein Schätzkriterium — die Parameter ergeben sich aus der Likelihood, nicht aus möglichst kleinen Schwierigkeiten. Und ein Modell, das unabhängig vom beobachteten Datenmuster die höchste Likelihood erhielte, widerspricht der Definition: Die Likelihood ist gerade die Wahrscheinlichkeit genau dieses beobachteten Musters; Folie 9 nennt sie zugleich Optimierungskriterium und Fit-Maß.",
+      "h": "Der Name des Verfahrens verrät das Kriterium schon halb: Es geht um eine Wahrscheinlichkeit, die maximiert wird. Frag Dich, wessen Wahrscheinlichkeit das ist — die des tatsächlich beobachteten Datenmusters — und grenze das von Abweichungsminimierung oder möglichst kleinen Schwierigkeiten ab."
+    },
+    {
+      "id": "q33",
+      "q": "Welche zwei Funktionen hat die Likelihood bei der Rasch-Modellierung?",
+      "opts": [
+        "Sie dient als Signifikanzkriterium für den Modelltest und als Maß der Itemtrennschärfe im Datensatz.",
+        "Sie dient als Optimierungskriterium für die Parameterschätzung und als Maß der Messgenauigkeit auf dem Merkmalskontinuum.",
+        "Sie dient als Optimierungskriterium für die Parameterschätzung und als Hinweis auf die Modellpassung an die Daten.",
+        "Sie dient als Kennwert der Reliabilität und als Grundlage der Schwierigkeitsschätzung der Items."
+      ],
+      "c": 2,
+      "e": "Folie 9 nennt der Likelihood ausdrücklich eine Doppelfunktion: Einerseits ist sie das Optimierungskriterium, nach dem die Personen- und Itemparameter so geschätzt werden, dass das beobachtete Datenmuster möglichst wahrscheinlich wird; andererseits sagt ihre Höhe etwas über die Passung des Modells an die Daten aus (eine große Likelihood spricht für die Gültigkeit des Modells). Genau diese beiden Aspekte – Schätzkriterium und Passungsindikator – bündelt der Schlüssel. Die Variante, die als zweite Funktion die Messgenauigkeit auf dem Merkmalskontinuum nennt, verwechselt die Likelihood mit der Informationsfunktion aus Folie 12, die die Genauigkeit positionsabhängig angibt. Die Kombination aus Signifikanzkriterium und Itemtrennschärfe mischt zwei fremde Größen ein: Der Signifikanztest ist der Andersen-LR- bzw. Wald-Test (Folie 16/18), die Trennschärfe ein Parameter erst des 2PL-Modells (Folie 22). Die Antwort mit Reliabilitätskennwert und Schwierigkeitsschätzung greift ebenfalls daneben – die Reliabilität wird in der PTT gar nicht als einzelner Koeffizient, sondern über die Informationsfunktion abgebildet (Folie 12).",
+      "h": "Achte darauf, welche zwei Aufgaben die Likelihood im Schätzprozess wirklich übernimmt: eine beim Bestimmen der Parameter und eine beim Beurteilen des Modells. Größen, die zur Informationsfunktion, zum Modelltest oder zur Reliabilität gehören, sind hier fehl am Platz."
+    },
+    {
+      "id": "q34",
+      "q": "Wie wird die Likelihood der gesamten Antwortmatrix gebildet?",
+      "opts": [
+        "Als Summe der Wahrscheinlichkeiten aller beobachteten Reaktionen über alle Personen und Items im Datensatz.",
+        "Als Produkt der Wahrscheinlichkeiten aller beobachteten Reaktionen über alle Personen und Items.",
+        "Als Produkt der Reaktionswahrscheinlichkeiten getrennt je Person, die danach über alle addiert werden.",
+        "Als Produkt der Zählerterme der Reaktionswahrscheinlichkeiten über alle Personen und Items zusammen."
+      ],
+      "c": 1,
+      "e": "Nach Folie 9 wird die Likelihood der gesamten Datenmatrix bestimmt, indem die Wahrscheinlichkeiten aller Reaktionen miteinander multipliziert werden; die Formel L = ∏∏ p(x_ij) läuft als Doppelprodukt über alle Personen (i) und alle Items (j). Der Schlüssel gibt genau dieses Produkt über alle beobachteten Zellen wieder. Die Summen-Variante vertauscht die Rechenoperation: Aus vielen Einzelwahrscheinlichkeiten wird die Gesamtwahrscheinlichkeit multiplikativ, nicht additiv gebildet – eine Summe widerspricht dem Produktzeichen der Formel direkt. Die Variante, die zuerst je Person multipliziert und dann über die Personen aufsummiert, erfindet eine Zwischenstufe, die es im Modell nicht gibt: Das Produkt erstreckt sich in einem Zug über sämtliche Zellen der Matrix (Folie 10). Die Zählerterm-Variante ist zu eng – die Betrachtung allein der Zähler ist auf Folie 11 nur ein Vereinfachungsschritt zur Veranschaulichung der Suffizienz; die Likelihood selbst multipliziert die vollständigen Zellwahrscheinlichkeiten mit Zähler und Nenner.",
+      "h": "Frag dich, mit welcher Rechenoperation viele Einzelwahrscheinlichkeiten zu einer Gesamtwahrscheinlichkeit verbunden werden und über welche Achsen der Datenmatrix sich diese Verknüpfung erstreckt. Zwischenschritte oder eine Beschränkung auf Teilterme führen in die Irre."
+    },
+    {
+      "id": "q35",
+      "q": "Warum werden üblicherweise logarithmierte Likelihood-Werte berichtet?",
+      "opts": [
+        "Weil erst die Logarithmierung die Parameter stichprobenunabhängig schätzbar macht.",
+        "Weil die logarithmierten Werte direkt die Modellpassung als Signifikanzurteil ausweisen.",
+        "Weil die Produkte vieler Reaktionswahrscheinlichkeiten sehr kleine Likelihood-Werte ergeben.",
+        "Weil das Produkt sonst die Itemtrennschärfe im Datensatz verzerren würde."
+      ],
+      "c": 2,
+      "e": "Folie 9 begründet die logarithmierte Darstellung rein numerisch: Weil die Likelihood ein Produkt sehr vieler Wahrscheinlichkeiten (jeweils zwischen 0 und 1) ist, werden die L-Werte extrem klein und schlecht handhabbar; man berichtet daher log(L). Genau diese Ursache – viele multiplizierte Wahrscheinlichkeiten ergeben winzige Werte – benennt der Schlüssel. Die Signifikanz-Variante verwechselt Grund und Interpretation: log(L) nahe 0 ist ein Fit-Hinweis, ein Signifikanzurteil liefert dagegen erst der Modelltest (Folie 16/18), nicht die Logarithmierung an sich. Die Variante der Stichprobenunabhängigkeit lagert die spezifische Objektivität (Folie 8) fälschlich der Log-Darstellung an – diese Eigenschaft ist eine Modelleigenschaft und hängt nicht von der Zahlendarstellung ab. Die Trennschärfe-Variante schließlich zieht einen 2PL-Parameter (Folie 22) heran, der im Rasch-Modell für alle Items gleich ist und mit dem Grund der Logarithmierung nichts zu tun hat.",
+      "h": "Überlege, was mit dem Zahlenwert eines Produkts aus vielen Faktoren unter 1 geschieht und warum das eine andere Darstellung nahelegt. Begründungen über Signifikanz, Stichprobenunabhängigkeit oder Trennschärfe zielen an dieser numerischen Ursache vorbei."
+    },
+    {
+      "id": "q36",
+      "q": "Wie werden Log-Likelihood-Werte nahe 0 in der Darstellung interpretiert?",
+      "opts": [
+        "Als Beleg großer Messfehler.",
+        "Als Beweis der Eindimensionalität.",
+        "Als Hinweis auf einen geringen Fit.",
+        "Als Hinweis auf einen hohen Fit."
+      ],
+      "c": 3,
+      "e": "Folie 9 hält fest: log(L)-Werte nahe 0 sprechen für einen hohen Fit – je näher der logarithmierte Likelihood-Wert an 0 liegt, desto besser passt das Modell zu den beobachteten Daten. Der Schlüssel gibt diese Leserichtung wieder. Die Variante mit geringem Fit dreht die Richtung um und widerspricht der Darstellung direkt. Die Eindimensionalitäts-Variante überdehnt den Befund: Eindimensionalität ist eine eigene Modellannahme (Folie 8), die über einen Modelltest geprüft wird; ein einzelner log(L)-Wert nahe 0 belegt sie nicht. Die Messfehler-Variante verwechselt die Fit-Kennzahl mit der Messgenauigkeit, die in der PTT über die Informationsfunktion und den Standardmessfehler (SE = 1/√Information, Folie 12) beschrieben wird – mit dem log(L)-Wert hat das nichts zu tun.",
+      "h": "Kläre zuerst die Leserichtung der Skala: Bedeutet ein Wert dicht an 0 eine gute oder eine schlechte Passung? Und trenne die reine Fit-Aussage von Modellannahmen wie der Eindimensionalität oder von Messfehler-Kennwerten."
+    },
+    {
+      "id": "q37",
+      "q": "Womit stimmen in der Zählervereinfachung der Likelihood die Häufigkeiten der Personenparameter θ_i überein?",
+      "opts": [
+        "Mit dem Gesamtsummenscore über die vollständige Matrix.",
+        "Mit den Trennschärfen der jeweils zugehörigen Items im Test.",
+        "Mit den Zeilensummen beziehungsweise den Summenscores der Personen.",
+        "Mit den Spaltensummen und den Lösungshäufigkeiten der einzelnen Items."
+      ],
+      "c": 2,
+      "e": "Auf Folie 11 wird der Zähler der Likelihood vereinfacht; im Exponenten erscheint jeder Personenparameter θ_i mit einem Koeffizienten, der angibt, wie oft er auftritt – und dieser Koeffizient ist gerade die Zeilensumme, also die Anzahl der von dieser Person gelösten Items (ihr Summenscore, Folie 10). Der Schlüssel ordnet die Häufigkeiten der θ_i daher korrekt den Zeilensummen bzw. Personenscores zu. Die Spaltensummen-Variante vertauscht Personen- und Itemparameter: Spaltensummen bzw. Lösungshäufigkeiten gehören zu den Itemparametern δ_j, nicht zu θ_i. Die Gesamtsummen-Variante ist zu grob – nicht die eine Gesamtsumme aller Zellen, sondern die individuelle Zeilensumme jeder Person bildet den jeweiligen θ_i-Koeffizienten. Die Trennschärfe-Variante zieht einen Parameter heran, den es im Rasch-Zähler gar nicht gibt; Trennschärfen treten erst im 2PL-Modell auf (Folie 22).",
+      "h": "Denk an die Herkunft des Koeffizienten, mit dem der Personenparameter im vereinfachten Zähler auftritt: Zählt hier eine Zeile oder eine Spalte der Datenmatrix, und ist eine individuelle oder eine Gesamtgröße gemeint? Item-Trennschärfen gehören nicht in den Rasch-Zähler."
+    },
+    {
+      "id": "q38",
+      "q": "Womit stimmen in der Zählervereinfachung der Likelihood die Häufigkeiten der Itemparameter δ_j überein?",
+      "opts": [
+        "Mit den Spaltensummen beziehungsweise den Lösungshäufigkeiten der Items.",
+        "Mit den Zeilensummen beziehungsweise den Summenscores der jeweiligen Personen.",
+        "Mit dem Gesamtsummenscore über alle Zellen der vollständigen Antwortmatrix.",
+        "Mit den Trennschärfeparametern der einzelnen Items des dichotomen Rasch-Modells."
+      ],
+      "c": 0,
+      "e": "Folie 11 zeigt den vereinfachten Zähler der Likelihood: Jeder Itemparameter δ_j erscheint im Exponenten mit einem Koeffizienten, der seiner Auftretenshäufigkeit entspricht – und das ist die Spaltensumme, also die Anzahl der Personen, die dieses Item gelöst haben (die Lösungshäufigkeit des Items, Folie 10). Der Schlüssel ordnet die Häufigkeiten der δ_j korrekt den Spaltensummen zu. Die Zeilensummen-Variante vertauscht Item- und Personenparameter: Zeilensummen bzw. Personensummenscores gehören zu θ_i, nicht zu δ_j. Die Gesamtsummen-Variante ist zu grob – maßgeblich ist die itemspezifische Spaltensumme, nicht die Summe über alle Zellen. Die Trennschärfe-Variante beruft sich auf einen Parameter, der im dichotomen Rasch-Modell nicht existiert; die Trennschärfe kommt erst als zweiter Parameter im 2PL-Modell hinzu (Folie 22).",
+      "h": "Frag dich, welche Randsumme der Datenmatrix die Häufigkeit eines Itemparameters im vereinfachten Zähler bestimmt – eine Spalte oder eine Zeile – und ob eine item-spezifische oder eine Gesamtgröße gemeint ist. Ein Trennschärfeparameter gehört nicht in das dichotome Rasch-Modell."
+    },
+    {
+      "id": "q39",
+      "q": "Welche Exponentialregel ermöglicht es, das Produkt mehrerer Zählerterme zu einem Exponentialterm zusammenzufassen?",
+      "opts": [
+        "exp(x)·exp(y)=exp(x−y).",
+        "exp(x)·exp(y)=exp(x·y).",
+        "exp(x)·exp(y)=exp(x+y).",
+        "exp(x)+exp(y)=exp(x+y)."
+      ],
+      "c": 2,
+      "e": "Auf Folie 11 wird das Produkt der einzelnen Zählerterme mit der Exponentialregel exp(x)·exp(y)=exp(x+y) zu einem einzigen Exponentialterm zusammengefasst – aus einem Produkt zweier Exponentialfunktionen wird eine Exponentialfunktion, deren Argument die Summe der Einzelargumente ist. Genau das leistet der Schlüssel. Die Variante mit exp(x·y) verwechselt die Rechenregel: Die Argumente werden addiert, nicht multipliziert. Die Variante mit einer Summe auf der linken Seite verkennt, dass dort ein Produkt zweier Exponentialterme steht; nur ein Produkt lässt sich zu exp(x+y) zusammenziehen. Die Variante mit exp(x−y) dreht das Vorzeichen im zusammengefassten Argument um – gerade beim Rasch-Term (θ_i−δ_j) ist das Vorzeichen entscheidend, die Rechenregel selbst verlangt hier aber die Summe der Argumente.",
+      "h": "Prüfe, welche Verknüpfung auf der linken Seite steht (Produkt oder Summe zweier Exponentialterme) und was mit den beiden Argumenten im zusammengefassten Term geschieht – werden sie addiert, multipliziert oder subtrahiert? Beim Vorzeichen lohnt besondere Sorgfalt."
+    },
+    {
+      "id": "q40",
+      "q": "Welche zentrale Aussage über Personenscores wird durch die Zählervereinfachung der Likelihood veranschaulicht?",
+      "opts": [
+        "Für den Personenscore ist die Anzahl gelöster Items entscheidend, nicht die Identität der gelösten Items; der Summenscore ist suffizient.",
+        "Der Personenscore hängt vor allem von der Schwierigkeit der bearbeiteten Items ab und nicht allein von deren Anzahl gelöster Aufgaben.",
+        "Für den Personenscore sind Anzahl und konkrete Auswahl der gelösten Items nötig, weshalb der Summenwert allein keine suffiziente Statistik bildet.",
+        "Für den Personenscore ist entscheidend, welche konkreten Items gelöst wurden und nicht deren Anzahl; erst das Antwortmuster macht ihn suffizient."
+      ],
+      "c": 0,
+      "e": "Folie 11 schließt aus der Zählervereinfachung: Im Exponenten steht jeder Personenparameter mit seiner Zeilensumme, das heißt für den Personenscore kommt es nur darauf an, wie viele Items eine Person löst, nicht welche – der Summenscore ist eine erschöpfende (suffiziente) Statistik (auch Folie 8). Der Schlüssel formuliert genau diese Aussage: Anzahl entscheidend, Identität der gelösten Items unerheblich, Summenscore suffizient. Die Variante, die die konkrete Item-Auswahl für entscheidend erklärt, dreht die Kernaussage um; gerade das Antwortmuster ist unerheblich. Die Variante, die Anzahl und Auswahl beide für nötig hält und die Suffizienz verneint, widerspricht der erschöpfenden Statistik – der Summenwert allein enthält bereits die gesamte Information über die Person (Folie 8). Die Variante mit Abhängigkeit von der Itemschwierigkeit denkt in KTT-Logik; im Rasch-Modell macht die spezifische Objektivität (Folie 8) den Personenscore gerade unabhängig von der konkreten Item-Auswahl.",
+      "h": "Halte fest, worauf es beim Personenscore laut Suffizienz ankommt: auf die Menge gelöster Aufgaben oder auf deren konkrete Zusammensetzung? Und überlege, ob der reine Summenwert bereits genügt oder ob Item-Auswahl oder Itemschwierigkeit zusätzlich nötig wären."
+    },
+    {
+      "id": "q41",
+      "q": "Wie wird Messgenauigkeit in der KTT und in der PTT jeweils beschrieben?",
+      "opts": [
+        "In der KTT durch einen Reliabilitätskoeffizienten, in der PTT durch die logarithmierte Gesamtlikelihood des Modells über die Personen und Items der Datenmatrix.",
+        "In der KTT durch Item- beziehungsweise Testinformationsfunktionen entlang des latenten Kontinuums, in der PTT durch einen einzelnen, positionsunabhängigen Reliabilitätskoeffizienten.",
+        "In der KTT durch einen Reliabilitätskoeffizienten, in der PTT durch Item- beziehungsweise Testinformationsfunktionen in Abhängigkeit von der Position auf dem latenten Kontinuum.",
+        "In der KTT durch einen Reliabilitätskoeffizienten, in der PTT durch einen über das gesamte latente Merkmalskontinuum konstant gehaltenen Trennschärfeindex."
+      ],
+      "c": 2,
+      "e": "Folie 12 stellt beide Rahmen direkt gegenüber: In der KTT wird die Genauigkeit, mit der ein Test das Merkmal erfasst, durch den Reliabilitätskoeffizienten quantifiziert — ein einziger, für den ganzen Test geltender Kennwert. In der PTT tritt an dessen Stelle eine Informationsfunktion (Item Information Function), die angibt, wie hoch die Messgenauigkeit eines Items oder — summiert über alle Items — des gesamten Tests in Abhängigkeit von der Position auf dem latenten Merkmalskontinuum ist. Das Trennmerkmal ist also die Positionsabhängigkeit: ein globaler Index gegen eine Funktion über das Kontinuum. Die Variante, die Kennwert und Framework vertauscht, dreht genau diese Zuordnung um und widerspricht Folie 12. Die Fassung mit einem konstanten Trennschärfeindex verkennt, dass die PTT-Genauigkeit gerade nicht konstant ist, sondern mit der Position variiert; die Trennschärfe gehört zudem erst zum 2PL-Modell (Folie 22). Die Fassung mit der logarithmierten Gesamtlikelihood verwechselt das Passungs- und Optimierungskriterium der Schätzung (Folie 9) mit dem Genauigkeitsmaß.",
+      "h": "Zwei Rahmen werden gegenübergestellt: einmal ein einziger globaler Kennwert für den ganzen Test, einmal eine Größe, die entlang des Merkmalskontinuums variiert. Achte darauf, welchem Framework der positionsabhängige Verlauf gehört und welchem der eine feste Koeffizient."
+    },
+    {
+      "id": "q42",
+      "q": "Wie entsteht die Informationsfunktion des gesamten Tests aus den Iteminformationen?",
+      "opts": [
+        "Durch Mittelung der Informationsfunktionen über die Items des Tests.",
+        "Durch Summation der quadrierten Standardmessfehler aller Items.",
+        "Durch Summation der Informationsfunktionen aller Items.",
+        "Durch Multiplikation der Informationsfunktionen aller Items."
+      ],
+      "c": 2,
+      "e": "Nach Folie 12 gibt die Informationsfunktion die Messgenauigkeit eines Items an; die Genauigkeit des gesamten Tests entsteht, indem über die Informationsfunktionen aller Items summiert wird. Der Wortlaut der Folie ist eindeutig ‚summiert über die Informationsfunktion aller Items‘. Das Trennmerkmal ist die Rechenoperation: Addition. Die Multiplikations-Variante überträgt fälschlich das Vorgehen aus der Likelihood-Bestimmung (Folie 9), wo tatsächlich Wahrscheinlichkeiten über alle Zellen multipliziert werden — für die Aggregation von Informationen gilt das aber nicht. Die Mittelungs-Variante ersetzt die Summe durch einen Durchschnitt; das widerspricht der Idee, dass ein Test mit mehr Items insgesamt genauer messen kann, denn ein Mittelwert bliebe unabhängig von der Itemzahl auf Einzelitem-Niveau. Die Variante mit den quadrierten Standardmessfehlern verdreht die Abhängigkeit: Der Standardmessfehler wird über 1/√Information erst aus der zusammengesetzten Information berechnet und ist daher keine Größe, die man zur Testinformation aufaddiert.",
+      "h": "Gefragt ist die Rechenoperation, mit der aus den Einzelbeiträgen der Items der Gesamtwert des Tests entsteht. Denke daran, dass ein längerer Test insgesamt genauer messen kann, und überlege, welche Verknüpfung diesen Zuwachs überhaupt zulässt."
+    },
+    {
+      "id": "q43",
+      "q": "Wovon hängt die Messgenauigkeit eines Items oder Tests in der PTT ab?",
+      "opts": [
+        "Von der Anzahl der bearbeiteten Items der Person.",
+        "Von der Stichprobe, an der der Test normiert wurde.",
+        "Von der Position auf dem latenten Merkmalskontinuum.",
+        "Von der einheitlichen Trennschärfe aller Items."
+      ],
+      "c": 2,
+      "e": "Folie 12 beschreibt die Informationsfunktion als Größe, die angibt, wie hoch die Messgenauigkeit eines Items oder Tests in Abhängigkeit von der Position auf dem latenten Merkmalskontinuum ist. Genau darin liegt der Kern der PTT-Reliabilitätsbetrachtung: Die Genauigkeit ist nicht überall gleich, sondern hängt davon ab, wo auf dem Kontinuum die betreffende Merkmalsausprägung liegt — in der Nähe der typischen Itemschwierigkeiten hoch, an den Rändern geringer. Das Trennmerkmal ist die Positionsabhängigkeit. Die Variante mit der Normierungsstichprobe verwechselt dies mit einer KTT-Eigenschaft: Stichprobenabhängigkeit ist ein Kritikpunkt der KTT (Folie 2) und wird im Rasch-Modell durch die spezifische Objektivität gerade überwunden (Folie 8). Die Variante mit der Anzahl bearbeiteter Items zielt auf den Summenscore, der nach der Suffizienzannahme nur zählt, wie viele Items gelöst wurden — das betrifft die Personenschätzung, nicht die lokale Präzision. Die Trennschärfe-Variante greift auf einen Parameter zurück, den das Rasch-Modell gar nicht variiert und der erst im 2PL-Modell eine Rolle spielt.",
+      "h": "Die Informationsfunktion ist keine feste Zahl für den ganzen Test, sondern verläuft über das Merkmal. Überlege, welche Größe angibt, wo auf diesem Verlauf die betrachtete Ausprägung liegt, und grenze das von reinen KTT-Eigenschaften ab."
+    },
+    {
+      "id": "q44",
+      "q": "Wie verhalten sich Information und Messfehler häufig in den Extrembereichen des latenten Kontinuums?",
+      "opts": [
+        "Dort sind Information und Messfehler gemeinsam geringer.",
+        "Dort bleiben Information wie Messfehler weitgehend unverändert.",
+        "Dort ist die Information geringer und der Messfehler größer.",
+        "Dort ist die Information deutlich größer, der Messfehler kleiner."
+      ],
+      "c": 2,
+      "e": "Folie 12 hält fest, dass die Tests in den Extremen des Kontinuums häufig weniger Information zur Verfügung stellen, und schließt daraus, dass Personenscores an den Rändern nur mit mehr Messfehlern bestimmt werden können. Der zugrunde liegende Zusammenhang ist Standardmessfehler = 1/√Information: Wenig Information bedeutet einen großen Messfehler. Das Trennmerkmal ist die gegenläufige, gerichtete Kopplung — Information niedrig, Fehler hoch. Die Variante, die beides umkehrt (Information hoch, Fehler niedrig), beschreibt gerade den mittleren Bereich und widerspricht dem Randbefund der Folie. Die Variante mit unveränderten Werten leugnet die Positionsabhängigkeit, die den ganzen Abschnitt trägt: Die Informationsfunktion ist über das Kontinuum eben nicht konstant. Die Variante, in der Information und Fehler gemeinsam sinken, verletzt die inverse Beziehung selbst — bei sinkender Information kann der über 1/√Information gebildete Fehler nicht ebenfalls sinken, sondern muss steigen.",
+      "h": "Halte zwei Größen auseinander, die über eine Kehrwert-Wurzel-Beziehung gekoppelt sind. Wenn an den Rändern die eine knapp wird, überlege, in welche Richtung die andere zwangsläufig gehen muss."
+    },
+    {
+      "id": "q45",
+      "q": "Wie hängt der Standardmessfehler mathematisch von der Information ab?",
+      "opts": [
+        "Standardmessfehler = 1/√Information.",
+        "Standardmessfehler = 1/Information.",
+        "Standardmessfehler = 1 − Reliabilität.",
+        "Standardmessfehler = √Information."
+      ],
+      "c": 0,
+      "e": "Folie 12 gibt den Zusammenhang zwischen Präzision und Information direkt als Formel an: Standardmessfehler = 1/√Information. Zwei Bausteine sind entscheidend — der Kehrwert und die Quadratwurzel. Beide zusammen erzeugen die inverse Kopplung: Steigt die Information, sinkt der Fehler, und zwar gedämpft über die Wurzel. Das Trennmerkmal ist genau diese Kombination. Die Variante ohne Kehrwert (bloß die Wurzel der Information) dreht die Richtung um, sodass der Fehler mit der Information wüchse — das widerspricht dem Folienbefund, dass an informationsarmen Rändern mehr Messfehler auftritt. Die Variante mit dem Kehrwert der Information ohne Wurzel behält zwar die richtige Richtung, verfehlt aber die Skalierung, weil die Wurzel fehlt. Die Variante mit 1 − Reliabilität wechselt unzulässig das Framework: Die Reliabilität ist der KTT-Kennwert; die PTT bezieht den Standardmessfehler ausschließlich auf die Informationsfunktion. Nur die Fassung mit Kehrwert und Wurzel gibt die Folienformel korrekt wieder.",
+      "h": "Zwei Operationen bestimmen die Formel: ein Kehrwert und eine Wurzel. Prüfe, ob beide vorhanden sind und ob die Beziehung dieselbe Größe verwendet, die in der PTT die Messgenauigkeit beschreibt — nicht den Kennwert des anderen Testtheorie-Rahmens."
+    },
+    {
+      "id": "q46",
+      "q": "Wie verändert sich der Standardmessfehler, wenn die Information steigt?",
+      "opts": [
+        "Der Standardmessfehler dieses Tests schwankt zufällig.",
+        "Der Standardmessfehler dieses Tests sinkt.",
+        "Der Standardmessfehler dieses Tests bleibt konstant.",
+        "Der Standardmessfehler dieses Tests steigt."
+      ],
+      "c": 1,
+      "e": "Der Kern folgt unmittelbar aus der Formel der Folie 12: Standardmessfehler = 1/√Information. Die Information steht im Nenner unter der Wurzel; wächst sie, so wird der Bruch kleiner, der Standardmessfehler nimmt also ab. Das ist eine gerichtete, monotone und deterministische Beziehung — genau das Trennmerkmal gegenüber den Alternativen. Die Variante mit einem Anstieg des Fehlers liest die inverse Kopplung fälschlich als gleichsinnig; sie widerspräche der Kernaussage der Folie, dass an informationsarmen Stellen mehr Messfehler auftritt. Die Variante mit konstantem Fehler blendet die Abhängigkeit von der Information vollständig aus, obwohl die Formel den Fehler ausdrücklich als Funktion der Information ausdrückt. Die Variante mit zufälliger Schwankung verwechselt einen festen mathematischen Zusammenhang mit einem Zufallsprozess; die Formel lässt für eine gegebene Information genau einen Fehlerwert zu. Die Antwortoptionen sind für die Längenbalance in einen einheitlichen Satzrahmen gehoben; inhaltlich unterscheiden sie sich nur in der beschriebenen Änderungsrichtung.",
+      "h": "Setze die Information in der Formel gedanklich größer und beobachte den Bruch, in dem sie unter der Wurzel im Nenner steht. Entscheidend ist die Richtung der Veränderung des Fehlers, nicht sein Betrag."
+    },
+    {
+      "id": "q47",
+      "q": "Welche Datengrundlage verwendet die exemplarische R-Analyse des Rasch-Modells?",
+      "opts": [
+        "Der Datensatz verbal mit 316 Personen und 24 dichotomen Items zur Rechtschreibung.",
+        "Der Datensatz verbal mit 24 Personen und 316 dichotomen Items zur Aggression.",
+        "Der Datensatz verbal mit 316 Personen und 24 dichotomen Items zur verbalen Aggression.",
+        "Der Datensatz verbal mit 316 Personen und 24 mehrstufig kodierten Items."
+      ],
+      "c": 2,
+      "e": "Nach Folie 13 arbeitet die exemplarische R-Analyse mit dem Datensatz verbal aus dem Paket difR: Er enthält Angaben von 316 Personen zu 24 dichotomen Items, die verbale Aggression erfassen (vier aggressionsauslösende Situationen, je Reaktion curse/scold/shout in den Modi would/do). Vier Bestandteile müssen stimmen: der Name verbal, 316 Personen, 24 dichotome Items und das Konstrukt verbale Aggression. Das Trennmerkmal ist die exakte Kombination dieser Angaben. Die Variante mit vertauschten Zahlen macht aus 316 Personen 24 und aus 24 Items 316 — der Datensatz hat aber deutlich mehr Personen als Items. Die Rechtschreibungs-Variante übernimmt zwar Personen- und Itemzahl, ersetzt aber das Konstrukt durch den Rechtschreibtest, der nur im Beispiel zur Informationsfunktion (Folie 12) vorkommt und nicht die R-Datengrundlage ist. Die Variante mit mehrstufig kodierten Items widerspricht dem dichotomen Format, das für das hier geschätzte Rasch-Modell vorausgesetzt wird; mehrstufige Formate gehörten zu ordinalen IRT-Modellen (Folie 2).",
+      "h": "Vier Angaben müssen zusammenpassen: Name, Personenzahl, Itemzahl und erfasstes Konstrukt. Prüfe, in welchem Verhältnis Personen zu Items stehen, welches Antwortformat das hier geschätzte Modell verlangt und ob das Konstrukt nicht aus einem anderen Beispiel stammt."
+    },
+    {
+      "id": "q48",
+      "q": "Aus welchem R-Paket stammt die Funktion RM() zur Schätzung des Rasch-Modells?",
+      "opts": [
+        "Aus dem Paket eRm des Programms R.",
+        "Aus dem Paket ltm des Programms R.",
+        "Aus dem Basis-R, ohne Zusatzpaket.",
+        "Aus dem Paket difR der Software R."
+      ],
+      "c": 0,
+      "e": "Folie 14 nennt die Quelle ausdrücklich: Das Rasch-Modell wird über die RM()-Funktion aus dem Paket eRm geschätzt (das Schätzverfahren dort ist Conditional Maximum Likelihood, CML). Das Trennmerkmal ist die Zuordnung Funktion-zu-Paket. Die ltm-Variante verwechselt dies mit dem 2PL-Zweig: ltm schätzt nach Folie 24 das 2PL-Modell und benutzt dafür Marginal Maximum Likelihood — nicht RM() und nicht CML. Die difR-Variante verwechselt Datenquelle und Schätzwerkzeug: difR stellt nach Folie 13 den Datensatz verbal bereit, enthält aber nicht die Rasch-Schätzfunktion. Die Base-R-Variante übersieht, dass die drei Pakete laut Folie 13 erst installiert und geladen werden müssen; RM() ist Teil des Zusatzpakets eRm und nicht im Basisumfang von R enthalten. Die Optionen sind zur Längenbalance in einen gleichförmigen Rahmen gesetzt; unterschieden werden sie allein durch die genannte Herkunft.",
+      "h": "Trenne drei Rollen der geladenen Pakete: eines liefert die Daten, eines dient dem 2PL-Zweig mit einer anderen Schätzmethode, eines enthält die Rasch-Schätzfunktion. Frage außerdem, ob die Funktion überhaupt ohne Zusatz verfügbar wäre."
+    },
+    {
+      "id": "q49",
+      "q": "Welches Schätzverfahren wird für RM() im Paket eRm angegeben?",
+      "opts": [
+        "Marginal Maximum Likelihood (MML).",
+        "Joint Maximum Likelihood (JML).",
+        "Unconditional Maximum Likelihood (UML).",
+        "Conditional Maximum Likelihood (CML)."
+      ],
+      "c": 3,
+      "e": "Folie 14 hält für die Schätzung mit RM() aus dem eRm-Paket ausdrücklich fest, dass das spezifische Verfahren ein Conditional-Maximum-Likelihood-Verfahren (CML) ist. Entscheidend ist das Wort conditional: Es wird auf die suffizienten Summenscores bedingt, sodass die Personenparameter herausfallen (Folie 11 zeigt, dass der Summenscore eine erschöpfende Statistik ist). Marginal Maximum Likelihood (MML) ist laut Folie 24 gerade das Verfahren des ltm-Pakets für das 2PL-Modell und das dort neu geschätzte 1PL, nicht das von RM(). Joint Maximum Likelihood würde Personen- und Itemparameter gemeinsam schätzen, statt die Personenparameter über die Bedingung auf die Summenscores zu eliminieren. Unconditional Maximum Likelihood bezeichnet ebenfalls ein unbedingtes Verfahren und widerspricht damit dem auf Folie 14 genannten bedingten CML-Ansatz.",
+      "h": "Achte auf das R-Paket und die genaue Art des Schätzverfahrens: bedingt, unbedingt oder marginal — welche Variante ist der RM()-Funktion aus dem eRm-Paket zugeordnet und welche gehört zum ltm-Paket?"
+    },
+    {
+      "id": "q50",
+      "q": "Welche Art von Itemparameter bezeichnet beta in der eRm-Ausgabe von RM()?",
+      "opts": [
+        "Itemschwierigkeitsparameter eta, direkt vom eRm-Paket ausgegeben.",
+        "Itemleichtigkeitsparameter, nicht direkt die Itemschwierigkeit.",
+        "Trennschärfeparameter des Items im Sinne der 2PL-Diskrimination.",
+        "Personenfähigkeitsparameter theta, geschätzt für die jeweilige Person."
+      ],
+      "c": 1,
+      "e": "Der Kasten auf Folie 14 stellt klar: eRm gibt bei RM() nicht die Schwierigkeit der Items (eta) aus, sondern deren Leichtigkeit (beta) — die Ausgabe heißt dort Item Easiness Parameters (beta). beta ist damit ein Itemleichtigkeitsparameter, nicht unmittelbar die Itemschwierigkeit; beide lassen sich über eta = −1·beta ineinander umrechnen. Der Itemschwierigkeitsparameter eta ist zwar inhaltlich gemeint, wird aber gerade nicht direkt berichtet und trägt das umgekehrte Vorzeichen. Ein Trennschärfe- oder Diskriminationsparameter existiert im Rasch-Modell überhaupt nicht als eigener Itemparameter — alle Items haben dieselbe Trennschärfe (Folie 7); erst das 2PL-Modell nimmt die Trennschärfe als zweiten Parameter auf (Folie 22). Ein Personenfähigkeitsparameter theta schließlich beschreibt die Person, nicht das Item (Folie 6), und ist kein Wert der beta-Spalte.",
+      "h": "Frage dich, welche Kennzahl RM() tatsächlich in der beta-Spalte ausgibt und ob sie die Aufgabe leichter oder schwerer beschreibt — und ob es sich dabei um eine Eigenschaft des Items oder der Person handelt."
+    },
+    {
+      "id": "q51",
+      "q": "Wie wird der Itemleichtigkeitsparameter beta in den Schwierigkeitsparameter eta umgerechnet?",
+      "opts": [
+        "eta = +1 · beta",
+        "eta = −1 · beta",
+        "eta = −2 · beta",
+        "eta = −1 / beta"
+      ],
+      "c": 1,
+      "e": "Der Kasten auf Folie 14 gibt die Umrechnung explizit an: eta = −1 · beta. Weil eRm nur die Leichtigkeit (beta) berichtet, die Schwierigkeit (eta) aber die inhaltlich umgekehrte Größe ist, kehrt die Umrechnung das Vorzeichen um — ein leichtes Item mit großem positiven beta wird zu einem niedrigen Schwierigkeitswert und umgekehrt. Entscheidend ist die Multiplikation mit −1: eta = +1 · beta ließe das Vorzeichen unverändert und würde Leichtigkeit und Schwierigkeit gleichsetzen. eta = −1 / beta ersetzt die Multiplikation durch eine Division und trifft die Beziehung nicht. eta = −2 · beta verwendet einen falschen Faktor; die Folie nennt genau den Faktor −1, keine andere Skalierung.",
+      "h": "Bei dieser Formelfrage kommt es auf die Beziehung zwischen Leichtigkeit und Schwierigkeit an: Es ist dieselbe Information mit umgekehrter Blickrichtung. Überlege, welche einfache Rechenoperation eine Größe genau in ihr Gegenteil überführt."
+    },
+    {
+      "id": "q52",
+      "q": "Wozu wird das Rasch-Modell in der R-Anwendung hauptsächlich genutzt?",
+      "opts": [
+        "Um die inhaltlich interessanten Schwierigkeitsparameter der einzelnen Items zu bestimmen.",
+        "Um zu prüfen, ob das Modell auf die Daten passt und damit die Rasch-Annahmen für die Daten gestützt werden.",
+        "Um die Reliabilität des gesamten Tests als einen einzelnen numerischen Kennwert zuverlässig zu quantifizieren.",
+        "Um die Trennschärfen der einzelnen Items zu schätzen und ungeeignete Items aus dem gesamten Test auszuschließen."
+      ],
+      "c": 1,
+      "e": "Folie 15 formuliert genau diese Pointe: Inhaltlich sind wir an den Schwierigkeitsparametern meist gar nicht interessiert, das Rasch-Modell liefert aber nur diese. Der eigentliche Nutzen liegt darin, kontrollieren zu können, ob das Modell auf die Daten passt — trifft das zu, hat man eine fundierte Bestätigung, dass die Rasch-Annahmen (Eindimensionalität, Summenscore als suffiziente Statistik, spezifische Objektivität) vorliegen. Deshalb ist der Zweck die Modellprüfung, nicht das Gewinnen inhaltlich interessanter Schwierigkeitswerte — diese sind laut Folie 15 gerade das, woran man meist nicht interessiert ist. Die Trennschärfen einzelner Items zu schätzen ist ebenfalls falsch: Im Rasch-/1PL-Modell sind alle Trennschärfen gleich (Folie 7); ein Trennschärfeparameter tritt erst im 2PL-Modell auf (Folie 22). Und die Reliabilität als einzelner Kennwert gehört zur KTT — in der PTT tritt an ihre Stelle die Informationsfunktion (Folie 12).",
+      "h": "Überlege, wozu das Modell laut Umsetzung praktisch dient, obwohl die berichteten Schwierigkeitswerte inhaltlich meist wenig interessieren — geht es um das Gewinnen von Kennwerten oder um eine Kontrolle der zugrunde liegenden Annahmen?"
+    },
+    {
+      "id": "q53",
+      "q": "Welche Grundidee liegt dem Vergleich von Itemparametern zwischen zwei Subgruppen zugrunde?",
+      "opts": [
+        "Bei guter Modellpassung sollten die Personenfähigkeiten in beiden Gruppen annähernd gleich sein.",
+        "Bei guter Modellpassung sollten die getrennt geschätzten Itemparameter in beiden Gruppen annähernd gleich sein.",
+        "Bei guter Modellpassung sollten die Summenscores der Personen in beiden Gruppen annähernd gleich sein.",
+        "Bei guter Modellpassung sollten sich die getrennt geschätzten Itemparameter in beiden Gruppen deutlich unterscheiden."
+      ],
+      "c": 1,
+      "e": "Folie 16 beschreibt die Grundidee subgruppenbasierter Modelltests: Man bestimmt die Itemparameter getrennt für zwei Subgruppen (im Beispiel Frauen und Männer) und vergleicht sie. Passt das Modell, sollten diese getrennt geschätzten Itemparameter in beiden Gruppen (annähernd) gleich ausfallen — das ist Ausdruck der Parameterinvarianz. Der Distraktor mit deutlich unterscheiden dreht genau diese Erwartung um: Unterschiede sprechen gegen, nicht für die Passung. Der Vergleich betrifft die Itemparameter, nicht die Personenfähigkeiten — gegenübergestellt werden die getrennt geschätzten Item-Kennwerte, nicht theta. Und auch nicht die Summenscores: Diese sind zwar suffiziente Statistiken (Folie 11), Gegenstand des Subgruppenvergleichs sind aber die Itemparameter.",
+      "h": "Kläre zwei Dinge: welche Kennwerte beim Subgruppenvergleich verglichen werden und in welche Richtung sie bei guter Passung ausfallen sollten — spricht Gleichheit oder ein Unterschied für das Modell?"
+    },
+    {
+      "id": "q54",
+      "q": "Was bedeutet ein signifikanter Andersen-Likelihood-Ratio-Test für die Rasch-Modellpassung?",
+      "opts": [
+        "Er zeigt lediglich einzelne auffällige Items an, während die globale Passung des Rasch-Modells an den vorliegenden Daten davon unberührt gültig bleibt.",
+        "Er weist darauf hin, dass sich die beiden Subgruppen in ihrer mittleren Personenfähigkeit unterscheiden, das Rasch-Modell selbst aber gut passt.",
+        "Er spricht dafür, dass die Parameter zwischen den Subgruppen nicht hinreichend invariant sind und das Rasch-Modell nicht gut passt.",
+        "Er belegt, dass die getrennt geschätzten Itemparameter über beide Subgruppen hinweg invariant sind und das Rasch-Modell die Daten damit gut abbildet."
+      ],
+      "c": 2,
+      "e": "Folie 16 zeigt den Andersen-Likelihood-Ratio-Test (LRtest) mit dem Ergebnis LR-value 70,693, df 23, p = 0 und schließt: Für die vorliegenden Daten passt das Modell nicht gut, der Test fällt signifikant aus. Ein signifikanter Test besagt also, dass sich die getrennt für die Subgruppen geschätzten Itemparameter unterscheiden — die geforderte Parameterinvarianz ist verletzt, das Rasch-Modell passt nicht gut. Der Distraktor, der Signifikanz als Beleg für Invarianz und gute Passung liest, dreht die Logik um. Der Andersen-LR-Test ist zudem ein globaler Modelltest über Subgruppen, kein itemweiser Test — einzelne auffällige Items identifiziert man mit dem Wald-Test (Folie 18) oder grafisch (Folie 17). Und er prüft die Invarianz der Itemparameter, nicht einen Unterschied der mittleren Personenfähigkeit; ein Fähigkeitsunterschied bei gutem Modell ist gerade nicht die Aussage.",
+      "h": "Erinnere dich an die Nullhypothese solcher Modelltests: Invarianz der Parameter über die Subgruppen. Was bedeutet dann ein signifikantes Ergebnis für die Modellgeltung — Bestätigung oder Verletzung? Prüfe außerdem, ob der Test global oder itemweise argumentiert."
+    },
+    {
+      "id": "q55",
+      "q": "Welche Schlussfolgerung wird aus LR=70,693 bei 23 Freiheitsgraden und p=0 gezogen?",
+      "opts": [
+        "Das Rasch-Modell passt für die vorliegenden Daten nicht gut.",
+        "Der Test weist lediglich einzelne auffällige Items aus.",
+        "Das Rasch-Modell passt für diese Daten sehr gut.",
+        "Das 2PL-Modell passt besser als das Rasch-Modell."
+      ],
+      "c": 0,
+      "e": "Auf Folie 16 liefert der Andersen-LR-Test die Werte LR = 70,693 bei df = 23 und p = 0. Ein p-Wert von 0 bedeutet ein hochsignifikantes Ergebnis; die Folie zieht daraus ausdrücklich den Schluss, dass das Modell für die vorliegenden Daten nicht gut passt. Signifikanz heißt hier also gerade nicht guter Fit — der Distraktor passt sehr gut verwechselt die Richtung. Der LR-Test ist zudem ein globaler Subgruppentest, er weist nicht bloß einzelne auffällige Items aus; dafür wären der Wald-Test (Folie 18) oder der Graphical Model Check (Folie 17) zuständig. Und der Befund vergleicht nicht 1PL gegen 2PL — dieser Modellvergleich läuft über einen separaten anova-Likelihood-Ratio-Test (Folie 25); hier geht es allein um die Passung des Rasch-Modells auf die Daten.",
+      "h": "Ein p-Wert nahe null macht den Test signifikant. Überlege bei einem Modelltest, ob Signifikanz für oder gegen die Passung des Modells spricht, und ob dieser Test die Gesamtpassung oder einzelne Items betrifft."
+    },
+    {
+      "id": "q56",
+      "q": "Wozu dient der Graphical Model Check nach einem subgruppenbasierten Modelltest?",
+      "opts": [
+        "Zur grafischen Wiedergabe der Item- und Testinformationsfunktion über das gesamte Merkmalskontinuum hinweg.",
+        "Zur inferenzstatistischen Signifikanzprüfung der Parameterunterschiede der Subgruppen.",
+        "Zur grafischen Beurteilung der Parameterübereinstimmung und zur Identifikation problematischer Items.",
+        "Zur modellbasierten Schätzung der individuellen Personenparameter aus den vorliegenden Antwortmustern."
+      ],
+      "c": 2,
+      "e": "Folie 17 führt den Graphical Model Check ein: Über plotGOF werden die Itemparameter der beiden Subgruppen gegeneinander abgetragen (Achsen Women und Men), mit einer Diagonalen als Referenz. Punkte nahe der Diagonalen zeigen übereinstimmende Parameter; deutlich abweichende Punkte (im Beispiel etwa Item 4 und Item 21) markieren problematische Items. Der Zweck ist also die grafische Beurteilung der Parameterübereinstimmung und das Aufspüren problematischer Items. Eine numerische Signifikanzprüfung leistet der Check nicht — die liefern der Andersen-LR-Test (Folie 16) und der Wald-Test (Folie 18). Mit der Item- und Testinformationsfunktion darf man ihn nicht verwechseln: Diese beschreibt die Messgenauigkeit über das Merkmalskontinuum (Folie 12), nicht die Subgruppenübereinstimmung. Und eine Schätzung der Personenparameter erfolgt über person.parameter beziehungsweise RM() (Folie 19, 14), nicht über den grafischen Check.",
+      "h": "Der Zusatz graphical verrät die Methode: Es geht um ein Bild, nicht um eine Teststatistik. Frage dich, was in dieser Grafik gegeneinander aufgetragen wird und wozu die Abweichungen von der Diagonalen dienen."
+    },
+    {
+      "id": "q57",
+      "q": "Was bedeutet es im Graphical Model Check, wenn ein Itempunkt nahe der Diagonalen liegt?",
+      "opts": [
+        "Die für beide Subgruppen geschätzten Itemparameter stimmen annähernd überein.",
+        "Das Item trennt in beiden Subgruppen besonders scharf zwischen den Personen.",
+        "Die für beide Subgruppen geschätzten Itemparameter weichen deutlich voneinander ab.",
+        "Das Item ist in beiden Subgruppen gleichermaßen besonders schwierig."
+      ],
+      "c": 0,
+      "e": "Der Graphical Model Check (Folie 17) trägt auf den beiden Achsen die getrennt für Frauen (x-Achse) und Männer (y-Achse) geschätzten Itemparameter ab; die Diagonale markiert exakte Gleichheit beider Schätzungen. Liegt ein Itempunkt nahe der Diagonalen, stimmen die für beide Subgruppen geschätzten Parameter also annähernd überein – genau das ist das Passungssignal dieses Modelltests. Das Trennmerkmal ist die Nähe zur Diagonalen als Ausdruck von Übereinstimmung, nicht von Abweichung: Items, deren Parameter zwischen den Gruppen auseinanderfallen (auf Folie 17 etwa Item 4 und Item 21), liegen gerade weit von der Diagonalen entfernt; die Behauptung einer deutlichen Abweichung dreht das Signal um. Eine besonders scharfe Trennung der Personen wird hier nicht dargestellt – im Rasch-Modell sind die Trennschärfen ohnehin für alle Items gleich (Folie 7), verglichen werden die Schwierigkeits- bzw. Leichtigkeitsparameter. Auch über die Höhe der Schwierigkeit sagt die Diagonalnähe nichts aus: Punkte können überall entlang der Diagonalen liegen, von leicht bis schwer, und trotzdem Übereinstimmung anzeigen.",
+      "h": "Überlege, was die beiden Achsen der Grafik abbilden und wofür die schräge Referenzlinie steht. Der Denkweg zielt auf den Vergleich zweier getrennt bestimmter Werte – nicht auf die Höhe der Aufgabenschwere und nicht auf die Trennkraft. Entscheidend ist, ob Nähe zur Linie Gleichheit oder Verschiedenheit bedeutet."
+    }
+  ]
+};
+
+var bonusFragen = [];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var view = OPT_SHUF ? _shufCopy(q) : {opts:q.opts, c:q.c};
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+view.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* ─── Options-Shuffle: bei JEDEM Rendern/Durchgang frisch (nicht mehr nur einmal
+   pro Seitenladung), damit sich die Position der richtigen Antwort bei erneuten
+   Versuchen/Durchgängen ändert. Gibt eine NEUE {opts,c}-Kopie zurück, mutiert q
+   NICHT — die Originaldaten (data.json-Reihenfolge) bleiben als Quelle erhalten.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufCopy(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number'||_hasLtrRef(q.e)) return {opts:(q?q.opts:[]), c:(q?q.c:0)};
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  return {opts:idx.map(function(i){return q.opts[i];}), c:idx.indexOf(q.c)};
+}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+/* ═══ Altklausur Quiz-Runner (Üben + Klausur) ═══════════════════════════ */
+var ALLE = (sofortFragen['0'] || []);
+/* RUN.shuf[qi] = {opts, c} — frisch gemischte Optionsansicht je Frage, neu erzeugt
+   bei jedem _quizBegin() (Start/Fällige/Nur-falsche/nach Reset), damit die Position
+   der richtigen Antwort sich bei jedem neuen Durchgang ändert statt fix zu bleiben. */
+var RUN = {mode:'ueben', shuffle:false, order:[], pos:0, answers:{}, started:false, finished:false, lastWrong:[], expOpen:false, hintOpen:false, shuf:{}};
+var LTRS = ['a','b','c','d'];
+
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function quizModeUeben(){RUN.mode='ueben'; if(!RUN.started) quizRender();}
+function quizModeKlausur(){RUN.mode='klausur'; if(!RUN.started) quizRender();}
+function quizToggleShuffle(){RUN.shuffle=!RUN.shuffle; if(!RUN.started) quizRender();}
+function quizToggleExp(){RUN.expOpen=!RUN.expOpen; quizRender();}
+function quizToggleHint(){RUN.hintOpen=!RUN.hintOpen; quizRender();}
+
+/* ── Persistenz (teilt den Store mit dem „Alle Fragen"-Tab; load/save aus der Engine) ── */
+function _qSched(qid, correct){
+  var p=load(), now=Date.now(), DAY=86400000;
+  var card=p[qid]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(correct){ card.stability*=2.5; card.due=now+Math.max(DAY,card.stability*DAY); card.state='review'; }
+  else { card.lapses++; card.stability=Math.max(1,card.stability*0.5); card.due=now+600000; card.state='learning'; }
+  card.reps++; p[qid]=card; save(p);
+}
+function _qStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ALLE.forEach(function(q){ var c=p[q.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ALLE.length};
+}
+function _qDueIdx(){
+  var p=load(), now=Date.now(), idx=[];
+  ALLE.forEach(function(q,i){ var c=p[q.id]; if(!c||c.state==='new'||c.due<=now||c.lapses>0) idx.push(i); });
+  return idx;
+}
+function quizDueMode(){ var idx=_qDueIdx(); if(idx.length) _quizBegin(idx); }
+function quizResetProgress(){ var p=load(); ALLE.forEach(function(q){ delete p[q.id]; }); save(p); RUN.lastWrong=[]; quizRestart(); }
+
+function quizStart(){_quizBegin(ALLE.map(function(_,i){return i;}));}
+function quizOnlyWrong(){if(RUN.lastWrong.length) _quizBegin(RUN.lastWrong.slice());}
+function _quizBegin(idx){
+  RUN.order = RUN.shuffle ? _shuffle(idx) : idx.slice();
+  RUN.shuf={}; RUN.order.forEach(function(qi){ RUN.shuf[qi]=_shufCopy(ALLE[qi]); });
+  RUN.pos=0; RUN.answers={}; RUN.expOpen=false; RUN.hintOpen=false; RUN.started=true; RUN.finished=false; quizRender();
+}
+function quizRestart(){RUN.started=false; RUN.finished=false; quizRender();}
+
+function quizAnswer(i){
+  var qi=RUN.order[RUN.pos];
+  if(RUN.mode==='ueben' && RUN.answers[qi]!==undefined) return;  /* Üben: nach Antwort fixiert */
+  RUN.answers[qi]=i;
+  if(RUN.mode==='ueben') _qSched(ALLE[qi].id, i===RUN.shuf[qi].c);  /* Üben: Schwäche sofort einplanen (Key = Frage-ID) */
+  quizRender();
+}
+function quizNext(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos<RUN.order.length-1){RUN.pos++; quizRender();} else quizSubmit();}
+function quizPrev(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos>0){RUN.pos--; quizRender();}}
+function quizSubmit(){
+  RUN.finished=true;
+  RUN.lastWrong=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+  if(RUN.mode==='klausur') RUN.order.forEach(function(qi){
+    if(RUN.answers[qi]!==undefined) _qSched(ALLE[qi].id, RUN.answers[qi]===RUN.shuf[qi].c);
+  });
+  quizRender();
+}
+
+function _optsHTML(q, qi){
+  var view=RUN.shuf[qi]||{opts:q.opts,c:q.c};
+  var chosen=RUN.answers[qi], answered=chosen!==undefined, h='<div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    var cls='mc-opt', dis='';
+    if(RUN.mode==='ueben' && answered){
+      if(i===view.c) cls+=' correct'; else if(i===chosen) cls+=' wrong';
+      dis=' disabled';
+    } else if(RUN.mode==='klausur' && i===chosen){ cls+=' qr-sel'; }
+    h+='<button class="'+cls+'"'+dis+' onclick="quizAnswer('+i+')">'+(OPT_SHUF?'':'<span class="ltr">'+LTRS[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  return h+'</div>';
+}
+
+function quizRender(){
+  var c=document.getElementById('quizRunner'); if(!c) return;
+  /* ── Startbildschirm ── */
+  if(!RUN.started){
+    var st=_qStats(), dueIdx=_qDueIdx();
+    var statLine = st.learned>0
+      ? '<p class="qr-stat">📊 '+st.learned+' / '+st.total+' gelernt · '+st.due+' fällig (Lernstand wird gespeichert)</p>'
+      : '<p class="qr-stat">Lernstand wird auf diesem Gerät gespeichert.</p>';
+    c.innerHTML='<div class="card"><div class="card-title">Quiz starten</div>'
+      +'<p>Modus wählen, dann starten — '+ALLE.length+' Fragen.</p>'
+      + statLine
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.mode==='ueben'?' active':'')+'" onclick="quizModeUeben()">📝 Üben · Sofort-Feedback</button>'
+        +'<button class="nav-btn'+(RUN.mode==='klausur'?' active':'')+'" onclick="quizModeKlausur()">🎓 Klausur · Auswertung am Ende</button>'
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.shuffle?' active':'')+'" onclick="quizToggleShuffle()">🔀 Reihenfolge mischen: '+(RUN.shuffle?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="quizStart()">▶ Alle Fragen starten</button>'
+      +(st.learned>0 && dueIdx.length?'<button class="btn btn-accent" onclick="quizDueMode()">🔁 Fällige & Schwächen ('+dueIdx.length+')</button>':'')
+      +(RUN.lastWrong.length?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur '+RUN.lastWrong.length+' falsche wiederholen</button>':'')
+      +(st.learned>0?'<button class="btn btn-ghost" onclick="quizResetProgress()" style="font-size:.7rem;padding:5px 9px">↺ Fortschritt zurücksetzen</button>':'')
+      +'</div></div>';
+    return;
+  }
+  /* ── Auswertung ── */
+  if(RUN.finished){
+    var total=RUN.order.length;
+    var correct=RUN.order.filter(function(qi){return RUN.answers[qi]===RUN.shuf[qi].c;}).length;
+    var wrong=total-correct, pct=total?Math.round(correct/total*100):0;
+    var icon=pct>=80?'🎉':(pct>=50?'💪':'📚');
+    var h='<div class="done-box"><div class="done-icon">'+icon+'</div>'
+      +'<div class="done-title">'+correct+' / '+total+' richtig ('+pct+'%)</div>'
+      +'<div class="done-sub">Modus: '+(RUN.mode==='klausur'?'Klausur':'Üben')+'</div>'
+      +'<div class="done-stats">'
+        +'<div class="done-stat"><div class="dn" style="color:var(--green)">'+correct+'</div><div class="dl">Richtig</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--red)">'+wrong+'</div><div class="dl">Falsch</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div>'
+      +'</div></div>'
+      +'<div class="qr-ctrl" style="justify-content:center">'
+        +'<button class="btn btn-accent" onclick="quizRestart()">🔁 Neuer Durchgang</button>'
+        +(wrong?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur falsche ('+wrong+') wiederholen</button>':'')
+        +(_qDueIdx().length?'<button class="btn btn-ghost" onclick="quizDueMode()">🔁 Fällige & Schwächen</button>':'')
+        +'<button class="btn btn-ghost" onclick="goTo(1)">📋 Alle Fragen</button>'
+      +'</div>';
+    var wrongQ=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+    if(wrongQ.length){
+      h+='<div class="phase-label">Falsch beantwortet</div><div class="qr-review">';
+      wrongQ.forEach(function(qi){
+        var q=ALLE[qi], view=RUN.shuf[qi], ch=RUN.answers[qi];
+        h+='<div class="card"><p style="color:var(--text);font-weight:600">'+q.q+'</p>'
+          +(ch===undefined?'<p style="color:var(--red);font-size:.84rem">Keine Antwort gegeben</p>'
+                          :'<p style="color:var(--red);font-size:.84rem">Deine Antwort: '+view.opts[ch]+'</p>')
+          +'<p style="color:var(--green);font-size:.84rem">Richtig: '+view.opts[view.c]+'</p>'
+          +'<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div></div>';
+      });
+      h+='</div>';
+    } else { h+='<div class="hinweis"><strong>Perfekt!</strong> Alle Fragen richtig beantwortet.</div>'; }
+    c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'}); return;
+  }
+  /* ── Fragebildschirm ── */
+  var qi=RUN.order[RUN.pos], q=ALLE[qi], N=RUN.order.length;
+  var answered=RUN.answers[qi]!==undefined;
+  var ansCount=RUN.order.filter(function(x){return RUN.answers[x]!==undefined;}).length;
+  var scoreNow=RUN.order.filter(function(x){return RUN.answers[x]===RUN.shuf[x].c;}).length;
+  var meta='Frage '+(RUN.pos+1)+' / '+N+'  ·  '+(RUN.mode==='klausur'?'🎓 Klausur':'📝 Üben')
+          +(RUN.mode==='ueben'?'  ·  Score '+scoreNow+'/'+ansCount:'');
+  var h='<div class="trainer-top"><span class="trainer-meta">'+meta+'</span>'
+      +'<button class="btn btn-ghost" onclick="quizRestart()" style="font-size:.7rem;padding:5px 9px">✕ Beenden</button></div>'
+      +'<div class="prog-bar"><div class="prog-fill" style="width:'+Math.round((RUN.pos+1)/N*100)+'%"></div></div>'
+      +'<div class="mc-wrap"><div class="mc-q-text">'+q.q+'</div>'+_optsHTML(q,qi);
+  if(RUN.mode==='ueben'){
+    if(answered){ h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>'; }
+    else {
+      if(q.h) h+='<button class="exp-btn" onclick="quizToggleHint()">'+(RUN.hintOpen?'💡 Erklärung ausblenden':'💡 Erklärung anzeigen')+'</button>';
+      h+='<button class="exp-btn" onclick="quizToggleExp()">'+(RUN.expOpen?'🔓 Lösung ausblenden':'🔓 Lösung anzeigen')+'</button>';
+      if(RUN.hintOpen && q.h) h+='<div class="mc-hint"><div class="lbl">Erklärung — ohne Lösung</div>'+q.h+'</div>';
+      if(RUN.expOpen) h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>';
+    }
+  }
+  h+='</div><div class="qr-ctrl" style="justify-content:flex-end">';
+  if(RUN.mode==='klausur'){
+    if(RUN.pos>0) h+='<button class="btn btn-ghost" onclick="quizPrev()">← Zurück</button>';
+    if(RUN.pos<N-1) h+='<button class="btn btn-accent" onclick="quizNext()">Weiter →</button>';
+    h+='<button class="btn btn-accent" onclick="quizSubmit()">✓ Abgeben</button>';
+  } else {
+    if(answered) h+='<button class="btn btn-accent" onclick="quizNext()">'+(RUN.pos<N-1?'Weiter →':'Abschließen ✓')+'</button>';
+    else h+='<span class="trainer-meta">Antwort wählen …</span>';
+  }
+  h+='</div>';
+  c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'});
+}
+/* 💡/🔓-Buttons im „Alle Fragen"-Tab — „Erklärung" = spoilerfreier Konzept-Hinweis (h-Feld,
+   eigenes .mc-hint-Div), „Lösung" = togglet das versteckte #exp-<id> der Engine (Label per DOM
+   auf „Lösung" umbenannt). Rein additiv: renderMC/answerMC der geteilten Engine bleiben unberührt. */
+function _injectExpButtons(){
+  var byId={}; ALLE.forEach(function(q){ byId[q.id]=q; });
+  document.querySelectorAll('#s1 .mc-wrap').forEach(function(w){
+    var exp=w.querySelector('.mc-exp'); if(!exp||w.querySelector('.exp-btn')) return;
+    var lbl=exp.querySelector('.lbl'); if(lbl) lbl.textContent='Lösung';
+    var q=byId[(w.id||'').replace('mcq-','')];
+    var hd=null;
+    if(q && q.h){
+      var hb=document.createElement('button'); hb.className='exp-btn'; hb.textContent='💡 Erklärung anzeigen';
+      hd=document.createElement('div'); hd.className='mc-hint'; hd.style.display='none';
+      hd.innerHTML='<div class="lbl">Erklärung — ohne Lösung</div>'+q.h;
+      hb.onclick=function(){
+        var vis=hd.style.display!=='none';
+        hd.style.display=vis?'none':'block';
+        hb.textContent=vis?'💡 Erklärung anzeigen':'💡 Erklärung ausblenden';
+      };
+      exp.parentNode.insertBefore(hb, exp);
+    }
+    var b=document.createElement('button'); b.className='exp-btn'; b.textContent='🔓 Lösung anzeigen';
+    b.onclick=function(){
+      var vis=exp.style.display==='block';
+      exp.style.display=vis?'':'block';
+      b.textContent=vis?'🔓 Lösung anzeigen':'🔓 Lösung ausblenden';
+    };
+    exp.parentNode.insertBefore(b, exp);
+    if(hd) exp.parentNode.insertBefore(hd, exp);
+  });
+}
+(function(){ quizRender(); _injectExpButtons(); })();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

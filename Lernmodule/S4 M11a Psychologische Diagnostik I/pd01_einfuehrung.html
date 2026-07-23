@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD01 Einführung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl01
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD01 custom learning widgets */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.citation-line{font-size:.74rem!important;color:var(--text3)!important;margin-top:8px}.source-note{margin-top:10px;padding:10px 12px;border-left:3px solid var(--yellow);background:rgba(251,191,36,.07);font-size:.78rem;color:var(--text2)}
+details.card summary{cursor:pointer;color:var(--text);min-height:44px;display:flex;align-items:center}.widget{background:linear-gradient(145deg,rgba(56,189,248,.06),rgba(129,140,248,.08));border:1px solid rgba(129,140,248,.38);border-radius:14px;padding:18px;margin-bottom:14px}.widget h3{font-size:1rem;margin-bottom:6px}.widget>p{font-size:.86rem;color:var(--text2);margin-bottom:12px}.compact-widget{padding:14px}.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice-btn{min-height:48px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);padding:10px;text-align:left;cursor:pointer}.choice-btn[data-result="correct"]{border-color:var(--green)}.choice-btn[data-result="wrong"]{border-color:var(--red)}.statusbox{margin-top:12px;border:1px solid var(--border);background:var(--bg);border-radius:9px;padding:10px 12px;font-size:.82rem;color:var(--text2)}.statusbox.ok{border-color:var(--green);color:var(--green)}.statusbox.bad{border-color:var(--red);color:var(--red)}
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.case-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.35fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}.case-row:last-child{border-bottom:0}.case-row label{font-size:.84rem}.case-row select,.arrow-task select,.compact-widget select{min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px}.mini-feedback{grid-column:1/-1;font-size:.78rem;min-height:1.2em}.mini-feedback.ok,.inline-feedback.ok{color:var(--green)}.mini-feedback.bad,.inline-feedback.bad{color:var(--red)}
+.numbered{padding-left:24px}.flow-grid{display:grid;gap:7px;margin:12px 0}.flow-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.flow-node{border:1px solid var(--border);background:var(--bg);border-radius:9px;padding:9px;text-align:center;font-size:.8rem}.flow-node.wide{max-width:560px;width:100%;justify-self:center}.flow-arrow{text-align:center;color:var(--accent);font-weight:700;font-size:.75rem}.reorder-list{list-style:none;padding:0;margin:12px 0}.reorder-item{display:grid;grid-template-columns:36px 1fr auto auto;gap:8px;align-items:center;border:1px solid var(--border);background:var(--bg);border-radius:9px;padding:8px;margin-bottom:7px}.reorder-num{font-weight:800;color:var(--accent);text-align:center}.reorder-controls button{min-width:40px;min-height:40px}.widget-actions{display:flex;gap:8px;flex-wrap:wrap}.formula{font-size:1.2rem!important;color:var(--text)!important;font-weight:800;text-align:center;padding:12px;background:var(--bg);border-radius:9px}.formula-vars{display:grid;grid-template-columns:max-content 1fr;gap:5px 12px;font-size:.82rem}.formula-vars dt{font-weight:700}.formula-vars dd{color:var(--text2)}.ladder{padding-left:20px}.ladder li{margin:9px 0;color:var(--text2);font-size:.84rem}.ladder input{width:88px;min-height:40px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px}.blank{display:inline-block;min-width:36px;border-bottom:2px solid var(--accent);text-align:center}.inline-feedback{margin-left:8px;font-size:.78rem}
+.model-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0;text-align:center}.model-layer{border:2px solid var(--border);border-radius:12px;padding:15px}.model-layer strong,.model-layer span{display:block}.model-layer span{font-size:.75rem;color:var(--text2)}.model-layer.latent{border-color:var(--accent)}.model-layer.manifest{border-color:var(--cyan)}.model-arrows{display:flex;justify-content:space-around;gap:10px;flex-wrap:wrap;font-size:.75rem;color:var(--text2)}.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat-grid>div{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px}.stat-grid strong,.stat-grid span{display:block}.stat-grid strong{font-size:.78rem;color:var(--text)}.stat-grid span{font-size:.76rem;color:var(--text2);margin-top:4px}.arrow-task{display:grid;grid-template-columns:1fr minmax(230px,.6fr);gap:10px;align-items:center;margin:10px 0}
+.prediction{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px}.prediction label{display:block;margin:7px 0;font-size:.84rem}.nips-wrap{margin-top:14px}.nips-wrap svg{width:100%;height:auto;background:var(--bg);border:1px solid var(--border);border-radius:10px}.axis{stroke:var(--text2);stroke-width:2}.line-high{fill:none;stroke:var(--accent);stroke-width:5}.line-low{fill:none;stroke:var(--cyan);stroke-width:5;stroke-dasharray:10 7}.nips-wrap svg text{fill:var(--text2);font-size:14px}.nips-wrap circle{fill:var(--yellow);stroke:var(--bg);stroke-width:3}.nips-wrap input[type=range]{width:100%;accent-color:var(--accent);margin-top:10px}
+#fr-local-fab{position:fixed;right:14px;bottom:14px;z-index:9998;border:1px solid #b91c1c;background:#7f1d1d;color:#fff;border-radius:999px;padding:9px 13px;font-weight:700;cursor:pointer}#fr-local-ov{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px}#fr-local-ov.on{display:flex}.fr-local-box{max-width:520px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px}.fr-local-box textarea{width:100%;min-height:120px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px}.fr-local-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+@media(max-width:680px){.option-grid,.concept-grid,.stat-grid,.flow-pair{grid-template-columns:1fr}.case-row,.arrow-task{grid-template-columns:1fr}.case-row .btn{width:100%}.reorder-item{grid-template-columns:32px 1fr 44px 44px}.model-arrows{display:grid}.formula-vars{grid-template-columns:1fr}.duel{grid-template-columns:1fr}.duel-mid{display:none}}
+@media print{#fr-local-fab,#fr-local-ov,.nav,.progress-tools,.section-nav{display:none!important}.section{display:block!important}.wrap{max-width:none}.widget{break-inside:avoid}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD01 Einführung</h1>
+<p class="page-sub">Psychologische Diagnostik · Sommersemester 2026 · offline nutzbares Lernmodul</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Was ist psychologische Diagnostik? · Wie verläuft der diagnostische Prozess? · Wie unterscheiden sich Eigenschafts-, Verhaltens- und Interaktionsperspektiven?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Orientierung</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Ziele</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Prozess</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Geschichte</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Eigenschaften</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Paradigmen</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">🎯 Gemischter Abruf</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — Orientierung ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+ data-source-id="PD01-A01E01 PD01-A01E02 PD01-A01E03 PD01-A02E01 PD01-A02E02" data-slides="1–5" data-source-status="direkt+integriert"
+ data-learning-objective="LZ01" data-widget-type="W1" data-cognitive-task="definieren_einordnen_quellenstruktur_lesen">
+ <div class="sec-head"><div class="sec-title">① Modulrahmen, Definition und Bedeutung</div><div class="sec-lz">Psychologische Diagnostik definieren und ihre wissenschaftliche sowie entscheidungsbezogene Funktion einordnen.</div><div class="source-meta">Folien 1–5 · Quellen PD01-A01E01 bis PD01-A02E02 · Widget W1</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div>
+ <div class="entry-q"><p>Reicht es für psychologische Diagnostik, einen geeigneten Test durchzuführen und dessen Wert abzulesen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq0" aria-hidden="true"><strong>Nein.</strong> Die Definition umfasst eine Fragestellung, gezielte Informationserhebung, wissenschaftliche Standards, psychologisches Wissen und die Interpretation der Informationen. Ein Test kann ein Instrument sein, ersetzt aber nicht den diagnostischen Prozess.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <article class="card" data-source-id="PD01-A01E01" data-slides="1"><div class="card-title">Veranstaltung</div><p><strong>Modul 11a: Psychologische Diagnostik</strong> · BSc. Psychologie (Präsenz) · Dr. Nadine Wedderhoff · Sommersemester 2026 · MHB – Medizinische Hochschule Brandenburg.</p></article>
+ <article class="card" data-source-id="PD01-A02E01" data-slides="4"><div class="card-title">Definition</div><p><strong>Etymologie:</strong> „diagignoskein“ wird mit „gründlich kennenlernen“, „entscheiden“ und „beschließen“ verbunden.</p><p>Psychologische Diagnostik ist eine Teildisziplin der Psychologie. Sie beantwortet Fragen zur <strong>Beschreibung, Klassifikation, Erklärung oder Vorhersage</strong> menschlichen Verhaltens und Erlebens. Dafür werden Informationen über Menschen und relevante Bedingungen gezielt erhoben, anhand psychologischen Wissens interpretiert und mit Methoden gewonnen, die wissenschaftlichen Standards genügen.</p><p class="citation-line">Schmidt-Atzert, Krumm &amp; Amelang, 2021</p></article>
+ <article class="card" data-source-id="PD01-A02E02" data-slides="5"><div class="card-title">Bedeutung für Entscheidungen</div><p>Diagnostik soll so durchgeführt werden, dass <strong>zutreffende Entscheidungen über bestmögliche Maßnahmen</strong> möglich werden. Die dargestellte Erhebung weist folgende Anteile an der Gesamttätigkeit aus:</p><div class="table-scroll"><table><caption>Anteil psychologischer Diagnostik an der Gesamttätigkeit</caption><thead><tr><th scope="col">Arbeitsfeld</th><th scope="col">Anteil</th></tr></thead><tbody><tr><th scope="row">Klinische Psychologie</th><td>24 %</td></tr><tr><th scope="row">Gesundheitspsychologie</th><td>26 %</td></tr><tr><th scope="row">Pädagogische Psychologie</th><td>29 %</td></tr><tr><th scope="row">Arbeits- und Organisationspsy.</th><td>30 %</td></tr><tr><th scope="row">Forensische Psychologie</th><td>44 %</td></tr><tr><th scope="row">Verkehrspsychologie</th><td>44 %</td></tr><tr><th scope="row">andere Bereiche</th><td>31 %</td></tr></tbody></table></div><p class="citation-line">nach Roth &amp; Herzberg (2008), N =398</p></article>
+ <details class="card" data-source-id="PD01-A01E02" data-slides="2"><summary><strong>Semesterplan vollständig anzeigen</strong></summary><div class="table-scroll"><table><caption>Semesterplan mit 13 Terminen</caption><thead><tr><th scope="col">Termin</th><th scope="col">Woche</th><th scope="col">Thema</th></tr></thead><tbody>
+ <tr><td>1.</td><td>13.04.</td><td>Einführung</td></tr><tr><td>2.</td><td>20.04.</td><td>Grundlage der Testkonstruktion I</td></tr><tr><td>3.</td><td>27.04.</td><td>Grundlage der Testkonstruktion II</td></tr><tr><td>4.</td><td>04.05.</td><td>Klassische Testtheorie</td></tr><tr><td>5.</td><td>11.05.</td><td>Grundlagen der Itemanalyse</td></tr><tr><td>6.</td><td>18.05.</td><td>explorative Faktorenanalyse</td></tr><tr><td>7.</td><td>25.05.</td><td>- Pfingsten -</td></tr><tr><td>8.</td><td>01.06.</td><td>(Haupt-) Gütekriterien I</td></tr><tr><td>9.</td><td>08.06.</td><td>(Haupt-) Gütekriterien II</td></tr><tr><td>10.</td><td>15.06.</td><td>Normierung</td></tr><tr><td>11.</td><td>22.06.</td><td>diagnostische Entscheidungen</td></tr><tr><td>12.</td><td>29.06.</td><td>Probabilistische Testtheorie</td></tr><tr><td>13.</td><td>06.07.</td><td>Beobachtung, Neuropsychologische Diagnostik</td></tr></tbody></table></div></details>
+ <details class="card" data-source-id="PD01-A01E03" data-slides="3"><summary><strong>Abgebildete Literatur anzeigen</strong></summary><ol><li>Schmidt-Atzert, Krumm &amp; Amelang (Hrsg.): <em>Psychologische Diagnostik</em>, 6. Auflage; sichtbare Marken MOREMEDIA und Springer.</li><li>Moosbrugger &amp; Kelava (Hrsg.): <em>Testtheorie und Fragebogenkonstruktion</em>, 3. Auflage; sichtbare Marke Springer.</li><li>Markus Bühner: <em>Einführung in die Test- und Fragebogenkonstruktion</em>, 4., korrigierte und erweiterte Auflage; sichtbare Marken Pearson und EXTRAS ONLINE.</li></ol></details>
+ <div class="phase-label">Phase 3 — Anwenden · W1</div>
+ <article class="widget" aria-labelledby="foundation-title"><h3 id="foundation-title">Diagnostik-Bausteine prüfen</h3><p>Entscheide bei jeder Aussage, ob sie zur Definition gehört. Jede Schaltfläche liefert eine textliche Begründung.</p><div class="option-grid"><button class="choice-btn" type="button" onclick="checkFoundation(this,true,'Gezielte Informationserhebung gehört ausdrücklich zur Definition.')">Gezielte Informationserhebung</button><button class="choice-btn" type="button" onclick="checkFoundation(this,true,'Wissenschaftliche Standards sind eine ausdrückliche Anforderung.')">Wissenschaftliche Standards</button><button class="choice-btn" type="button" onclick="checkFoundation(this,false,'Ein einzelner Test ist nur ein mögliches Instrument und ersetzt nicht das diagnostische Handeln.')">Ein Testwert entscheidet allein</button><button class="choice-btn" type="button" onclick="checkFoundation(this,true,'Erhobene Informationen werden auf die Fragestellung bezogen interpretiert.')">Wissensgeleitete Interpretation</button></div><div id="foundation-feedback" class="statusbox" role="status" aria-live="polite">Wähle einen Baustein.</div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq0"></div></div><div class="section-nav"><button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — Ziele ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1" data-source-id="PD01-A02E03 PD01-A02E04 PD01-A02E05 PD01-A02E06" data-slides="6–7" data-source-status="direkt+integriert" data-learning-objective="LZ02" data-widget-type="W1+W9" data-cognitive-task="begriffe_unterscheiden_faelle_klassifizieren">
+ <div class="sec-head"><div class="sec-title">② Beschreibung, Klassifikation, Erklärung und Vorhersage</div><div class="sec-lz">Die vier diagnostischen Ziele anhand von Fällen unterscheiden und begründet zuordnen.</div><div class="source-meta">Folien 6–7 · Quellen PD01-A02E03 bis PD01-A02E06 · Widget W1+W9</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Ein Kind wird der Kategorie „Trennungsangst“ zugeordnet. Ist das bereits eine Erklärung dafür, warum die Angst entstanden ist?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq1" aria-hidden="true"><strong>Nein.</strong> Die Zuordnung zu einer Kategorie ist Klassifikation. Erklärung fragt nach plausiblen Ursachen und aufrechterhaltenden Bedingungen.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <div class="concept-grid">
+ <article class="card" data-source-id="PD01-A02E03 PD01-A02E04" data-slides="6"><div class="card-title">Beschreibung</div><p>Exakte Erfassung von Gegebenheiten und Symptomatik, qualitativ oder quantitativ. Im Schulangstbeispiel: Verhaltensbeobachtung während der Schulzeit, Interviews mit Eltern und Lehrpersonal sowie ein standardisierter Fragebogen zur Quantifizierung.</p></article>
+ <article class="card" data-source-id="PD01-A02E03 PD01-A02E05" data-slides="6"><div class="card-title">Klassifikation</div><p>Spezialfall der Beschreibung: Zuordnung zu Kategorien, etwa über DSM V oder ICD-11. Genannt werden Soziale Phobie (6B04), Trennungsangst (6B05), Eignung, Hochbegabung oder Schuldfähigkeit.</p></article>
+ <article class="card" data-source-id="PD01-A02E03 PD01-A02E06" data-slides="7"><div class="card-title">Erklärung</div><p>Suche nach Ursachen in der Vorgeschichte und nach aufrechterhaltenden Bedingungen in der Gegenwart. Diagnostische Interviews oder Aktenanalysen werden als geeignete Methoden genannt. Ergebnis bleiben mehr oder weniger plausible Erklärungen; <strong>Beweise sind nicht möglich</strong>.</p></article>
+ <article class="card" data-source-id="PD01-A02E03" data-slides="7"><div class="card-title">Vorhersage</div><p>Wahrscheinlichkeitsaussage über den weiteren Verlauf, beispielsweise Schul- oder Berufserfolg oder den Verlauf einer psychischen Erkrankung.</p></article></div>
+ <div class="phase-label">Phase 3 — Anwenden · W1+W9</div>
+ <article class="widget"><h3>Vier Ziele im Fall unterscheiden</h3><p>Ordne jede Handlung dem passenden Ziel zu und prüfe anschließend.</p>
+ <div class="case-row"><label for="goal1"><strong>A.</strong> Häufigkeit und Intensität der Schulangst werden mit Beobachtung, Interviews und Fragebogen erfasst.</label><select id="goal1"><option value="">Bitte wählen</option><option>Beschreibung</option><option>Klassifikation</option><option>Erklärung</option><option>Vorhersage</option></select><button class="btn btn-ghost" type="button" onclick="checkSelect('goal1','Beschreibung','goal1fb')">Prüfen</button><div id="goal1fb" class="mini-feedback" role="status"></div></div>
+ <div class="case-row"><label for="goal2"><strong>B.</strong> Der Befund wird der Kategorie Trennungsangst (6B05) zugeordnet.</label><select id="goal2"><option value="">Bitte wählen</option><option>Beschreibung</option><option>Klassifikation</option><option>Erklärung</option><option>Vorhersage</option></select><button class="btn btn-ghost" type="button" onclick="checkSelect('goal2','Klassifikation','goal2fb')">Prüfen</button><div id="goal2fb" class="mini-feedback" role="status"></div></div>
+ <div class="case-row"><label for="goal3"><strong>C.</strong> Akten und Interview werden genutzt, um plausible auslösende und aufrechterhaltende Bedingungen zu bestimmen.</label><select id="goal3"><option value="">Bitte wählen</option><option>Beschreibung</option><option>Klassifikation</option><option>Erklärung</option><option>Vorhersage</option></select><button class="btn btn-ghost" type="button" onclick="checkSelect('goal3','Erklärung','goal3fb')">Prüfen</button><div id="goal3fb" class="mini-feedback" role="status"></div></div>
+ <div class="case-row"><label for="goal4"><strong>D.</strong> Es wird eingeschätzt, wie wahrscheinlich ein bestimmter weiterer Verlauf ist.</label><select id="goal4"><option value="">Bitte wählen</option><option>Beschreibung</option><option>Klassifikation</option><option>Erklärung</option><option>Vorhersage</option></select><button class="btn btn-ghost" type="button" onclick="checkSelect('goal4','Vorhersage','goal4fb')">Prüfen</button><div id="goal4fb" class="mini-feedback" role="status"></div></div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq1"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — Prozess ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2" data-source-id="PD01-A03E01 PD01-A03E02 PD01-A03E03 PD01-A03E04 PD01-A03E05 PD01-A03E06" data-slides="8–13" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ03" data-widget-type="W2" data-cognitive-task="reihenfolge_und_abhaengigkeiten_rekonstruieren">
+ <div class="sec-head"><div class="sec-title">③ Der diagnostische Prozess</div><div class="sec-lz">Die fünf Prozessstufen rekonstruieren und am Hochbegabungsbeispiel in Beziehung setzen.</div><div class="source-meta">Folien 8–13 · Quellen PD01-A03E01 bis PD01-A03E06 · Widget W2</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Warum beginnt man nicht direkt mit der Auswahl eines Intelligenztests?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Zuerst müssen die globale Fragestellung präzisiert und prüfbare psychologische Teilfragen formuliert werden. Erst daraus folgt, welche Informationen und Instrumente benötigt werden.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <article class="card" data-source-id="PD01-A03E01" data-slides="8"><div class="card-title">Eine idealisierte Prozessbeschreibung</div><p>Der diagnostische Prozess ist eine sinnvolle Abfolge diagnostischer Teilschritte und der damit verbundenen Entscheidungen. Die Folie bezeichnet die dargestellte Abfolge als <strong>eine mögliche</strong> Modellvorstellung; alternative Modelle existieren.</p><ol class="numbered"><li>Globale Fragestellung</li><li>Differenzierung der psychologischen Fragen</li><li>Auswahl der Instrumente</li><li>Durchführung und Auswertung</li><li>Integration der Ergebnisse zur Beantwortung der Teilfragen und der globalen Fragestellung</li></ol></article>
+ <article class="card" data-source-id="PD01-A03E02 PD01-A03E03" data-slides="9–10"><div class="card-title">Vom Auftrag zu prüfbaren Teilfragen</div><p><strong>Globale Frage:</strong> „Ist für die Schülerin XY eine Förderung in einer Einrichtung für intellektuell Hochbegabte zu empfehlen?“ Sie wird meist von außen herangetragen und muss präzisiert, modifiziert oder gegebenenfalls abgelehnt werden.</p><p><strong>Teilfragen:</strong> Verfügt XY über einen IQ &gt; 130? Verfügt XY über überdurchschnittliche Leistungsmotivation? Teilfragen sollen prüfbar, hypothesengeleitet, fachwissensbasiert und auf relevante Aspekte begrenzt sein. Maxime: „so viele wie nötig so wenig wie möglich“. Auch die spätere Verrechnung soll früh mitgedacht werden.</p><div class="source-note">Quellenanomalie: Auf Folie 10 steht sichtbar „schonerste“; im Lerntext wird bedeutungsgleich „schon erste“ verwendet.</div></article>
+ <article class="card" data-source-id="PD01-A03E04 PD01-A03E05" data-slides="11–12"><div class="card-title">Instrumente, Durchführung und Einzelergebnisse</div><p>Für die IQ-Frage: <strong>Intelligenztest 1</strong> und <strong>Intelligenztest 2</strong>. Für Leistungsmotivation: <strong>LM-Fragebogen</strong> und <strong>strukturiertes Interview</strong>. Die Folie empfiehlt hohe Güteansprüche und mindestens zwei verschiedene Instrumente.</p><p>Vorbereitung, Durchführung, Auswertung und Interpretation müssen nach wissenschaftlich fundierten Empfehlungen beherrscht werden. Für Tests werden Richtlinien der International Test Commission genannt.</p></article>
+ <article class="card" data-source-id="PD01-A03E06" data-slides="13"><div class="card-title">Integration</div><div class="flow-grid" aria-label="Textuelle Rekonstruktion des Flussdiagramms"><div class="flow-node wide"><strong>Globale Förderfrage</strong></div><div class="flow-arrow">↓ differenzieren</div><div class="flow-pair"><div class="flow-node">IQ &gt; 130?</div><div class="flow-node">Überdurchschnittliche LM?</div></div><div class="flow-arrow">↓ Instrumente und Ergebnisse</div><div class="flow-pair"><div class="flow-node">Test 1 + Test 2 → zweimal IQ &gt; 130</div><div class="flow-node">Fragebogen + Interview → zweimal überdurchschnittliche LM</div></div><div class="flow-arrow">↓ je Teilfrage integrieren</div><div class="flow-pair"><div class="flow-node">Teilantwort IQ bestätigt</div><div class="flow-node">Teilantwort LM bestätigt</div></div><div class="flow-arrow">↓ global integrieren</div><div class="flow-node wide"><strong>Förderung wird empfohlen</strong></div></div><p>Uneindeutige Ergebnisse erschweren die Urteilsbildung und können weitere Datenerhebungen erforderlich machen.</p></article>
+ <div class="phase-label">Phase 3 — Anwenden · W2</div>
+ <article class="widget"><h3>Process Builder</h3><p>Die Schritte sind absichtlich vertauscht. Verschiebe sie mit den Tasten nach oben oder unten; Drag-and-drop ist nicht erforderlich.</p><ol id="process-list" class="reorder-list"></ol><div class="widget-actions"><button class="btn btn-accent" type="button" onclick="checkProcess()">Reihenfolge prüfen</button><button class="btn btn-ghost" type="button" onclick="resetProcess()">Neu mischen</button></div><div id="process-feedback" class="statusbox" role="status" aria-live="polite">Baue die fünfstufige Abfolge.</div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq2"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — Geschichte ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3" data-source-id="PD01-A04E01 PD01-A04E02 PD01-A04E03" data-slides="14–16" data-source-status="direkt+visuell_rekonstruiert" data-learning-objective="LZ04" data-widget-type="W2+W4" data-cognitive-task="zeitfolge_rekonstruieren_formel_anwenden">
+ <div class="sec-head"><div class="sec-title">④ Historische Meilensteine</div><div class="sec-lz">Die auf den Folien dargestellten Meilensteine zeitlich ordnen und die Stern-Formel im historischen Kontext nachvollziehen.</div><div class="source-meta">Folien 14–16 · Quellen PD01-A04E01 bis PD01-A04E03 · Widget W2+W4</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Welche kam zuerst: die erste Validierungsstudie zu kognitiven Tests oder der erste Binet-Simon-Intelligenztest?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Die Folie ordnet Clark Wisslers Validierungsstudie auf 1901 und den ersten Intelligenztest von Alfred Binet und Theodore Simon auf 1905.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <article class="card" data-source-id="PD01-A04E01" data-slides="14–15"><div class="card-title">Zeitachse bis 1950</div><div class="table-scroll"><table><caption>Auf den Folien dargestellte Meilensteine</caption><thead><tr><th scope="col">Zeit</th><th scope="col">Ereignis</th></tr></thead><tbody><tr><th scope="row">vor 3000 Jahren</th><td>Beamtenprüfung in China als multimethodaler Ansatz</td></tr><tr><th scope="row">1879</th><td>„Gründung des ersten Labors zur Erforschung psychologischer durch Wilhelm Wund an der Uni Leipzig“</td></tr><tr><th scope="row">1884</th><td>Sir Francis Galton stellt sein psychometrisches Labor vor, das auch kognitive Tests umfasst.</td></tr><tr><th scope="row">1901</th><td>Clark Wissler führt die erste Validierungsstudie zu kognitiven Tests durch.</td></tr><tr><th scope="row">1905</th><td>Alfred Binet und Theodore Simon veröffentlichen den ersten Intelligenztest.</td></tr><tr><th scope="row">1912</th><td>William Stern schlägt den Begriff Intelligenzquotient vor.</td></tr><tr><th scope="row">1917/18</th><td>Erster Gruppentest (Army Alpha und Beta Examination) und Personal Data Sheet.</td></tr><tr><th scope="row">1921</th><td>Rorschach-Test wird veröffentlicht.</td></tr><tr><th scope="row">1939</th><td>Der erste Wechsler-Test erscheint.</td></tr><tr><th scope="row">1943</th><td>Das Minnesota Multiphasic Personality Inventory (MMPI) wird publiziert.</td></tr></tbody></table></div><div class="source-note"><strong>Quellentreue Hinweise:</strong> Der 1879-Satz ist sichtbar unvollständig und wird nicht ergänzt. Der Kasten lautet sichtbar „1900 – Beginn zweiter Weltkrieg: Blütezeit der Psychotechnik“; keine externe Datumsnormalisierung vorgenommen.</div></article>
+ <article class="card" data-source-id="PD01-A04E02" data-slides="14–15"><div class="card-title">Psychotechnik</div><p>Als Bildbeispiele erscheinen ein <strong>Kerzentest zur Messung von überlegtem Handeln</strong> und eine <strong>Untersuchung zur geistigen Leistung im Rhönrad</strong>.</p></article>
+ <article class="card" data-source-id="PD01-A04E03" data-slides="16"><div class="card-title">Nach dem Zweiten Weltkrieg</div><p>Genannt werden Papier-und-Bleistift-Tests und Gustav Lienert als Pionier der Testkonstruktion. Sein Buch <em>Testaufbau und Testanalyse</em> wird als weiterhin zum Handwerkszeug von Testentwicklern gehörig beschrieben.</p><ul><li>Mechanisch-Technischer Verständnistest (1958)</li><li>Drahtbiegeprobe (1961)</li><li>Konzentrations-Leistungs-Test (1965)</li></ul><div class="source-note">Im Sichtbild beginnt beim Buchtitel ein Anführungszeichen, ohne sichtbaren Abschluss; der Titelkern bleibt unverändert.</div></article>
+ <article class="card formula-card" data-source-id="PD01-A04E01" data-slides="15"><div class="card-title">Formel-Ladder: Sterns historische IQ-Formel</div><p class="formula" aria-label="IQ gleich einhundert mal Intelligenzalter geteilt durch Lebensalter">IQ = 100 · Intelligenzalter / Lebensalter</p><dl class="formula-vars"><dt>Intelligenzalter</dt><dd>Zähler der auf der Folie angegebenen Formel.</dd><dt>Lebensalter</dt><dd>Nenner der auf der Folie angegebenen Formel.</dd><dt>100</dt><dd>Skalierungsfaktor des Quotienten.</dd></dl><ol class="ladder"><li><strong>Vollständiges Beispiel:</strong> 100 · 12 / 10 = 120.</li><li><strong>Teilweise ausgeblendet:</strong> 100 · 9 / <span class="blank">?</span> = 100. Welcher Nenner passt? <input id="iq-gap" type="number" inputmode="decimal" aria-label="Fehlender Nenner"><button class="btn btn-ghost" type="button" onclick="checkIqGap()">Prüfen</button><span id="iq-gap-fb" class="inline-feedback" role="status"></span></li><li><strong>Selbstständig:</strong> Berechne 100 · 15 / 12. <input id="iq-self" type="number" inputmode="decimal" aria-label="IQ Ergebnis"><button class="btn btn-ghost" type="button" onclick="checkIqSelf()">Prüfen</button><span id="iq-self-fb" class="inline-feedback" role="status"></span></li><li><strong>Transfer:</strong> Bei konstantem Lebensalter steigt der Quotient, wenn das Intelligenzalter steigt.</li></ol><p class="source-note">Die Zahlenbeispiele sind rein didaktisch aus der sichtbaren Formel abgeleitet; sie ergänzen keinen historischen Quellenbefund.</p></article>
+ <div class="phase-label">Phase 3 — Anwenden · W2</div><article class="widget"><h3>Zeitachsen-Sortierung</h3><p>Ordne sechs Schlüsselereignisse ohne eingeblendete Jahreszahlen. Rufe dafür die Abfolge der Zeitachse aus dem Lernteil ab; die semantische Quellentabelle bleibt als Accessibility-Fallback verfügbar.</p><ol id="timeline-list" class="reorder-list"></ol><div class="widget-actions"><button class="btn btn-accent" type="button" onclick="checkTimeline()">Zeitfolge prüfen</button><button class="btn btn-ghost" type="button" onclick="resetTimeline()">Neu mischen</button></div><div id="timeline-feedback" class="statusbox" role="status" aria-live="polite">Sortiere von früh nach spät.</div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq3"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — Eigenschaften ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4" data-source-id="PD01-A05E01 PD01-A05E02 PD01-A05E03 PD01-A05E04 PD01-A05E05 PD01-A05E06 PD01-A05E07 PD01-A05E08 PD01-A05E09" data-slides="17–21" data-source-status="direkt+integriert+visuell_rekonstruiert" data-learning-objective="LZ05–LZ07" data-widget-type="W3" data-cognitive-task="pfeilrichtungen_deuten_tabellen_und_studienbefunde_zuordnen">
+ <div class="sec-head"><div class="sec-title">⑤ Eigenschaftsmodell, Grenzen und Befunde</div><div class="sec-lz">Traits, States, latente Konstrukte, manifeste Indikatoren und die berichteten empirischen Befunde erklären.</div><div class="source-meta">Folien 17–21 · Quellen PD01-A05E01 bis PD01-A05E09 · Widget W3</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Kann ein einzelnes beobachtetes Verhalten bereits mit einer latenten Eigenschaft gleichgesetzt werden?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true"><strong>Nein.</strong> Manifeste Verhaltensweisen sind Indikatoren, aus denen auf ein nicht direkt beobachtbares latentes Konstrukt geschlossen wird. Einzelne Zustände können zudem stark situationsabhängig sein.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <article class="card" data-source-id="PD01-A05E01 PD01-A05E02 PD01-A05E03" data-slides="17–19"><div class="card-title">Trait, State und zwei Pfeilrichtungen</div><p><strong>Traits</strong> sind relativ breite und zeitlich stabile Dispositionen zu bestimmten Verhaltensweisen, die konsistent in verschiedenen Situationen auftreten. Sie sind nicht direkt beobachtbar, sondern latente Konstrukte. <strong>Manifeste Verhaltensweisen</strong> dienen als Indikatoren.</p><p><strong>States</strong> sind zeitlich nicht stabil und stark situationsabhängig.</p><p>Die Foliengrafik stellt oben vier rechteckige Elemente für latente Eigenschaften und unten 14 Kreise für manifeste Verhaltensweisen dar.</p><div class="model-grid" role="img" aria-describedby="model-alt"><div class="model-layer latent"><strong>Latente Eigenschaften</strong><span>nicht direkt beobachtbar</span></div><div class="model-arrows"><span>↑ Schluss vom Verhalten auf Eigenschaften</span><span>↓ Erfassung von Eigenschaften ermöglicht Prognose von Verhalten</span></div><div class="model-layer manifest"><strong>Manifeste Verhaltensweisen</strong><span>beobachtbare Indikatoren</span></div></div><p id="model-alt" class="sr-only">Oben liegen latente Eigenschaften, unten manifeste Verhaltensweisen. Ein Pfeil führt vom Verhalten nach oben als Eigenschaftsschluss; ein zweiter von Eigenschaften nach unten als Verhaltensprognose.</p><p class="citation-line">Trait-Definition: Stemmler et al., 2010</p></article>
+ <article class="card" data-source-id="PD01-A05E04" data-slides="19"><div class="card-title">Grenzen: Situation, Breite und Symmetrie</div><p>In konkreten Situationen überschreitet die Korrelation zwischen Persönlichkeitstraits und Verhalten nach der dargestellten Mischel-Debatte nur selten <strong>r = .30</strong>. Als Begründung wird genannt, dass breit formulierte Eigenschaften konkrete Verhaltensweisen nur begrenzt vorhersagen. Entscheidend ist die <strong>Symmetrie zwischen Verhaltensbereich und Eigenschaft</strong>.</p><p>Kontextualisierung, etwa der Zusatz „at work“, soll Eigenschaft und vorherzusagenden Kontext enger aufeinander beziehen.</p></article>
+ <article class="card" data-source-id="PD01-A05E05" data-slides="19"><div class="card-title">Metaanalyse: Kontextualisierte Big-Five-Items</div><div class="table-scroll"><table><caption>Mittlere gepoolte Korrelationen; Klammerwerte um Range Restriction korrigiert</caption><thead><tr><th scope="col">Merkmal</th><th scope="col">nicht kontextualisiert</th><th scope="col">kontextualisiert</th></tr></thead><tbody><tr><th scope="row">Gewissenhaftigkeit</th><td>.14 (.22)</td><td>.19 (.30)</td></tr><tr><th scope="row">Emotionale Stabilität</th><td>.07 (.11)</td><td>.18 (.27)</td></tr><tr><th scope="row">Extraversion</th><td>.05 (.08)</td><td>.16 (.25)</td></tr><tr><th scope="row">Verträglichkeit</th><td>.06 (.10)</td><td>.15 (.24)</td></tr><tr><th scope="row">Offenheit</th><td>.01 (.02)</td><td>.09 (.14)</td></tr></tbody></table></div><p class="citation-line">Shaffer &amp; Postlethwaite, 2012</p></article>
+ <article class="card" data-source-id="PD01-A05E06 PD01-A05E07 PD01-A05E08 PD01-A05E09" data-slides="20–21"><div class="card-title">Empirische Befunde korrekt lesen</div><div class="stat-grid"><div><strong>Fleeson &amp; Gallagher (2009), k = 15</strong><span>Einzelne Zustände: r = .18 bis .37; über Situationen gemittelt: r = .42 bis .56.</span></div><div><strong>Roberts &amp; DelVeccio (2000)</strong><span>Stabilität: r = .54 bei 18–22 Jahren; r = .74 bei 50–59 Jahren.</span></div><div><strong>Strenze (2007)</strong><span>Akademischer Erfolg r = .56; beruflicher Status r = .45; Einkommen r = .23.</span></div><div><strong>Charter (2003)</strong><span>Retest-Reliabilität der Intelligenz: r = .80.</span></div><div><strong>Strand (2004)</strong><span>Messungen im Alter 10–13 Jahre: r = .89.</span></div><div><strong>Deary et al. (2004)</strong><span>IQ mit 11 und 80 Jahren: r = .66; positive Punktwolke. x-Achse: IQ mit 11 Jahren, y-Achse: IQ mit 80 Jahren.</span></div></div><p class="source-note">Diese Befunde sind Korrelationen. Das Lernmodul deutet sie nicht als Kausalnachweise. Die sichtbare Quellenschreibweise „DelVeccio“ bleibt erhalten.</p></article>
+ <div class="phase-label">Phase 3 — Anwenden · W3</div>
+ <article class="widget"><h3>Arrow/Model Mapper</h3><p>Ordne den beiden Pfeilrichtungen ihre Bedeutung zu.</p><div class="arrow-task"><label for="arrow-up">Pfeil: manifeste Verhaltensweisen → latente Eigenschaften</label><select id="arrow-up"><option value="">Bitte wählen</option><option value="schluss">Schluss vom Verhalten auf Eigenschaften</option><option value="prognose">Prognose von Verhalten aus Eigenschaften</option></select></div><div class="arrow-task"><label for="arrow-down">Pfeil: latente Eigenschaften → manifeste Verhaltensweisen</label><select id="arrow-down"><option value="">Bitte wählen</option><option value="schluss">Schluss vom Verhalten auf Eigenschaften</option><option value="prognose">Prognose von Verhalten aus Eigenschaften</option></select></div><button class="btn btn-accent" type="button" onclick="checkArrows()">Pfeile prüfen</button><div id="arrow-feedback" class="statusbox" role="status" aria-live="polite">Beide Richtungen müssen zusammenpassen.</div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq4"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — Paradigmen ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5" data-source-id="PD01-A06E01 PD01-A06E02 PD01-A06E03 PD01-A06E04" data-slides="22–23" data-source-status="direkt+integriert+visuell_rekonstruiert" data-learning-objective="LZ08" data-widget-type="W7+W9" data-cognitive-task="paradigmen_abgrenzen_fallanalysieren_diagramm_prognostizieren">
+ <div class="sec-head"><div class="sec-title">⑥ Verhaltenstheorie und Interaktionismus</div><div class="sec-lz">Signs und samples, S-O-R-K-C sowie die gemeinsame Wirkung von Situation und Trait abgrenzen und anwenden.</div><div class="source-meta">Folien 22–23 · Quellen PD01-A06E01 bis PD01-A06E04 · Widget W7+W9</div></div>
+ <div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Wenn eine Person mit hoher Trait-Aggressiveness provoziert wird, bestimmt dann ausschließlich der Trait ihr Aggressionsniveau?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true"><strong>Nein.</strong> Das Interaktionsmodell nimmt eine gemeinsame Wirkung von Persönlichkeitseigenschaft und Situation an. Ihre Gewichtung kann je nach Konstellation variieren.</div></div>
+ <div class="phase-label">Phase 2 — Verstehen</div>
+ <article class="card" data-source-id="PD01-A06E01" data-slides="22"><div class="card-title">Signs vs. samples</div><p>Im Kontext von Verhaltenstheorie und Behaviorismus richtet sich das Interesse fast ausschließlich auf direkt beobachtbares Verhalten.</p><p>Der Eigenschaftsansatz behandelt Verhalten als <strong>sign</strong>: als Indikator oder Anzeichen für ein dahinterliegendes Persönlichkeitsmerkmal. Im verhaltenstheoretischen Zugang ist Verhalten ein <strong>sample</strong>: eine Stichprobe ähnlicher direkt beobachtbarer Verhaltensweisen.</p></article>
+ <article class="card" data-source-id="PD01-A06E02" data-slides="22"><div class="card-title">S-O-R-K-C-Verhaltensgleichung</div><div class="table-scroll"><table><caption>Funktionale Verhaltensanalyse mit dem Folienbeispiel</caption><thead><tr><th scope="col">Kürzel</th><th scope="col">Begriff</th><th scope="col">Erklärung und Beispiel</th></tr></thead><tbody><tr><th scope="row">S</th><td>Stimulus</td><td>Reiz, der auf die Person einwirkt: Mitschüler*innen hänseln das Kind.</td></tr><tr><th scope="row">O</th><td>Organismus</td><td>Körperliche und psychische Merkmale: körperlich unterlegen und geringes Selbstvertrauen.</td></tr><tr><th scope="row">R</th><td>Reaktion</td><td>Zu erklärendes Problemverhalten: Das Kind zieht sich zurück.</td></tr><tr><th scope="row">K</th><td>Kontingenz</td><td>Regelmäßigkeit, mit der die Konsequenzen eintreten: gelegentlich.</td></tr><tr><th scope="row">C</th><td>Konsequenz</td><td>Reaktion auf das Problemverhalten: Mutter „tröstet“ mit starker Zuwendung und Süßigkeiten.</td></tr></tbody></table></div></article>
+ <article class="card" data-source-id="PD01-A06E03 PD01-A06E04" data-slides="23"><div class="card-title">Interaktionismus und NIPS</div><p>Verhaltenstheoretische Ansätze betonen die Situation, Eigenschaftsansätze eher Traits. Der Interaktionismus verbindet beide: <strong>Situation und Persönlichkeitseigenschaften beeinflussen Verhalten gemeinsam.</strong> Ihre Gewichtung ist nicht konstant.</p><p>In der dargestellten Nonlinear Interaction of Person and Situation (NIPS) steigt Aggression mit situativer Provokation für niedrige und hohe Trait-Aggressiveness unterschiedlich. Hohe Trait-Aggressiveness beginnt bereits bei niedriger Provokation auf höherem Niveau; bei niedriger Trait-Aggressiveness liegt der stärkste Anstieg erst zwischen moderater und hoher Provokation.</p><p class="citation-line">Schmitt et al., 2013</p></article>
+ <div class="phase-label">Phase 3 — Anwenden · W7+W9</div>
+ <article class="widget"><h3>NIPS: Erst prognostizieren, dann erkunden</h3><p>Die Darstellung ist eine <strong>schematische Rekonstruktion ohne numerische y-Skala</strong>.</p><fieldset class="prediction"><legend>Welche Prognose passt?</legend><label><input type="radio" name="nips-pred" value="parallel"> Beide Linien verlaufen parallel.</label><label><input type="radio" name="nips-pred" value="interaction"> Die Gruppen reagieren je nach Provokationsstufe unterschiedlich.</label><label><input type="radio" name="nips-pred" value="constant"> Provokation verändert Aggression nicht.</label></fieldset><button class="btn btn-accent" type="button" onclick="checkNipsPrediction()">Prognose abgeben</button><div id="nips-pred-fb" class="statusbox" role="status" aria-live="polite">Nach der Prognose wird der Regler freigeschaltet.</div>
+ <div class="nips-wrap"><svg viewBox="0 0 520 300" role="img" aria-labelledby="nips-title nips-desc"><title id="nips-title">Schematische NIPS-Grafik</title><desc id="nips-desc">Aggression auf der y-Achse, situative Provokation niedrig bis hoch auf der x-Achse. Eine durchgezogene Linie für hohe Trait-Aggressiveness beginnt höher und steigt besonders bis moderater Provokation. Eine gestrichelte Linie für niedrige Trait-Aggressiveness steigt besonders bei hoher Provokation.</desc><line x1="60" y1="250" x2="490" y2="250" class="axis"/><line x1="60" y1="250" x2="60" y2="35" class="axis"/><text x="275" y="292" text-anchor="middle">Situative Provokation</text><text x="18" y="145" text-anchor="middle" transform="rotate(-90 18 145)">Aggression</text><text x="90" y="272">niedrig</text><text x="255" y="272">moderat</text><text x="425" y="272">hoch</text><polyline points="100,155 280,85 455,65" class="line-high"/><polyline points="100,220 280,210 455,80" class="line-low"/><text x="330" y="48">hohe Trait-Aggressiveness</text><text x="260" y="228">niedrige Trait-Aggressiveness</text><circle id="nips-high-dot" cx="100" cy="155" r="7"/><circle id="nips-low-dot" cx="100" cy="220" r="7"/></svg><label for="provocation">Provokationsstufe: <output id="prov-label">niedrig</output></label><input id="provocation" type="range" min="0" max="2" value="0" step="1" disabled oninput="updateNips()"><div id="nips-output" class="statusbox" role="status" aria-live="polite">Regler noch gesperrt.</div></div></article>
+ <article class="widget compact-widget"><h3>S-O-R-K-C-Fallstelle</h3><label for="sorkc-select">„Das Kind zieht sich zurück“ gehört zu:</label><select id="sorkc-select"><option value="">Bitte wählen</option><option value="S">S – Stimulus</option><option value="O">O – Organismus</option><option value="R">R – Reaktion</option><option value="K">K – Kontingenz</option><option value="C">C – Konsequenz</option></select><button class="btn btn-ghost" type="button" onclick="checkSelect('sorkc-select','R','sorkcfb')">Prüfen</button><div id="sorkcfb" class="mini-feedback" role="status"></div></article>
+ <div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq5"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(6)">Zu den Verwechslungen →</button></div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Zentrale Verwechslungs-Duelle</div>
+    <div class="sec-lz">Nahe Konzepte anhand ihres entscheidenden Trennkriteriums unterscheiden</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Beschreibung</h4>
+      <p>Gegebenheiten und Symptomatik erfassen</p>
+      <p>qualitativ oder quantitativ möglich</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Klassifikation</h4>
+      <p>Spezialfall der Beschreibung</p>
+      <p>Zuordnung zu Kategorien oder Klassen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Klassifikation und Erklärung seien dasselbe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Erklärung</h4>
+      <p>plausible Ursachen und aufrechterhaltende Bedingungen</p>
+      <p>Beweise sind nicht möglich</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Vorhersage</h4>
+      <p>Wahrscheinlichkeitsaussage</p>
+      <p>bezieht sich auf den weiteren Verlauf</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine diagnostische Erklärung beweise die Ursache.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Globale Frage</h4>
+      <p>übergeordneter Entscheidungsauftrag</p>
+      <p>wird häufig von außen herangetragen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Teilfrage</h4>
+      <p>prüfbar und hypothesengeleitet</p>
+      <p>operationalisiert relevante Voraussetzungen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein einzelner Test könne die globale Frage unmittelbar beantworten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Trait</h4>
+      <p>relativ breit und zeitlich stabil</p>
+      <p>latentes Konstrukt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>State</h4>
+      <p>zeitlich nicht stabil</p>
+      <p>stark situationsabhängig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Jede momentane Verhaltensausprägung sei bereits ein stabiler Trait.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sign</h4>
+      <p>Indikator für ein latentes Merkmal</p>
+      <p>Eigenschaftsperspektive</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Sample</h4>
+      <p>Stichprobe ähnlicher Verhaltensweisen</p>
+      <p>verhaltenstheoretische Perspektive</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Signs und samples seien nur zwei Wörter für denselben Zugang.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eigenschaftsansatz</h4>
+      <p>betont relativ stabile Traits</p>
+      <p>Situation kann vernachlässigt werden</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Interaktionismus</h4>
+      <p>Situation und Trait wirken gemeinsam</p>
+      <p>Gewichtung kann variieren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Interaktionismus bedeute, dass Situation und Trait immer gleich stark wirken.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl01</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl01';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd01-s0-q1",
+      "q": "Welche Beschreibung trifft den Kern psychologischer Diagnostik am besten?",
+      "opts": [
+        "Wissenschaftlich geleitete Erhebung und Interpretation von Informationen zur Beantwortung diagnostischer Fragen.",
+        "Unstrukturierte Sammlung persönlicher Eindrücke ohne festgelegte Fragestellung oder wissenschaftliche Standards.",
+        "Alleinige Zuordnung psychischer Störungen zu Kategorien ohne Beschreibung, Erklärung oder Vorhersage.",
+        "Reine Anwendung eines einzelnen Tests, dessen Ergebnis die diagnostische Entscheidung unmittelbar ersetzt."
+      ],
+      "c": 0,
+      "e": "Psychologische Diagnostik verbindet eine Fragestellung mit gezielter Informationserhebung, wissenschaftlichen Methoden, psychologischem Wissen und Interpretation.",
+      "oe": [
+        "Richtig: Die Definition umfasst Fragestellung, gezielte Erhebung, wissenschaftliche Standards und wissensgeleitete Interpretation.",
+        "Falsch: Unstrukturierte Eindrücke erfüllen weder die gezielte Erhebung noch die wissenschaftlichen Standards der Definition.",
+        "Falsch: Klassifikation ist nur eines von vier Zielen; Beschreibung, Erklärung und Vorhersage gehören ebenfalls dazu.",
+        "Falsch: Ein einzelner Test ersetzt weder die Integration der Informationen noch die diagnostische Urteilsbildung."
+      ],
+      "mt": [
+        null,
+        "wissenschaftlichkeit_ausgeblendet",
+        "klassifikation_verengt",
+        "ein_test_ersetzt_urteil"
+      ],
+      "source_ids": [
+        "PD01-A02E01"
+      ],
+      "learning_objective_id": "LZ01"
+    },
+    {
+      "id": "pd01-s0-q2",
+      "q": "Welche Aussage gibt die Tätigkeitsanteile aus der dargestellten Erhebung korrekt wieder?",
+      "opts": [
+        "Klinische und Gesundheitspsychologie weisen mit jeweils 44 Prozent die höchsten berichteten Anteile auf.",
+        "Forensische und Verkehrspsychologie weisen mit jeweils 44 Prozent die höchsten berichteten Anteile auf.",
+        "Pädagogische und Arbeitspsychologie weisen mit jeweils 44 Prozent die höchsten berichteten Anteile auf.",
+        "Alle sieben Arbeitsfelder weisen denselben Anteil von ungefähr einem Drittel der Gesamttätigkeit auf."
+      ],
+      "c": 1,
+      "e": "In der Tabelle liegen Forensische Psychologie und Verkehrspsychologie mit jeweils 44 % an der Spitze; die übrigen Werte reichen von 24 % bis 31 %.",
+      "oe": [
+        "Falsch: Klinische Psychologie ist mit 24 % und Gesundheitspsychologie mit 26 % angegeben.",
+        "Richtig: Forensische und Verkehrspsychologie sind in der Tabelle jeweils mit 44 % ausgewiesen.",
+        "Falsch: Pädagogische Psychologie hat 29 %, Arbeits- und Organisationspsychologie 30 %.",
+        "Falsch: Die Tabelle zeigt unterschiedliche Werte zwischen 24 % und 44 %, nicht einen einheitlichen Anteil."
+      ],
+      "mt": [
+        "werte_vertauscht",
+        null,
+        "werte_vertauscht",
+        "varianz_ignoriert"
+      ],
+      "source_ids": [
+        "PD01-A02E02"
+      ],
+      "learning_objective_id": "LZ01"
+    },
+    {
+      "id": "pd01-s0-q3",
+      "q": "Warum gehört die Interpretation der erhobenen Informationen ausdrücklich zur Diagnostik?",
+      "opts": [
+        "Weil die Erhebung nur Rohinformationen liefert, die ohne Bezug auf eine Fragestellung nicht von selbst entscheidungsrelevant sind.",
+        "Weil jede erhobene Information unabhängig von Qualität und Fragestellung dieselbe diagnostische Bedeutung besitzt.",
+        "Weil Informationen mithilfe psychologischen Wissens auf die konkrete Fragestellung bezogen und eingeordnet werden müssen.",
+        "Weil die Interpretation wissenschaftliche Standards ersetzt, sobald genügend Informationen gesammelt wurden."
+      ],
+      "c": 2,
+      "e": "Erhobene Informationen beantworten eine diagnostische Frage nicht von selbst. Sie werden psychologisch wissensgeleitet auf die konkrete Fragestellung bezogen und interpretiert.",
+      "oe": [
+        "Teilweise plausibel, aber unvollständig: Entscheidend ist zusätzlich die wissensgeleitete Einordnung auf die konkrete Fragestellung.",
+        "Falsch: Bedeutung hängt gerade von Qualität, Kontext, Bedingung und Fragestellung der Information ab.",
+        "Richtig: Die Definition nennt psychologisches Wissen und die Interpretation zur Beantwortung der Fragestellung ausdrücklich.",
+        "Falsch: Interpretation ergänzt wissenschaftlich erhobene Informationen; sie hebt wissenschaftliche Standards nicht auf."
+      ],
+      "mt": [
+        "interpretation_unvollstaendig",
+        "alle_informationen_gleich",
+        null,
+        "standards_ersetzt"
+      ],
+      "source_ids": [
+        "PD01-A02E01"
+      ],
+      "learning_objective_id": "LZ01"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd01-s1-q1",
+      "q": "Welches diagnostische Ziel liegt vor, wenn ein Befund einer vorgegebenen Kategorie zugeordnet wird?",
+      "opts": [
+        "Erklärung, weil nach verursachenden und aufrechterhaltenden Bedingungen gesucht wird.",
+        "Vorhersage, weil eine Wahrscheinlichkeitsaussage über den weiteren Verlauf entsteht.",
+        "Beschreibung, weil nur einzelne Beobachtungen ohne Kategorien erfasst werden.",
+        "Klassifikation als Spezialfall der Beschreibung mit Zuordnung zu Kategorien."
+      ],
+      "c": 3,
+      "e": "Klassifikation wird als Spezialfall der Beschreibung dargestellt: Erhobene Merkmale werden einer Kategorie oder Klasse zugeordnet.",
+      "oe": [
+        "Falsch: Erklärung richtet sich auf plausible Ursachen oder aufrechterhaltende Bedingungen.",
+        "Falsch: Vorhersage betrifft wahrscheinliche zukünftige Verläufe, nicht die Kategorienzuordnung.",
+        "Falsch: Beschreibung ist der Oberbegriff; die explizite Zuordnung zu Kategorien kennzeichnet Klassifikation.",
+        "Richtig: Klassifikation ist auf den Folien ein Spezialfall der Beschreibung mit kategorialer Zuordnung."
+      ],
+      "mt": [
+        "klassifikation_mit_erklaerung",
+        "klassifikation_mit_prognose",
+        "oberbegriff_statt_spezialfall",
+        null
+      ],
+      "source_ids": [
+        "PD01-A02E03",
+        "PD01-A02E05"
+      ],
+      "learning_objective_id": "LZ02"
+    },
+    {
+      "id": "pd01-s1-q2",
+      "q": "Welche Vorgehensweise entspricht der multimodalen Beschreibung einer berichteten Schulangst?",
+      "opts": [
+        "Beobachtung in der Schule, Interviews mit Bezugspersonen und ein standardisierter Angstfragebogen.",
+        "Alleinige Vergabe einer Diagnosekategorie auf Grundlage eines kurzen Gesprächs mit den Eltern.",
+        "Alleinige Suche nach einem Kindheitserlebnis, das die Schulangst zweifelsfrei verursacht haben muss.",
+        "Einmalige Vorhersage des späteren Schulerfolgs ohne aktuelle Beschreibung der Angst und ihrer Bedingungen."
+      ],
+      "c": 0,
+      "e": "Die Folie kombiniert Beobachtung, Interviews und standardisierten Fragebogen. Damit werden unterschiedliche Informationsquellen und qualitative wie quantitative Angaben genutzt.",
+      "oe": [
+        "Richtig: Genau diese drei Methoden werden als multimodale Strategie zur Beschreibung genannt.",
+        "Falsch: Das wäre eine verengte Klassifikation und nutzt nicht die drei dargestellten Informationswege.",
+        "Falsch: Diagnostische Erklärungen bleiben plausibel; ein zweifelsfreier Ursachennachweis wird nicht beansprucht.",
+        "Falsch: Eine Prognose ersetzt nicht die aktuelle, multimodale Beschreibung der Symptomatik."
+      ],
+      "mt": [
+        null,
+        "multimodalitaet_ignoriert",
+        "ursache_bewiesen",
+        "prognose_statt_beschreibung"
+      ],
+      "source_ids": [
+        "PD01-A02E04"
+      ],
+      "learning_objective_id": "LZ02"
+    },
+    {
+      "id": "pd01-s1-q3",
+      "q": "Welche Abgrenzung zwischen Erklärung und Vorhersage ist korrekt?",
+      "opts": [
+        "Erklärung ordnet Kategorien zu; Vorhersage beschreibt nur den aktuellen Zustand ohne Zukunftsbezug.",
+        "Erklärung sucht plausible Ursachen und Bedingungen; Vorhersage formuliert Wahrscheinlichkeitsaussagen über Verläufe.",
+        "Erklärung beweist die Ursache eines Verhaltens; Vorhersage nennt den bereits beobachteten Verlauf rückblickend.",
+        "Erklärung und Vorhersage sind austauschbare Begriffe, solange dieselben diagnostischen Instrumente eingesetzt werden."
+      ],
+      "c": 1,
+      "e": "Erklärung richtet sich auf plausible Ursachen und aufrechterhaltende Bedingungen. Vorhersage bezieht sich als Wahrscheinlichkeitsaussage auf den weiteren Verlauf.",
+      "oe": [
+        "Falsch: Kategorienzuordnung gehört zur Klassifikation; aktuelle Zustände gehören zur Beschreibung.",
+        "Richtig: Genau diese Trennung wird auf den Folien vorgenommen.",
+        "Falsch: Diagnostische Erklärungen liefern keine Beweise; Vorhersagen sind zukunftsbezogen.",
+        "Falsch: Die Ziele unterscheiden sich durch die Fragestellung, nicht bloß durch verwendete Instrumente."
+      ],
+      "mt": [
+        "ziele_vertauscht",
+        null,
+        "erklaerung_als_beweis",
+        "ziele_gleichgesetzt"
+      ],
+      "source_ids": [
+        "PD01-A02E03",
+        "PD01-A02E06"
+      ],
+      "learning_objective_id": "LZ02"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd01-s2-q1",
+      "q": "Welche Reihenfolge bildet den dargestellten diagnostischen Prozess korrekt ab?",
+      "opts": [
+        "Instrumentauswahl → globale Frage → Integration → Teilfragen → Durchführung und Auswertung.",
+        "Teilfragen → Integration → globale Frage → Durchführung und Auswertung → Instrumentauswahl.",
+        "Globale Frage → Teilfragen → Instrumentauswahl → Durchführung und Auswertung → Integration.",
+        "Globale Frage → Instrumentauswahl → Durchführung und Auswertung → Teilfragen → Integration."
+      ],
+      "c": 2,
+      "e": "Der Prozess beginnt mit der globalen Fragestellung, differenziert diese in Teilfragen, wählt Instrumente, führt sie durch und integriert anschließend die Ergebnisse.",
+      "oe": [
+        "Falsch: Instrumente können erst sinnvoll gewählt werden, nachdem globale Frage und Teilfragen geklärt sind.",
+        "Falsch: Integration steht am Ende und setzt Durchführung sowie Auswertung voraus.",
+        "Richtig: Dies entspricht den fünf nummerierten Stufen der Folie.",
+        "Falsch: Teilfragen müssen der Instrumentauswahl vorausgehen, weil sie bestimmen, welche Informationen benötigt werden."
+      ],
+      "mt": [
+        "instrument_vor_fragestellung",
+        "integration_zu_frueh",
+        null,
+        "teilfragen_zu_spaet"
+      ],
+      "source_ids": [
+        "PD01-A03E01"
+      ],
+      "learning_objective_id": "LZ03"
+    },
+    {
+      "id": "pd01-s2-q2",
+      "q": "Worin unterscheidet sich im Hochbegabungsbeispiel die globale Frage von den psychologischen Teilfragen?",
+      "opts": [
+        "Die globale Frage nennt bereits jeden Testwert; die Teilfragen formulieren nur eine allgemeine Förderempfehlung.",
+        "Die globale Frage ist in jedem Fall empirisch unprüfbar; die Teilfragen dürfen daher nur persönliche Eindrücke enthalten.",
+        "Die globale Frage ersetzt die spätere Integration; die Teilfragen werden erst nach der Förderentscheidung formuliert.",
+        "Die globale Frage betrifft die Förderempfehlung; Teilfragen prüfen IQ und Leistungsmotivation als Voraussetzungen."
+      ],
+      "c": 3,
+      "e": "Die globale Fragestellung ist der übergeordnete Entscheidungsauftrag. Die Teilfragen übersetzen relevante Bedingungen in prüfbare psychologische Fragen.",
+      "oe": [
+        "Falsch: Im Beispiel enthalten die Teilfragen die prüfbaren Kriterien, während die globale Frage die Empfehlung betrifft.",
+        "Falsch: Teilfragen sollen ausdrücklich prüfbar, hypothesengeleitet und fachwissensbasiert sein.",
+        "Falsch: Integration erfolgt nach den Teilfragen und Instrumentergebnissen, nicht vor ihnen.",
+        "Richtig: Förderempfehlung ist global; IQ und Leistungsmotivation sind die beiden psychologischen Teilfragen."
+      ],
+      "mt": [
+        "global_und_teilfrage_vertauscht",
+        "wissenschaftlichkeit_ausgeblendet",
+        "integration_zu_frueh",
+        null
+      ],
+      "source_ids": [
+        "PD01-A03E02",
+        "PD01-A03E03"
+      ],
+      "learning_objective_id": "LZ03"
+    },
+    {
+      "id": "pd01-s2-q3",
+      "q": "Welche Konsequenz können uneindeutige Instrumentergebnisse im dargestellten Prozess haben?",
+      "opts": [
+        "Sie können die Urteilsbildung erschweren und zur Klärung eine zusätzliche Datenerhebung erforderlich machen.",
+        "Sie müssen unabhängig von ihrer Richtung zu derselben globalen Empfehlung zusammengefasst werden.",
+        "Sie machen die vorher formulierten Teilfragen rückwirkend bedeutungslos und dürfen ignoriert werden.",
+        "Sie belegen unmittelbar eine Ursache, weil verschiedene Instrumente unterschiedliche Ursachen sicher messen."
+      ],
+      "c": 0,
+      "e": "Die Folie betont, dass uneindeutige Ergebnisse die diagnostische Urteilsbildung erschweren und weitere Datenerhebungen notwendig machen können.",
+      "oe": [
+        "Richtig: Dies ist die ausdrücklich genannte Konsequenz bei uneindeutigen Ergebnissen.",
+        "Falsch: Integration darf Widersprüche nicht verdecken; Uneindeutigkeit kann gerade zusätzliche Daten erfordern.",
+        "Falsch: Teilfragen strukturieren weiterhin die Urteilsbildung und werden nicht durch Widersprüche bedeutungslos.",
+        "Falsch: Widersprüchliche Messungen liefern keinen Kausalbeweis."
+      ],
+      "mt": [
+        null,
+        "widerspruch_wegmitteln",
+        "teilfragen_verwerfen",
+        "korrelation_kausal"
+      ],
+      "source_ids": [
+        "PD01-A03E06"
+      ],
+      "learning_objective_id": "LZ03"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd01-s3-q1",
+      "q": "Welche Abfolge ordnet Galtons psychometrisches Labor, Wisslers Validierungsstudie, den Binet-Simon-Test und Sterns Intelligenzquotienten chronologisch?",
+      "opts": [
+        "Wisslers Validierungsstudie → Galtons psychometrisches Labor → Binet-Simon-Test → Sterns Intelligenzquotient.",
+        "Galtons psychometrisches Labor → Wisslers Validierungsstudie → Binet-Simon-Test → Sterns Intelligenzquotient.",
+        "Binet-Simon-Test → Galtons psychometrisches Labor → Sterns Intelligenzquotient → Wisslers Validierungsstudie.",
+        "Sterns Intelligenzquotient → Galtons psychometrisches Labor → Wisslers Validierungsstudie → Binet-Simon-Test."
+      ],
+      "c": 1,
+      "e": "Chronologisch folgen auf Galtons psychometrisches Labor von 1884 Wisslers Validierungsstudie von 1901, der Binet-Simon-Test von 1905 und Sterns Begriff des Intelligenzquotienten von 1912.",
+      "oe": [
+        "Falsch: Wisslers Validierungsstudie liegt nach Galtons psychometrischem Labor.",
+        "Richtig: Galton steht vor Wissler, danach folgen Binet und Simon sowie Stern.",
+        "Falsch: Der Binet-Simon-Test liegt nach Galton und Wissler; Stern folgt erst danach.",
+        "Falsch: Sterns Intelligenzquotient ist das jüngste der vier Ereignisse und gehört ans Ende."
+      ],
+      "mt": [
+        "chronologie_vertauscht",
+        null,
+        "chronologie_vertauscht",
+        "chronologie_vertauscht"
+      ],
+      "source_ids": [
+        "PD01-A04E01"
+      ],
+      "learning_objective_id": "LZ04"
+    },
+    {
+      "id": "pd01-s3-q2",
+      "q": "Wie ist die auf der Folie genannte historische IQ-Formel aufgebaut?",
+      "opts": [
+        "IQ = 100 × Lebensalter / Intelligenzalter; der Quotient sinkt bei höherem Intelligenzalter.",
+        "IQ = Intelligenzalter + Lebensalter; der Faktor 100 wird erst nach der Addition ergänzt.",
+        "IQ = 100 × Intelligenzalter / Lebensalter; der Quotient wird mit 100 skaliert.",
+        "IQ = Lebensalter − Intelligenzalter; negative Werte werden anschließend mit 100 multipliziert."
+      ],
+      "c": 2,
+      "e": "Die Folie zeigt: IQ = 100 · Intelligenzalter / Lebensalter. Der Faktor 100 skaliert den Quotienten der beiden Altersangaben.",
+      "oe": [
+        "Falsch: Zähler und Nenner sind vertauscht; außerdem würde ein höheres Intelligenzalter bei konstantem Lebensalter den Quotienten erhöhen.",
+        "Falsch: Die sichtbare Formel ist ein Quotient und keine Addition.",
+        "Richtig: Dies ist die auf der Zeitachse bei 1912 angegebene Formel.",
+        "Falsch: Die sichtbare Formel verwendet weder Differenzbildung noch Multiplikation eines negativen Werts."
+      ],
+      "mt": [
+        "zaehler_nenner_vertauscht",
+        "rechenart_vertauscht",
+        null,
+        "rechenart_vertauscht"
+      ],
+      "source_ids": [
+        "PD01-A04E01"
+      ],
+      "learning_objective_id": "LZ04"
+    },
+    {
+      "id": "pd01-s3-q3",
+      "q": "Welche drei Verfahren werden auf der Folie zur Entwicklung nach dem Zweiten Weltkrieg genannt?",
+      "opts": [
+        "Rorschach-Test, Wechsler-Test und Minnesota Multiphasic Personality Inventory.",
+        "Army Alpha, Army Beta und Personal Data Sheet als drei einzelne Nachkriegsverfahren genannt.",
+        "Binet-Simon-Test, Intelligenzquotient und psychometrisches Labor als Testverfahren.",
+        "Mechanisch-Technischer Verständnistest, Drahtbiegeprobe und Konzentrations-Leistungs-Test."
+      ],
+      "c": 3,
+      "e": "Auf der Folie werden der Mechanisch-Technische Verständnistest (1958), die Drahtbiegeprobe (1961) und der Konzentrations-Leistungs-Test (1965) genannt.",
+      "oe": [
+        "Falsch: Diese Verfahren sind auf der früheren Zeitachse eingeordnet, nicht als die drei Nachkriegsbeispiele der Lienert-Folie.",
+        "Falsch: Army Alpha/Beta und Personal Data Sheet werden 1917/18 auf der Zeitachse genannt.",
+        "Falsch: Dies sind unterschiedliche historische Elemente, aber nicht die drei Verfahren der Nachkriegsfolie.",
+        "Richtig: Genau diese drei Verfahren samt Jahreszahlen werden im Zusammenhang mit Gustav Lienert aufgeführt."
+      ],
+      "mt": [
+        "zeitabschnitt_vertauscht",
+        "zeitabschnitt_vertauscht",
+        "kategorien_vermischt",
+        null
+      ],
+      "source_ids": [
+        "PD01-A04E03"
+      ],
+      "learning_objective_id": "LZ04"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd01-s4-q1",
+      "q": "Welche Richtung beschreibt den Schluss im eigenschaftstheoretischen Modell korrekt?",
+      "opts": [
+        "Von manifestem Verhalten wird auf latente Eigenschaften geschlossen; Eigenschaften dienen der Verhaltensprognose.",
+        "Von latenten Eigenschaften wird nur auf weitere latente Eigenschaften geschlossen; Verhalten bleibt ohne Funktion.",
+        "Von einem einzelnen State wird unmittelbar auf einen unveränderlichen Trait geschlossen; Situationen werden ausgeschlossen.",
+        "Von einer Prognose wird rückwärts auf ein beobachtetes Verhalten geschlossen; Indikatoren werden dabei nicht benötigt."
+      ],
+      "c": 0,
+      "e": "Das Modell enthält zwei Richtungen: manifestes Verhalten dient als Indikator für den Schluss auf latente Eigenschaften; erfasste Eigenschaften sollen Verhalten prognostizieren.",
+      "oe": [
+        "Richtig: Dies gibt beide Pfeilrichtungen des Ebenenmodells wieder.",
+        "Falsch: Manifeste Verhaltensweisen sind zentrale Indikatoren und dürfen nicht aus dem Modell entfernt werden.",
+        "Falsch: States sind situationsabhängig; ein einzelner Zustand belegt keinen unveränderlichen Trait.",
+        "Falsch: Die Prognoserichtung verläuft von Eigenschaften zu Verhalten und setzt den vorherigen Eigenschaftsschluss voraus."
+      ],
+      "mt": [
+        null,
+        "manifest_ignoriert",
+        "state_als_trait",
+        "pfeilrichtung_vertauscht"
+      ],
+      "source_ids": [
+        "PD01-A05E02"
+      ],
+      "learning_objective_id": "LZ05"
+    },
+    {
+      "id": "pd01-s4-q2",
+      "q": "Was zeigt die Tabelle zu kontextualisierten Big-Five-Items?",
+      "opts": [
+        "Nicht kontextualisierte Items weisen bei allen fünf Merkmalen die höheren berichteten Korrelationen auf.",
+        "Kontextualisierte Items weisen bei allen fünf Merkmalen die höheren berichteten Korrelationen auf.",
+        "Kontextualisierung verändert nur Offenheit; bei den übrigen vier Merkmalen bleiben die Werte identisch.",
+        "Die Tabelle vergleicht nur Mittelwerte der Merkmale und enthält keine Korrelationsangaben."
+      ],
+      "c": 1,
+      "e": "Für Gewissenhaftigkeit, emotionale Stabilität, Extraversion, Verträglichkeit und Offenheit liegen die Werte der kontextualisierten Items jeweils über denen der nicht kontextualisierten Items.",
+      "oe": [
+        "Falsch: In jeder Tabellenzeile ist der kontextualisierte Wert höher.",
+        "Richtig: Dieses durchgängige Muster ist die zentrale Aussage der Tabelle.",
+        "Falsch: Alle fünf Merkmale zeigen Unterschiede, nicht nur Offenheit.",
+        "Falsch: Die Tabelle berichtet mittlere gepoolte Korrelationen und korrigierte Klammerwerte."
+      ],
+      "mt": [
+        "richtung_vertauscht",
+        null,
+        "nur_eine_zeile_beachtet",
+        "kennwert_verwechselt"
+      ],
+      "source_ids": [
+        "PD01-A05E05"
+      ],
+      "learning_objective_id": "LZ06"
+    },
+    {
+      "id": "pd01-s4-q3",
+      "q": "Welcher Befund passt zur Aussage, dass Aggregation über Situationen die Trait-Verhaltens-Beziehung stärkt?",
+      "opts": [
+        "Einzelne Zustandsmessungen erreichen durchweg r = .80 bis r = .89, gemittelte Werte dagegen nur r = .18.",
+        "Einzelne Zustandsmessungen und gemittelte Werte zeigen in der Metaanalyse gänzlich identische Korrelationen.",
+        "Einzelne Zustandsmessungen liegen bei r = .18 bis .37, über Situationen gemittelte Werte bei r = .42 bis .56.",
+        "Gemittelte Werte erlauben einen Kausalnachweis, während einzelne Zustandsmessungen nur beschreibend verwendet werden."
+      ],
+      "c": 2,
+      "e": "Fleeson und Gallagher berichten niedrigere Zusammenhänge für einzelne Zustandsmessungen und höhere Zusammenhänge für über mehrere Situationen gemittelte Werte.",
+      "oe": [
+        "Falsch: Die Werte .80 und .89 gehören zu anderen Stabilitätsbefunden, nicht zur Aggregationsanalyse.",
+        "Falsch: Die beiden Wertebereiche unterscheiden sich deutlich.",
+        "Richtig: .18–.37 versus .42–.56 bildet den Aggregationseffekt der Folie ab.",
+        "Falsch: Höhere Korrelationen sind kein Kausalnachweis."
+      ],
+      "mt": [
+        "studienwerte_vermischt",
+        "aggregation_ignoriert",
+        null,
+        "korrelation_kausal"
+      ],
+      "source_ids": [
+        "PD01-A05E06"
+      ],
+      "learning_objective_id": "LZ07"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd01-s5-q1",
+      "q": "Wie unterscheiden sich signs und samples in den dargestellten Paradigmen?",
+      "opts": [
+        "Signs sind zufällige Verhaltensproben; samples beweisen dagegen direkt ein dahinterliegendes Persönlichkeitsmerkmal.",
+        "Signs und samples bezeichnen identische Testwerte; die Begriffe unterscheiden sich nur durch ihre Sprache.",
+        "Signs sind nur physiologische Reaktionen; samples sind nur Antworten in Fragebögen und Interviews.",
+        "Signs gelten als Indikatoren latenter Merkmale; samples sind Stichproben ähnlicher beobachtbarer Verhaltensweisen."
+      ],
+      "c": 3,
+      "e": "Im Eigenschaftsansatz verweist Verhalten als sign auf ein latentes Merkmal. Im verhaltenstheoretischen Zugang wird Verhalten als sample ähnlicher Verhaltensweisen betrachtet.",
+      "oe": [
+        "Falsch: Die Begriffe sind vertauscht und ein sample liefert keinen direkten Trait-Beweis.",
+        "Falsch: Die Begriffe markieren zwei unterschiedliche diagnostische Sichtweisen.",
+        "Falsch: Die Folie bindet die Unterscheidung nicht an diese beiden Methodenarten.",
+        "Richtig: Dies trifft den Indikatorcharakter von signs und den Stichprobencharakter von samples."
+      ],
+      "mt": [
+        "sign_sample_vertauscht",
+        "paradigmen_gleichgesetzt",
+        "methoden_verengt",
+        null
+      ],
+      "source_ids": [
+        "PD01-A06E01"
+      ],
+      "learning_objective_id": "LZ08"
+    },
+    {
+      "id": "pd01-s5-q2",
+      "q": "Wofür steht K in der S-O-R-K-C-Verhaltensgleichung?",
+      "opts": [
+        "Kontingenz: die Regelmäßigkeit, mit der eine Konsequenz auf die Reaktion folgt und erneut eintritt.",
+        "Kognition: die bewusste Bewertung, die notwendigerweise vor jedem Stimulus stattfinden muss.",
+        "Klassifikation: die diagnostische Kategorie, der die Reaktion abschließend zugeordnet wird.",
+        "Konflikt: die verborgene Eigenschaft, aus der beobachtetes Verhalten direkt abgeleitet werden soll."
+      ],
+      "c": 0,
+      "e": "K bezeichnet die Kontingenz, also die Regelmäßigkeit des Auftretens der Konsequenz. Im Folienbeispiel lautet die Angabe „gelegentlich“.",
+      "oe": [
+        "Richtig: K ist Kontingenz und beschreibt die Regelmäßigkeit der Konsequenz.",
+        "Falsch: Kognition ist in der dargestellten Gleichung kein eigenes Kürzel.",
+        "Falsch: Klassifikation gehört zu diagnostischen Zielen, nicht zur K-Stelle der funktionalen Verhaltensanalyse.",
+        "Falsch: Ein verborgener Trait ist gerade nicht die Bedeutung von K in S-O-R-K-C."
+      ],
+      "mt": [
+        null,
+        "kuerzel_falsch_aufgeloest",
+        "ziel_mit_modell_vermischt",
+        "trait_in_verhaltensanalyse"
+      ],
+      "source_ids": [
+        "PD01-A06E02"
+      ],
+      "learning_objective_id": "LZ08"
+    },
+    {
+      "id": "pd01-s5-q3",
+      "q": "Welche Aussage beschreibt den Interaktionismus korrekt?",
+      "opts": [
+        "Verhalten wird nur durch stabile Traits bestimmt; situative Provokation verändert nur die Messgenauigkeit.",
+        "Situation und Persönlichkeitseigenschaften wirken gemeinsam; ihre Gewichtung kann variieren.",
+        "Verhalten wird nur durch Situationen bestimmt; individuelle Eigenschaften dürfen nicht berücksichtigt werden.",
+        "Situation und Trait wirken in jeder Lage exakt gleich stark und erzeugen deshalb durchgehend parallele Verläufe."
+      ],
+      "c": 1,
+      "e": "Der Interaktionismus verbindet beide Einflussquellen. Die Folie betont ausdrücklich, dass ihre Gewichtung nicht konstant sein muss.",
+      "oe": [
+        "Falsch: Diese Aussage blendet die Situation aus und entspricht nicht dem Interaktionismus.",
+        "Richtig: Gemeinsame Wirkung bei variabler Gewichtung ist die Kernaussage.",
+        "Falsch: Das wäre eine ausschließlich situationistische Position.",
+        "Falsch: Die Gewichtung ist gerade nicht konstant; das NIPS-Beispiel zeigt unterschiedliche Verläufe."
+      ],
+      "mt": [
+        "situation_ignoriert",
+        null,
+        "trait_ignoriert",
+        "gleiche_gewichtung"
+      ],
+      "source_ids": [
+        "PD01-A06E03",
+        "PD01-A06E04"
+      ],
+      "learning_objective_id": "LZ08"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd01-b-q1",
+    "q": "Welche Stabilitätsbefunde zu Persönlichkeitsmerkmalen werden berichtet?",
+    "opts": [
+      "r = .18 bei 18–22 Jahren und r = .37 bei 50–59 Jahren; beide Werte stammen aus Einzelzuständen.",
+      "r = .80 bei 18–22 Jahren und r = .89 bei 50–59 Jahren; beide Werte betreffen Intelligenztests.",
+      "r = .54 bei 18–22 Jahren und r = .74 bei 50–59 Jahren zum Zeitpunkt der ersten Messung.",
+      "r = .56 bei 18–22 Jahren und r = .23 bei 50–59 Jahren; beide Werte betreffen Einkommen."
+    ],
+    "c": 2,
+    "e": "Roberts und DelVeccio berichten Stabilitätskorrelationen von r = .54 bei 18–22 Jahren und r = .74 bei 50–59 Jahren.",
+    "oe": [
+      "Falsch: .18 und .37 gehören zu Zustandsmessungen in einer anderen Metaanalyse.",
+      "Falsch: .80 und .89 sind auf der Folie Intelligenz- bzw. Retestbefunde.",
+      "Richtig: Dies sind die beiden berichteten Altersgruppenwerte.",
+      "Falsch: .56 und .23 stammen aus der Vorhersage späterer Leistungen durch Intelligenz."
+    ],
+    "mt": [
+      "studienwerte_vermischt",
+      "studienwerte_vermischt",
+      null,
+      "studienwerte_vermischt"
+    ],
+    "source_ids": [
+      "PD01-A05E07"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd01-b-q2",
+    "q": "Welche Zuordnung der berichteten Intelligenzkorrelationen ist korrekt?",
+    "opts": [
+      "Akademischer Erfolg r = .23, beruflicher Status r = .56 und Einkommen r = .45.",
+      "Akademischer Erfolg r = .45, beruflicher Status r = .23 und Einkommen r = .56.",
+      "Akademischer Erfolg r = .89, beruflicher Status r = .80 und Einkommen r = .66.",
+      "Akademischer Erfolg r = .56, beruflicher Status r = .45 und Einkommen r = .23."
+    ],
+    "c": 3,
+    "e": "Strenze berichtet r = .56 für akademischen Erfolg, r = .45 für beruflichen Status und r = .23 für Einkommen.",
+    "oe": [
+      "Falsch: Die drei Werte sind den Kriterien falsch zugeordnet.",
+      "Falsch: Die Werte sind ebenfalls vertauscht.",
+      "Falsch: .89, .80 und .66 gehören zu Stabilitäts- bzw. Retestbefunden.",
+      "Richtig: Diese Reihenfolge entspricht den drei berichteten Kriterien."
+    ],
+    "mt": [
+      "werte_vertauscht",
+      "werte_vertauscht",
+      "studienwerte_vermischt",
+      null
+    ],
+    "source_ids": [
+      "PD01-A05E08"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd01-b-q3",
+    "q": "Welche Aussage trennt Trait und State am klarsten?",
+    "opts": [
+      "Trait: relativ breit und zeitlich stabil; State: zeitlich instabil und stark situationsabhängig.",
+      "Ein Trait ist eine einzelne beobachtete Reaktion; ein State ist in jedem Fall ein direkt gemessener Intelligenzwert.",
+      "Ein Trait verändert sich in jeder Situation gänzlich; ein State bleibt dagegen über Jahre unverändert.",
+      "Trait und State sind zwei Bezeichnungen für dieselbe latente Eigenschaft ohne zeitlichen Unterschied."
+    ],
+    "c": 0,
+    "e": "Traits werden als relativ breite und stabile Dispositionen beschrieben; States als zeitlich nicht stabile, situationsabhängige Zustände.",
+    "oe": [
+      "Richtig: Stabilität und Situationsabhängigkeit bilden das zentrale Trennkriterium.",
+      "Falsch: Eine einzelne Reaktion ist manifestes Verhalten und nicht automatisch ein Trait.",
+      "Falsch: Die Stabilitätszuordnung ist umgekehrt.",
+      "Falsch: Die Folien unterscheiden beide Konzepte ausdrücklich."
+    ],
+    "mt": [
+      null,
+      "manifest_mit_trait",
+      "trait_state_vertauscht",
+      "konzepte_gleichgesetzt"
+    ],
+    "source_ids": [
+      "PD01-A05E01",
+      "PD01-A05E03"
+    ],
+    "learning_objective_id": "LZ05"
+  },
+  {
+    "id": "pd01-b-q4",
+    "q": "Welches Muster beschreibt die NIPS-Grafik am treffendsten?",
+    "opts": [
+      "Beide Trait-Gruppen beginnen gleich und steigen zwischen allen Provokationsstufen exakt parallel an.",
+      "Hohe Trait-Aggressiveness startet höher; die niedrige Gruppe steigt bei hoher Provokation stark.",
+      "Niedrige Trait-Aggressiveness startet höher; hohe Trait-Aggressiveness sinkt bei moderater Provokation deutlich ab.",
+      "Aggression bleibt in beiden Gruppen unabhängig von niedriger, moderater oder hoher Provokation gänzlich konstant."
+    ],
+    "c": 1,
+    "e": "Die Kurven verlaufen nicht parallel: Die hohe Trait-Gruppe beginnt höher, während die niedrige Trait-Gruppe den stärksten Anstieg erst bei hoher Provokation zeigt.",
+    "oe": [
+      "Falsch: Die dargestellten Verläufe sind gerade nicht parallel.",
+      "Richtig: Dies beschreibt Ausgangsniveau und unterschiedliche Anstiegsbereiche der beiden Linien.",
+      "Falsch: Ausgangsniveau und Richtung sind vertauscht.",
+      "Falsch: Beide Linien verändern sich mit der Provokation."
+    ],
+    "mt": [
+      "interaktion_als_parallel",
+      null,
+      "linien_vertauscht",
+      "situation_ignoriert"
+    ],
+    "source_ids": [
+      "PD01-A06E04"
+    ],
+    "learning_objective_id": "LZ08"
+  }
+];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+/* PD01 bespoke widgets */
+function setBox(id,msg,ok){var e=document.getElementById(id);if(!e)return;e.textContent=(ok?'✓ ':'✗ ')+msg;e.classList.toggle('ok',!!ok);e.classList.toggle('bad',!ok);}
+function checkFoundation(btn,correct,msg){btn.dataset.result=correct?'correct':'wrong';setBox('foundation-feedback',msg,correct);}
+function checkSelect(selectId,correct,feedbackId){var s=document.getElementById(selectId),f=document.getElementById(feedbackId);if(!s||!f)return;var ok=s.value===correct;f.textContent=(ok?'✓ Richtig: ':'✗ Noch nicht: ')+(ok?correct+' passt hier.':'Gesucht ist '+correct+'.');f.className='mini-feedback '+(ok?'ok':'bad');}
+var processCorrect=['Globale Fragestellung','Differenzierung der psychologischen Fragen','Auswahl der Instrumente','Durchführung und Auswertung','Integration der Ergebnisse'];
+var processState=[];
+function deterministicShuffle(a,seed){var x=a.slice();for(var i=x.length-1;i>0;i--){seed=(seed*9301+49297)%233280;var j=Math.floor(seed/233280*(i+1));var t=x[i];x[i]=x[j];x[j]=t;}return x;}
+function renderReorder(id,state,mover){var list=document.getElementById(id);if(!list)return;list.innerHTML='';state.forEach(function(txt,i){var li=document.createElement('li');li.className='reorder-item';li.innerHTML='<span class="reorder-num">'+(i+1)+'</span><span>'+txt+'</span><button type="button" class="btn btn-ghost" aria-label="'+txt+' nach oben" '+(i===0?'disabled':'')+' onclick="'+mover+'('+i+',-1)">↑</button><button type="button" class="btn btn-ghost" aria-label="'+txt+' nach unten" '+(i===state.length-1?'disabled':'')+' onclick="'+mover+'('+i+',1)">↓</button>';list.appendChild(li);});}
+function moveProcess(i,d){var j=i+d;if(j<0||j>=processState.length)return;var t=processState[i];processState[i]=processState[j];processState[j]=t;renderReorder('process-list',processState,'moveProcess');}
+function resetProcess(){processState=deterministicShuffle(processCorrect,7+Math.floor(Math.random()*90));renderReorder('process-list',processState,'moveProcess');setBox('process-feedback','Die Schritte wurden neu gemischt.',true);}
+function checkProcess(){var ok=processState.every(function(x,i){return x===processCorrect[i];});setBox('process-feedback',ok?'Die fünf Stufen stehen in der richtigen Abfolge.':'Die Reihenfolge stimmt noch nicht. Prüfe besonders, ob Teilfragen vor Instrumenten und Integration am Ende stehen.',ok);}
+var timelineCorrect=['Wundt-Labor','Galtons psychometrisches Labor','Wisslers Validierungsstudie','Binet-Simon-Test','Stern: Intelligenzquotient','Rorschach-Test'];var timelineState=[];
+function moveTimeline(i,d){var j=i+d;if(j<0||j>=timelineState.length)return;var t=timelineState[i];timelineState[i]=timelineState[j];timelineState[j]=t;renderReorder('timeline-list',timelineState,'moveTimeline');}
+function resetTimeline(){timelineState=deterministicShuffle(timelineCorrect,13+Math.floor(Math.random()*90));renderReorder('timeline-list',timelineState,'moveTimeline');setBox('timeline-feedback','Die Ereignisse wurden neu gemischt.',true);}
+function checkTimeline(){var ok=timelineState.every(function(x,i){return x===timelineCorrect[i];});setBox('timeline-feedback',ok?'Die sechs Ereignisse sind chronologisch geordnet.':'Noch nicht chronologisch. Prüfe besonders die Position von Wundt, Wissler und Stern.',ok);}
+function checkIqGap(){var v=Number(document.getElementById('iq-gap').value),f=document.getElementById('iq-gap-fb'),ok=Math.abs(v-9)<.0001;f.textContent=ok?'✓ 100 · 9 / 9 = 100.':'✗ Der Nenner muss 9 sein.';f.className='inline-feedback '+(ok?'ok':'bad');}
+function checkIqSelf(){var v=Number(document.getElementById('iq-self').value),f=document.getElementById('iq-self-fb'),ok=Math.abs(v-125)<.0001;f.textContent=ok?'✓ 100 · 15 / 12 = 125.':'✗ Rechne 1500 / 12 = 125.';f.className='inline-feedback '+(ok?'ok':'bad');}
+function checkArrows(){var up=document.getElementById('arrow-up').value,down=document.getElementById('arrow-down').value,ok=up==='schluss'&&down==='prognose';setBox('arrow-feedback',ok?'Manifest → latent ist der Eigenschaftsschluss; latent → manifest ist die Prognoserichtung.':'Prüfe die Richtung: Beobachtung liefert Indikatoren nach oben; erfasste Eigenschaften dienen der Prognose nach unten.',ok);}
+var nipsUnlocked=false;var nipsLabels=['niedrig','moderat','hoch'];var nipsTexts=[
+'Niedrige Provokation: Die hohe Trait-Gruppe beginnt auf höherem Aggressionsniveau; die niedrige Trait-Gruppe bleibt niedrig.',
+'Moderate Provokation: Die hohe Trait-Gruppe ist deutlich angestiegen; die niedrige Trait-Gruppe verändert sich nur wenig.',
+'Hohe Provokation: Beide Gruppen liegen hoch; der stärkste späte Anstieg zeigt sich bei niedriger Trait-Aggressiveness.'
+];var highPts=[[100,155],[280,85],[455,65]],lowPts=[[100,220],[280,210],[455,80]];
+function checkNipsPrediction(){var r=document.querySelector('input[name="nips-pred"]:checked');if(!r){setBox('nips-pred-fb','Wähle zuerst eine Prognose.',false);return;}var ok=r.value==='interaction';setBox('nips-pred-fb',ok?'Richtig: Die nicht parallelen Verläufe zeigen eine Interaktion von Person und Situation.':'Nicht passend: Die Folie zeigt unterschiedliche, nicht parallele Verläufe.',ok);if(ok){nipsUnlocked=true;document.getElementById('provocation').disabled=false;updateNips();}}
+function updateNips(){if(!nipsUnlocked)return;var i=Number(document.getElementById('provocation').value);document.getElementById('prov-label').textContent=nipsLabels[i];document.getElementById('nips-output').textContent=nipsTexts[i];var hd=document.getElementById('nips-high-dot'),ld=document.getElementById('nips-low-dot');hd.setAttribute('cx',highPts[i][0]);hd.setAttribute('cy',highPts[i][1]);ld.setAttribute('cx',lowPts[i][0]);ld.setAttribute('cy',lowPts[i][1]);}
+function openLocalFeedback(){document.getElementById('fr-local-ov').classList.add('on');document.getElementById('fr-local-text').focus();}
+function closeLocalFeedback(){document.getElementById('fr-local-ov').classList.remove('on');}
+function saveLocalFeedback(){var t=document.getElementById('fr-local-text').value.trim();if(!t)return;var rep={module:document.title,storage_key:LS_KEY,time:new Date().toISOString(),url:location.href,text:t};var arr=[];try{arr=JSON.parse(localStorage.getItem('lm-fehlerberichte')||'[]');arr.push(rep);localStorage.setItem('lm-fehlerberichte',JSON.stringify(arr));}catch(e){}var md='# Fehlerbericht\n\n- Modul: '+rep.module+'\n- Zeit: '+rep.time+'\n- Storage-Key: '+rep.storage_key+'\n\n## Beschreibung\n'+t+'\n';var b=new Blob([md],{type:'text/markdown;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='fehler_pd01_'+Date.now()+'.md';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},500);document.getElementById('fr-local-text').value='';closeLocalFeedback();document.getElementById('liveStatus').textContent='Fehlerbericht lokal gespeichert und heruntergeladen.';}
+document.addEventListener('DOMContentLoaded',function(){processState=deterministicShuffle(processCorrect,17);timelineState=deterministicShuffle(timelineCorrect,29);renderReorder('process-list',processState,'moveProcess');renderReorder('timeline-list',timelineState,'moveTimeline');var ov=document.getElementById('fr-local-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closeLocalFeedback();});document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLocalFeedback();});});
+
+</script>
+<button id="fr-local-fab" type="button" onclick="openLocalFeedback()" title="Fehler lokal melden">🐞 Fehler</button><div id="fr-local-ov" role="dialog" aria-modal="true" aria-labelledby="fr-local-title"><div class="fr-local-box"><h3 id="fr-local-title">Fehler melden</h3><p class="details">Der Bericht wird nur lokal gespeichert und als Markdown-Datei heruntergeladen.</p><textarea id="fr-local-text" aria-label="Fehlerbeschreibung" placeholder="Was stimmt nicht oder ist unklar?"></textarea><div class="fr-local-actions"><button class="btn btn-ghost" type="button" onclick="closeLocalFeedback()">Abbrechen</button><button class="btn btn-accent" type="button" onclick="saveLocalFeedback()">Lokal speichern</button></div></div></div>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

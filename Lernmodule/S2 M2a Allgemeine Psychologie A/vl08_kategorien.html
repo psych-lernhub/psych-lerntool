@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL08 Kategorisierung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl08
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL08 Kategorisierung</h1>
+<p class="page-sub">Wissensrepräsentation · Kategorisierung · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Funktionen von Kategorien · 2. Klassische/regelbasierte Sicht · 3. Prototyp vs. Exemplar · 4. Theoriesicht · 5. Kritik am Ähnlichkeitsbegriff
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Funktionen</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Klassische Sicht</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Semantisches Netzwerk</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Gegen klassisch</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Prototyp</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Exemplar</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Theoriesicht</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Ähnlichkeit & Anwendung</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Funktionen ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Kategorisierung & Funktionen von Kategorien</div>
+    <div class="sec-lz">Semantische Repräsentation im LZG; Klassifikation (Gluck & Bower 1988), Inferenz, u. a.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum ist es überhaupt nützlich, einen Gegenstand der Kategorie „Hund“ zuzuordnen — was gewinnt das kognitive System durch diese Zuordnung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Mit der Zuordnung wird <strong>Wissen verfügbar</strong>: Ich kann nicht sichtbare Eigenschaften <em>erschließen</em> (bellt, könnte beißen), mein Verhalten planen, kommunizieren und Neues anknüpfen. Kategorisierung ist eine Form der <strong>semantischen Repräsentation im LZG</strong> und Grundlage von Klassifikation, Inferenz, Lernen, Denken, Handlungsplanung und Sprache.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition</div>
+    <p><strong>Kategorisierung</strong> ist eine Form der <strong>semantischen Repräsentation</strong> von Wissen im Langzeitgedächtnis: Objekte und Ereignisse werden zu Kategorien zusammengefasst. Es gibt zwei Theoriefamilien, wie das geschieht — <strong>regel­basiert</strong> (klassische Sicht) und <strong>ähnlichkeits­basiert</strong> (Prototyp & Exemplar); später kommt die <strong>theoriegeleitete</strong> Sicht hinzu.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Sechs Funktionen von Kategorien</div>
+    <ul>
+      <li><strong>Klassifikation</strong> — neue Objekte einer Kategorie zuordnen (<strong>Gluck & Bower 1988</strong>: fiktive Patientenakten der richtigen Diagnose zuordnen lernen)</li>
+      <li><strong>Inferenz</strong> — aus der Zugehörigkeit auf nicht sichtbare Eigenschaften schließen (Erwartungen — auch Vorurteile)</li>
+      <li><strong>Lernen</strong> — neues Wissen an Kategorien anknüpfen</li>
+      <li><strong>Denken</strong> — über Kategorien schlussfolgern</li>
+      <li><strong>Handlungsplanung</strong> — angemessenes Verhalten ableiten</li>
+      <li><strong>Sprache & Kommunikation</strong> — Kategorien als Bedeutung von Begriffen</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <p><strong>Klassifikation</strong> (ein Objekt erst <em>in</em> eine Kategorie einordnen) ist nicht dasselbe wie <strong>Inferenz</strong> (aus der bereits feststehenden Zugehörigkeit weitere Merkmale <em>ableiten</em>). Klassifikation ist die Eingangs-, Inferenz die Folgefunktion.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — wofür dient jede Funktion?</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Klassifikation</h4><p>Neuen Fall zuordnen — Gluck & Bower 1988: Diagnose aus Symptomen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Inferenz</h4><p>Auf nicht sichtbare Eigenschaften schließen — Quelle von Erwartungen & Vorurteilen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Lernen</h4><p>Neues Wissen an bestehende Kategorien anknüpfen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Denken</h4><p>Über Kategorien schlussfolgern statt über jedes Einzelobjekt.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Handlungsplanung</h4><p>Angemessenes Verhalten aus der Kategorie ableiten.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Sprache</h4><p>Kategorien liefern die Bedeutung von Begriffen — Kommunikation.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Klassische Sicht ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Klassische (regelbasierte) Sichtweise</div>
+    <div class="sec-lz">Definierende Merkmale, notwendig+hinreichend, scharfe Grenzen, gleiche Repräsentativität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein „Junggeselle“ ist per Definition ein unverheirateter erwachsener Mann. Lassen sich <em>alle</em> Alltagsbegriffe so sauber über Merkmale definieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Die klassische Sicht nimmt genau das an: <strong>notwendige und hinreichende</strong> Merkmale, <strong>scharfe Grenzen</strong>, alle Mitglieder <strong>gleich repräsentativ</strong>. Für „Junggeselle“ funktioniert es — für „Spiel“, „Gemüse“ oder „Vogel“ scheitert es jedoch (→ Abschnitt ④).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — klassische (regelbasierte) Sicht</div>
+    <p>Eine Kategorie wird über <strong>definierende Merkmale</strong> festgelegt, die <strong>notwendig UND hinreichend</strong> sind. Die Zugehörigkeit entscheidet eine <em>Regel</em> (Definition), nicht die Ähnlichkeit. Beispiel: „Junggeselle“ = unverheiratet + männlich + erwachsen.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei testbare Vorhersagen</div>
+    <ul>
+      <li><strong>Scharfe Grenzen:</strong> Ein Objekt gehört eindeutig dazu oder nicht — kein „dazwischen“.</li>
+      <li><strong>Gleiche Repräsentativität:</strong> Alle Mitglieder sind gleichermaßen Mitglied; keines ist „typischer“ als ein anderes.</li>
+    </ul>
+    <div class="hinweis">Genau diese beiden Vorhersagen werden später empirisch <strong>widerlegt</strong> (Typikalität, unscharfe Grenzen) — der zentrale Klausur-Konflikt.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    <p><strong>Regelbasiert</strong> (klassisch) heißt: Zugehörigkeit über eine Definition. <strong>Ähnlichkeitsbasiert</strong> (Prototyp/Exemplar) heißt: Zugehörigkeit über Ähnlichkeit. Beides nicht vermischen.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — klassische Sicht oder Prototypensicht?</div>
+    <div class="corr-item" id="c1a">Zugehörigkeit über notwendige und hinreichende Merkmale.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'klassisch')">Klassisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'prototyp')">Prototyp</button>
+      </div><div class="corr-fb" id="c1a-fb"></div>
+    </div>
+    <div class="corr-item" id="c1b">Zuordnung über Ähnlichkeit zu typischen Merkmalen, unscharfe Grenzen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'klassisch')">Klassisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'prototyp')">Prototyp</button>
+      </div><div class="corr-fb" id="c1b-fb"></div>
+    </div>
+    <div class="corr-item" id="c1c">Alle Mitglieder sind gleich repräsentativ.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'klassisch')">Klassisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'prototyp')">Prototyp</button>
+      </div><div class="corr-fb" id="c1c-fb"></div>
+    </div>
+    <div class="corr-item" id="c1d">Manche Mitglieder gelten als typischer als andere.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'klassisch')">Klassisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1d',this,'prototyp')">Prototyp</button>
+      </div><div class="corr-fb" id="c1d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Semantisches Netzwerk ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Semantisches Netzwerk & kognitive Ökonomie</div>
+    <div class="sec-lz">Collins & Quillian 1969; Hierarchieebenen; Basale Kategorien (Taylor & Tanaka).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum dauert es länger zu bestätigen, dass „ein Kanarienvogel Haut hat“, als dass „ein Kanarienvogel singen kann“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Im hierarchischen Netzwerk (<strong>Collins & Quillian 1969</strong>) ist „hat Haut“ zwei Ebenen höher gespeichert (beim <em>Tier</em>) als „kann singen“ (beim <em>Kanarienvogel</em> selbst). Der Weg über die Ebenen kostet Zeit — eine direkte Folge des Prinzips der <strong>kognitiven Ökonomie</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — semantisches Netzwerk (Collins & Quillian 1969)</div>
+    <p>Wissen ist ein Netz aus <strong>Knoten</strong> (Konzepten), verbunden durch <strong>Zugehörigkeitsrelationen</strong> („ist ein“) und <strong>Eigenschaftsrelationen</strong> („hat/kann“). Die Konzepte sind <strong>hierarchisch</strong> über mehrere Ebenen geordnet: Tier → Vogel → Kanarienvogel.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Prinzip der kognitiven Ökonomie</div>
+    <p>Eigenschaften werden möglichst <strong>sparsam</strong> auf der <strong>höchstmöglichen Ebene</strong> gespeichert, auf der sie für alle Unterknoten gelten: „hat Haut“ beim <em>Tier</em>, nicht bei jedem Vogel erneut. Speziellere Merkmale stehen weiter unten („kann singen“ beim Kanarienvogel).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Basale Kategorien (Taylor & Tanaka 1991)</div>
+    <p>Die <strong>mittlere</strong> Ebene („Hund“ statt „Säugetier“ oder „Dackel“) wird bevorzugt: viele gemeinsame Merkmale bei großer Abgrenzung zu anderen Kategorien. Welche Ebene basal ist, ist <strong>erfahrungsabhängig</strong> — Expert:innen nutzen eine spezifischere Basalebene.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz FÜR das Netzwerk</div>
+    <p>Satzverifikation (Collins & Quillian): je mehr Ebenen ein Satz überbrückt, desto länger die Antwortzeit — der Ebenenwechsel kostet messbar Zeit, wie vom Modell vorhergesagt.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Satzverifikation — Schritt für Schritt aufdecken</div>
+    <div id="s2steps">
+      <div class="step-item"><div class="step-label">0 Ebenen</div>„Ein Kanarienvogel <strong>kann singen</strong>“ — beim Knoten <em>Kanarienvogel</em> selbst gespeichert → <strong>schnellste</strong> Verifikation.</div>
+      <div class="step-item"><div class="step-label">1 Ebene</div>„Ein Kanarienvogel <strong>hat Federn</strong>“ — gespeichert beim Knoten <em>Vogel</em> → eine Ebene hoch → <strong>etwas langsamer</strong>.</div>
+      <div class="step-item"><div class="step-label">2 Ebenen</div>„Ein Kanarienvogel <strong>hat Haut</strong>“ — gespeichert beim Knoten <em>Tier</em> → zwei Ebenen hoch → <strong>am langsamsten</strong>.</div>
+      <div class="step-item"><div class="step-label">Fazit</div>Die abgestufte Verifikationszeit stützt die hierarchische Struktur + kognitive Ökonomie — zugleich die Achillesferse, sobald paradoxe Zeiten auftauchen (→ Abschnitt ④).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s2steps')" style="margin-top:10px">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Gegen klassisch ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Evidenz gegen die klassische Sicht & Spreading Activation</div>
+    <div class="sec-lz">Typikalität, unscharfe Grenzen (McCloskey & Glucksberg), Wittgenstein; Collins & Loftus 1975.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn jeder Vogel per Definition gleichermaßen „Vogel“ ist — warum erscheint uns ein Spatz „typischer“ als ein Pinguin?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Weil die klassische Annahme <strong>gleicher Repräsentativität falsch</strong> ist: Es gibt <strong>Typikalität</strong>. Zusammen mit unscharfen Grenzen (McCloskey & Glucksberg), paradoxen Verifikationszeiten und nicht definierbaren Begriffen (Wittgenstein) spricht das gegen die klassische Sicht. Die <strong>Spreading-Activation-Theorie</strong> (Collins & Loftus) ersetzt die strikte Hierarchie.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vier Befunde gegen die klassische Sicht</div>
+    <ul>
+      <li><strong>Typikalität:</strong> Mitglieder sind NICHT gleich repräsentativ (Spatz typischer als Pinguin).</li>
+      <li><strong>Paradoxe Verifikationszeiten:</strong> „Huhn ist ein Tier“ wird <em>schneller</em> bestätigt als „Huhn ist ein Vogel“ — entgegen der Hierarchie-Vorhersage.</li>
+      <li><strong>Unscharfe Grenzen</strong> (McCloskey & Glucksberg 1978): Menschen sind sich uneinig/inkonsistent, ob z. B. eine Tomate Obst ist.</li>
+      <li><strong>Kein definierendes Merkmal</strong> (Wittgenstein 1953): „Spiel“ lässt sich nur über <em>Familienähnlichkeit</em> fassen, nicht über notwendige+hinreichende Merkmale.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title">Definition — Spreading-Activation-Theorie (Collins & Loftus 1975; Anderson 1983)</div>
+    <p>Revidiertes Netzwerk: <strong>nicht streng hierarchisch</strong>. Knoten sind nach <strong>Häufigkeit/Ähnlichkeit/Assoziationsstärke</strong> verbunden (kürzere Verbindung = stärker assoziiert). Aktivierung <strong>breitet sich</strong> vom aktivierten Knoten über die Verbindungen aus.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Reichweite</div>
+    <p>Die Spreading-Activation-Theorie erklärt <strong>Typikalität und Priming</strong> gut — aber <strong>nicht</strong>, wie Kategorien überhaupt erst <em>entstehen</em>.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Befunde gegen die klassische Sicht — nacheinander aufdecken</div>
+    <div id="s3steps">
+      <div class="step-item"><div class="step-label">Befund 1</div><strong>Typikalität</strong> widerlegt die Annahme gleicher Repräsentativität.</div>
+      <div class="step-item"><div class="step-label">Befund 2</div><strong>Paradoxe Verifikationszeiten</strong> widersprechen der strikten Hierarchie.</div>
+      <div class="step-item"><div class="step-label">Befund 3</div><strong>Unscharfe Grenzen</strong> (McCloskey & Glucksberg) widerlegen die scharfen Grenzen.</div>
+      <div class="step-item"><div class="step-label">Befund 4</div><strong>Familienähnlichkeit</strong> (Wittgenstein) widerlegt die definierenden Merkmale.</div>
+      <div class="step-item"><div class="step-label">Konsequenz</div>→ Ähnlichkeitsbasierte Ansätze (Prototyp/Exemplar) und das Spreading-Activation-Netzwerk lösen die klassische Sicht ab.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s3steps')" style="margin-top:10px">Nächsten Befund zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Prototyp ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Prototypensichtweise</div>
+    <div class="sec-lz">Probabilistisch; zentrale Tendenz; Posner & Keele 1968.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>VPn lernen Kategorien aus verzerrten Punktmustern — und erkennen hinterher ausgerechnet ein Muster am besten, das sie <em>nie</em> gesehen haben. Wie kann das sein?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Sie haben die <strong>zentrale Tendenz</strong> (den <strong>Prototyp</strong>) der Trainingsmuster abstrahiert und gespeichert (<strong>Posner & Keele 1968</strong>). Genau das ist die Prototypensicht: Kategorien werden über <strong>charakteristische (probabilistische) Merkmale</strong> und die Ähnlichkeit zum Prototyp repräsentiert.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — Prototypensicht (probabilistisch)</div>
+    <p>Eine Kategorie wird über <strong>typische/charakteristische Merkmale</strong> beschrieben, die <strong>nicht</strong> notwendig und hinreichend sind, sondern nur <em>wahrscheinlich</em> zutreffen. Beispiel: ICD-10-Depression verlangt „vier oder mehr“ aus einer Merkmalsliste — kein einzelnes Merkmal ist zwingend. So werden unscharfe Grenzen und Typikalität erlaubt.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Definition — Prototyp</div>
+    <p>Abstrahierte Zusammenfassung der typischen Merkmale (<strong>zentrale Tendenz</strong>) — ein „bestes“, oft <em>fiktives</em> Exemplar, das real nicht vorkommen muss. Ein neues Objekt wird über seine <strong>Ähnlichkeit zum Prototyp</strong> zugeordnet: je ähnlicher, desto typischer.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz — Posner & Keele 1968</div>
+    <p>VPn lernten Kategorien aus <em>verzerrten</em> Punktmustern (Distortionen eines nie gezeigten Prototyps). Im Test wurde der <strong>nie gezeigte Prototyp</strong> am besten klassifiziert — besonders bei <strong>verzögerter</strong> Beurteilung. → Es wird eine abstrahierte zentrale Tendenz gespeichert.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Evidenz GEGEN den Prototyp</div>
+    <ul>
+      <li>Manche Kategorien sind <strong>idealtypisch</strong> (Sollphänotyp) statt prototypisch — z. B. biologische Kategorien (Hampton 2006; Kim & Murphy 2011; Medin & Atran 2004).</li>
+      <li>Typikalität ist <strong>kontextabhängig</strong>.</li>
+      <li>Es gibt <strong>nicht linear trennbare</strong> Kategorien ohne Prototyp (Gemüse vs. Obst).</li>
+      <li><strong>Variabilität</strong> (Spatz vs. Pinguin vs. Eule) und <strong>Merkmalskorrelationen</strong> gehen verloren.</li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Posner & Keele (1968) — die Logik nacheinander aufdecken</div>
+    <div id="s4steps">
+      <div class="step-item"><div class="step-label">Lernphase</div>VPn sehen nur <strong>verzerrte</strong> Versionen (Distortionen) eines Punktmusters — den <em>Prototyp</em> selbst nie.</div>
+      <div class="step-item"><div class="step-label">Testphase</div>Neue Muster klassifizieren — darunter der nie gezeigte Prototyp.</div>
+      <div class="step-item"><div class="step-label">Befund</div>Der <strong>nie gezeigte Prototyp</strong> wird am sichersten zugeordnet — stärker als viele real gezeigte Distortionen.</div>
+      <div class="step-item"><div class="step-label">Verzögerung</div>Nach Zeitverzögerung ist der Prototyp-Vorteil <strong>besonders groß</strong> — Distortionen werden vergessen, die abstrahierte Tendenz bleibt.</div>
+      <div class="step-item"><div class="step-label">Schluss</div>→ Im LZG wird eine <strong>abstrahierte zentrale Tendenz</strong> (der Prototyp) gespeichert.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s4steps')" style="margin-top:10px">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Exemplar ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Exemplar-basierte Sichtweise</div>
+    <div class="sec-lz">Gespeicherte Exemplare, Ähnlichkeit als Cue; Voorspoels et al. 2008.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Statt einen abstrakten „Durchschnitts-Stuhl“ zu speichern — was, wenn wir einfach <em>alle</em> erlebten Stühle behalten und neue Objekte damit vergleichen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Genau das ist die <strong>Exemplar-Sicht</strong>: Kategorien bestehen aus vielen gespeicherten <strong>Einzelexemplaren</strong>; ein neues Objekt wirkt als <strong>Cue</strong> und aktiviert sie über Ähnlichkeit. Das erklärt <strong>Varianz</strong> und <strong>Merkmalskorrelationen</strong> besser als ein gemittelter Prototyp (Voorspoels 2008) — kostet aber Speicher.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — Exemplar-basierte Sicht</div>
+    <p>Eine Kategorie besteht <strong>nicht</strong> aus einem abstrahierten Prototyp, sondern aus den vielen <strong>konkreten Exemplaren</strong>, die im LZG gespeichert sind. Ein neues Objekt wird über seine <strong>Ähnlichkeit zu diesen Exemplaren</strong> kategorisiert: es wirkt wie ein <strong>Cue</strong>, der alle/viele Exemplare gleichzeitig aktiviert.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Stärke gegenüber dem Prototyp</div>
+    <p>Weil <strong>spezifische Einzelexemplare</strong> repräsentiert sind, erklärt der Ansatz die <strong>Varianz innerhalb</strong> einer Kategorie und <strong>Merkmalskorrelationen</strong> besser als die Prototypensicht (die alles zu einer zentralen Tendenz mittelt).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz — Voorspoels et al. 2008</div>
+    <p>Typikalität wurde aus paarweisen Ähnlichkeitswerten vorhergesagt — entweder über alle Einzelvergleiche (Exemplar-Modell) oder über gemittelte Prototypen. Für die <strong>meisten Kategorien</strong> sagte das <strong>Exemplar-Modell</strong> das beobachtete Verhalten besser vorher.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Evidenz GEGEN Exemplar</div>
+    <ul>
+      <li><strong>Speicherkapazität:</strong> unplausibel, dass ALLE je erlebten Objekte gespeichert sind (welche? was bei vergessenen?).</li>
+      <li><strong>Entstehung:</strong> erklärt nicht, warum Tennisball und Orange trotz Ähnlichkeit verschiedene Kategorien sind.</li>
+      <li><strong>Verifikation:</strong> „Alle Vögel sind Lebewesen“ wird zu schnell bejaht für reinen Exemplarvergleich.</li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Prototyp- oder Exemplar-Sicht?</div>
+    <div class="corr-item" id="c5a">Eine abstrahierte zentrale Tendenz wird gespeichert.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'prototyp')">Prototyp</button>
+        <button class="corr-btn" onclick="checkCorr('c5a',this,'exemplar')">Exemplar</button>
+      </div><div class="corr-fb" id="c5a-fb"></div>
+    </div>
+    <div class="corr-item" id="c5b">Viele konkrete Einzelexemplare werden gespeichert.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'prototyp')">Prototyp</button>
+        <button class="corr-btn" onclick="checkCorr('c5b',this,'exemplar')">Exemplar</button>
+      </div><div class="corr-fb" id="c5b-fb"></div>
+    </div>
+    <div class="corr-item" id="c5c">Posner & Keele: das nie gezeigte Muster wird am besten klassifiziert.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'prototyp')">Prototyp</button>
+        <button class="corr-btn" onclick="checkCorr('c5c',this,'exemplar')">Exemplar</button>
+      </div><div class="corr-fb" id="c5c-fb"></div>
+    </div>
+    <div class="corr-item" id="c5d">Erklärt Varianz und Merkmalskorrelation innerhalb der Kategorie am besten.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'prototyp')">Prototyp</button>
+        <button class="corr-btn" onclick="checkCorr('c5d',this,'exemplar')">Exemplar</button>
+      </div><div class="corr-fb" id="c5d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Theoriesicht ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Theoriesicht & Theorien multipler Systeme</div>
+    <div class="sec-lz">Murphy & Medin 1985; Vorwissen; Gelman & Coley 1990.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Mann springt angezogen in einen eiskalten See, um ein Kind zu retten, und gilt sofort als „mutig“ — obwohl er kaum einem Prototyp von Mut <em>ähnelt</em>. Wieso?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Weil wir Kategorien mit <strong>erklärendem Vorwissen</strong> (intuitiven Theorien) bilden, nicht nur über Oberflächenähnlichkeit (<strong>Murphy & Medin 1985</strong>). Ähnlichkeit allein reicht nicht; bereits Vorwissen/ein Label steuert die Zuordnung (<strong>Gelman & Coley 1990</strong>).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition — Theoriesicht (Murphy & Medin 1985)</div>
+    <p>Kategorisierung beruht nicht auf Ähnlichkeit, sondern auf <strong>theoretischem Vorwissen</strong>: Menschen berücksichtigen <strong>erklärende Relationen</strong> zwischen Merkmalen („Vögel haben Flügel, deshalb können sie meist fliegen“). Neue Exemplare werden auf mehreren Dimensionen als <em>zur Theorie passend/unpassend</em> eingestuft → <strong>Interaktion von Theorie (top-down) und Daten (bottom-up)</strong>.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz</div>
+    <p><strong>Wisniewski & Medin 1994:</strong> Wer Kinderzeichnungen mit einer Theorie („von hochbegabten vs. normalen Kindern“) betrachtet, beschreibt andere, abstraktere Merkmale („ungewöhnliche Perspektive, detailreich“) als eine Gruppe ohne Theorie (oberflächlich: „kurze Ärmel“).</p>
+    <p><strong>Gelman & Coley 1990:</strong> 2½-jährige Kinder ziehen bei einem <em>untypischen</em> Exemplar (Dodo) die richtige Inferenz, wenn ein Kategorie-<strong>Label</strong> genannt wird („Das ist ein Vogel“) → Wissen/Label steuert, nicht nur Ähnlichkeit.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Theorien multipler Systeme</div>
+    <p>Kombination je nach Kategorie: <strong>umfangreiche</strong> Kategorien → eher <strong>Prototypen</strong>; <strong>kleine</strong> → eher <strong>Exemplare</strong>; <strong>exakte</strong> → <strong>Regeln</strong>. Die Grundlage kann sich im Erwerb ändern (z. B. Spracherwerb: Exemplare → Prototypen → Regeln).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Ungelöste Probleme der Theoriesicht</div>
+    <ul>
+      <li>nicht <strong>formal präzise</strong> → nur qualitative Beurteilung</li>
+      <li>was, wenn (noch) <strong>kein Vorwissen</strong> da ist → braucht ähnlichkeitsbasierte Ansätze als Grundlage?</li>
+      <li>was passiert bei <strong>Amnesie/Demenz</strong>, wenn Vorwissen verschwindet?</li>
+      <li>welche Faktoren bestimmen, wie stark Wissen Einfluss nimmt?</li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — theoriegeleitet oder ähnlichkeitsbasiert?</div>
+    <div class="corr-item" id="c6a">Erklärende Relationen aus Vorwissen bestimmen die Kategorie (top-down).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'theorie')">Theoriegeleitet</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'aehnlich')">Ähnlichkeitsbasiert</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Reine Merkmalsähnlichkeit bestimmt die Kategorie.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'theorie')">Theoriegeleitet</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'aehnlich')">Ähnlichkeitsbasiert</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Gelman & Coley: ein Kategorie-Label steuert die Inferenz.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'theorie')">Theoriegeleitet</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'aehnlich')">Ähnlichkeitsbasiert</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Voorspoels: Typikalität wird aus Ähnlichkeitswerten vorhergesagt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'theorie')">Theoriegeleitet</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'aehnlich')">Ähnlichkeitsbasiert</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Ähnlichkeit & Anwendung ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Kritik am Ähnlichkeitsbegriff & Anwendungen</div>
+    <div class="sec-lz">Medin et al. 1993; Goldstone & Steyvers 2001; Stereotype Threat (Steele & Aronson 1995).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann man „Ähnlichkeit“ überhaupt objektiv messen — oder hängt sie davon ab, worauf man gerade achtet?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Ähnlichkeit ist selbst <strong>variabel und kontextabhängig</strong> (<strong>Medin et al. 1993</strong>) — ein Grundproblem aller ähnlichkeitsbasierten Ansätze. Goldstone & Steyvers (2001) zeigten sogar eine <strong>Entkopplung</strong> von Ähnlichkeit und Kategorisierung: gelernt wird nach <em>Funktionalität</em>. Anwendungen: Diagnostik (Ahn & Kim) und Stereotype Threat (Steele & Aronson).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kritik am Ähnlichkeitsbegriff (Medin et al. 1993)</div>
+    <p>Ähnlichkeitsbasierte Ansätze setzen voraus, dass „Ähnlichkeit“ klar <strong>messbar</strong> ist — doch was als ähnlich gilt, ist selbst <strong>variabel und kontextabhängig</strong> (hängt von der betrachteten Dimension ab). Damit wird die Grundlage von Prototyp- und Exemplar-Sicht fragwürdig.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz — Goldstone & Steyvers 2001</div>
+    <p>VPn lernten, gemorphte Gesichter entlang <em>einer</em> von zwei Dimensionen zu klassifizieren. Nach ~200 Durchgängen wurde nur die <strong>gelernte</strong> Dimension genutzt, die andere ignoriert → <strong>Entkopplung</strong> von Ähnlichkeit und Kategorisierung. Nicht allein Ähnlichkeit, sondern auch <strong>Funktionalität</strong> (Aufgabenrelevanz) bestimmt die Kategorie.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Anwendungen & Denkanstöße</div>
+    <ul>
+      <li><strong>Diagnostik:</strong> die theoriebasierte, exemplar-gestützte Sicht erfahrener Therapeut:innen konkurriert mit den eher <strong>prototypen-basierten</strong> diagnostischen Kriterien (Ahn & Kim 2002).</li>
+      <li><strong>Stereotype Threat</strong> (Steele & Aronson 1995): eine aktivierte (Selbst-)Kategorisierung kann die Leistung senken — schlechtere Testleistung nach Aktivierung eines negativen Stereotyps.</li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — die vier Ansätze auf einen Blick</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Klassisch / regelbasiert</h4><p>Notwendige + hinreichende Merkmale, scharfe Grenzen. Scheitert an Typikalität & unscharfen Grenzen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Prototyp</h4><p>Abstrahierte zentrale Tendenz, probabilistisch. Beleg: Posner & Keele 1968.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Exemplar</h4><p>Viele gespeicherte Einzelexemplare, Ähnlichkeit als Cue. Erklärt Varianz am besten (Voorspoels 2008).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Theoriegeleitet</h4><p>Erklärendes Vorwissen statt Ähnlichkeit (Murphy & Medin 1985). Nicht formal präzise.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare der Kategorisierung sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Klassische Sicht (regelbasiert)</h4>
+      <p>Notwendige + hinreichende Merkmale</p>
+      <p>Scharfe Kategoriegrenzen</p>
+      <p>Alle Mitglieder gleich repräsentativ</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Prototypensicht</h4>
+      <p>Typische/charakteristische Merkmale (probabilistisch)</p>
+      <p>Unscharfe Grenzen</p>
+      <p>Manche Mitglieder typischer (Typikalität)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> In der klassischen Sicht sind die Kategoriegrenzen unscharf und manche Mitglieder gelten als typischer als andere.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Prototyp</h4>
+      <p>Eine abstrahierte zentrale Tendenz</p>
+      <p>Ein (oft fiktives) bestes Exemplar</p>
+      <p>Beleg: Posner & Keele 1968</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Exemplar</h4>
+      <p>Viele gespeicherte Einzelexemplare</p>
+      <p>Ähnlichkeit als Cue aktiviert Exemplare</p>
+      <p>Erklärt Varianz/Merkmalskorrelation (Voorspoels 2008)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Prototypensicht speichert viele konkrete Einzelexemplare und erklärt damit die Varianz innerhalb der Kategorie besser als die Exemplar-Sicht.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ähnlichkeitsbasiert</h4>
+      <p>Prototyp- und Exemplar-Sicht</p>
+      <p>Zuordnung über Ähnlichkeit</p>
+      <p>Kritik: Ähnlichkeit kontextabhängig (Medin 1993)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Theoriegeleitet</h4>
+      <p>Murphy & Medin 1985</p>
+      <p>Erklärendes Vorwissen, Relationen</p>
+      <p>Interaktion top-down/bottom-up</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die theoriegeleitete Sicht erklärt Kategorisierung allein über die wahrgenommene Oberflächenähnlichkeit der Merkmale.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Semantisches Netzwerk (Collins & Quillian 1969)</h4>
+      <p>Streng hierarchisch (Ebenen)</p>
+      <p>Prinzip der kognitiven Ökonomie</p>
+      <p>Vorhersage: Ebenenwechsel kostet Zeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Spreading Activation (Collins & Loftus 1975)</h4>
+      <p>Nicht streng hierarchisch</p>
+      <p>Verbindungen nach Assoziationsstärke</p>
+      <p>Aktivierungsausbreitung erklärt Typikalität</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Spreading-Activation-Theorie ordnet die Konzepte streng hierarchisch und speichert jedes Merkmal nur auf der höchsten Ebene.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Klassifikation</h4>
+      <p>Neues Objekt einer Kategorie zuordnen</p>
+      <p>Gluck & Bower 1988 (Diagnosen)</p>
+      <p>Eingangsfunktion</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Inferenz</h4>
+      <p>Aus Zugehörigkeit auf Merkmale schließen</p>
+      <p>Erwartungen ableiten</p>
+      <p>Auch Quelle von Vorurteilen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der Inferenz wird ein neues, unbekanntes Objekt erstmals einer Kategorie zugeordnet.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl08</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl08';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Welche Funktion von Kategorien untersuchten Gluck & Bower (1988)?",
+      "opts": [
+        "Die Ableitung sprachlicher Bedeutung aus reinen Lautmustern.",
+        "Den passiven Zerfall von Gedächtnisspuren über die Zeit.",
+        "Die Klassifikation: neue Fälle einer Kategorie (Diagnose) zuordnen lernen.",
+        "Die Handlungsplanung, weil Kategorien ausschließlich der Auswahl motorischer Programme dienen und gar kein Wissen repräsentieren."
+      ],
+      "c": 2,
+      "e": "Gluck & Bower 1988: VPn lernten, fiktive Patientenakten anhand der Symptome der richtigen Diagnose zuzuordnen → Klassifikationsfunktion."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was ist mit der Inferenz-Funktion von Kategorien gemeint?",
+      "opts": [
+        "Aus der Kategoriezugehörigkeit auf nicht beobachtbare Eigenschaften schließen.",
+        "Das wortgetreue Auswendiglernen vorgegebener Definitionen.",
+        "Das Wiedererkennen bereits gesehener Items im Rekognitionstest.",
+        "Das Aufrechterhalten von Information im Arbeitsgedächtnis, weil Kategorien primär die Kapazität des Kurzzeitspeichers erweitern."
+      ],
+      "c": 0,
+      "e": "Inferenz: aus der Zugehörigkeit zu einer Kategorie lassen sich weitere, nicht direkt sichtbare Merkmale erschließen (Erwartungen — auch Vorurteile)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was kennzeichnet die klassische (regelbasierte) Sichtweise der Kategorisierung?",
+      "opts": [
+        "Mitglieder werden über ihre Ähnlichkeit zu einem Prototyp zugeordnet.",
+        "Kategorien sind über notwendige und hinreichende Merkmale definiert.",
+        "Kategoriegrenzen sind grundsätzlich unscharf und kontextabhängig.",
+        "Kategorien bestehen aus vielen gespeicherten Einzelexemplaren, deren Ähnlichkeit beim Abruf gleichzeitig aktiviert wird."
+      ],
+      "c": 1,
+      "e": "Klassisch = definierende Merkmale, notwendig UND hinreichend. (a)/(d) sind ähnlichkeitsbasiert, (c) widerspricht der klassischen Annahme klarer Grenzen."
+    },
+    {
+      "id": "s1q2",
+      "q": "Welche Vorhersage folgt direkt aus der klassischen Sichtweise?",
+      "opts": [
+        "Manche Mitglieder einer Kategorie sind typischer als andere.",
+        "Die Kategoriezugehörigkeit ist nur probabilistisch bestimmbar.",
+        "Die Ähnlichkeit zum durchschnittlichen Mitglied entscheidet über die Zuordnung, weil Kategorien als abstrahierte zentrale Tendenz im LZG gespeichert sind.",
+        "Alle Mitglieder sind gleich repräsentativ; die Grenzen sind scharf."
+      ],
+      "c": 3,
+      "e": "Aus notwendigen+hinreichenden Merkmalen folgen scharfe Grenzen und gleiche Repräsentativität — beides wird empirisch widerlegt (Typikalität, unscharfe Grenzen)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie ist Wissen im semantischen Netzwerk (Collins & Quillian 1969) organisiert?",
+      "opts": [
+        "Als hierarchisch geordnete Knoten mit Zugehörigkeits- und Eigenschaftsrelationen.",
+        "Als ungeordnete, unverbundene Liste einzelner Exemplare.",
+        "Als rein bildhafte, analoge Repräsentation ohne Relationen.",
+        "Als Menge probabilistischer Prototypen, die jeweils nur die wahrscheinlichsten Merkmale einer Kategorie zusammenfassen."
+      ],
+      "c": 0,
+      "e": "Collins & Quillian: Konzepte als Knoten, hierarchisch über mehrere Ebenen, verbunden durch ist-ein- (Zugehörigkeit) und hat/kann-Relationen (Eigenschaft)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was besagt das Prinzip der kognitiven Ökonomie?",
+      "opts": [
+        "Jedes Merkmal wird bei jedem einzelnen Konzept redundant gespeichert.",
+        "Häufig genutzte Konzepte werden vollständig aus dem LZG gelöscht.",
+        "Merkmale werden auf der höchstmöglichen, allgemein gültigen Ebene gespeichert.",
+        "Konzepte werden ausschließlich nach ihrer Ähnlichkeit zu gespeicherten Einzelexemplaren geordnet, völlig unabhängig von Hierarchieebenen."
+      ],
+      "c": 2,
+      "e": "Kognitive Ökonomie: sparsame Speicherung — ein Merkmal steht auf der höchsten Ebene, für die es gilt („hat Haut“ beim Tier), nicht bei jedem Unterknoten erneut."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welcher Befund spricht GEGEN die klassische Sichtweise?",
+      "opts": [
+        "Aussagen über entferntere Hierarchieebenen werden langsamer verifiziert, was die hierarchische Netzwerkstruktur gerade stützt statt sie zu widerlegen.",
+        "Merkmale werden ökonomisch auf der höchsten gültigen Ebene gespeichert.",
+        "Konzepte sind als Knoten mit Relationen miteinander verbunden.",
+        "Typikalität: manche Mitglieder gelten als typischer als andere."
+      ],
+      "c": 3,
+      "e": "Typikalität (Spatz typischer als Pinguin) widerlegt die Annahme gleicher Repräsentativität. (a) ist gerade Evidenz FÜR das Netzwerk."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was zeigte Wittgenstein (1953) am Beispiel des Begriffs „Spiel“?",
+      "opts": [
+        "Dass sich jeder Begriff über notwendige und hinreichende Merkmale definieren lässt.",
+        "Dass sich Begriffe oft nur über Familienähnlichkeit fassen lassen.",
+        "Dass Kategorien immer rein hierarchisch organisiert sind.",
+        "Dass die Verifikationszeit mit dem Abstand der Hierarchieebenen steigt, weil die Aktivierung jede Zwischenebene durchlaufen muss."
+      ],
+      "c": 1,
+      "e": "Wittgenstein: „Spiel“ hat kein gemeinsames definierendes Merkmal aller Spiele, nur überlappende Familienähnlichkeiten → gegen die klassische Definitionsidee."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was ist ein Prototyp im Sinne der Prototypensichtweise?",
+      "opts": [
+        "Ein zufällig ausgewähltes, real existierendes Kategoriemitglied.",
+        "Eine Regel mit notwendigen und hinreichenden Merkmalen.",
+        "Eine abstrahierte Zusammenfassung der typischen Merkmale (zentrale Tendenz).",
+        "Die Gesamtheit aller je erlebten Einzelexemplare einer Kategorie, die einzeln im LZG gespeichert bleiben."
+      ],
+      "c": 2,
+      "e": "Prototyp = abstrahierte zentrale Tendenz, ein oft fiktives „bestes“ Exemplar. (d) ist die Exemplar-Sicht, (b) die klassische."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was zeigte das Punktmuster-Experiment von Posner & Keele (1968)?",
+      "opts": [
+        "Der nie gezeigte Prototyp wurde am besten klassifiziert, v. a. bei Verzögerung.",
+        "Verzerrte Muster konnten gar nicht klassifiziert werden.",
+        "Nur die konkret gezeigten Exemplare wurden überhaupt wiedererkannt.",
+        "Die Klassifikationsleistung hing allein von der Ähnlichkeit zwischen je zwei einzeln gespeicherten Exemplaren ab und nicht von einer abstrahierten Tendenz."
+      ],
+      "c": 0,
+      "e": "Der nie präsentierte Prototyp wurde am sichersten zugeordnet (besonders nach Verzögerung) → es wird eine abstrahierte zentrale Tendenz gespeichert."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie werden Objekte laut exemplar-basierter Sichtweise kategorisiert?",
+      "opts": [
+        "Durch Anwendung notwendiger und hinreichender Definitionsmerkmale.",
+        "Über ihre Ähnlichkeit zu vielen im LZG gespeicherten Einzelexemplaren.",
+        "Über den Abgleich mit einem einzigen abstrahierten Prototyp.",
+        "Über erklärendes Vorwissen, das Relationen zwischen den Merkmalen mit kausalem Charakter berücksichtigt."
+      ],
+      "c": 1,
+      "e": "Exemplar: das neue Objekt wirkt wie ein Cue und aktiviert die gespeicherten Einzelexemplare; die Ähnlichkeit zu ihnen entscheidet. (c) ist Prototyp, (d) Theoriesicht."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welchen Vorteil hat die Exemplar- gegenüber der Prototypensicht?",
+      "opts": [
+        "Sie benötigt deutlich weniger Speicherkapazität im LZG.",
+        "Sie erklärt vollständig, wie Kategorien überhaupt erst entstehen.",
+        "Sie kommt vollständig ohne jeden Ähnlichkeitsvergleich aus, weil die Zuordnung allein über abstrakte Definitionsregeln erfolgt.",
+        "Sie bildet die Varianz innerhalb der Kategorie und Merkmalskorrelationen besser ab."
+      ],
+      "c": 3,
+      "e": "Weil konkrete Einzelexemplare repräsentiert sind, erfasst die Exemplar-Sicht Variabilität und Merkmalskorrelationen besser als ein gemittelter Prototyp. Speicherkapazität ist gerade ihr Schwachpunkt."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Worauf beruht Kategorisierung laut Theoriesicht (Murphy & Medin 1985)?",
+      "opts": [
+        "Auf erklärendem Vorwissen und Relationen zwischen Merkmalen.",
+        "Allein auf der wahrgenommenen Ähnlichkeit der Oberflächenmerkmale.",
+        "Auf notwendigen und hinreichenden Definitionsmerkmalen.",
+        "Auf der Zahl gespeicherter Einzelexemplare, deren gemittelte Ähnlichkeit die Kategoriezugehörigkeit eines neuen Objekts festlegt."
+      ],
+      "c": 0,
+      "e": "Theoriesicht: Kategorien als intuitive Theorien — theoretisches Vorwissen und erklärende Merkmalsrelationen („Vögel haben Flügel, deshalb fliegen sie“), Interaktion top-down/bottom-up."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was zeigte die Studie von Gelman & Coley (1990) mit 2½-jährigen Kindern?",
+      "opts": [
+        "Dass Kleinkinder ausschließlich nach Oberflächenähnlichkeit kategorisieren.",
+        "Dass Vorwissen die Kategorisierung in diesem Alter noch gar nicht beeinflusst.",
+        "Ein Kategorie-Label steuerte die Inferenz auch bei untypischen Exemplaren.",
+        "Dass die Kinder die Aufgabe erst nach etwa 200 Lerndurchgängen entlang der relevanten Dimension lösen konnten."
+      ],
+      "c": 2,
+      "e": "Gelman & Coley: nannte man bei einem untypischen Vogel (Dodo) das Label „Vogel“, zogen die Kinder die richtige Inferenz (lebt im Nest) → Wissen/Label steuert, nicht nur Ähnlichkeit."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was ist der zentrale Kritikpunkt am Ähnlichkeitsbegriff (Medin et al. 1993)?",
+      "opts": [
+        "Ähnlichkeit lässt sich exakt und kontextfrei messen, weshalb sie als objektive Grundlage jeder Kategorisierung dienen kann.",
+        "Ähnlichkeit spielt für die Kategorisierung überhaupt keine Rolle.",
+        "Ähnlichkeit ist mit der klassischen Sichtweise identisch.",
+        "Ähnlichkeit ist selbst variabel und kontextabhängig."
+      ],
+      "c": 3,
+      "e": "Ähnlichkeitsbasierte Ansätze setzen messbare Ähnlichkeit voraus — doch was als ähnlich gilt, hängt von der betrachteten Dimension/dem Kontext ab (Medin et al. 1993)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was zeigte Goldstone & Steyvers (2001) mit gemorphten Gesichtern?",
+      "opts": [
+        "Dass Ähnlichkeit und Kategorisierung immer deckungsgleich sind.",
+        "Nach Training wurde nur die gelernte Dimension zur Kategorisierung genutzt.",
+        "Dass Kleinkinder Gesichter überhaupt nicht klassifizieren können.",
+        "Dass ein nie gezeigter Prototyp am besten erkannt wurde, weil die zentrale Tendenz der Trainingsreize abstrahiert gespeichert wird."
+      ],
+      "c": 1,
+      "e": "Goldstone & Steyvers: nach ~200 Durchgängen nutzten VPn nur die gelernte Dimension (die andere ignoriert) → Entkopplung von Ähnlichkeit und Kategorisierung; auch Funktionalität zählt."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zur Spreading-Activation-Theorie (Collins & Loftus 1975) trifft zu?",
+    "opts": [
+      "Das Netzwerk ist nicht streng hierarchisch; Verbindungen richten sich nach Assoziationsstärke.",
+      "Aktivierung breitet sich nur entlang strikter Hierarchieebenen aus.",
+      "Sie erklärt vollständig, wie neue Kategorien überhaupt entstehen.",
+      "Sie ersetzt den Ähnlichkeitsbegriff durch notwendige und hinreichende Definitionsmerkmale jeder einzelnen Kategorie."
+    ],
+    "c": 0,
+    "e": "Spreading Activation: Knoten nach Häufigkeit/Ähnlichkeit verbunden, Aktivierung breitet sich aus — erklärt Typikalität/Priming, aber nicht die Entstehung von Kategorien."
+  },
+  {
+    "id": "bq2",
+    "q": "Was zeigte McCloskey & Glucksberg (1978)?",
+    "opts": [
+      "Dass Kategoriegrenzen über alle Personen hinweg völlig stabil sind.",
+      "Dass Menschen sich bei der Zuordnung uneinig und inkonsistent sind (unscharfe Grenzen).",
+      "Dass der Prototyp nie gezeigt werden muss, um erkannt zu werden.",
+      "Dass die Verifikationszeit linear mit der Zahl der durchquerten Hierarchieebenen des semantischen Netzwerks ansteigt."
+    ],
+    "c": 1,
+    "e": "McCloskey & Glucksberg: VPn waren uneinig und sogar in sich inkonsistent, ob z. B. eine Tomate Obst ist → unscharfe Grenzen, gegen die klassische Sicht."
+  },
+  {
+    "id": "bq3",
+    "q": "Was sind basale Kategorien (Taylor & Tanaka 1991)?",
+    "opts": [
+      "Die abstrakteste, allgemeinste Hierarchieebene (z. B. „Lebewesen“).",
+      "Die spezifischste mögliche Ebene, die alle Detailmerkmale enthält.",
+      "Die mittlere, bevorzugte Ebene mit vielen gemeinsamen Merkmalen bei guter Abgrenzung.",
+      "Eine Ebene, die für alle Menschen unabhängig von ihrer Erfahrung exakt gleich und unveränderlich festgelegt ist."
+    ],
+    "c": 2,
+    "e": "Basale Kategorien = mittlere Ebene („Hund“), informativ und gut abgrenzbar; welche Ebene basal ist, ist erfahrungsabhängig (Expert:innen spezifischer; Taylor & Tanaka)."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Evidenz spricht GEGEN die exemplar-basierte Sicht?",
+    "opts": [
+      "Sie erklärt Merkmalskorrelationen innerhalb der Kategorie sehr gut, weil spezifische Einzelmerkmale jedes Exemplars erhalten bleiben.",
+      "Typikalität lässt sich aus Ähnlichkeitswerten gut vorhersagen.",
+      "Sie bildet die Varianz innerhalb der Kategorie gut ab.",
+      "Die begrenzte Speicherkapazität: kaum alle je erlebten Objekte sind speicherbar."
+    ],
+    "c": 3,
+    "e": "Schwachpunkt der Exemplar-Sicht: unplausibel, dass ALLE Exemplare gespeichert werden (welche, was bei vergessenen?). (a)–(c) sind gerade ihre Stärken."
+  },
+  {
+    "id": "bq5",
+    "q": "Was besagt die Annahme der „Theorien multipler Systeme“?",
+    "opts": [
+      "Je nach Kategorie werden Regeln, Prototypen oder Exemplare genutzt.",
+      "Nur Prototypen sind für jede Form der Kategorisierung verantwortlich.",
+      "Kategorisierung beruht ausschließlich auf der Anwendung von Definitionsregeln.",
+      "Alle Kategorien werden über genau ein einziges, lebenslang unveränderliches Repräsentationsformat verarbeitet."
+    ],
+    "c": 0,
+    "e": "Multiple Systeme: umfangreiche Kategorien → eher Prototypen, kleine → Exemplare, exakte → Regeln; die Grundlage kann sich im Erwerb ändern (Exemplare → Prototypen → Regeln)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was demonstriert der Stereotype-Threat-Befund (Steele & Aronson 1995) im Kontext von Kategorisierung?",
+    "opts": [
+      "Dass Stereotype keinerlei Einfluss auf die Leistung haben.",
+      "Eine aktivierte (Selbst-)Kategorisierung kann das eigene Verhalten und die Leistung verändern.",
+      "Dass Kategorien ausschließlich rein hierarchisch gespeichert sind.",
+      "Dass diagnostische Kriterien grundsätzlich exemplar-basiert und niemals prototypen-basiert formuliert werden."
+    ],
+    "c": 1,
+    "e": "Stereotype Threat: das Aktivieren eines negativen Stereotyps (Kategorie) senkte die Testleistung der betroffenen Gruppe → (Selbst-)Kategorisierung wirkt aufs Verhalten."
+  },
+  {
+    "id": "bq7",
+    "q": "Wie hängen die paradoxen Verifikationszeiten mit der klassischen Sicht zusammen?",
+    "opts": [
+      "Sie bestätigen die klassische Sicht in jeder Hinsicht vollständig.",
+      "Sie zeigen, dass alle Mitglieder gleich repräsentativ sind.",
+      "„Huhn ist Tier“ schneller als „Huhn ist Vogel“ widerspricht der Hierarchie-Vorhersage.",
+      "Sie belegen, dass Merkmale stets nur auf der höchstmöglichen Ebene des Netzwerks gespeichert und niemals dupliziert werden."
+    ],
+    "c": 2,
+    "e": "Paradox: das Modell sagt schnelleren Zugriff auf die nähere Ebene (Vogel) voraus, beobachtet wird der schnellere Zugriff auf die entferntere (Tier) → gegen das strikte Netzwerk."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche der vier Sichtweisen ist NICHT ähnlichkeitsbasiert?",
+    "opts": [
+      "Die Prototypensichtweise, da sie ein neues Objekt über dessen Ähnlichkeit zur abstrahierten zentralen Tendenz zuordnet.",
+      "Die Exemplar-basierte Sichtweise.",
+      "Die Theoriesicht und die Exemplar-Sicht zusammengenommen.",
+      "Die klassische (regelbasierte) Sichtweise."
+    ],
+    "c": 3,
+    "e": "Klassisch = regelbasiert (notwendige+hinreichende Merkmale), nicht ähnlichkeitsbasiert. Prototyp und Exemplar sind die beiden ähnlichkeitsbasierten Ansätze."
+  }
+];
+
+var corrCorrect = {
+  "c1a": "klassisch",
+  "c1b": "prototyp",
+  "c1c": "klassisch",
+  "c1d": "prototyp",
+  "c5a": "prototyp",
+  "c5b": "exemplar",
+  "c5c": "prototyp",
+  "c5d": "exemplar",
+  "c6a": "theorie",
+  "c6b": "aehnlich",
+  "c6c": "theorie",
+  "c6d": "aehnlich"
+};
+var corrExpl = {
+  "c1a": "Notwendige und hinreichende Merkmale = klassische (regelbasierte) Sicht.",
+  "c1b": "Zuordnung über Ähnlichkeit zu typischen Merkmalen mit unscharfen Grenzen = Prototypensicht.",
+  "c1c": "„Alle Mitglieder gleich repräsentativ“ ist eine Kernannahme der klassischen Sicht.",
+  "c1d": "Typikalität (manche Mitglieder typischer) ist ein Befund der Prototypensicht, nicht der klassischen.",
+  "c5a": "Eine abstrahierte zentrale Tendenz wird gespeichert = Prototyp.",
+  "c5b": "Viele konkrete Einzelexemplare werden gespeichert = Exemplar-Sicht.",
+  "c5c": "Posner & Keele: nie gezeigtes Muster am besten klassifiziert → Beleg für den abstrahierten Prototyp.",
+  "c5d": "Varianz und Merkmalskorrelation innerhalb der Kategorie erklärt die Exemplar-Sicht am besten.",
+  "c6a": "Erklärende Relationen aus Vorwissen (top-down) = Theoriesicht.",
+  "c6b": "Reine Merkmalsähnlichkeit bestimmt die Kategorie = ähnlichkeitsbasierte Sicht.",
+  "c6c": "Gelman & Coley: ein Kategorie-Label steuert die Inferenz → Wissen/Theorie.",
+  "c6d": "Voorspoels: Typikalität wird aus Ähnlichkeitswerten vorhergesagt → ähnlichkeitsbasiert."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL10 Aggression</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl10
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke GAM-Durchlauf-Simulator (VL10) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL10 Aggression</h1>
+<p class="page-sub">Sozialpsychologie · Prof. Dr. Susanne Veit · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Welche Formen der Aggression gibt es? (drei benennen und erklären) · 2. Was ist Aggressionsverschiebung — und warum erklärt sie hohe Feindlichkeit gegen Migrant*innen in strukturschwachen Regionen? · 3. Hilft es, Aggression rauszulassen (Schreien, Boxsack)?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Definition & Gewalt</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Formen</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Messung & Biologie</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Frustration & Verschiebung</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Affekt & Erregung</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Lernen & GAM</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Person & Situation</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Soziales Problem</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">⑨ Interventionen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(10)" id="nb10">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Definition & Gewalt ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Aggression & Gewalt — Definition</div>
+    <div class="sec-lz">Aggression vs. Gewalt; 3 Voraussetzungen (Absicht)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Kind beschimpft ein anderes; ein Schläger verprügelt jemanden krankenhausreif; eine Ärztin fügt bei einer OP Schmerzen zu. Was davon ist Aggression — und was Gewalt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die Beschimpfung ist <strong>Aggression</strong> (Schädigungsabsicht), aber keine Gewalt. Die Prügel sind <strong>Gewalt</strong> (schwere körperliche Schädigung) — und damit auch Aggression. Die OP ist <strong>keine Aggression</strong>: keine Schädigungsabsicht und mit Einwilligung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition: Aggression &amp; Gewalt</div>
+    <strong>Aggression</strong> = jedes Verhalten mit der Absicht, einem Lebewesen zu schaden — körperlich, seelisch, durch Gerüchte oder Zerstörung. <strong>Gewalt</strong> = die Teilmenge mit schwerer körperlicher Schädigung (oder deren Androhung). Merke: <em>Jede Gewalt ist Aggression, aber nicht jede Aggression ist Gewalt.</em>
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Voraussetzungen</div>
+    (1) <strong>Schädigungsabsicht</strong> — entscheidend ist die Absicht, nicht der tatsächliche Schaden (ein Schlag, der danebengeht, zählt).<br>
+    (2) <strong>Wissen</strong> um das Schädigungspotenzial — Versehen und Fahrlässigkeit zählen nicht.<br>
+    (3) Die Handlung erfolgt <strong>nicht auf Wunsch</strong> der betroffenen Person (z. B. einvernehmlicher Sport).
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Aggression ≠ Gewalt</div>
+    Wer aggressiv ist, ist nicht automatisch gewalttätig: Gewalt ist die schwere körperliche Spitze, Aggression der weite Oberbegriff (auch verbal und indirekt).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Aggression, Gewalt oder keins?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Szenario richtig ein</div>
+    <div class="corr-item" id="def0">Jemandem mit dem Messer eine schwere Verletzung zufügen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('def0',this,'gewalt')">Gewalt</button>
+        <button class="corr-btn" onclick="checkCorr('def0',this,'aggression')">Aggression (keine Gewalt)</button>
+        <button class="corr-btn" onclick="checkCorr('def0',this,'keine')">Keine Aggression</button>
+      </div><div class="corr-fb" id="def0-fb"></div>
+    </div>
+    <div class="corr-item" id="def1">Hinter dem Rücken Gerüchte verbreiten, um jemandem zu schaden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('def1',this,'gewalt')">Gewalt</button>
+        <button class="corr-btn" onclick="checkCorr('def1',this,'aggression')">Aggression (keine Gewalt)</button>
+        <button class="corr-btn" onclick="checkCorr('def1',this,'keine')">Keine Aggression</button>
+      </div><div class="corr-fb" id="def1-fb"></div>
+    </div>
+    <div class="corr-item" id="def2">Beim Sport den Gegner in einem fairen Zweikampf versehentlich verletzen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('def2',this,'gewalt')">Gewalt</button>
+        <button class="corr-btn" onclick="checkCorr('def2',this,'aggression')">Aggression (keine Gewalt)</button>
+        <button class="corr-btn" onclick="checkCorr('def2',this,'keine')">Keine Aggression</button>
+      </div><div class="corr-fb" id="def2-fb"></div>
+    </div>
+    <div class="corr-item" id="def3">Jemanden aus Wut mit der Faust krankenhausreif schlagen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('def3',this,'gewalt')">Gewalt</button>
+        <button class="corr-btn" onclick="checkCorr('def3',this,'aggression')">Aggression (keine Gewalt)</button>
+        <button class="corr-btn" onclick="checkCorr('def3',this,'keine')">Keine Aggression</button>
+      </div><div class="corr-fb" id="def3-fb"></div>
+    </div>
+    <div class="corr-item" id="def4">Einen Kollegen vor allen bloßstellen und beleidigen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('def4',this,'gewalt')">Gewalt</button>
+        <button class="corr-btn" onclick="checkCorr('def4',this,'aggression')">Aggression (keine Gewalt)</button>
+        <button class="corr-btn" onclick="checkCorr('def4',this,'keine')">Keine Aggression</button>
+      </div><div class="corr-fb" id="def4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Formen ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Formen der Aggression</div>
+    <div class="sec-lz">Lernfrage 1: Form (physisch/verbal) · Direktheit · Motivation</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Aggression" klingt nach Prügelei. Aber auch Gerüchte, Beleidigungen oder kühl kalkulierte Schädigung gehören dazu. Wie ordnet man diese Vielfalt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Aggression hat mehrere <strong>Dimensionen</strong>: <strong>Form</strong> (physisch / verbal), <strong>Direktheit</strong> (direkt / indirekt) und <strong>Motivation</strong> (feindselig / instrumentell; proaktiv / reaktiv). Dieselbe Handlung kann mehrere Dimensionen zugleich tragen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Form (physisch/verbal) &amp; Direktheit</div>
+    <strong>Physisch</strong> (auf den Körper gerichtet) vs. <strong>verbal</strong> (mit Worten: Beleidigungen, Drohungen).<br>
+    <strong>Direkt</strong> (unmittelbar auf die Zielperson) vs. <strong>indirekt</strong> (verdeckt, über die sozialen Beziehungen — z. B. Gerüchte streuen).
+  </div>
+  <div class="card">
+    <div class="card-title">Motivation: feindselig vs. instrumentell</div>
+    <strong>Feindselige (affektive) Aggression</strong> entspringt Ärger/Wut — die Schädigung ist das <em>Ziel</em>. <strong>Instrumentelle Aggression</strong> ist Mittel zu einem anderen Zweck (z. B. Beute) — die Schädigung ist <em>Werkzeug</em>.
+  </div>
+  <div class="card">
+    <div class="card-title">Proaktiv vs. reaktiv</div>
+    <strong>Proaktiv</strong> = ohne vorausgehende Provokation (geplant, zielgerichtet). <strong>Reaktiv</strong> = als Antwort auf eine vorausgehende Provokation.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Die Dimensionen im Vergleich</div>
+  <div class="card">
+    <div class="card-title">Drei Achsen — umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="moda" onclick="switchTab(this,'formen')">Physisch/verbal</button>
+      <button class="tab-btn" data-tab="direkt" onclick="switchTab(this,'formen')">Direktheit</button>
+      <button class="tab-btn" data-tab="motiv" onclick="switchTab(this,'formen')">Motivation</button>
+    </div>
+    <div class="tab-group" data-group="formen">
+      <div class="tab-content active" data-tab="moda">
+        <strong>Physisch:</strong> auf die körperliche Unversehrtheit gerichtet (Schlagen, Treten).<br>
+        <strong>Verbal:</strong> mit sprachlichen Mitteln (Beleidigen, Drohen).
+      </div>
+      <div class="tab-content" data-tab="direkt">
+        <strong>Direkt:</strong> unmittelbar auf die Zielperson (ins Gesicht).<br>
+        <strong>Indirekt:</strong> verdeckt über soziale Beziehungen (Gerüchte, Ausgrenzung).
+      </div>
+      <div class="tab-content" data-tab="motiv">
+        <strong>Feindselig (affektiv):</strong> aus Ärger, Schädigung ist das Ziel — oft reaktiv.<br>
+        <strong>Instrumentell:</strong> Mittel zum Zweck, oft kalkuliert — kann proaktiv (ohne Provokation) sein.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Messung & Biologie ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Messung & biologische Ansätze</div>
+    <div class="sec-lz">Buss & Perry; Dampfkessel, Genetik, Testosteron, Kortisol</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind manche Menschen biologisch „zur Aggression geboren"? Was sagen Gene und Hormone?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Biologie trägt bei — Genetik erklärt rund <strong>41 %</strong> der Varianz, dazu Hormone (Testosteron, Kortisol). Aber die Umwelt überwiegt (~<strong>59 %</strong>). Das alte <strong>Dampfkesselmodell</strong> (Aggression staut sich und muss sich entladen) ist empirisch überholt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Messung von Aggression</div>
+    Drei Wege: <strong>Selbstbericht</strong> (Aggressionsfragebogen mit vier Subskalen — physische Aggression, verbale Aggression, Ärger, Feindseligkeit), <strong>Verhaltensbeobachtung</strong> im Labor und <strong>Archivdaten</strong> (z. B. Kriminalstatistik). Der Fragebogen erfasst Aggressivität als <em>Disposition</em>.
+  </div>
+  <div class="card">
+    <div class="card-title">Dampfkesselmodell &amp; Genetik</div>
+    Das <strong>Dampfkesselmodell</strong> (angeborener Trieb, der sich zwangsläufig entlädt) ist intuitiv, aber <strong>empirisch überholt</strong>. Die <strong>Verhaltensgenetik</strong> (Zwillings-/Adoptionsstudien) zeigt: Genetik erklärt ~41 % der Varianz, Umwelt ~59 % — also kein biologischer Determinismus.
+  </div>
+  <div class="card">
+    <div class="card-title">Hormone: Testosteron &amp; Kortisol</div>
+    <strong>Testosteron</strong>: erhöhte Werte bei hochaggressiven Männern (Archer et al., 1998); steigt zudem nach dem Hantieren mit einer Schusswaffe (Klinesmith et al., 2006) — die Kausalrichtung ist unklar. <strong>Kortisol</strong>: ein <em>niedriger</em> Spiegel geht mit Furchtlosigkeit und Enthemmung einher und sagt erhöhte Aggression vorher.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher biologische Ansatz?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Aussage dem passenden Ansatz zu</div>
+    <div class="corr-item" id="bio0">Aggression staut sich an und muss sich zwangsläufig entladen (überholt).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bio0',this,'dampfkessel')">Dampfkesselmodell</button>
+        <button class="corr-btn" onclick="checkCorr('bio0',this,'genetik')">Genetik</button>
+        <button class="corr-btn" onclick="checkCorr('bio0',this,'testosteron')">Testosteron</button>
+        <button class="corr-btn" onclick="checkCorr('bio0',this,'kortisol')">Kortisol</button>
+      </div><div class="corr-fb" id="bio0-fb"></div>
+    </div>
+    <div class="corr-item" id="bio1">Eineiige Zwillinge ähneln sich in der Aggressionsneigung stärker.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bio1',this,'dampfkessel')">Dampfkesselmodell</button>
+        <button class="corr-btn" onclick="checkCorr('bio1',this,'genetik')">Genetik</button>
+        <button class="corr-btn" onclick="checkCorr('bio1',this,'testosteron')">Testosteron</button>
+        <button class="corr-btn" onclick="checkCorr('bio1',this,'kortisol')">Kortisol</button>
+      </div><div class="corr-fb" id="bio1-fb"></div>
+    </div>
+    <div class="corr-item" id="bio2">Bei hochaggressiven Männern erhöht, steigt auch nach dem Hantieren mit einer Waffe.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bio2',this,'dampfkessel')">Dampfkesselmodell</button>
+        <button class="corr-btn" onclick="checkCorr('bio2',this,'genetik')">Genetik</button>
+        <button class="corr-btn" onclick="checkCorr('bio2',this,'testosteron')">Testosteron</button>
+        <button class="corr-btn" onclick="checkCorr('bio2',this,'kortisol')">Kortisol</button>
+      </div><div class="corr-fb" id="bio2-fb"></div>
+    </div>
+    <div class="corr-item" id="bio3">Ein niedriger Spiegel geht mit Furchtlosigkeit und Enthemmung einher.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bio3',this,'dampfkessel')">Dampfkesselmodell</button>
+        <button class="corr-btn" onclick="checkCorr('bio3',this,'genetik')">Genetik</button>
+        <button class="corr-btn" onclick="checkCorr('bio3',this,'testosteron')">Testosteron</button>
+        <button class="corr-btn" onclick="checkCorr('bio3',this,'kortisol')">Kortisol</button>
+      </div><div class="corr-fb" id="bio3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Frustration & Verschiebung ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Frustration, Aggressionsverschiebung & Hinweisreize</div>
+    <div class="sec-lz">Lernfrage 2: displaced aggression; Waffeneffekt</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du wirst vom Chef ungerecht behandelt, traust dich aber nicht zu reagieren — und schnauzt abends den Partner an. Wie hängt das zusammen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Frustration</strong> (ein blockiertes Ziel) erhöht die Aggressionsbereitschaft. Ist die Quelle unerreichbar (der Chef), verschiebt sich die Aggression auf ein <strong>leichter erreichbares Ersatzziel</strong> (Aggressionsverschiebung). <strong>Aggressive Hinweisreize</strong> wie Waffen verstärken den Effekt zusätzlich.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Frustrations-Aggressions-Hypothese (revidiert)</div>
+    Frustration = Blockierung einer zielgerichteten Handlung. Ursprünglich hieß es: Frustration führt <em>immer</em> zu Aggression. Heute (revidiert): Frustration <strong>erhöht nur die Bereitschaft</strong> — sie ist weder notwendig noch hinreichend. Hemmung z. B. durch Angst vor Strafe.
+  </div>
+  <div class="card">
+    <div class="card-title">Aggressionsverschiebung</div>
+    Ist das eigentliche Ziel zu mächtig oder unerreichbar, richtet sich die Aggression auf ein <strong>leichter erreichbares Ersatzziel</strong>. <strong>Anwendung (Lernfrage 2):</strong> In strukturschwachen Regionen wird Frust über die eigene Lage auf eine schwache Minderheit als <em>Sündenbock</em> gelenkt — die geringe Ausländerquote spricht gerade <em>gegen</em> eine Kontakt-Erklärung.
+  </div>
+  <div class="card">
+    <div class="card-title">Aggressive Hinweisreize (Waffeneffekt)</div>
+    Situative Reize mit aggressiver Bedeutung — vor allem <strong>Waffen</strong> — machen aggressive Kognitionen zugänglicher und erhöhen die Aggression. Waffen sind nicht die Ursache, aber sie verschärfen die Folgen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Von der Frustration zur Verschiebung</div>
+  <div class="card">
+    <div class="card-title">Schritt für Schritt</div>
+    <div id="fav">
+      <div class="step-item"><strong>Schritt 1:</strong> Eine zielgerichtete Handlung wird blockiert → Frustration entsteht.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Die Frustration erhöht die Aggressionsbereitschaft (nicht zwingend Aggression).</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Die eigentliche Quelle ist zu mächtig oder unerreichbar (z. B. der Chef).</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Die Aggression verschiebt sich auf ein leichter erreichbares Ersatzziel.</div>
+      <div class="step-item"><strong>Anwendung:</strong> In strukturschwachen Regionen wird der Frust über die eigene Lage auf eine schwache Minderheit als Sündenbock gelenkt.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'fav')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Affekt & Erregung ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Affekt- & Erregungstheorien</div>
+    <div class="sec-lz">Neo-assoziationistisch (Berkowitz); Erregungsübertragung (Zillmann)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum machen Hitze, Schmerz und Lärm gleichermaßen reizbar — und warum ist man direkt nach dem Sport leichter aufzubringen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Zwei Theorien: Das <strong>kognitiv neo-assoziationistische Modell</strong> erklärt, dass aversive Reize negativen Affekt erzeugen, der aggressive Assoziationen weckt. Die <strong>Erregungsübertragung</strong> erklärt, dass Resterregung (z. B. aus Sport) auf eine spätere Provokation übertragen und als Ärger fehlgedeutet wird.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kognitiv neo-assoziationistisches Modell</div>
+    Nicht nur Frustration, sondern <strong>jeder aversive Reiz</strong> (Hitze, Schmerz, Lärm) erzeugt unspezifischen <strong>negativen Affekt</strong>. Dieser aktiviert assoziativ aggressionsbezogene Gedanken, Gefühle und Impulse (Kampf) — daher wirken so unterschiedliche Reize ähnlich.
+  </div>
+  <div class="card">
+    <div class="card-title">Theorie der Erregungsübertragung</div>
+    Körperliche <strong>Resterregung</strong> aus einer neutralen Quelle (z. B. Sport) wird auf eine nachfolgende Provokation übertragen und fälschlich als <strong>Ärger</strong> gedeutet (Fehlattribution) → stärkere Aggression. Das funktioniert nur, wenn die ursprüngliche Erregungsquelle nicht mehr bewusst ist.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Zwei Theorien im Vergleich</div>
+  <div class="card">
+    <div class="card-title">Umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="neo" onclick="switchTab(this,'affekt')">Neo-assoziationistisch</button>
+      <button class="tab-btn" data-tab="erreg" onclick="switchTab(this,'affekt')">Erregungsübertragung</button>
+    </div>
+    <div class="tab-group" data-group="affekt">
+      <div class="tab-content active" data-tab="neo">
+        <strong>Auslöser:</strong> jeder aversive Reiz (Hitze, Schmerz, Lärm, Frustration).<br>
+        <strong>Mechanismus:</strong> negativer Affekt aktiviert aggressive Assoziationen.<br>
+        <strong>Erklärt:</strong> warum verschiedenste unangenehme Reize ähnlich aggressiv machen.
+      </div>
+      <div class="tab-content" data-tab="erreg">
+        <strong>Auslöser:</strong> Resterregung aus einer neutralen Quelle (z. B. Sport).<br>
+        <strong>Mechanismus:</strong> Übertragung + Fehlattribution der Erregung als Ärger.<br>
+        <strong>Bedingung:</strong> die ursprüngliche Quelle ist nicht mehr bewusst.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Lernen & GAM ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Lernen & Allgemeines Aggressionsmodell</div>
+    <div class="sec-lz">Bobo-Doll, aggressive Skripte, GAM</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann man Aggression durch bloßes Zuschauen lernen — und wie fügen sich all die Theorien zu einem Bild zusammen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Ja — <strong>Beobachtungslernen</strong> (Bobo-Doll): Kinder imitieren aggressive Modelle, auch ohne selbst belohnt zu werden. Wiederholung festigt <strong>aggressive Skripte</strong>. Das <strong>Allgemeine Aggressionsmodell (GAM)</strong> integriert alles: Person + Situation → innerer Zustand → Bewertung → Verhalten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Lerntheorie</div>
+    <strong>Direkte Verstärkung:</strong> Aggression wird beibehalten, wenn sie zum Erfolg führt oder Anerkennung bringt. <strong>Modelllernen (Bobo-Doll):</strong> Kinder ahmen ein beobachtetes aggressives Modell nach — auch ohne eigene Belohnung.
+  </div>
+  <div class="card">
+    <div class="card-title">Aggressive Skripte</div>
+    Durch wiederholtes Beobachten oder Ausüben entstehen <strong>aggressive Skripte</strong> — kognitive „Drehbücher", die in passenden Situationen aggressives Verhalten nahelegen und das Verhalten automatisch steuern.
+  </div>
+  <div class="card">
+    <div class="card-title">Allgemeines Aggressionsmodell (GAM)</div>
+    Das umfassendste Rahmenmodell integriert die Ansätze: <strong>Input</strong> (Personen- + Situationsfaktoren) → <strong>innerer Zustand</strong> (Kognition, Affekt, Erregung) → <strong>Bewertung</strong> (automatisch, dann kontrolliert) → <strong>Verhalten</strong> → Reaktion → neue Episode (Kreislauf).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das GAM Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Vom Auslöser zum Verhalten</div>
+    <div id="gam">
+      <div class="step-item"><strong>Schritt 1 — Input:</strong> Personenfaktoren (z. B. Trait-Aggressivität) + Situationsfaktoren (Provokation, Hitze, Waffe).</div>
+      <div class="step-item"><strong>Schritt 2 — Innerer Zustand:</strong> zugängliche Kognitionen/Skripte, Affekt und physiologische Erregung.</div>
+      <div class="step-item"><strong>Schritt 3 — Automatische Bewertung:</strong> schnelle Deutung der Lage (z. B. „das war eine Bedrohung").</div>
+      <div class="step-item"><strong>Schritt 4 — Kontrollierte Neubewertung:</strong> bei Zeit/Motivation (z. B. „vielleicht war es keine Absicht").</div>
+      <div class="step-item"><strong>Schritt 5 — Verhalten:</strong> Reaktion → Antwort der Zielperson → Beginn einer neuen Episode (Kreislauf).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'gam')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎛️ Simulator: Der GAM-Durchlauf</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Personenfaktor</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ga-p-lo" onclick="gaSet('p','lo')">unauffällig</button>
+        <button class="sim-tbtn" id="ga-p-hi" onclick="gaSet('p','hi')">hohe Trait-Aggressivität + feindseliger Stil</button>
+      </div>
+      <div class="sim-lbl">Situationsfaktor</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ga-s-lo" onclick="gaSet('s','lo')">neutral</button>
+        <button class="sim-tbtn" id="ga-s-hi" onclick="gaSet('s','hi')">Provokation + aggressiver Hinweisreiz</button>
+      </div>
+      <div class="sim-lbl">Bewertungsphase: Zeit & kognitive Ressourcen?</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ga-r-hi" onclick="gaSet('r','hi')">vorhanden</button>
+        <button class="sim-tbtn" id="ga-r-lo" onclick="gaSet('r','lo')">knapp (Stress, Alkohol, Zeitdruck)</button>
+      </div>
+      <div class="sim-verdict" id="ga-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Person & Situation ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Bedingungsfaktoren: Person & Situation</div>
+    <div class="sec-lz">Aggressivität, Attributionsstil, Geschlecht; Alkohol, Hitze, Medien</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum rastet dieselbe Person mal aus und mal nicht — liegt es an der Person oder an der Situation?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">An <strong>beidem</strong>. <strong>Personenfaktoren</strong>: Trait-Aggressivität, feindseliger Attributionsstil, Geschlecht. <strong>Situative Faktoren</strong>: Alkohol, Hitze, Mediengewalt. Sie interagieren — wie im GAM.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Personenfaktoren</div>
+    <strong>Aggressivität</strong> als stabiles Merkmal (über Jahre konstant). <strong>Feindseliger Attributionsstil</strong>: die Tendenz, mehrdeutiges Verhalten als absichtlich feindselig zu deuten. <strong>Geschlecht</strong>: Männer zeigen mehr direkte/physische Aggression — statistisch, nicht deterministisch (große Überlappung).
+  </div>
+  <div class="card">
+    <div class="card-title">Situative Faktoren</div>
+    <strong>Alkohol</strong>: enthemmt und verengt die Wahrnehmung („Alkoholkurzsichtigkeit"). <strong>Hitze</strong>: Der geografische <em>Regionen-</em> und der <em>Zeitspannenansatz</em> zeigen konsistent mehr Gewalt bei Hitze — <strong>Laborstudien</strong> mit manipulierter Raumtemperatur sind dagegen <em>inkonsistent</em>: Die Befundlage hängt von der Methode ab. <strong>Mediengewalt</strong>: schwacher, aber robuster Effekt; aktiviert aggressive Skripte und desensibilisiert. Der Längsschnitt-Kernbefund (viel Konsum mit 8 → mehr Aggression mit 18, mehr Gewaltverurteilungen mit 30) bleibt dabei <em>korrelativ</em> — kein endgültiger Kausalbeweis.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Person oder Situation?</div>
+  <div class="card">
+    <div class="card-title">Ordne jeden Faktor der richtigen Ebene zu</div>
+    <div class="corr-item" id="bf0">Ein stabiler feindseliger Attributionsstil.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bf0',this,'person')">Person (dispositional)</button>
+        <button class="corr-btn" onclick="checkCorr('bf0',this,'situation')">Situation (situativ)</button>
+      </div><div class="corr-fb" id="bf0-fb"></div>
+    </div>
+    <div class="corr-item" id="bf1">Sommerliche Hitze am Tag des Konflikts.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bf1',this,'person')">Person (dispositional)</button>
+        <button class="corr-btn" onclick="checkCorr('bf1',this,'situation')">Situation (situativ)</button>
+      </div><div class="corr-fb" id="bf1-fb"></div>
+    </div>
+    <div class="corr-item" id="bf2">Alkoholkonsum kurz vor dem Streit.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bf2',this,'person')">Person (dispositional)</button>
+        <button class="corr-btn" onclick="checkCorr('bf2',this,'situation')">Situation (situativ)</button>
+      </div><div class="corr-fb" id="bf2-fb"></div>
+    </div>
+    <div class="corr-item" id="bf3">Eine hohe Trait-Aggressivität als Persönlichkeitsmerkmal.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bf3',this,'person')">Person (dispositional)</button>
+        <button class="corr-btn" onclick="checkCorr('bf3',this,'situation')">Situation (situativ)</button>
+      </div><div class="corr-fb" id="bf3-fb"></div>
+    </div>
+    <div class="corr-item" id="bf4">Gewalthaltige Medieninhalte in der Umgebung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bf4',this,'person')">Person (dispositional)</button>
+        <button class="corr-btn" onclick="checkCorr('bf4',this,'situation')">Situation (situativ)</button>
+      </div><div class="corr-fb" id="bf4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Soziales Problem ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Aggression als soziales Problem</div>
+    <div class="sec-lz">Partnergewalt, sexuelle Aggression, Deindividuation, Terrorismus</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Aggression ist nicht nur Privatsache. Wo wird sie zum gesellschaftlichen Problem — und wie radikalisieren sich Menschen bis zur kollektiven Gewalt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Zentrale Felder: <strong>Partnergewalt</strong> (häufig, überwiegend gegen Frauen), <strong>sexuelle Aggression</strong> (hohe Dunkelziffer, Tätermythen), <strong>Intergruppengewalt</strong> mit <strong>Deindividuation</strong> und <strong>Terrorismus</strong> (ideologisch, Radikalisierung in Stufen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Partnergewalt &amp; sexuelle Aggression</div>
+    <strong>Partnergewalt</strong> ist häufig und betrifft überwiegend Frauen (zwanghaft-kontrollierende Gewalt meist durch Männer). <strong>Sexuelle Aggression</strong> hat eine hohe Dunkelziffer; der „Fremder als Täter"-Mythos trifft selten zu — Täter stammen meist aus dem Umfeld. Folge u. a. posttraumatische Belastungsstörung.
+  </div>
+  <div class="card">
+    <div class="card-title">Intergruppengewalt &amp; Deindividuation</div>
+    Aggression zwischen Gruppen speist sich aus Interessenkonflikten und sozialer Identität. <strong>Deindividuation</strong> = Verlust von Identität und Verantwortungsgefühl durch <strong>Anonymität</strong> in großen Gruppen → gesenkte Hemmschwelle, enthemmtes Verhalten.
+  </div>
+  <div class="card">
+    <div class="card-title">Terrorismus</div>
+    <strong>Politisch motivierte Gewalt</strong> mit dem Ziel, Angst und Schrecken zu verbreiten. Radikalisierung verläuft als <strong>stufenweiser Prozess</strong> (Treppenstufen-Modell) — von empfundener Ungerechtigkeit bis zum Ausschalten moralischer Hemmungen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Treppenstufen der Radikalisierung</div>
+  <div class="card">
+    <div class="card-title">Schritt für Schritt nach oben</div>
+    <div id="terror">
+      <div class="step-item"><strong>Erdgeschoss:</strong> wahrgenommene Ungerechtigkeit der eigenen Lebensbedingungen.</div>
+      <div class="step-item"><strong>1. Stock:</strong> Suche nach Handlungsoptionen gegen die empfundene Ungerechtigkeit.</div>
+      <div class="step-item"><strong>2. Stock:</strong> Verschiebung der Aggression auf einen Sündenbock / ein Feindbild.</div>
+      <div class="step-item"><strong>3.–4. Stock:</strong> Bindung an eine Gruppe und „Wir gegen sie" — die Vereinigung wird als legitim erlebt.</div>
+      <div class="step-item"><strong>5. Stock:</strong> Ausschalten moralischer Hemmungen → terroristische Tat.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'terror')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — ⑨ Interventionen ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">⑨ Interventionen gegen Aggression</div>
+    <div class="sec-lz">Lernfrage 3: Katharsis (unwirksam), Bestrafung, Deeskalation</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wut auf den Boxsack klopfen, damit sie „raus" ist — funktioniert das wirklich, um Aggression abzubauen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq8')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq8"><strong>Nein.</strong> Die <strong>Katharsis</strong>-Idee ist empirisch nicht belegt und kann Aggression durch Übung sogar <strong>verstärken</strong>. Was wirkt: <strong>Bestrafung</strong> (nur unter Bedingungen) und vor allem <strong>Deeskalation durch unvereinbare prosoziale Reaktionen</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Katharsis — der Mythos</div>
+    Die Idee, Aggression durch Ausleben oder symbolisches Abreagieren (Boxsack, Schreien, Gewaltmedien) abzubauen, ist <strong>empirisch widerlegt</strong>. Im Gegenteil: Ausleben kann durch Übung und Desensibilisierung die Aggression eher <strong>verstärken</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Bestrafung — bedingt wirksam</div>
+    Bestrafung kann Aggression hemmen, <em>wenn</em> sie <strong>unmittelbar, konsistent und angemessen</strong> erfolgt und Verhaltensalternativen bestehen. Grenzen: Belohnung ist oft wirksamer, und Strafe kann selbst zum aggressiven Hinweisreiz werden.
+  </div>
+  <div class="card">
+    <div class="card-title">Deeskalation durch unvereinbare Reaktionen</div>
+    Wirksam ist das Auslösen <strong>prosozialer Zustände</strong>, die mit Aggression unvereinbar sind: ein prosoziales Videospiel oder angenehme Musik senken Ärger und aggressive Kognitionen nach einer Provokation.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Intervention?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Maßnahme richtig ein</div>
+    <div class="corr-item" id="iv0">Auf einen Boxsack einschlagen, um die Wut abzubauen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('iv0',this,'katharsis')">Katharsis (unwirksam)</button>
+        <button class="corr-btn" onclick="checkCorr('iv0',this,'bestrafung')">Bestrafung (bedingt)</button>
+        <button class="corr-btn" onclick="checkCorr('iv0',this,'deeskalation')">Deeskalation (wirksam)</button>
+      </div><div class="corr-fb" id="iv0-fb"></div>
+    </div>
+    <div class="corr-item" id="iv1">Ein prosoziales Videospiel spielen, das positive Gedanken weckt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('iv1',this,'katharsis')">Katharsis (unwirksam)</button>
+        <button class="corr-btn" onclick="checkCorr('iv1',this,'bestrafung')">Bestrafung (bedingt)</button>
+        <button class="corr-btn" onclick="checkCorr('iv1',this,'deeskalation')">Deeskalation (wirksam)</button>
+      </div><div class="corr-fb" id="iv1-fb"></div>
+    </div>
+    <div class="corr-item" id="iv2">Eine unmittelbare, konsistente und angemessene Konsequenz setzen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('iv2',this,'katharsis')">Katharsis (unwirksam)</button>
+        <button class="corr-btn" onclick="checkCorr('iv2',this,'bestrafung')">Bestrafung (bedingt)</button>
+        <button class="corr-btn" onclick="checkCorr('iv2',this,'deeskalation')">Deeskalation (wirksam)</button>
+      </div><div class="corr-fb" id="iv2-fb"></div>
+    </div>
+    <div class="corr-item" id="iv3">Nach einer Provokation angenehme Musik hören.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('iv3',this,'katharsis')">Katharsis (unwirksam)</button>
+        <button class="corr-btn" onclick="checkCorr('iv3',this,'bestrafung')">Bestrafung (bedingt)</button>
+        <button class="corr-btn" onclick="checkCorr('iv3',this,'deeskalation')">Deeskalation (wirksam)</button>
+      </div><div class="corr-fb" id="iv3-fb"></div>
+    </div>
+    <div class="corr-item" id="iv4">Wut im Sport stellvertretend ausleben, um sie loszuwerden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('iv4',this,'katharsis')">Katharsis (unwirksam)</button>
+        <button class="corr-btn" onclick="checkCorr('iv4',this,'bestrafung')">Bestrafung (bedingt)</button>
+        <button class="corr-btn" onclick="checkCorr('iv4',this,'deeskalation')">Deeskalation (wirksam)</button>
+      </div><div class="corr-fb" id="iv4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq8"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s9">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 10 häufigsten Verwechslungen aus VL10</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Aggression</h4>
+      <p>Jedes Verhalten mit Schädigungsabsicht</p>
+      <p>Verbal, indirekt oder physisch</p>
+      <p>Der Oberbegriff</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gewalt</h4>
+      <p>Schwere körperliche Schädigung oder deren Androhung</p>
+      <p>Teilmenge der Aggression</p>
+      <p>Jede Gewalt ist Aggression, nicht umgekehrt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Aggression und Gewalt sind dasselbe — wer aggressiv ist, ist automatisch gewalttätig.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Feindselige (affektive) Aggression</h4>
+      <p>Emotional motiviert (Ärger, Wut)</p>
+      <p>Schädigung ist das eigentliche Ziel</p>
+      <p>Oft impulsiv, reaktiv</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Instrumentelle Aggression</h4>
+      <p>Mittel zu einem anderen Ziel (z. B. Beute)</p>
+      <p>Schädigung ist Werkzeug, nicht Zweck</p>
+      <p>Oft kalkuliert, kann schwerwiegend sein</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Instrumentelle Aggression ist harmloser, weil sie nicht aus Wut entsteht.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Frustrations-Aggressions-Hypothese (original)</h4>
+      <p>Frustration führt immer zu Aggression</p>
+      <p>Aggression setzt immer Frustration voraus</p>
+      <p>Strikt bidirektional und zwingend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Revidierte Fassung</h4>
+      <p>Frustration erhöht nur die Aggressionsbereitschaft</p>
+      <p>Weder notwendig noch hinreichend</p>
+      <p>Hinweisreize verstärken den Effekt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Frustration führt immer zu Aggression — wer frustriert ist, wird zwangsläufig aggressiv.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Katharsis</h4>
+      <p>Idee: Ausleben baut Aggression ab</p>
+      <p>Empirisch nicht belegt</p>
+      <p>Kann Aggression sogar verstärken</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Deeskalation durch unvereinbare Reaktionen</h4>
+      <p>Aktivierung prosozialer, inkompatibler Zustände</p>
+      <p>Empirisch wirksam</p>
+      <p>Z. B. prosoziale Spiele, angenehme Musik</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Man sollte Wut rauslassen, um sich zu beruhigen — das baut Aggression ab.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Erregungsübertragung (Zillmann)</h4>
+      <p>Erregung stammt aus neutraler Quelle (z. B. Sport)</p>
+      <p>Wird auf eine spätere Situation übertragen</p>
+      <p>Fehlattribution als Ärger</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Direkte Frustrations-Aggressions-Reaktion</h4>
+      <p>Erregung entsteht direkt aus der Frustration</p>
+      <p>Keine fremde Erregungsquelle nötig</p>
+      <p>Unmittelbarer Zusammenhang</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer nach dem Sport aggressiver reagiert, ist grundsätzlich aggressiver.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Aggressivität (Persönlichkeitsmerkmal)</h4>
+      <p>Stabile Disposition, aggressiv zu reagieren</p>
+      <p>Über Jahre relativ konstant</p>
+      <p>Erhöht nur die Wahrscheinlichkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Aggression (Verhalten)</h4>
+      <p>Das konkrete aggressive Verhalten</p>
+      <p>Situativ ausgelöst</p>
+      <p>Hängt auch von der Situation ab</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer eine hohe Aggressivität als Merkmal hat, verhält sich immer aggressiv.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Feindseliger Attributionsstil</h4>
+      <p>Kognitiver Verarbeitungsstil</p>
+      <p>Deutet mehrdeutiges Verhalten als feindselig</p>
+      <p>Bezieht sich auf die Absicht anderer</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Feindseligkeit (Subskala)</h4>
+      <p>Affektiv-kognitive Disposition</p>
+      <p>Misstrauen, Bitterkeit gegenüber anderen</p>
+      <p>Teil des Aggressionsfragebogens</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Feindseligkeit und feindseliger Attributionsstil sind dasselbe Konstrukt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Deindividuation</h4>
+      <p>Verlust von Selbstgefühl und Verantwortung</p>
+      <p>Durch Anonymität in großen Gruppen</p>
+      <p>Fördert enthemmtes, aggressives Verhalten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verantwortungsdiffusion</h4>
+      <p>Verantwortung verteilt sich auf viele</p>
+      <p>Mechanismus des Bystander-Effekts</p>
+      <p>Jeder fühlt sich weniger zuständig (Hilfe)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Deindividuation und Verantwortungsdiffusion sind dasselbe Phänomen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Aggressionsverschiebung</h4>
+      <p>Das ZIEL wechselt: Statt der unerreichbaren Frustrationsquelle wird ein leichter erreichbares Ziel angegriffen</p>
+      <p>„Verschiebung = anderes Ziel“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Erregungsübertragung (Zillmann)</h4>
+      <p>Die ERREGUNG aus einer neutralen Quelle (z. B. Sport) wird auf die Ärger-Situation übertragen und fehlattribuiert</p>
+      <p>„Übertragung = mehr Erregung“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der Erregungsübertragung wird die Aggression auf ein leichter erreichbares Ersatzziel umgelenkt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Direkte Verstärkung</h4>
+      <p>Aggression wird durch EIGENE Belohnung gelernt (Zielerreichung, Anerkennung)</p>
+      <p>„Ich werde belohnt“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Modelllernen</h4>
+      <p>Lernen durch NACHAHMUNG eines Modells, dessen Aggression belohnt beobachtet wird</p>
+      <p>„Ich sehe andere belohnt“ (Bobo-Doll-Paradigma)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim Modelllernen wird Aggression ausschließlich durch die eigene, direkt erfahrene Belohnung erlernt.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(8)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(10)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 11 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s10" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl10</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl10';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Ein Schüler verbreitet gezielt Gerüchte, um eine Mitschülerin sozial auszugrenzen. Ist das Aggression, Gewalt — oder beides?",
+      "opts": [
+        "Aggression, aber keine Gewalt — die schwere körperliche Schädigung fehlt",
+        "Gewalt, aber keine Aggression — denn Rufschädigung gilt immer als Gewalt",
+        "Weder Aggression noch Gewalt — ganz ohne Körperkontakt zählt es nicht",
+        "Sowohl Gewalt als auch echte Aggression im strengen körperlichen Sinn"
+      ],
+      "c": 0,
+      "e": "Aggression ist jedes Verhalten mit Schädigungsabsicht — auch das Verbreiten von Gerüchten. Gewalt ist die engere Teilmenge mit schwerer körperlicher Schädigung; die liegt hier nicht vor. Also Aggression, aber keine Gewalt."
+    },
+    {
+      "id": "s0q2",
+      "q": "Ein Fußballspieler verletzt einen Gegner bei einem fairen, regelkonformen Zweikampf schwer. Warum ist das nach der Definition keine Aggression?",
+      "opts": [
+        "Weil es im Sport grundsätzlich keine Schädigung von Personen geben kann",
+        "Weil die Schädigungsabsicht fehlt — die Verletzung war nicht beabsichtigt",
+        "Weil der Gegner die Verletzung durch das Mitspielen selbst verschuldet hat",
+        "Weil nur körperliche, niemals seelische Schädigungen als Aggression gelten"
+      ],
+      "c": 1,
+      "e": "Aggression setzt eine Schädigungsabsicht voraus. Eine versehentliche Verletzung im regelkonformen Spiel erfüllt diese Bedingung nicht — auch wenn der Schaden real und schwer ist."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Ein Räuber schlägt sein Opfer nieder, um an die Beute zu kommen — nicht aus Wut. Welche Form von Aggression ist das?",
+      "opts": [
+        "Feindselige Aggression — sie entspringt unmittelbar starkem Ärger",
+        "Reaktive Aggression — sie ist die Antwort auf eine Provokation",
+        "Instrumentelle Aggression — sie dient nur als Mittel zum Zweck",
+        "Indirekte Aggression — sie schädigt verdeckt über die sozialen Beziehungen"
+      ],
+      "c": 2,
+      "e": "Instrumentelle Aggression ist Mittel zum Zweck (hier: die Beute), nicht Ausdruck von Ärger. Feindselige Aggression wäre emotional motiviert mit Schädigung als eigentlichem Ziel."
+    },
+    {
+      "id": "s1q2",
+      "q": "Eine Jugendliche streut gezielt Gerüchte, um die Freundschaften einer Rivalin zu zerstören. Welche Form zeigt sich?",
+      "opts": [
+        "Direkte Aggression — sie trifft die Zielperson ganz unmittelbar und sichtbar von Angesicht",
+        "Physische Aggression — sie zielt gezielt auf die körperliche Unversehrtheit ab",
+        "Instrumentelle Aggression — die Schädigung ist hier nur Mittel zum eigentlichen Zweck",
+        "Indirekte Aggression — sie schädigt verdeckt die sozialen Beziehungen der Zielperson"
+      ],
+      "c": 3,
+      "e": "Indirekte Aggression schädigt verdeckt die sozialen Beziehungen der Zielperson, etwa durch das Verbreiten von Gerüchten. Direkte Aggression wäre dagegen unmittelbar auf die Person gerichtet."
+    },
+    {
+      "id": "s1q3",
+      "q": "Ohne jede Provokation greift ein Kind ein anderes an, um dessen Spielzeug zu erbeuten. Welche Form beschreibt das am besten?",
+      "opts": [
+        "Proaktive Aggression — sie erfolgt ohne vorausgehende Provokation",
+        "Reaktive Aggression — sie ist eine Antwort auf einen vorherigen Angriff",
+        "Feindselige Aggression — sie dient allein dem Ausdruck von Ärger",
+        "Verbale Aggression — sie schädigt ausschließlich mit sprachlichen Mitteln"
+      ],
+      "c": 0,
+      "e": "Proaktive Aggression erfolgt ohne vorausgehende Provokation und zielgerichtet (hier: das Spielzeug). Reaktive Aggression wäre dagegen eine Reaktion auf einen vorherigen Angriff."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Ein Modell nimmt an, Aggression staue sich wie Energie auf und müsse sich zwangsläufig entladen. Wie ist dieses Modell heute einzuordnen?",
+      "opts": [
+        "Als gut belegtes Standardmodell der heutigen Aggressionsforschung",
+        "Als intuitiv plausibel, heute aber empirisch überholt",
+        "Als hormonelle Erklärung allein über den Testosteronspiegel",
+        "Als lerntheoretisches Modell des reinen Beobachtungslernens"
+      ],
+      "c": 1,
+      "e": "Das Dampfkesselmodell ist intuitiv eingängig, hat aber kaum Erklärungswert und gilt als empirisch überholt. Aggression baut sich nicht zwangsläufig auf und muss sich entladen."
+    },
+    {
+      "id": "s2q2",
+      "q": "Zwillings- und Adoptionsstudien zeigen: Aggressionsneigung ist zu einem Teil erblich. Was sagt der Forschungsstand zum Verhältnis von Anlage und Umwelt?",
+      "opts": [
+        "Aggression ist nahezu vollständig genetisch festgelegt und kaum veränderbar",
+        "Gene spielen für Aggression praktisch überhaupt keine messbare Rolle",
+        "Gene erklären einen Teil, Umwelt einen noch etwas größeren Teil",
+        "Anlage und Umwelt lassen sich grundsätzlich gar nicht trennen"
+      ],
+      "c": 2,
+      "e": "Die Verhaltensgenetik schätzt den genetischen Anteil an der Varianz der Aggressionsneigung auf rund 41 %, den Umweltanteil mit etwa 59 % als noch größer. Aggression ist also weder rein erblich noch genfrei."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Wie wird der Zusammenhang von Frustration und Aggression heute (revidiert) verstanden?",
+      "opts": [
+        "Frustration führt grundsätzlich immer und zwingend zu offener Aggression",
+        "Aggression setzt ausnahmslos eine vorausgehende Frustration zwingend voraus",
+        "Frustration und Aggression haben miteinander praktisch gar nichts zu tun",
+        "Frustration erhöht die Aggressionsbereitschaft, erzwingt sie aber nicht"
+      ],
+      "c": 3,
+      "e": "Die ursprüngliche Hypothese (Frustration → immer Aggression) wurde revidiert: Frustration erhöht nur die Bereitschaft zu Aggression — sie ist weder notwendig noch hinreichend."
+    },
+    {
+      "id": "s3q2",
+      "q": "Ein Mann wird vom Chef ungerecht behandelt, traut sich aber nicht zu reagieren — und lässt seinen Ärger zu Hause an der Familie aus. Welches Phänomen ist das?",
+      "opts": [
+        "Aggressionsverschiebung — sie trifft ein leichter erreichbares Ersatzziel",
+        "Erregungsübertragung — Resterregung wird fälschlich als reiner Ärger gedeutet",
+        "Katharsis — das Ausleben baut die aufgestaute Aggression dauerhaft wieder ab",
+        "Instrumentelle Aggression — sie dient ganz gezielt einem äußeren Zweck"
+      ],
+      "c": 0,
+      "e": "Bei der Aggressionsverschiebung richtet sich die Aggression nicht gegen die mächtige Quelle (Chef), sondern gegen ein leichter erreichbares Ersatzziel (Familie)."
+    },
+    {
+      "id": "s3q3",
+      "q": "In strukturschwachen Regionen mit kaum Migrant*innen ist die Feindlichkeit gegen sie oft besonders hoch. Wie erklärt die Aggressionsverschiebung das?",
+      "opts": [
+        "Die Menschen dort sind von Natur aus deutlich aggressiver als anderswo",
+        "Frust über die eigene Lage wird auf eine schwache Ersatzgruppe gelenkt",
+        "Häufiger persönlicher Kontakt mit Migrant*innen erzeugt erst den Konflikt",
+        "Hohe Temperaturen in genau diesen Regionen steigern die Aggressionsrate"
+      ],
+      "c": 1,
+      "e": "Frust über die eigene (wirtschaftliche) Lage lässt sich nicht gegen die schwer fassbare Ursache richten — er wird auf eine schwache, leicht erreichbare Minderheit als Sündenbock verschoben. Die geringe Ausländerquote spricht gerade gegen die Kontakt-Erklärung."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Direkt nach intensivem Sport reagiert eine Person auf eine Provokation deutlich aggressiver — obwohl der Sport nichts mit dem Ärger zu tun hatte. Welche Theorie erklärt das?",
+      "opts": [
+        "Frustrations-Aggressions-Hypothese — die reine Blockade eines Ziels",
+        "Lerntheorie — das aggressive Verhalten wurde zuvor klar verstärkt",
+        "Erregungsübertragung — Resterregung wird als Ärger fehlgedeutet",
+        "Katharsis — der Sport baut die vorhandene Aggression eigentlich ab"
+      ],
+      "c": 2,
+      "e": "Die körperliche Resterregung aus dem Sport wird auf die spätere Provokation übertragen und fälschlich als Ärger gedeutet — das verstärkt die aggressive Reaktion (Erregungsübertragung)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Warum lösen ganz unterschiedliche unangenehme Reize — Hitze, Schmerz, Lärm — ähnliche aggressive Reaktionen aus?",
+      "opts": [
+        "Weil sie alle den Testosteronspiegel besonders stark erhöhen",
+        "Weil sie ausnahmslos aus einer blockierten Zielhandlung entstehen müssen",
+        "Weil aggressives Verhalten in genau solchen Lagen zuvor belohnt wurde",
+        "Weil sie negativen Affekt erzeugen, der aggressive Assoziationen weckt"
+      ],
+      "c": 3,
+      "e": "Im kognitiv neo-assoziationistischen Modell erzeugen verschiedenste aversive Reize negativen Affekt, der aggressionsbezogene Gedanken und Impulse aktiviert — daher die ähnliche Wirkung."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Kinder, die zusehen, wie ein Erwachsener eine Puppe aggressiv behandelt, ahmen das später nach — auch ohne selbst belohnt zu werden. Was zeigt das?",
+      "opts": [
+        "Aggression kann schon durch bloße Beobachtung eines Modells entstehen",
+        "Aggression ist ausschließlich genetisch vorbestimmt und somit angeboren",
+        "Nur eine direkte Belohnung kann aggressives Verhalten überhaupt erzeugen",
+        "Frustration ist letztlich die einzige Ursache kindlicher Aggression"
+      ],
+      "c": 0,
+      "e": "Das Bobo-Doll-Paradigma zeigt Beobachtungslernen: Kinder imitieren aggressive Modelle auch ohne eigene Verstärkung. Aggression muss also nicht direkt belohnt werden, um erlernt zu werden."
+    },
+    {
+      "id": "s5q2",
+      "q": "Das Allgemeine Aggressionsmodell gilt als umfassendstes Rahmenmodell. Was ist sein zentraler Anspruch?",
+      "opts": [
+        "Es erklärt Aggression allein über hormonelle Steuerungsprozesse",
+        "Es integriert Person, Situation, innere Zustände und Bewertung",
+        "Es reduziert Aggression auf einen einzigen angeborenen Trieb",
+        "Es beschränkt sich rein auf beobachtbares Reiz-Reaktions-Lernen"
+      ],
+      "c": 1,
+      "e": "Das Allgemeine Aggressionsmodell integriert Personen- und Situationsfaktoren, innere Zustände (Kognition, Affekt, Erregung) und Bewertungsprozesse zu einem umfassenden Rahmen — kein Einzelfaktor."
+    },
+    {
+      "id": "s5q3",
+      "q": "Nach einer Provokation spürt Deniz Ärger und aufsteigende Erregung, ihm schießen feindselige Gedanken durch den Kopf. Ob er nun zuschlägt oder ruhig reagiert, entscheidet sich laut Allgemeinem Aggressionsmodell …",
+      "opts": [
+        "… in der Bewertungsphase: Automatische Deutung erzeugt impulsives Verhalten, kontrollierte Neubewertung durchdachtes",
+        "… allein durch die Situation: Bei Provokation ist Aggression unausweichlich, der Auslösereiz bestimmt die Reaktion",
+        "… ausschließlich durch die Gene — Situation und innerer Zustand spielen dabei überhaupt gar keine Rolle",
+        "… durch das Dampfkesselmodell: Der angestaute innere Druck muss sich einfach zwangsläufig entladen"
+      ],
+      "c": 0,
+      "e": "GAM-Ablauf: Disposition + Situation erzeugen den inneren Zustand (Kognitionen/Skripte, Affekt, Erregung). Danach folgt die automatische Bewertung — und wenn Zeit und kognitive Ressourcen da sind, eine kontrollierte NEUbewertung. Sie entscheidet zwischen impulsivem und durchdachtem Verhalten."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Eine Person deutet mehrdeutiges Verhalten anderer fast immer als absichtlich feindselig und reagiert entsprechend gereizt. Welcher Faktor liegt vor?",
+      "opts": [
+        "Erregungsübertragung aus einer früheren körperlichen Anstrengung",
+        "Eine besonders niedrige Aggressivität als Persönlichkeitsmerkmal",
+        "Ein feindseliger Attributionsstil bei mehrdeutigen Situationen",
+        "Reine instrumentelle Aggression zur Erreichung eines klaren Ziels"
+      ],
+      "c": 2,
+      "e": "Der feindselige Attributionsstil ist die Tendenz, bei Mehrdeutigkeit eine feindselige Absicht zu unterstellen. Das erhöht die Wahrscheinlichkeit aggressiver Reaktionen deutlich."
+    },
+    {
+      "id": "s6q2",
+      "q": "Welche Aussage zu situativen Einflüssen auf Aggression ist nach der Forschung korrekt?",
+      "opts": [
+        "Alkohol senkt ganz zuverlässig die Aggressionsbereitschaft jeder Person",
+        "Mediengewalt hat nachweislich überhaupt keinen Effekt auf Aggression",
+        "Hitze schützt empirisch belegt zuverlässig vor aggressivem Verhalten",
+        "Alkohol, Hitze und Mediengewalt erhöhen die Aggressionsneigung"
+      ],
+      "c": 3,
+      "e": "Alkohol (Enthemmung), Hitze und Mediengewalt sind empirisch belegte situative Faktoren, die Aggression begünstigen — nicht senken oder davor schützen."
+    },
+    {
+      "id": "s6q3",
+      "q": "Zur Hitze-Hypothese („mehr Hitze → mehr Aggression“) zeigt die Befundlage:",
+      "opts": [
+        "Labor- und Feldbefunde sind gleichermaßen eindeutig positiv und bestätigen die Hitze-Hypothese vollständig",
+        "Regionen- und Zeitspannenansatz stützen den Zusammenhang, Laborstudien sind inkonsistent",
+        "Nur im Labor zeigt sich der Effekt, im Feld nie — Raumtemperatur ist der einzig saubere Beleg",
+        "Hitze senkt Aggression sehr zuverlässig, weil sie Menschen träge, müde und apathisch macht"
+      ],
+      "c": 1,
+      "e": "Geografischer Regionenansatz und Zeitspannenansatz (mehr Gewalt in heißen Regionen/Zeiträumen) stützen die Hitze-Hypothese; Laborstudien mit manipulierter Raumtemperatur liefern dagegen inkonsistente Befunde — die Befundlage ist methodenabhängig."
+    },
+    {
+      "id": "s6q4",
+      "q": "Eine Längsschnittstudie findet: Wer mit 8 Jahren viel Mediengewalt konsumierte, zeigt mit 18 mehr Aggression und hat mit 30 mehr Gewaltverurteilungen. Was folgt daraus methodisch?",
+      "opts": [
+        "Der Kausalbeweis ist erbracht: Mediengewalt in der Kindheit macht später im Erwachsenenalter zuverlässig gewalttätig",
+        "Die Daten widerlegen jeden Zusammenhang zwischen Mediengewalt und späterer Aggression vollständig",
+        "Ein bedeutsamer LÄNGSSCHNITT-Zusammenhang — aber als korrelativer Befund kein endgültiger Kausalbeweis",
+        "Nur Erwachsene sind von Mediengewalt beeinflussbar, Kinder verfügen über keinerlei stabile Medienwirkungen"
+      ],
+      "c": 2,
+      "e": "Der Längsschnitt zeigt einen zeitlich geordneten, bedeutsamen Zusammenhang (Konsum mit 8 → Aggression mit 18 → Verurteilungen mit 30). Dennoch bleibt er korrelativ: Drittvariablen (z. B. familiäres Umfeld, Trait-Aggressivität) sind nicht ausgeschlossen — Kausalität erfordert Experimente."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "In einer großen, anonymen Menge verliert eine Person das Gefühl für die eigene Identität und Verantwortung und verhält sich enthemmt aggressiv. Wie heißt das?",
+      "opts": [
+        "Deindividuation — Anonymität senkt in der Gruppe die Hemmschwelle",
+        "Erregungsübertragung — Resterregung wird fälschlich als Ärger gedeutet",
+        "Feindseliger Attributionsstil — anderen wird gezielt Böses unterstellt",
+        "Katharsis — die Menge baut die aufgestaute Aggression wieder ab"
+      ],
+      "c": 0,
+      "e": "Deindividuation ist der Verlust von Selbstgefühl und Verantwortung durch Anonymität in großen Gruppen — er senkt Hemmschwellen und begünstigt enthemmtes, oft aggressives Verhalten."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was kennzeichnet Terrorismus als Form kollektiver Aggression?",
+      "opts": [
+        "Spontane, ungeplante Gewalt ganz ohne jedes erkennbare politische Ziel",
+        "Politisch motivierte Gewalt, die gezielt Angst und Schrecken verbreiten soll",
+        "Rein wirtschaftlich motivierter Diebstahl an einzelnen, zufälligen Privatpersonen",
+        "Eine harmlose, symbolische Form des Protests ganz ohne jedes reale Opfer"
+      ],
+      "c": 1,
+      "e": "Terrorismus ist politisch motivierte Gewalt mit dem Ziel, Angst und Schrecken zu verbreiten und so politisch Verantwortliche zu beeinflussen — nicht spontan, ziellos oder harmlos."
+    },
+    {
+      "id": "s7q3",
+      "q": "In einer Diskussion sagt jemand: „Sexuelle Gewalt geht fast immer von Fremden aus, die nachts im Park lauern.“ Was sagt die Befundlage?",
+      "opts": [
+        "Die Aussage stimmt — fremde Täter sind bei sexueller Gewalt tatsächlich der weit überwiegende Normalfall",
+        "Es gibt dazu keinerlei belastbare Daten — das Thema ist wegen der hohen Dunkelziffer wissenschaftlich unerforscht",
+        "Sexuelle Gewalt kommt in Wirklichkeit praktisch nicht vor, die kursierenden Zahlen sind stark übertrieben",
+        "Das ist der „Mythos des fremden Täters“: Täter sind meist BEKANNTE Personen, bei hoher Dunkelziffer und geringer Verurteilung"
+      ],
+      "c": 3,
+      "e": "Bei sexueller Aggression stammt der Täter meist aus dem Bekanntenkreis — nicht aus der Fremde. Dazu kommen hohe Dunkelziffer und geringe Verurteilungsquote. Der „Mythos des fremden Täters“ verzerrt Risikowahrnehmung und Prävention."
+    }
+  ],
+  "8": [
+    {
+      "id": "s8q1",
+      "q": "Viele glauben, man solle Wut „rauslassen“ (z. B. auf einen Boxsack schlagen), um Aggression abzubauen. Was sagt die Forschung dazu?",
+      "opts": [
+        "Das ist nachweislich die wirksamste Methode zum Abbau von Aggression",
+        "Es wirkt aber nur bei körperlich sehr fitten und trainierten Personen",
+        "Das ist empirisch nicht belegt und kann Aggression sogar verstärken",
+        "Es baut Aggression zuverlässig ab, solange dabei niemand zusieht"
+      ],
+      "c": 2,
+      "e": "Die Katharsis-Hypothese ist empirisch nicht gestützt: Das Ausleben von Aggression baut sie nicht ab, sondern kann sie durch Übung und Desensibilisierung sogar verstärken."
+    },
+    {
+      "id": "s8q2",
+      "q": "Welche Strategie zur Aggressionsreduktion ist empirisch wirksam?",
+      "opts": [
+        "Das rein symbolische Ausleben der eigenen Aggression über Sport",
+        "Das wiederholte Betrachten klar gewalthaltiger Medieninhalte",
+        "Das Aufstauen der Wut bis zur viel späteren Entladung",
+        "Das Auslösen unvereinbarer prosozialer Gefühle und Gedanken"
+      ],
+      "c": 3,
+      "e": "Deeskalation durch unvereinbare Reaktionen wirkt: Prosoziale Gefühle und Gedanken (z. B. durch ein prosoziales Spiel oder angenehme Musik) hemmen aggressive Kognitionen — anders als Ausleben oder Medien­gewalt."
+    },
+    {
+      "id": "s8q3",
+      "q": "Unter welchen Bedingungen kann Bestrafung aggressives Verhalten wirksam unterdrücken?",
+      "opts": [
+        "Wenn sie unmittelbar, konsistent und angemessen erfolgt",
+        "Wenn sie möglichst hart und erst lange nach der Tat erfolgt",
+        "Wenn sie nur unregelmäßig und für die Person überraschend kommt",
+        "Bestrafung ist grundsätzlich völlig wirkungslos gegen Aggression"
+      ],
+      "c": 0,
+      "e": "Bestrafung kann Aggression hemmen, wenn sie unmittelbar, konsistent und angemessen erfolgt und Verhaltensalternativen bestehen. Belohnung ist allerdings oft wirksamer, und Strafe kann selbst als aggressiver Hinweisreiz wirken."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Wie stehen Aggression und Gewalt logisch zueinander?",
+    "opts": [
+      "Aggression ist eine spezielle Teilmenge der umfassenderen Gewalt",
+      "Gewalt ist eine Teilmenge der Aggression, aber nicht umgekehrt",
+      "Aggression und Gewalt sind exakt dasselbe und somit austauschbar",
+      "Gewalt und Aggression schließen einander praktisch vollständig aus"
+    ],
+    "c": 1,
+    "e": "Jede Gewalt ist Aggression (Schädigungsabsicht mit schwerer körperlicher Schädigung), aber nicht jede Aggression ist Gewalt. Gewalt ist also die Teilmenge."
+  },
+  {
+    "id": "bq2",
+    "q": "Was ist die zentrale Botschaft der Aggressionsforschung zur Ursache von Aggression?",
+    "opts": [
+      "Aggression hat genau eine einzige, klar nachweisbare Hauptursache",
+      "Aggression ist vollständig biologisch von Geburt an vorbestimmt",
+      "Aggression ist multideterminiert — viele Faktoren wirken zusammen",
+      "Aggression entsteht ausschließlich durch mediale Gewaltvorbilder"
+    ],
+    "c": 2,
+    "e": "Aggression ist multideterminiert: biologische, psychologische und situative Faktoren interagieren. Kein einzelner Faktor erklärt sie vollständig — deshalb müssen auch Interventionen mehrstufig ansetzen."
+  },
+  {
+    "id": "bq3",
+    "q": "Studien zeigen: Liegt bei einer Provokation eine Waffe im Raum, steigt die Aggression. Wie heißt dieser Effekt?",
+    "opts": [
+      "Katharsis-Effekt — die Waffe baut die Aggression eigentlich wieder ab",
+      "Erregungsübertragung — die Waffe erzeugt körperliche Resterregung",
+      "Deindividuation — die Waffe macht die handelnde Person anonym",
+      "Waffeneffekt — die Waffe wirkt als aggressiver Hinweisreiz"
+    ],
+    "c": 3,
+    "e": "Der Waffeneffekt: Waffen wirken als aggressive Hinweisreize, die aggressive Kognitionen zugänglicher machen und so die Aggressionsbereitschaft erhöhen."
+  }
+];
+
+var corrCorrect = {
+  "def0": "gewalt",
+  "def1": "aggression",
+  "def2": "keine",
+  "def3": "gewalt",
+  "def4": "aggression",
+  "bio0": "dampfkessel",
+  "bio1": "genetik",
+  "bio2": "testosteron",
+  "bio3": "kortisol",
+  "bf0": "person",
+  "bf1": "situation",
+  "bf2": "situation",
+  "bf3": "person",
+  "bf4": "situation",
+  "iv0": "katharsis",
+  "iv1": "deeskalation",
+  "iv2": "bestrafung",
+  "iv3": "deeskalation",
+  "iv4": "katharsis"
+};
+var corrExpl = {
+  "def0": "Schwere körperliche Schädigung mit Absicht — das ist Gewalt (und damit auch Aggression).",
+  "def1": "Gerüchte mit Schädigungsabsicht sind Aggression, aber ohne schwere körperliche Schädigung keine Gewalt.",
+  "def2": "Versehentliche Verletzung im regelkonformen Spiel — ohne Schädigungsabsicht keine Aggression.",
+  "def3": "Jemanden krankenhausreif schlagen ist schwere körperliche Schädigung mit Absicht — Gewalt.",
+  "def4": "Bloßstellen und Beleidigen schädigt mit Absicht (verbal), ist aber keine schwere körperliche Gewalt.",
+  "bio0": "Aufstauen und zwanghaftes Entladen — das überholte Dampfkesselmodell (Trieb).",
+  "bio1": "Größere Ähnlichkeit eineiiger Zwillinge spricht für eine genetische Grundlage (Verhaltensgenetik).",
+  "bio2": "Erhöhte Werte bei hochaggressiven Männern (Archer et al., 1998); steigt zudem nach dem Hantieren mit einer Schusswaffe (Klinesmith et al., 2006) — Testosteron.",
+  "bio3": "Niedriger Spiegel geht mit Furchtlosigkeit und Enthemmung einher — Kortisol.",
+  "bf0": "Ein stabiler Attributionsstil ist ein überdauerndes Personenmerkmal (dispositional).",
+  "bf1": "Hitze ist ein situativer Umgebungsfaktor.",
+  "bf2": "Alkoholkonsum vor dem Konflikt ist ein situativer Faktor (Enthemmung).",
+  "bf3": "Trait-Aggressivität ist ein stabiles Persönlichkeitsmerkmal (dispositional).",
+  "bf4": "Gewalthaltige Medien in der Umgebung sind ein situativer Reiz.",
+  "iv0": "Auf den Boxsack schlagen = Ausleben von Aggression — Katharsis, empirisch unwirksam.",
+  "iv1": "Ein prosoziales Spiel weckt positive, mit Aggression unvereinbare Kognitionen — wirksame Deeskalation.",
+  "iv2": "Unmittelbare, konsistente, angemessene Konsequenz — Bestrafung (bedingt wirksam).",
+  "iv3": "Angenehme Musik nach Provokation senkt Ärger und aggressive Kognitionen — Deeskalation.",
+  "iv4": "Wut im Sport stellvertretend ausleben ist die Katharsis-Idee — empirisch nicht belegt."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* GAM-Durchlauf-Simulator (Sektion ⑥): Person × Situation × Bewertung → Verhalten */
+var gaState = {p:'lo', s:'lo', r:'hi'};
+function gaSet(dim, val){
+  gaState[dim] = val;
+  ['lo','hi'].forEach(function(v){
+    var b = document.getElementById('ga-'+dim+'-'+v);
+    if(b) b.classList.toggle('on', v === val);
+  });
+  gaRender();
+}
+function gaRender(){
+  var o = document.getElementById('ga-out');
+  if(!o) return;
+  var inner, path;
+  if(gaState.p==='lo' && gaState.s==='lo'){
+    inner = '<strong>Innerer Zustand:</strong> ruhig — kaum feindselige Kognitionen, neutraler Affekt, niedrige Erregung.';
+    path = 'Ohne aggressiven inneren Zustand gibt es wenig zu bewerten: Das Verhalten bleibt unauffällig — egal, wie viel Zeit zur Verfügung steht.';
+  } else if(gaState.p==='hi' && gaState.s==='hi'){
+    inner = '<strong>Innerer Zustand:</strong> stark aufgeladen — aggressive Skripte aktiviert (Kognition), Ärger (Affekt), hohe Erregung. Person UND Situation wirken zusammen.';
+    path = (gaState.r==='hi')
+      ? 'Die automatische Bewertung deutet die Lage feindselig — aber mit Zeit und Ressourcen greift die <strong>kontrollierte Neubewertung</strong>: durchdachtes Verhalten ist möglich, Aggression bleibt aber wahrscheinlicher als sonst.'
+      : 'Knappe Ressourcen (Stress, Alkohol, Zeitdruck) stoppen die Neubewertung: Es bleibt bei der automatischen feindseligen Deutung → <strong>impulsive Aggression ist am wahrscheinlichsten</strong>. Der riskanteste Pfad im Modell.';
+  } else {
+    var who = (gaState.p==='hi') ? 'die Disposition (aggressionsbereite Person, aber neutrale Lage)' : 'die Situation (Provokation + Hinweisreiz, aber unauffällige Person)';
+    inner = '<strong>Innerer Zustand:</strong> mäßig aktiviert — nur ' + who + ' speist Kognition, Affekt und Erregung.';
+    path = (gaState.r==='hi')
+      ? 'Die kontrollierte Neubewertung hat gute Chancen: Mit Zeit und Ressourcen wird die Lage meist entschärft → durchdachtes Verhalten.'
+      : 'Ohne Ressourcen entscheidet die automatische Bewertung — ein mäßig aufgeladener Zustand kann dann in impulsives Verhalten kippen.';
+  }
+  o.innerHTML = inner + '<br>' + path + '<br><em>Merke: Nach dem Verhalten folgt die Reaktion der Zielperson — eine neue Episode beginnt (Kreislauf).</em>';
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  gaRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

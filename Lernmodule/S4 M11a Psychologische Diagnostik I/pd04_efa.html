@@ -1,0 +1,2401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD04 Explorative Faktorenanalyse</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  Inhalt, Daten und Widgets wurden vollständig in das deterministische Gerüst integriert.
+  Storage-Key: lm-m11a-vl04
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+html,body{max-width:100%;overflow-x:hidden}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD04-spezifische Erweiterungen */
+.wrap{max-width:1080px}
+.page-sub{max-width:80ch}
+.source-meta{font-size:.7rem;color:var(--text3);margin-top:4px}
+.source-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:.68rem;color:var(--text3);margin:2px 4px 2px 0}
+.orientation{background:linear-gradient(135deg,rgba(56,189,248,.08),rgba(129,140,248,.08));border:1px solid rgba(56,189,248,.28);border-radius:16px;padding:18px;margin:12px 0 22px}
+.orientation h2{font-size:1rem;margin-bottom:8px}
+.orientation-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
+.orientation-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:.77rem;color:var(--text2)}
+.orientation-step strong{display:block;color:var(--text);font-size:.8rem;margin-bottom:3px}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.card h3{font-size:.95rem;color:var(--text);margin:0 0 8px}
+.card h4{font-size:.84rem;color:var(--text);margin:10px 0 5px}
+.card p+ p{margin-top:7px}
+.card .lead{font-size:.98rem;color:var(--text);font-weight:600}
+.definition{border-left:4px solid var(--cyan)}
+.mechanism{border-left:4px solid var(--accent)}
+.example{border-left:4px solid var(--green)}
+.caution{border-left:4px solid var(--yellow)}
+.source-note{background:rgba(148,163,184,.07);border:1px dashed var(--border);border-radius:9px;padding:9px 11px;font-size:.76rem;color:var(--text3);margin-top:10px}
+.flow{display:flex;align-items:stretch;gap:6px;overflow-x:auto;padding:8px 2px 12px}
+.flow-node{flex:0 0 145px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;font-size:.76rem;color:var(--text2)}
+.flow-node strong{display:block;font-size:1.08rem;color:var(--cyan)}
+.flow-node small{display:block;color:var(--text3);margin-top:4px}
+.flow-arrow{align-self:center;color:var(--accent);font-weight:800;font-size:1.15rem}
+.flow-node.focus{border-color:var(--yellow);box-shadow:0 0 0 2px rgba(251,191,36,.15)}
+.matrix-wrap,.table-scroll{overflow:auto;border:1px solid var(--border);border-radius:10px;margin-top:8px}
+.matrix{border-collapse:collapse;width:100%;min-width:420px;background:rgba(15,23,42,.42)}
+.matrix caption{caption-side:top;text-align:left;padding:8px 10px;font-size:.76rem;color:var(--text3)}
+.matrix th,.matrix td{border:1px solid var(--border);padding:7px 9px;text-align:center;font-variant-numeric:tabular-nums;font-size:.78rem}
+.matrix th{background:var(--surface2);color:var(--text)}
+.matrix td{color:var(--text2)}
+.matrix .diag{font-weight:700;color:var(--text)}
+.matrix .hot{background:rgba(52,211,153,.12);color:var(--green);font-weight:700}
+.matrix .cross{background:rgba(251,191,36,.08)}
+.matrix .mark{outline:3px solid var(--yellow);outline-offset:-3px}
+.codebox{background:#0b1020;border:1px solid var(--border);border-radius:10px;padding:12px;overflow:auto;margin-top:8px}
+.codebox code,.output{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.76rem;white-space:pre;line-height:1.45;color:#cbd5e1}
+.mathbox{display:flex;flex-wrap:wrap;align-items:center;gap:12px;background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.25);border-radius:10px;padding:12px;margin:8px 0}
+.mathbox math{font-size:1.25rem;color:var(--text)}
+.mathbox .math-text{font-size:.8rem;color:var(--text2)}
+.widget{background:linear-gradient(135deg,rgba(30,41,59,.95),rgba(15,23,42,.95));border:1px solid rgba(129,140,248,.35);border-radius:16px;padding:16px;margin-bottom:14px}
+.widget h3{font-size:.95rem;margin-bottom:5px}
+.widget-intro{font-size:.8rem;color:var(--text2);margin-bottom:12px}
+.widget-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.widget label{font-size:.78rem;color:var(--text2)}
+.widget select,.widget input[type=number],.widget input[type=range]{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;min-height:42px;padding:7px 9px}
+.widget select{max-width:100%}
+.feedback{display:none;background:var(--surface2);border-radius:9px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.feedback.show{display:block}
+.feedback.good{border-left:4px solid var(--green)}
+.feedback.bad{border-left:4px solid var(--red)}
+.process-list{list-style:none;padding:0;display:grid;gap:7px}
+.process-item{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px}
+.process-number{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);font-weight:800;color:var(--accent)}
+.process-actions{display:flex;gap:4px}
+.icon-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:7px;min-width:38px;min-height:38px;cursor:pointer}
+.icon-btn:disabled{opacity:.35;cursor:not-allowed}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.choice-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:10px;padding:11px;text-align:left;cursor:pointer;min-height:48px}
+.choice-btn[aria-pressed=true]{border-color:var(--accent);background:rgba(129,140,248,.1);color:var(--text)}
+.ladder{counter-reset:ladder;display:grid;gap:8px}
+.ladder-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px}
+.ladder-step::before{counter-increment:ladder;content:counter(ladder);display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--surface2);color:var(--accent);font-weight:800;margin-right:8px}
+.ladder-step.locked{opacity:.48}
+.criteria-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.criterion{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:.78rem;color:var(--text2)}
+.criterion strong{display:block;color:var(--text);margin-bottom:5px}
+.svg-stage{background:#f8fafc;border-radius:12px;padding:10px;overflow:auto}
+.svg-stage svg{width:100%;min-width:480px;height:auto;display:block}
+.diagram-summary{font-size:.8rem;color:var(--text2);margin-top:9px}
+.output-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr);gap:12px}
+.output-task{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px}
+.output-table{border-collapse:collapse;width:100%;min-width:650px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.output-table th,.output-table td{border-bottom:1px solid var(--border);padding:5px 7px;text-align:right;font-size:.72rem;color:var(--text2)}
+.output-table th:first-child,.output-table td:first-child{text-align:left;color:var(--text)}
+.output-table th{position:sticky;top:0;background:var(--surface2);z-index:1;color:var(--text)}
+.output-table tr.highlight td{background:rgba(251,191,36,.12);color:var(--text)}
+.kmo-scale{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:9px 0}
+.kmo-band{padding:7px 4px;text-align:center;border:1px solid var(--border);border-radius:7px;font-size:.68rem;color:var(--text2)}
+.score-case{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin:8px 0}
+summary{cursor:pointer;color:var(--text);font-weight:700}
+details{margin-top:10px}
+.status-pill{display:inline-flex;border-radius:999px;padding:3px 8px;font-size:.68rem;font-weight:700;border:1px solid var(--border)}
+.status-good{color:var(--green);border-color:rgba(52,211,153,.4)}
+.status-warn{color:var(--yellow);border-color:rgba(251,191,36,.4)}
+@media(max-width:820px){.orientation-grid,.three-col,.criteria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.output-grid{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}.wrap{padding:18px 12px}.flow-node{flex-basis:130px}}
+@media(max-width:540px){.orientation-grid,.three-col,.criteria-grid,.choice-grid{grid-template-columns:1fr}.process-item{grid-template-columns:30px 1fr}.process-actions{grid-column:2}.page-title{font-size:1.35rem}.widget{padding:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD04 Explorative Faktorenanalyse</h1>
+<p class="page-sub">Psychologische Diagnostik · vollständiges interaktives Lernmodul · Sommersemester 2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie wird aus einer Korrelationsstruktur eine interpretierbare Faktorlösung? · Wie werden Kommunalitäten, Eigenwerte und Faktorzahl bestimmt? · Wie werden Rotation, R-Output und Itemselektion fachlich beurteilt?
+</div>
+
+<section class="orientation" data-source-id="PD04-F01" data-slides="1" data-source-status="direkt_abgedeckt" data-learning-objective="Orientierung" data-widget-type="Stoffkarte">
+  <h2>Stoffkarte: Explorative Faktorenanalyse</h2>
+  <p>Die Vorlesung verfolgt einen durchgängigen Weg: von einer Testrohform und ihrer Korrelationsstruktur über Extraktion und Rotation bis zu interpretierbaren Faktoren, ausgewählten Items und Personenscores.</p>
+  <div class="orientation-grid" aria-label="Vier Hauptblöcke des Moduls">
+    <div class="orientation-step"><strong>1 · Daten vorbereiten</strong>Analysestichprobe, invertierte Items, Z und R.</div>
+    <div class="orientation-step"><strong>2 · Struktur extrahieren</strong>Kommunalitäten, Ladungen, Eigenwerte und q.</div>
+    <div class="orientation-step"><strong>3 · Lösung interpretieren</strong>Rotation, Einfachstruktur und R-Output.</div>
+    <div class="orientation-step"><strong>4 · Test weiterbauen</strong>Faktoren benennen, Items selektieren, Scores bilden.</div>
+  </div>
+  <p class="source-note">Primärquelle: PD04_EFA__BEREINIGT.pdf, 43 Seiten. Das Modul folgt ausschließlich den sichtbaren Inhalten dieser Quelle.</p>
+</section>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Einordnung</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Grundidee</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Eignung</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ PCA vs. PFA</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Extraktion</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Rotation</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ R-Output</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Faktorwerte</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s9" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(9)" id="nb9">🎯 SRS & Transfer</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Einordnung ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0"
+  data-source-id="PD04-F02 PD04-F03 PD04-F04 PD04-F05" data-slides="2–5" data-source-status="integriert_abgedeckt"
+  data-learning-objective="LZ01" data-widget-type="W2_Process_Builder" data-cognitive-task="Prozessreihenfolge rekonstruieren und methodische Anforderungen beurteilen">
+  <div class="sec-head">
+    <div class="sec-title">① Von der Testrohform zur Dimensionalitätsentscheidung</div>
+    <div class="sec-lz">Die Rolle der Analysestichprobe und der Dimensionalitätsprüfung vor der Itemselektion einordnen.</div>
+    <div class="source-meta">Folien 2–5 · Quellen PD04-F02 PD04-F03 PD04-F04 PD04-F05 · Widget W2_Process_Builder</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Darf man die besten Items bereits auswählen, bevor geklärt ist, wie viele Dimensionen der Test tatsächlich erfasst?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Die Dimensionalitätsentscheidung bestimmt, für wie viele Dimensionen getrennt Items ausgewählt werden. Deshalb liegt die Strukturprüfung logisch vor der endgültigen Itemselektion.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="two-col">
+  <article class="card mechanism" data-source-id="PD04-F02" data-slides="2" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ01" data-widget-type="W2">
+    <div class="card-title">Prozess · Testkonstruktion</div>
+    <h3>Fünf Stufen mit klarer Aufgabenverteilung</h3>
+    <ol>
+      <li><strong>Merkmal festlegen:</strong> erste Abgrenzung, theoretische/empirische Befunde sichten, Definition.</li>
+      <li><strong>Test planen:</strong> Datentyp, Konstruktionsstrategie, Testlänge und Rahmenbedingungen.</li>
+      <li><strong>Testrohform konstruieren:</strong> Items, Instruktion und Testgestaltung.</li>
+      <li><strong>Rohform optimieren:</strong> Vorgabe an eine Analyse-/Konstruktionsstichprobe, Itemanalyse, Selektion und Gütekriterienprüfung.</li>
+      <li><strong>Endform normieren:</strong> Normstichprobe, Normen und erneute Gütekriterienprüfung.</li>
+    </ol>
+    <p class="hinweis"><strong>Fokus der Vorlesung:</strong> Die orange markierte vierte Stufe ist der Ort der Itemanalyse und der explorativen Strukturprüfung.</p>
+  </article>
+  <article class="card definition" data-source-id="PD04-F03" data-slides="3" data-source-status="direkt_abgedeckt" data-learning-objective="LZ01" data-widget-type="Text">
+    <div class="card-title">Analysestichprobe</div>
+    <h3>Worauf die Optimierungsdaten beruhen sollen</h3>
+    <p>Nach Expertenbefragungen beziehungsweise Pretesting wird die Rohform einer Analyse- oder Konstruktionsstichprobe vorgelegt. Diese soll:</p>
+    <ul>
+      <li>möglichst repräsentativ für die Zielgruppe sein,</li>
+      <li>ausreichend groß sein und</li>
+      <li>den Test möglichst unter den späteren Einsatzbedingungen bearbeiten.</li>
+    </ul>
+    <p><strong>Orientierungsbeispiele:</strong> Die Testtheorie-Literatur nennt etwa 200–400 Personen in Abhängigkeit von der Homogenität. In einem Faktorenanalyse-Beispiel reichen bei einem Verhältnis Itemzahl/Faktorenzahl ≥ 7 etwa 180 Personen.</p>
+    <p class="source-note">Die Zahlen sind ausdrücklich Beispiele und keine universellen Mindestschwellen.</p>
+  </article>
+</div>
+<div class="two-col">
+  <article class="card" data-source-id="PD04-F04" data-slides="4" data-source-status="direkt_abgedeckt" data-learning-objective="LZ01" data-widget-type="Concept_Map">
+    <div class="card-title">Funktion versus Verfahren</div>
+    <h3>Was die Itemanalyse leisten soll</h3>
+    <p><strong>Funktionen:</strong> geeignete Items selektieren beziehungsweise ungeeignete eliminieren und die Dimensionalität des Merkmals untersuchen.</p>
+    <p><strong>Vorgehensweisen:</strong> einfache Itemkennwerte wie Schwierigkeit und Trennschärfe, Faktorenanalyse beziehungsweise Strukturgleichungsmodellierung sowie Itemcharakteristiken auf PTT-Hintergrund.</p>
+  </article>
+  <article class="card caution" data-source-id="PD04-F05" data-slides="5" data-source-status="integriert_abgedeckt" data-learning-objective="LZ01" data-widget-type="Misconception_Debugger">
+    <div class="card-title">Abhängigkeit</div>
+    <h3>Dimensionalität vor Itemselektion</h3>
+    <p>Wurde eine Struktur postuliert, wird geprüft, ob die Daten der Analysestichprobe sie empirisch unterstützen. Ohne Vorhypothese wird ermittelt, welche Dimensionalität vorliegt.</p>
+    <p class="lead">Erst die Strukturentscheidung legt fest, für wie viele Dimensionen separat Items ausgewählt werden müssen.</p>
+    <p>Einfache Itemindizes sind für diese Strukturfrage nicht gut geeignet; hierfür werden Faktorenanalysen eingesetzt.</p>
+  </article>
+</div>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W2_Process_Builder</div>
+  
+<div class="widget" id="processWidget" data-source-id="PD04-F02 PD04-F03 PD04-F04 PD04-F05" data-slides="2–5" data-source-status="integriert_abgedeckt" data-learning-objective="LZ01" data-widget-type="W2_Process_Builder">
+  <h3>Process Builder: Bringe die Testkonstruktion in die richtige Reihenfolge</h3>
+  <p class="widget-intro">Nutze die Pfeiltasten an jedem Schritt. Drag-and-drop ist nicht erforderlich.</p>
+  <ol class="process-list" id="processList" aria-label="Sortierbare Prozessschritte"></ol>
+  <div class="widget-controls">
+    <button class="btn btn-accent" type="button" onclick="checkProcess()">Reihenfolge prüfen</button>
+    <button class="btn btn-ghost" type="button" onclick="resetProcess()">Neu mischen</button>
+  </div>
+  <div class="feedback" id="processFeedback" role="status" aria-live="polite"></div>
+</div>
+<div class="widget" data-source-id="PD04-F03 PD04-F05" data-slides="3, 5" data-source-status="integriert_abgedeckt" data-learning-objective="LZ01" data-widget-type="W9_Case_Decision">
+  <h3>Mini-Fall: Ist diese Optimierungsplanung tragfähig?</h3>
+  <p class="widget-intro">Eine neue Skala soll später bei Erwachsenen in einer Beratungsstelle eingesetzt werden. Die Rohform wird ausschließlich an 45 Psychologiestudierenden unter Prüfungsbedingungen erprobt.</p>
+  <div class="choice-grid" role="group" aria-label="Beurteilung der Analysestichprobe">
+    <button class="choice-btn" type="button" onclick="caseFeedback(this,'sampleCase',false)">Ja, weil nur die statistische Auswertung entscheidend ist.</button>
+    <button class="choice-btn" type="button" onclick="caseFeedback(this,'sampleCase',true)">Nein, Zielgruppenbezug, Umfang und Einsatzbedingungen sind problematisch.</button>
+  </div>
+  <div class="feedback" id="sampleCase" role="status" aria-live="polite"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Grundidee ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1"
+  data-source-id="PD04-F06 PD04-F07 PD04-F08 PD04-F09 PD04-F10 PD04-F11" data-slides="6–11" data-source-status="integriert_abgedeckt"
+  data-learning-objective="LZ02–LZ04" data-widget-type="W6_Matrix_Reader_W4_Formula_Ladder" data-cognitive-task="Korrelationsblöcke erkennen, Matrizen zuordnen und Umpolung anwenden">
+  <div class="sec-head">
+    <div class="sec-title">② Korrelationsmuster, Beispieldaten und EFA-Matrizenfolge</div>
+    <div class="sec-lz">Die Grundidee der Faktorenanalyse, das Umpolen invertierter Items und die Matrizenfolge Z → R → R* → L → L* → F erklären.</div>
+    <div class="source-meta">Folien 6–11 · Quellen PD04-F06 PD04-F07 PD04-F08 PD04-F09 PD04-F10 PD04-F11 · Widget W6_Matrix_Reader_W4_Formula_Ladder</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In einer Korrelationsmatrix sind A–B = .90 und C–D = .87, alle Kreuzkorrelationen liegen nahe null. Welche Struktur erwartest du?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1" aria-hidden="true">Zwei Faktoren: A und B bilden einen Korrelationsblock, C und D einen zweiten. Die Grundidee ist nicht bloß ‚hohe Korrelation‘, sondern hohe Korrelation innerhalb und geringe Korrelation zwischen Gruppen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<article class="card definition" data-source-id="PD04-F06" data-slides="6" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ02" data-widget-type="W6_Matrix_Reader">
+  <div class="card-title">Grundidee</div>
+  <h3>Viele Variablen auf wenige Faktoren zurückführen</h3>
+  <p>Die Faktorenanalyse nutzt das Muster der Korrelationen. Sie soll die Faktorzahl ökonomisch klein halten und zugleich möglichst viel Variablenvarianz erklären. Variablen, die untereinander hoch und mit anderen Variablen gering korrelieren, werden zusammengefasst.</p>
+  <div class="matrix-wrap">
+    <table class="matrix"><caption>Korrelationsmatrix A–D aus dem Beispiel</caption><thead><tr><th scope="col"></th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th><th scope="col">D</th></tr></thead>
+      <tbody><tr><th scope="row">A</th><td class="diag">1</td><td class="hot">.90</td><td class="cross">-.02</td><td class="cross">.04</td></tr>
+      <tr><th scope="row">B</th><td class="hot">.90</td><td class="diag">1</td><td class="cross">.03</td><td class="cross">-.08</td></tr>
+      <tr><th scope="row">C</th><td class="cross">-.02</td><td class="cross">.03</td><td class="diag">1</td><td class="hot">.87</td></tr>
+      <tr><th scope="row">D</th><td class="cross">.04</td><td class="cross">-.08</td><td class="hot">.87</td><td class="diag">1</td></tr></tbody></table>
+  </div>
+  <p><strong>Intuitive Lösung:</strong> F1 = A/B und F2 = C/D.</p>
+</article>
+<div class="two-col">
+  <article class="card example" data-source-id="PD04-F07 PD04-F10" data-slides="7, 10" data-source-status="direkt_abgedeckt" data-learning-objective="LZ02–LZ04" data-widget-type="Example">
+    <div class="card-title">Durchgängiges Beispiel</div>
+    <h3>Fragebogen zur Freude an Festivitäten (FFF)</h3>
+    <p>15 Items werden auf einer visuellen Analogskala von 0 = keine Zustimmung bis 10 = vollste Zustimmung beantwortet. Zwei Aussagen sind gegen die Zielrichtung formuliert: <strong>item_6</strong> und <strong>item_15</strong>.</p>
+    <details><summary>Alle 15 Items anzeigen</summary>
+      <div class="table-scroll"><table class="matrix"><caption>FFF-Items</caption><thead><tr><th scope="col">Item</th><th scope="col">Wortlaut</th></tr></thead><tbody>
+      <tr><th scope="row">item_1</th><td>Wenn ich an das Wochenende denke, werde ich aufgeregt</td></tr><tr><th scope="row">item_2</th><td>Ich mag es, mich mit anderen Menschen zu unterhalten</td></tr><tr><th scope="row">item_3</th><td>Mich findet man ab 20:00 Uhr auf der Tanzfläche</td></tr><tr><th scope="row">item_4</th><td>Eine spontane Feier wäre jetzt was</td></tr><tr><th scope="row">item_5</th><td>Ich könnte die ganze Nacht durchtanzen</td></tr><tr><th scope="row">item_6</th><td><strong>Andere Menschen sind mir zuwider</strong></td></tr><tr><th scope="row">item_7</th><td>Ich freue mich auf meinen Geburtstag</td></tr><tr><th scope="row">item_8</th><td>Ich freue mich auf die Geburtstage meiner Freunde</td></tr><tr><th scope="row">item_9</th><td>Ich tanze gerne mit anderen Menschen zusammen</td></tr><tr><th scope="row">item_10</th><td>Ich lerne auf Feiern gerne andere Menschen kennen</td></tr><tr><th scope="row">item_11</th><td>Two-Step, Air-Punches und Wave sind meine Sprache</td></tr><tr><th scope="row">item_12</th><td>Ich organisiere gerne Feiern</td></tr><tr><th scope="row">item_13</th><td>Ich freue mich darüber, Einladungen zu Feiern zu erhalten</td></tr><tr><th scope="row">item_14</th><td>Ich feiere gerne mit anderen Menschen</td></tr><tr><th scope="row">item_15</th><td><strong>Es geht mir gut, wenn ich weiß, dass keine Feier ansteht</strong></td></tr>
+      </tbody></table></div>
+    </details>
+  </article>
+  <article class="card mechanism" data-source-id="PD04-F09 PD04-F10" data-slides="9–10" data-source-status="direkt_abgedeckt" data-learning-objective="LZ04" data-widget-type="W4_Formula_Ladder">
+    <div class="card-title">Vorarbeit an Z</div><h3>Invertierte Items umpolen</h3>
+    <div class="mathbox"><math aria-label="x Strich i j gleich Klammer auf o j plus u j Klammer zu minus x i j"><msubsup><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow><mo>′</mo></msubsup><mo>=</mo><mo>(</mo><msub><mi>o</mi><mi>j</mi></msub><mo>+</mo><msub><mi>u</mi><mi>j</mi></msub><mo>)</mo><mo>−</mo><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></math><span class="math-text">o<sub>j</sub> = obere Grenze, u<sub>j</sub> = untere Grenze, x<sub>ij</sub> = beobachteter Wert.</span></div>
+    <div class="codebox"><code>partyi &lt;- party
+partyi$item_6  &lt;- 10 - party$item_6
+partyi$item_15 &lt;- 10 - party$item_15</code></div>
+  </article>
+</div>
+<article class="card mechanism" data-source-id="PD04-F08 PD04-F11" data-slides="8, 11" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ03" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">EFA-Ablauf</div><h3>Die sechs Matrizen</h3>
+  <div class="flow" aria-label="Matrizenfolge Z nach R nach R Stern nach L nach L Stern nach F">
+    <div class="flow-node"><strong>Z</strong>standardisierte Datenmatrix<small>n × m</small></div><div class="flow-arrow">→</div>
+    <div class="flow-node focus"><strong>R</strong>Korrelationsmatrix<small>m × m, Diagonale 1</small></div><div class="flow-arrow">→</div>
+    <div class="flow-node"><strong>R*</strong>modifizierte Korrelationsmatrix<small>m × m, Diagonale h²</small></div><div class="flow-arrow">→</div>
+    <div class="flow-node"><strong>L</strong>unrotierte Ladungsmatrix<small>m × q</small></div><div class="flow-arrow">→</div>
+    <div class="flow-node"><strong>L*</strong>rotierte Ladungsmatrix<small>m × q</small></div><div class="flow-arrow">→</div>
+    <div class="flow-node"><strong>F</strong>Faktorwertematrix<small>n × q</small></div>
+  </div>
+  <p class="hinweis"><strong>Folie 11:</strong> Der Übergang Z → R ist als Schritt der Interkorrelationen markiert.</p>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W6_Matrix_Reader_W4_Formula_Ladder</div>
+  
+<div class="two-col">
+  <div class="widget" data-source-id="PD04-F06" data-slides="6" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ02" data-widget-type="W6_Matrix_Reader">
+    <h3>Matrix Reader: Welches Paar gehört zusammen?</h3>
+    <p class="widget-intro">Wähle ein Variablenpaar und beurteile, ob es einen gemeinsamen Faktorblock stützt.</p>
+    <div class="widget-controls"><label for="pairSelect">Paar</label><select id="pairSelect"><option value="AB">A–B (r = .90)</option><option value="AC">A–C (r = -.02)</option><option value="CD">C–D (r = .87)</option><option value="BD">B–D (r = -.08)</option></select></div>
+    <div class="choice-grid"><button class="choice-btn" type="button" onclick="checkPair(true)">Stützt denselben Faktorblock</button><button class="choice-btn" type="button" onclick="checkPair(false)">Stützt die Trennung der Blöcke</button></div>
+    <div class="feedback" id="pairFeedback" role="status" aria-live="polite"></div>
+  </div>
+  <div class="widget" data-source-id="PD04-F09 PD04-F10" data-slides="9–10" data-source-status="direkt_abgedeckt" data-learning-objective="LZ04" data-widget-type="W4_Formula_Ladder">
+    <h3>Formula Ladder: Umpolen</h3>
+    <p class="widget-intro">Setze Skalenuntergrenze, Obergrenze und Rohwert ein. Der Rechner prüft auch den Wertebereich.</p>
+    <div class="widget-controls"><label>u <input id="revLow" type="number" value="0" step="1"></label><label>o <input id="revHigh" type="number" value="10" step="1"></label><label>x <input id="revX" type="number" value="2" step="1"></label><button class="btn btn-accent" type="button" onclick="reverseScore()">Berechnen</button></div>
+    <div class="feedback" id="reverseFeedback" role="status" aria-live="polite"></div>
+  </div>
+</div>
+<div class="widget" data-source-id="PD04-F08" data-slides="8" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ03" data-widget-type="W3_Arrow_Model_Mapper">
+  <h3>Arrow Mapper: Welche Bedeutung gehört zu welchem Symbol?</h3>
+  <div class="widget-controls"><label for="matrixSymbol">Symbol</label><select id="matrixSymbol"><option>Z</option><option>R</option><option>R*</option><option>L</option><option>L*</option><option>F</option></select><label for="matrixMeaning">Bedeutung</label><select id="matrixMeaning"><option value="data">n×m standardisierte Daten</option><option value="corr">m×m Korrelationen, Diagonale 1</option><option value="comm">m×m Korrelationen, Diagonale h²</option><option value="load">m×q unrotierte Ladungen</option><option value="rot">m×q rotierte Ladungen</option><option value="scores">n×q Faktorwerte</option></select><button class="btn btn-accent" type="button" onclick="checkMatrixMap()">Zuordnung prüfen</button></div>
+  <div class="feedback" id="matrixMapFeedback" role="status" aria-live="polite"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Eignung ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2"
+  data-source-id="PD04-F12 PD04-F13 PD04-F14 PD04-F15" data-slides="12–15" data-source-status="direkt_abgedeckt"
+  data-learning-objective="LZ05" data-widget-type="W8_R_Output_Explorer" data-cognitive-task="Kennwerte und Outputstellen lokalisieren, Schwellen anwenden und Grenzen beurteilen">
+  <div class="sec-head">
+    <div class="sec-title">③ Eignung der Korrelationsmatrix prüfen</div>
+    <div class="sec-lz">Bartlett-Test, Anti-Image-Korrelationsmatrix und KMO/MSA korrekt lokalisieren und interpretieren.</div>
+    <div class="source-meta">Folien 12–15 · Quellen PD04-F12 PD04-F13 PD04-F14 PD04-F15 · Widget W8_R_Output_Explorer</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Bartlett-Test liefert p < .001 bei sehr großer Stichprobe. Reicht das bereits als Beleg, dass die Matrix gut faktoranalysierbar ist?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Der Test ist stark stichprobengrößenabhängig. Deshalb werden zusätzlich Anti-Image-Informationen und insbesondere KMO/MSA betrachtet.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="two-col">
+  <article class="card caution" data-source-id="PD04-F12" data-slides="12" data-source-status="direkt_abgedeckt" data-learning-objective="LZ05" data-widget-type="W8_R_Output_Explorer">
+    <div class="card-title">Bedeutsame Interkorrelationen</div><h3>Bartlett-Test und seine Grenze</h3>
+    <p>Eine Faktorenanalyse setzt bedeutsame Korrelationen voraus. Einzelne <code>cor.test()</code>-Prüfungen und der Bartlett-Test können hierfür herangezogen werden. Der Bartlett-Test prüft, ob die Korrelationsmatrix signifikant von der Einheitsmatrix abweicht.</p>
+    <div class="codebox"><code>library(psych)
+cortest.bartlett(cor(partyi), n = 320)
+
+$chisq   1546.316
+$p.value 8.9097e-255
+$df      105</code></div>
+    <p class="hinweis"><strong>Grenze:</strong> Beide Signifikanzmaße hängen stark von der Stichprobengröße ab.</p>
+    <p class="source-note">Die Folie schreibt „Barlett-Test“. Im Lerntext wird der fachübliche Name „Bartlett-Test“ verwendet.</p>
+  </article>
+  <article class="card definition" data-source-id="PD04-F13" data-slides="13" data-source-status="direkt_abgedeckt" data-learning-objective="LZ05" data-widget-type="W6_Matrix_Reader">
+    <div class="card-title">Anti-Image-Korrelationsmatrix</div><h3>Erklärte und unerklärte Anteile trennen</h3>
+    <p><strong>Image:</strong> Varianzanteil einer Variablen, der durch die übrigen Variablen erklärt wird. <strong>Anti-Image:</strong> unerklärter Anteil, der möglichst gering sein soll.</p>
+    <ul><li>Diagonalelemente: verbleibende ungeklärte Varianz nach Berücksichtigung der anderen Variablen.</li><li>Nicht-Diagonalelemente: partielle Korrelationen; sie sollen nahe 0 liegen.</li></ul>
+    <p class="lead">Daumenregel: Höchstens 25 % der Nicht-Diagonalelemente sollten betragsmäßig größer als .09 sein.</p>
+  </article>
+</div>
+<article class="card mechanism" data-source-id="PD04-F14 PD04-F15" data-slides="14–15" data-source-status="direkt_abgedeckt" data-learning-objective="LZ05" data-widget-type="W8_R_Output_Explorer">
+  <div class="card-title">KMO / Measure of Sampling Adequacy</div><h3>Vergleich einfacher und partieller Korrelationen</h3>
+  <p>Das KMO-Kriterium basiert auf der Anti-Image-Logik. Höhere MSA-Werte bedeuten mehr gemeinsame Varianz und bessere Eignung für eine Faktorenanalyse. Der Wertebereich reicht von 0 bis 1.</p>
+  <div class="kmo-scale" aria-label="KMO-Beurteilungsskala"><div class="kmo-band">≥ .90<br>erstaunlich</div><div class="kmo-band">≥ .80<br>verdienstvoll</div><div class="kmo-band">≥ .70<br>ziemlich gut</div><div class="kmo-band">≥ .60<br>mittelmäßig</div><div class="kmo-band">≥ .50<br>kläglich</div><div class="kmo-band">&lt; .50<br>untragbar</div></div>
+  <p>Das KMO-Kriterium wird als bestes der dargestellten Eignungskriterien empfohlen. Itembezogene MSAs können ungeeignete Variablen sichtbar machen.</p>
+  <div class="codebox"><code>KMO(partyi)
+Overall MSA = 0.88
+item_1 .90 · item_2 .88 · item_3 .85 · item_4 .92 · item_5 .83
+item_6 .80 · item_7 .89 · item_8 .90 · item_9 .87 · item_10 .84
+item_11 .85 · item_12 .92 · item_13 .90 · item_14 .88 · item_15 .91</code></div>
+  <p class="source-note">Die Folie 14 verwendet einmal „Varianzanalyse“; der sichtbare Kontext behandelt die Eignung für die Faktorenanalyse.</p>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W8_R_Output_Explorer</div>
+  
+<div class="two-col">
+  <div class="widget" data-source-id="PD04-F14 PD04-F15" data-slides="14–15" data-source-status="direkt_abgedeckt" data-learning-objective="LZ05" data-widget-type="W8_R_Output_Explorer">
+    <h3>KMO-Explorer: Kategorie und schwächstes Item</h3>
+    <p class="widget-intro">Overall MSA = .88. Die niedrigsten itembezogenen Werte sind item_6 = .80 und item_5 = .83.</p>
+    <div class="widget-controls"><label for="kmoClass">Kategorie</label><select id="kmoClass"><option value="amazing">erstaunlich</option><option value="merit">verdienstvoll</option><option value="middling">mittelmäßig</option><option value="bad">untragbar</option></select><label for="kmoWeak">niedrigstes Item</label><select id="kmoWeak"><option>item_4</option><option>item_6</option><option>item_12</option><option>item_15</option></select><button class="btn btn-accent" type="button" onclick="checkKMO()">Prüfen</button></div>
+    <div class="feedback" id="kmoFeedback" role="status" aria-live="polite"></div>
+  </div>
+  <div class="widget" data-source-id="PD04-F13" data-slides="13" data-source-status="direkt_abgedeckt" data-learning-objective="LZ05" data-widget-type="W6_Matrix_Reader">
+    <h3>Anti-Image-Regel anwenden</h3>
+    <p class="widget-intro">In einem Ausschnitt liegen 4 von 15 Nicht-Diagonalelementen betragsmäßig über .09. Beurteilen Sie die 25-%-Regel.</p>
+    <div class="choice-grid"><button class="choice-btn" type="button" onclick="aicCheck(true)">Regel erfüllt</button><button class="choice-btn" type="button" onclick="aicCheck(false)">Regel nicht erfüllt</button></div>
+    <div class="feedback" id="aicFeedback" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ PCA vs. PFA ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3"
+  data-source-id="PD04-F16 PD04-F17" data-slides="16–17" data-source-status="direkt_abgedeckt"
+  data-learning-objective="LZ06" data-widget-type="W1_Concept_Duel" data-cognitive-task="Verfahrensannahmen anhand kurzer Fälle unterscheiden">
+  <div class="sec-head">
+    <div class="sec-title">④ Initiale Kommunalitäten: PCA und PFA unterscheiden</div>
+    <div class="sec-lz">Das Kommunalitätenproblem sowie Gesamtvarianz, gemeinsame Varianz und Uniqueness voneinander abgrenzen.</div>
+    <div class="source-meta">Folien 16–17 · Quellen PD04-F16 PD04-F17 · Widget W1_Concept_Duel</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>PCA und PFA starten beide mit einer Korrelationsmatrix. Behandeln sie die gesamte Itemvarianz trotzdem gleich?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3" aria-hidden="true">Nein. Die PCA analysiert Gesamtvarianz und setzt initiale Kommunalitäten auf 1. Die PFA zielt auf gemeinsame Varianz und verwendet Startwerte unter 1.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<article class="card mechanism" data-source-id="PD04-F16" data-slides="16" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ06" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">Ort im EFA-Ablauf</div><h3>Das Kommunalitätenproblem liegt bei R → R*</h3>
+  <div class="flow"><div class="flow-node"><strong>R</strong>Diagonale = 1</div><div class="flow-arrow">→</div><div class="flow-node focus"><strong>R*</strong>Diagonale = initiale h²</div></div>
+  <p>Vor der Schätzung der Ladungen muss festgelegt beziehungsweise geschätzt werden, welcher Anteil der Itemvarianz durch die Faktoren erklärbar sein soll.</p>
+</article>
+<div class="two-col">
+  <article class="card definition" data-source-id="PD04-F17" data-slides="17" data-source-status="direkt_abgedeckt" data-learning-objective="LZ06" data-widget-type="W1_Concept_Duel">
+    <div class="card-title">PCA</div><h3>Principal Component Analysis</h3>
+    <ul><li>analysiert die <strong>gesamte Varianz</strong> der Items,</li><li>unterstellt vollständige Erklärbarkeit durch die Komponenten,</li><li>setzt alle initialen Kommunalitäten auf <strong>1</strong>.</li></ul>
+  </article>
+  <article class="card definition" data-source-id="PD04-F17" data-slides="17" data-source-status="direkt_abgedeckt" data-learning-objective="LZ06" data-widget-type="W1_Concept_Duel">
+    <div class="card-title">PFA</div><h3>Principal Factor Analysis</h3>
+    <ul><li>analysiert die <strong>gemeinsame Varianz</strong>,</li><li>lässt itemspezifische Einflüsse beziehungsweise <strong>Uniqueness</strong> zu,</li><li>verwendet geschätzte Startwerte <strong>unter 1</strong>.</li></ul>
+  </article>
+</div>
+<p class="source-note">Die Vorlesung führt anschließend das Vorgehen der PCA weiter aus.</p>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W1_Concept_Duel</div>
+  
+<div class="widget" data-source-id="PD04-F17" data-slides="17" data-source-status="direkt_abgedeckt" data-learning-objective="LZ06" data-widget-type="W1_Concept_Duel">
+  <h3>Concept Duel: PCA oder PFA?</h3>
+  <p class="widget-intro">Ordne nacheinander drei Aussagen zu. Nach jeder Entscheidung erhältst du eine Begründung.</p>
+  <div id="pcaCaseText" class="score-case"></div>
+  <div class="choice-grid"><button class="choice-btn" type="button" onclick="classifyPca('PCA')">PCA</button><button class="choice-btn" type="button" onclick="classifyPca('PFA')">PFA</button></div>
+  <div class="feedback" id="pcaFeedback" role="status" aria-live="polite"></div>
+  <div class="widget-controls"><button class="btn btn-ghost" type="button" onclick="nextPcaCase()">Nächster Fall</button></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Extraktion ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4"
+  data-source-id="PD04-F18 PD04-F19 PD04-F20 PD04-F21 PD04-F22 PD04-F23 PD04-F24 PD04-F25 PD04-F26 PD04-F27 PD04-F28" data-slides="18–28" data-source-status="integriert_abgedeckt"
+  data-learning-objective="LZ07–LZ08" data-widget-type="W4_Formula_Ladder_W5_Faded_Example" data-cognitive-task="Summenrichtungen unterscheiden, Formeln anwenden und Faktorzahlkriterien kombinieren">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Faktorenextraktion, Kennwerte und Faktorzahl</div>
+    <div class="sec-lz">Faktorladungen, finale Kommunalitäten, Eigenwerte und Varianzanteile berechnen sowie die Faktorzahl begründet bestimmen.</div>
+    <div class="source-meta">Folien 18–28 · Quellen PD04-F18 PD04-F19 PD04-F20 PD04-F21 PD04-F22 PD04-F23 PD04-F24 PD04-F25 PD04-F26 PD04-F27 PD04-F28 · Widget W4_Formula_Ladder_W5_Faded_Example</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du siehst eine Ladungsmatrix. Summierst du für eine Kommunalität entlang einer Zeile oder einer Spalte?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4" aria-hidden="true">Entlang der Itemzeile über die Faktoren. Für einen Eigenwert summierst du dagegen entlang einer Faktorspalte über die Variablen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<article class="card mechanism" data-source-id="PD04-F18 PD04-F19" data-slides="18–19" data-source-status="integriert_abgedeckt" data-learning-objective="LZ07" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">Extraktionsproblem · R* → L</div><h3>Sukzessive Hauptkomponenten</h3>
+  <p>Nach Festlegung der Kommunalitäten sucht die PCA zunächst eine gewichtete Summe der Items, die maximal Varianz erklärt. Die zweite Komponente ist von der ersten unabhängig und maximiert die verbleibende Varianz; so geht es bis zu m Komponenten.</p>
+  <p>Die durch Komponente l erklärte Varianz ist ihr Eigenwert λ<sub>l</sub>. Bei m standardisierten Variablen gilt:</p>
+  <div class="mathbox"><math aria-label="Summe der Eigenwerte von eins bis m gleich m"><munderover><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>λ</mi><mi>l</mi></msub><mo>=</mo><mi>m</mi></math><span class="math-text">Ziel ist q deutlich kleiner als m.</span></div>
+</article>
+<article class="card definition" data-source-id="PD04-F20 PD04-F21 PD04-F22 PD04-F23" data-slides="20–23" data-source-status="direkt_abgedeckt" data-learning-objective="LZ07" data-widget-type="W4_Formula_Ladder">
+  <div class="card-title">Ladungsmatrix lesen</div><h3>Drei Kennwerte, zwei Summenrichtungen</h3>
+  <div class="matrix-wrap"><table class="matrix"><caption>Schema der Ladungsmatrix</caption><thead><tr><th scope="col">Variable</th><th scope="col">F₁</th><th scope="col">F₂</th><th scope="col">…</th><th scope="col">Fq</th><th scope="col">h²</th></tr></thead><tbody><tr><th scope="row">1</th><td>a₁₁</td><td>a₁₂</td><td>…</td><td>a₁q</td><td class="hot">h₁²</td></tr><tr><th scope="row">j</th><td>aⱼ₁</td><td>aⱼ₂</td><td>…</td><td>aⱼq</td><td class="hot">hⱼ²</td></tr><tr><th scope="row">m</th><td>aₘ₁</td><td>aₘ₂</td><td>…</td><td>aₘq</td><td class="hot">hₘ²</td></tr><tr><th scope="row">Eigenwert</th><td class="hot">λ₁</td><td class="hot">λ₂</td><td>…</td><td class="hot">λq</td><td></td></tr><tr><th scope="row">Prop. Var.</th><td>v₁</td><td>v₂</td><td>…</td><td>vq</td><td></td></tr></tbody></table></div>
+  <div class="three-col">
+    <div><h4>Faktorladung</h4><p>Bei orthogonaler Rotation ist a<sub>jl</sub> die Korrelation zwischen Variable j und Faktor l.</p></div>
+    <div><h4>Finale Kommunalität</h4><div class="mathbox"><math aria-label="h j Quadrat gleich Summe a j l Quadrat"><msubsup><mi>h</mi><mi>j</mi><mn>2</mn></msubsup><mo>=</mo><munderover><mo>∑</mo><mrow><mi>l</mi><mo>=</mo><mn>1</mn></mrow><mi>q</mi></munderover><msubsup><mi>a</mi><mrow><mi>j</mi><mi>l</mi></mrow><mn>2</mn></msubsup></math></div><p>Zeile: über Faktoren.</p></div>
+    <div><h4>Eigenwert und Anteil</h4><div class="mathbox"><math aria-label="Lambda l gleich Summe a j l Quadrat"><msub><mi>λ</mi><mi>l</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msubsup><mi>a</mi><mrow><mi>j</mi><mi>l</mi></mrow><mn>2</mn></msubsup></math><span class="math-text">v<sub>l</sub> = λ<sub>l</sub> / m</span></div><p>Spalte: über Variablen.</p></div>
+  </div>
+</article>
+<article class="card caution" data-source-id="PD04-F24 PD04-F25 PD04-F26 PD04-F27 PD04-F28" data-slides="24–28" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ08" data-widget-type="W7_Diagram_Manipulator">
+  <div class="card-title">Wie viele Faktoren q?</div><h3>Inhalt und formale Kriterien verbinden</h3>
+  <div class="criteria-grid"><div class="criterion"><strong>Kaiser-Guttman</strong>Eigenwert &gt; 1; Minimalkriterium, das häufig zu viele Faktoren extrahiert.</div><div class="criterion"><strong>Scree-Test</strong>Visuelle Suche nach dem Knick im Eigenwertverlauf; subjektiv.</div><div class="criterion"><strong>Parallelanalyse</strong>Empirische Eigenwerte müssen kritische simulierte Eigenwerte übersteigen.</div></div>
+  <p><strong>FFF-Ergebnis:</strong> Scree-Plot, Kaiser-Guttman und Parallelanalyse sprechen im Beispiel für drei Faktoren. Die endgültige Zahl wird aufgrund inhaltlicher und/oder formal-statistischer Überlegungen festgelegt.</p>
+  <details><summary>R-Befehle und Diagrammlogik</summary><div class="codebox"><code>scree(partyi, factors = FALSE)
+fa.parallel(partyi, fa = "pc")</code></div><p>Im Scree-Plot fällt die Kurve zunächst stark und flacht dann ab. In der Parallelanalyse liegen die ersten drei empirischen Komponenten über den Referenzkurven beziehungsweise der markierten Grenze.</p></details>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W4_Formula_Ladder_W5_Faded_Example</div>
+  
+<div class="widget" data-source-id="PD04-F21 PD04-F22 PD04-F23" data-slides="21–23" data-source-status="direkt_abgedeckt" data-learning-objective="LZ07" data-widget-type="W4_Formula_Ladder_W5_Faded_Example">
+  <h3>Formula Ladder: Kommunalität, Eigenwert, Varianzanteil</h3>
+  <p class="widget-intro">Arbeite in der Reihenfolge: Bezugsrichtung bestimmen → quadrieren → summieren → interpretieren.</p>
+  <div class="ladder">
+    <div class="ladder-step"><strong>Vollständiges Beispiel:</strong> Ein Item lädt .70, .40 und .10. h² = .49 + .16 + .01 = .66. Damit erklären die drei Faktoren 66 % seiner standardisierten Varianz.</div>
+    <div class="ladder-step"><strong>Teilweise ausgeblendet:</strong> Faktorladungen .70, .50, .40, .30 ergeben λ = <button type="button" class="btn btn-ghost" onclick="this.textContent='.49 + .25 + .16 + .09 = .99';this.disabled=true">Rechenweg zeigen</button></div>
+    <div class="ladder-step"><strong>Selbst rechnen:</strong> <label>h² für Ladungen .60, .50 und .20 <input id="commAnswer" type="number" step=".01" min="0" max="1"></label> <button class="btn btn-accent" type="button" onclick="checkComm()">Prüfen</button></div>
+    <div class="ladder-step"><strong>Transfer:</strong> Bei m = 15 und λ = 3.62: <label>v = <input id="varAnswer" type="number" step=".01" min="0" max="1"></label> <button class="btn btn-accent" type="button" onclick="checkVarShare()">Prüfen</button></div>
+  </div>
+  <div class="feedback" id="formulaFeedback" role="status" aria-live="polite"></div>
+</div>
+<div class="widget" data-source-id="PD04-F24 PD04-F25 PD04-F26 PD04-F27 PD04-F28" data-slides="24–28" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ08" data-widget-type="W9_Case_Decision">
+  <h3>Faktorzahl-Entscheidung: Erst prognostizieren, dann auflösen</h3>
+  <p class="widget-intro">Im FFF liegen die ersten drei Eigenwerte über 1; danach flacht der Scree-Verlauf ab. In der Parallelanalyse übersteigen ebenfalls nur die ersten drei empirischen Werte die Referenz.</p>
+  <div class="choice-grid"><button class="choice-btn" type="button" onclick="factorCount(2)">q = 2</button><button class="choice-btn" type="button" onclick="factorCount(3)">q = 3</button><button class="choice-btn" type="button" onclick="factorCount(4)">q = 4</button><button class="choice-btn" type="button" onclick="factorCount(15)">q = 15</button></div>
+  <div class="feedback" id="factorCountFeedback" role="status" aria-live="polite"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Rotation ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5"
+  data-source-id="PD04-F29 PD04-F30 PD04-F31 PD04-F32 PD04-F33 PD04-F34 PD04-F35 PD04-F36" data-slides="29–36" data-source-status="visuell_rekonstruiert"
+  data-learning-objective="LZ09–LZ10" data-widget-type="W7_Diagram_Manipulator" data-cognitive-task="Veränderung prognostizieren, Achsenrelation manipulieren und Matrixbedeutungen zuordnen">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Rotation, Einfachstruktur und Matrixbedeutungen</div>
+    <div class="sec-lz">Rotation geometrisch verstehen und orthogonale/oblique Lösungen sowie Muster-/Strukturmatrix unterscheiden.</div>
+    <div class="source-meta">Folien 29–36 · Quellen PD04-F29 PD04-F30 PD04-F31 PD04-F32 PD04-F33 PD04-F34 PD04-F35 PD04-F36 · Widget W7_Diagram_Manipulator</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wenn eine Faktorlösung rotiert wird: Geht dadurch insgesamt erklärte Varianz verloren?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Die Gesamtvarianzaufklärung und die finalen Kommunalitäten bleiben gleich; nur die Verteilung auf die einzelnen Faktoren und damit deren Eigenwerte verändert sich.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<article class="card mechanism" data-source-id="PD04-F29" data-slides="29" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ09" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">Ort im EFA-Ablauf</div><h3>Das Rotationsproblem liegt bei L → L*</h3>
+  <div class="flow"><div class="flow-node"><strong>L</strong>unrotierte Ladungen</div><div class="flow-arrow">→</div><div class="flow-node focus"><strong>L*</strong>rotierte Ladungen</div></div>
+</article>
+<div class="two-col">
+  <article class="card example" data-source-id="PD04-F30" data-slides="30" data-source-status="direkt_abgedeckt" data-learning-objective="LZ09" data-widget-type="W6_Matrix_Reader">
+    <div class="card-title">Ausgangsproblem</div><h3>Unrotierte Ladungen sind schwer zuzuordnen</h3>
+    <div class="table-scroll"><table class="matrix"><caption>Erste sechs FFF-Items vor Rotation</caption><thead><tr><th>Item</th><th>PC1</th><th>PC2</th><th>PC3</th><th>h²</th></tr></thead><tbody><tr><th>item_1</th><td>.69</td><td>-.38</td><td>-.04</td><td>.63</td></tr><tr><th>item_2</th><td>.47</td><td>.27</td><td>.48</td><td>.52</td></tr><tr><th>item_3</th><td>.57</td><td>.34</td><td>-.47</td><td>.66</td></tr><tr><th>item_4</th><td>.66</td><td>-.30</td><td>-.09</td><td>.63</td></tr><tr><th>item_5</th><td>.44</td><td>.36</td><td>-.51</td><td>.58</td></tr><tr><th>item_6</th><td>.41</td><td>.33</td><td>.51</td><td>.54</td></tr></tbody></table></div>
+    <p>item_6 lädt auf allen drei Komponenten nennenswert; eine klare inhaltliche Zuordnung ist schwierig.</p>
+  </article>
+  <article class="card definition" data-source-id="PD04-F31" data-slides="31" data-source-status="direkt_abgedeckt" data-learning-objective="LZ09" data-widget-type="W11_Misconception_Debugger">
+    <div class="card-title">Ziel der Rotation</div><h3>Einfachstruktur</h3>
+    <p>Jedes Item soll auf einem Faktor betragsmäßig hoch und auf den übrigen Faktoren möglichst nahe 0 laden.</p>
+    <ul><li>Unendlich viele Rotationen sind möglich.</li><li>Gesamt erklärte Varianz bleibt gleich.</li><li>Eigenwerte einzelner Faktoren verändern sich.</li><li>Finale Kommunalitäten bleiben gleich.</li></ul>
+  </article>
+</div>
+<article class="card mechanism" data-source-id="PD04-F32 PD04-F33 PD04-F34 PD04-F35" data-slides="32–35" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ10" data-widget-type="W7_Diagram_Manipulator">
+  <div class="card-title">Geometrische Deutung</div><h3>Winkel, Projektionen und gedrehte Achsen</h3>
+  <p>Z-standardisierte Variablen werden als Vektoren dargestellt. Der Kosinus des Winkels entspricht der Korrelation: r<sub>jk</sub> = cos(φ<sub>jk</sub>). Die erste Hauptkomponente minimiert die Summe quadrierter Abstände beziehungsweise maximiert die Projektionen; H2 steht zunächst senkrecht auf H1.</p>
+  <div class="table-scroll"><table class="matrix"><caption>Winkel-Korrelations-Beispiele</caption><thead><tr><th>Winkel</th><th>r</th></tr></thead><tbody><tr><th>180°</th><td>-1.00</td></tr><tr><th>120°</th><td>-.50</td></tr><tr><th>90°</th><td>0</td></tr><tr><th>45°</th><td>.70</td></tr><tr><th>10°</th><td>.98</td></tr></tbody></table></div>
+  <p><strong>Orthogonal:</strong> gedrehte Achsen bleiben im rechten Winkel. <strong>Oblique:</strong> die Achsen dürfen schiefwinklig sein, was häufig eine bessere Einfachstruktur ermöglicht, aber korrelierte Faktoren und redundante Information zulässt.</p>
+</article>
+<article class="card caution" data-source-id="PD04-F36" data-slides="36" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ10" data-widget-type="W1_Concept_Duel">
+  <div class="card-title">Bei obliquer Rotation</div><h3>Muster- und Strukturmatrix trennen</h3>
+  <div class="two-col"><div><h4>Mustermatrix</h4><p>Enthält Ladungen als Regressionsgewichte, bereinigt um den Einfluss der anderen Faktoren. Sie wird standardmäßig in R dargestellt.</p></div><div><h4>Strukturmatrix</h4><p>Enthält die einfachen Korrelationen der Variablen mit den Faktoren.</p></div></div>
+  <p>Bei orthogonaler Rotation sind beide Matrizen identisch. Bei obliquer Rotation können Musterkoeffizient a<sub>jl</sub> und Strukturkoeffizient r<sub>jl</sub> differieren.</p>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W7_Diagram_Manipulator</div>
+  
+<div class="widget" data-source-id="PD04-F32 PD04-F34 PD04-F35 PD04-F36" data-slides="32, 34–36" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ10" data-widget-type="W7_Diagram_Manipulator">
+  <h3>Diagram Manipulator: Faktorachsen und Korrelation</h3>
+  <p class="widget-intro"><strong>Prognose zuerst:</strong> Was passiert mit der Faktorkorrelation, wenn der Winkel von 90° auf 60° sinkt?</p>
+  <div class="choice-grid" id="rotationPredict"><button class="choice-btn" type="button" onclick="predictRotation(this,'zero')">Sie bleibt 0.</button><button class="choice-btn" type="button" onclick="predictRotation(this,'positive')">Sie wird positiv.</button><button class="choice-btn" type="button" onclick="predictRotation(this,'negative')">Sie wird negativ.</button><button class="choice-btn" type="button" onclick="predictRotation(this,'unknown')">Der Winkel ist ohne Bedeutung.</button></div>
+  <div class="widget-controls"><label for="angleSlider">Winkel zwischen Faktorachsen: <output id="angleOut">90°</output></label><input id="angleSlider" type="range" min="45" max="90" value="90" step="1" disabled oninput="updateRotationDiagram()"></div>
+  <div class="svg-stage"><svg viewBox="0 0 620 330" role="img" aria-labelledby="rotTitle rotDesc"><title id="rotTitle">Faktorachsen und Variablenvektoren</title><desc id="rotDesc">Zwei Faktorachsen und sechs Variablenvektoren. Der Winkel der zweiten Achse kann verändert werden.</desc><line x1="80" y1="260" x2="550" y2="260" stroke="#111827" stroke-width="3"/><line id="axis2" x1="80" y1="260" x2="80" y2="40" stroke="#16a34a" stroke-width="4"/><text x="550" y="282" fill="#111827">H1</text><text id="axis2Label" x="90" y="45" fill="#166534">H2</text><g stroke="#2563eb" stroke-width="3" marker-end="url(#arr)"><line x1="80" y1="260" x2="360" y2="85"/><line x1="80" y1="260" x2="410" y2="120"/><line x1="80" y1="260" x2="330" y2="145"/><line x1="80" y1="260" x2="370" y2="285"/><line x1="80" y1="260" x2="430" y2="305"/><line x1="80" y1="260" x2="315" y2="320"/></g><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2563eb"/></marker></defs></svg></div>
+  <div class="diagram-summary" id="rotationSummary">Bei 90° gilt cos(90°)=0: Die Faktorachsen sind orthogonal und die Faktoren unkorreliert.</div>
+  <div class="feedback" id="rotationFeedback" role="status" aria-live="polite"></div>
+</div>
+<div class="widget" data-source-id="PD04-F36" data-slides="36" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ10" data-widget-type="W1_Concept_Duel">
+  <h3>Matrix-Duell</h3><p class="widget-intro">Welche Matrix beantwortet die Frage: „Wie stark korreliert Variable j insgesamt mit Faktor 2?“</p>
+  <div class="choice-grid"><button class="choice-btn" type="button" onclick="patternStructure(false)">Mustermatrix</button><button class="choice-btn" type="button" onclick="patternStructure(true)">Strukturmatrix</button></div><div class="feedback" id="patternFeedback" role="status" aria-live="polite"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ R-Output ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6"
+  data-source-id="PD04-F37 PD04-F38 PD04-F39 PD04-F40 PD04-F41" data-slides="37–41" data-source-status="direkt_abgedeckt"
+  data-learning-objective="LZ11–LZ12" data-widget-type="W8_R_Output_Explorer_W9_Case_Decision" data-cognitive-task="R-Ausgabe aktiv lesen und eine Itemselektionsentscheidung begründen">
+  <div class="sec-head">
+    <div class="sec-title">⑦ PCA in R interpretieren und Items selektieren</div>
+    <div class="sec-lz">principal()-Ausgaben lesen, Ladungsmuster deuten, Faktoren benennen und Items begründet auswählen.</div>
+    <div class="source-meta">Folien 37–41 · Quellen PD04-F37 PD04-F38 PD04-F39 PD04-F40 PD04-F41 · Widget W8_R_Output_Explorer_W9_Case_Decision</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im R-Output steht bei item_8 TC1 = .60 und TC3 = .40. Ist das eine eindeutige Zuordnung?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6" aria-hidden="true">Nicht vollständig. Das Item hat eine Kreuzladung und muss zusammen mit theoretischer Passung und weiteren Itemanalyse-Kriterien geprüft werden.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<div class="two-col">
+  <article class="card mechanism" data-source-id="PD04-F37" data-slides="37" data-source-status="direkt_abgedeckt" data-learning-objective="LZ11" data-widget-type="W8_R_Output_Explorer">
+    <div class="card-title">PCA in R</div><h3>principal() konfigurieren</h3>
+    <p>Der Datensatz, die Zahl der Faktoren (<code>nfactors</code>) und die Rotation (<code>rotate</code>) werden angegeben. Orthogonale Beispiele sind varimax und quartimax; oblique Beispiele sind oblimin und Promax. Oblimin kann das Paket GPArotation benötigen.</p>
+    <div class="codebox"><code>install.packages("GPArotation")
+library(GPArotation)
+party_efa &lt;- principal(partyi, nfactors = 3, rotate = "oblimin")</code></div>
+  </article>
+  <article class="card definition" data-source-id="PD04-F38" data-slides="38" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ11" data-widget-type="W8_R_Output_Explorer">
+    <div class="card-title">Output-Landkarte</div><h3>Was die Spalten und Blöcke bedeuten</h3>
+    <ul><li><strong>TC1–TC3:</strong> Mustermatrix-Ladungen.</li><li><strong>h2:</strong> Kommunalität; <strong>u2:</strong> Uniqueness.</li><li><strong>com:</strong> Komplexität des Ladungsmusters.</li><li><strong>SS loadings:</strong> Eigenwerte.</li><li><strong>Proportion/Cumulative Var:</strong> Varianzanteile.</li><li><strong>Component correlations:</strong> Korrelationen der obliquen Komponenten.</li></ul>
+  </article>
+</div>
+<article class="card example" data-source-id="PD04-F38" data-slides="38" data-source-status="direkt_abgedeckt" data-learning-objective="LZ11" data-widget-type="W8_R_Output_Explorer">
+  <div class="card-title">Vollständige zentrale Ausgabe</div><h3>Pattern Matrix des FFF</h3>
+  <div class="table-scroll"><table class="output-table" id="efaOutputTable"><thead><tr><th>Item</th><th>TC1</th><th>TC2</th><th>TC3</th><th>h2</th><th>u2</th><th>com</th></tr></thead><tbody>
+<tr data-item="item_1"><td>item_1</td><td>.79</td><td>.05</td><td>-.04</td><td>.63</td><td>.37</td><td>1.0</td></tr><tr data-item="item_2"><td>item_2</td><td>.09</td><td>-.03</td><td>.70</td><td>.52</td><td>.48</td><td>1.0</td></tr><tr data-item="item_3"><td>item_3</td><td>.06</td><td>.79</td><td>-.01</td><td>.66</td><td>.34</td><td>1.0</td></tr><tr data-item="item_4"><td>item_4</td><td>.69</td><td>.12</td><td>-.04</td><td>.53</td><td>.47</td><td>1.1</td></tr><tr data-item="item_5"><td>item_5</td><td>-.05</td><td>.79</td><td>-.07</td><td>.58</td><td>.42</td><td>1.0</td></tr><tr data-item="item_6"><td>item_6</td><td>-.01</td><td>-.03</td><td>.75</td><td>.54</td><td>.46</td><td>1.0</td></tr><tr data-item="item_7"><td>item_7</td><td>.69</td><td>-.11</td><td>.04</td><td>.45</td><td>.55</td><td>1.1</td></tr><tr data-item="item_8"><td>item_8</td><td>.60</td><td>-.05</td><td>.40</td><td>.65</td><td>.35</td><td>1.8</td></tr><tr data-item="item_9"><td>item_9</td><td>.05</td><td>.63</td><td>.01</td><td>.62</td><td>.38</td><td>1.5</td></tr><tr data-item="item_10"><td>item_10</td><td>-.01</td><td>.01</td><td>.78</td><td>.60</td><td>.40</td><td>1.0</td></tr><tr data-item="item_11"><td>item_11</td><td>.09</td><td>.75</td><td>-.06</td><td>.60</td><td>.40</td><td>1.0</td></tr><tr data-item="item_12"><td>item_12</td><td>.69</td><td>.09</td><td>-.14</td><td>.49</td><td>.51</td><td>1.1</td></tr><tr data-item="item_13"><td>item_13</td><td>.78</td><td>-.08</td><td>.03</td><td>.60</td><td>.40</td><td>1.0</td></tr><tr data-item="item_14"><td>item_14</td><td>-.06</td><td>.39</td><td>.54</td><td>.51</td><td>.49</td><td>1.8</td></tr><tr data-item="item_15"><td>item_15</td><td>.67</td><td>.11</td><td>-.02</td><td>.50</td><td>.50</td><td>1.1</td></tr>
+  </tbody></table></div>
+  <div class="three-col"><div><h4>SS loadings</h4><p>3.62 · 2.53 · 2.33</p></div><div><h4>Proportion Var</h4><p>.24 · .17 · .16; kumulativ .57</p></div><div><h4>Komponentenkorrelationen</h4><p>TC1–TC2 .33 · TC1–TC3 .30 · TC2–TC3 .22</p></div></div>
+  <details><summary>Weitere ausgegebene Fitinformationen</summary><p>Mean item complexity = 1.2; RMSR = .06; empirisches χ² = 269.78 mit p &lt; 2.1e-27; Fit based upon off diagonal values = .96.</p></details>
+</article>
+<article class="card mechanism" data-source-id="PD04-F39 PD04-F40 PD04-F41" data-slides="39–41" data-source-status="direkt_abgedeckt" data-learning-objective="LZ11–LZ12" data-widget-type="W9_Case_Decision">
+  <div class="card-title">Von der Ausgabe zur Testendform</div><h3>Sortieren, interpretieren, selektieren</h3>
+  <div class="codebox"><code>print.psych(party_efa, cut = .40, sort = TRUE)</code></div>
+  <p><code>sort = TRUE</code> gruppiert Items nach Faktoren; <code>cut = .40</code> blendet kleinere Ladungen aus. Je nach Autor werden .30 oder .40 als Ignoriergrenze verwendet. item_8 bleibt mit TC1 = .60 und TC3 = .40 als Kreuzladung sichtbar.</p>
+  <ul><li>Daumenregel: Ladungen etwa ≥ .50 können als hoch gelten.</li><li>Fürntratt: Die quadrierte Ladung soll mindestens 50 % der Kommunalität ausmachen.</li><li>Faktorbenennung: Gemeinsamkeit der hoch ladenden Items; besonders hohe Items können Markiervariablen heißen.</li><li>Bei unplausibler Interpretation werden alternative Lösungen mit größerem oder kleinerem q geprüft.</li><li>Selektion: hohe positive Zielladung, niedrige Nebenladungen, ungefähr gleiche Itemzahl je Faktor und zusätzliche Itemanalyse-Kriterien wie Heterogenität und gegebenenfalls negative Polung.</li></ul>
+  <p class="source-note">Ladungshöhen hängen unter anderem von n und den Interkorrelationen ab; Schwellen sind daher Daumenregeln, keine mechanischen Naturgesetze.</p>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W8_R_Output_Explorer_W9_Case_Decision</div>
+  
+<div class="output-grid">
+  <div class="widget" data-source-id="PD04-F38 PD04-F39" data-slides="38–39" data-source-status="direkt_abgedeckt" data-learning-objective="LZ11" data-widget-type="W8_R_Output_Explorer">
+    <h3>R-Output Explorer: relevante Zeile lokalisieren</h3>
+    <p class="widget-intro" id="outputPrompt">Markiere das Item mit einer sichtbaren Kreuzladung von .60 und .40.</p>
+    <div class="widget-controls"><label for="outputItem">Item</label><select id="outputItem"><option>item_1</option><option>item_6</option><option>item_8</option><option>item_14</option></select><button class="btn btn-accent" type="button" onclick="checkOutputTask()">Markieren und prüfen</button><button class="btn btn-ghost" type="button" onclick="nextOutputTask()">Nächste Aufgabe</button></div>
+    <div class="feedback" id="outputFeedback" role="status" aria-live="polite"></div>
+  </div>
+  <div class="widget" data-source-id="PD04-F40 PD04-F41" data-slides="40–41" data-source-status="direkt_abgedeckt" data-learning-objective="LZ12" data-widget-type="W9_Case_Decision">
+    <h3>Diagnostic Case Decision: item_8</h3>
+    <p class="widget-intro">Ziel-Faktor TC1: .60; Nebenfaktor TC3: .40; h2 = .65. Welche Entscheidung passt am besten?</p>
+    <div class="choice-grid"><button class="choice-btn" type="button" onclick="itemDecision('keep')">Eindeutig behalten</button><button class="choice-btn" type="button" onclick="itemDecision('review')">Als Kreuzladung prüfen</button><button class="choice-btn" type="button" onclick="itemDecision('drop')">Allein wegen h2 verwerfen</button><button class="choice-btn" type="button" onclick="itemDecision('tc3')">Automatisch TC3 zuordnen</button></div>
+    <div class="feedback" id="itemFeedback" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Faktorwerte ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7"
+  data-source-id="PD04-F42 PD04-F43" data-slides="42–43" data-source-status="integriert_abgedeckt"
+  data-learning-objective="LZ12" data-widget-type="W1_Concept_Duel_W9_Case_Decision" data-cognitive-task="Personenscores klassifizieren und passende Auswertungswege auswählen">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Faktorwerte, Skalenwerte und höherer Ordnung</div>
+    <div class="sec-lz">Faktorwerte von Summen-/Mittelwertscores unterscheiden und den Übergang zur Faktorenanalyse höherer Ordnung erklären.</div>
+    <div class="source-meta">Folien 42–43 · Quellen PD04-F42 PD04-F43 · Widget W1_Concept_Duel_W9_Case_Decision</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind Faktorwerte und Summenwerte einfach zwei Bezeichnungen für denselben Personenscore?</p>
+    <button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq7" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7" aria-hidden="true">Nein. Faktorwerte können faktorbezogene Gewichte verwenden; Summen- oder Mittelwertscores aggregieren die einem Faktor zugeordneten Items direkt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  
+<article class="card mechanism" data-source-id="PD04-F42" data-slides="42" data-source-status="visuell_rekonstruiert" data-learning-objective="LZ12" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">Letzter Übergang</div><h3>Von L* zu F: Faktorwerte bestimmen</h3>
+  <div class="flow"><div class="flow-node"><strong>L*</strong>rotierte Ladungsmatrix<small>m × q</small></div><div class="flow-arrow">→</div><div class="flow-node focus"><strong>F</strong>Faktorwerte<small>n × q</small></div></div>
+</article>
+<div class="two-col">
+  <article class="card definition" data-source-id="PD04-F43" data-slides="43" data-source-status="direkt_abgedeckt" data-learning-objective="LZ12" data-widget-type="W1_Concept_Duel">
+    <div class="card-title">Faktorwerte</div><h3>Gewichtete Ausprägungen der Personen</h3>
+    <p>Faktorwerte sind personenspezifische Ausprägungen auf den Faktoren. Sie können als gewichtete Personenscores verstanden und beispielsweise zur Validierung mit Außenkriterien korreliert werden.</p>
+  </article>
+  <article class="card example" data-source-id="PD04-F43" data-slides="43" data-source-status="direkt_abgedeckt" data-learning-objective="LZ12" data-widget-type="W1_Concept_Duel">
+    <div class="card-title">Praktische Alternative</div><h3>Summen- oder Mittelwertscores</h3>
+    <p>Nach einer Faktorenanalyse werden häufig nicht die Faktorwerte, sondern direkte Summen oder Mittelwerte über die einem Faktor zugeordneten Items als Personenscores berechnet.</p>
+  </article>
+</div>
+<article class="card caution" data-source-id="PD04-F43" data-slides="43" data-source-status="direkt_abgedeckt" data-learning-objective="LZ12" data-widget-type="W3_Arrow_Model_Mapper">
+  <div class="card-title">Höhere Ordnung</div><h3>Wenn Faktoren selbst miteinander korrelieren</h3>
+  <p>Bei obliquer Rotation können die Interkorrelationen der Faktorwerte erneut einer Faktorenanalyse unterzogen werden. Damit wird eine mögliche übergeordnete Struktur der Faktoren untersucht.</p>
+</article>
+<article class="card mechanism" data-source-id="PD04-F01 PD04-F02 PD04-F08 PD04-F16 PD04-F18 PD04-F29 PD04-F42" data-slides="1–2, 8, 16, 18, 29, 42" data-source-status="integriert_abgedeckt" data-learning-objective="Gesamttransfer" data-widget-type="W2_Process_Builder">
+  <div class="card-title">Gesamtkette</div><h3>Vom Rohdatensatz zur Testskala</h3>
+  <p><strong>Rohform → Analysestichprobe → Z → R → R* → L → L* → F → Interpretation → Itemselektion → Personenscores.</strong></p>
+  <p>Jeder Übergang beantwortet eine andere Frage: Interkorrelationen, initiale Kommunalitäten, Extraktion, Rotation und Faktorwerte.</p>
+</article>
+
+
+  <div class="phase-label">Phase 3 — Anwenden · W1_Concept_Duel_W9_Case_Decision</div>
+  
+<div class="widget" data-source-id="PD04-F43" data-slides="43" data-source-status="direkt_abgedeckt" data-learning-objective="LZ12" data-widget-type="W9_Case_Decision">
+  <h3>Score Decision: Welche Auswertung ist gemeint?</h3>
+  <div class="score-case" id="scoreCaseText"></div>
+  <div class="choice-grid"><button class="choice-btn" type="button" onclick="scoreChoice('factor')">Faktorwert</button><button class="choice-btn" type="button" onclick="scoreChoice('sum')">Summen-/Mittelwertscore</button><button class="choice-btn" type="button" onclick="scoreChoice('higher')">Faktorenanalyse höherer Ordnung</button></div>
+  <div class="feedback" id="scoreFeedback" role="status" aria-live="polite"></div>
+  <div class="widget-controls"><button class="btn btn-ghost" type="button" onclick="nextScoreCase()">Nächster Fall</button></div>
+</div>
+<div class="widget" data-source-id="PD04-F08 PD04-F16 PD04-F18 PD04-F29 PD04-F42" data-slides="8, 16, 18, 29, 42" data-source-status="integriert_abgedeckt" data-learning-objective="Gesamttransfer" data-widget-type="W2_Process_Builder">
+  <h3>Abschluss-Mapper: Benenne den Übergang</h3>
+  <div class="widget-controls"><label for="transitionSelect">Übergang</label><select id="transitionSelect"><option value="ZR">Z → R</option><option value="RR">R → R*</option><option value="RL">R* → L</option><option value="LL">L → L*</option><option value="LF">L* → F</option></select><label for="transitionMeaning">Bedeutung</label><select id="transitionMeaning"><option value="inter">Interkorrelationen</option><option value="comm">Kommunalitätenproblem</option><option value="extract">Extraktionsproblem</option><option value="rotate">Rotationsproblem</option><option value="scores">Faktorwerte bestimmen</option></select><button class="btn btn-accent" type="button" onclick="checkTransition()">Prüfen</button></div><div class="feedback" id="transitionFeedback" role="status" aria-live="polite"></div>
+</div>
+
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button type="button" class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button type="button" class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Zentrale Verwechslungs-Duelle</div>
+    <div class="sec-lz">Begriffe über ihr entscheidendes Trennkriterium statt über bloße Schlagwörter unterscheiden.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Initiale Kommunalität</h4>
+      <p>vor der Extraktion festgelegt oder geschätzt</p>
+      <p>in der PCA auf 1, in der PFA unter 1</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Finale Kommunalität</h4>
+      <p>nach der Extraktion aus Ladungen bestimmt</p>
+      <p>Summe der quadrierten Ladungen eines Items</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> In der PCA sei jede finale Kommunalität automatisch 1.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kommunalität</h4>
+      <p>Bezug: eine Variable beziehungsweise Itemzeile</p>
+      <p>Summation über Faktoren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Eigenwert</h4>
+      <p>Bezug: ein Faktor beziehungsweise eine Spalte</p>
+      <p>Summation über Variablen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kommunalität und Eigenwert seien nur zwei Namen für dieselbe Summenrichtung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Orthogonale Rotation</h4>
+      <p>Faktorachsen im 90-Grad-Winkel</p>
+      <p>Faktoren unkorreliert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Oblique Rotation</h4>
+      <p>schiefwinklige Faktorachsen möglich</p>
+      <p>Faktoren dürfen korrelieren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Oblique Rotation bedeute lediglich eine andere grafische Darstellung derselben unkorrelierten Faktoren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Mustermatrix</h4>
+      <p>bereinigte Regressionsgewichte</p>
+      <p>standardmäßig bei obliquer Rotation in R</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Strukturmatrix</h4>
+      <p>einfache Faktor-Variablen-Korrelationen</p>
+      <p>kann bei obliquer Rotation abweichen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Muster- und Strukturmatrix seien auch bei korrelierten Faktoren identisch.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Faktorwerte</h4>
+      <p>gewichtete personenspezifische Ausprägungen</p>
+      <p>Matrix F mit n Personen und q Faktoren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Summen-/Mittelwertscores</h4>
+      <p>direkte Aggregation zugeordneter Items</p>
+      <p>praktisch häufig nach der Faktorenanalyse verwendet</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Nach einer EFA würden als Personenscores immer ausschließlich Faktorwerte verwendet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bartlett-Test</h4>
+      <p>Abweichung von der Einheitsmatrix</p>
+      <p>stark stichprobengrößenabhängig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>KMO/MSA</h4>
+      <p>Vergleich einfacher und partieller Korrelationen</p>
+      <p>Wertebereich 0 bis 1 mit Eignungskategorien</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein extrem kleiner Bartlett-p-Wert ersetze die KMO/MSA-Prüfung vollständig.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" role="tabpanel" aria-hidden="true" aria-labelledby="nb9" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl04</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl04';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd04-s0-q1",
+      "q": "In welcher Phase werden Itemanalyse, Itemselektion und eine erste Gütekriterienprüfung durchgeführt?",
+      "opts": [
+        "Bei der Vorgabe der Rohform an die Optimierungsstichprobe",
+        "Bei der Festlegung und Definition des zu erfassenden Merkmals",
+        "Bei der Vorgabe der Testendform an die spätere Normstichprobe",
+        "Bei der abschließenden Veröffentlichung der Testdokumentation"
+      ],
+      "c": 0,
+      "e": "Diese Arbeitsschritte gehören zur Vorgabe der Testrohform an eine Analyse- beziehungsweise Optimierungsstichprobe. Die Normstichprobe folgt erst mit der Testendform.",
+      "oe": [
+        "Richtig: Die Rohform wird an einer Analyse- beziehungsweise Optimierungsstichprobe geprüft.",
+        "Hier wird das Merkmal inhaltlich abgegrenzt; die empirische Itemanalyse ist noch nicht an der Reihe.",
+        "Die Normstichprobe dient der Normbestimmung und einer erneuten Gütekriterienprüfung der Endform.",
+        "Eine Veröffentlichung ist keine der fünf dargestellten Konstruktionsstufen."
+      ],
+      "mt": [
+        null,
+        "prozessstufe_verwechselt",
+        "optimierungs_und_normstichprobe_verwechselt",
+        "nicht_quellenbelegt"
+      ],
+      "source_ids": [
+        "PD04-F02"
+      ],
+      "learning_objective_id": "LZ01"
+    },
+    {
+      "id": "pd04-s0-q2",
+      "q": "Welche Kombination beschreibt die Anforderungen an eine Analysestichprobe am treffendsten?",
+      "opts": [
+        "Zielgruppenfern, sehr homogen und unter besonders günstigen Bedingungen",
+        "Möglichst repräsentativ, ausreichend groß und unter späteren Einsatzbedingungen",
+        "Nur zufällig gezogen, exakt 400 Personen und unter streng standardisierten Bedingungen",
+        "Nur aus Expertinnen und Experten bestehend und ohne vorheriges Pretesting"
+      ],
+      "c": 1,
+      "e": "Die Quelle fordert einen möglichst guten Zielgruppenbezug, eine ausreichende Größe und Bedingungen, die dem späteren Einsatz entsprechen. Die genannten Zahlen sind Beispiele, keine universellen Schwellen.",
+      "oe": [
+        "Diese Kombination widerspricht dem Zielgruppenbezug und den Einsatzbedingungen.",
+        "Richtig: Repräsentativität, ausreichender Umfang und Einsatznähe werden gemeinsam gefordert.",
+        "Die Folie nennt keine universelle Pflichtgröße von 400 und keine absolute Zufallsstichprobe.",
+        "Expertinnen und Experten können vorab beteiligt sein, ersetzen aber nicht die Analysestichprobe."
+      ],
+      "mt": [
+        "zielgruppenbezug_verfehlt",
+        null,
+        "beispielwert_verabsolutiert",
+        "expertenpruefung_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F03"
+      ],
+      "learning_objective_id": "LZ01"
+    },
+    {
+      "id": "pd04-s0-q3",
+      "q": "Warum muss die Dimensionalität vor der endgültigen Itemselektion geklärt werden?",
+      "opts": [
+        "Weil sie direkt die erforderliche Normstichprobengröße für den Test exakt bestimmt",
+        "Weil sie alle weiteren Prüfungen einfacher Itemkennwerte überflüssig macht",
+        "Weil sie festlegt, für wie viele Dimensionen getrennt Items ausgewählt werden",
+        "Weil sie unabhängig von den Daten bereits durch die Testlänge feststeht"
+      ],
+      "c": 2,
+      "e": "Die empirisch gestützte Dimensionalität bestimmt, für wie viele Dimensionen jeweils eigene Items ausgewählt werden müssen. Andere Itemanalyse-Kriterien bleiben trotzdem relevant.",
+      "oe": [
+        "Die Faktorstruktur liefert keine exakte Normstichprobengröße.",
+        "Faktorenanalyse ersetzt nicht sämtliche anderen Kriterien der Itemanalyse.",
+        "Richtig: Die Itemselektion ist dimensionsbezogen und setzt daher die Strukturentscheidung voraus.",
+        "Die Testlänge legt die Dimensionalität nicht automatisch fest."
+      ],
+      "mt": [
+        "dimensionalitaet_mit_stichprobengroesse_verwechselt",
+        "verfahren_als_ersatz_missverstanden",
+        null,
+        "struktur_aus_testlaenge_abgeleitet"
+      ],
+      "source_ids": [
+        "PD04-F04",
+        "PD04-F05"
+      ],
+      "learning_objective_id": "LZ01"
+    }
+  ],
+  "1": [
+    {
+      "id": "pd04-s1-q1",
+      "q": "Welches Korrelationsmuster spricht am stärksten für zwei getrennte Faktoren?",
+      "opts": [
+        "Alle vier Variablen korrelieren untereinander ungefähr gleich stark positiv",
+        "Nur A korreliert hoch mit B, C und D zeigen keinerlei Zusammenhang",
+        "Die Kreuzkorrelationen sind höher als die Korrelationen innerhalb der Paare",
+        "A–B und C–D korrelieren hoch, die Kreuzkorrelationen bleiben gering"
+      ],
+      "c": 3,
+      "e": "Faktoren bündeln Variablen, die innerhalb einer Gruppe hoch und mit anderen Variablen nur gering korrelieren. Genau dieses Blockmuster zeigen A/B und C/D.",
+      "oe": [
+        "Ein annähernd einheitliches Muster spricht nicht für zwei klar getrennte Gruppen.",
+        "Damit wäre nur ein Paar klar gruppierbar; für C und D fehlte die zweite Gruppe.",
+        "Hohe Kreuzkorrelationen würden die angenommene Trennung der Gruppen unterlaufen.",
+        "Richtig: Zwei dichte Korrelationsblöcke mit schwachen Kreuzbezügen sprechen für zwei Faktoren."
+      ],
+      "mt": [
+        "ein_faktor_muster",
+        "unvollstaendige_gruppierung",
+        "korrelationsrichtung_vertauscht",
+        null
+      ],
+      "source_ids": [
+        "PD04-F06"
+      ],
+      "learning_objective_id": "LZ02"
+    },
+    {
+      "id": "pd04-s1-q2",
+      "q": "Ein invertiertes Item hat auf einer Skala von 0 bis 10 den Rohwert 2. Welcher Wert entsteht nach der Umpolung?",
+      "opts": [
+        "Nach der Umpolung beträgt der Wert acht Punkte auf derselben Antwortskala",
+        "Nach der Umpolung beträgt der Wert zwei Punkte auf derselben Antwortskala",
+        "Nach der Umpolung beträgt der Wert fünf Punkte auf derselben Antwortskala",
+        "Nach der Umpolung beträgt der Wert zehn Punkte auf derselben Antwortskala"
+      ],
+      "c": 0,
+      "e": "Mit x′ = (10 + 0) − 2 ergibt sich 8. Die Umpolung spiegelt den Wert an der Skalenmitte, ohne den Wertebereich zu verändern.",
+      "oe": [
+        "Richtig: 10 minus 2 ergibt den umgepolten Wert 8.",
+        "Das wäre keine Umpolung, sondern das unveränderte Beibehalten des Rohwerts.",
+        "Die Skalenmitte ist nicht automatisch das Ergebnis der Umpolung.",
+        "Der obere Skalenendpunkt entsteht nur aus dem ursprünglichen Wert 0."
+      ],
+      "mt": [
+        null,
+        "umpolung_ausgelassen",
+        "skalenmitte_als_ergebnis",
+        "obergrenze_als_standardantwort"
+      ],
+      "source_ids": [
+        "PD04-F09",
+        "PD04-F10"
+      ],
+      "learning_objective_id": "LZ04"
+    },
+    {
+      "id": "pd04-s1-q3",
+      "q": "Welche Zuordnung der Matrizen im EFA-Ablauf ist korrekt?",
+      "opts": [
+        "R ist die standardisierte n×m-Datenmatrix mit Personen in den Zeilen",
+        "R* ist die m×m-Matrix mit initialen Kommunalitäten auf der Diagonale",
+        "L* ist die n×q-Matrix der geschätzten Faktorwerte für alle Personen",
+        "F ist die m×q-Matrix der unrotierten Ladungen der Variablen"
+      ],
+      "c": 1,
+      "e": "R* ist eine m×m-Korrelationsmatrix, in deren Diagonale initiale Kommunalitäten statt Einsen stehen. Z ist n×m, L/L* sind m×q und F ist n×q.",
+      "oe": [
+        "Das beschreibt Z, nicht R.",
+        "Richtig: R* unterscheidet sich von R durch die initialen Kommunalitäten auf der Diagonale.",
+        "Das beschreibt F, nicht L*.",
+        "Das beschreibt L; F enthält Faktorwerte der Personen."
+      ],
+      "mt": [
+        "Z_und_R_verwechselt",
+        null,
+        "Lstern_und_F_verwechselt",
+        "L_und_F_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F08",
+        "PD04-F11"
+      ],
+      "learning_objective_id": "LZ03"
+    }
+  ],
+  "2": [
+    {
+      "id": "pd04-s2-q1",
+      "q": "Was prüft der Bartlett-Test im Kontext der Faktorenanalyse?",
+      "opts": [
+        "Ob jede einzelne Itemkorrelation einen Wert größer als genau .50 erreicht",
+        "Ob mindestens drei Faktoren jeweils einen Eigenwert von mehr als 1 aufweisen",
+        "Ob die Korrelationsmatrix signifikant von der Einheitsmatrix abweicht",
+        "Ob alle itembezogenen MSA-Werte mindestens .80 erreichen und damit gut geeignet sind"
+      ],
+      "c": 2,
+      "e": "Der Bartlett-Test prüft die Abweichung der beobachteten Korrelationsmatrix von der Einheitsmatrix. Seine Signifikanz ist jedoch stark von der Stichprobengröße abhängig.",
+      "oe": [
+        "Der Test prüft keine feste Mindesthöhe jeder Einzelkorrelation.",
+        "Die Faktorzahl wird nicht durch den Bartlett-Test festgelegt.",
+        "Richtig: Nullhypothese und Prüfgegenstand beziehen sich auf die Einheitsmatrix.",
+        "MSA-Werte gehören zum KMO-Kriterium, nicht zum Bartlett-Test."
+      ],
+      "mt": [
+        "einzelkorrelation_als_bartlett",
+        "bartlett_mit_kaiser_verwechselt",
+        null,
+        "bartlett_mit_kmo_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F12"
+      ],
+      "learning_objective_id": "LZ05"
+    },
+    {
+      "id": "pd04-s2-q2",
+      "q": "Wie ist ein Overall MSA von .88 nach den angegebenen Kategorien zu beurteilen?",
+      "opts": [
+        "Als erstaunlich, weil jeder Wert oberhalb von .80 so bezeichnet wird",
+        "Als ziemlich gut, weil .88 zwischen .70 und unter .80 liegt",
+        "Als untragbar, weil nur ein Wert von exakt 1 akzeptabel wäre",
+        "Als verdienstvoll, weil .88 zwischen .80 und unter .90 liegt"
+      ],
+      "c": 3,
+      "e": "Ein MSA von .88 liegt in der Kategorie ‚verdienstvoll‘. ‚Erstaunlich‘ beginnt bei .90; Werte unter .50 werden als untragbar bezeichnet.",
+      "oe": [
+        "Die Kategorie ‚erstaunlich‘ beginnt erst ab .90.",
+        "Die Kategorie ‚ziemlich gut‘ gilt ab .70 bis unter .80.",
+        "MSA-Werte werden auf einer Skala von 0 bis 1 abgestuft beurteilt; 1 ist keine Mindestanforderung.",
+        "Richtig: .88 erfüllt die Grenze .80, aber noch nicht .90."
+      ],
+      "mt": [
+        "grenzwert_zu_niedrig_angesetzt",
+        "intervall_falsch_zugeordnet",
+        "perfektionskriterium",
+        null
+      ],
+      "source_ids": [
+        "PD04-F14",
+        "PD04-F15"
+      ],
+      "learning_objective_id": "LZ05"
+    },
+    {
+      "id": "pd04-s2-q3",
+      "q": "Welche Aussage zur Anti-Image-Korrelationsmatrix ist korrekt?",
+      "opts": [
+        "Ihre Nicht-Diagonalelemente enthalten partielle Korrelationen und sollten nahe bei 0 liegen",
+        "Ihre Diagonale enthält die Eigenwerte der extrahierten Faktoren in absteigender Reihenfolge",
+        "Ihr Image-Anteil bezeichnet nur die unerklärte itemspezifische Restvarianz",
+        "Mehr als 25 Prozent großer Nicht-Diagonalelemente gilt als besonders günstiges Muster"
+      ],
+      "c": 0,
+      "e": "Die Nicht-Diagonalelemente der AIC sind partielle Korrelationen nach Kontrolle der übrigen Variablen und sollten möglichst nahe null liegen. Mehr als 25 % mit |r| > .09 ist ungünstig.",
+      "oe": [
+        "Richtig: Kleine partielle Korrelationen sprechen für eine gemeinsame Faktorenstruktur.",
+        "Eigenwerte stehen nicht auf der Diagonale der Anti-Image-Korrelationsmatrix.",
+        "Das Anti-Image, nicht das Image, bezeichnet den unerklärten Anteil.",
+        "Die 25-Prozent-Regel formuliert eine Obergrenze, keine Zielüberschreitung."
+      ],
+      "mt": [
+        null,
+        "aic_mit_ladungsmatrix_verwechselt",
+        "image_antiimage_vertauscht",
+        "schwellenrichtung_vertauscht"
+      ],
+      "source_ids": [
+        "PD04-F13"
+      ],
+      "learning_objective_id": "LZ05"
+    }
+  ],
+  "3": [
+    {
+      "id": "pd04-s3-q1",
+      "q": "Welche Aussage beschreibt die PCA im Kommunalitätenproblem?",
+      "opts": [
+        "Sie analysiert nur gemeinsame Varianz und verwendet Startwerte unter 1",
+        "Sie analysiert Gesamtvarianz und setzt initiale Kommunalitäten auf 1",
+        "Sie ersetzt die Diagonale von R* generell durch finale Eigenwerte",
+        "Sie schließt itemspezifische Varianz erst nach der Rotation aus"
+      ],
+      "c": 1,
+      "e": "In der PCA geht die gesamte Itemvarianz in die Analyse ein; deshalb werden die initialen Kommunalitäten auf 1 gesetzt. Die PFA verwendet Schätzwerte unter 1.",
+      "oe": [
+        "Das beschreibt die PFA.",
+        "Richtig: Gesamtvarianz und initiale Kommunalität 1 kennzeichnen die PCA.",
+        "Eigenwerte stehen nicht als Diagonaleinträge in R*.",
+        "Die Annahme wird vor der Extraktion festgelegt und nicht erst durch Rotation erzeugt."
+      ],
+      "mt": [
+        "PCA_PFA_verwechselt",
+        null,
+        "kommunalitaet_eigenwert_verwechselt",
+        "zeitpunkt_des_problems_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F17"
+      ],
+      "learning_objective_id": "LZ06"
+    },
+    {
+      "id": "pd04-s3-q2",
+      "q": "Was bedeutet Uniqueness in der Darstellung zur PFA?",
+      "opts": [
+        "Der allein durch die gemeinsamen Faktoren erklärte Varianzanteil eines Items",
+        "Die Korrelation eines Items mit seinem am höchsten ladenden Faktor",
+        "Der itemspezifische Varianzanteil, der nicht als gemeinsame Varianz eingeht",
+        "Die Summe der Eigenwerte aller extrahierten Hauptkomponenten"
+      ],
+      "c": 2,
+      "e": "Uniqueness bezeichnet itemspezifische Einflüsse beziehungsweise den nicht durch gemeinsame Faktoren erklärten Anteil. Deshalb liegen initiale PFA-Kommunalitäten unter 1.",
+      "oe": [
+        "Das ist die gemeinsame beziehungsweise kommunale Varianz, nicht die Uniqueness.",
+        "Eine einzelne Faktor-Item-Korrelation ist eine Ladung beziehungsweise Strukturkorrelation.",
+        "Richtig: Uniqueness ist der itemspezifische, nicht gemeinsam erklärte Anteil.",
+        "Die Eigenwertsumme beschreibt Gesamtvarianz, nicht die Uniqueness eines Items."
+      ],
+      "mt": [
+        "kommunalitaet_als_uniqueness",
+        "ladung_als_uniqueness",
+        null,
+        "eigenwertsumme_als_uniqueness"
+      ],
+      "source_ids": [
+        "PD04-F17"
+      ],
+      "learning_objective_id": "LZ06"
+    },
+    {
+      "id": "pd04-s3-q3",
+      "q": "An welcher Stelle des EFA-Ablaufs liegt das Kommunalitätenproblem?",
+      "opts": [
+        "Beim Übergang von Z zur Korrelationsmatrix R",
+        "Beim Übergang von der Ladungsmatrix L zur Rotation L*",
+        "Beim Übergang von L* zu den Faktorwerten F",
+        "Beim Übergang von R zur modifizierten Matrix R*"
+      ],
+      "c": 3,
+      "e": "Das Kommunalitätenproblem betrifft die Diagonale der Korrelationsmatrix: Aus R mit Einsen wird R* mit initialen Kommunalitäten. Es liegt daher beim Übergang R → R*.",
+      "oe": [
+        "Z → R betrifft die Berechnung der Interkorrelationen.",
+        "L → L* ist das Rotationsproblem.",
+        "L* → F betrifft die Bestimmung der Faktorwerte.",
+        "Richtig: Hier werden initiale Kommunalitäten in die Diagonale eingesetzt."
+      ],
+      "mt": [
+        "interkorrelationsproblem_verwechselt",
+        "rotationsproblem_verwechselt",
+        "faktorwertproblem_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "PD04-F16"
+      ],
+      "learning_objective_id": "LZ06"
+    }
+  ],
+  "4": [
+    {
+      "id": "pd04-s4-q1",
+      "q": "Wie wird die finale Kommunalität eines Items aus einer Ladungsmatrix berechnet?",
+      "opts": [
+        "Quadrierte Ladungen des Items über alle extrahierten Faktoren summieren",
+        "Quadrierte Ladungen eines Faktors über alle Items der Tabelle summieren",
+        "Unquadrierte Ladungen des Items über alle Faktoren direkt mitteln",
+        "Eigenwert des stärksten Faktors durch die Itemzahl der Skala teilen"
+      ],
+      "c": 0,
+      "e": "Für ein Item j gilt h²j = Σl a²jl: Man bleibt in der Zeile des Items und summiert die quadrierten Ladungen über die extrahierten Faktoren.",
+      "oe": [
+        "Richtig: Die Summenrichtung verläuft für die Kommunalität über die Faktoren einer Itemzeile.",
+        "Diese Summenrichtung ergibt den Eigenwert eines Faktors.",
+        "Ladungen werden quadriert und nicht einfach gemittelt.",
+        "Die proportionale Varianz nutzt λ/m; sie ist keine Itemkommunalität."
+      ],
+      "mt": [
+        null,
+        "kommunalitaet_eigenwert_summenrichtung",
+        "quadrierung_vergessen",
+        "varianzanteil_als_kommunalitaet"
+      ],
+      "source_ids": [
+        "PD04-F21"
+      ],
+      "learning_objective_id": "LZ07"
+    },
+    {
+      "id": "pd04-s4-q2",
+      "q": "Welche formale Regel gehört zum Kaiser-Guttman-Kriterium?",
+      "opts": [
+        "Faktoren bis unmittelbar vor dem subjektiv erkannten Scree-Knick behalten",
+        "Faktoren mit einem Eigenwert größer als 1 als bedeutsam behandeln",
+        "Faktoren mit empirischen Eigenwerten oberhalb simulierter Referenzen behalten",
+        "Faktoren nur dann behalten, wenn alle Items mindestens .50 laden"
+      ],
+      "c": 1,
+      "e": "Das Kaiser-Guttman-Kriterium behält Faktoren mit Eigenwerten über 1. Es ist ein Minimalkriterium und führt häufig zur Extraktion zu vieler Faktoren.",
+      "oe": [
+        "Das beschreibt den Scree-Test.",
+        "Richtig: Der Schwellenwert des Kaiser-Guttman-Kriteriums ist λ > 1.",
+        "Das beschreibt die Parallelanalyse.",
+        "Eine Mindestladung aller Items ist kein Kriterium zur Bestimmung der Faktorzahl."
+      ],
+      "mt": [
+        "kaiser_mit_scree_verwechselt",
+        null,
+        "kaiser_mit_parallel_verwechselt",
+        "itemselektion_als_faktorzahl"
+      ],
+      "source_ids": [
+        "PD04-F24",
+        "PD04-F25"
+      ],
+      "learning_objective_id": "LZ08"
+    },
+    {
+      "id": "pd04-s4-q3",
+      "q": "Welche Schlussfolgerung ist für die Faktorzahl im FFF-Beispiel quellengetreu?",
+      "opts": [
+        "Nur der Scree-Test spricht für drei Faktoren, die übrigen Kriterien widersprechen",
+        "Die Parallelanalyse verlangt vier Faktoren, weil sie durchweg konservativer entscheidet",
+        "Kaiser-Guttman, Scree-Test und Parallelanalyse sprechen jeweils für drei Faktoren",
+        "Nur die erwartete Testlänge legt die Zahl der Faktoren der Lösung fest"
+      ],
+      "c": 2,
+      "e": "Im FFF-Beispiel sprechen Kaiser-Guttman, Scree-Test und Parallelanalyse für drei Faktoren. Die abschließende Entscheidung soll dennoch inhaltliche und formale Überlegungen verbinden.",
+      "oe": [
+        "Die Folien berichten Übereinstimmung aller drei dargestellten Kriterien.",
+        "Die Parallelanalyse spricht hier ebenfalls für drei und folgt keiner solchen starren Regel.",
+        "Richtig: Alle drei Verfahren führen im Beispiel zur Drei-Faktoren-Lösung.",
+        "Die Testlänge allein bestimmt die Faktorzahl nicht."
+      ],
+      "mt": [
+        "kriterienergebnis_unvollstaendig",
+        "parallel_starr_missverstanden",
+        null,
+        "faktorzahl_aus_testlaenge"
+      ],
+      "source_ids": [
+        "PD04-F25",
+        "PD04-F27",
+        "PD04-F28"
+      ],
+      "learning_objective_id": "LZ08"
+    }
+  ],
+  "5": [
+    {
+      "id": "pd04-s5-q1",
+      "q": "Welche Größe bleibt bei einer zulässigen Rotation unverändert?",
+      "opts": [
+        "Der Eigenwert jedes einzelnen Faktors in exakt gleicher Höhe",
+        "Die Korrelation zwischen obliquen Faktoren bleibt gleich null",
+        "Jede einzelne Ladung eines Items auf jedem Faktor",
+        "Die insgesamt durch die Faktorlösung erklärte Varianz"
+      ],
+      "c": 3,
+      "e": "Rotation verteilt die erklärte Varianz anders auf die Faktoren, verändert aber nicht die insgesamt erklärte Varianz und nicht die finalen Kommunalitäten. Einzelne Eigenwerte und Ladungen können sich ändern.",
+      "oe": [
+        "Einzelne Eigenwerte verändern sich durch die Umverteilung.",
+        "Oblique Faktoren dürfen korrelieren.",
+        "Die Ladungsmatrix wird gerade durch die Rotation verändert.",
+        "Richtig: Die Gesamtvarianzaufklärung der Lösung bleibt konstant."
+      ],
+      "mt": [
+        "eigenwerte_als_invariant",
+        "oblique_als_orthogonal",
+        "ladung_als_invariant",
+        null
+      ],
+      "source_ids": [
+        "PD04-F31"
+      ],
+      "learning_objective_id": "LZ09"
+    },
+    {
+      "id": "pd04-s5-q2",
+      "q": "Was kennzeichnet eine oblique Rotation?",
+      "opts": [
+        "Die Faktorachsen dürfen schiefwinklig sein und die Faktoren korrelieren",
+        "Die Faktorachsen bleiben rechtwinklig und die Faktoren unkorreliert",
+        "Muster- und Strukturmatrix sind unabhängig von den Daten identisch",
+        "Jede Ladung entspricht weiterhin genau der Faktor-Variablen-Korrelation"
+      ],
+      "c": 0,
+      "e": "Bei obliquer Rotation wird die Orthogonalitätsbedingung aufgegeben; Faktoren dürfen korrelieren. Deshalb können Muster- und Strukturkoeffizienten voneinander abweichen.",
+      "oe": [
+        "Richtig: Schiefwinklige Achsen erlauben korrelierte Faktoren.",
+        "Das kennzeichnet eine orthogonale Rotation.",
+        "Identität gilt bei orthogonaler, nicht generell bei obliquer Rotation.",
+        "Bei obliquer Rotation ist die Ladung der Mustermatrix nicht zwingend die einfache Korrelation."
+      ],
+      "mt": [
+        null,
+        "oblique_orthogonal_verwechselt",
+        "muster_struktur_identitaet_verallgemeinert",
+        "ladung_korrelation_verallgemeinert"
+      ],
+      "source_ids": [
+        "PD04-F35",
+        "PD04-F36"
+      ],
+      "learning_objective_id": "LZ10"
+    },
+    {
+      "id": "pd04-s5-q3",
+      "q": "Welche Matrix enthält bei obliquer Rotation die Korrelationen der Variablen mit den Faktoren?",
+      "opts": [
+        "Die Mustermatrix mit bereinigten Regressionsgewichten",
+        "Die Strukturmatrix mit Faktor-Variablen-Korrelationen",
+        "Die Anti-Image-Matrix mit partiellen Restkorrelationen",
+        "Die Faktorwertematrix mit Personenausprägungen"
+      ],
+      "c": 1,
+      "e": "Die Strukturmatrix enthält die Korrelationen zwischen Variablen und Faktoren. Die Mustermatrix enthält um die übrigen Faktoren bereinigte Regressionsgewichte.",
+      "oe": [
+        "Das beschreibt die Mustermatrix, nicht die Strukturmatrix.",
+        "Richtig: Strukturkoeffizienten sind die Faktor-Variablen-Korrelationen.",
+        "Die Anti-Image-Matrix gehört zur Eignungsprüfung der Korrelationsmatrix.",
+        "Die Faktorwertematrix enthält Werte für Personen, keine Variablen-Faktor-Korrelationen."
+      ],
+      "mt": [
+        "muster_und_struktur_verwechselt",
+        null,
+        "struktur_und_antiimage_verwechselt",
+        "struktur_und_faktorwerte_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F36"
+      ],
+      "learning_objective_id": "LZ10"
+    }
+  ],
+  "6": [
+    {
+      "id": "pd04-s6-q1",
+      "q": "Was bewirkt print.psych(party_efa, cut = .40, sort = TRUE) in der dargestellten Anwendung?",
+      "opts": [
+        "Es extrahiert direkt vier Faktoren und rotiert sie orthogonal",
+        "Es berechnet den Bartlett-Test bei einer Stichprobe mit 40 Personen",
+        "Es sortiert Items nach Faktoren und blendet Ladungen unter .40 aus",
+        "Es ersetzt alle Kommunalitäten unter .40 durch den Wert 1"
+      ],
+      "c": 2,
+      "e": "sort = TRUE ordnet die Items nach ihrem Ladungsmuster; cut = .40 unterdrückt in der Anzeige Ladungen unter .40. Die zugrunde liegende Analyse wird dadurch nicht neu geschätzt.",
+      "oe": [
+        "Faktorzahl und Rotation werden im principal()-Aufruf festgelegt.",
+        "Der Bartlett-Test wird mit cortest.bartlett() berechnet.",
+        "Richtig: Die Argumente steuern Sortierung und sichtbare Ausblendeschwelle.",
+        "Kommunalitäten werden weder ersetzt noch durch print.psych() verändert."
+      ],
+      "mt": [
+        "druckfunktion_als_extraktion",
+        "print_mit_bartlett_verwechselt",
+        null,
+        "anzeige_als_datenveraenderung"
+      ],
+      "source_ids": [
+        "PD04-F39"
+      ],
+      "learning_objective_id": "LZ11"
+    },
+    {
+      "id": "pd04-s6-q2",
+      "q": "Woran erkennt man im dargestellten Output eine Kreuzladung von item_8?",
+      "opts": [
+        "item_8 besitzt eine Ladung von .60 auf TC1 und keine weitere sichtbare Ladung",
+        "item_8 weist eine Kommunalität von .40 und eine Uniqueness von .60 auf",
+        "item_8 ist das einzige Item mit einer negativen Ladung auf TC2",
+        "item_8 lädt mit 0.60 auf TC1 und zusätzlich mit 0.40 auf TC3"
+      ],
+      "c": 3,
+      "e": "item_8 hat eine deutliche Ladung von .60 auf TC1 und zusätzlich .40 auf TC3. Damit ist die Zuordnung weniger eindeutig als bei Items mit nur einer hohen Ladung.",
+      "oe": [
+        "Das lässt die zusätzliche Ladung auf TC3 unberücksichtigt.",
+        "Im Output gilt h2 = .65 und u2 = .35.",
+        "Die kleine negative TC2-Ladung ist nicht das entscheidende Kreuzladungsmuster.",
+        "Richtig: Zwei sichtbare Ladungen ab der Ausblendeschwelle markieren die Kreuzladung."
+      ],
+      "mt": [
+        "kreuzladung_uebersehen",
+        "h2_u2_vertauscht",
+        "nebensaechliche_ladung_fokussiert",
+        null
+      ],
+      "source_ids": [
+        "PD04-F38",
+        "PD04-F39"
+      ],
+      "learning_objective_id": "LZ11"
+    },
+    {
+      "id": "pd04-s6-q3",
+      "q": "Welches Ladungsmuster spricht am stärksten für das Beibehalten eines Items für einen Ziel-Faktor?",
+      "opts": [
+        "Hohe positive Ladung auf dem Ziel-Faktor und niedrige Ladungen auf anderen Faktoren",
+        "Ähnlich hohe positive Ladungen auf allen Faktoren der gewählten Lösung ohne klare Trennung",
+        "Deutlich niedrige Ladung auf dem Ziel-Faktor und hohe negative Ladung auf einem Nebenfaktor",
+        "Nur eine hohe Kommunalität, unabhängig vom konkreten Ladungsmuster auf den Faktoren"
+      ],
+      "c": 0,
+      "e": "Die Quelle nennt als zentrales Selektionsmuster eine hohe positive Ladung auf dem Ziel-Faktor bei gleichzeitig niedrigen Ladungen auf den anderen Faktoren. Weitere Itemanalyse-Kriterien kommen hinzu.",
+      "oe": [
+        "Richtig: Dieses Muster ermöglicht eine klare dimensionsbezogene Zuordnung.",
+        "Mehrfach hohe Ladungen erschweren die eindeutige Zuordnung.",
+        "Das Muster widerspricht dem gewünschten positiven Zielbezug.",
+        "Eine hohe Kommunalität allein sagt nicht, welchem Faktor das Item eindeutig zuzuordnen ist."
+      ],
+      "mt": [
+        null,
+        "kreuzladung_als_ideal",
+        "ladungsrichtung_vertauscht",
+        "kommunalitaet_allein_als_selektion"
+      ],
+      "source_ids": [
+        "PD04-F40",
+        "PD04-F41"
+      ],
+      "learning_objective_id": "LZ12"
+    }
+  ],
+  "7": [
+    {
+      "id": "pd04-s7-q1",
+      "q": "Was sind Faktorwerte in der dargestellten EFA-Systematik?",
+      "opts": [
+        "Eigenwerte der Faktoren in der unrotierten Ladungsmatrix",
+        "Ausprägungen der Personen auf den extrahierten Faktoren",
+        "Mittlere MSA-Werte der Items innerhalb jeder Subskala",
+        "Partielle Korrelationen zwischen den ursprünglichen Variablen"
+      ],
+      "c": 1,
+      "e": "Faktorwerte sind personenspezifische Ausprägungen auf den Faktoren. Sie können beispielsweise mit Außenkriterien korreliert werden.",
+      "oe": [
+        "Eigenwerte beschreiben erklärte Varianz eines Faktors, nicht Personenausprägungen.",
+        "Richtig: Die Matrix F enthält für n Personen Werte auf q Faktoren.",
+        "MSA-Werte beurteilen die Eignung von Variablen für die Faktorenanalyse.",
+        "Partielle Korrelationen gehören unter anderem zur Anti-Image-Matrix."
+      ],
+      "mt": [
+        "faktorwert_eigenwert_verwechselt",
+        null,
+        "faktorwert_msa_verwechselt",
+        "faktorwert_partialkorrelation_verwechselt"
+      ],
+      "source_ids": [
+        "PD04-F42",
+        "PD04-F43"
+      ],
+      "learning_objective_id": "LZ12"
+    },
+    {
+      "id": "pd04-s7-q2",
+      "q": "Welche Aussage unterscheidet Faktorwerte von Summen- oder Mittelwertscores?",
+      "opts": [
+        "Faktorwerte entstehen bei orthogonaler Rotation; Skalenwerte werden nach obliquer Rotation gebildet",
+        "Faktorwerte und Skalenwerte sind rechnerisch und inhaltlich generell identisch",
+        "Faktorwerte gewichten Items; Summen- oder Mittelwerte aggregieren die zugeordneten Items direkt",
+        "Summenwerte beziehen weniger Items ein als die zugehörigen gewichteten Faktorwerte"
+      ],
+      "c": 2,
+      "e": "Faktorwerte können gewichtete Personenscores darstellen. In der Praxis werden nach einer Faktorenanalyse jedoch häufig direkte Summen- oder Mittelwerte der zugeordneten Items verwendet.",
+      "oe": [
+        "Beide Scorearten sind nicht an diese Rotationsarten gebunden.",
+        "Sie können ähnlich korrelieren, sind aber nicht grundsätzlich identisch.",
+        "Richtig: Die Gewichtungslogik ist das zentrale Trennmerkmal.",
+        "Die Anzahl der einbezogenen Items ist nicht das definierende Merkmal."
+      ],
+      "mt": [
+        "scoreart_an_rotation_gebunden",
+        "scorearten_identisch",
+        null,
+        "itemzahl_als_unterschied"
+      ],
+      "source_ids": [
+        "PD04-F43"
+      ],
+      "learning_objective_id": "LZ12"
+    },
+    {
+      "id": "pd04-s7-q3",
+      "q": "Wann kann eine Faktorenanalyse höherer Ordnung ansetzen?",
+      "opts": [
+        "Wenn der Bartlett-Test selbst bei einer sehr großen Stichprobe nicht signifikant ausfällt",
+        "Wenn jede initiale Kommunalität der PCA nach der Rotation kleiner als 1 wird",
+        "Wenn nur ein einziger unkorrelierter Faktor ohne weitere Faktorstruktur extrahiert worden ist",
+        "Wenn bei obliquer Rotation die Korrelationen der Faktorwerte erneut analysiert werden"
+      ],
+      "c": 3,
+      "e": "Bei obliquer Rotation können die Interkorrelationen der Faktorwerte erneut faktorenanalysiert werden. Dadurch wird eine mögliche übergeordnete Faktorenstruktur untersucht.",
+      "oe": [
+        "Der Bartlett-Test ist nicht die definierende Voraussetzung dieses Schritts.",
+        "Initiale Kommunalitäten sind nicht der Ausgangspunkt der höheren Ordnung.",
+        "Bei nur einem unkorrelierten Faktor gibt es keine Faktorinterkorrelationsstruktur zu analysieren.",
+        "Richtig: Korrelierte Faktoren liefern die Grundlage für eine Analyse höherer Ordnung."
+      ],
+      "mt": [
+        "bartlett_als_hoeherer_ordnung",
+        "kommunalitaet_als_hoeherer_ordnung",
+        "ein_faktor_als_hoeherer_ordnung",
+        null
+      ],
+      "source_ids": [
+        "PD04-F43"
+      ],
+      "learning_objective_id": "LZ12"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd04-b-q1",
+    "q": "Eine Variable lädt mit .70, .40 und .10 auf drei Faktoren. Wie groß ist ihre finale Kommunalität?",
+    "opts": [
+      "Die finale Kommunalität beträgt .66 nach Summe der quadrierten Ladungen",
+      "Die finale Kommunalität beträgt .54 nach Addition der drei Ladungen",
+      "Die finale Kommunalität beträgt .84 nach Quadrierung der Ladungssumme",
+      "Die finale Kommunalität beträgt 1.20 durch Summe der absoluten Ladungen"
+    ],
+    "c": 0,
+    "e": "h² = .70² + .40² + .10² = .49 + .16 + .01 = .66. Für die Kommunalität werden die Ladungen eines Items über die Faktoren quadriert und summiert.",
+    "oe": [
+      "Richtig: Die Summe der quadrierten Ladungen ergibt .66.",
+      "Hier wurden die unquadrierten Ladungen nicht korrekt verarbeitet.",
+      "Die Summe wird nicht zuerst gebildet und anschließend quadriert.",
+      "Absolute Ladungen werden nicht unquadriert addiert."
+    ],
+    "mt": [
+      null,
+      "quadrierung_vergessen",
+      "summe_vor_quadrierung",
+      "betragsaddition"
+    ],
+    "source_ids": [
+      "PD04-F21"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd04-b-q2",
+    "q": "Ein Faktor hat bei vier Variablen die Ladungen .70, .50, .40 und .30. Welcher Eigenwert ergibt sich?",
+    "opts": [
+      "Der Eigenwert beträgt 1.90 als Summe der unquadrierten Ladungen",
+      "Der Eigenwert beträgt .99 als Summe der quadrierten Ladungen",
+      "Der Eigenwert beträgt .25 als Mittelwert der quadrierten Ladungen",
+      "Der Eigenwert beträgt 3.01 als Quadrat der gesamten Ladungssumme"
+    ],
+    "c": 1,
+    "e": "λ = .70² + .50² + .40² + .30² = .49 + .25 + .16 + .09 = .99. Beim Eigenwert wird über die Variablen eines Faktors summiert.",
+    "oe": [
+      "Eigenwerte verwenden quadrierte, nicht unquadrierte Ladungen.",
+      "Richtig: Die Spaltensumme der quadrierten Ladungen beträgt .99.",
+      "Es wird summiert und nicht durch die Variablenzahl gemittelt.",
+      "Die Ladungssumme wird nicht als Ganzes quadriert."
+    ],
+    "mt": [
+      "quadrierung_vergessen",
+      null,
+      "mittelwert_statt_summe",
+      "summe_vor_quadrierung"
+    ],
+    "source_ids": [
+      "PD04-F22"
+    ],
+    "learning_objective_id": "LZ07"
+  },
+  {
+    "id": "pd04-b-q3",
+    "q": "Warum ist ein extrem kleiner p-Wert des Bartlett-Tests allein kein hinreichender Eignungsbeleg?",
+    "opts": [
+      "Weil der Test nur bei einer Lösung mit genau drei Faktoren definiert ist",
+      "Weil der Test nur die Itemmittelwerte miteinander vergleicht",
+      "Weil der Test stark von der Stichprobengröße beeinflusst wird",
+      "Weil ein kleiner p-Wert durchweg eine Einheitsmatrix bestätigt"
+    ],
+    "c": 2,
+    "e": "Der Bartlett-Test reagiert stark auf die Stichprobengröße. Deshalb sollen zusätzlich strukturelle Eignungskriterien wie KMO/MSA und die Anti-Image-Information berücksichtigt werden.",
+    "oe": [
+      "Der Test ist nicht an eine Drei-Faktoren-Lösung gebunden.",
+      "Er prüft die Korrelationsmatrix, nicht die Itemmittelwerte.",
+      "Richtig: Große Stichproben können bereits kleine Abweichungen signifikant machen.",
+      "Ein kleiner p-Wert spricht gegen, nicht für die Einheitsmatrix."
+    ],
+    "mt": [
+      "bartlett_an_faktorzahl_gebunden",
+      "bartlett_als_mittelwerttest",
+      null,
+      "nullhypothesenrichtung_vertauscht"
+    ],
+    "source_ids": [
+      "PD04-F12",
+      "PD04-F14"
+    ],
+    "learning_objective_id": "LZ05"
+  },
+  {
+    "id": "pd04-b-q4",
+    "q": "Welche Aussage verbindet Winkel und Korrelation in der geometrischen Deutung korrekt?",
+    "opts": [
+      "Bei 90 Grad beträgt die Korrelation 1, weil die Achsen senkrecht sind",
+      "Bei 180 Grad beträgt die Korrelation 0, weil die Vektoren genau entgegengesetzt sind",
+      "Bei 10 Grad beträgt die Korrelation ungefähr -.98 wegen des kleinen Winkels",
+      "Bei 90 Grad ist die Korrelation null, weil der Kosinus dieses Winkels null ergibt"
+    ],
+    "c": 3,
+    "e": "Nach r = cos(φ) entsprechen 90 Grad einer Korrelation von 0. Kleine Winkel ergeben hohe positive, 180 Grad eine perfekte negative Korrelation.",
+    "oe": [
+      "Senkrecht bedeutet r = 0 und nicht r = 1.",
+      "Entgegengesetzte Vektoren entsprechen r = -1.",
+      "Ein kleiner Winkel von 10 Grad entspricht ungefähr r = +.98.",
+      "Richtig: Rechtwinklige Vektoren sind in dieser Darstellung unkorreliert."
+    ],
+    "mt": [
+      "orthogonal_als_perfekt_korreliert",
+      "gegenrichtung_als_null",
+      "vorzeichen_bei_kleinem_winkel",
+      null
+    ],
+    "source_ids": [
+      "PD04-F32"
+    ],
+    "learning_objective_id": "LZ10"
+  },
+  {
+    "id": "pd04-b-q5",
+    "q": "Ein Item lädt .60 auf dem Ziel-Faktor und .40 auf einem weiteren Faktor. Welche Reaktion ist am angemessensten?",
+    "opts": [
+      "Das Item als Kreuzladung markieren und zusammen mit weiteren Kriterien prüfen",
+      "Das Item ohne weitere Prüfung eindeutig und endgültig dem Ziel-Faktor zuordnen",
+      "Das Item allein wegen seiner Kommunalität aus dem Test entfernen",
+      "Das Item dem Nebenfaktor zuordnen, weil .40 als stärkere Ladung gilt"
+    ],
+    "c": 0,
+    "e": "Das Muster zeigt eine Kreuzladung und damit eine weniger eindeutige Zuordnung. Die Quelle verlangt hohe Zielladung, niedrige Nebenladungen und die Berücksichtigung weiterer Itemanalyse-Kriterien.",
+    "oe": [
+      "Richtig: Das Item wird als problematisch markiert und nicht mechanisch entschieden.",
+      "Die zusätzliche Ladung von .40 darf bei der Zuordnung nicht ignoriert werden.",
+      "Die Kommunalität allein begründet keine zwingende Elimination.",
+      ".60 ist größer als .40; außerdem gibt es keine solche starre Umkehrregel."
+    ],
+    "mt": [
+      null,
+      "kreuzladung_ignoriert",
+      "kommunalitaet_als_alleinkriterium",
+      "ladungsvergleich_vertauscht"
+    ],
+    "source_ids": [
+      "PD04-F39",
+      "PD04-F41"
+    ],
+    "learning_objective_id": "LZ12"
+  },
+  {
+    "id": "pd04-b-q6",
+    "q": "Welche Aussage zur finalen Kommunalität nach Rotation ist richtig?",
+    "opts": [
+      "Sie wird bei orthogonaler Rotation direkt auf den Wert 1 gesetzt",
+      "Sie bleibt gleich, obwohl einzelne Ladungen und Eigenwerte sich ändern",
+      "Sie sinkt bei schiefwinkligen Faktorachsen in der Regel deutlich ab",
+      "Sie entspricht nach der Rotation dem größten Eigenwert der gesamten Lösung"
+    ],
+    "c": 1,
+    "e": "Eine zulässige Rotation verändert die Verteilung der Ladungen und der faktorbezogenen Eigenwerte, nicht aber die durch alle beibehaltenen Faktoren erklärte Itemvarianz.",
+    "oe": [
+      "Nur initiale PCA-Kommunalitäten werden auf 1 gesetzt, nicht finale nach Rotation.",
+      "Richtig: Die Zeilensumme der quadrierten relevanten Ladungen bleibt erhalten.",
+      "Oblique Rotation erzwingt kein generelles Absinken der Kommunalität.",
+      "Kommunalität und Eigenwert haben unterschiedliche Bezugsrichtungen."
+    ],
+    "mt": [
+      "initial_final_verwechselt",
+      null,
+      "oblique_als_varianzverlust",
+      "kommunalitaet_eigenwert_verwechselt"
+    ],
+    "source_ids": [
+      "PD04-F31"
+    ],
+    "learning_objective_id": "LZ09"
+  },
+  {
+    "id": "pd04-b-q7",
+    "q": "Welche Kombination gehört zur vollständigen Faktorzahlentscheidung?",
+    "opts": [
+      "Nur das Kaiser-Guttman-Kriterium, weil sein Grenzwert die Entscheidung festlegt",
+      "Nur die Parallelanalyse, weil andere Verfahren generell unzulässig sind",
+      "Inhaltliche Überlegungen zusammen mit geeigneten formal-statistischen Kriterien",
+      "Nur die Anzahl der zuvor konstruierten Items innerhalb jeder vorgesehenen Dimension"
+    ],
+    "c": 2,
+    "e": "Die Folien halten fest, dass q aufgrund inhaltlicher und/oder formal-statistischer Überlegungen festgelegt wird. Einzelne Kriterien können unterschiedliche Entscheidungen liefern.",
+    "oe": [
+      "Das Kaiser-Guttman-Kriterium kann zu viele Faktoren extrahieren und soll nicht isoliert entscheiden.",
+      "Die Parallelanalyse ist wichtig, aber nicht als alleinige zwingende Quelle festgelegt.",
+      "Richtig: Inhaltliche Interpretierbarkeit und formale Kriterien werden gemeinsam betrachtet.",
+      "Die Itemplanung kann Erwartungen liefern, ersetzt jedoch nicht die empirische Strukturentscheidung."
+    ],
+    "mt": [
+      "einzelkriterium_verabsolutiert",
+      "parallel_verabsolutiert",
+      null,
+      "geplante_und_empirische_dimension_verwechselt"
+    ],
+    "source_ids": [
+      "PD04-F24",
+      "PD04-F28",
+      "PD04-F40"
+    ],
+    "learning_objective_id": "LZ08"
+  },
+  {
+    "id": "pd04-b-q8",
+    "q": "Welche Zuordnung ist für die oblique principal()-Ausgabe korrekt?",
+    "opts": [
+      "h2 bezeichnet den Eigenwert eines Faktors, u2 die kumulative Varianz aller Faktoren",
+      "h2 bezeichnet die Faktorinterkorrelation, u2 den Bartlett-Chi-Quadrat-Wert",
+      "h2 bezeichnet die Stichprobengröße, u2 die Zahl der extrahierten Komponenten",
+      "h2 bezeichnet erklärte Itemvarianz, u2 den nicht erklärten itemspezifischen Anteil"
+    ],
+    "c": 3,
+    "e": "Im principal()-Output steht h2 für die Kommunalität und u2 für die Uniqueness. Beide beziehen sich auf ein Item und ergänzen sich bei standardisierten Variablen zum Gesamtanteil.",
+    "oe": [
+      "Eigenwerte und kumulative Varianz stehen in separaten Zusammenfassungszeilen.",
+      "Faktorkorrelationen und Bartlett-Kennwerte werden an anderen Stellen ausgegeben.",
+      "Stichprobengröße und Faktorzahl sind keine Bedeutungen dieser Spalten.",
+      "Richtig: h2 und u2 sind itembezogene erklärte beziehungsweise nicht erklärte Varianzanteile."
+    ],
+    "mt": [
+      "h2_u2_mit_eigenwerten",
+      "h2_u2_mit_tests",
+      "h2_u2_mit_dimensionen",
+      null
+    ],
+    "source_ids": [
+      "PD04-F38"
+    ],
+    "learning_objective_id": "LZ11"
+  }
+];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Tastaturbedienung des ARIA-Tabsets: Pfeile, Pos1 und Ende. */
+(function(){
+  var nav=document.querySelector('.nav[role="tablist"]');
+  if(!nav)return;
+  nav.addEventListener('keydown',function(e){
+    if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;
+    var tabs=Array.from(nav.querySelectorAll('[role="tab"]'));
+    var current=Math.max(0,tabs.indexOf(document.activeElement));
+    var next=current;
+    if(e.key==='ArrowRight')next=(current+1)%tabs.length;
+    if(e.key==='ArrowLeft')next=(current-1+tabs.length)%tabs.length;
+    if(e.key==='Home')next=0;
+    if(e.key==='End')next=tabs.length-1;
+    e.preventDefault();
+    goTo(next);
+    tabs[next].focus();
+  });
+})();
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+
+/* PD04-spezifische Widget-Logik */
+function announce(msg){var l=document.getElementById('liveStatus');if(l)l.textContent=msg;}
+function showFeedback(id,good,msg){var el=document.getElementById(id);if(!el)return;el.className='feedback show '+(good?'good':'bad');el.innerHTML=msg;announce(msg.replace(/<[^>]*>/g,''));}
+function caseFeedback(btn,id,good){btn.parentElement.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',b===btn?'true':'false');});showFeedback(id,good,good?'Richtig. Die Zielgruppe, der geringe Umfang und die abweichenden Prüfungsbedingungen gefährden die Übertragbarkeit der Optimierungsanalyse.':'Nicht passend. Statistische Auswertung ersetzt keine angemessene Analysestichprobe.');}
+
+var PROCESS_CORRECT=['Merkmal festlegen','Test planen','Testrohform konstruieren','Rohform an Optimierungsstichprobe','Testendform an Normstichprobe'];
+var processOrder=[];
+function renderProcess(){var list=document.getElementById('processList');if(!list)return;list.innerHTML='';processOrder.forEach(function(text,i){var li=document.createElement('li');li.className='process-item';li.innerHTML='<span class="process-number">'+(i+1)+'</span><span>'+text+'</span><span class="process-actions"><button type="button" class="icon-btn" aria-label="'+text+' nach oben" '+(i===0?'disabled':'')+' onclick="moveProcess('+i+',-1)">↑</button><button type="button" class="icon-btn" aria-label="'+text+' nach unten" '+(i===processOrder.length-1?'disabled':'')+' onclick="moveProcess('+i+',1)">↓</button></span>';list.appendChild(li);});}
+function resetProcess(){processOrder=PROCESS_CORRECT.slice().sort(function(){return Math.random()-.5;});if(processOrder.join('|')===PROCESS_CORRECT.join('|'))processOrder.reverse();renderProcess();showFeedback('processFeedback',false,'Die Schritte wurden neu gemischt.');}
+function moveProcess(i,d){var j=i+d;if(j<0||j>=processOrder.length)return;var t=processOrder[i];processOrder[i]=processOrder[j];processOrder[j]=t;renderProcess();announce('Schritt verschoben.');}
+function checkProcess(){var ok=processOrder.every(function(x,i){return x===PROCESS_CORRECT[i];});showFeedback('processFeedback',ok,ok?'Richtig. Die Optimierungsstichprobe liegt zwischen Rohformkonstruktion und Normierung der Endform.':'Noch nicht. Denke an die Logik: definieren → planen → Rohform bauen → empirisch optimieren → Endform normieren.');}
+
+function checkPair(same){var pair=document.getElementById('pairSelect').value;var high=pair==='AB'||pair==='CD';var ok=same===high;var msg=high?'Dieses Paar korreliert hoch und stützt einen gemeinsamen Faktorblock.':'Diese Kreuzkorrelation liegt nahe null und stützt die Trennung der beiden Blöcke.';showFeedback('pairFeedback',ok,(ok?'Richtig. ':'Nicht ganz. ')+msg);}
+function reverseScore(){var u=Number(document.getElementById('revLow').value),o=Number(document.getElementById('revHigh').value),x=Number(document.getElementById('revX').value);if(!Number.isFinite(u)||!Number.isFinite(o)||!Number.isFinite(x)||u>=o){showFeedback('reverseFeedback',false,'Bitte gib eine gültige Unter- und Obergrenze ein.');return;}if(x<u||x>o){showFeedback('reverseFeedback',false,'Der Rohwert muss innerhalb der Antwortskala liegen.');return;}var y=(o+u)-x;showFeedback('reverseFeedback',true,'x′ = ('+o+' + '+u+') − '+x+' = <strong>'+y+'</strong>. Der Wertebereich bleibt '+u+' bis '+o+'.');}
+var matrixAnswers={'Z':'data','R':'corr','R*':'comm','L':'load','L*':'rot','F':'scores'};
+function checkMatrixMap(){var s=document.getElementById('matrixSymbol').value,m=document.getElementById('matrixMeaning').value;var ok=matrixAnswers[s]===m;showFeedback('matrixMapFeedback',ok,ok?'Richtig zugeordnet.':'Noch nicht. Prüfe vor allem, ob Personen (n), Variablen (m) oder Faktoren (q) die Matrixdimension bestimmen.');}
+
+function checkKMO(){var c=document.getElementById('kmoClass').value,w=document.getElementById('kmoWeak').value;var ok=c==='merit'&&w==='item_6';showFeedback('kmoFeedback',ok,ok?'Richtig: .88 ist „verdienstvoll“ und item_6 hat mit .80 den niedrigsten itembezogenen MSA-Wert.':'Prüfe die Intervallgrenzen: .88 liegt zwischen .80 und .90; der kleinste aufgelistete Itemwert ist .80.');}
+function aicCheck(saysMet){var share=4/15;var met=share<=.25;var ok=saysMet===met;showFeedback('aicFeedback',ok,(ok?'Richtig. ':'Nicht richtig. ')+ '4/15 = '+(share*100).toFixed(1)+' %, also mehr als 25 %. Die Daumenregel ist nicht erfüllt.');}
+
+var pcaCases=[{t:'Alle initialen Kommunalitäten werden auf 1 gesetzt.',a:'PCA',e:'Die PCA nimmt die gesamte standardisierte Itemvarianz als erklärbar an.'},{t:'Nur gemeinsame Varianz wird analysiert; itemspezifische Einflüsse bleiben als Uniqueness.',a:'PFA',e:'Die PFA verwendet deshalb Startwerte unter 1.'},{t:'Die Gesamtvarianz wird sukzessiv in unabhängige Hauptkomponenten zerlegt.',a:'PCA',e:'Das ist das in der Vorlesung weiterverfolgte PCA-Vorgehen.'}];var pcaIndex=0;
+function renderPcaCase(){var e=document.getElementById('pcaCaseText');if(e)e.textContent=pcaCases[pcaIndex].t;var f=document.getElementById('pcaFeedback');if(f)f.className='feedback';}
+function classifyPca(ans){var c=pcaCases[pcaIndex];showFeedback('pcaFeedback',ans===c.a,(ans===c.a?'Richtig. ':'Nicht passend. ')+c.e);}
+function nextPcaCase(){pcaIndex=(pcaIndex+1)%pcaCases.length;renderPcaCase();}
+
+function checkComm(){var x=Number(document.getElementById('commAnswer').value),target=.36+.25+.04;var ok=Math.abs(x-target)<.005;showFeedback('formulaFeedback',ok,ok?'Richtig: .60² + .50² + .20² = .36 + .25 + .04 = .65.':'Rechne jede Ladung zuerst einzeln zum Quadrat und addiere anschließend.');}
+function checkVarShare(){var x=Number(document.getElementById('varAnswer').value),target=3.62/15;var ok=Math.abs(x-target)<.015;showFeedback('formulaFeedback',ok,ok?'Richtig: 3.62 / 15 ≈ .24. Der Faktor erklärt rund 24 % der Gesamtvarianz.':'Nutze v = λ/m: 3.62 geteilt durch 15 ergibt ungefähr .24.');}
+function factorCount(n){showFeedback('factorCountFeedback',n===3,n===3?'Richtig. Alle drei dargestellten Kriterien sprechen im Beispiel für q = 3; die inhaltliche Deutung bleibt dennoch Teil der Entscheidung.':'Die beschriebenen Kriterien markieren jeweils drei Faktoren. Eine andere Zahl wäre hier nicht quellengetreu.');}
+
+function predictRotation(btn,choice){document.querySelectorAll('#rotationPredict button').forEach(function(b){b.setAttribute('aria-pressed',b===btn?'true':'false');});var ok=choice==='positive';showFeedback('rotationFeedback',ok,ok?'Richtig. Ein Winkel unter 90° hat einen positiven Kosinus; die Faktoren dürfen positiv korrelieren.':'Denke an r = cos(φ): cos(90°)=0, bei 60° ist der Kosinus positiv.');document.getElementById('angleSlider').disabled=false;updateRotationDiagram();}
+function updateRotationDiagram(){var slider=document.getElementById('angleSlider'),deg=Number(slider.value),rad=deg*Math.PI/180;document.getElementById('angleOut').value=deg+'°';var x1=80,y1=260,len=220,x2=x1+len*Math.cos(rad),y2=y1-len*Math.sin(rad);var a=document.getElementById('axis2');a.setAttribute('x2',x2.toFixed(1));a.setAttribute('y2',y2.toFixed(1));var label=document.getElementById('axis2Label');label.setAttribute('x',(x2+8).toFixed(1));label.setAttribute('y',(y2+4).toFixed(1));var r=Math.cos(rad);document.getElementById('rotationSummary').textContent='Winkel '+deg+'°: cos(φ) ≈ '+r.toFixed(2)+'. '+(deg===90?'Orthogonale Achsen, Faktoren unkorreliert.':'Schiefwinklige Achsen, positive Faktorkorrelation möglich; Muster- und Strukturmatrix können abweichen.');document.getElementById('rotDesc').textContent='Zwei Faktorachsen mit einem Winkel von '+deg+' Grad; geschätzte Korrelation '+r.toFixed(2)+'.';}
+function patternStructure(correct){showFeedback('patternFeedback',correct,correct?'Richtig. Die Strukturmatrix enthält die einfachen Faktor-Variablen-Korrelationen.':'Die Mustermatrix enthält bereinigte Regressionsgewichte. Gefragt ist die Strukturmatrix.');}
+
+var outputTasks=[{p:'Markiere das Item mit einer sichtbaren Kreuzladung von .60 und .40.',a:'item_8',e:'item_8 lädt .60 auf TC1 und .40 auf TC3.'},{p:'Markiere das Item mit der höchsten TC3-Ladung.',a:'item_10',e:'item_10 hat TC3 = .78.'},{p:'Markiere das Item mit h2 = .45 und u2 = .55.',a:'item_7',e:'item_7 weist diese komplementären Werte auf.'}];var outputIndex=0;
+function highlightOutput(item){document.querySelectorAll('#efaOutputTable tbody tr').forEach(function(r){r.classList.toggle('highlight',r.dataset.item===item);});}
+function checkOutputTask(){var val=document.getElementById('outputItem').value,t=outputTasks[outputIndex],ok=val===t.a;highlightOutput(val);showFeedback('outputFeedback',ok,(ok?'Richtig. ':'Nicht passend. ')+t.e);}
+function nextOutputTask(){outputIndex=(outputIndex+1)%outputTasks.length;document.getElementById('outputPrompt').textContent=outputTasks[outputIndex].p;document.getElementById('outputFeedback').className='feedback';document.querySelectorAll('#efaOutputTable tbody tr').forEach(function(r){r.classList.remove('highlight');});}
+function itemDecision(ans){var ok=ans==='review';showFeedback('itemFeedback',ok,ok?'Richtig. Die Kreuzladung macht die Zuordnung weniger eindeutig; Theorie und weitere Itemkennwerte müssen einbezogen werden.':'Diese Entscheidung ist zu mechanisch. Eine hohe Kommunalität oder die größte Ladung allein löst die Kreuzladung nicht.');}
+
+var scoreCases=[{t:'Für jede Person wird eine gewichtete Kombination der Items berechnet.',a:'factor',e:'Das beschreibt einen Faktorwert.'},{t:'Die fünf einem Faktor zugeordneten Items werden direkt gemittelt.',a:'sum',e:'Das ist ein Mittelwertscore der Skala.'},{t:'Die Korrelationen zwischen drei obliquen Faktoren werden erneut faktoranalysiert.',a:'higher',e:'Das ist eine Faktorenanalyse höherer Ordnung.'}];var scoreIndex=0;
+function renderScoreCase(){document.getElementById('scoreCaseText').textContent=scoreCases[scoreIndex].t;document.getElementById('scoreFeedback').className='feedback';}
+function scoreChoice(ans){var c=scoreCases[scoreIndex];showFeedback('scoreFeedback',ans===c.a,(ans===c.a?'Richtig. ':'Nicht passend. ')+c.e);}
+function nextScoreCase(){scoreIndex=(scoreIndex+1)%scoreCases.length;renderScoreCase();}
+var transitionAnswers={ZR:'inter',RR:'comm',RL:'extract',LL:'rotate',LF:'scores'};
+function checkTransition(){var t=document.getElementById('transitionSelect').value,m=document.getElementById('transitionMeaning').value;showFeedback('transitionFeedback',transitionAnswers[t]===m,transitionAnswers[t]===m?'Richtig. Der Übergang ist korrekt benannt.':'Noch nicht. Nutze die fünf Callouts der wiederkehrenden EFA-Ablaufgrafik.');}
+function initPD04(){resetProcess();renderPcaCase();renderScoreCase();updateRotationDiagram();}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  initPD04();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

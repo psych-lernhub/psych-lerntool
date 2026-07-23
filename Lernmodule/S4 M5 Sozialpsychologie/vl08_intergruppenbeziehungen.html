@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL08 Intergruppenbeziehungen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl08
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke SCM-Quadranten-Simulator (VL08) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL08 Intergruppenbeziehungen</h1>
+<p class="page-sub">Sozialpsychologie · Prof. Dr. Susanne Veit · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Was sind RWA und SDO? Welche Gruppen werden bei hohem RWA bzw. hohem SDO am wahrscheinlichsten abgewertet? · 2. Was führt laut der Theorie des realistischen Konflikts zu Konflikten zwischen Gruppen, und wie lassen sie sich auflösen? · 3. Nennen und erklären Sie zwei Ansätze zur Reduktion von Vorurteilen — wie ließen sie sich in konfliktreichen Nachbarschaften anwenden?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Stereotyp · Vorurteil · Diskriminierung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② SCM & BIAS Map</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Formen von Vorurteilen</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Diskriminierung empirisch</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ RWA & SDO</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Kognitiver Ansatz</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Realistischer Konflikt</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Negative Identität & System</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">⑨ Vorurteilsabbau</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(10)" id="nb10">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Stereotyp · Vorurteil · Diskriminierung ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Stereotyp · Vorurteil · Diskriminierung</div>
+    <div class="sec-lz">Drei Begriffe sauber unterscheiden: Repräsentation · abwertende Einstellung · benachteiligende Behandlung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du <em>denkst</em> „Ältere sind erfahren". Du <em>fühlst</em> Unbehagen gegenüber einer Gruppe. Ein Vermieter <em>lehnt</em> jemanden wegen der Herkunft ab. Sind das drei Mal dasselbe?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Nein — die Folien unterscheiden drei <strong>eigene Begriffe</strong>: <strong>Stereotyp</strong> als kognitive Repräsentation von Gruppeneigenschaften, <strong>Vorurteil</strong> als abwertende Einstellung oder Orientierung gegenüber einer Gruppe und <strong>Diskriminierung</strong> als benachteiligende Behandlung aufgrund zugeschriebener Gruppenzugehörigkeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Begriffe sauber unterscheiden</div>
+    <strong>Stereotyp</strong> = kognitive Repräsentation von Gruppeneigenschaften — eine kognitive Abkürzung, beschreibend und nicht zwingend wertend.<br>
+    <strong>Vorurteil</strong> = eine abwertende, emotional besetzte Einstellung gegenüber einer Gruppe.<br>
+    <strong>Diskriminierung</strong> = benachteiligendes Verhalten aufgrund der (zugeschriebenen) Gruppenzugehörigkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Zusammenhang — aber nicht identisch</div>
+    Ein Stereotyp kann <em>ohne</em> Vorurteil bestehen (neutrales oder positives Stereotyp); ein Vorurteil kann <em>ohne</em> Diskriminierung bleiben (Haltung ohne Handlung). Wichtig: Auch rational begründbares benachteiligendes Verhalten zählt als Diskriminierung.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Verwechslungsgefahr: Stereotyp vs. Vorurteil</div>
+    Ein Stereotyp <strong>beschreibt</strong> Gruppeneigenschaften und ist laut Folie nicht notwendigerweise wertend. Ein Vorurteil <strong>wertet ab</strong>. Der Unterschied ist also die Abwertung — nicht die bloße Annahme über eine Gruppe.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Ebene ist das?</div>
+  <div class="card">
+    <div class="card-title">Stereotyp, Vorurteil oder Diskriminierung?</div>
+    <div class="corr-item" id="sv0">„Ältere Menschen sind erfahren und ruhig."
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sv0',this,'stereotyp')">Stereotyp</button>
+        <button class="corr-btn" onclick="checkCorr('sv0',this,'vorurteil')">Vorurteil</button>
+        <button class="corr-btn" onclick="checkCorr('sv0',this,'diskriminierung')">Diskriminierung</button>
+      </div><div class="corr-fb" id="sv0-fb"></div>
+    </div>
+    <div class="corr-item" id="sv1">„Ich finde Mitglieder dieser Gruppe einfach unsympathisch."
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sv1',this,'stereotyp')">Stereotyp</button>
+        <button class="corr-btn" onclick="checkCorr('sv1',this,'vorurteil')">Vorurteil</button>
+        <button class="corr-btn" onclick="checkCorr('sv1',this,'diskriminierung')">Diskriminierung</button>
+      </div><div class="corr-fb" id="sv1-fb"></div>
+    </div>
+    <div class="corr-item" id="sv2">Ein Lokal weist Gäste wegen ihrer Herkunft ab.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sv2',this,'stereotyp')">Stereotyp</button>
+        <button class="corr-btn" onclick="checkCorr('sv2',this,'vorurteil')">Vorurteil</button>
+        <button class="corr-btn" onclick="checkCorr('sv2',this,'diskriminierung')">Diskriminierung</button>
+      </div><div class="corr-fb" id="sv2-fb"></div>
+    </div>
+    <div class="corr-item" id="sv3">„Diese Gruppe ist faul und unzuverlässig" — mit Verachtung gesagt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sv3',this,'stereotyp')">Stereotyp</button>
+        <button class="corr-btn" onclick="checkCorr('sv3',this,'vorurteil')">Vorurteil</button>
+        <button class="corr-btn" onclick="checkCorr('sv3',this,'diskriminierung')">Diskriminierung</button>
+      </div><div class="corr-fb" id="sv3-fb"></div>
+    </div>
+    <div class="corr-item" id="sv4">Eine Bewerberin wird wegen ihres Kopftuchs nicht eingestellt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sv4',this,'stereotyp')">Stereotyp</button>
+        <button class="corr-btn" onclick="checkCorr('sv4',this,'vorurteil')">Vorurteil</button>
+        <button class="corr-btn" onclick="checkCorr('sv4',this,'diskriminierung')">Diskriminierung</button>
+      </div><div class="corr-fb" id="sv4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② SCM & BIAS Map ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Stereotype Content Model & BIAS Map</div>
+    <div class="sec-lz">Wärme × Kompetenz → vier Emotionen & Verhaltensabsichten</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum <em>bewundern</em> wir manche Gruppen, <em>beneiden</em> andere, <em>bemitleiden</em> wieder andere — und <em>verachten</em> manche? Steckt ein System dahinter?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Ja — zwei Dimensionen, <strong>Wärme × Kompetenz</strong>, spannen vier Quadranten auf. Jeder Quadrant ist mit einer typischen Emotion (Bewunderung, Neid, Mitleid, Verachtung) und Verhaltensabsicht verbunden.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Dimensionen</div>
+    Das Stereotype Content Model ordnet jede Gruppe auf zwei Dimensionen ein: <strong>Wärme</strong> (soziale Absichten — meint die Gruppe es gut mit mir?) und <strong>Kompetenz</strong> (Fähigkeiten — kann die Gruppe etwas?). Alternative: das <strong>2d-ABC-Modell</strong> mit den Achsen <strong>Agency</strong> (dominiert/inkompetent ↔ agentisch/kompetent) und <strong>Beliefs</strong> (konservativ ↔ progressiv) — die <em>Wärme</em> liegt dort als Kreis in der Mitte des Koordinatensystems.
+  </div>
+  <div class="card">
+    <div class="card-title">Vier Quadranten, vier Emotionen</div>
+    <strong>Hoch / hoch</strong> → <strong>Bewunderung</strong> (Eigengruppe, Verbündete).<br>
+    <strong>Hohe Kompetenz, geringe Wärme</strong> → <strong>Neid</strong> (Reiche, Karrierefrauen).<br>
+    <strong>Hohe Wärme, geringe Kompetenz</strong> → <strong>Mitleid</strong> (Ältere, Kranke).<br>
+    <strong>Gering / gering</strong> → <strong>Verachtung</strong> (Obdachlose, Arme).
+  </div>
+  <div class="card">
+    <div class="card-title">BIAS Map: von Emotion zu Verhalten</div>
+    Nicht alle Vorurteile sind offene Feindseligkeit. <strong>Mitleid</strong> führt zu <em>passiver</em> Schädigung (man unterlässt aktive Hilfe), <strong>Verachtung</strong> zu <em>aktiver</em> Schädigung. Die Emotion vermittelt zwischen Stereotyp und Verhalten.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Emotion sagt das Modell vorher?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Wahrnehmung der passenden Emotion zu</div>
+    <div class="corr-item" id="bias0">Eine Gruppe gilt als warm UND kompetent (z. B. die Eigengruppe).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bias0',this,'bewunderung')">Bewunderung</button>
+        <button class="corr-btn" onclick="checkCorr('bias0',this,'neid')">Neid</button>
+        <button class="corr-btn" onclick="checkCorr('bias0',this,'mitleid')">Mitleid</button>
+        <button class="corr-btn" onclick="checkCorr('bias0',this,'verachtung')">Verachtung</button>
+      </div><div class="corr-fb" id="bias0-fb"></div>
+    </div>
+    <div class="corr-item" id="bias1">Eine Gruppe gilt als kompetent, aber kalt (z. B. Reiche).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bias1',this,'bewunderung')">Bewunderung</button>
+        <button class="corr-btn" onclick="checkCorr('bias1',this,'neid')">Neid</button>
+        <button class="corr-btn" onclick="checkCorr('bias1',this,'mitleid')">Mitleid</button>
+        <button class="corr-btn" onclick="checkCorr('bias1',this,'verachtung')">Verachtung</button>
+      </div><div class="corr-fb" id="bias1-fb"></div>
+    </div>
+    <div class="corr-item" id="bias2">Eine Gruppe gilt als warm, aber wenig kompetent (z. B. Ältere).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bias2',this,'bewunderung')">Bewunderung</button>
+        <button class="corr-btn" onclick="checkCorr('bias2',this,'neid')">Neid</button>
+        <button class="corr-btn" onclick="checkCorr('bias2',this,'mitleid')">Mitleid</button>
+        <button class="corr-btn" onclick="checkCorr('bias2',this,'verachtung')">Verachtung</button>
+      </div><div class="corr-fb" id="bias2-fb"></div>
+    </div>
+    <div class="corr-item" id="bias3">Eine Gruppe gilt als weder warm noch kompetent (z. B. Obdachlose).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bias3',this,'bewunderung')">Bewunderung</button>
+        <button class="corr-btn" onclick="checkCorr('bias3',this,'neid')">Neid</button>
+        <button class="corr-btn" onclick="checkCorr('bias3',this,'mitleid')">Mitleid</button>
+        <button class="corr-btn" onclick="checkCorr('bias3',this,'verachtung')">Verachtung</button>
+      </div><div class="corr-fb" id="bias3-fb"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎛️ Simulator: Stell Wärme × Kompetenz ein</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Wärme (meint die Gruppe es gut mit mir?)</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sc-w-hi" onclick="scSet('w','hi')">hoch</button>
+        <button class="sim-tbtn" id="sc-w-lo" onclick="scSet('w','lo')">gering</button>
+      </div>
+      <div class="sim-lbl">Kompetenz (kann die Gruppe etwas?)</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sc-k-hi" onclick="scSet('k','hi')">hoch</button>
+        <button class="sim-tbtn" id="sc-k-lo" onclick="scSet('k','lo')">gering</button>
+      </div>
+      <div class="sim-verdict" id="sc-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Formen von Vorurteilen ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Formen von Vorurteilen</div>
+    <div class="sec-lz">blatant / modern / explizit / implizit (IAT)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Offener Rassismus ist seltener geworden. Heißt das, Vorurteile sind verschwunden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Nein — sie haben die <em>Form</em> geändert. Statt offen (<strong>blatant</strong>) treten sie verdeckt (<strong>modern/subtil</strong>) auf. Außerdem unterscheidet man <strong>explizite</strong> (bewusste) von <strong>impliziten</strong> (unbewussten) Vorurteilen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Blatant vs. modern</div>
+    <strong>Blatant</strong> = offen und direkt geäußert; in westlichen Gesellschaften heute sozial sanktioniert. <strong>Modern/subtil</strong> = verdeckt, leugnet fortbestehende Diskriminierung und stellt Gleichheitsforderungen als übertrieben dar.
+  </div>
+  <div class="card">
+    <div class="card-title">Explizit vs. implizit</div>
+    <strong>Explizit</strong> = bewusst zugänglich, durch Selbstauskunft messbar (z. B. Gefühlsthermometer). <strong>Implizit</strong> = unbewusst, automatisch aktiviert, über einen Reaktionszeittest (IAT) messbar.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Niedrige explizite Werte ≠ keine Vorurteile</div>
+    Soziale Erwünschtheit drückt explizite Maße nach unten. Implizite Maße decken automatische Assoziationen auf, die sich <strong>nicht</strong> willentlich unterdrücken lassen — explizit „sauber" heißt also nicht implizit vorurteilsfrei.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Form von Vorurteil?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Beispiel der passenden Form zu</div>
+    <div class="corr-item" id="vf0">„Mit Leuten aus dieser Gruppe wäre ich nie befreundet." (offen gesagt)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('vf0',this,'blatant')">Blatant</button>
+        <button class="corr-btn" onclick="checkCorr('vf0',this,'modern')">Modern</button>
+        <button class="corr-btn" onclick="checkCorr('vf0',this,'explizit')">Explizit</button>
+        <button class="corr-btn" onclick="checkCorr('vf0',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="vf0-fb"></div>
+    </div>
+    <div class="corr-item" id="vf1">„Die werden doch längst bevorzugt und übertreiben maßlos."
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('vf1',this,'blatant')">Blatant</button>
+        <button class="corr-btn" onclick="checkCorr('vf1',this,'modern')">Modern</button>
+        <button class="corr-btn" onclick="checkCorr('vf1',this,'explizit')">Explizit</button>
+        <button class="corr-btn" onclick="checkCorr('vf1',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="vf1-fb"></div>
+    </div>
+    <div class="corr-item" id="vf2">Auf dem Gefühlsthermometer bewertet jemand eine Gruppe bewusst kälter.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('vf2',this,'blatant')">Blatant</button>
+        <button class="corr-btn" onclick="checkCorr('vf2',this,'modern')">Modern</button>
+        <button class="corr-btn" onclick="checkCorr('vf2',this,'explizit')">Explizit</button>
+        <button class="corr-btn" onclick="checkCorr('vf2',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="vf2-fb"></div>
+    </div>
+    <div class="corr-item" id="vf3">Im Reaktionszeittest schnellere Verknüpfung der Gruppe mit „schlecht".
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('vf3',this,'blatant')">Blatant</button>
+        <button class="corr-btn" onclick="checkCorr('vf3',this,'modern')">Modern</button>
+        <button class="corr-btn" onclick="checkCorr('vf3',this,'explizit')">Explizit</button>
+        <button class="corr-btn" onclick="checkCorr('vf3',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="vf3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Diskriminierung empirisch ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Diskriminierung empirisch — Korrespondenztests</div>
+    <div class="sec-lz">Korrespondenztest als kausaler Nachweis; Befunde</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie <em>beweist</em> man, dass Diskriminierung auf dem Arbeitsmarkt existiert — und es nicht nur an unterschiedlicher Qualifikation liegt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Mit dem <strong>Korrespondenztest</strong>: Man verschickt zwei <em>identische</em> Bewerbungen, die sich nur im Namen unterscheiden. Ein Unterschied im Rückruf ist dann kausal auf die zugeschriebene Herkunft — also Diskriminierung — zurückzuführen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Der Korrespondenztest</div>
+    Zwei gleichwertige, fiktive Bewerbungen gehen auf dieselbe Stelle. Einziger Unterschied: der <strong>Name</strong> signalisiert verschiedene Herkunft (z. B. deutsch vs. türkisch klingend). Gemessen wird die Einladungs- bzw. Rückrufquote.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum das kausal ist</div>
+    Weil <strong>alles außer dem Namen identisch</strong> ist, kann ein Unterschied in den Einladungen nur an der zugeschriebenen Herkunft liegen. Das macht den Korrespondenztest zu einem experimentellen <strong>Kausalnachweis</strong> für Diskriminierung.
+  </div>
+  <div class="card">
+    <div class="card-title">Die Befunde</div>
+    Auf dem <strong>Arbeitsmarkt</strong> und im <strong>Gesundheitswesen</strong> zeigen die Folien klare Benachteiligung türkischer Namen. Bei <strong>Kitaplätzen</strong> zeigt die Folie dagegen <strong>keine signifikante Diskriminierung türkischer Eltern</strong>, wohl aber Benachteiligung anderer Herkunftsgruppen. Folgen solcher Diskriminierung sind gesundheitliche, soziale und wirtschaftliche Nachteile.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Der Korrespondenztest Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Wie ein Kausalnachweis aufgebaut wird</div>
+    <div id="kt">
+      <div class="step-item"><strong>Schritt 1 — Auswahl:</strong> Man wählt echte, offene Stellenanzeigen aus.</div>
+      <div class="step-item"><strong>Schritt 2 — Bewerbungen:</strong> Zu jeder Stelle gehen zwei Bewerbungen mit <em>identischer</em> Qualifikation.</div>
+      <div class="step-item"><strong>Schritt 3 — Variation:</strong> Einziger Unterschied ist der Name — er signalisiert verschiedene Herkunft.</div>
+      <div class="step-item"><strong>Schritt 4 — Messung:</strong> Man erfasst, welche Bewerbung häufiger zum Gespräch eingeladen wird.</div>
+      <div class="step-item"><strong>Schritt 5 — Schluss:</strong> Da nur der Name variiert, ist ein Unterschied kausal auf Diskriminierung zurückzuführen.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'kt')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ RWA & SDO ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ RWA & SDO + Duales Prozessmodell</div>
+    <div class="sec-lz">Lernfrage 1: zwei Dispositionen, welche Gruppen sie abwerten</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Manche Menschen werten andere Gruppen ab — aber aus ganz unterschiedlichen Motiven. Welche zwei Persönlichkeitsmuster stecken oft dahinter, und wen treffen sie jeweils?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>RWA</strong> (Rechter Autoritarismus: Konformität, Unterwerfung, Bedrohung) wertet vor allem <em>abweichende, „bedrohliche"</em> Gruppen ab. <strong>SDO</strong> (Soziale Dominanzorientierung: Wunsch nach Hierarchie) wertet vor allem <em>statusniedrige, konkurrierende</em> Gruppen ab.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Rechter Autoritarismus (RWA)</div>
+    Drei Bausteine: <strong>Konventionalismus</strong> (Bewährtes ist gut), <strong>autoritäre Unterwürfigkeit</strong> (gegenüber Autoritäten) und <strong>autoritäre Aggression</strong> (gegen Normabweichler). Wertet ab: abweichende, als „bedrohlich" erlebte Gruppen.
+  </div>
+  <div class="card">
+    <div class="card-title">Soziale Dominanzorientierung (SDO)</div>
+    Der Wunsch nach <strong>hierarchischen Gruppenbeziehungen</strong> — „manche Gruppen sind einfach mehr wert". <strong>Legitimierende Mythen</strong> (etwa die Leistungsideologie) rechtfertigen Ungleichheit. Wertet ab: statusniedrige, konkurrierende Gruppen.
+  </div>
+  <div class="card">
+    <div class="card-title">Woher kommen RWA & SDO — und sind sie fix?</div>
+    Historischer Ursprung: das Konzept der <strong>autoritären Persönlichkeit</strong> (gemessen mit der <strong>F-Skala</strong>) — Vorurteile als Folge <em>strenger Erziehung</em> zu Gehorsam und Konformität, mit Verschiebung der Aggression auf „Sündenböcke". Der moderne Befund: RWA und SDO sind relativ stabil, aber <strong>wandelbar</strong> — ein liberales Wohnumfeld senkt Autoritarismus-Werte deutlich, und beim Studienfach zeigt sich beides: <em>Selbstselektion</em> (Unterschiede schon im 1. Semester) plus <em>Sozialisation</em> (Verstärkung über die Studienjahre). Das <strong>Duale Prozessmodell</strong> erklärt den Weg über <strong>Weltsichten</strong>: bedrohlicher Kontext + Konformitäts-Persönlichkeit → Weltsicht „<em>gefährliche Welt</em>" → RWA → Abwertung <em>bedrohlich</em> wirkender Gruppen.
+  </div>
+  <div class="card">
+    <div class="card-title">Duales Prozessmodell — zwei Wege zum Vorurteil</div>
+    Die Weltsicht <strong>🔒 gefährlicher Ort</strong> führt zu RWA (Schutz durch Konformität und Autorität) → Abwertung <em>bedrohlicher</em> Gruppen. Die Weltsicht <strong>🐅 kompetitiver Dschungel</strong> führt zu SDO (Dominanz) → Abwertung <em>statusniedriger</em> Gruppen.
+  </div>
+  <div class="card">
+    <div class="card-title">Beide sind wandelbar</div>
+    RWA und SDO sind keine fixen, angeborenen Eigenschaften, sondern durch <strong>Sozialisation</strong> und Selbstselektion formbar (z. B. das Studienumfeld). Sie korrelieren nur schwach, erklären zusammen Vorurteile aber sehr gut.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: RWA und SDO im direkten Vergleich</div>
+  <div class="card">
+    <div class="card-title">Zwei Dispositionen — umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="rwa" onclick="switchTab(this,'rwasdo')">RWA</button>
+      <button class="tab-btn" data-tab="sdo" onclick="switchTab(this,'rwasdo')">SDO</button>
+    </div>
+    <div class="tab-group" data-group="rwasdo">
+      <div class="tab-content active" data-tab="rwa">
+        <strong>Kern:</strong> Konformität, Unterwerfung unter Autorität, Aggression gegen Normabweichler.<br>
+        <strong>Weltsicht:</strong> 🔒 gefährlicher Ort.<br>
+        <strong>Wertet ab:</strong> abweichende, als „bedrohlich" wahrgenommene Gruppen.
+      </div>
+      <div class="tab-content" data-tab="sdo">
+        <strong>Kern:</strong> Wunsch nach Hierarchie zwischen Gruppen — „manche sind mehr wert".<br>
+        <strong>Weltsicht:</strong> 🐅 kompetitiver Dschungel.<br>
+        <strong>Wertet ab:</strong> statusniedrige, konkurrierende Gruppen.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Kognitiver Ansatz ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Kognitiver Ansatz: Kategorisierung</div>
+    <div class="sec-lz">Akzentuierung, Fremdgruppenhomogenität — und die Grenze</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind Vorurteile vielleicht nur ein Nebenprodukt davon, wie unser Gehirn die Welt vereinfacht?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Teilweise — <strong>Kategorisierung</strong> spart Ressourcen, erzeugt aber Verzerrungen (Akzentuierung, Fremdgruppenhomogenität). <em>Aber:</em> Kategorisierung allein erklärt nicht, <strong>warum</strong> Gruppen abgewertet werden — sie ist notwendig, aber nicht hinreichend.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kategorisierung & Akzentuierung</div>
+    Wir ordnen die soziale Welt in Kategorien — das vereinfacht. Der <strong>Akzentuierungseffekt</strong>: Unterschiede <em>zwischen</em> Kategorien werden überschätzt, Unterschiede <em>innerhalb</em> einer Kategorie unterschätzt.
+  </div>
+  <div class="card">
+    <div class="card-title">Folgen der Kategorisierung</div>
+    <strong>Fremdgruppenhomogenität</strong> („die sind doch alle gleich"); <strong>kognitive Geizhälse</strong> (Stereotype sparen Ressourcen — mit passender Kategorie bleibt mehr Kapazität für anderes); <strong>implizite Vorurteile</strong> (automatisch, nicht willentlich steuerbar).
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Grenze des Ansatzes</div>
+    Kategorisierung ist <strong>notwendig, aber nicht hinreichend</strong>: Sie erklärt Vereinfachung und Eigengruppenbevorzugung, aber nicht, <em>warum</em> abgewertet wird. Herz (Affekt) + Gehirn (Kognition) + ? → Vorurteil.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher kognitive Prozess?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Phänomen dem passenden Begriff zu</div>
+    <div class="corr-item" id="kog0">Unterschiede zwischen Gruppen werden überschätzt, innerhalb unterschätzt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('kog0',this,'akzent')">Akzentuierung</button>
+        <button class="corr-btn" onclick="checkCorr('kog0',this,'homogen')">Fremdgruppen-Homogenität</button>
+        <button class="corr-btn" onclick="checkCorr('kog0',this,'geizhals')">Kognitiver Geizhals</button>
+        <button class="corr-btn" onclick="checkCorr('kog0',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="kog0-fb"></div>
+    </div>
+    <div class="corr-item" id="kog1">„Die anderen sind doch alle gleich."
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('kog1',this,'akzent')">Akzentuierung</button>
+        <button class="corr-btn" onclick="checkCorr('kog1',this,'homogen')">Fremdgruppen-Homogenität</button>
+        <button class="corr-btn" onclick="checkCorr('kog1',this,'geizhals')">Kognitiver Geizhals</button>
+        <button class="corr-btn" onclick="checkCorr('kog1',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="kog1-fb"></div>
+    </div>
+    <div class="corr-item" id="kog2">Stereotype sparen geistige Ressourcen für andere Aufgaben.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('kog2',this,'akzent')">Akzentuierung</button>
+        <button class="corr-btn" onclick="checkCorr('kog2',this,'homogen')">Fremdgruppen-Homogenität</button>
+        <button class="corr-btn" onclick="checkCorr('kog2',this,'geizhals')">Kognitiver Geizhals</button>
+        <button class="corr-btn" onclick="checkCorr('kog2',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="kog2-fb"></div>
+    </div>
+    <div class="corr-item" id="kog3">Eine automatische Verknüpfung, die der bewussten Einstellung widerspricht.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('kog3',this,'akzent')">Akzentuierung</button>
+        <button class="corr-btn" onclick="checkCorr('kog3',this,'homogen')">Fremdgruppen-Homogenität</button>
+        <button class="corr-btn" onclick="checkCorr('kog3',this,'geizhals')">Kognitiver Geizhals</button>
+        <button class="corr-btn" onclick="checkCorr('kog3',this,'implizit')">Implizit</button>
+      </div><div class="corr-fb" id="kog3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Realistischer Konflikt ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Realistischer Konflikt & Social Identity</div>
+    <div class="sec-lz">Lernfrage 2: Ursache (Ressourcenkonflikt) & Auflösung (übergeordnete Ziele)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei zufällig gebildete Jungengruppen in einem Sommercamp wurden binnen Tagen zu verfeindeten Lagern. Was löste den Konflikt aus — und wie bekam man ihn wieder weg?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Der <strong>Wettbewerb um knappe Ressourcen</strong> (negative Interdependenz) erzeugte Feindseligkeit. Aufgelöst wurde er durch <strong>übergeordnete gemeinsame Ziele</strong> (positive Interdependenz), die nur durch Kooperation erreichbar waren — bloßer Kontakt reichte nicht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Theorie des realistischen Konflikts</div>
+    Das Verhalten zwischen Gruppen folgt ihrer <strong>funktionalen Beziehung</strong>. <strong>Negative Interdependenz</strong> — ein realer Wettbewerb um knappe Ressourcen — führt zu Feindseligkeit und Abwertung der jeweils anderen Gruppe. Bedrohung wirkt dabei nicht nur materiell: Neben der <strong>realistischen</strong> Bedrohung (Ressourcen, Sicherheit) zählt auch die <strong>symbolische</strong> Bedrohung (Werte, Weltbild) — vertieft im Vertiefungsmodul VT03.
+  </div>
+  <div class="card">
+    <div class="card-title">Die Lösung: übergeordnete Ziele</div>
+    <strong>Positive Interdependenz</strong> entsteht durch <strong>übergeordnete Ziele</strong>, die nur <em>gemeinsam</em> erreichbar sind. Sie führen zu Kooperation und Freundschaften. Wichtig: Bloßer Kontakt ohne gemeinsames Ziel reichte nicht.
+  </div>
+  <div class="card">
+    <div class="card-title">Social Identity Approach</div>
+    Konflikt braucht aber keinen realen Ressourcenkampf: Schon die Kategorisierung in „wir vs. die" und das Streben nach <strong>positiver sozialer Identität</strong> erzeugt Eigengruppenbevorzugung — gezeigt im Minimalgruppenparadigma.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Ingroup Love ≠ Outgroup Hate</div>
+    Eigengruppenbegünstigung (<em>Ingroup love</em>) ist der Normalfall und entsteht schon <strong>ohne</strong> Abwertung der anderen. Fremdgruppenhass (<em>Outgroup hate</em>) tritt nur unter bestimmten Bedingungen auf (z. B. Bedrohung, Dehumanisierung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das Ferienlager-Experiment Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Vom Konflikt zur Kooperation</div>
+    <div id="rc">
+      <div class="step-item"><strong>Stufe 1 — Setup:</strong> Zwei zufällig gebildete Jungengruppen im Sommercamp, zunächst getrennt — kein Persönlichkeitsunterschied.</div>
+      <div class="step-item"><strong>Stufe 2 — Wettbewerb:</strong> Turniere, bei denen nur eine Gruppe gewinnen kann (Kampf um knappe Ressourcen).</div>
+      <div class="step-item"><strong>Stufe 3 — Folge:</strong> Rasch entstehen Feindseligkeit, Beschimpfungen und Vorurteile zwischen den Gruppen.</div>
+      <div class="step-item"><strong>Stufe 4 — Was NICHT half:</strong> Bloßer Kontakt (z. B. gemeinsames Essen) löste den Konflikt nicht.</div>
+      <div class="step-item"><strong>Stufe 5 — Die Lösung:</strong> Erst übergeordnete Ziele (gemeinsam einen Defekt beheben) schufen Kooperation und Freundschaften.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'rc')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Negative Identität & System ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Bewältigungsstrategien & Systemrechtfertigung</div>
+    <div class="sec-lz">Mobilität / Kreativität / Wettbewerb; warum Benachteiligte das System stützen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was tun, wenn die eigene Gruppe einen niedrigen Status hat — sich anpassen, umdeuten oder kämpfen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Drei Strategien: <strong>individuelle Mobilität</strong> (wechseln), <strong>soziale Kreativität</strong> (umdeuten) und <strong>sozialer Wettbewerb</strong> (kämpfen). Welche gewählt wird, hängt von der <em>Durchlässigkeit</em> der Grenzen und der <em>Legitimität</em> der Statusunterschiede ab.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Drei Bewältigungsstrategien</div>
+    <strong>Individuelle Mobilität:</strong> Wechsel in die höherstehende Gruppe — nur bei durchlässigen Grenzen möglich.<br>
+    <strong>Soziale Kreativität:</strong> Umdeutung oder neue Vergleichsdimension — <em>ohne</em> realen Statuswechsel.<br>
+    <strong>Sozialer Wettbewerb:</strong> kollektiver Kampf um echte Statusverbesserung — bei wahrgenommener Illegitimität.
+  </div>
+  <div class="card">
+    <div class="card-title">Was die Wahl steuert</div>
+    <strong>Durchlässig + stabil + legitim</strong> → individuelle Mobilität.<br>
+    <strong>Undurchlässig + instabil + illegitim</strong> → sozialer Wettbewerb.<br>
+    Dazwischen → soziale Kreativität.
+  </div>
+  <div class="card">
+    <div class="card-title">Systemrechtfertigung — das Paradox</div>
+    Auch <strong>Benachteiligte</strong> verteidigen manchmal das System, das sie benachteiligt. Folie 69 erklärt das über <strong>kognitive Dissonanz</strong>: Wenn kein sozialer Wettbewerb stattfindet, werden die eigenen <strong>Überzeugungen</strong> an dieses Verhalten angepasst und das bestehende System eher gerechtfertigt. Das steht in Spannung zur Theorie der sozialen Identität.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Strategie zeigt sich?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Szenario der passenden Strategie zu</div>
+    <div class="corr-item" id="ns0">Ein Mitglied verlässt die statusniedrige Gruppe und schließt sich der höheren an.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ns0',this,'mobil')">Individuelle Mobilität</button>
+        <button class="corr-btn" onclick="checkCorr('ns0',this,'kreativ')">Soziale Kreativität</button>
+        <button class="corr-btn" onclick="checkCorr('ns0',this,'wettbewerb')">Sozialer Wettbewerb</button>
+      </div><div class="corr-fb" id="ns0-fb"></div>
+    </div>
+    <div class="corr-item" id="ns1">Die Gruppe deutet ein abgewertetes Merkmal stolz um („… is beautiful").
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ns1',this,'mobil')">Individuelle Mobilität</button>
+        <button class="corr-btn" onclick="checkCorr('ns1',this,'kreativ')">Soziale Kreativität</button>
+        <button class="corr-btn" onclick="checkCorr('ns1',this,'wettbewerb')">Sozialer Wettbewerb</button>
+      </div><div class="corr-fb" id="ns1-fb"></div>
+    </div>
+    <div class="corr-item" id="ns2">Die Gruppe organisiert kollektiven Protest für echten Statusgewinn.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ns2',this,'mobil')">Individuelle Mobilität</button>
+        <button class="corr-btn" onclick="checkCorr('ns2',this,'kreativ')">Soziale Kreativität</button>
+        <button class="corr-btn" onclick="checkCorr('ns2',this,'wettbewerb')">Sozialer Wettbewerb</button>
+      </div><div class="corr-fb" id="ns2-fb"></div>
+    </div>
+    <div class="corr-item" id="ns3">Man vergleicht sich bewusst mit einer anderen, schwächeren Gruppe.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ns3',this,'mobil')">Individuelle Mobilität</button>
+        <button class="corr-btn" onclick="checkCorr('ns3',this,'kreativ')">Soziale Kreativität</button>
+        <button class="corr-btn" onclick="checkCorr('ns3',this,'wettbewerb')">Sozialer Wettbewerb</button>
+      </div><div class="corr-fb" id="ns3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — ⑨ Vorurteilsabbau ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">⑨ Vorurteilsabbau: Kontakt & Kategorien</div>
+    <div class="sec-lz">Lernfrage 3: Kontakthypothese + Kategorienänderung, Anwendung Nachbarschaft</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In einer Nachbarschaft mit Gruppenkonflikten — was hilft <em>wirklich</em> gegen Vorurteile? Reicht es, die Leute einfach zusammenzubringen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq8')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq8">Bloßer Kontakt reicht nicht — er braucht <strong>optimale Bedingungen</strong> (gleicher Status, gemeinsame Ziele, Unterstützung). Dazu kommt das <strong>Verändern der Kategoriengrenzen</strong>: erst als Individuen sehen (Dekategorisierung), dann ein gemeinsames „Wir" schaffen (Rekategorisierung).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ansatz 1: Kontakthypothese</div>
+    Kontakt baut Vorurteile ab — aber nur unter Bedingungen: <strong>gleicher Status</strong>, <strong>kooperative gemeinsame Ziele</strong>, <strong>institutionelle/normative Unterstützung</strong> und Potenzial für Freundschaft. Er wirkt über Angstreduktion, Empathie und Perspektivübernahme.
+  </div>
+  <div class="card">
+    <div class="card-title">Ansatz 2: Kategoriengrenzen verändern</div>
+    <strong>Dekategorisierung</strong> (die Person statt der Gruppe sehen), <strong>Rekategorisierung</strong> (ein gemeinsames übergeordnetes „wir"), <strong>duale Identität</strong> (Dach + sichtbare Untergruppen) und <strong>wechselseitige Differenzierung</strong> (distinkte, einander ergänzende Rollen).
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Zwei Hürden: Irony of Harmony & Prinzip-Umsetzungs-Lücke</div>
+    <strong>Irony of Harmony:</strong> Positiver, harmonischer Kontakt baut Vorurteile ab — kann aber bei der <em>benachteiligten</em> Gruppe die Wahrnehmung von Ungleichheit und damit die <strong>Veränderungsmotivation senken</strong>. <strong>Prinzip-Umsetzungs-Lücke:</strong> Die Mehrheit bejaht Gleichheit <em>im Prinzip</em>, leistet aber Widerstand gegen <em>konkrete Maßnahmen</em>. Kontakt reduziert also Vorurteile — nicht automatisch die Ungleichheit.
+  </div>
+  <div class="card">
+    <div class="card-title">Anwendung Nachbarschaft (Lernfrage 3)</div>
+    Gemeinsame Projekte mit <strong>gleichem Status &amp; kooperativen Zielen</strong> (Kontakt) <strong>+</strong> persönliches Kennenlernen als Individuen (Dekategorisierung) <strong>+</strong> ein verbindendes „Wir Stadtteil" (Rekategorisierung) — diese Kombination baut Vorurteile am wirksamsten ab.
+  </div>
+  <div class="card warn">
+    <div class="card-title">⚠️ Grenze: Ironie der Harmonie</div>
+    Positiver Kontakt verbessert zwar die Einstellungen der Mehrheit, baut aber <strong>nicht automatisch Ungleichheit</strong> ab — und kann bei Benachteiligten die Bereitschaft zu kollektivem Handeln gegen Diskriminierung sogar senken.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welche Strategie zum Vorurteilsabbau?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Maßnahme dem passenden Begriff zu</div>
+    <div class="corr-item" id="ab0">Man lernt das Gegenüber als einzelne Person kennen, die Gruppe tritt zurück.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab0',this,'dekat')">Dekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab0',this,'rekat')">Rekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab0',this,'dual')">Duale Identität</button>
+        <button class="corr-btn" onclick="checkCorr('ab0',this,'wechsdiff')">Wechselseitige Differenzierung</button>
+      </div><div class="corr-fb" id="ab0-fb"></div>
+    </div>
+    <div class="corr-item" id="ab1">Aus „wir vs. die" wird ein gemeinsames übergeordnetes „wir".
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab1',this,'dekat')">Dekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab1',this,'rekat')">Rekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab1',this,'dual')">Duale Identität</button>
+        <button class="corr-btn" onclick="checkCorr('ab1',this,'wechsdiff')">Wechselseitige Differenzierung</button>
+      </div><div class="corr-fb" id="ab1-fb"></div>
+    </div>
+    <div class="corr-item" id="ab2">Eine gemeinsame Dachidentität, aber die Untergruppen bleiben sichtbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab2',this,'dekat')">Dekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab2',this,'rekat')">Rekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab2',this,'dual')">Duale Identität</button>
+        <button class="corr-btn" onclick="checkCorr('ab2',this,'wechsdiff')">Wechselseitige Differenzierung</button>
+      </div><div class="corr-fb" id="ab2-fb"></div>
+    </div>
+    <div class="corr-item" id="ab3">Beide Gruppen behalten distinkte, einander ergänzende Rollen im Kontakt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab3',this,'dekat')">Dekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab3',this,'rekat')">Rekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab3',this,'dual')">Duale Identität</button>
+        <button class="corr-btn" onclick="checkCorr('ab3',this,'wechsdiff')">Wechselseitige Differenzierung</button>
+      </div><div class="corr-fb" id="ab3-fb"></div>
+    </div>
+    <div class="corr-item" id="ab4">Der Blick wandert von Kategorien hin zu individuellen Eigenschaften.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab4',this,'dekat')">Dekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab4',this,'rekat')">Rekategorisierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab4',this,'dual')">Duale Identität</button>
+        <button class="corr-btn" onclick="checkCorr('ab4',this,'wechsdiff')">Wechselseitige Differenzierung</button>
+      </div><div class="corr-fb" id="ab4-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq8"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s9">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 10 häufigsten Verwechslungen aus VL08</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Stereotyp</h4>
+      <p>Kognitive Repräsentation von Gruppeneigenschaften</p>
+      <p>Beschreibend, nicht zwingend wertend</p>
+      <p>Nicht notwendigerweise wertend</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Vorurteil</h4>
+      <p>Affektive, bewertende Komponente</p>
+      <p>Immer abwertend / evaluativ</p>
+      <p>Geht über die bloße Beschreibung hinaus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Stereotype sind dasselbe wie Vorurteile — beide sind negative Einstellungen gegenüber Gruppen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Explizite Vorurteile</h4>
+      <p>Bewusst zugänglich</p>
+      <p>Durch Selbstauskunft messbar (z. B. Fragebogen)</p>
+      <p>Anfällig für soziale Erwünschtheit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Implizite Vorurteile</h4>
+      <p>Unbewusst, automatisch aktiviert</p>
+      <p>Über Reaktionszeittest (IAT) messbar</p>
+      <p>Können der bewussten Einstellung widersprechen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer keine expliziten Vorurteile äußert, hat auch keine impliziten Vorurteile.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>RWA (Rechter Autoritarismus)</h4>
+      <p>Konformität, Unterwerfung, autoritäre Aggression</p>
+      <p>Weltsicht: gefährlicher Ort</p>
+      <p>Wertet ab: abweichende, „bedrohliche“ Gruppen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>SDO (Soziale Dominanzorientierung)</h4>
+      <p>Wunsch nach Hierarchie zwischen Gruppen</p>
+      <p>Weltsicht: kompetitiver Dschungel</p>
+      <p>Wertet ab: statusniedrige, konkurrierende Gruppen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> RWA und SDO messen dasselbe Konstrukt und sind beliebig austauschbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ingroup Love (Eigengruppenliebe)</h4>
+      <p>Bevorzugung der eigenen Gruppe</p>
+      <p>Entsteht schon durch bloße Kategorisierung</p>
+      <p>Der Normalfall der Eigengruppenbegünstigung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Outgroup Hate (Fremdgruppenhass)</h4>
+      <p>Aktive Abwertung der Fremdgruppe</p>
+      <p>Nur unter bestimmten Bedingungen (z. B. Bedrohung)</p>
+      <p>Nicht zwingende Folge der Eigengruppenliebe</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer die eigene Gruppe bevorzugt, hasst automatisch die Fremdgruppe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Theorie des realistischen Konflikts</h4>
+      <p>Ursache: realer Wettbewerb um knappe Ressourcen</p>
+      <p>Negative Interdependenz erzeugt Feindseligkeit</p>
+      <p>Lösung: übergeordnete gemeinsame Ziele</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Theorie der sozialen Identität</h4>
+      <p>Ursache: Streben nach positiver sozialer Identität</p>
+      <p>Ingroup-Favorisierung auch ohne realen Konflikt</p>
+      <p>Beleg: Minimalgruppenparadigma</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Vorurteile entstehen nur, wenn Gruppen tatsächlich um Ressourcen konkurrieren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Dekategorisierung</h4>
+      <p>Gruppengrenzen werden aufgelöst</p>
+      <p>Wahrnehmung als Individuum statt als Gruppe</p>
+      <p>Personalisierter Kontakt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Rekategorisierung</h4>
+      <p>Gemeinsame übergeordnete Kategorie wird geschaffen</p>
+      <p>Frühere Fremdgruppe wird Teil der Eigengruppe</p>
+      <p>Aus „wir vs. die“ wird ein gemeinsames „wir“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Dekategorisierung und Rekategorisierung sind dasselbe — beide lösen Gruppenidentitäten auf.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Blatante Vorurteile</h4>
+      <p>Offen und direkt geäußert</p>
+      <p>Sozial heute weniger akzeptiert</p>
+      <p>Leicht als Vorurteil erkennbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Moderne / subtile Vorurteile</h4>
+      <p>Verdeckt, als sachliche Kritik getarnt</p>
+      <p>Leugnen fortbestehende Diskriminierung</p>
+      <p>Stellen Gleichberechtigungsforderungen als übertrieben dar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Da offene Diskriminierung seltener wurde, sind Vorurteile insgesamt weniger verbreitet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Soziale Kreativität</h4>
+      <p>Umdeutung ohne realen Statuswechsel</p>
+      <p>Andere Vergleichsdimension oder -gruppe</p>
+      <p>Beispiel: „… is beautiful“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Sozialer Wettbewerb</h4>
+      <p>Kollektiver Kampf um echten Statusgewinn</p>
+      <p>Setzt wahrgenommene Illegitimität voraus</p>
+      <p>Soziale Bewegungen, kollektives Handeln</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Soziale Kreativität und sozialer Wettbewerb führen beide zu tatsächlichem sozialen Wandel.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Realistische Ressourcenbedrohung</h4>
+      <p>Tatsächlicher Wettbewerb um knappe Güter (z. B. Jobs)</p>
+      <p>Objektive Interessenkonflikte → negative Interdependenz</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Relative Deprivation</h4>
+      <p>GEFÜHLTES ungerechtes Zurückbleiben im Vergleich zu anderen</p>
+      <p>Wirkt auch bei objektiv guter Lage — der Vergleich zählt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Relative Deprivation setzt voraus, dass es der eigenen Gruppe objektiv schlecht geht.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Duale Identität</h4>
+      <p>Subgruppen-Identität BLEIBT erhalten + gemeinsame übergeordnete Identität</p>
+      <p>Rekategorisierung + saliente Subgruppenidentität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Wechselseitige Differenzierung</h4>
+      <p>Gruppen bleiben getrennt, kooperieren aber mit komplementären Stärken</p>
+      <p>Jede Gruppe behält ihre Rolle — Anerkennung statt Verschmelzung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der dualen Identität geben beide Gruppen ihre ursprünglichen Subgruppen-Identitäten vollständig auf.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(8)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(10)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 11 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s10" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl08</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl08';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Ein Vermieter vergibt eine Wohnung nicht an eine Familie, nur weil sie einen ausländischen Nachnamen trägt. Welches Konzept beschreibt dieses Verhalten am genauesten?",
+      "opts": [
+        "Diskriminierung — benachteiligende Behandlung wegen der Gruppenzugehörigkeit",
+        "Stereotyp — eine kognitive, rein beschreibende Annahme über die ganze Gruppe",
+        "Vorurteil — eine abwertende emotionale Haltung gegenüber der Gruppe",
+        "Soziale Kategorie — das bloße Einordnen von Menschen nach Merkmalen"
+      ],
+      "c": 0,
+      "e": "Diskriminierung ist die benachteiligende Behandlung von Menschen aufgrund ihrer zugeschriebenen Gruppenzugehörigkeit. Ein Stereotyp beschreibt Gruppeneigenschaften, ein Vorurteil ist eine abwertende Einstellung oder Orientierung gegenüber einer Gruppe."
+    },
+    {
+      "id": "s0q2",
+      "q": "Warum kann ein Stereotyp wie „Ältere Menschen sind erfahren“ bestehen, ohne schon ein Vorurteil zu sein?",
+      "opts": [
+        "Weil Stereotype stets der Wahrheit entsprechen und niemals verzerren",
+        "Weil Stereotype beschreibend sind und nicht zwingend eine Abwertung enthalten",
+        "Weil ein Vorurteil erst durch tatsächlich benachteiligendes Verhalten entsteht",
+        "Weil Stereotype nur dann wirken, wenn sie laut ausgesprochen werden"
+      ],
+      "c": 1,
+      "e": "Ein Stereotyp ist die kognitive Repräsentation von Eigenschaften einer Gruppe und laut Folie nicht notwendigerweise wertend. Ein Vorurteil geht darüber hinaus, weil es eine Gruppe direkt oder indirekt abwertet."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Eine Gruppe wird als sehr kompetent, aber wenig warmherzig wahrgenommen (etwa erfolgreiche Reiche). Welche Emotion sagt das Stereotype Content Model dafür vorher?",
+      "opts": [
+        "Mitleid — die Gruppe gilt als gutmütig, aber wenig leistungsfähig",
+        "Bewunderung — die Gruppe gilt zugleich als warm und als kompetent",
+        "Neid — die Gruppe gilt als kompetent, aber als wenig warmherzig",
+        "Verachtung — die Gruppe gilt als weder warm noch als kompetent"
+      ],
+      "c": 2,
+      "e": "Hohe Kompetenz bei geringer Wärme erzeugt laut Modell Neid. Bewunderung entsteht bei hoch/hoch, Mitleid bei warm/inkompetent, Verachtung bei gering/gering."
+    },
+    {
+      "id": "s1q2",
+      "q": "Anhand welcher zwei Grunddimensionen ordnet das Stereotype Content Model soziale Gruppen ein?",
+      "opts": [
+        "Nach Sympathie und nach der Vertrautheit mit der jeweiligen Gruppe",
+        "Nach Macht und nach der Statushöhe der jeweiligen sozialen Gruppe",
+        "Nach Ähnlichkeit und nach der Häufigkeit der jeweiligen Gruppe",
+        "Nach Wärme und nach der Kompetenz der jeweiligen sozialen Gruppe"
+      ],
+      "c": 3,
+      "e": "Die zwei fundamentalen Dimensionen sind Wärme (soziale Absichten) und Kompetenz (Fähigkeiten). Ihre Kombination bestimmt, welche Emotionen und Verhaltensabsichten gegenüber einer Gruppe entstehen."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Auf einem Fragebogen gibt eine Person keinerlei Vorurteile an, reagiert in einem Reaktionszeittest aber deutlich schneller, wenn eine Fremdgruppe mit negativen Wörtern gepaart wird. Was zeigt dieser Test?",
+      "opts": [
+        "Ein implizites Vorurteil — eine automatische, unbewusste Assoziation",
+        "Dass die Person bewusst lügt und in Wahrheit offen feindselig ist",
+        "Ein blatantes Vorurteil — eine offen und direkt geäußerte Abwertung",
+        "Dass gar kein Vorurteil vorliegt, weil der Fragebogen ausschlaggebend ist"
+      ],
+      "c": 0,
+      "e": "Reaktionszeitverfahren (IAT) erfassen implizite, automatisch aktivierte Assoziationen, die der bewussten Selbstauskunft widersprechen können. Niedrige explizite Werte schließen implizite Vorurteile also nicht aus."
+    },
+    {
+      "id": "s2q2",
+      "q": "„Minderheiten stellen heute übertriebene Forderungen und werden längst bevorzugt behandelt.“ Welche Form von Vorurteil zeigt sich in dieser Aussage?",
+      "opts": [
+        "Ein blatantes Vorurteil — die Gruppe wird ganz offen und direkt beschimpft",
+        "Ein modernes Vorurteil — verdeckt und als sachliche Kritik getarnt",
+        "Ein implizites Vorurteil — unbewusst und nicht willentlich steuerbar",
+        "Gar kein Vorurteil — es handelt sich um eine sachlich korrekte Aussage"
+      ],
+      "c": 1,
+      "e": "Moderner (subtiler) Rassismus leugnet fortbestehende Diskriminierung und stellt Gleichberechtigungsforderungen als übertrieben dar. Er ist verdeckt, anders als das offen abwertende blatante Vorurteil."
+    },
+    {
+      "id": "s2q3",
+      "q": "In einer Umfrage erzielt eine Region unauffällige Werte auf klassischen Vorurteilsskalen. Ein Verhaltenstest (fingierte Bewerbungen) zeigt dort trotzdem deutliche Benachteiligung. Was folgt daraus für die Messung von Vorurteilen?",
+      "opts": [
+        "Die Skalen sind gefälscht worden — anders lässt sich der Widerspruch zwischen den Ergebnissen nicht erklären",
+        "Der Verhaltenstest ist ungültig, weil Skalen immer das methodisch genauere Bild liefern",
+        "Vorurteile existieren in der Region schlicht nicht, wie die unauffälligen Skalenwerte klar belegen",
+        "Unauffällige Skalenwerte bedeuten nicht „kein Bias“ — es braucht mehrere Messansätze bis hin zum Verhalten"
+      ],
+      "c": 3,
+      "e": "Vorurteile können sozial erwünscht überdeckt oder subtil geworden sein: Wer nur direkte Skalen nutzt, unterschätzt sie. Deshalb kombiniert die Forschung offene Fragen, Skalen, indirekte Verfahren und Verhaltenstests (Korrespondenztests) — erst die Kaskade zeigt das volle Bild."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "In einem Korrespondenztest werden auf dieselbe Stellenanzeige zwei gleichwertige Bewerbungen geschickt, die sich nur im Namen (deutsch vs. türkisch klingend) unterscheiden. Wozu dient dieses Vorgehen?",
+      "opts": [
+        "Um die tatsächliche Qualifikation der beiden Bewerber objektiv zu vergleichen",
+        "Um zu messen, wie viele Menschen offen rassistische Ansichten äußern",
+        "Um Diskriminierung kausal nachzuweisen, da allein der Name variiert",
+        "Um die Zufriedenheit der Arbeitgeber mit neuen Mitarbeitern zu erheben"
+      ],
+      "c": 2,
+      "e": "Weil beide Bewerbungen identisch sind und nur der Name variiert, lässt sich ein Unterschied in den Einladungen kausal auf die zugeschriebene Herkunft — also Diskriminierung — zurückführen."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was zeigen Korrespondenztests auf dem deutschen Arbeitsmarkt übereinstimmend?",
+      "opts": [
+        "Dass Bewerber ausschließlich nach ihrer fachlichen Eignung eingeladen werden",
+        "Dass Diskriminierung nur in wirtschaftlich schwachen Regionen überhaupt vorkommt",
+        "Dass offene Diskriminierung heute vollständig aus dem Arbeitsmarkt verschwunden ist",
+        "Dass gleich qualifizierte Bewerber mit Migrationsnamen seltener eingeladen werden"
+      ],
+      "c": 3,
+      "e": "Die Befunde sind konsistent: Bei identischer Qualifikation werden Bewerber mit Migrationsnamen seltener zum Gespräch eingeladen. Diskriminierung ist also empirisch messbar und weit verbreitet."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Eine Person betont das Bewährte, ordnet sich Autoritäten unter und will Normabweichler hart bestraft sehen. Welche Disposition beschreibt das?",
+      "opts": [
+        "Rechter Autoritarismus — Konformität und Unterwerfung unter Autorität",
+        "Soziale Dominanzorientierung — der Wunsch nach klaren Gruppenhierarchien",
+        "Relative Deprivation — das Gefühl, schlechter gestellt zu sein als andere",
+        "Systemrechtfertigung — das Verteidigen der bestehenden Gesellschaftsordnung"
+      ],
+      "c": 0,
+      "e": "Rechter Autoritarismus (RWA) verbindet Konventionalismus, autoritäre Unterwürfigkeit und autoritäre Aggression gegen Normabweichler. SDO dagegen dreht sich um den Wunsch nach Hierarchie zwischen Gruppen."
+    },
+    {
+      "id": "s4q2",
+      "q": "Eine Person findet, manche Gruppen seien einfach mehr wert als andere und Hierarchien zwischen Gruppen seien in Ordnung. Welche Disposition zeigt sich — und wen wertet sie eher ab?",
+      "opts": [
+        "RWA — sie wertet vor allem normabweichende, „unmoralische“ Gruppen ab",
+        "SDO — sie wertet vor allem statusniedrige, konkurrierende Gruppen ab",
+        "Relative Deprivation — sie wertet vor allem die eigene Bezugsgruppe ab",
+        "Mere Exposure — sie wertet vor allem unbekannte, ganz neue Gruppen ab"
+      ],
+      "c": 1,
+      "e": "Der Wunsch nach Gruppenhierarchie ist das Kennzeichen der sozialen Dominanzorientierung (SDO). Sie sagt vor allem Abwertung statusniedriger und konkurrierender Gruppen vorher; RWA zielt eher auf abweichende Gruppen."
+    },
+    {
+      "id": "s4q3",
+      "q": "Im Dualen Prozessmodell führen zwei Weltsichten zu Vorurteilen. Wer die Welt als „gefährlichen Ort“ erlebt, neigt am ehesten wozu?",
+      "opts": [
+        "Zu SDO, weil die Welt dann als konkurrenzbetonter Dschungel erscheint",
+        "Zu relativer Deprivation gegenüber den besser gestellten Fremdgruppen",
+        "Zu RWA, weil Schutz durch Konformität und Autorität gesucht wird",
+        "Zu Systemrechtfertigung, weil das bestehende System Sicherheit verspricht"
+      ],
+      "c": 2,
+      "e": "Die Weltsicht „gefährlicher Ort“ speist den Pfad zu RWA (Schutz durch Konformität und Autorität). Die Weltsicht „kompetitiver Dschungel“ speist dagegen den Pfad zu SDO."
+    },
+    {
+      "id": "s4q4",
+      "q": "Nach dem Umzug in ein liberales Wohnheim sinken die Autoritarismus-Werte einer Studentin deutlich; ihre Kommilitonin in der konservativen Verbindung verändert sich kaum. Was zeigt das über RWA?",
+      "opts": [
+        "RWA ist wandelbar: Soziales Umfeld und Sozialisation verändern die Ausprägung deutlich",
+        "RWA ist ein fixes, früh geprägtes Persönlichkeitsmerkmal, das sich nach der Kindheit nicht mehr verändert",
+        "Der deutliche Unterschied zwischen den beiden Studentinnen beweist, dass RWA nur ein Messartefakt ist",
+        "Nur SDO ist wandelbar durch Umfeld und Sozialisation, RWA dagegen bleibt fix und unveränderlich"
+      ],
+      "c": 0,
+      "e": "RWA (und SDO) sind relativ stabil, aber wandelbar — Ergebnis von Persönlichkeit UND Sozialisation: Ein liberales Wohnklima senkt Autoritarismus-Werte; bei SDO zeigen sich Studienfach-Effekte (Selbstselektion plus Sozialisation über die Studienjahre)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "„Die aus der anderen Abteilung sind doch alle gleich“ — während man die eigene Abteilung als bunt gemischt erlebt. Welcher kognitive Effekt zeigt sich?",
+      "opts": [
+        "Illusorische Korrelation — ein Zusammenhang wird stark überschätzt",
+        "Eigengruppenbegünstigung — die eigene Gruppe wird klar bevorzugt",
+        "Akzentuierung der Unterschiede innerhalb der eigenen Bezugsgruppe",
+        "Fremdgruppenhomogenität — die andere Gruppe wirkt einheitlicher"
+      ],
+      "c": 3,
+      "e": "Mitglieder der Fremdgruppe werden als ähnlicher wahrgenommen, als sie sind („die sind alle gleich“), während die Eigengruppe differenziert erscheint — das ist der Fremdgruppen-Homogenitätseffekt."
+    },
+    {
+      "id": "s5q2",
+      "q": "Der kognitive Ansatz erklärt Vorurteile über Kategorisierung. Was ist seine zentrale Grenze?",
+      "opts": [
+        "Kategorisierung allein erklärt nicht, warum Gruppen abgewertet werden",
+        "Kategorisierung kommt beim Menschen tatsächlich überhaupt nicht vor",
+        "Kategorisierung betrifft ausschließlich die eigene Bezugsgruppe",
+        "Kategorisierung lässt sich willentlich jederzeit vollständig abschalten"
+      ],
+      "c": 0,
+      "e": "Kategorisierung ist eine notwendige, aber nicht hinreichende Bedingung: Sie erklärt Vereinfachung und Ingroup-Favorisierung, nicht aber, warum Fremdgruppen abgewertet werden. Affektive und motivationale Faktoren kommen hinzu."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "In einem Ferienlager-Experiment mit zwei Jungengruppen entstanden rasch Feindseligkeit und Vorurteile. Was war laut Theorie des realistischen Konflikts die Ursache?",
+      "opts": [
+        "Schon die bloße Einteilung in zwei Gruppen ganz ohne weiteren Anlass",
+        "Der Wettbewerb um knappe Ressourcen, also negative Interdependenz",
+        "Die unterschiedliche Persönlichkeit der beteiligten einzelnen Jungen",
+        "Die räumliche Enge und die drückende Sommerhitze im Ferienlager selbst"
+      ],
+      "c": 1,
+      "e": "Die Theorie des realistischen Konflikts führt Intergruppenfeindseligkeit auf realen Wettbewerb um knappe Ressourcen (negative Interdependenz) zurück — nicht auf Persönlichkeit oder die Situation an sich."
+    },
+    {
+      "id": "s6q2",
+      "q": "Wie ließ sich der Konflikt zwischen den beiden Lagergruppen wieder abbauen?",
+      "opts": [
+        "Indem man die beiden Gruppen räumlich dauerhaft voneinander trennte",
+        "Indem eine Autorität den Gruppen den Streit kurzerhand verbot",
+        "Durch übergeordnete Ziele, die nur gemeinsam erreichbar waren",
+        "Durch einen Wettkampf, den die stärkere Gruppe am Ende klar gewann"
+      ],
+      "c": 2,
+      "e": "Übergeordnete Ziele schaffen positive Interdependenz: Sie sind nur durch Kooperation beider Gruppen erreichbar und bauen so Feindseligkeit ab. Bloße Trennung oder erneuter Wettbewerb helfen nicht."
+    },
+    {
+      "id": "s6q3",
+      "q": "Schon die zufällige Einteilung in zwei bedeutungslose Gruppen führt dazu, dass man die eigene Gruppe bevorzugt — ohne die andere zu hassen. Was zeigt das?",
+      "opts": [
+        "Dass Vorurteile ausschließlich aus realem Ressourcenkonflikt entstehen",
+        "Dass Eigengruppenliebe und Fremdgruppenhass immer gemeinsam auftreten",
+        "Dass die Bevorzugung der Eigengruppe reale Konkurrenz zwingend voraussetzt",
+        "Dass Eigengruppenbegünstigung schon ohne Fremdgruppenabwertung entsteht"
+      ],
+      "c": 3,
+      "e": "Das Minimalgruppenparadigma zeigt: Schon bloße Kategorisierung genügt für Ingroup-Favorisierung. Eigengruppenliebe (Ingroup Love) und Fremdgruppenhass (Outgroup Hate) sind trennbar — Liebe ist der Normalfall."
+    },
+    {
+      "id": "s6q4",
+      "q": "Gruppe A geht es objektiv gut — doch im Vergleich zu einer anderen Gruppe fühlt sie sich ungerecht schlechtergestellt und entwickelt Feindseligkeit. Welcher Mechanismus ist das?",
+      "opts": [
+        "Realistische Ressourcenbedrohung: Es herrscht tatsächlicher Wettbewerb um knappe Güter wie Arbeitsplätze oder Wohnraum",
+        "Relative Deprivation: Die GEFÜHLTE Benachteiligung im Vergleich zählt, nicht die objektive Lage",
+        "Dekategorisierung: Die Gruppengrenzen wurden vollständig aufgelöst, jeder gilt nur als Individuum",
+        "Ingroup Love: reine Eigengruppenbevorzugung ohne jeden Bezug zur Fremdgruppe oder deren Abwertung"
+      ],
+      "c": 1,
+      "e": "Relative Deprivation entsteht aus dem wahrgenommenen ungerechten Zurückbleiben im VERGLEICH zu anderen — auch bei objektiv guter Lage. Die realistische Konflikttheorie setzt dagegen bei tatsächlichem Wettbewerb um knappe Ressourcen an."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Mitglieder einer statusniedrigen Gruppe deuten ein bislang abgewertetes Merkmal stolz um („… is beautiful“), ohne den realen Status zu verändern. Welche Strategie ist das?",
+      "opts": [
+        "Soziale Kreativität — Umdeutung ohne tatsächliche Statusänderung",
+        "Individuelle Mobilität — der Wechsel in eine höherstehende Gruppe",
+        "Sozialer Wettbewerb — der kollektive Kampf um echten Statusgewinn",
+        "Systemrechtfertigung — das Verteidigen der bestehenden Ordnung"
+      ],
+      "c": 0,
+      "e": "Soziale Kreativität verbessert die soziale Identität durch Umdeutung oder Wechsel der Vergleichsdimension — ohne den tatsächlichen Status zu ändern. Sozialer Wettbewerb zielt dagegen auf echte Statusveränderung."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wie erklärt die Theorie der Systemrechtfertigung, dass auch Benachteiligte die bestehende Ordnung verteidigen?",
+      "opts": [
+        "Sie tun das nie — Benachteiligte bekämpfen das System grundsätzlich",
+        "Kognitive Dissonanz wird reduziert, indem Überzeugungen an das eigene Ausbleiben von sozialem Wettbewerb angepasst werden",
+        "Sie verteidigen es nur dann, wenn sie dafür unmittelbar bezahlt werden",
+        "Sie verwechseln dabei lediglich die Eigengruppe mit der Fremdgruppe"
+      ],
+      "c": 1,
+      "e": "Folie 69 erklärt Systemrechtfertigung über kognitive Dissonanz: Wenn kein sozialer Wettbewerb stattfindet, werden die eigenen Überzeugungen an dieses Verhalten angepasst und das bestehende System eher gerechtfertigt."
+    }
+  ],
+  "8": [
+    {
+      "id": "s8q1",
+      "q": "Bloßer Kontakt zwischen Gruppen reicht oft nicht. Welche Bedingung muss laut Kontakthypothese erfüllt sein, damit Kontakt Vorurteile abbaut?",
+      "opts": [
+        "Die Gruppen sollten möglichst selten und nur ganz kurz aufeinandertreffen",
+        "Eine der beiden Gruppen sollte deutlich mehr Status und Macht besitzen",
+        "Gleicher Status, gemeinsame Ziele und institutionelle Unterstützung",
+        "Der Kontakt sollte ganz ohne gemeinsame Aufgaben oder Ziele stattfinden"
+      ],
+      "c": 2,
+      "e": "Kontakt baut Vorurteile nur unter optimalen Bedingungen ab: gleicher Status, kooperative gemeinsame Ziele und unterstützendes normatives Klima. Sonst kann er Vorurteile sogar verstärken."
+    },
+    {
+      "id": "s8q2",
+      "q": "Zwei verfeindete Vereine werden zu einem gemeinsamen Stadtteam zusammengefasst, sodass aus „wir gegen die“ ein gemeinsames „wir“ wird. Welche Strategie ist das?",
+      "opts": [
+        "Dekategorisierung — der Blick auf die einzelne Person statt die Gruppe",
+        "Subtypisierung — das Bilden von Ausnahmen innerhalb des Stereotyps",
+        "Wechselseitige Differenzierung — getrennte, ergänzende Gruppenrollen",
+        "Rekategorisierung — eine gemeinsame übergeordnete Gruppenidentität"
+      ],
+      "c": 3,
+      "e": "Rekategorisierung ersetzt die Eigen-/Fremdgruppen-Grenze durch eine gemeinsame übergeordnete Identität — frühere Fremdgruppenmitglieder werden Teil der neuen Eigengruppe."
+    },
+    {
+      "id": "s8q3",
+      "q": "In einer Nachbarschaft mit Gruppenkonflikten organisiert man gemeinsame Projekte, bei denen man sich als Einzelpersonen kennenlernt. Welcher Mechanismus baut hier Vorurteile ab?",
+      "opts": [
+        "Dekategorisierung — man sieht den anderen als Person, nicht als Gruppe",
+        "Relative Deprivation — das Gefühl, gegenüber anderen benachteiligt zu sein",
+        "Soziale Dominanz — der Wunsch nach klarer Rangordnung zwischen Gruppen",
+        "Systemrechtfertigung — das Akzeptieren der bestehenden Konfliktlage"
+      ],
+      "c": 0,
+      "e": "Personalisierter Kontakt verringert die Salienz der Gruppengrenzen: Man nimmt das Gegenüber als Individuum mit eigenen Eigenschaften wahr statt als Vertreter einer Kategorie — das ist Dekategorisierung."
+    },
+    {
+      "id": "s8q4",
+      "q": "Nach einem harmonischen Begegnungsprojekt bewertet die benachteiligte Gruppe die Mehrheit deutlich positiver — engagiert sich aber weniger für die Verbesserung ihrer eigenen Lage. Wie heißt dieses Phänomen?",
+      "opts": [
+        "Prinzip-Umsetzungs-Lücke: Man bejaht Gleichheit im Prinzip, blockiert aber konkrete Maßnahmen im Alltag",
+        "Rekategorisierung: Beide Gruppen verschmelzen zu einer neuen, gemeinsamen übergeordneten Wir-Kategorie",
+        "Irony of Harmony: Positiver Kontakt kann die Veränderungsmotivation der Benachteiligten senken",
+        "Intergruppenangst: Der Kontakt erzeugt negative Erwartungen gegenüber der anderen Gruppe"
+      ],
+      "c": 2,
+      "e": "Irony of Harmony: Harmonischer Kontakt reduziert Vorurteile, kann aber die Wahrnehmung von Ungleichheit und damit den Veränderungsdruck bei der benachteiligten Gruppe dämpfen. Die Prinzip-Umsetzungs-Lücke ist das verwandte Mehrheits-Phänomen (Gleichheit ja, konkrete Maßnahmen nein)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Zuordnung trifft die drei Folienbegriffe Stereotyp, Vorurteil und Diskriminierung am besten?",
+    "opts": [
+      "Stereotyp = benachteiligende Behandlung, Vorurteil = kognitive Repräsentation, Diskriminierung = neutrale Beschreibung von Gruppeneigenschaften",
+      "Stereotyp = kognitive Repräsentation von Gruppeneigenschaften, Vorurteil = abwertende Einstellung/Orientierung gegenüber einer Gruppe, Diskriminierung = benachteiligende Behandlung aufgrund zugeschriebener Gruppenzugehörigkeit",
+      "Stereotyp = soziale Rolle, Vorurteil = Gruppenvergleich, Diskriminierung = subjektives Ungerechtigkeitsgefühl",
+      "Stereotyp = direkte Feindseligkeit, Vorurteil = institutionelle Benachteiligung, Diskriminierung = bloße Kategorisierung"
+    ],
+    "c": 1,
+    "e": "Die Folien definieren drei eigenständige Begriffe: Stereotyp als kognitive Repräsentation von Gruppeneigenschaften, Vorurteil als direkt oder indirekt abwertende Einstellung bzw. Orientierung und Diskriminierung als benachteiligende Behandlung aufgrund zugeschriebener Gruppenzugehörigkeit."
+  },
+  {
+    "id": "bq2",
+    "q": "Positiver Kontakt verbessert zwar die Einstellung der Mehrheit, kann bei Benachteiligten aber die Bereitschaft senken, gegen Ungleichheit vorzugehen. Wie nennt man dieses Paradox?",
+    "opts": [
+      "Prinzip-Umsetzungs-Lücke — Zustimmung ohne Bereitschaft zu Maßnahmen",
+      "Sekundärer Transfereffekt — Übertragung des Effekts auf weitere Gruppen",
+      "Ironie der Harmonie — erlebte Harmonie senkt das Problembewusstsein",
+      "Relative Deprivation — der empfundene Nachteil gegenüber anderen Gruppen"
+    ],
+    "c": 2,
+    "e": "Die „Ironie der Harmonie“ beschreibt, dass subjektiv erlebte Harmonie das Bewusstsein für strukturelle Ungleichheit senkt und die Bereitschaft zu kollektivem Handeln verringert."
+  },
+  {
+    "id": "bq3",
+    "q": "Worin unterscheiden sich Rechter Autoritarismus und Soziale Dominanzorientierung am deutlichsten?",
+    "opts": [
+      "RWA strebt nach Hierarchie, SDO nach Unterordnung unter Autoritäten",
+      "Beide messen exakt dasselbe Konstrukt und sind im Grunde praktisch austauschbar",
+      "RWA und SDO sind angeboren und durch Erfahrung gar nicht veränderbar",
+      "RWA beruht auf Konformität und Bedrohung, SDO auf dem Wunsch nach Hierarchie"
+    ],
+    "c": 3,
+    "e": "RWA gründet auf Konformität und Bedrohungswahrnehmung (Unterwerfung unter Autorität), SDO auf dem Wunsch nach Gruppenhierarchie. Beide korrelieren nur schwach, erklären zusammen aber Vorurteile sehr gut."
+  }
+];
+
+var corrCorrect = {
+  "sv0": "stereotyp",
+  "sv1": "vorurteil",
+  "sv2": "diskriminierung",
+  "sv3": "vorurteil",
+  "sv4": "diskriminierung",
+  "bias0": "bewunderung",
+  "bias1": "neid",
+  "bias2": "mitleid",
+  "bias3": "verachtung",
+  "vf0": "blatant",
+  "vf1": "modern",
+  "vf2": "explizit",
+  "vf3": "implizit",
+  "kog0": "akzent",
+  "kog1": "homogen",
+  "kog2": "geizhals",
+  "kog3": "implizit",
+  "ns0": "mobil",
+  "ns1": "kreativ",
+  "ns2": "wettbewerb",
+  "ns3": "kreativ",
+  "ab0": "dekat",
+  "ab1": "rekat",
+  "ab2": "dual",
+  "ab3": "wechsdiff",
+  "ab4": "dekat"
+};
+var corrExpl = {
+  "sv0": "Eine kognitive Repräsentation von Eigenschaften einer Gruppe — laut Folie beschreibend und nicht notwendigerweise wertend.",
+  "sv1": "Ein Vorurteil ist eine Einstellung oder Orientierung gegenüber einer Gruppe, die sie direkt oder indirekt abwertet.",
+  "sv2": "Tatsächliches benachteiligendes Verhalten aufgrund der Herkunft — die Verhaltensebene.",
+  "sv3": "Hier steht die abwertende Einstellung gegenüber der Gruppe im Vordergrund — also ein Vorurteil, nicht bloß eine Beschreibung.",
+  "sv4": "Eine konkrete benachteiligende Handlung (Nicht-Einstellung) — Verhaltensebene.",
+  "bias0": "Hohe Wärme und hohe Kompetenz erzeugen Bewunderung (z. B. die Eigengruppe).",
+  "bias1": "Hohe Kompetenz bei geringer Wärme erzeugt Neid (z. B. Reiche).",
+  "bias2": "Hohe Wärme bei geringer Kompetenz erzeugt Mitleid (z. B. Ältere).",
+  "bias3": "Geringe Wärme und geringe Kompetenz erzeugen Verachtung (z. B. Obdachlose).",
+  "vf0": "Offen und direkt geäußerte Ablehnung — ein blatantes (offenes) Vorurteil.",
+  "vf1": "Diskriminierung wird geleugnet, Forderungen als übertrieben dargestellt — moderner Rassismus.",
+  "vf2": "Eine bewusst angegebene Bewertung (Gefühlsthermometer) — explizite Voreingenommenheit.",
+  "vf3": "Eine automatische, unbewusste Assoziation aus dem Reaktionszeittest — implizites Vorurteil.",
+  "kog0": "Unterschiede zwischen Kategorien werden überschätzt, innerhalb unterschätzt — Akzentuierungseffekt.",
+  "kog1": "Die Fremdgruppe wird als einheitlicher wahrgenommen, als sie ist — Fremdgruppenhomogenität.",
+  "kog2": "Stereotype sparen geistige Ressourcen — der Mensch als „kognitiver Geizhals“.",
+  "kog3": "Eine automatische Verknüpfung, die der bewussten Einstellung widersprechen kann — implizites Vorurteil.",
+  "ns0": "Verlassen der Gruppe und Wechsel in die höherstehende — individuelle Mobilität.",
+  "ns1": "Stolze Umdeutung eines Merkmals ohne realen Statuswechsel — soziale Kreativität.",
+  "ns2": "Kollektiver Kampf um echte Statusverbesserung der Gruppe — sozialer Wettbewerb.",
+  "ns3": "Wahl einer anderen Vergleichsgruppe/-dimension ohne Statusänderung — soziale Kreativität.",
+  "ab0": "Die Person tritt als Individuum in den Vordergrund, die Gruppe zurück — Dekategorisierung.",
+  "ab1": "Aus zwei Gruppen wird ein gemeinsames übergeordnetes „wir“ — Rekategorisierung.",
+  "ab2": "Gemeinsame Dachidentität bei weiterhin sichtbaren Untergruppen — duale Identität.",
+  "ab3": "Gruppen bleiben salient mit distinkten, ergänzenden Rollen — wechselseitige Differenzierung.",
+  "ab4": "Der Blick wandert von der Kategorie zu individuellen Eigenschaften — Dekategorisierung."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* SCM-Quadranten-Simulator (Sektion ②): Wärme × Kompetenz → Quadrant/Emotion */
+var scState = {w:'hi', k:'hi'};
+function scSet(dim, val){
+  scState[dim] = val;
+  ['hi','lo'].forEach(function(v){
+    var b = document.getElementById('sc-'+dim+'-'+v);
+    if(b) b.classList.toggle('on', v === val);
+  });
+  scRender();
+}
+function scRender(){
+  var o = document.getElementById('sc-out');
+  if(!o) return;
+  var key = scState.w + scState.k;
+  var m = {
+    hihi: '<strong>Bewunderung</strong> (warm + kompetent). Typisch verortet: die <em>Eigengruppe</em> und Verbündete. Die „gute Ecke" des Modells — hierhin sortieren Menschen die Gruppen, denen sie sich zugehörig fühlen.',
+    hilo: '<strong>Mitleid</strong> (warm, aber als wenig kompetent wahrgenommen). Im deutschen Streudiagramm z. B. <em>Ältere und Kranke</em>. Paternalistisches Muster: wohlwollend, aber herablassend — die Gruppe wird umsorgt, nicht ernst genommen.',
+    lohi: '<strong>Neid</strong> (kompetent, aber kalt wahrgenommen). Im deutschen Streudiagramm z. B. <em>Reiche, Karrierefrauen, Feministinnen</em>. Anerkannte Fähigkeit + unterstellte kalte Absicht = ambivalentes, konfliktträchtiges Stereotyp.',
+    lolo: '<strong>Verachtung</strong> (weder warm noch kompetent wahrgenommen). Im deutschen Streudiagramm z. B. <em>Obdachlose und Arme</em>. Die „schlechteste Ecke" — hier fallen Abwertung und Ausgrenzung am stärksten aus.'
+  };
+  o.innerHTML = m[key] + '<br><em>BIAS map:</em> Jeder Quadrant ist zusätzlich mit typischen Verhaltensabsichten verknüpft (Erleichterung vs. Schädigung) — die Emotion ist das Scharnier zwischen Stereotypinhalt und Verhalten.';
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  scRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

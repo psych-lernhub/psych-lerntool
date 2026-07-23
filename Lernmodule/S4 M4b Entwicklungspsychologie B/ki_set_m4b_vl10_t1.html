@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · 🤖 KI-Übungsset VL10 · Teil 1/3 — 38 Fragen (Entwicklungsaufgaben)</title>
+<!--
+  Altklausur-HTML von build_altklausur.py erzeugt (Engine = scaffold_lernmodul.py
+  + Quiz-Runner). Echte, geprüfte Altklausurfragen. Storage-Key: lm-m4b-vl60
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Quiz-Runner */
+.mc-opt.qr-sel{border-color:var(--accent)!important;background:rgba(129,140,248,.12)!important;color:var(--text)!important}
+.mc-opt.qr-sel .ltr{color:var(--accent)}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-review .card{margin-bottom:10px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.exp-btn{background:none;border:1px solid rgba(56,189,248,.35);color:var(--cyan);border-radius:8px;
+  padding:6px 12px;font-size:.75rem;font-weight:600;cursor:pointer;margin-top:8px;margin-right:8px;transition:.15s}
+.exp-btn:hover{background:rgba(56,189,248,.08)}
+.mc-hint{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.28);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2)}
+.mc-hint .lbl{font-size:.63rem;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · 🤖 KI-Übungsset VL10 · Teil 1/3 — 38 Fragen (Entwicklungsaufgaben)</h1>
+<p class="page-sub">Entwicklungspsychologie B · VL10 Entwicklungsaufgaben · Teil 1 von 3 · MCQ-Kette V5.1.0</p>
+<div class="lf-bar">
+  <strong>🤖 VL10·1/3</strong> Teil 1 von 3 des VL10-Fragensets (38 von 112 Fragen; die Teile folgen der Reihenfolge der Vorlesung und überschneiden sich nicht). Distraktoren fehlkonzept-basiert nach Regelwerk V5.1.0, quellengebunden an die V2-Extraktion, jeder Distraktor mit Falschheitsbeleg; formal gate-geprüft (Musterprüfungen + fachblinde Blind-Rate).
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">🎯 Quiz starten</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">📋 Alle Fragen</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — Quiz-Runner ═══════════ -->
+<section class="section active" id="s0">
+  <div id="quizRunner"></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — Alle Fragen (Durchblättern) ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">📋 Alle Altklausurfragen (38)</div>
+    <div class="sec-lz">38 KI-Fragen zur VL10 (Entwicklungsaufgaben), Teil 1 von 3.</div>
+  </div>
+  <div id="sq0"></div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(0)">← Zum Quiz</button>
+  </div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl60';
+var OPT_SHUF = true;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "q1",
+      "q": "Welche vier Arten von Kriterien bilden das Kriterienbündel zur Bestimmung von Phasen des Erwachsenenalters?",
+      "opts": [
+        "Biologische Reifung, gesellschaftliche Anforderungen und die Normalbiografie der Mittelschicht der 1950er Jahre.",
+        "Soziale, historische und kulturelle Rahmenbedingungen sowie einzelne Persönlichkeitsmerkmale.",
+        "Soziale Vorstellungen, institutionelle Regelungen, biologische Bedingtheiten und das Rentenalter.",
+        "Chronologisches Alter, biologische Faktoren, die Bewältigung von Entwicklungsaufgaben und Transitionen."
+      ],
+      "c": 3,
+      "e": "Auf PDF-Seite 5 führt die Vorlesung unter der Überschrift Phasen des Erwachsenenalters ausdrücklich ein Kriterienbündel auf, und dieses Bündel besteht aus genau vier Arten von Kriterien: chronologisches Alter, biologische Faktoren, die Bewältigung von Entwicklungsaufgaben und Transitionen. Entscheidendes Trennmerkmal ist die Funktion der Kriterien: Gefragt ist, woran eine Altersphase überhaupt festgemacht wird — nicht, woraus Entwicklungsaufgaben entstehen, wodurch Fristen gesetzt werden oder wodurch Entwicklungsverläufe variieren. Die stärkste Falle ist deshalb die Aufzählung aus Havighursts Modell: Auf PDF-Seite 10 stehen biologische Reifung sowie gesellschaftliche Anforderungen und selbst gesetzte Ziele als Quellen der Entwicklungsaufgaben, und die Orientierung an der Normalbiografie der Mittelschicht der 1950er Jahre kennzeichnet dieses Modell. Beides erklärt die Herkunft der Aufgaben, nicht die Einteilung der Lebensspanne. Soziale Vorstellungen, institutionelle Regelungen, biologische Bedingtheiten und das Rentenalter gehören laut PDF-Seite 22 zu den Entwicklungsfristen; diese legen fest, wann Aufgaben begonnen und erreicht sein sollten, und wirken damit innerhalb einer Phase. Soziale, historische und kulturelle Rahmenbedingungen sowie Persönlichkeitsmerkmale nennt PDF-Seite 19 als Gründe für die Variation von Entwicklungsaufgaben — eine Variationsquelle, kein Bestimmungskriterium. Beachte außerdem: Kein einzelnes der vier Kriterien ist für sich hinreichend, die Quelle spricht bewusst von einem Bündel.",
+      "h": "Frag dich, welches Bündel die Quelle unmittelbar zur Einteilung der Lebensphasen heranzieht — und trenne das sauber davon, woraus Aufgaben im Havighurst-Modell entstehen und wodurch Fristen im Lebenslauf gesetzt werden."
+    },
+    {
+      "id": "q2",
+      "q": "Warum sind Beginn und Ende von Phasen des Erwachsenenalters nicht als unveränderliche Altersgrenzen zu verstehen?",
+      "opts": [
+        "Weil jede Person den Zeitpunkt der eigenen Transitionen frei von sozialen Bezügen wählt.",
+        "Weil das chronologische Alter für die Bestimmung von Altersphasen bedeutungslos ist.",
+        "Weil sie in erster Linie durch biologische Reifung und elterliche Erziehung vorgegeben werden.",
+        "Weil sie historischen Veränderungen und kulturellen Variationen unterliegen."
+      ],
+      "c": 3,
+      "e": "PDF-Seite 5 hält als ersten Punkt fest: Beginn und Ende der Altersphasen unterliegt historischen Veränderungen und kulturellen Variationen. Genau diese beiden Variabilitätsquellen sind gemeint — die Grenzen verschieben sich über die Zeit und unterscheiden sich zwischen kulturellen Kontexten. Entscheidendes Trennmerkmal ist die Herkunft der Veränderlichkeit: Gefragt ist, woher der Wandel kommt, und nicht, ob ein einzelnes Kriterium wertlos sei oder ob alles beliebig wäre. Die stärkste Falle ist die biologisch-externe Erklärung: PDF-Seite 20 stellt ausdrücklich fest, dass das Erwachsenenalter weniger von biologischen Regulationsprozessen wie Reifung und von externen Regulationsprozessen wie der elterlichen Erziehung bestimmt wird als die Kindheit. Wären die Grenzen so vorgegeben, wären sie gerade fest und nicht wandelbar — die Aussage kehrt den Befund also um. Die Behauptung, das chronologische Alter sei für die Bestimmung von Altersphasen bedeutungslos, überdehnt den Gedanken: Dasselbe Blatt führt das chronologische Alter als erstes Kriterium des Kriterienbündels auf; variabel heißt nicht wirkungslos. Und die freie Wahl der eigenen Transitionen ohne soziale Bezüge trifft es ebenfalls nicht: PDF-Seite 20 spricht zwar von mehr Freiheit bei der Gestaltung der Entwicklung, betont aber im selben Zug soziale Erwartungen und Normen als Orientierungsrahmen, und PDF-Seite 19 bindet die Variation ausdrücklich an soziale, historische und kulturelle Rahmenbedingungen. Variabilität ist also eingebettet, nicht beliebig.",
+      "h": "Prüfe, ob eine Aussage die Grenzen der Lebensphasen wirklich als wandelbar erklärt — oder ob sie stattdessen nur ein Einzelkriterium für bedeutungslos erklärt, die Regulation der Kindheit überträgt oder Wandel mit völliger Beliebigkeit gleichsetzt."
+    },
+    {
+      "id": "q3",
+      "q": "Welche zentralen Kriterien kennzeichnen in den Quellen das junge Erwachsenenalter?",
+      "opts": [
+        "Intensiver Selbstfokus und Vermeidung fester Verpflichtungen.",
+        "Intimität, Isolierung sowie eine gefestigte Ich-Identität.",
+        "Volljährigkeit, Autonomie, Eintritt ins Berufsleben und Familiengründung.",
+        "Sorge für das Gemeinwohl und Aufbau eines gemeinsamen Freundeskreises."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 6 listet unter der Überschrift Zentrale Kriterien zur Definition des jungen Erwachsenenalters genau vier Punkte: Volljährigkeit, Autonomie, Eintritt ins Berufsleben und Familiengründung. Entscheidendes Trennmerkmal ist der Unterschied zwischen Definitionskriterium und Entwicklungsaufgabe: Kriterien sagen, woran die Phase erkannt wird, Aufgaben sagen, was in ihr zu bewältigen ist. Genau dort setzt die stärkste Falle an: Sorge für das Gemeinwohl und der Aufbau eines gemeinsamen Freundeskreises stehen auf PDF-Seite 13, dort aber als zentrale Entwicklungsaufgaben des jungen Erwachsenenalters nach Havighurst und nicht als Kriterien der Phasendefinition. Weil beide Listen dieselbe Altersphase betreffen, hilft nur die saubere Trennung der Ebenen. Intensiver Selbstfokus und die Vermeidung fester Verpflichtungen gehören laut PDF-Seite 31 zu den Hauptcharakteristika der Emerging Adulthood; diese Phase wird dort ausdrücklich als eigenständiger, verlängerter Übergang zwischen Adoleszenz und Erwachsenenalter beschrieben und ist damit von der gefragten Phase abzugrenzen. Intimität, Isolierung und die gefestigte Ich-Identität stammen von PDF-Seite 15 und aus der Tabelle auf PDF-Seite 17: Das ist Eriksons psychosozialer Stufenkonflikt für das junge Erwachsenenalter, also eine theoretische Beschreibung der Entwicklungsthematik. Beachte zudem, dass die vier Kriterien nicht als gleichzeitig erfüllt oder universell gültig zu lesen sind.",
+      "h": "Halte zwei Ebenen auseinander: woran eine Lebensphase definiert wird und was in ihr zu leisten ist. Gesucht sind die Merkmale, mit denen die Quelle den Übergang ins Erwachsensein festmacht — nicht Aufgaben aus Havighursts Modell und nicht Eriksons Stufenkonflikt."
+    },
+    {
+      "id": "q4",
+      "q": "Welche zentralen Kriterien kennzeichnen in den Quellen das mittlere Erwachsenenalter?",
+      "opts": [
+        "Die Mitte des Lebens, berufliche Etablierung und Berentung sowie familiäre Etablierung und der Auszug der Kinder.",
+        "Körperliche Veränderungen akzeptieren, befriedigende Leistung im Beruf erreichen und heranwachsenden Kindern helfen.",
+        "Das Interesse an der Stiftung und Erziehung der nächsten Generation sowie die Fähigkeit zur Fürsorge für die Welt.",
+        "Die Anpassung an die Pensionierung, an das Nachlassen der Körperkräfte und an den Tod des Lebenspartners."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 6 nennt unter Zentrale Kriterien zur Definition des mittleren Erwachsenenalters drei Punkte: Mitte des Lebens, berufliche Etablierung und Berentung sowie familiäre Etablierung und Auszug der Kinder. Entscheidendes Trennmerkmal ist die Ebene: Gefragt sind Kriterien, an denen die Phase festgemacht wird, nicht die Aufgaben, die in ihr anstehen, und nicht der Stufenkonflikt eines Entwicklungsmodells. Die stärkste Falle ist das späte Erwachsenenalter: Anpassung an die Pensionierung, an das Nachlassen der Körperkräfte und an den Tod des Lebenspartners steht auf PDF-Seite 12 unter Punkt 6 und in der Tabelle auf PDF-Seite 17 ausdrücklich in der Zeile Spätes Erwachsenenalter. Besonders verwechslungsanfällig ist das, weil im Schlüssel Berentung vorkommt — Berentung als Kriterium der Lebensmitte und die Anpassung an die bereits erfolgte Pensionierung sind aber zwei verschiedene Dinge. Körperliche Veränderungen akzeptieren, befriedigende Leistung im Beruf erreichen und heranwachsenden Kindern helfen sind laut PDF-Seite 14 Havighursts zentrale Entwicklungsaufgaben des mittleren Erwachsenenalters: inhaltlich richtig, als Antwort auf die Kriterienfrage aber falsch verortet. Das Interesse an der Stiftung und Erziehung der nächsten Generation sowie die Fähigkeit zur Fürsorge beschreibt PDF-Seite 16 als Eriksons Generativität. Beachte, dass keines der drei Kriterien als notwendige Voraussetzung zu lesen ist.",
+      "h": "Gefragt sind die Merkmale, mit denen die Quelle diese Lebensphase definiert — nicht die Aufgaben, die in ihr zu bewältigen sind, und nicht der Stufenkonflikt eines Entwicklungsmodells. Prüfe außerdem, ob eine Aussage nicht schon die folgende Altersphase beschreibt."
+    },
+    {
+      "id": "q5",
+      "q": "Welche Merkmale umfasst der klassische Entwicklungsbegriff?",
+      "opts": [
+        "Multidimensionalität und Multidirektionalität, eine geringe Entwicklungsrate und große interindividuelle Unterschiede.",
+        "Fortschreitende Differenzierung, Reifung, Zuwachs an Kompetenzen und das Erreichen höherer Funktionsstufen.",
+        "Fortschreitende Differenzierung, Abbau von Kompetenzen und die Rückkehr auf frühere Funktionsstufen.",
+        "Das Lösen von Entwicklungsaufgaben, die in einem bestimmten Lebensabschnitt jeweils zentral sind."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 4 führt unter der Zwischenüberschrift Klassischer Entwicklungsbegriff genau vier Merkmale auf: fortschreitende Differenzierung, Reifung, Zuwachs an Kompetenzen und höhere Funktionsstufen. Entscheidendes Trennmerkmal ist die Zuordnung innerhalb derselben Folie: Die Punkte darunter — Multidimensionalität und -direktionalität, geringe Entwicklungsrate, große interindividuelle Unterschiede — gehören nicht mehr zum klassischen Begriff, sondern charakterisieren die Entwicklung im Erwachsenenalter, für die es der Folie zufolge diesbezüglich relativ wenig Entwicklung gibt. Genau das ist die stärkste Falle, weil beide Blöcke räumlich unmittelbar zusammenstehen: Wer die Folie als eine einzige Aufzählung liest, ordnet die lebensspannenbezogenen Kennzeichen fälschlich dem klassischen Begriff zu, obwohl sie ihm entgegengesetzt sind. Die Variante mit Abbau von Kompetenzen und Rückkehr auf frühere Funktionsstufen dreht die Richtung um: Dieselbe Seite spricht von Zuwachs und von höheren Funktionsstufen, der klassische Begriff denkt Entwicklung also aufwärts. Das Lösen von Entwicklungsaufgaben, die in einem bestimmten Lebensabschnitt zentral sind, steht auf PDF-Seite 8 und PDF-Seite 10 und gehört zu Havighursts Modell, also zu einem eigenen theoretischen Ansatz. Beachte, dass der klassische Begriff enger ist als die lebensspannenbezogene, multidimensionale Sicht und Entwicklung nicht bloß als quantitatives Wachstum fasst.",
+      "h": "Auf derselben Folie stehen zwei Blöcke direkt untereinander: die Merkmale des klassischen Begriffs und die Kennzeichen der Entwicklung im Erwachsenenalter. Ordne sauber zu und achte zusätzlich auf die Richtung der beschriebenen Veränderung."
+    },
+    {
+      "id": "q6",
+      "q": "Wie wird Entwicklung im Erwachsenenalter hinsichtlich ihrer Richtung und Dimensionen charakterisiert?",
+      "opts": [
+        "Als normativ, universell und unidirektional.",
+        "Als multidimensional und multidirektional.",
+        "Als multidimensional, aber streng unidirektional.",
+        "Als langsam und interindividuell sehr verschieden."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 4 nennt für die Entwicklung im Erwachsenenalter ausdrücklich Multidimensionalität und -direktionalität. Darin stecken zwei Strukturaussagen zugleich: Entwicklung findet in mehreren Dimensionen statt, und sie verläuft in mehreren Richtungen, also nicht bloß als linearer Zuwachs. Entscheidendes Trennmerkmal ist, dass die Frage nach Richtung und Dimensionen die Struktur von Entwicklung betrifft und nicht deren Tempo. Die stärkste Falle ist deshalb die Charakterisierung über Langsamkeit und interindividuelle Streuung: Geringe Entwicklungsrate und große interindividuelle Unterschiede stehen zwar auf derselben Seite und sind inhaltlich völlig richtig, beantworten aber eine andere Frage — nämlich die nach Geschwindigkeit und Personenunterschieden. Wer hier zugreift, verwechselt Dynamik mit Struktur. Die Charakterisierung als normativ, universell und unidirektional ist dagegen die Gegenposition zur Quelle: PDF-Seite 19 hält für die Lebensspannenperspektive ausdrücklich fest, dass Entwicklungsaufgaben nicht als normative, universelle und unidirektionale Folge von Entwicklungsstufen zu verstehen sind. Und die Mischform, die die Mehrdimensionalität übernimmt, die Richtung aber auf eine einzige verengt, greift zu kurz: Die Folie nennt beide Eigenschaften gleichrangig in einem Punkt, und Multidirektionalität bezeichnet gerade die Mehrzahl möglicher Entwicklungsrichtungen.",
+      "h": "Die Frage zielt auf zwei Strukturmerkmale zugleich: auf die Zahl der Bereiche, in denen sich etwas verändert, und auf die Zahl der möglichen Verlaufsrichtungen. Tempo und Streuung zwischen Personen gehören zu einer anderen Dimension und sind hier nicht gefragt."
+    },
+    {
+      "id": "q7",
+      "q": "Welche zwei weiteren Merkmale kennzeichnen Entwicklung im Erwachsenenalter neben ihrer Multidimensionalität und Multidirektionalität?",
+      "opts": [
+        "Eine fortschreitende Differenzierung und das Erreichen höherer Funktionsstufen.",
+        "Eine Auslösung durch biologische Reifung und eine Orientierung an der Normalbiografie.",
+        "Eine langsame beziehungsweise geringe Entwicklungsrate und große interindividuelle Unterschiede.",
+        "Ein weitgehender Stillstand der Entwicklung und eine Angleichung der Personen."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 4 listet neben Multidimensionalität und -direktionalität zwei weitere Kennzeichen der Entwicklung im Erwachsenenalter: Entwicklung ist langsam, es gilt also eine geringe Entwicklungsrate, und es bestehen große interindividuelle Unterschiede. Entscheidendes Trennmerkmal ist, dass beide Merkmale die Dynamik betreffen — Tempo des Wandels und Streuung zwischen Personen — und nicht die Struktur. Die stärkste Falle ist der Sprung von langsam zu Stillstand: Die Folie formuliert eine geringe Entwicklungsrate und spricht von diesbezüglich relativ wenig Entwicklung, meint damit aber ausdrücklich weiterlaufende, nur langsame Entwicklung. Eine behauptete Angleichung der Personen widerspricht zudem direkt den großen interindividuellen Unterschieden auf derselben Seite, sodass diese Option gleich in beiden Hälften kippt. Fortschreitende Differenzierung und das Erreichen höherer Funktionsstufen stehen zwar ebenfalls auf PDF-Seite 4, gehören dort aber zur Aufzählung unter der Zwischenüberschrift Klassischer Entwicklungsbegriff — also zu genau dem Begriff, von dem das Erwachsenenalter abgegrenzt wird. Die Auslösung durch biologische Reifung und die Orientierung an der Normalbiografie schließlich beschreibt PDF-Seite 10 als Merkmale von Havighursts Modell der Entwicklungsaufgaben und damit einen eigenen theoretischen Ansatz.",
+      "h": "Gesucht sind zwei Merkmale von derselben Folie, die weder die Zahl der Bereiche noch die Verlaufsrichtungen betreffen. Prüfe, ob eine Aussage stattdessen den klassischen Begriff wiedergibt, Havighursts Aufgabenquellen nennt oder langsamen Wandel mit gar keinem Wandel gleichsetzt."
+    },
+    {
+      "id": "q8",
+      "q": "Mit welcher Entwicklungsorientierung wird das Thema Beruf verbunden?",
+      "opts": [
+        "Mit Aufbau sowie einer Orientierung an Zuwachs und Entwicklungsgewinnen.",
+        "Mit Fürsorge sowie einer Orientierung an den nächsten Generationen.",
+        "Mit Anpassung sowie einer Orientierung an der sekundären Kontrolle des Selbst.",
+        "Mit Stabilisierung sowie einer Orientierung am erreichten Funktionsniveau."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 7 stellt unter der Überschrift Zentrale Entwicklungsthemen zwei Ovale nebeneinander, Beruf und Familie, und ordnet jedem einen eigenen Kasten zu. Unter Beruf stehen Aufbau sowie Orientierung an Zuwachs und Entwicklungsgewinnen, unter Familie stehen Stabilisierung und Aufrechterhalten des Funktionsniveaus. Entscheidendes Trennmerkmal ist damit die Stoßrichtung: Beruf ist auf Erweiterung und Gewinn hin angelegt, Familie auf den Erhalt des erreichten Niveaus. Die stärkste Falle ist genau die Vertauschung dieser Zuordnung, denn Stabilisierung und das Aufrechterhalten des Funktionsniveaus sind auf derselben Seite ausdrücklich dem Thema Familie zugeschrieben. Wer sich nur die beiden Stoßrichtungen merkt, nicht aber ihre Verteilung auf die zwei Themen, greift hier daneben. Die Anpassung eigener Ziele über sekundäre Kontrolle stammt aus einem anderen Zusammenhang: PDF-Seite 28 definiert sekundäre Kontrolle als Veränderung des Selbst und als Anpassung eigener Bedürfnisse und Ziele an kontextuelle Gegebenheiten; das ist eine Kontrollstrategie der Lebenslauftheorie der Kontrolle. Fürsorge und die Ausrichtung auf die nächsten Generationen gehören laut PDF-Seite 16 zu Eriksons Generativität in den mittleren Lebensjahren. Beachte, dass die Zuordnung in der dargestellten Gegenüberstellung von Beruf und Familie gilt und nicht auf beliebige Lebensbereiche verallgemeinert werden darf.",
+      "h": "Die Quelle stellt zwei zentrale Entwicklungsthemen einander gegenüber und gibt jedem eine eigene Stoßrichtung. Rufe dir diese Gegenüberstellung ins Gedächtnis und prüfe, ob eine Aussage nicht die Stoßrichtung des jeweils anderen Themas oder ein ganz anderes Modell beschreibt."
+    },
+    {
+      "id": "q9",
+      "q": "Mit welcher Entwicklungsorientierung wird das Thema Familie verbunden?",
+      "opts": [
+        "Mit Stabilisierung und der Aufrechterhaltung des Funktionsniveaus.",
+        "Mit fortschreitender Differenzierung und höheren Funktionsstufen.",
+        "Mit gesteigertem Zielengagement und späterer Zielablösung.",
+        "Mit Aufbau und der Orientierung an Zuwachs und Entwicklungsgewinnen."
+      ],
+      "c": 0,
+      "e": "Die Zuordnung stammt aus der Gegenüberstellung zweier zentraler Entwicklungsthemen auf PDF-Seite 7: Unter dem Oval Beruf steht der Kasten mit Aufbau und der Orientierung an Zuwachs und Entwicklungsgewinnen, unter dem Oval Familie dagegen der Kasten mit Stabilisierung und dem Aufrechterhalten des Funktionsniveaus. Das entscheidende Trennmerkmal ist die Richtung der Orientierung: Zuwachs und Gewinn auf der einen, Erhalt eines bereits erreichten Niveaus auf der anderen Seite. Der stärkste Fehlweg besteht darin, genau diese beiden Kästen zu vertauschen und der Familie den Aufbau samt Zuwachsorientierung zuzuschreiben — das ist die Berufsseite derselben Gegenüberstellung und damit ausgeschlossen. Der klassische Entwicklungsbegriff mit fortschreitender Differenzierung und höheren Funktionsstufen gehört dagegen auf PDF-Seite 4 und beschreibt kein Entwicklungsthema, sondern ein allgemeines Entwicklungsverständnis, von dem dort ausdrücklich festgehalten wird, dass im Erwachsenenalter diesbezüglich relativ wenig Entwicklung stattfindet. Gesteigertes Zielengagement und spätere Zielablösung schließlich stammen aus dem Abschnitt zu Entwicklungsfristen auf PDF-Seite 22; sie beschreiben, wie Fristen Ziele regulieren, und nicht die Orientierung, die dem Thema Familie zugeordnet wird.",
+      "h": "Die beiden Themen stehen einander gegenüber: eines zielt auf Zuwachs und Gewinn, das andere auf den Erhalt des bereits Erreichten. Ordne zuerst das andere Thema zu — dann bleibt für dieses nur die entgegengesetzte Richtung übrig."
+    },
+    {
+      "id": "q10",
+      "q": "In welche beiden Abschnitte wird das späte Erwachsenenalter in dem behandelten Lebensspannenmodell untergliedert?",
+      "opts": [
+        "In „Junge Alte“ und „Alte Alte“; die Grenze liegt ungefähr bei 80 Jahren.",
+        "In das mittlere und das späte Erwachsenenalter; die Grenze liegt ungefähr bei 60 Jahren.",
+        "In „Junge Alte“ und „Alte Alte“; die Grenze liegt exakt und kulturunabhängig bei 80 Jahren.",
+        "In „Junge Alte“ und „Alte Alte“; die Grenze liegt ungefähr bei der Pensionierung."
+      ],
+      "c": 0,
+      "e": "Der Zeitstrahl auf PDF-Seite 2 gliedert das späte Erwachsenenalter in zwei Abschnitte: die „Jungen Alten“ von etwa 60–65 Jahren bis ungefähr 80 Jahre und die „Alten Alten“ ab ungefähr 80 Jahren. Das entscheidende Trennmerkmal ist, welche Marke die Binnengrenze setzt und welche nur den Beginn der Gesamtphase markiert: 60–65 Jahre stehen für die Pensionierung und damit für den Übergang vom mittleren ins späte Erwachsenenalter, ungefähr 80 Jahre für die Teilung innerhalb des späten Erwachsenenalters. Der stärkste Fehlweg setzt die Grenze bei der Pensionierung an und verwechselt damit genau diese beiden Marken, die auf demselben Zeitstrahl unmittelbar nebeneinanderliegen. Wer mit mittlerem und spätem Erwachsenenalter antwortet, benennt zwei eigenständige Hauptabschnitte der Lebensspanne statt der Binnengliederung einer einzigen Phase. Und wer die Marke als exakte, kulturunabhängige Grenze liest, überdehnt sie: PDF-Seite 2 gibt sie als „ca. 80 Jahre“ und als Vorschlag zur Untergliederung an, und PDF-Seite 5 hält fest, dass Beginn und Ende der Altersphasen historischen Veränderungen und kulturellen Variationen unterliegen.",
+      "h": "Zwei Marken liegen auf dem Zeitstrahl dicht beieinander: eine trennt das mittlere vom späten Erwachsenenalter, die andere teilt die späte Phase selbst. Achte darauf, welche der beiden gefragt ist — und wie genau der Wert überhaupt gemeint ist."
+    },
+    {
+      "id": "q11",
+      "q": "Wie bestimmt das Havighurst-Modell den grundlegenden Prozess von Entwicklung?",
+      "opts": [
+        "Entwicklung wird als das Lösen von Entwicklungsaufgaben verstanden, die in bestimmten Lebensabschnitten zentral werden.",
+        "Entwicklung wird als das Bewältigen beliebiger Alltagsaufgaben verstanden, die im Lauf des Lebens anfallen.",
+        "Entwicklung wird als Variation der Aufgaben nach sozialen, historischen und kulturellen Rahmenbedingungen verstanden.",
+        "Entwicklung wird als Stufenfolge verstanden, auf der jeweils ein Spannungspaar zu bewältigen ist."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 8 führt Robert Havighurst mit dem Modell der Entwicklungsaufgaben ein und bringt die Grundidee auf eine Formel: Entwicklung als Lösen von Entwicklungsaufgaben. PDF-Seite 10 ergänzt den zweiten notwendigen Bestandteil — es geht um Aufgaben, die in einem bestimmten Lebensabschnitt zentral sind —, und PDF-Seite 9 bindet die Aufgabe ausdrücklich an das Hervortreten in einer bestimmten Lebensperiode. Das entscheidende Trennmerkmal ist damit die Kopplung zweier Elemente: Aufgabenbewältigung als Prozess und Lebensabschnittsspezifität als Bedingung. Der stärkste Fehlweg lässt genau die zweite Hälfte weg und macht aus dem Modell eine Aussage über beliebige Alltagsaufgaben; gemeint sind aber gerade nicht alle im Lebenslauf anfallenden Aufgaben, sondern periodisch hervortretende. Die Beschreibung über ein Spannungspaar je Stufe gehört zu Erikson, dessen acht Stufen auf PDF-Seite 15 und PDF-Seite 16 mit Intimität gegen Isolierung und Generativität gegen Stagnation vorgestellt und auf PDF-Seite 17 in einer eigenen Spalte neben Havighurst gestellt werden — Havighurst formuliert Aufgaben, keine Pole. Die Variation nach sozialen, historischen und kulturellen Rahmenbedingungen wiederum ist auf PDF-Seite 19 die Gegenposition der Lebensspannenperspektive, die dem Modell seine normative, unidirektionale Stufenfolge gerade abspricht.",
+      "h": "Zwei Bausteine gehören zusammen: ein Prozessbegriff und eine zeitliche Bedingung. Prüfe, ob eine Formulierung beide trägt — oder ob sie nur den Prozess nennt, die Position der Lebensspannenperspektive wiedergibt oder das Stufenmodell eines anderen Autors beschreibt."
+    },
+    {
+      "id": "q12",
+      "q": "Was macht eine Aufgabe nach Havighurst zu einer Entwicklungsaufgabe?",
+      "opts": [
+        "Sie besteht in einer geteilten sozialen Erwartung des kulturellen Kontexts daran, was man in einem bestimmten Alter tun und erreichen sollte.",
+        "Ihre erfolgreiche Bewältigung trägt zu Wohlbefinden und zum Gelingen der späteren Aufgaben bei, unabhängig von der Lebensperiode des Individuums.",
+        "Sie tritt in einer bestimmten Lebensperiode des Individuums hervor und ihre Bewältigung hat Folgen für Wohlbefinden und spätere Aufgaben.",
+        "Sie wird durch die biologische Reifung des Individuums ausgelöst und ist deshalb in jedem Lebensalter gleich zu bewältigen."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 9 zitiert Havighursts Definition wörtlich: eine Aufgabe, die in einer bestimmten Lebensperiode des Individuums hervortritt und deren erfolgreiche Bewältigung zu seinem Wohlbefinden und zum Gelingen späterer Aufgaben führt, während ein Misslingen zu Unzufriedenheit, zu Missbilligung durch die Gesellschaft und zu Schwierigkeiten bei späteren Aufgaben beiträgt. Die Definition hat damit zwei tragende Teile, und das entscheidende Trennmerkmal ist ihre Verbindung: zeitliches Hervortreten in einer Lebensperiode und Folgen der Bewältigung müssen beide vorliegen. Der stärkste Fehlweg definiert die Entwicklungsaufgabe allein über die geteilte soziale Erwartung, was man in einem bestimmten Alter tun und erreichen sollte — das ist die eigenständige Konzeption von PDF-Seite 20 mit der „social clock“ und nicht Havighursts Definitionskern. Ebenso unvollständig bleibt die reine Folgenangabe, die die Periodenbindung ausdrücklich für unerheblich erklärt: Damit fehlt genau das Kriterium, das eine Entwicklungsaufgabe von jeder anderen Aufgabe unterscheidet. Die Auslösung durch biologische Reifung schließlich gilt laut PDF-Seite 10 nur für frühe Lebensphasen, während spätere Phasen gesellschaftliche Anforderungen und selbst gesetzte Ziele als Quellen haben; ein über alle Lebensalter gleiches Reifungskriterium widerspricht zudem den historischen und kulturellen Variationen auf PDF-Seite 5.",
+      "h": "Die Definition nennt mehr als ein Kriterium. Frag dich, ob eine Formulierung beide Teile trägt — den zeitlichen Ort im Leben und das, was aus Gelingen oder Scheitern erwächst. Wer nur einen Teil nennt oder einen Teil ausdrücklich streicht, greift zu kurz."
+    },
+    {
+      "id": "q13",
+      "q": "Welche Folgen schreibt Havighurst der erfolgreichen Bewältigung einer Entwicklungsaufgabe zu?",
+      "opts": [
+        "Sie garantiert das Gelingen sämtlicher späterer Entwicklungsaufgaben.",
+        "Sie trägt zum subjektiven Wohlbefinden und zum Gelingen späterer Aufgaben bei.",
+        "Sie führt zu Missbilligung durch die Gesellschaft und zu Unzufriedenheit im Individuum.",
+        "Sie sichert soziale Unterstützung und Verstärkung durch die Bezugsgruppe."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 9 und PDF-Seite 10 nennen für die erfolgreiche Bewältigung genau zwei Folgen: subjektives Wohlbefinden und das Gelingen späterer Aufgaben. Das entscheidende Trennmerkmal ist die Stärke der Aussage — das Modell spricht von einem Beitragen, nicht von einer Zusicherung. Der stärkste Fehlweg dreht deshalb nicht den Inhalt, sondern den Anspruch: Wer aus dem Beitrag eine Garantie für sämtliche späteren Entwicklungsaufgaben macht, behauptet mehr, als in der Definition steht, die ausdrücklich nur ein Beitragen formuliert. Ein zweiter Fehlweg vertauscht die Richtung und schreibt der erfolgreichen Bewältigung zu, was PDF-Seite 9 dem Misslingen zuordnet: Unzufriedenheit im Individuum und Missbilligung durch die Gesellschaft. Soziale Unterstützung und Verstärkung schließlich stehen auf PDF-Seite 21 — dort sind es die Folgen eines On-time-Verlaufs im Vergleich mit dem normativen Zeitplan, also die Konsequenz einer Passung zu geteilten sozialen Erwartungen und nicht die von Havighurst benannte Folge gelungener Aufgabenbewältigung.",
+      "h": "Zwei Prüfschritte helfen: Passt die Richtung — geht es um Gelingen oder um Misslingen? Und passt die Stärke des Anspruchs — behauptet die Formulierung einen Beitrag oder eine Zusicherung? Eine der Formulierungen stammt zudem aus dem Bereich der sozialen Zeitpläne und gehört nicht hierher."
+    },
+    {
+      "id": "q14",
+      "q": "Welche Folgen verbindet Havighurst mit dem Misslingen einer Entwicklungsaufgabe?",
+      "opts": [
+        "Subjektives Wohlbefinden des Individuums, Zustimmung der Gesellschaft und ein Gelingen der späteren Entwicklungsaufgaben.",
+        "Negative Sanktionen durch die Gruppe, ein Vergleich mit dem normativen Zeitplan und der Verlust sozialer Verstärkung.",
+        "Unzufriedenheit des Individuums, Missbilligung durch die Gesellschaft und ein endgültiges Scheitern der weiteren Entwicklung.",
+        "Unzufriedenheit des Individuums, Missbilligung durch die Gesellschaft und Schwierigkeiten bei späteren Aufgaben."
+      ],
+      "c": 3,
+      "e": "PDF-Seite 9 nennt für das Misslingen drei Folgen nebeneinander: Unzufriedenheit im Individuum, Missbilligung durch die Gesellschaft und Schwierigkeiten bei späteren Aufgaben. Das entscheidende Trennmerkmal liegt in der Vollständigkeit dieser Trias und in ihrer Reichweite — die Definition spricht von einem Beitragen zu Schwierigkeiten, nicht von einem Endzustand. Der stärkste Fehlweg übernimmt deshalb die ersten beiden Folgen korrekt und überdehnt die dritte zu einem endgültigen Scheitern der weiteren Entwicklung; im Original geht es um erschwerte, nicht um unmöglich gewordene Aufgaben. Ein zweiter Fehlweg vertauscht die Richtung und nennt die Erfolgsseite mit Wohlbefinden und Gelingen späterer Aufgaben, ergänzt um eine gesellschaftliche Zustimmung, die in der Definition überhaupt nicht vorkommt: Die gesellschaftliche Reaktion erscheint dort ausschließlich als Missbilligung im Misslingensfall. Negative Sanktionen, der Vergleich mit dem normativen Zeitplan und der Verlust sozialer Verstärkung beschreiben schließlich auf PDF-Seite 21 einen Off-time-Verlauf im Konzept der sozialen Erwartungen — ein anderer Rahmen als das Aufgabenmodell.",
+      "h": "Drei Folgen gehören zusammen: eine im Erleben der Person, eine in der Reaktion des Umfelds, eine im weiteren Lebenslauf. Achte auf die dritte — wie weit reicht der behauptete Schaden? Und prüfe zuerst, ob überhaupt die Misslingensseite beschrieben wird."
+    },
+    {
+      "id": "q15",
+      "q": "Wodurch werden Entwicklungsaufgaben in frühen Lebensphasen nach dem Havighurst-Modell vor allem ausgelöst?",
+      "opts": [
+        "Vor allem durch die biologische Reifung des Individuums.",
+        "Vor allem durch die Normalbiografie der Mittelschicht.",
+        "Vor allem durch gesellschaftliche Anforderungen.",
+        "Vor allem durch geteilte soziale Erwartungen."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 10 unterscheidet die Quellen der Aufgaben ausdrücklich nach Lebensphase: In frühen Lebensphasen werden Aufgaben durch biologische Reifung ausgelöst, in späteren Phasen gelten gesellschaftliche Anforderungen und selbst gesetzte Ziele als wichtige Quellen. Das entscheidende Trennmerkmal ist damit nicht die Quelle allein, sondern ihre Zuordnung zur Phase. Der stärkste Fehlweg nennt gesellschaftliche Anforderungen: fachlich eine echte Quelle des Modells, aber eben die der späteren Phasen — wer die Phasenbindung überliest, greift danach. Geteilte soziale Erwartungen gehören zu einer anderen Konzeption: PDF-Seite 20 fasst Entwicklungsaufgaben als in einem sozial-kulturellen Kontext geteilte Erwartungen und führt dafür die „social clock“ nach Neugarten ein; dieselbe Seite hält fest, dass das Erwachsenenalter weniger von biologischen Prozessen bestimmt ist als die Kindheit. Die Normalbiografie der Mittelschicht schließlich steht zwar auf derselben Seite wie die Reifungsaussage, bezeichnet dort aber die normative Bezugsfolie, an der sich das Modell insgesamt orientiert, und nicht den Auslöser der Aufgaben in frühen Lebensphasen. Zu beachten bleibt, dass die Reifungsaussage nicht zur Alleinquelle aller Aufgaben verallgemeinert werden darf — dagegen steht die Phasendifferenzierung derselben Seite.",
+      "h": "Die Quelle der Aufgaben wechselt im Lauf des Lebens. Ordne zuerst zu, was für spätere Phasen gilt — was dann übrig bleibt, gehört an den Anfang. Achte außerdem darauf, ob eine Formulierung nur den normativen Bezugsrahmen des Modells statt eines Auslösers benennt."
+    },
+    {
+      "id": "q16",
+      "q": "Welche Quellen werden für Entwicklungsaufgaben in späteren Lebensphasen hervorgehoben?",
+      "opts": [
+        "Gesellschaftliche Anforderungen und selbst gesetzte Ziele.",
+        "Biologische Reifung und die externe Regulation durch die Eltern.",
+        "Fortschreitende Differenzierung und der Zuwachs an Kompetenzen.",
+        "Institutionelle Regelungen und die biologische Uhr."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 10 trennt die Quellen nach Lebensphase: frühe Lebensphasen mit Aufgaben, die durch biologische Reifung ausgelöst werden, und spätere Phasen mit gesellschaftlichen Anforderungen sowie selbst gesetzten Zielen als wichtigen Quellen dieser Aufgaben. Für die späteren Phasen sind also zwei Quellen zu nennen, und das entscheidende Trennmerkmal ist ihre Doppelnatur: eine von außen herangetragene und eine selbst hervorgebrachte. Der stärkste Fehlweg schiebt die Reifungsquelle nach hinten und ergänzt die externe Regulation durch die Eltern; beides gehört laut PDF-Seite 20 zur Kindheit, die stärker von biologischen und externen Regulationsprozessen bestimmt ist als das Erwachsenenalter, in dem gerade mehr Freiheit bei der Gestaltung der Entwicklung besteht. Fortschreitende Differenzierung und Kompetenzzuwachs sind auf PDF-Seite 4 Bestandteile des klassischen Entwicklungsbegriffs — eines Entwicklungsverständnisses, von dem dieselbe Seite festhält, dass es im Erwachsenenalter relativ wenig greift; Quellenangaben des Modells sind sie nicht. Institutionelle Regelungen und die „biologische Uhr“ schließlich stehen auf PDF-Seite 22 unter den Entwicklungsfristen: Fristen legen fest, wann eine Aufgabe begonnen und erreicht sein sollte, benennen aber nicht, woher die Aufgabe stammt.",
+      "h": "Gesucht sind zwei Quellen, die im Erwachsenenalter zusammenwirken — eine von außen, eine von innen. Prüfe bei jeder Formulierung, ob sie überhaupt sagt, woher eine Aufgabe kommt, oder nur, bis wann sie erledigt sein soll."
+    },
+    {
+      "id": "q17",
+      "q": "Welche historische und soziale Orientierung begrenzt die Verallgemeinerbarkeit des Havighurst-Modells?",
+      "opts": [
+        "Es orientiert sich an den offenen, modernen Biografien der heutigen Gegenwartsgesellschaft.",
+        "Es orientiert sich an der Normalbiografie der europäischen Arbeiterschicht der Nachkriegsjahre.",
+        "Es orientiert sich an der Normalbiografie der amerikanischen Mittelschicht der 1950er Jahre.",
+        "Es orientiert sich an den geteilten sozialen Erwartungen der jeweiligen Kultur."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 10 führt als letzten Punkt des Havighurst-Modells ausdrücklich die Orientierung an der Normalbiografie der Mittelschicht der 1950er Jahre auf, und PDF-Seite 18 macht daraus den Kern der Kritik: Beschrieben würden Entwicklungsaufgaben für einen mittelständischen Amerikaner, die man kaum verallgemeinern kann. Genau dieser dreifache Rahmen aus Kulturraum, sozialer Schicht und Jahrzehnt begrenzt die Reichweite des Modells. Entscheidendes Trennmerkmal ist die Frage, welcher Rahmen dem Modell zugrunde liegt und welcher ihm nur kritisch gegenübersteht. Der europäisch-proletarische Rahmen der Nachkriegsjahre hält das Jahrzehnt ungefähr, tauscht aber Schicht und Kulturraum aus — PDF-Seite 10 und PDF-Seite 18 legen beides eindeutig fest. Der stärkste Irrweg sind die offenen, modernen Biografien: Sehr viele erinnern sie richtig von der Kritikfolie, übersehen aber die Richtung. PDF-Seite 18 sagt, das Normative des Entwicklungsverständnisses widerspreche diesen Biografien; sie sind damit der Gegenpol, an dem das Modell scheitert, und keinesfalls seine Grundlage. Wer hier zugreift, dreht den Bezug um. Die geteilten sozialen Erwartungen der jeweiligen Kultur schließlich gehören zur Gegenposition: PDF-Seite 19 und PDF-Seite 20 binden Entwicklungsaufgaben ausdrücklich an den jeweiligen sozial-kulturellen Kontext und lösen sie damit von der einen Normalbiografie, an der Havighurst festhält.",
+      "h": "Achte darauf, welchen einen konkreten Rahmen aus Kulturraum, sozialer Schicht und Jahrzehnt das Modell voraussetzt — und trenne diesen Rahmen scharf von den Positionen, die dem Modell in der Kritik gerade entgegengehalten werden."
+    },
+    {
+      "id": "q18",
+      "q": "Welche Entwicklungsaufgaben ordnet Havighursts Phasenmodell dem Säuglingsalter zu?",
+      "opts": [
+        "Laufen lernen, Nahrungsaufnahme und beginnende Sprachentwicklung.",
+        "Laufen lernen, Nahrungsaufnahme und Erwerb einer Geschlechtsrollen-Identität.",
+        "Erwerb der Geschlechtsrolle, Lernen sozialer Kooperation und Entwicklung von Moral.",
+        "Nahrungsaufnahme, Entwicklung von Autonomie und beginnendes soziales Kooperieren."
+      ],
+      "c": 0,
+      "e": "Das Phasenmodell der Lebensspanne auf PDF-Seite 11 ordnet dem Säuglingsalter als erster Phase genau drei Aufgaben zu: Laufen lernen, Nahrungsaufnahme und beginnende Sprachentwicklung. Entscheidendes Trennmerkmal ist die Phasengrenze — alles, was Geschlechtsrolle, Schulkompetenzen, Moral oder Gleichaltrige betrifft, siedelt Havighurst später an. Dazu passt PDF-Seite 10: In frühen Lebensphasen werden die Aufgaben durch biologische Reifung ausgelöst, und Gehen wie Essen sind genau solche reifungsgetriebenen Aufgaben, während gesellschaftliche Anforderungen erst in späteren Phasen als Quelle hinzukommen. Der stärkste Irrweg ist die Liste mit Geschlechtsrolle, sozialer Kooperation und Moral, denn sie ist vollständig korrekt wiedergegeben — nur eben für die zweite Phase, die Kindheit (PDF-Seite 11). Wer die Aufgaben kennt, aber die Phasenreihenfolge nicht mitliest, greift hier zu. Die Variante mit der Geschlechtsrollen-Identität ist tückisch, weil zwei Drittel stimmen: Laufen und Nahrungsaufnahme sind richtig, doch die Identitätsaufgabe gehört nach PDF-Seite 11 in die dritte Phase, Pubertät und Adoleszenz, und verdrängt die Sprachentwicklung. Autonomie schließlich ist überhaupt keine Aufgabe des Phasenmodells, sondern nach PDF-Seite 6 ein zentrales Kriterium zur Definition des jungen Erwachsenenalters.",
+      "h": "Sortiere streng nach der Phasenlogik des Modells: Ganz am Anfang treiben biologische Reifungsschritte die Aufgaben, alles rund um Geschlechtsrolle, Schule, Moral und Gleichaltrige folgt erst in späteren Phasen."
+    },
+    {
+      "id": "q19",
+      "q": "Welche Entwicklungsaufgaben ordnet Havighursts Phasenmodell der Kindheit zu?",
+      "opts": [
+        "Erwerb der Geschlechtsrolle, soziale Kooperation, Basiskompetenzen im Lesen, Schreiben und Rechnen sowie Aufbau eines Freundeskreises.",
+        "Erwerb der Geschlechtsrolle, soziale Kooperation, Basiskompetenzen im Lesen, Schreiben und Rechnen sowie Entwicklung von Moral und Werten.",
+        "Akzeptieren der körperlichen Reifung, Erwerb einer Geschlechtsrollen-Identität sowie Gestaltung von Beziehungen zu Gleichaltrigen.",
+        "Ausschließlich der Erwerb der Geschlechtsrolle und das Lernen der Basiskompetenzen im Lesen, Schreiben und Rechnen."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 11 fasst unter Punkt 2, Kindheit, vier Aufgaben zusammen: Erwerb der Geschlechtsrolle, Lernen von sozialer Kooperation, Basiskompetenzen im Lesen, Schreiben Rechnen sowie Entwicklung von Moral und Werten. Entscheidend sind damit zwei Dinge zugleich — die Vollzähligkeit aller vier Elemente und die Abgrenzung nach unten wie nach oben. Der stärkste Irrweg tauscht darum nur ein einziges Element: Drei der vier Kindheitsaufgaben stimmen, doch der Aufbau eines Freundeskreises gehört nach PDF-Seite 13 in die Aufgabenliste des jungen Erwachsenenalters, und die Entwicklung von Moral und Werten fehlt dadurch. Wer die Liste nur ungefähr im Kopf hat, merkt diesen Tausch kaum. Die Variante mit körperlicher Reifung und Geschlechtsrollen-Identität ist eine ebenfalls korrekte Havighurst-Liste, aber die der dritten Phase, Pubertät und Adoleszenz (PDF-Seite 11); der feine Unterschied lautet: In der Kindheit wird die Geschlechtsrolle erworben, in der Adoleszenz die Geschlechtsrollen-Identität. Die auf zwei Punkte verkürzte Fassung schließlich schneidet die Phase zu eng zu — soziale Kooperation sowie Moral und Werte stehen auf PDF-Seite 11 gleichrangig neben Rollenerwerb und Kulturtechniken und dürfen nicht wegfallen.",
+      "h": "Die Kindheitsphase bündelt mehrere Aufgaben nebeneinander. Prüfe jede Aufzählung doppelt: erst auf Vollzähligkeit, dann darauf, ob sich ein Element eingeschlichen hat, das im Modell erst in einer späteren Phase auftaucht."
+    },
+    {
+      "id": "q20",
+      "q": "Welche Entwicklungsaufgaben ordnet Havighursts Phasenmodell Pubertät und Adoleszenz zu?",
+      "opts": [
+        "Erwerb der Geschlechtsrolle, Lernen von sozialer Kooperation und die Entwicklung von Moral und Werten im Umgang mit anderen.",
+        "Akzeptieren der körperlichen Reifung, Erwerb einer Geschlechtsrollen-Identität und Gestaltung von Peer-Beziehungen.",
+        "Akzeptieren der körperlichen Reifung, Beginn einer Berufskarriere und die Gestaltung von Beziehungen zu Gleichaltrigen.",
+        "Erwerb der Geschlechtsrolle, Suche nach einer Lebenspartnerschaft und Gestaltung von Peer-Beziehungen."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 11 ordnet Punkt 3, Pubertät und Adoleszenz, drei Aufgaben zu: Akzeptieren der körperlichen Reifung, Erwerb einer Geschlechtsrollen-Identität und Gestalten von Peer-Beziehungen. Entscheidendes Trennmerkmal gegenüber der Kindheit ist das Begriffspaar Geschlechtsrolle gegenüber Geschlechtsrollen-Identität: In der Kindheit wird die Rolle erworben, in der Adoleszenz die Identität ausgebildet. Genau deshalb ist die Liste mit Geschlechtsrolle, sozialer Kooperation sowie Moral und Werten der stärkste Irrweg — sie gibt Punkt 2 des Phasenmodells wortgetreu wieder, und wer nur auf das Stichwort Geschlecht achtet, verwechselt beide Phasen. Der Beginn einer Berufskarriere gehört nach PDF-Seite 12 in Punkt 4, das frühe Erwachsenenalter; ihn in die Adoleszenz zu ziehen, ordnet ein korrektes Modellelement der falschen Phase zu, zumal die körperliche Reifung und die Peer-Beziehungen daneben richtig stehen und die Kombination dadurch glaubwürdig wirkt. Die Suche nach einer Lebenspartnerschaft schließlich stammt aus einem anderen Modell: PDF-Seite 15 führt sie unter Eriksons Stufe Intimität gegenüber Isolierung für das junge Erwachsenenalter auf, während Havighurst die Partnerwahl nach PDF-Seite 12 erst der vierten Phase zuweist.",
+      "h": "Zwei Phasen liegen hier dicht beieinander. Achte genau darauf, ob von der Rolle oder von der Identität die Rede ist — und ob sich eine Aufgabe eingeschlichen hat, die im Modell erst nach der Adoleszenz beginnt oder gar von Erikson stammt."
+    },
+    {
+      "id": "q21",
+      "q": "Welche drei Kernaufgaben nennt Havighursts Phasenmodell für das frühe Erwachsenenalter?",
+      "opts": [
+        "Partnerwahl beziehungsweise Ehe, Familiengründung beziehungsweise Kinder und der Beginn einer Berufskarriere.",
+        "Partnerwahl beziehungsweise Ehe, Familiengründung und der Aufbau von Generativität und Fürsorge.",
+        "Erwerb einer Geschlechtsrollen-Identität, Familiengründung beziehungsweise Kinder und Berufseinstieg.",
+        "Kindererziehung, die Entwicklung der Berufskarriere und die Übernahme sozialer und öffentlicher Verantwortung."
+      ],
+      "c": 0,
+      "e": "Das Phasenmodell der Lebensspanne nennt auf PDF-Seite 12 unter Punkt 4, frühes Erwachsenenalter, genau drei Aufgaben: Partnerwahl/Ehe, Familiengründung/Kinder und den Beginn einer Berufskarriere; die Übersichtstabelle auf PDF-Seite 17 bestätigt das mit Partnerwahl, Familiengründung, Kinder aufziehen und Berufseinstieg. Entscheidendes Trennmerkmal ist das Beginnen: In dieser Phase werden Partnerschaft, Familie und Beruf aufgenommen, in der folgenden dann weitergeführt. Genau daran scheitert der stärkste Irrweg — Kindererziehung, Entwicklung der Berufskarriere und Übernahme sozialer und öffentlicher Verantwortung sind nach PDF-Seite 12 die Aufgaben von Punkt 5, dem mittleren Erwachsenenalter. Die Lebensbereiche Familie und Beruf sind dieselben, nur die Bearbeitungsstufe unterscheidet sich, und wer Aufbau und Fortführung nicht trennt, greift hier zu. Der Erwerb einer Geschlechtsrollen-Identität stammt nach PDF-Seite 11 aus Punkt 3, Pubertät und Adoleszenz, und ist damit ein korrektes Modellelement an falscher Stelle. Generativität und Fürsorge schließlich gehören gar nicht zu Havighurst: PDF-Seite 16 und PDF-Seite 17 weisen Generativität gegenüber Stagnation als Eriksons Stufe der mittleren Lebensjahre aus, während Erikson dem frühen Erwachsenenalter Intimität gegenüber Isolation zuordnet.",
+      "h": "Halte streng auseinander, was in dieser Phase erstmals aufgenommen wird und was erst in der Lebensmitte weitergeführt wird — und prüfe zusätzlich, ob eine Aufgabe in Wahrheit aus Eriksons Stufenfolge stammt."
+    },
+    {
+      "id": "q22",
+      "q": "Welche drei Kernaufgaben nennt Havighursts Phasenmodell für das mittlere Erwachsenenalter?",
+      "opts": [
+        "Die Kindererziehung, die Entwicklung der Berufskarriere sowie die Anpassung an das Nachlassen der eigenen Körperkräfte.",
+        "Partnerwahl beziehungsweise Ehe, Familiengründung beziehungsweise Kinder sowie der Beginn einer Berufskarriere.",
+        "Die Mitte des Lebens, berufliche Etablierung und Berentung sowie familiäre Etablierung und der Auszug der Kinder.",
+        "Kindererziehung, Entwicklung der Berufskarriere sowie Übernahme sozialer und öffentlicher Verantwortung."
+      ],
+      "c": 3,
+      "e": "PDF-Seite 12 listet unter Punkt 5, mittleres Erwachsenenalter, drei Aufgaben: Kindererziehung, Entwicklung der Berufskarriere und Übernahme sozialer und öffentlicher Verantwortung; die Tabelle auf PDF-Seite 17 wiederholt das als Kindererziehung, berufliche Karriere und Übernahme sozialer und öffentlicher Verantwortung. Zu unterscheiden ist hier zweierlei: die Phase und die Kategorie. Der stärkste Irrweg nennt die Mitte des Lebens, berufliche Etablierung und Berentung sowie familiäre Etablierung und den Auszug der Kinder — das steht wörtlich in der Quelle, nämlich auf PDF-Seite 6, dort aber als zentrale Kriterien zur Definition des mittleren Erwachsenenalters. Solche Kriterien beschreiben, woran die Phase erkannt und abgegrenzt wird; Entwicklungsaufgaben beschreiben, was in ihr zu leisten ist. Wer beides gleichsetzt, greift hier zu. Partnerwahl, Familiengründung und der Beginn einer Berufskarriere sind nach PDF-Seite 12 die Aufgaben der vierten Phase: dieselben Lebensbereiche, aber die Stufe des Aufbaus statt der Fortführung. Die Anpassung an das Nachlassen der Körperkräfte schließlich gehört nach PDF-Seite 12 und PDF-Seite 17 in die sechste Phase und ersetzt hier die Verantwortungsübernahme.",
+      "h": "Zwei Fallen liegen nebeneinander: die Nachbarphasen davor und danach — und der Unterschied zwischen Merkmalen, an denen eine Lebensphase überhaupt erkannt und abgegrenzt wird, und dem, was in ihr laut Phasenmodell zu leisten ist."
+    },
+    {
+      "id": "q23",
+      "q": "Welche Anpassungsaufgaben nennt Havighursts Phasenmodell für das späte Erwachsenenalter?",
+      "opts": [
+        "Erreichen von Ich-Integrität, Abwehr von Verzweiflung und Rückblick auf das gelebte Leben.",
+        "Kindererziehung, Entwicklung der Berufskarriere und Übernahme sozialer Verantwortung.",
+        "Anpassung an die Pensionierung, an das Nachlassen der Körperkräfte und an den Tod des Lebenspartners.",
+        "Anpassung an die Pensionierung, an das Nachlassen der Körperkräfte und an den Auszug der Kinder."
+      ],
+      "c": 2,
+      "e": "Für Punkt 6, das späte Erwachsenenalter, nennt PDF-Seite 12 drei Anpassungsaufgaben: Anpassung an Pensionierung, Anpassung an Nachlassen von Körperkräften und Anpassung an den Tod des Lebenspartners; die Tabelle auf PDF-Seite 17 führt sie in der Havighurst-Spalte identisch. Entscheidendes Trennmerkmal ist doppelt: Alle drei Aufgaben sind Anpassungen an Verluste des höheren Alters, und gefragt ist Havighurst, nicht Erikson. Der stärkste Irrweg tauscht darum nur ein einziges Element aus — statt des Todes des Lebenspartners steht dort der Auszug der Kinder. Zwei von drei Elementen stimmen, doch der Auszug der Kinder gehört nach PDF-Seite 6 zur familiären Etablierung des mittleren Erwachsenenalters und wird auf PDF-Seite 40 als Ausgangspunkt des Phänomens der gewonnenen Jahre behandelt; das dritte Element kippt also die Phase. Ich-Integrität und Verzweiflung treffen zwar die richtige Altersphase, stammen aber aus dem anderen Modell: PDF-Seite 17 stellt genau diese Erikson-Stufe der Havighurst-Spalte gegenüber, und wer die Tabelle zeilenweise statt spaltenweise liest, greift hier zu. Kindererziehung, Berufskarriere und soziale Verantwortung schließlich sind nach PDF-Seite 12 die Aufgaben der fünften Phase und beschreiben Ausbau statt Anpassung.",
+      "h": "Drei Verlusterfahrungen prägen diese Phase. Prüfe zuerst, ob wirklich jedes Element ins höhere Alter gehört und nicht eines aus der Lebensmitte stammt — und dann, ob überhaupt Havighursts Aufgaben gemeint sind und nicht das Krisenpaar Eriksons."
+    },
+    {
+      "id": "q24",
+      "q": "Welche partnerschafts- und familienbezogenen Entwicklungsaufgaben nennt Havighurst für das junge Erwachsenenalter?",
+      "opts": [
+        "Einen Lebenspartner finden, das Zusammenleben lernen, eine Familie gründen, Kinder aufziehen und ein Zuhause für die Familie schaffen.",
+        "Einen Lebenspartner finden, das Zusammenleben lernen, eine Familie gründen, in den Beruf einsteigen und Sorge für das Gemeinwohl tragen.",
+        "Eine Beziehung zum Ehepartner als eigenständigem Menschen aufbauen, den heranwachsenden Kindern helfen und die Beziehung zu den alternden Eltern gestalten.",
+        "Einen Lebenspartner finden, eine Familie gründen, Kinder aufziehen und eine gefestigte Identität als Voraussetzung entwickeln."
+      ],
+      "c": 0,
+      "e": "PDF-Seite 13 listet für das junge Erwachsenenalter acht Aufgaben nach Havighurst 1972. Fünf davon bilden den partnerschafts- und familienbezogenen Teil: einen Lebenspartner finden, das Zusammenleben mit dem Partner lernen, eine Familie gründen, Kinder aufziehen und ein Zuhause für die Familie schaffen. Die übrigen Einträge — Einstieg in den Beruf, Sorge für das Gemeinwohl und Aufbau eines gemeinsamen Freundeskreises — stehen in derselben Liste, gehören aber nicht zum erfragten Teilbereich. Genau daran scheitert der stärkste Irrweg, der Berufseinstieg und Gemeinwohlsorge hineinnimmt: Beides ist als Aufgabe völlig korrekt, sprengt aber die Eingrenzung und verdrängt zwei Aufgaben, die tatsächlich gemeint sind. Entscheidendes Trennmerkmal ist hier also nicht wahr oder falsch für das junge Erwachsenenalter, sondern die Zugehörigkeit zum Bereich Partnerschaft und Familie. Die Beziehung zum Ehepartner als eigenständigem Menschen, die Hilfe für heranwachsende Kinder und die Beziehung zu den alternden Eltern klingen ebenfalls familienbezogen, stammen aber nach PDF-Seite 14 aus dem mittleren Erwachsenenalter und setzen bereits herangewachsene Kinder voraus. Die gefestigte Identität schließlich ist kein Havighurst-Element: PDF-Seite 15 nennt sie als Voraussetzung für Intimität in Eriksons Stufenmodell.",
+      "h": "Die Quelle führt für diese Lebensphase eine längere Aufgabenliste, die mehrere Inhaltsbereiche mischt. Grenze zuerst den erfragten Bereich ein und prüfe dann, ob eine Aufgabe in Wahrheit zur Lebensmitte oder zu Eriksons Stufen gehört."
+    },
+    {
+      "id": "q25",
+      "q": "Welche beruflichen und gesellschaftlichen Entwicklungsaufgaben nennt Havighurst für das junge Erwachsenenalter?",
+      "opts": [
+        "Einstieg in den Beruf, Sorge für das Gemeinwohl und Aufbau eines gemeinsamen Freundeskreises mit dem Lebenspartner.",
+        "Einen Lebenspartner finden, eine Familie gründen und ein Zuhause für die eigene Familie schaffen.",
+        "Befriedigende Leistung im Beruf erreichen, erwachsene Verantwortlichkeit im sozialen Bereich und Freizeithobbys aufbauen.",
+        "Die Volljährigkeit erreichen, persönliche Autonomie gewinnen und den Eintritt in das Berufsleben vollziehen."
+      ],
+      "c": 0,
+      "e": "Auf PDF-Seite 13 stehen die acht zentralen Entwicklungsaufgaben des jungen Erwachsenenalters nach Havighurst 1972. Fünf davon betreffen Partnerschaft und Familie, drei den beruflich-gesellschaftlichen Bereich: Einstieg in den Beruf, Sorge für das Gemeinwohl und Aufbau eines gemeinsamen Freundeskreises mit dem Lebenspartner. Genau dieser Dreierblock ist gefragt. Das entscheidende Trennmerkmal ist deshalb nicht allein die Altersphase, sondern der Inhaltsbereich innerhalb der richtigen Liste. Am stärksten zieht die Aufzählung von Lebenspartner finden, Familie gründen und Zuhause schaffen: Diese Punkte stammen zwar von derselben PDF-Seite 13, decken aber den partnerschaftlich-familiären Teil ab und beantworten die Frage nach dem beruflich-gesellschaftlichen Teil damit nicht. Befriedigende Berufsleistung, erwachsene Verantwortlichkeit im sozialen Bereich und Freizeithobbys gehören laut PDF-Seite 14 zum mittleren Erwachsenenalter; inhaltlich verwandt, aber eine Phase zu spät, und im Beruf geht es dort um das Halten eines Niveaus statt um den Einstieg. Volljährigkeit, Autonomie und Eintritt ins Berufsleben schließlich sind laut PDF-Seite 6 die zentralen Kriterien zur Definition des jungen Erwachsenenalters, also Merkmale, an denen die Phase erkannt wird, und keine zu lösenden Aufgaben.",
+      "h": "Trenne die Liste des jungen Erwachsenenalters nach Lebensbereichen: Ein Teil betrifft Partnerwahl und eigene Familie, der andere die Erwerbstätigkeit und das Engagement in der Gemeinschaft. Gefragt ist ausdrücklich der zweite Bereich — und nicht die Aufgabenliste einer anderen Altersphase."
+    },
+    {
+      "id": "q26",
+      "q": "Welche körperbezogene und berufliche Entwicklungsaufgabe nennt Havighurst für das mittlere Erwachsenenalter?",
+      "opts": [
+        "Eine dem hohen Alter der Eltern angemessene Beziehung aufbauen und die Beziehung zum Ehepartner als eigenständigem Menschen aufrechterhalten.",
+        "Körperliche Veränderungen akzeptieren und sich anpassen sowie eine befriedigende Leistung im Beruf erreichen und aufrechterhalten.",
+        "Sich an das Nachlassen der Körperkräfte anpassen und die Pensionierung bewältigen, um den Ausstieg aus dem Berufsleben zu verarbeiten.",
+        "Die Mitte des Lebens bewusst erreichen, sich beruflich etablieren und die Berentung sowie den Auszug der heranwachsenden Kinder vorbereiten."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 14 listet die sieben zentralen Entwicklungsaufgaben des mittleren Erwachsenenalters nach Havighurst 1972. Die ersten beiden Punkte sind gefragt: körperliche Veränderungen des mittleren Erwachsenenalters akzeptieren und sich daran anpassen sowie eine befriedigende Leistung im Beruf erreichen und aufrechterhalten. Das entscheidende Trennmerkmal ist die Kombination aus Akzeptanz körperlicher Veränderung bei gleichzeitig fortbestehender Berufstätigkeit. Am stärksten zieht die Anpassung an Nachlassen der Körperkräfte und an die Pensionierung: Beides steht auf PDF-Seite 12, dort aber ausdrücklich unter dem späten Erwachsenenalter — es geht um Verlust und Berufsausstieg statt um Anpassung im laufenden Berufsleben. Die Beziehung zu den hochbetagten Eltern und zum Ehepartner stammt zwar von PDF-Seite 14 und damit aus der richtigen Liste, betrifft aber Beziehungen zu anderen Menschen und weder den eigenen Körper noch die eigene Berufsleistung. Mitte des Lebens, berufliche Etablierung, Berentung und Auszug der Kinder sind laut PDF-Seite 6 Definitionskriterien der Phase, also Merkmale zu ihrer Abgrenzung, und keine zu bewältigenden Aufgaben.",
+      "h": "Havighurst nennt für das mittlere Erwachsenenalter sieben Punkte aus sehr unterschiedlichen Lebensbereichen. Prüfe, welche zwei davon den eigenen Leib und die eigene Erwerbsarbeit betreffen — und ob es dabei um Anpassung im laufenden Leben oder um Verlust und Ausstieg geht."
+    },
+    {
+      "id": "q27",
+      "q": "Welche intergenerationalen Entwicklungsaufgaben nennt Havighurst für das mittlere Erwachsenenalter?",
+      "opts": [
+        "Das Interesse an der Stiftung und Erziehung der nächsten Generation entwickeln und im weiteren Sinne Sorge um die Welt und die Gemeinschaft tragen.",
+        "Zwischen den Verpflichtungen gegenüber zwei Generationen eine Balance von Geben und Nehmen finden und dabei eigene Bedürfnisse wahren.",
+        "Eine angemessene Beziehung zu den alternden Eltern aufbauen und heranwachsenden Kindern helfen, verantwortungsbewusste und glückliche Erwachsene zu werden.",
+        "Die Beziehung zum Ehepartner als einem eigenständigen Menschen aufbauen und daneben Freizeitinteressen und Hobbys entwickeln."
+      ],
+      "c": 2,
+      "e": "Intergenerational heißt: Die Aufgabe richtet sich auf eine andere Generation als die eigene. In Havighursts Liste für das mittlere Erwachsenenalter auf PDF-Seite 14 trifft das auf genau zwei der sieben Punkte zu — eine dem hohen Alter der Eltern angemessene Beziehung zu diesen aufbauen und den heranwachsenden Kindern helfen, verantwortungsbewusste und glückliche Erwachsene zu werden. Die eine Aufgabe zielt auf die Generation über der Person, die andere auf die darunter; das ist das entscheidende Trennmerkmal. Am stärksten zieht Eriksons Generativität: Stiftung und Erziehung der nächsten Generation und die Sorge um die Welt stehen auf PDF-Seite 16 und sind ebenfalls generationenbezogen und ebenfalls in der Lebensmitte angesiedelt — aber sie gehören zu Eriksons Stufenmodell und beschreiben eine psychosoziale Grundhaltung, nicht Havighursts konkrete Aufgaben. Die Balance von Geben und Nehmen zwischen zwei Generationen beschreibt laut PDF-Seite 39 die Sandwich-Generation, also ein Belastungsphänomen der Lebensmitte statt einer Aufgabe der Liste. Ehepartner und Hobbys stammen zwar von PDF-Seite 14, betreffen aber die eigene Generation beziehungsweise gar keine.",
+      "h": "Intergenerational heißt: Es geht um die Generation über und die Generation unter der Person. Prüfe, welche zwei Punkte der Aufgabenliste für die Lebensmitte genau diese beiden Richtungen abdecken — und ob der Denkweg wirklich von Havighurst stammt oder aus einem benachbarten Modell."
+    },
+    {
+      "id": "q28",
+      "q": "Welche weiteren Aufgaben nennt Havighurst im mittleren Erwachsenenalter für Partnerschaft, Gesellschaft und Freizeit?",
+      "opts": [
+        "Das Ich-Interesse zu einer Sorge um die Welt erweitern, Verantwortung für die Gemeinschaft übernehmen sowie sich sozial und politisch in Gemeinden, Schulen, Hilfsorganisationen und Krankenhäusern engagieren.",
+        "Die Beziehung zum Ehepartner als eigenständigem Menschen aufbauen und aufrechterhalten, soziale und gesellschaftliche Verantwortlichkeit entwickeln sowie Freizeitinteressen und Hobbys aufbauen.",
+        "Das Zusammenleben mit dem Lebenspartner lernen, für das Gemeinwohl sorgen sowie gemeinsam mit dem Lebenspartner einen Freundeskreis aufbauen und ein Zuhause für die neu gegründete Familie schaffen.",
+        "Körperliche Veränderungen akzeptieren und sich daran anpassen, eine befriedigende Leistung im Beruf erreichen und aufrechterhalten sowie den alternden Eltern angemessen begegnen."
+      ],
+      "c": 1,
+      "e": "Havighursts Liste für das mittlere Erwachsenenalter auf PDF-Seite 14 umfasst sieben Punkte. Vier davon betreffen Körper, Beruf, die alternden Eltern und die heranwachsenden Kinder; die verbleibenden drei sind gefragt und decken genau die Bereiche Partnerschaft, Gesellschaft und Freizeit ab: eine Beziehung zum Ehepartner als eigenständigem Menschen aufbauen und aufrechterhalten, eine erwachsene Verantwortlichkeit im sozialen und gesellschaftlichen Bereich aufbauen sowie Freizeitinteressen und Hobbys aufbauen. Entscheidendes Trennmerkmal ist, dass alle drei aus derselben Liste derselben Altersphase stammen und die drei erfragten Bereiche vollständig abdecken. Am stärksten zieht die Aufzählung mit Zusammenleben lernen, Gemeinwohl und gemeinsamem Freundeskreis: Diese Trias berührt dieselben drei Bereiche, steht aber auf PDF-Seite 13 unter dem jungen Erwachsenenalter — dort wird die Partnerschaft erst aufgebaut, in der Lebensmitte dagegen der Partner als eigenständiger Mensch anerkannt. Sorge um die Welt und Engagement in Gemeinden stammen von PDF-Seite 16 und gehören zu Eriksons Generativität, die weder eine Partnerschafts- noch eine Freizeitaufgabe kennt. Körper, Berufsleistung und alternde Eltern stehen zwar auf PDF-Seite 14, gehören aber zu den vier anderen Bereichen der Liste.",
+      "h": "Die Liste für die Lebensmitte hat sieben Punkte; vier davon betreffen den eigenen Leib, die Erwerbsarbeit und die beiden Nachbargenerationen. Achte darauf, welche Punkte übrig bleiben — und ob eine Aufzählung wirklich aus dieser Liste und dieser Altersphase stammt."
+    },
+    {
+      "id": "q29",
+      "q": "Warum wird die Generalisierbarkeit der von Havighurst beschriebenen Entwicklungsaufgaben kritisiert?",
+      "opts": [
+        "Weil Havighurst die Aufgaben aus Befragungen von Frauen der amerikanischen Oberschicht ableitete und ihre Übertragung auf Männer deshalb unsicher bleiben muss.",
+        "Weil sie sich auf einen mittelständischen Amerikaner beziehungsweise die Normalbiografie der amerikanischen Mittelschicht beziehen und daher kulturell und sozial nur begrenzt übertragbar sind.",
+        "Weil die Entwicklungsaufgaben in allen Lebensphasen aus der biologischen Reifung abgeleitet werden und gesellschaftliche Anforderungen als ihre Quelle unberücksichtigt bleiben.",
+        "Weil die hierarchische Aufeinanderfolge der Entwicklungsaufgaben dem Konzept insgesamt einen starren Charakter verleiht und Abweichungen von der vorgegebenen Reihenfolge darin nicht vorgesehen sind."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 18 nennt drei getrennte Kritikpunkte am Havighurst-Modell. Der erste lautet, dass Entwicklungsaufgaben für einen mittelständischen Amerikaner beschrieben werden, die man kaum verallgemeinern kann; PDF-Seite 10 ergänzt die Orientierung an der Normalbiografie der Mittelschicht der 1950er Jahre. Genau darauf zielt die Frage: Der Geltungsbereich der Aufgaben ist an eine bestimmte Kultur und soziale Schicht gebunden, deshalb sind sie kulturell und sozial nur begrenzt übertragbar. Entscheidendes Trennmerkmal ist die Bezugsgruppe, an der die Aufgaben abgelesen wurden. Am stärksten zieht der Starrheitsvorwurf: Er steht auf derselben PDF-Seite 18, ist aber ausdrücklich der hierarchischen Aufeinanderfolge zugeordnet und betrifft die innere Struktur des Modells, nicht dessen Reichweite. Die Ableitung aller Aufgaben aus biologischer Reifung ist bereits sachlich falsch, denn laut PDF-Seite 10 gilt die Reifungsquelle nur für frühe Phasen, während spätere Phasen auf gesellschaftliche Anforderungen und selbst gesetzte Ziele zurückgeführt werden. Die Herleitung aus Befragungen von Frauen der Oberschicht verfehlt die Quelle doppelt: Kritisiert wird die Mittelschicht, und die Geschlechterfrage gehört laut PDF-Seite 35 zu Levinsons Midlife-Crisis.",
+      "h": "Havighursts Modell wird aus drei Richtungen angegriffen: wegen seiner inneren Struktur, wegen seines Verhältnisses zu heutigen Lebensläufen und wegen der Bezugsgruppe, an der die Aufgaben ursprünglich abgelesen wurden. Frag dich, welcher Einwand die Reichweite der Aussagen betrifft."
+    },
+    {
+      "id": "q30",
+      "q": "Welches Problem entsteht durch die hierarchische Aufeinanderfolge von Entwicklungsaufgaben im Havighurst-Modell?",
+      "opts": [
+        "Das Konzept erhält dadurch einen sozial-kulturellen Charakter.",
+        "Das Konzept erhält dadurch einen starren Charakter.",
+        "Das Konzept erhält dadurch einen kulturübergreifenden Charakter.",
+        "Das Konzept erhält dadurch einen biologistischen Charakter."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 18 formuliert den Zusammenhang wörtlich: Problematisch ist die hierarchische Aufeinanderfolge der Entwicklungsaufgaben; das Konzept gewinnt dadurch einen starren Charakter. Gefragt ist genau diese Folge. Das entscheidende Trennmerkmal ist, dass die Kritik hier auf die Struktur des Modells zielt — wenn Aufgaben aufeinander aufbauen und in fester Ordnung gelöst werden müssen, bleibt kein Raum für abweichende Verläufe. Die anderen beiden Einwände derselben PDF-Seite 18, begrenzte Verallgemeinerbarkeit und Spannung zum offeneren modernen Lebenslauf, gehören nicht zur Hierarchisierung. Am stärksten zieht der biologistische Charakter: Laut PDF-Seite 10 löst biologische Reifung Aufgaben aber nur in frühen Lebensphasen aus, während spätere Phasen auf gesellschaftliche Anforderungen und selbst gesetzte Ziele zurückgehen — die Anordnung der Aufgaben sagt nichts über ihre Herkunft. Ein sozial-kultureller Charakter entsteht laut PDF-Seite 20 über geteilte soziale Erwartungen und ist ein eigener Zugang neben dem Modell. Und ein kulturübergreifender Charakter verkehrt die Kritik ins Gegenteil: PDF-Seite 18 beklagt gerade die fehlende Verallgemeinerbarkeit.",
+      "h": "Havighursts Modell wird an drei Stellen angegriffen. Ordne jeden Vorwurf seiner Ursache zu und frag dich: Welcher Einwand ergibt sich unmittelbar daraus, dass die Aufgaben in fester Ordnung aufeinander aufbauen sollen — und welcher betrifft stattdessen Reichweite oder Menschenbild?"
+    },
+    {
+      "id": "q31",
+      "q": "Worin widerspricht Havighursts normatives Entwicklungsverständnis der Lebensspannenperspektive moderner Biografien?",
+      "opts": [
+        "Es beschreibt Entwicklungsaufgaben als kontextabhängig variabel, während die Lebensspannenperspektive von einer universellen und unidirektionalen Stufenfolge ausgeht, die für alle Biografien gleich gilt.",
+        "Es setzt eine feste Aufgabenfolge voraus, während moderne Biografien meist demselben Zeitplan folgen und lediglich einzelne Übergänge um einige Jahre nach hinten verschieben.",
+        "Es setzt eine vergleichsweise feste normative Aufgabenfolge voraus, während moderne Biografien offener sind und Entwicklungsaufgaben mit sozialen, historischen, kulturellen und personalen Bedingungen variieren.",
+        "Es leitet die normative Aufgabenfolge aus der biologischen Reifung ab, während die Lebensspannenperspektive sie auf gesellschaftliche Anforderungen und selbst gesetzte Ziele zurückführt."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 18 hält fest, dass das Normative an Havighursts Entwicklungsverständnis unseren viel offeneren, modernen Biografien widerspricht, die weniger in ein Schema passen. PDF-Seite 19 formuliert die Gegenposition: Entwicklungsaufgaben sind nicht als normative, universelle und unidirektionale Folge von Entwicklungsstufen zu verstehen, sondern variieren aufgrund sozialer, historischer, kultureller Rahmenbedingungen und Persönlichkeitsmerkmalen. Genau dieser Gegensatz ist gefragt, und das entscheidende Trennmerkmal ist die Richtung der Zuschreibung: feste normative Folge bei Havighurst, bedingte Variabilität in der Lebensspannenperspektive. Am stärksten zieht die spiegelverkehrte Fassung, die Havighurst die Variabilität und der Lebensspannenperspektive die universelle Stufenfolge zuschreibt — inhaltlich stehen dort dieselben Begriffe, nur an vertauschten Stellen. Die Reduktion auf einen nach hinten verschobenen, im Kern gleichen Zeitplan verfehlt den Punkt ebenfalls: Diese Verschiebung ins Alter zwischen 27 und 35 Jahren gehört laut PDF-Seite 32 zur Rushhour und lässt die normative Folge unangetastet. Und die Aufteilung der Aufgabenquellen ist falsch, weil biologische Reifung wie gesellschaftliche Anforderungen laut PDF-Seite 10 beide zu Havighurst gehören.",
+      "h": "Halte die beiden Positionen sauber auseinander: Wer nimmt eine feste Reihenfolge an, wer eine kontextabhängige? Und bedenke, dass Kontextabhängigkeit weder dasselbe ist wie Beliebigkeit noch dasselbe wie eine bloße zeitliche Verschiebung derselben Stationen."
+    },
+    {
+      "id": "q32",
+      "q": "Was bezeichnet Intimität im jungen Erwachsenenalter nach der behandelten Erikson-Konzeption?",
+      "opts": [
+        "Das Interesse an der Stiftung und Erziehung der nächsten Generation einschließlich Schöpfertum sowie die Fähigkeit zur Fürsorge.",
+        "Die gefestigte Identität eines erwachsenen Menschen, die einer Hingabe ohne jede Furcht vor dem Verlust des eigenen Ich überhaupt erst vorausgeht.",
+        "Die gegenseitige Bezogenheit zweier erwachsener Menschen sowie die Fähigkeit zu Lebenspartnerschaft und tragfähigen sozialen Beziehungen.",
+        "Die sexuelle Hingabe an einen Lebenspartner und die dabei erlebte körperliche Nähe als Kern der Beziehung zwischen zwei erwachsenen Menschen."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 15 ordnet dem jungen Erwachsenenalter den Konflikt Intimität gegen Isolierung zu und bestimmt Intimität über zwei Merkmale: die gegenseitige Bezogenheit zweier erwachsener Menschen und die Suche nach einer Lebenspartnerschaft und tragfähigen sozialen Beziehungen. Das entscheidende Trennmerkmal ist die Weite des Begriffs — Intimität meint nicht nur die Paarbeziehung und schon gar nicht nur Sexualität, sondern die Bezogenheit auf andere Erwachsene überhaupt. Am stärksten zieht die gefestigte Identität: Dieses Merkmal steht auf derselben PDF-Seite 15, dort aber ausdrücklich als Voraussetzung für Intimität und als Bedingung der Hingabe ohne Furcht vor Ich-Verlust; wer sie mit Intimität gleichsetzt, verwechselt Bedingung und Konstrukt. Die Reduktion auf sexuelle Hingabe greift zu kurz, weil Sexualität dort nur eines von mehreren Feldern der Hingabe ist, neben enger Freundschaft, Inspiration durch Lehrer und eigener Intuition. Und Stiftung und Erziehung der nächsten Generation samt Fähigkeit zur Fürsorge beschreiben laut PDF-Seite 16 die Generativität der mittleren Lebensjahre, also die nächste Stufe des Lebenszyklus.",
+      "h": "Der Begriff ist hier weiter gefasst, als die Alltagsbedeutung nahelegt. Frag dich, ob eine Aussage die Voraussetzung, einen Teilaspekt oder das Konstrukt selbst beschreibt — und ob sie zum jungen oder zum mittleren Erwachsenenalter gehört."
+    },
+    {
+      "id": "q33",
+      "q": "Welche Voraussetzung nennt Eriksons Stufenmodell für die Fähigkeit zu Intimität?",
+      "opts": [
+        "Ein eigener Haushalt.",
+        "Eine feste Partnerschaft.",
+        "Eine gefestigte Identität.",
+        "Die Fähigkeit zur Fürsorge."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 15 ordnet den Konflikt Intimität versus Isolierung dem jungen Erwachsenenalter zu und hält ausdrücklich fest: gefestigte Identität als Voraussetzung für Intimität. Das entscheidende Trennmerkmal ist damit die Art der Bedingung — Erikson verlangt eine bereits geleistete innerpsychische Klärung, bevor Hingabe ohne Furcht vor Ich-Verlust überhaupt möglich wird. Der stärkste Fehlweg führt über die Partnerschaft: PDF-Seite 15 nennt die Suche nach einer Lebenspartnerschaft und nach tragfähigen sozialen Beziehungen als Inhalt genau dieser Stufe. Eine Partnerschaft ist also das, worum auf dieser Stufe gerungen wird, und gerade nicht deren Vorbedingung; wer hier Bedingung und Ziel tauscht, dreht die Logik des Stufenmodells um. Die Fähigkeit zur Fürsorge steht dagegen auf PDF-Seite 16 und gehört zum Konflikt Generativität versus Stagnation der mittleren Lebensjahre — sie ist Kern der späteren Stufe und keine Bedingung der früheren. Ein eigener Haushalt schließlich stammt aus einem anderen Modell: PDF-Seite 13 führt ein Zuhause für die Familie schaffen in Havighursts Aufgabenliste, PDF-Seite 6 nennt Autonomie als Definitionskriterium des jungen Erwachsenenalters. Erikson formuliert an dieser Stelle keine äußere Lebenslage, sondern eine innere Klärung.",
+      "h": "Frag dich, ob Erikson hier eine innere Klärung oder einen äußeren Lebensumstand verlangt — und ob das Beschriebene auf dieser Stufe erst gesucht wird, statt ihr vorauszugehen. Prüfe außerdem, welches Merkmal erst zur folgenden Stufe der mittleren Lebensjahre gehört."
+    },
+    {
+      "id": "q34",
+      "q": "Wodurch ist gelingende Hingabe im Kontext von Eriksons Intimitätskonzept gekennzeichnet?",
+      "opts": [
+        "Durch die libidinöse Besetzung dessen, was gezeugt wurde.",
+        "Durch Hingabe unter Preisgabe der eigenen Identität und Grenzen.",
+        "Durch Nähe und Hingabe ohne Furcht vor Ich-Verlust.",
+        "Durch Ausweichen vor der Furcht und Zuwendung zu sich selbst."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 15 verknüpft die gefestigte Identität unmittelbar mit dem Merkmal Hingabe ohne Furcht vor Ich-Verlust und führt als Erfahrungsfelder Sexualität, enge Freundschaft, Erlebnisse der Inspiration durch Lehrer und die eigene Intuition an; darüber steht die gegenseitige Bezogenheit zweier erwachsener Menschen. Das entscheidende Trennmerkmal ist die Gleichzeitigkeit von Nähe und erhaltener Identität: Gelingende Hingabe bedeutet nicht weniger Ich, sondern Bezogenheit bei bestehendem Ich. Deshalb ist die Vorstellung einer Preisgabe des eigenen Ich der stärkste Fehlweg — sie klingt nach Nähe, kehrt aber die Aussage von PDF-Seite 15 um, wo die Identität Voraussetzung ist und in der Hingabe gerade nicht verloren geht. Der Weg über das Ausweichen dreht die Richtung des Konflikts um: PDF-Seite 15 hält fest, dass ein Überwiegen der Furcht und das Ausweichen vor diesen Erlebnissen zum Gefühl tiefster Vereinsamung und zur Beschäftigung mit sich selbst führen; das kennzeichnet das Misslingen. Die libidinöse Besetzung dessen, was gezeugt wurde, gehört nach PDF-Seite 16 zu den mittleren Lebensjahren und zum Konflikt Generativität versus Stagnation, also zu einer anderen Stufe mit einem anderen Bezugsobjekt.",
+      "h": "Achte darauf, was in diesem Konzept trotz größter Nähe erhalten bleibt — und prüfe bei jeder Beschreibung, ob sie das Gelingen oder gerade das Ausweichen erfasst. Denkanstoß: Welches Merkmal gehört schon zur folgenden Stufe der mittleren Lebensjahre?"
+    },
+    {
+      "id": "q35",
+      "q": "Wie wird Isolierung im Konflikt „Intimität versus Isolierung“ beschrieben?",
+      "opts": [
+        "Als Gefühl der Stagnation und der Persönlichkeitsverarmung, das sich etwa in Selbstverwöhnung zeigt.",
+        "Als Unfähigkeit zur Kontaktaufnahme, die durch fehlende Gelegenheiten in der Umwelt ausgelöst wird.",
+        "Als Vermeidung von Kontakten, die zu Intimität führen, verbunden mit Verlust der Umwelt beziehungsweise tiefer Vereinsamung.",
+        "Als vorübergehendes Alleinsein, das trotz fortbestehender Intimität in engen Beziehungen zeitweise erlebt wird."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 15 definiert Isolierung wörtlich als Vermeidung von Kontakten, die zu Intimität führen, Verlust der Umwelt; unmittelbar darüber steht, dass Ausweichen vor Nähe zum Gefühl tiefster Vereinsamung führt. Das entscheidende Trennmerkmal ist die aktive Vermeidung genau derjenigen Kontakte, die Nähe stiften könnten — weder ein Mangel an Gelegenheit noch jede Form des Alleinseins genügt. Der stärkste Fehlweg führt über äußere Gelegenheiten: Er kehrt die Richtung um, denn der Verlust der Umwelt ist nach PDF-Seite 15 die Folge der Vermeidung und nicht deren Auslöser; zudem greift eine allgemeine Unfähigkeit zur Kontaktaufnahme zu weit, weil ausdrücklich die intimitätsführenden Kontakte gemeint sind. Vorübergehendes Alleinsein bei fortbestehender Intimität ist ebenfalls keine Isolierung: Genau das definierende Merkmal der Vermeidung fehlt dort. Das Gefühl der Stagnation und der Persönlichkeitsverarmung mit dem Beispiel Selbstverwöhnung steht schließlich auf PDF-Seite 16 und bildet den Gegenpol der Generativität in den mittleren Lebensjahren, nicht den Gegenpol der Intimität im jungen Erwachsenenalter.",
+      "h": "Prüfe, ob die Beschreibung ein aktives Verhalten gegenüber möglichen nahen Kontakten erfasst oder bloß einen Zustand des Fehlens. Frag dich außerdem, welcher Gegenpol zu welcher Stufe gehört — der Gegenpol des jungen Erwachsenenalters ist nicht der der mittleren Lebensjahre."
+    },
+    {
+      "id": "q36",
+      "q": "Was ist der Kern von Generativität in Eriksons mittleren Lebensjahren?",
+      "opts": [
+        "Gegenseitige Bezogenheit zweier erwachsener Menschen sowie die Suche nach einer tragfähigen Lebenspartnerschaft.",
+        "Die leibliche Zeugung eigener Kinder und deren Versorgung im Haushalt, worin sich der Kern dieser Stufe erschöpft.",
+        "Interesse an der Stiftung und Erziehung der nächsten Generation sowie Fürsorge für das Hervorgebrachte.",
+        "Bilanzierung des bisher Erreichten und der nicht mehr erreichbaren Ziele in der Lebensmitte."
+      ],
+      "c": 2,
+      "e": "PDF-Seite 16 fasst Generativität als Interesse an der Stiftung und Erziehung der nächsten Generation, wobei Produktivität und Schöpfertum eingeschlossen sind, und nennt die Fähigkeit zur Fürsorge sowie die Sorge um Kinder und im weiteren Sinne um die Welt. Das entscheidende Trennmerkmal ist der Bezug auf die nachfolgende Generation samt Fürsorge für das Hervorgebrachte. Die Verengung auf leibliche Zeugung und Versorgung eigener Kinder ist der stärkste Fehlweg, weil PDF-Seite 16 die Zeugung tatsächlich erwähnt — sie erweitert den Kern jedoch ausdrücklich auf Produktivität, Schöpfertum, Verantwortung für die Gemeinschaft und die Sorge um die Welt; wer nur die leibliche Elternschaft gelten lässt, verliert genau diese Reichweite. Die gegenseitige Bezogenheit zweier erwachsener Menschen und die Suche nach einer Lebenspartnerschaft gehören nach PDF-Seite 15 zur vorausgehenden Stufe Intimität versus Isolierung und richten sich auf die Partnerperson. Die Bilanzierung des Erreichten und der nicht mehr erreichbaren Ziele stammt aus der Midlife-Crisis-Konzeption von PDF-Seite 34 und beschreibt eine Selbstbewertung ohne Generationenbezug.",
+      "h": "Frag dich, auf wen sich diese Stufe richtet und wie weit der Bezug reicht. Prüfe jede Beschreibung darauf, ob sie im Kreis der eigenen leiblichen Nachkommen stecken bleibt, eine andere Stufe des Lebenszyklus wiedergibt oder bloß die eigene Lebensbilanz betrifft."
+    },
+    {
+      "id": "q37",
+      "q": "Wie kann sich Generativität über die Sorge für eigene Kinder hinaus ausdrücken?",
+      "opts": [
+        "Als libidinöse Besetzung dessen, was gezeugt wurde, also als eine Erweiterung des Ich-Interesses, die sich auf die eigenen Nachkommen richtet.",
+        "Als Balance zwischen den Verpflichtungen gegenüber den eigenen Kindern und den alternden Eltern, also als Stellung in der Mitte der Generationen.",
+        "Als Übernahme öffentlicher Ämter in Gemeinden, Schulen und Hilfsorganisationen, sofern sie der eigenen beruflichen Karriere und der Sicherung der eigenen Position dienen.",
+        "Als Verantwortung für Gemeinschaft und Sorge um die Welt, etwa durch soziales oder politisches Engagement und Tätigkeiten in gesellschaftlichen Einrichtungen."
+      ],
+      "c": 3,
+      "e": "PDF-Seite 16 erweitert Generativität im weiteren Sinne ausdrücklich auf die Sorge um die Welt, die Übernahme von Verantwortung für die Gemeinschaft, soziales und politisches Engagement sowie Aktivitäten in Gemeinden, Schulen, Hilfsorganisationen und Krankenhäusern. Das entscheidende Trennmerkmal ist der verantwortliche Fürsorgebezug über die eigene Nachkommenschaft hinaus. Der stärkste Fehlweg sieht täuschend richtig aus: Öffentliche Ämter in genau solchen Einrichtungen erfüllen das Kriterium dennoch nicht, wenn sie der eigenen Karriere und der Sicherung der eigenen Position dienen — PDF-Seite 16 verlangt die Erweiterung des Ich-Interesses und die Fähigkeit zur Fürsorge, und die fehlt, solange das Interesse bei sich selbst bleibt. Die Balance zwischen eigenen Kindern und alternden Eltern beschreibt die Sandwich-Generation von PDF-Seite 39; sie richtet sich auch auf die vorangehende Generation, während Generativität auf die nächste Generation und die Gemeinschaft zielt. Die libidinöse Besetzung dessen, was gezeugt wurde, steht zwar auf PDF-Seite 16, bleibt aber im Kreis der eigenen Nachkommen und geht damit nicht über die Sorge für eigene Kinder hinaus.",
+      "h": "Achte auf Reichweite und Ausrichtung: Wem gilt die Zuwendung, und ist sie tatsächlich fürsorglich oder dient sie am Ende dem eigenen Fortkommen? Prüfe zudem, ob die Beschreibung den Kreis der eigenen Nachkommen wirklich verlässt oder nur nach außen aussieht."
+    },
+    {
+      "id": "q38",
+      "q": "Welche Folge wird angenommen, wenn die Bezogenheit auf nächste Generationen und Gemeinschaft fehlt?",
+      "opts": [
+        "Eine im mittleren Erwachsenenalter diagnostizierbare depressive Erkrankung mit Innenwendung und Suizidalität.",
+        "Ein Gefühl der Stagnation und Persönlichkeitsverarmung, beispielsweise in Form von Selbstverwöhnung.",
+        "Eine Umkehrung der Zeitperspektive, die von der Zeit seit der Geburt zur verbleibenden Lebenszeit führt.",
+        "Ein Gefühl tiefster Vereinsamung, das mit einer gänzlichen Beschäftigung mit sich selbst verbunden ist."
+      ],
+      "c": 1,
+      "e": "PDF-Seite 16 formuliert wörtlich: Fehlt die Bezogenheit auf die nächsten Generationen und die Gemeinschaft, führt dies zu einem Gefühl der Stagnation und Persönlichkeitsverarmung, mit Selbstverwöhnung als Beispiel. Das entscheidende Trennmerkmal ist, dass hier eine theoriebasierte Entwicklungsfolge des Konflikts Generativität versus Stagnation gesucht wird — kein klinischer Befund und kein Merkmal einer anderen Stufe. Der stärkste Fehlweg ist das Gefühl tiefster Vereinsamung samt Beschäftigung mit sich selbst: Das steht auf PDF-Seite 15, beschreibt dort aber die Folge des Ausweichens vor Hingabe im Konflikt Intimität versus Isolierung, also die vorausgehende Stufe mit einer ganz anderen auslösenden Bedingung. Eine diagnostizierbare depressive Erkrankung mit Innenwendung und Suizidalität greift auf die Kennzeichen der von Levinson postulierten Midlife-Crisis von PDF-Seite 35 zurück und macht aus einer Entwicklungsfolge eine Diagnose. Die Umkehrung der Zeitperspektive schließlich kennzeichnet nach PDF-Seite 34 das mittlere Erwachsenenalter allgemein und tritt unabhängig davon auf, ob die Bezogenheit gelingt.",
+      "h": "Achte darauf, dass hier eine theoretisch angenommene Entwicklungsfolge gesucht wird — kein klinischer Befund und kein allgemeines Kennzeichen der Lebensmitte. Frag dich außerdem, zu welcher Stufe der beschriebene Ausgang gehört; der Ausgang der vorherigen Stufe passt hier nicht."
+    }
+  ]
+};
+
+var bonusFragen = [];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var view = OPT_SHUF ? _shufCopy(q) : {opts:q.opts, c:q.c};
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+view.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* ─── Options-Shuffle: bei JEDEM Rendern/Durchgang frisch (nicht mehr nur einmal
+   pro Seitenladung), damit sich die Position der richtigen Antwort bei erneuten
+   Versuchen/Durchgängen ändert. Gibt eine NEUE {opts,c}-Kopie zurück, mutiert q
+   NICHT — die Originaldaten (data.json-Reihenfolge) bleiben als Quelle erhalten.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufCopy(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number'||_hasLtrRef(q.e)) return {opts:(q?q.opts:[]), c:(q?q.c:0)};
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  return {opts:idx.map(function(i){return q.opts[i];}), c:idx.indexOf(q.c)};
+}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+/* ═══ Altklausur Quiz-Runner (Üben + Klausur) ═══════════════════════════ */
+var ALLE = (sofortFragen['0'] || []);
+/* RUN.shuf[qi] = {opts, c} — frisch gemischte Optionsansicht je Frage, neu erzeugt
+   bei jedem _quizBegin() (Start/Fällige/Nur-falsche/nach Reset), damit die Position
+   der richtigen Antwort sich bei jedem neuen Durchgang ändert statt fix zu bleiben. */
+var RUN = {mode:'ueben', shuffle:false, order:[], pos:0, answers:{}, started:false, finished:false, lastWrong:[], expOpen:false, hintOpen:false, shuf:{}};
+var LTRS = ['a','b','c','d'];
+
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function quizModeUeben(){RUN.mode='ueben'; if(!RUN.started) quizRender();}
+function quizModeKlausur(){RUN.mode='klausur'; if(!RUN.started) quizRender();}
+function quizToggleShuffle(){RUN.shuffle=!RUN.shuffle; if(!RUN.started) quizRender();}
+function quizToggleExp(){RUN.expOpen=!RUN.expOpen; quizRender();}
+function quizToggleHint(){RUN.hintOpen=!RUN.hintOpen; quizRender();}
+
+/* ── Persistenz (teilt den Store mit dem „Alle Fragen"-Tab; load/save aus der Engine) ── */
+function _qSched(qid, correct){
+  var p=load(), now=Date.now(), DAY=86400000;
+  var card=p[qid]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(correct){ card.stability*=2.5; card.due=now+Math.max(DAY,card.stability*DAY); card.state='review'; }
+  else { card.lapses++; card.stability=Math.max(1,card.stability*0.5); card.due=now+600000; card.state='learning'; }
+  card.reps++; p[qid]=card; save(p);
+}
+function _qStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ALLE.forEach(function(q){ var c=p[q.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ALLE.length};
+}
+function _qDueIdx(){
+  var p=load(), now=Date.now(), idx=[];
+  ALLE.forEach(function(q,i){ var c=p[q.id]; if(!c||c.state==='new'||c.due<=now||c.lapses>0) idx.push(i); });
+  return idx;
+}
+function quizDueMode(){ var idx=_qDueIdx(); if(idx.length) _quizBegin(idx); }
+function quizResetProgress(){ var p=load(); ALLE.forEach(function(q){ delete p[q.id]; }); save(p); RUN.lastWrong=[]; quizRestart(); }
+
+function quizStart(){_quizBegin(ALLE.map(function(_,i){return i;}));}
+function quizOnlyWrong(){if(RUN.lastWrong.length) _quizBegin(RUN.lastWrong.slice());}
+function _quizBegin(idx){
+  RUN.order = RUN.shuffle ? _shuffle(idx) : idx.slice();
+  RUN.shuf={}; RUN.order.forEach(function(qi){ RUN.shuf[qi]=_shufCopy(ALLE[qi]); });
+  RUN.pos=0; RUN.answers={}; RUN.expOpen=false; RUN.hintOpen=false; RUN.started=true; RUN.finished=false; quizRender();
+}
+function quizRestart(){RUN.started=false; RUN.finished=false; quizRender();}
+
+function quizAnswer(i){
+  var qi=RUN.order[RUN.pos];
+  if(RUN.mode==='ueben' && RUN.answers[qi]!==undefined) return;  /* Üben: nach Antwort fixiert */
+  RUN.answers[qi]=i;
+  if(RUN.mode==='ueben') _qSched(ALLE[qi].id, i===RUN.shuf[qi].c);  /* Üben: Schwäche sofort einplanen (Key = Frage-ID) */
+  quizRender();
+}
+function quizNext(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos<RUN.order.length-1){RUN.pos++; quizRender();} else quizSubmit();}
+function quizPrev(){RUN.expOpen=false; RUN.hintOpen=false; if(RUN.pos>0){RUN.pos--; quizRender();}}
+function quizSubmit(){
+  RUN.finished=true;
+  RUN.lastWrong=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+  if(RUN.mode==='klausur') RUN.order.forEach(function(qi){
+    if(RUN.answers[qi]!==undefined) _qSched(ALLE[qi].id, RUN.answers[qi]===RUN.shuf[qi].c);
+  });
+  quizRender();
+}
+
+function _optsHTML(q, qi){
+  var view=RUN.shuf[qi]||{opts:q.opts,c:q.c};
+  var chosen=RUN.answers[qi], answered=chosen!==undefined, h='<div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    var cls='mc-opt', dis='';
+    if(RUN.mode==='ueben' && answered){
+      if(i===view.c) cls+=' correct'; else if(i===chosen) cls+=' wrong';
+      dis=' disabled';
+    } else if(RUN.mode==='klausur' && i===chosen){ cls+=' qr-sel'; }
+    h+='<button class="'+cls+'"'+dis+' onclick="quizAnswer('+i+')">'+(OPT_SHUF?'':'<span class="ltr">'+LTRS[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  return h+'</div>';
+}
+
+function quizRender(){
+  var c=document.getElementById('quizRunner'); if(!c) return;
+  /* ── Startbildschirm ── */
+  if(!RUN.started){
+    var st=_qStats(), dueIdx=_qDueIdx();
+    var statLine = st.learned>0
+      ? '<p class="qr-stat">📊 '+st.learned+' / '+st.total+' gelernt · '+st.due+' fällig (Lernstand wird gespeichert)</p>'
+      : '<p class="qr-stat">Lernstand wird auf diesem Gerät gespeichert.</p>';
+    c.innerHTML='<div class="card"><div class="card-title">Quiz starten</div>'
+      +'<p>Modus wählen, dann starten — '+ALLE.length+' Fragen.</p>'
+      + statLine
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.mode==='ueben'?' active':'')+'" onclick="quizModeUeben()">📝 Üben · Sofort-Feedback</button>'
+        +'<button class="nav-btn'+(RUN.mode==='klausur'?' active':'')+'" onclick="quizModeKlausur()">🎓 Klausur · Auswertung am Ende</button>'
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(RUN.shuffle?' active':'')+'" onclick="quizToggleShuffle()">🔀 Reihenfolge mischen: '+(RUN.shuffle?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="quizStart()">▶ Alle Fragen starten</button>'
+      +(st.learned>0 && dueIdx.length?'<button class="btn btn-accent" onclick="quizDueMode()">🔁 Fällige & Schwächen ('+dueIdx.length+')</button>':'')
+      +(RUN.lastWrong.length?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur '+RUN.lastWrong.length+' falsche wiederholen</button>':'')
+      +(st.learned>0?'<button class="btn btn-ghost" onclick="quizResetProgress()" style="font-size:.7rem;padding:5px 9px">↺ Fortschritt zurücksetzen</button>':'')
+      +'</div></div>';
+    return;
+  }
+  /* ── Auswertung ── */
+  if(RUN.finished){
+    var total=RUN.order.length;
+    var correct=RUN.order.filter(function(qi){return RUN.answers[qi]===RUN.shuf[qi].c;}).length;
+    var wrong=total-correct, pct=total?Math.round(correct/total*100):0;
+    var icon=pct>=80?'🎉':(pct>=50?'💪':'📚');
+    var h='<div class="done-box"><div class="done-icon">'+icon+'</div>'
+      +'<div class="done-title">'+correct+' / '+total+' richtig ('+pct+'%)</div>'
+      +'<div class="done-sub">Modus: '+(RUN.mode==='klausur'?'Klausur':'Üben')+'</div>'
+      +'<div class="done-stats">'
+        +'<div class="done-stat"><div class="dn" style="color:var(--green)">'+correct+'</div><div class="dl">Richtig</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--red)">'+wrong+'</div><div class="dl">Falsch</div></div>'
+        +'<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div>'
+      +'</div></div>'
+      +'<div class="qr-ctrl" style="justify-content:center">'
+        +'<button class="btn btn-accent" onclick="quizRestart()">🔁 Neuer Durchgang</button>'
+        +(wrong?'<button class="btn btn-ghost" onclick="quizOnlyWrong()">🔁 Nur falsche ('+wrong+') wiederholen</button>':'')
+        +(_qDueIdx().length?'<button class="btn btn-ghost" onclick="quizDueMode()">🔁 Fällige & Schwächen</button>':'')
+        +'<button class="btn btn-ghost" onclick="goTo(1)">📋 Alle Fragen</button>'
+      +'</div>';
+    var wrongQ=RUN.order.filter(function(qi){return RUN.answers[qi]!==RUN.shuf[qi].c;});
+    if(wrongQ.length){
+      h+='<div class="phase-label">Falsch beantwortet</div><div class="qr-review">';
+      wrongQ.forEach(function(qi){
+        var q=ALLE[qi], view=RUN.shuf[qi], ch=RUN.answers[qi];
+        h+='<div class="card"><p style="color:var(--text);font-weight:600">'+q.q+'</p>'
+          +(ch===undefined?'<p style="color:var(--red);font-size:.84rem">Keine Antwort gegeben</p>'
+                          :'<p style="color:var(--red);font-size:.84rem">Deine Antwort: '+view.opts[ch]+'</p>')
+          +'<p style="color:var(--green);font-size:.84rem">Richtig: '+view.opts[view.c]+'</p>'
+          +'<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div></div>';
+      });
+      h+='</div>';
+    } else { h+='<div class="hinweis"><strong>Perfekt!</strong> Alle Fragen richtig beantwortet.</div>'; }
+    c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'}); return;
+  }
+  /* ── Fragebildschirm ── */
+  var qi=RUN.order[RUN.pos], q=ALLE[qi], N=RUN.order.length;
+  var answered=RUN.answers[qi]!==undefined;
+  var ansCount=RUN.order.filter(function(x){return RUN.answers[x]!==undefined;}).length;
+  var scoreNow=RUN.order.filter(function(x){return RUN.answers[x]===RUN.shuf[x].c;}).length;
+  var meta='Frage '+(RUN.pos+1)+' / '+N+'  ·  '+(RUN.mode==='klausur'?'🎓 Klausur':'📝 Üben')
+          +(RUN.mode==='ueben'?'  ·  Score '+scoreNow+'/'+ansCount:'');
+  var h='<div class="trainer-top"><span class="trainer-meta">'+meta+'</span>'
+      +'<button class="btn btn-ghost" onclick="quizRestart()" style="font-size:.7rem;padding:5px 9px">✕ Beenden</button></div>'
+      +'<div class="prog-bar"><div class="prog-fill" style="width:'+Math.round((RUN.pos+1)/N*100)+'%"></div></div>'
+      +'<div class="mc-wrap"><div class="mc-q-text">'+q.q+'</div>'+_optsHTML(q,qi);
+  if(RUN.mode==='ueben'){
+    if(answered){ h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>'; }
+    else {
+      if(q.h) h+='<button class="exp-btn" onclick="quizToggleHint()">'+(RUN.hintOpen?'💡 Erklärung ausblenden':'💡 Erklärung anzeigen')+'</button>';
+      h+='<button class="exp-btn" onclick="quizToggleExp()">'+(RUN.expOpen?'🔓 Lösung ausblenden':'🔓 Lösung anzeigen')+'</button>';
+      if(RUN.hintOpen && q.h) h+='<div class="mc-hint"><div class="lbl">Erklärung — ohne Lösung</div>'+q.h+'</div>';
+      if(RUN.expOpen) h+='<div class="mc-exp" style="display:block"><div class="lbl">Lösung</div>'+q.e+'</div>';
+    }
+  }
+  h+='</div><div class="qr-ctrl" style="justify-content:flex-end">';
+  if(RUN.mode==='klausur'){
+    if(RUN.pos>0) h+='<button class="btn btn-ghost" onclick="quizPrev()">← Zurück</button>';
+    if(RUN.pos<N-1) h+='<button class="btn btn-accent" onclick="quizNext()">Weiter →</button>';
+    h+='<button class="btn btn-accent" onclick="quizSubmit()">✓ Abgeben</button>';
+  } else {
+    if(answered) h+='<button class="btn btn-accent" onclick="quizNext()">'+(RUN.pos<N-1?'Weiter →':'Abschließen ✓')+'</button>';
+    else h+='<span class="trainer-meta">Antwort wählen …</span>';
+  }
+  h+='</div>';
+  c.innerHTML=h; window.scrollTo({top:0,behavior:'smooth'});
+}
+/* 💡/🔓-Buttons im „Alle Fragen"-Tab — „Erklärung" = spoilerfreier Konzept-Hinweis (h-Feld,
+   eigenes .mc-hint-Div), „Lösung" = togglet das versteckte #exp-<id> der Engine (Label per DOM
+   auf „Lösung" umbenannt). Rein additiv: renderMC/answerMC der geteilten Engine bleiben unberührt. */
+function _injectExpButtons(){
+  var byId={}; ALLE.forEach(function(q){ byId[q.id]=q; });
+  document.querySelectorAll('#s1 .mc-wrap').forEach(function(w){
+    var exp=w.querySelector('.mc-exp'); if(!exp||w.querySelector('.exp-btn')) return;
+    var lbl=exp.querySelector('.lbl'); if(lbl) lbl.textContent='Lösung';
+    var q=byId[(w.id||'').replace('mcq-','')];
+    var hd=null;
+    if(q && q.h){
+      var hb=document.createElement('button'); hb.className='exp-btn'; hb.textContent='💡 Erklärung anzeigen';
+      hd=document.createElement('div'); hd.className='mc-hint'; hd.style.display='none';
+      hd.innerHTML='<div class="lbl">Erklärung — ohne Lösung</div>'+q.h;
+      hb.onclick=function(){
+        var vis=hd.style.display!=='none';
+        hd.style.display=vis?'none':'block';
+        hb.textContent=vis?'💡 Erklärung anzeigen':'💡 Erklärung ausblenden';
+      };
+      exp.parentNode.insertBefore(hb, exp);
+    }
+    var b=document.createElement('button'); b.className='exp-btn'; b.textContent='🔓 Lösung anzeigen';
+    b.onclick=function(){
+      var vis=exp.style.display==='block';
+      exp.style.display=vis?'':'block';
+      b.textContent=vis?'🔓 Lösung anzeigen':'🔓 Lösung ausblenden';
+    };
+    exp.parentNode.insertBefore(b, exp);
+    if(hd) exp.parentNode.insertBefore(hd, exp);
+  });
+}
+(function(){ quizRender(); _injectExpButtons(); })();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2a · VL12 Denken & Problemlösen I</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m2a-vl12
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M2a · VL12 Denken & Problemlösen I</h1>
+<p class="page-sub">Sichtweisen des Problemlösens · Behaviorismus/Gestalt/Kognition · Klausur Sept 2026 (WH) · Single Choice</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Was ist Denken? · 2. Behaviorismus & Gestaltpsychologie · 3. Fördernde/hemmende Einflüsse · 4. Problemraum & Operatoren · 5. Heuristiken & Re-Repräsentation
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Was ist Denken?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Behaviorismus</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Gestaltpsychologie</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Inkubation</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Hemmende Einflüsse</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Problemraum</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Heuristiken</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Bewertung & Re-Repräsentation</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Was ist Denken? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Was ist Denken?</div>
+    <div class="sec-lz">Definitionen (Dörner, Aebli, Hussey); Klassifikation der Denkprozesse.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Tagträumen, einen Schachzug wählen, eine Reise planen, eine Diagnose stellen — das alles nennen wir „Denken“. Was haben diese so unterschiedlichen Tätigkeiten gemeinsam?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Denken ist ein <strong>komplexer, nicht sichtbarer mentaler Prozess</strong>, der Repräsentationen erzeugt/transformiert und es erlaubt, Handeln von der unmittelbaren Reizsituation <strong>abzukoppeln</strong> (Hussey 1984). Dörner: „Denken ist Problemlösen“. Man unterscheidet u. a. Problemlösen, Planen, Schließen und Urteilen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definitionsversuche</div>
+    <p>„Denken ist Problemlösen, ist Umwandeln bestimmter Sachverhalte mit Hilfe bestimmter <strong>Operatoren</strong>“ (Dörner 1976). Denken ist „Das Ordnen des Tuns“ (Aebli 1982).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Definitionsbestandteile (Hussey 1984)</div>
+    <ul>
+      <li>komplexer und vielschichtiger <strong>mentaler Prozess</strong></li>
+      <li>für Außenstehende <strong>nicht sichtbar</strong></li>
+      <li>Generation/Transformation/Kombination von Repräsentationen → verhaltensbestimmend</li>
+      <li>Möglichkeit, Handeln (partiell) von der unmittelbaren <strong>Reizsituation abzukoppeln</strong></li>
+    </ul>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — Klassifikation der Denkprozesse</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Problemlösen</h4><p>Barriere zwischen Ausgangs- und Zielzustand überwinden (z. B. Schach).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Planen</h4><p>Handlungsschritte vorausschauend ordnen.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Schließen</h4><p>Deduktiv (logische Ableitung) und induktiv (Wahrscheinlichkeitsschätzung).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Urteilen & Entscheiden</h4><p>Optionen bewerten und auswählen (z. B. im Supermarkt).</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Behaviorismus ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Behaviorismus & Problemlösen</div>
+    <div class="sec-lz">Assoziationismus, Thorndikes Problemkäfig, Reaktionshierarchie, Top-Reaktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Katze in Thorndikes Käfig miaut, kratzt, zwängt sich — und zieht irgendwann zufällig an der Schnur. Beim nächsten Mal geht es etwas schneller. Was lernt sie hier eigentlich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Sie lernt durch <strong>Versuch und Irrtum</strong>: der zufällige Erfolg verstärkt die richtige Reaktion, die <strong>Reaktionshierarchie wird umgeschichtet</strong>. Ein „Problem“ ist behavioristisch das <strong>Versagen der Top-Reaktion</strong> — die Lösung erscheint allmählich, nicht durch Einsicht.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Grundgedanke: Assoziationismus</div>
+    <p>Lernen = assoziative Verbindung zwischen Stimulus und Reaktion; die Bildung der Assoziationen wird durch <strong>Erfolg</strong> (Verstärkung/Bestrafung) kontrolliert. <strong>Thorndikes Problemkäfig:</strong> die Katze zeigt anfangs dominante Reaktionen (Miauen, Kratzen); zufälliges Ziehen an der Schnur öffnet die Tür; die richtige Reaktion wird zunehmend schneller ausgeführt.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Anwendung auf die Denkpsychologie</div>
+    <p>Ein „<strong>Problem</strong>“ = Versagen der <strong>Top-Reaktion</strong> (der dominanten Reaktion in der Hierarchie). Die Lösung erfolgt durch <strong>Umschichtung der Reaktions-/Gewohnheitshierarchien</strong>. Streichholzproblem: Top-Reaktion = Hölzer flach auf den Tisch legen; die zielführende 3-D-Lösung steht weit unten und wird nicht immer gefunden.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Umschichtung der Reaktionshierarchie — Schritt für Schritt</div>
+    <div id="s1steps">
+      <div class="step-item"><div class="step-label">Ausgangslage</div>Dominante Top-Reaktion (z. B. Hölzer flach legen / sich durch die Gitterstäbe zwängen) <strong>versagt</strong>.</div>
+      <div class="step-item"><div class="step-label">Versuch & Irrtum</div>Weitere Reaktionen der Hierarchie werden durchprobiert.</div>
+      <div class="step-item"><div class="step-label">Zufälliger Erfolg</div>Eine ungewöhnliche Reaktion (am Faden ziehen / 3-D-Dreieck bauen) führt zum Ziel und wird verstärkt.</div>
+      <div class="step-item"><div class="step-label">Umschichtung</div>Die erfolgreiche Reaktion rückt in der Hierarchie nach oben — beim nächsten Mal schneller.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s1steps')" style="margin-top:10px">Nächsten Schritt zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Gestaltpsychologie ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Gestaltpsychologie: Einsicht & Restrukturierung</div>
+    <div class="sec-lz">Köhler (Sultan), defekte Gestalt, produktiv/reproduktiv, Wallas 4 Phasen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Köhlers Schimpanse Sultan stapelt plötzlich Kisten und greift mit einem Stock nach der Banane — ohne langes Probieren. Thorndikes Katze dagegen lernt nur langsam. Worin liegt der Unterschied?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Sultan zeigt <strong>Einsicht</strong>: eine plötzliche, sprunghafte Lösung durch gedankliche <strong>Restrukturierung</strong> der „defekten Gestalt“. Thorndikes Katze zeigt allmähliches <strong>Versuch und Irrtum</strong>. Genau diesen Gegensatz untersucht die Gestaltpsychologie (produktives vs. reproduktives Denken).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gestaltpsychologischer Ansatz (Köhler)</div>
+    <p>Ausgangspunkt Ganzheitspsychologie: <em>das Ganze ist mehr als die Summe seiner Teile</em>; der Mensch strebt nach einer „guten Gestalt“. Ein „Problem“ ist eine <strong>defekte Gestalt</strong>; Ziel ist ihre Transformation in eine gute Gestalt. Köhlers Schimpanse <strong>Sultan</strong> (1913–1917): plötzlicher, gezielter Werkzeuggebrauch → <strong>Einsicht</strong> und planendes Handeln (sprunghafte vs. allmähliche Lernkurve).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Restrukturierung & produktiv vs. reproduktiv</div>
+    <p>Problemlösen vollzieht sich nicht allmählich, sondern durch <strong>Restrukturierung</strong> → Einsicht (Aha-Erlebnis), analog zum Umschlagen mehrdeutiger Reizvorlagen. <strong>Produktiv</strong> = Einsicht + Restrukturierung; <strong>reproduktiv</strong> = Wiederverwendung von Erfahrung (kann die Lösung erschweren). 4 Phasen (Wallas 1926): Vorbereitung → Inkubation → Illumination → Verifikation.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Behaviorismus oder Gestaltpsychologie?</div>
+    <div class="corr-item" id="c2a">Problemlösen durch Versuch und Irrtum, Umschichtung von Reaktionshierarchien.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c2a',this,'gestalt')">Gestaltpsychologie</button>
+      </div><div class="corr-fb" id="c2a-fb"></div>
+    </div>
+    <div class="corr-item" id="c2b">Problemlösen durch plötzliche Einsicht und Restrukturierung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c2b',this,'gestalt')">Gestaltpsychologie</button>
+      </div><div class="corr-fb" id="c2b-fb"></div>
+    </div>
+    <div class="corr-item" id="c2c">Thorndikes Katze im Problemkäfig (allmähliche Lernkurve).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c2c',this,'gestalt')">Gestaltpsychologie</button>
+      </div><div class="corr-fb" id="c2c-fb"></div>
+    </div>
+    <div class="corr-item" id="c2d">Köhlers Schimpanse Sultan (sprunghafte Lösung).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'behav')">Behaviorismus</button>
+        <button class="corr-btn" onclick="checkCorr('c2d',this,'gestalt')">Gestaltpsychologie</button>
+      </div><div class="corr-fb" id="c2d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Inkubation ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Fördernde Bedingungen: Inkubation</div>
+    <div class="sec-lz">Silveira 1971; Maier 1931 (unbemerkter Hinweis).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Man grübelt erfolglos über ein Problem, legt es weg — und unter der Dusche kommt plötzlich die Lösung. Warum hilft es, ein Problem eine Weile ruhen zu lassen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Das ist die <strong>Inkubation</strong> (2. Phase bei Wallas). Silveira (1971): eine längere Inkubationspause erhöhte die Lösungsrate (55 % → 85 %). Auch unbemerkte Hinweise wirken in dieser Phase (Maier 1931, Zwei-Seile-Problem).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Inkubation (Silveira 1971)</div>
+    <p>Ketten-Aufgabe: Kontrolle (½h ohne Pause) 55 %; ½h + ½h Inkubation 64 %; ½h + 4h Inkubation 85 % → eine <strong>längere Inkubationspause</strong> erhöht die Lösungsrate. Wirksamkeit hängt ab von Beginn/Zeitpunkt, Phase der Unterbrechung, <strong>Dauer</strong> und vorheriger intensiver Beschäftigung.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Unbemerkter Lösungshinweis (Maier 1931)</div>
+    <p>Zwei-Seile-Problem: Probanden lösten häufiger (ein Seil als Pendel anstoßen), wenn der Versuchsleiter in der Inkubationsphase <strong>beiläufig ein Seil anstieß</strong> — viele ohne sich des Hinweises bewusst zu sein (Replikation: Knoblich & Wartenberg 1998).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 4 Phasen (Wallas 1926) — Schritt für Schritt aufdecken</div>
+    <div id="s3steps">
+      <div class="step-item"><div class="step-label">1 · Vorbereitung</div>Informationen sammeln, erste Lösungsversuche.</div>
+      <div class="step-item"><div class="step-label">2 · Inkubation</div>Nach Scheitern das Problem liegen lassen (stilles Betrachten).</div>
+      <div class="step-item"><div class="step-label">3 · Illumination</div>Plötzliche Einsicht — das Aha-Erlebnis.</div>
+      <div class="step-item"><div class="step-label">4 · Verifikation</div>Realisierung und Überprüfung der Lösung.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s3steps')" style="margin-top:10px">Nächste Phase zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Hemmende Einflüsse ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Hemmende Einflüsse: Gebundenheit, Fixierung, Einstellung</div>
+    <div class="sec-lz">Duncker (Kerze), Scheerer (9 Punkte), Luchins (Wasserumfüllen).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bei Dunckers Kerzenaufgabe sehen viele die Streichholzschachtel nur als Behälter — und übersehen, dass sie als Halterung an die Wand genagelt werden kann. Welcher Effekt blockiert hier?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Die <strong>funktionale Gebundenheit</strong>: der gewohnte Gebrauch eines Objekts verhindert eine andere Nutzung. Verwandte Hemmnisse: <strong>Fixierung</strong> (unzutreffende Randbedingungen, 9-Punkte) und der <strong>Einstellungseffekt</strong> (eingeübte Strategie, Luchins).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Funktionale Gebundenheit (Duncker 1935)</div>
+    <p>Der gewohnte Gebrauch eines Objekts verhindert seine Verwendung in einer <strong>anderen Funktion</strong>. Kerzenaufgabe: die Streichholz-Schachtel wird nicht als Halterung erkannt, weil sie als Behälter dient. Replikation Adamson (1952): leere Schachtel → mehr Lösungen als Schachtel-als-Behälter.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Fixierung (Scheerer 1963) & Einstellungseffekt (Luchins 1942)</div>
+    <p><strong>Fixierung:</strong> Annahme unzutreffender Randbedingungen verhindert die Lösung (9-Punkte-Problem: man bleibt fälschlich „im Quadrat“). <strong>Einstellungseffekt (mental set):</strong> in der Vergangenheit erfolgreiche Operationen werden weiter übertragen, auch wenn suboptimal (Wasserumfüllen: komplexe Formel B − A − 2C trotz einfacherer Lösung).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — funktionale Gebundenheit oder Einstellungseffekt?</div>
+    <div class="corr-item" id="c4a">Der gewohnte Gebrauch eines Objekts verhindert seine andere Verwendung (Kerzenaufgabe).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'funktgeb')">Funktionale Gebundenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'einstellung')">Einstellungseffekt</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">Eine zuvor erfolgreiche Strategie wird mechanisch weiter angewandt (Wasserumfüllen).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'funktgeb')">Funktionale Gebundenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'einstellung')">Einstellungseffekt</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">Die Streichholzschachtel wird nicht als Halterung erkannt, weil sie als Behälter dient.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'funktgeb')">Funktionale Gebundenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'einstellung')">Einstellungseffekt</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+    <div class="corr-item" id="c4d">Auch bei einfachen Problemen wird die komplizierte gewohnte Lösung genutzt.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'funktgeb')">Funktionale Gebundenheit</button>
+        <button class="corr-btn" onclick="checkCorr('c4d',this,'einstellung')">Einstellungseffekt</button>
+      </div><div class="corr-fb" id="c4d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Problemraum ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Informationsverarbeitungsansatz: Der Problemraum</div>
+    <div class="sec-lz">Barriere, Operatoren, Zustände; Tower of Hanoi.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Beim Tower of Hanoi gibt es einen Startaufbau, ein Ziel und feste Regeln, welche Züge erlaubt sind. Wie lässt sich ein solches Problem formal beschreiben?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Als <strong>Problemraum</strong>: eine Menge von <strong>Zuständen</strong> (Anfang, Zwischen, Ziel) und <strong>Operatoren</strong> (erlaubte Züge), die Zustände transformieren. Ein Problem = Ausgangszustand + Zielzustand + <strong>Barriere</strong>; Problemlösen = Operatoren-Sequenz, die die Barriere überwindet.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Problem & Problemlösen (Informationsverarbeitung)</div>
+    <p>Grundprinzip: kognitive Architektur aktiver Informationsverarbeitung (Input → Verarbeitung → Output). Ein <strong>Problem</strong> = unerwünschter Ausgangszustand + erwünschter Zielzustand + <strong>Barriere</strong>, die die Transformation von A nach Z verhindert. <strong>Problemlösen</strong> = Generieren einer Sequenz von <strong>Operatoren</strong>, um die Barriere zu überwinden.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Der Problemraum</div>
+    <p>Die objektive Struktur eines Problems: eine Menge von <strong>Zuständen</strong> (Anfangs-, Zwischen-, Zielzustand) und eine Menge von <strong>Operatoren</strong> (Handlungen, die einen Zustand in einen anderen überführen). Der Problemraum stellt alle Zustände dar, die bei Anwendung aller anwendbaren Operatoren entstehen (Tower of Hanoi: nur die oberste Scheibe bewegen, nie größere auf kleinere).</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tower of Hanoi — die Bausteine des Problemraums aufdecken</div>
+    <div id="s5steps">
+      <div class="step-item"><div class="step-label">Anfangszustand</div>Alle Scheiben auf dem linken Pflock (geordnet, größte unten).</div>
+      <div class="step-item"><div class="step-label">Operatoren (Regeln)</div>Immer nur die oberste Scheibe bewegen; nie eine größere auf eine kleinere legen.</div>
+      <div class="step-item"><div class="step-label">Zwischenzustände</div>Alle legalen Konfigurationen, die durch erlaubte Züge erreichbar sind.</div>
+      <div class="step-item"><div class="step-label">Zielzustand</div>Alle Scheiben geordnet auf dem rechten Pflock.</div>
+      <div class="step-item"><div class="step-label">Problemraum</div>= die Gesamtheit aller erreichbaren Zustände + Operatoren.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'s5steps')" style="margin-top:10px">Nächsten Baustein zeigen</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Heuristiken ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Heuristiken: Differenzreduktion & Mittel-Ziel-Analyse</div>
+    <div class="sec-lz">hill climbing (Hobbits & Orcs); Newell/Shaw/Simon; Analogie (Gick & Holyoak).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Beim Hobbits-&-Orcs-Problem muss man zwischendurch Personen wieder zurückrudern — sich also kurzzeitig vom Ziel entfernen. Warum scheitern viele genau hier?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Weil die <strong>Differenzreduktion</strong> (immer näher ans Ziel) bei nötigen <strong>Umwegen</strong> scheitert. Die <strong>Mittel-Ziel-Analyse</strong> (Newell, Shaw & Simon) löst das über <strong>Zwischenziele</strong>, die auch eine zeitweilige Entfernung vom Ziel erlauben.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Differenzreduktion (hill climbing)</div>
+    <p>Führe immer den Operator aus, der dich dem Zielzustand <strong>am nächsten</strong> bringt (braucht ein Ähnlichkeitsmaß). Funktioniert oft, ist aber nicht immer optimal und <strong>scheitert bei nötigen Umwegen</strong> (Hobbits & Orcs, Thomas 1974: größte Schwierigkeiten in Zuständen, die eine Verringerung der Zielähnlichkeit erfordern).</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Mittel-Ziel-Analyse (Newell, Shaw & Simon 1958)</div>
+    <p>(1) Finde den wichtigsten Unterschied zum Zielzustand; (2) definiere ein <strong>Zwischenziel</strong>, ihn zu beseitigen; (3) wähle einen passenden Operator → erlaubt <strong>Umwege/Subziele</strong>. Egan & Greeno (1974): Gruppen mit Vorerfahrung (Subzielbildung) lösten komplexere Tower-of-Hanoi-Versionen besser. <strong>Analogie</strong> (Gick & Holyoak 1980): die Festungs-Geschichte half beim Bestrahlungsproblem.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zuordnen — Differenzreduktion oder Mittel-Ziel-Analyse?</div>
+    <div class="corr-item" id="c6a">Führe immer den Operator aus, der dem Zielzustand am ähnlichsten ist.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'diffred')">Differenzreduktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'mza')">Mittel-Ziel-Analyse</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">Definiere ein Zwischenziel, um den wichtigsten Unterschied zu beseitigen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'diffred')">Differenzreduktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'mza')">Mittel-Ziel-Analyse</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">Scheitert, wenn ein Umweg (zeitweise Entfernung vom Ziel) nötig ist (Hobbits & Orcs).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'diffred')">Differenzreduktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'mza')">Mittel-Ziel-Analyse</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">Bilde Subziele und wende einen zusammengesetzten Operator an (Newell, Shaw & Simon).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'diffred')">Differenzreduktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'mza')">Mittel-Ziel-Analyse</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Bewertung & Re-Repräsentation ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Bewertung & Re-Repräsentation</div>
+    <div class="sec-lz">Problemraumtheorie; Schachbrettproblem; Sackgasse (Ohlsson); Kontextfaktoren.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Beim Domino-Schachbrettproblem versuchen Probanden zunächst, im Kopf Felder abzudecken — und stecken bald fest. Warum ist gerade diese Herangehensweise eine Sackgasse?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Die naive <strong>Repräsentation</strong> (Felder abdecken) erzeugt einen Problemraum mit ~758.148 Zuständen → <strong>Sackgasse</strong> (Ohlsson 1992). Die Lösung erfordert eine <strong>Re-Repräsentation</strong> (Brot/Butter-Argument). Sackgassen entstehen durch unvollständige/verzerrte Repräsentation und hinderliches Vorwissen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bewertung der Problemraumtheorie</div>
+    <p>Erfolgreich bei <strong>relativ einfachen, gut strukturierten</strong> Problemen; erlaubt klare empirische Vorhersagen (in welchen Zuständen mehr Schwierigkeiten, wie weit vorausgeplant wird, Lernprozesse). Bei sehr einfachen Problemen ist ein Vergleich mit der objektiv optimalen Lösung möglich; auch einige Gestalt-Probleme sind so behandelbar.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Schachbrettproblem, Sackgasse & Re-Repräsentation (Ohlsson 1992)</div>
+    <p>Naive Repräsentation (Felder abdecken) → riesiger Problemraum (~758.148 Zustände) → <strong>Sackgasse</strong>. Die Lösung erfordert eine <strong>Re-Repräsentation</strong> (Brot/Butter: ein Dominostein deckt immer ein Brot- und ein Butter-Feld; es fehlen aber zwei gleichfarbige Felder). Sackgassen entstehen durch unvollständige/verzerrte Repräsentation und hinderliches Vorwissen.</p>
+  </div>
+  <div class="card">
+    <div class="card-title">Phasenmodell & Kontextfaktoren</div>
+    <p>Wiederholtes Scheitern führt zu <strong>repräsentationaler Veränderung</strong>. Die Problem-/Zielrepräsentation hängt zudem von <strong>Kontextfaktoren</strong> ab: Emotionen, Stress (Zeitdruck), Framing.</p>
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Tippen zum Aufdecken — warum Sackgassen entstehen</div>
+    <div class="misi-grid">
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Verzerrte Repräsentation</h4><p>Vernachlässigung bestimmter Problemaspekte → unvollständiger Problemraum.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Hinderliches Vorwissen</h4><p>Falsche Erwartungen, welche Aspekte veränderlich/konstant sind.</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Re-Repräsentation</h4><p>Ausweg aus der Sackgasse: das Problem neu darstellen (Brot/Butter).</p></div>
+      <div class="misi-card" onclick="revealMisi(this)"><h4>Kontextfaktoren</h4><p>Emotionen, Stress (Zeitdruck), Framing prägen die Repräsentation.</p></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare zu Denken & Problemlösen sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Behaviorismus (Thorndike)</h4>
+      <p>Versuch und Irrtum</p>
+      <p>Umschichtung von Reaktionshierarchien</p>
+      <p>allmähliche Lernkurve</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gestaltpsychologie (Köhler)</h4>
+      <p>Einsicht & Restrukturierung</p>
+      <p>defekte → gute Gestalt</p>
+      <p>sprunghafte Lösung (Aha)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Behaviorismus erklärt Problemlösen durch plötzliche Einsicht und Restrukturierung einer defekten Gestalt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Funktionale Gebundenheit</h4>
+      <p>Gewohnter Objektgebrauch blockiert</p>
+      <p>Kerzenaufgabe (Duncker)</p>
+      <p>Schachtel nicht als Halterung erkannt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Einstellungseffekt (mental set)</h4>
+      <p>Eingeübte Strategie blockiert</p>
+      <p>Wasserumfüllen (Luchins)</p>
+      <p>komplexe Lösung trotz einfacher Alternative</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Funktionale Gebundenheit bezeichnet das mechanische Beibehalten einer zuvor erfolgreichen Lösungsstrategie.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Differenzreduktion (hill climbing)</h4>
+      <p>Immer zum zielähnlichsten Zustand</p>
+      <p>meidet Umwege</p>
+      <p>scheitert bei Hobbits & Orcs</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Mittel-Ziel-Analyse</h4>
+      <p>Wichtigsten Unterschied finden</p>
+      <p>Zwischenziele/Subziele</p>
+      <p>erlaubt Umwege (Newell, Shaw & Simon)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Differenzreduktion bildet Zwischenziele und geht dafür auch zeitweise Umwege vom Zielzustand.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Produktives Problemlösen</h4>
+      <p>Einsicht in die Struktur</p>
+      <p>produktive Restrukturierung</p>
+      <p>etwas Neues schaffen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Reproduktives Problemlösen</h4>
+      <p>Wiederverwendung von Erfahrung</p>
+      <p>kann die Lösung erschweren</p>
+      <p>funktionale Gebundenheit/Einstellung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Reproduktives Problemlösen beruht auf Einsicht und produktiver Restrukturierung des Problems.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Funktionale Gebundenheit</h4>
+      <p>Betrifft die Funktion eines Objekts</p>
+      <p>gewohnter Gebrauch blockiert andere Nutzung</p>
+      <p>Kerzen-/Schachtelaufgabe</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fixierung</h4>
+      <p>Betrifft die Randbedingungen</p>
+      <p>unzutreffende Annahmen blockieren</p>
+      <p>9-Punkte-Problem (im Quadrat bleiben)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei der Fixierung verhindert der gewohnte Gebrauch eines Objekts dessen Verwendung in einer anderen Funktion.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m2a-vl12</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m2a-vl12';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Welche Definition des Denkens stammt von Dörner (1976)?",
+      "opts": [
+        "Denken ist „Das Ordnen des Tuns“.",
+        "Denken ist ein für Außenstehende stets direkt sichtbarer Prozess.",
+        "Denken ist Problemlösen, ist Umwandeln bestimmter Sachverhalte mit Hilfe bestimmter Operatoren.",
+        "Denken ist die unmittelbare, reflexhafte Reaktion auf einen äußeren Reiz ohne jede innere Repräsentation."
+      ],
+      "c": 2,
+      "e": "Dörner (1976): „Denken ist Problemlösen … mit Hilfe bestimmter Operatoren“. (a) ist Aebli (1982)."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welches Merkmal gehört laut Hussey (1984) zu den Definitionsbestandteilen des Denkens?",
+      "opts": [
+        "Ein komplexer mentaler Prozess, der für Außenstehende nicht sichtbar ist.",
+        "Eine stets bewusste und direkt beobachtbare Handlung.",
+        "Eine reine Reproduktion gelernter Reiz-Reaktions-Verbindungen.",
+        "Die zwingende Bindung des Handelns an die jeweils unmittelbar gegebene Reizsituation des Augenblicks."
+      ],
+      "c": 0,
+      "e": "Hussey: komplexer, nicht sichtbarer Prozess; Generation/Transformation von Repräsentationen; erlaubt, Handeln von der Reizsituation abzukoppeln (Gegenteil von d)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie erklärt der Behaviorismus (Thorndike) das Problemlösen?",
+      "opts": [
+        "Durch plötzliche Einsicht in die Struktur des Problems.",
+        "Durch Versuch und Irrtum sowie Umschichtung von Reaktionshierarchien.",
+        "Durch Restrukturierung einer defekten Gestalt.",
+        "Durch das Bilden von Subzielen mithilfe eines abstrakten, zusammengesetzten Operators."
+      ],
+      "c": 1,
+      "e": "Thorndikes Problemkäfig: die Katze probiert dominante Reaktionen, zufälliger Erfolg verstärkt die richtige → allmähliche Umschichtung der Reaktionshierarchie."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was ist beim Streichholzproblem aus behavioristischer Sicht das „Problem“?",
+      "opts": [
+        "Die plötzliche Einsicht in die Lösung.",
+        "Eine defekte Gestalt, die gedanklich zu einer guten Gestalt restrukturiert werden muss, damit der Lösungsweg erkennbar wird.",
+        "Eine Barriere im Problemraum zwischen Anfangs- und Zielzustand.",
+        "Das Versagen der Top-Reaktion (Hölzer flach hinlegen), das eine Umschichtung erfordert."
+      ],
+      "c": 3,
+      "e": "Behavioristisch: „Problem“ = Versagen der dominanten Top-Reaktion. Die zielführende 3-D-Lösung steht weit unten in der Reaktionshierarchie und wird nicht immer gefunden."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Wie versteht die Gestaltpsychologie ein „Problem“?",
+      "opts": [
+        "Als „defekte Gestalt“, die in eine gute Gestalt transformiert werden muss.",
+        "Als Versagen der dominanten Top-Reaktion in der Hierarchie.",
+        "Als Barriere im Problemraum zwischen den Zuständen.",
+        "Als eine Sequenz von Operatoren, die einen Anfangs- in einen Zielzustand überführt und dabei alle Zwischenzustände durchläuft."
+      ],
+      "c": 0,
+      "e": "Gestaltpsychologie (Ganzheitspsychologie): „Problem“ = defekte Gestalt; die Situation wird umstrukturiert, bis der Weg zum Ziel erkannt wird (Köhler)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was zeigte Köhlers Schimpanse Sultan?",
+      "opts": [
+        "Allmähliches Lernen durch Versuch und Irrtum (flache Lernkurve).",
+        "Dass intelligenter Werkzeuggebrauch nur durch Verstärkung entsteht.",
+        "Sprunghaftes Lösen durch Einsicht und planendes Handeln.",
+        "Dass die Lösung ausschließlich von der Anzahl vorheriger Verstärkungsdurchgänge im Käfig abhängt."
+      ],
+      "c": 2,
+      "e": "Sultan nutzte Werkzeuge plötzlich und gezielt → Einsicht/planendes Handeln (sprunghafte Lösungskurve), im Gegensatz zu Thorndikes allmählicher Versuch-und-Irrtum-Kurve."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist die Inkubationsphase im 4-Phasen-Modell (Wallas 1926)?",
+      "opts": [
+        "Das systematische Sammeln aller verfügbaren Informationen und das Durchführen erster, noch erfolgloser Lösungsversuche.",
+        "Die plötzliche Einsicht (Aha-Erlebnis).",
+        "Die Realisierung und Überprüfung der gefundenen Lösung.",
+        "Das Liegenlassen des Problems nach erfolglosem Bearbeiten (stilles Betrachten)."
+      ],
+      "c": 3,
+      "e": "Wallas: Vorbereitung → Inkubation (Problem ruhen lassen) → Illumination (Aha) → Verifikation. (a) ist Vorbereitung, (b) Illumination, (c) Verifikation."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was zeigte das Experiment von Silveira (1971) zur Inkubation?",
+      "opts": [
+        "Inkubation hat keinerlei Einfluss auf die Lösungsrate.",
+        "Eine längere Inkubationspause erhöhte den Anteil richtiger Lösungen (55 % → 85 %).",
+        "Probanden ganz ohne Pause lösten das Problem am häufigsten.",
+        "Die Lösung gelang nur, wenn der Versuchsleiter unbemerkt einen direkten Lösungshinweis in der Pause gab."
+      ],
+      "c": 1,
+      "e": "Silveira (Ketten-Aufgabe): ½h ohne Pause 55 %, mit ½h Inkubation 64 %, mit 4h Inkubation 85 % → längere Inkubation hilft."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was ist funktionale Gebundenheit (Duncker, Kerzenaufgabe)?",
+      "opts": [
+        "Die mechanische Wiederholung einer früher erfolgreichen Lösungsstrategie.",
+        "Das plötzliche Umstrukturieren einer defekten Gestalt zur guten Gestalt.",
+        "Der gewohnte Gebrauch eines Objekts verhindert seine Verwendung in anderer Funktion.",
+        "Die Annahme unzutreffender Randbedingungen, die den verfügbaren Lösungsraum künstlich einschränkt."
+      ],
+      "c": 2,
+      "e": "Funktionale Gebundenheit: die Schachtel als Streichholz-Behälter wird nicht als Kerzenhalterung erkannt (Duncker; repliziert Adamson 1952). (a) ist der Einstellungseffekt, (d) Fixierung."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was demonstrierte Luchins (1942) mit den Wasserumfüllaufgaben?",
+      "opts": [
+        "Den Einstellungseffekt: eine eingeübte Strategie wird auch bei einfacheren Problemen beibehalten.",
+        "Die funktionale Gebundenheit eines alltäglichen Werkzeugs.",
+        "Die plötzliche Einsicht durch perzeptuelle Restrukturierung.",
+        "Dass eine längere Inkubationszeit die Lösungswahrscheinlichkeit bei dieser Art von Aufgaben deutlich und zuverlässig erhöht."
+      ],
+      "c": 0,
+      "e": "Luchins: wer zuerst die komplexe Formel (B − A − 2C) einübte, nutzte sie auch dort, wo eine einfachere Lösung möglich war → Einstellung/mental set."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie wird ein „Problem“ im Informationsverarbeitungsansatz definiert?",
+      "opts": [
+        "Als defekte Gestalt, die zu restrukturieren ist.",
+        "Als Ausgangszustand, Zielzustand und Barriere, die die Transformation verhindert.",
+        "Als Versagen der dominanten Top-Reaktion.",
+        "Als plötzliche, mit einem Aha-Erlebnis verbundene Umstrukturierung der Wahrnehmung."
+      ],
+      "c": 1,
+      "e": "Informationsverarbeitung: Problem = unerwünschter Ausgangszustand + erwünschter Zielzustand + Barriere; Problemlösen = Sequenz von Operatoren, die die Barriere überwindet."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was ist der Problemraum?",
+      "opts": [
+        "Der konkrete physische Ort oder Raum, an dem ein Problem in der realen Welt typischerweise auftritt und gelöst wird.",
+        "Die eine, objektiv optimale Lösung eines Problems.",
+        "Ausschließlich der Anfangs- und der Zielzustand.",
+        "Die Darstellung aller möglichen Zustände, die durch Anwenden aller Operatoren entstehen."
+      ],
+      "c": 3,
+      "e": "Problemraum = alle erreichbaren Zustände (Anfang, Zwischen, Ziel) + die Operatoren, die Zustände transformieren (z. B. Tower of Hanoi)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was besagt die Heuristik der Differenzreduktion (hill climbing)?",
+      "opts": [
+        "Führe immer den Operator aus, der dem Zielzustand am nächsten bringt.",
+        "Bilde stets ein Zwischenziel und einen zusammengesetzten Operator.",
+        "Probiere alle anwendbaren Operatoren rein zufällig aus.",
+        "Bewerte das Problem komplett neu, sobald die anfängliche Repräsentation in eine Sackgasse führt."
+      ],
+      "c": 0,
+      "e": "Differenzreduktion: wähle den Operator, der die Ähnlichkeit zum Zielzustand maximal erhöht — scheitert, wenn ein Umweg (zeitweise Entfernung vom Ziel) nötig ist (Hobbits & Orcs)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was kennzeichnet die Mittel-Ziel-Analyse (Newell, Shaw & Simon 1958)?",
+      "opts": [
+        "Das rein zufällige Ausprobieren von Operatoren ohne Plan.",
+        "Das Bevorzugen des jeweils zielähnlichsten Zustands ganz ohne Zwischenziele.",
+        "Den wichtigsten Unterschied finden, ein Zwischenziel definieren und einen passenden Operator wählen.",
+        "Die Annahme, dass jede Problemlösung allein durch die Verstärkung erfolgreicher Reaktionen im Sinne des Behaviorismus entsteht."
+      ],
+      "c": 2,
+      "e": "Mittel-Ziel-Analyse: größten Ist-Soll-Unterschied identifizieren → Zwischenziel (diesen zu beseitigen) → Operator wählen; erlaubt auch Umwege (Subzielbildung)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Warum ist das Schachbrett-Dominoproblem aus kognitiver Sicht schwer (Ohlsson 1992)?",
+      "opts": [
+        "Weil das Problem objektiv überhaupt keine gültige Lösung besitzt und daher von niemandem korrekt gelöst werden kann.",
+        "Weil die dominante Top-Reaktion sofort zum Ziel führt.",
+        "Weil den Probanden eine längere Inkubationszeit fehlt.",
+        "Die anfängliche Repräsentation (Felder abdecken) erzeugt einen riesigen Problemraum → Sackgasse."
+      ],
+      "c": 3,
+      "e": "Die naive Repräsentation (Felder abdecken) führt zu ~758.148 Zuständen → Sackgasse. Die Lösung erfordert eine Re-Repräsentation (Brot/Butter-Argument: ungleiche Feldzahl)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wodurch entstehen laut Phasenmodell „Sackgassen“ beim Problemlösen?",
+      "opts": [
+        "Durch eine vollständige und unverzerrte Repräsentation des Problemraums.",
+        "Durch eine unvollständige/verzerrte Repräsentation (z. B. hinderliches Vorwissen).",
+        "Ausschließlich durch zu lange Inkubationszeiten.",
+        "Durch die korrekte Anwendung der Mittel-Ziel-Analyse auf ein bereits gut strukturiertes Problem."
+      ],
+      "c": 1,
+      "e": "Sackgassen: unvollständige/verzerrte Repräsentation des Problemraums (Vernachlässigung von Aspekten, hinderliches Vorwissen). Auch Kontextfaktoren (Emotionen, Stress, Framing) wirken."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was ist produktives Denken beim Problemlösen (Wertheimer / Ohlson)?",
+    "opts": [
+      "Einsicht in die Struktur des Problems durch produktive Restrukturierung.",
+      "Die schlichte Wiederverwendung vergangener Erfahrungen.",
+      "Die mechanische Anwendung einer eingeübten Formel.",
+      "Das Übertragen einer in der Vergangenheit erfolgreichen Operation auf jedes neue, andersartige Problem."
+    ],
+    "c": 0,
+    "e": "Produktives Problemlösen = Einsicht + Restrukturierung. Reproduktives Problemlösen (b/c/d) nutzt frühere Erfahrungen und kann die Lösung erschweren (funktionale Gebundenheit, Einstellung)."
+  },
+  {
+    "id": "bq2",
+    "q": "Was zeigte das Zwei-Seile-Problem von Maier (1931)?",
+    "opts": [
+      "Dass Inkubation die Lösung in keiner Weise beeinflusst.",
+      "Ein unbemerkter Hinweis (Anstoßen eines Seils) erhöhte die Lösungsrate.",
+      "Dass Probanden den Hinweis stets bewusst wahrnahmen und nutzten.",
+      "Dass ausschließlich funktionale Gebundenheit die Lösung dieses Problems überhaupt verhindern konnte."
+    ],
+    "c": 1,
+    "e": "Maier: stieß der VL beiläufig ein Seil an, lösten mehr Probanden — viele ohne sich des Hinweises bewusst zu sein (repliziert: Knoblich & Wartenberg 1998)."
+  },
+  {
+    "id": "bq3",
+    "q": "Was ist Fixierung als Hindernis beim Problemlösen?",
+    "opts": [
+      "Der gewohnte Gebrauch eines Objekts in seiner üblichen Funktion.",
+      "Die mechanische Wiederholung einer früher erfolgreichen Strategie.",
+      "Die Annahme unzutreffender Randbedingungen, die die Lösung verhindert.",
+      "Das plötzliche, mit einem Aha-Erlebnis verbundene Umstrukturieren einer zuvor defekten Gestalt."
+    ],
+    "c": 2,
+    "e": "Fixierung: unzutreffende (selbst gesetzte) Randbedingungen verhindern die Lösung (9-Punkte-Problem: man bleibt fälschlich im Quadrat). (a) funktionale Gebundenheit, (b) Einstellung."
+  },
+  {
+    "id": "bq4",
+    "q": "Was demonstrierte die Analogie von Gick & Holyoak (1980) am Bestrahlungsproblem (Duncker)?",
+    "opts": [
+      "Dass das Heranziehen einer strukturell ähnlichen Analogie das eigentliche Problemlösen eher behindert und die Lösungsrate sogar senkt.",
+      "Dass allein Versuch und Irrtum zur Lösung führen.",
+      "Dass die Lösung ganz ohne jeden Hinweis am häufigsten gelang.",
+      "Eine zuvor gelesene strukturgleiche Geschichte (General/Festung) erhöhte die Lösungsrate deutlich."
+    ],
+    "c": 3,
+    "e": "Gick & Holyoak: Wer die analoge Festungs-Geschichte (Truppen aus mehreren Richtungen) kannte, löste das Bestrahlungsproblem (Strahlen aus mehreren Richtungen) viel häufiger → Analogietransfer."
+  },
+  {
+    "id": "bq5",
+    "q": "Was zeigte Egan & Greeno (1974) zu den Tower-of-Hanoi-Varianten?",
+    "opts": [
+      "Vorerfahrung mit weniger Scheiben (Subzielbildung) führte zu besseren Resultaten.",
+      "Vorerfahrung verschlechterte die Leistung deutlich.",
+      "Differenzreduktion ist bei jedem beliebigen Problem die optimale Strategie.",
+      "Dass das Kurzzeitgedächtnis beliebig viele notwendige Zugfolgen gleichzeitig fehlerfrei speichern kann."
+    ],
+    "c": 0,
+    "e": "Egan & Greeno: die Gruppe mit Vorerfahrung (z. B. 3 Scheiben) bildete Subziele (zusammengesetzte Operatoren) und löste komplexere Versionen besser."
+  },
+  {
+    "id": "bq6",
+    "q": "Was unterscheidet die Differenzreduktion von der Mittel-Ziel-Analyse?",
+    "opts": [
+      "Beide Heuristiken sind im Kern identisch.",
+      "Differenzreduktion meidet Umwege, die Mittel-Ziel-Analyse erlaubt Subziele (auch Umwege).",
+      "Die Mittel-Ziel-Analyse probiert Operatoren rein zufällig aus.",
+      "Differenzreduktion setzt zwingend eine vollständige Re-Repräsentation des gesamten Problemraums voraus."
+    ],
+    "c": 1,
+    "e": "Differenzreduktion (hill climbing) geht stets zum zielähnlichsten Zustand → scheitert bei nötigen Umwegen; die Mittel-Ziel-Analyse bildet Zwischenziele und kann Umwege gehen."
+  },
+  {
+    "id": "bq7",
+    "q": "Welche Kontextfaktoren beeinflussen laut Phasenmodell die Problemrepräsentation?",
+    "opts": [
+      "Ausschließlich die Anzahl der verfügbaren Operatoren.",
+      "Nur die generelle Intelligenz des Problemlösers.",
+      "Emotionen, Stress (Zeitdruck) und Framing.",
+      "Allein die objektive mathematische Komplexität des zugrunde liegenden Problemraums."
+    ],
+    "c": 2,
+    "e": "Die Problem-/Zielrepräsentation hängt auch von Kontextfaktoren ab: Emotionen, Stress (Zeitdruck), Framing — sie beeinflussen, wie das Problem überhaupt dargestellt wird."
+  },
+  {
+    "id": "bq8",
+    "q": "Wofür wird die Problemraumtheorie positiv bewertet?",
+    "opts": [
+      "Für die umfassende Erklärung sehr komplexer, schlecht strukturierter Alltagsprobleme mit unklarem Ausgangs- und Zielzustand.",
+      "Für die Vorhersage unbewusster emotionaler Konflikte.",
+      "Für den bewussten Verzicht auf jede empirische Überprüfbarkeit.",
+      "Für klare empirische Vorhersagen bei relativ einfachen, gut strukturierten Problemen."
+    ],
+    "c": 3,
+    "e": "Problemraumtheorie: erfolgreich bei einfachen/gut strukturierten Problemen; erlaubt klare Vorhersagen (Schwierigkeiten, Planungstiefe, Lernprozesse) und kann sogar einige Gestalt-Probleme behandeln."
+  }
+];
+
+var corrCorrect = {
+  "c2a": "behav",
+  "c2b": "gestalt",
+  "c2c": "behav",
+  "c2d": "gestalt",
+  "c4a": "funktgeb",
+  "c4b": "einstellung",
+  "c4c": "funktgeb",
+  "c4d": "einstellung",
+  "c6a": "diffred",
+  "c6b": "mza",
+  "c6c": "diffred",
+  "c6d": "mza"
+};
+var corrExpl = {
+  "c2a": "Versuch und Irrtum, Umschichtung von Reaktionshierarchien = Behaviorismus.",
+  "c2b": "Plötzliche Einsicht und Restrukturierung = Gestaltpsychologie.",
+  "c2c": "Thorndikes Katze im Problemkäfig (allmähliche Lernkurve) = Behaviorismus.",
+  "c2d": "Köhlers Schimpanse Sultan (sprunghafte Lösung) = Gestaltpsychologie.",
+  "c4a": "Gewohnter Objektgebrauch blockiert andere Verwendung (Kerzenaufgabe) = funktionale Gebundenheit.",
+  "c4b": "Eine eingeübte erfolgreiche Strategie wird mechanisch weiter angewandt (Wasserumfüllen) = Einstellungseffekt.",
+  "c4c": "Die Schachtel wird nicht als Halterung erkannt, weil sie als Behälter dient = funktionale Gebundenheit.",
+  "c4d": "Auch bei einfachen Problemen wird die komplizierte gewohnte Lösung genutzt = Einstellungseffekt.",
+  "c6a": "Immer den Operator wählen, der dem Ziel am ähnlichsten ist = Differenzreduktion (hill climbing).",
+  "c6b": "Ein Zwischenziel definieren, um den wichtigsten Unterschied zu beseitigen = Mittel-Ziel-Analyse.",
+  "c6c": "Scheitert, wenn ein Umweg nötig ist (Hobbits & Orcs) = Differenzreduktion.",
+  "c6d": "Subziele bilden, zusammengesetzten Operator anwenden (Newell, Shaw & Simon) = Mittel-Ziel-Analyse."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

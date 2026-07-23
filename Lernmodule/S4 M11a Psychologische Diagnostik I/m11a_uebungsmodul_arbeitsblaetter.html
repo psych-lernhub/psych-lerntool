@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · Übungsmodul Aufgabenblätter 1–6</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl15
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* Ergänzungen für das quellengebundene Übungsmodul */
+.source-meta{font-size:.72rem;color:var(--text3);margin-top:4px}
+.source-chip{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 7px;margin:2px;font-size:.67rem;color:var(--text3)}
+.source-boundary{background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.38);border-radius:12px;padding:14px;margin:12px 0;color:var(--text2);font-size:.84rem}
+.source-boundary strong{color:var(--orange)}
+.source-issue{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.28);border-radius:12px;padding:14px;margin:10px 0;color:var(--text2);font-size:.84rem}
+.source-issue strong{color:var(--red)}
+.level-widget{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin:12px 0}
+.level-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.level-tab{border:1px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text2);padding:8px 12px;cursor:pointer;font-weight:700;min-height:44px}
+.level-tab[aria-selected="true"]{border-color:var(--cyan);color:var(--text);background:rgba(56,189,248,.10)}
+.level-panel{display:none}.level-panel.active{display:block}
+.level-tag{display:inline-block;border-radius:999px;padding:2px 8px;font-size:.68rem;font-weight:800;margin-bottom:8px;background:rgba(129,140,248,.12);color:var(--accent)}
+.widget-instruction{font-size:.86rem;color:var(--text2);margin-bottom:10px}
+.widget-feedback{display:none;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.82rem;border:1px solid var(--border)}
+.widget-feedback.good{display:block;border-color:var(--green);color:var(--green);background:rgba(52,211,153,.08)}
+.widget-feedback.bad{display:block;border-color:var(--red);color:var(--red);background:rgba(248,113,113,.08)}
+.form-grid{display:grid;grid-template-columns:minmax(150px,1fr) minmax(160px,1fr);gap:10px;align-items:center}
+.form-grid label{font-size:.84rem;color:var(--text2)}
+.form-grid input,.form-grid select,.case-table select,.matrix-practice select{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px;min-height:44px}
+.check-grid{display:grid;gap:8px;margin:10px 0}
+.check-row{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px;font-size:.84rem;color:var(--text2)}
+.check-row input{margin-top:4px;min-width:20px;min-height:20px}
+.order-list{list-style:none;padding:0;margin:10px 0;display:grid;gap:7px}
+.order-step{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 10px;color:var(--text2);font-size:.84rem}
+.order-controls{display:flex;gap:4px}.order-controls button{min-width:38px;min-height:38px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;cursor:pointer}
+.formula-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin:10px 0;overflow:auto}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--cyan);font-size:.95rem;white-space:normal}
+.code-block{background:#020617;border:1px solid var(--border);border-radius:10px;padding:12px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--cyan);font-size:.84rem}
+.matrix-scroll{overflow:auto;border:1px solid var(--border);border-radius:10px;margin-top:10px}
+.matrix-scroll table{min-width:900px;margin:0}
+.matrix-scroll th,.matrix-scroll td{border:1px solid var(--border);padding:6px;text-align:center;vertical-align:middle}
+.matrix-scroll th{background:var(--surface2);color:var(--text);font-size:.72rem}
+.matrix-scroll td:first-child,.matrix-scroll th:first-child{text-align:left;position:sticky;left:0;background:var(--surface2);z-index:1;min-width:180px}
+.matrix-practice select{min-width:82px;padding:5px}
+.matrix-cell-off{opacity:.45}
+.matrix-cell-button{width:100%;min-height:36px;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--text2);cursor:pointer}
+.matrix-cell-button:hover,.matrix-cell-button:focus-visible{border-color:var(--cyan);color:var(--text)}
+.matrix-task{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.28);border-radius:10px;padding:10px;margin-bottom:8px;color:var(--text2)}
+.case-table{width:100%;border-collapse:collapse}.case-table th,.case-table td{border-bottom:1px solid var(--border);padding:8px;vertical-align:top}.case-table th{text-align:left;color:var(--text);font-size:.75rem}.case-table td{color:var(--text2);font-size:.82rem}
+.path-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.path-card{border:1px solid var(--border);border-radius:10px;padding:10px;background:var(--bg)}.path-card b{display:block;color:var(--accent);font-size:.75rem}.path-card span{font-size:.8rem;color:var(--text2)}
+.source-register{max-height:220px;overflow:auto;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px}
+details{margin:10px 0}details summary{cursor:pointer;color:var(--accent);font-weight:700}
+@media(max-width:650px){.form-grid{grid-template-columns:1fr}.path-grid{grid-template-columns:1fr}.matrix-scroll td:first-child,.matrix-scroll th:first-child{position:static}.order-step{grid-template-columns:1fr}.order-controls{justify-content:flex-end}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · Übungsmodul Aufgabenblätter 1–6</h1>
+<p class="page-sub">Psychologische Diagnostik · Vom Konstrukt zur Validierung · quellengebundenes Training in drei Schwierigkeitsstufen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie wird ein Konstrukt operationalisiert? · Wie werden Reliabilität und Validität berechnet und interpretiert? · Welche Quellenfehler müssen beim Lernen transparent behandelt werden?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Pfad</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Konstrukt</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Items</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Daten</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Reliabilität</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Methoden</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Validität</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">⑧ MTMM & Kriterien</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">⑨ Testvergleich</button>
+  <button type="button" role="tab" aria-controls="s9" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(9)" id="nb9">⑩ Abschluss</button>
+  <button type="button" role="tab" aria-controls="s10" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(10)" id="nb10">⚖ Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s11" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(11)" id="nb11">🎯 Gemischtes Training</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Pfad ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0" data-source-id="AB1-E-01 AB1-E-07 AB2-E-01 AB2-E-02" data-slides="AB1:1 · AB2:1" data-source-status="integriert" data-learning-objective="LZ-GESAMTPFAD" data-widget-type="W2+W11" data-cognitive-task="prozess_rekonstruieren_und_quellenstatus_pruefen"><div class="sec-head"><div class="sec-title">① Vom Konstrukt zur validierten Skala</div><div class="sec-lz">Den gesamten Arbeitsablauf der Aufgabenblätter 1–6 strukturieren und Quellenreichweite erkennen.</div><div class="source-meta">Quellenbereiche AB1:1 · AB2:1 · Widget W2+W11</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Würdest du mit der Berechnung von Reliabilität beginnen, bevor Konstrukt und Items festgelegt sind?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Der sichtbare Arbeitsablauf beginnt mit der Konstruktklärung, führt über Itemkonstruktion und Datenaufbereitung und erst danach zu Reliabilität, Validität und abschließender Skalenbildung.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB1-E-01 AB2-E-03 AB3-E-04 AB4-A1-E03 AB5-E-01-01 AB6-EL-04"><div class="card-title">Projektpfad der sechs Aufgabenblätter</div><div class="path-grid"><div class="path-card"><b>AB 1</b><span>Konstrukt eingrenzen</span></div><div class="path-card"><b>AB 2</b><span>Items und Außenkriterien</span></div><div class="path-card"><b>AB 3</b><span>Daten aufbereiten</span></div><div class="path-card"><b>AB 4</b><span>Itemindizes und Reliabilität</span></div><div class="path-card"><b>AB 5</b><span>Validität und Kriterien</span></div><div class="path-card"><b>AB 6</b><span>Skalen und Endvalidierung</span></div></div></div><div class="source-boundary" data-source-id="AB3-E-07 AB4-A1-E03 AB6-EL-04"><strong>Quellenreichweite:</strong> Lösungen liegen nur für Aufgabenblatt 4 und 5 vor. Die Lösung zu Aufgabenblatt 4 deckt Aufgabe 2 und 3 ab, nicht die Berechnung der Itemindizes aus Aufgabe 1. Aufgabenblatt 3 nennt keine konkrete Invertierungsformel und Aufgabenblatt 6 weder die Skalenberechnungsregel noch das statistische Validierungsverfahren.</div><details class="card" data-source-id="AB1-E-07 AB2-E-01 AB2-E-02"><summary>Organisatorischer Quellenanhang</summary><p>Aufgabenblatt 1 und 2 sind als Kleingruppenaufgaben angelegt. Die sichtbaren Abgabehinweise nennen für Aufgabenblatt 1 den 16.04.2026 und für Aufgabenblatt 2 den 22.04.2026 sowie die in den Quellen angegebene E-Mail-Adresse.</p></details><div class="card"><div class="card-title">Drei Schwierigkeitsstufen</div><p><strong>Basis</strong> erkennt direkte Anforderungen. <strong>Standard</strong> wendet sie auf Abläufe, Tabellen und Rechenschritte an. <strong>Transfer</strong> verbindet mehrere Quellen oder diagnostiziert interne Quellenfehler.</p></div><div class="phase-label">Phase 3 — Anwenden · W2 + W11</div><div class="level-widget" data-level-group="g0"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g0')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g0')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g0')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><p class="widget-instruction">Bringe die sechs Projektphasen in die Reihenfolge der Aufgabenblätter.</p><ol class="order-list" id="pathOrder"><li class="order-step" data-key="data"><span>Datenaufbereitung</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="construct"><span>Konstrukt theoretisch eingrenzen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="validity"><span>Validität und Kriterien prüfen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="items"><span>Items und Außenkriterien planen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="finish"><span>Skalen bilden und validieren</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="reliability"><span>Itemindizes und Reliabilität prüfen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li></ol><button class="btn btn-accent" onclick="checkOrder('pathOrder','construct,items,data,reliability,validity,finish','pathOrderFb')">Reihenfolge prüfen</button><div class="widget-feedback" id="pathOrderFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Ordne jeder Arbeitsaufgabe das passende Aufgabenblatt zu.</p><div class="form-grid" id="pathSources"><label>Trait/State und Dimensionalität<select data-answer="1"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>Likert-Items und Außenkriterien<select data-answer="2"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>Invertierung kontrollieren<select data-answer="3"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>Spearman-Brown und Fehlerquellen<select data-answer="4"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>MTMM und Kriterienqualität<select data-answer="5"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label><label>Finale Itemmengen und Validierung<select data-answer="6"><option value="">– wählen –</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label></div><button class="btn btn-accent" onclick="checkFields('pathSources','pathSourcesFb','Alle Aufgaben sind dem richtigen Blatt zugeordnet.')">Zuordnung prüfen</button><div class="widget-feedback" id="pathSourcesFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Entscheide, ob die konkrete Information in den hochgeladenen Aufgaben- und Lösungsquellen belegt ist.</p><div class="form-grid" id="sourceLimits"><label>Spearman-Brown-Ergebnis 0.78<select data-answer="belegt"><option value="">– wählen –</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Konkrete Formel zur Invertierung<select data-answer="offen"><option value="">– wählen –</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Vollständige Fehlerquellenmatrix<select data-answer="belegt"><option value="">– wählen –</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Konkretes Verfahren der Endvalidierung<select data-answer="offen"><option value="">– wählen –</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label></div><button class="btn btn-accent" onclick="checkFields('sourceLimits','sourceLimitsFb','Du trennst belegte Inhalte und Quellenlücken korrekt.')">Quellenstatus prüfen</button><div class="widget-feedback" id="sourceLimitsFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq0"></div></div><div class="section-nav"><button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 2 — ② Konstrukt ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1" data-source-id="AB1-E-02 AB1-E-03 AB1-E-04 AB1-E-05 AB1-E-06" data-slides="AB1:1" data-source-status="direkt" data-learning-objective="LZ-KONSTRUKT" data-widget-type="W1+W11" data-cognitive-task="anforderungen_unterscheiden_und_vollstaendigkeit_pruefen"><div class="sec-head"><div class="sec-title">② Konstrukt präzisieren</div><div class="sec-lz">Die in Aufgabenblatt 1 verlangten Bestandteile eines belastbaren Konstruktprofils vollständig zusammenstellen.</div><div class="source-meta">Quellenbereiche AB1:1 · Widget W1+W11</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Eine Gruppe liefert eine Definition, ein Alltagsbeispiel und einen bestehenden Test. Ist Aufgabenblatt 1 damit vollständig bearbeitet?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq1" aria-hidden="true">Nein. Zusätzlich werden mindestens Trait/State, Uni-/Multidimensionalität mit Teilbereichen, eine hinreichend enge Definition, praktische Folgen und mindestens zwei etablierte Verfahren verlangt.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB1-E-02 AB1-E-03"><div class="card-title">Zwei getrennte Einordnungsfragen</div><table><caption>Einordnungsfragen zum Konstrukt</caption><thead><tr><th scope="col">Frage</th><th scope="col">Quellenform</th><th scope="col">Konsequenz</th></tr></thead><tbody><tr><td>Trait oder State?</td><td>Trait = stabil, State = situativ</td><td>zeitliche Einordnung</td></tr><tr><td>Uni- oder multidimensional?</td><td>bei Mehrdimensionalität Teilbereiche angeben</td><td>Struktur des Konstrukts</td></tr></tbody></table></div><div class="card" data-source-id="AB1-E-04 AB1-E-05"><div class="card-title">Definition und Verhaltensbezug</div><p>Die Definition soll so eng sein, dass mögliche Items plausibel ein homogenes Merkmal erfassen. Bei einem mehrdimensionalen Konstrukt ist jeder Teilbereich zu beschreiben. Zusätzlich verlangt das Aufgabenblatt ein Verhaltensbeispiel für eine hohe Ausprägung und eine mögliche praktische Folge im beruflichen oder privaten Alltag.</p></div><div class="card" data-source-id="AB1-E-06"><div class="card-title">Bestehende Messverfahren</div><p>Mindestens zwei etablierte Verfahren zur Messung der Big Five oder des gewählten Konstrukts sollen aufgeführt werden. Als Suchhinweis nennt die Quelle Psyndex Tests.</p></div><div class="source-boundary"><strong>Nicht in den Quellen enthalten:</strong> Eine Musterlösung zu einer konkreten Big-Five-Dimension. Das Modul trainiert daher die Vollständigkeit des Profils, nicht eine extern ergänzte inhaltliche Definition.</div><div class="phase-label">Phase 3 — Anwenden · W1 + W11</div><div class="level-widget" data-level-group="g1"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g1')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g1')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g1')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="constructBasics"><label>Trait bedeutet im Aufgabenblatt<select data-answer="stabil"><option value="">– wählen –</option><option value="stabil">stabil</option><option value="situativ">situativ</option></select></label><label>State bedeutet im Aufgabenblatt<select data-answer="situativ"><option value="">– wählen –</option><option value="stabil">stabil</option><option value="situativ">situativ</option></select></label><label>Bei Mehrdimensionalität<select data-answer="teile"><option value="">– wählen –</option><option value="teile">Teilbereiche beschreiben</option><option value="keine">Teilbereiche auslassen</option></select></label></div><button class="btn btn-accent" onclick="checkFields('constructBasics','constructBasicsFb','Die Grundunterscheidungen stimmen.')">Prüfen</button><div class="widget-feedback" id="constructBasicsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Markiere alle Bestandteile, die ein vollständiges Konstruktprofil nach Aufgabenblatt 1 enthalten muss.</p><div class="check-grid" id="constructChecklist"><label class="check-row"><input type="checkbox" data-answer="true"> theoretischer Hintergrund</label><label class="check-row"><input type="checkbox" data-answer="true"> Trait oder State</label><label class="check-row"><input type="checkbox" data-answer="true"> Uni- oder Multidimensionalität</label><label class="check-row"><input type="checkbox" data-answer="true"> enge Definition und Teilbereiche</label><label class="check-row"><input type="checkbox" data-answer="true"> Verhalten bei hoher Ausprägung und praktische Folge</label><label class="check-row"><input type="checkbox" data-answer="true"> mindestens zwei etablierte Testverfahren</label><label class="check-row"><input type="checkbox" data-answer="false"> zwingende Cutoffwerte für Diagnosen</label></div><button class="btn btn-accent" onclick="checkFields('constructChecklist','constructChecklistFb','Das Profil enthält alle geforderten Bestandteile und keine unbelegte Zusatzanforderung.')">Profil prüfen</button><div class="widget-feedback" id="constructChecklistFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Ein Entwurf enthält eine sehr breite Definition, ein Verhaltensbeispiel und einen Testnamen. Welche Lücken bleiben?</p><div class="check-grid" id="constructDraft"><label class="check-row"><input type="checkbox" data-answer="true"> Trait-/State-Einordnung fehlt</label><label class="check-row"><input type="checkbox" data-answer="true"> Dimensionalität und Teilbereiche fehlen</label><label class="check-row"><input type="checkbox" data-answer="true"> Definition ist nicht eng genug begründet</label><label class="check-row"><input type="checkbox" data-answer="true"> zweites Testverfahren fehlt</label><label class="check-row"><input type="checkbox" data-answer="false"> konkrete Spearman-Brown-Rechnung fehlt</label></div><button class="btn btn-accent" onclick="checkFields('constructDraft','constructDraftFb','Du erkennst die quellenbasierten Lücken des Entwurfs.')">Lücken prüfen</button><div class="widget-feedback" id="constructDraftFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq1"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 3 — ③ Items ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2" data-source-id="AB2-E-03 AB2-E-04 AB2-E-05 AB2-E-06 AB2-E-07 AB2-E-08 AB2-E-09" data-slides="AB2:1" data-source-status="direkt" data-learning-objective="LZ-ITEMPLAN" data-widget-type="W9" data-cognitive-task="anforderungen_auf_entwuerfe_anwenden"><div class="sec-head"><div class="sec-title">③ Items und Außenkriterien planen</div><div class="sec-lz">Itemformat, Umfang, Polung, Dokumentation und Anforderungen an Außenkriterien korrekt anwenden.</div><div class="source-meta">Quellenbereiche AB2:1 · Widget W9</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Ein Entwurf umfasst ungefähr 24 Items, verwendet aber vier Antwortstufen und ausschließlich positive Polung. Ist er quellenkonform?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Nein. Der Umfang passt ungefähr, aber verlangt werden fünf bis sieben Antwortstufen und ein ausgewogenes Verhältnis positiv und negativ gepolter Items.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB2-E-03 AB2-E-04 AB2-E-05 AB2-E-06"><div class="card-title">Konstruktionsrahmen</div><ul><li>ungefähr vier Items pro Subfacette, angelehnt an Costa und McCrae;</li><li>insgesamt ungefähr 24 Items;</li><li>Items als Aussagen in einem Likert-Format;</li><li>fünf- bis siebenstufige Antwortskala von „stimme gar nicht zu“ bis „stimme voll und ganz zu“;</li><li>ausgewogenes Verhältnis positiv und negativ gepolter Items.</li></ul></div><div class="card" data-source-id="AB2-E-07"><div class="card-title">Dokumentation in Excel</div><table><caption>Quellenbeispiel</caption><thead><tr><th scope="col">Itemtext</th><th scope="col">Facette</th><th scope="col">Polung</th></tr></thead><tbody><tr><td>Ich brauche nicht viel, um glücklich zu sein</td><td>A5: Bescheidenheit</td><td>positiv</td></tr></tbody></table></div><div class="card" data-source-id="AB2-E-08 AB2-E-09"><div class="card-title">Außenkriterien</div><p>Mindestens zwei Außenkriterien sollen im Sinne eines nomologischen Netzwerks mit dem Konstrukt zusammenhängen. Die Auswahl soll empirisch begründet, in der tatsächlichen Erhebung praktikabel und einfach erfassbar sein; falls nötig ist ein geeigneter Fragebogen mit Items auszuwählen.</p></div><div class="phase-label">Phase 3 — Anwenden · W9</div><div class="level-widget" data-level-group="g2"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g2')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g2')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g2')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="itemBasics"><label>Items pro Subfacette<select data-answer="4"><option value="">– wählen –</option><option value="4">etwa 4</option><option value="24">etwa 24</option></select></label><label>Gesamtumfang<select data-answer="24"><option value="">– wählen –</option><option value="4">etwa 4</option><option value="24">etwa 24</option></select></label><label>Antwortstufen<select data-answer="5-7"><option value="">– wählen –</option><option value="3-4">3 bis 4</option><option value="5-7">5 bis 7</option><option value="8-10">8 bis 10</option></select></label><label>Polung<select data-answer="ausgewogen"><option value="">– wählen –</option><option value="nur_pos">nur positiv</option><option value="ausgewogen">positiv und negativ ausgewogen</option></select></label></div><button class="btn btn-accent" onclick="checkFields('itemBasics','itemBasicsFb','Die vier zentralen Formatvorgaben stimmen.')">Prüfen</button><div class="widget-feedback" id="itemBasicsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Bewerte die konstruierten Übungsfälle ausschließlich anhand der sichtbaren Vorgaben.</p><table class="case-table" id="itemCases"><caption>Bewertung konstruierter Itementwürfe</caption><thead><tr><th>Entwurf</th><th>Bewertung</th></tr></thead><tbody><tr><td>Aussage „Ich brauche nicht viel, um glücklich zu sein“, Facette A5, Polung positiv, sechs Zustimmungsstufen</td><td><select aria-label="Bewertung des quellenkonformen Beispielitems" data-answer="passend"><option value="">–</option><option value="passend">quellenkonform</option><option value="fehler">Vorgabe verletzt</option></select></td></tr><tr><td>Frageform „Wie oft …?“ statt Aussage</td><td><select aria-label="Bewertung der Frageform statt Aussage" data-answer="fehler"><option value="">–</option><option value="passend">quellenkonform</option><option value="fehler">Vorgabe verletzt</option></select></td></tr><tr><td>Vierstufige Antwortskala</td><td><select aria-label="Bewertung der vierstufigen Antwortskala" data-answer="fehler"><option value="">–</option><option value="passend">quellenkonform</option><option value="fehler">Vorgabe verletzt</option></select></td></tr><tr><td>Alle ungefähr 24 Items sind positiv gepolt</td><td><select aria-label="Bewertung der ausschließlich positiven Polung" data-answer="fehler"><option value="">–</option><option value="passend">quellenkonform</option><option value="fehler">Vorgabe verletzt</option></select></td></tr></tbody></table><button class="btn btn-accent" onclick="checkFields('itemCases','itemCasesFb','Die Entwürfe sind korrekt anhand der Quellenanforderungen bewertet.')">Fälle prüfen</button><div class="widget-feedback" id="itemCasesFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Prüfe den Plan für das nomologische Netzwerk.</p><div class="check-grid" id="criteriaPlan"><label class="check-row"><input type="checkbox" data-answer="true"> mindestens zwei Außenkriterien</label><label class="check-row"><input type="checkbox" data-answer="true"> erwarteter Zusammenhang mit dem Konstrukt</label><label class="check-row"><input type="checkbox" data-answer="true"> Bezug auf empirische Literatur</label><label class="check-row"><input type="checkbox" data-answer="true"> in der Erhebung praktisch mitlaufend und einfach erfassbar</label><label class="check-row"><input type="checkbox" data-answer="true"> falls nötig passenden Fragebogen mit Items auswählen</label><label class="check-row"><input type="checkbox" data-answer="false"> Außenkriterien müssen identisch mit den selbst entwickelten Items sein</label></div><button class="btn btn-accent" onclick="checkFields('criteriaPlan','criteriaPlanFb','Der Außenkriterienplan erfüllt die vollständigen Quellenanforderungen.')">Plan prüfen</button><div class="widget-feedback" id="criteriaPlanFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq2"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 4 — ④ Daten ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3" data-source-id="AB3-E-01 AB3-E-02 AB3-E-03 AB3-E-04 AB3-E-05 AB3-E-06 AB3-E-07 AB3-E-08" data-slides="AB3:1" data-source-status="direkt" data-learning-objective="LZ-DATEN" data-widget-type="W2+W8" data-cognitive-task="prozess_und_codebezug_rekonstruieren"><div class="sec-head"><div class="sec-title">④ Datenaufbereitung in R strukturieren</div><div class="sec-lz">Die fünf Arbeitsschritte von Variablenauswahl bis Speicherung in der richtigen Abfolge rekonstruieren.</div><div class="source-meta">Quellenbereiche AB3:1 · Widget W2+W8</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Soll die Invertierung direkt im ersten ausgewählten Datensatz erfolgen?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Die Quelle verlangt zunächst eine Kopie des Datensatzes mit angehängtem „i“ im Datensatznamen und anschließend die Invertierung der negativ gepolten Items in dieser Kopie.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB3-E-01 AB3-E-02 AB3-E-03"><div class="card-title">Ausgangsdateien</div><p><code>sose2026.RData</code> enthält laut Aufgabenblatt die relevanten Angaben der Datenerhebung. <code>Items.xlsx</code> enthält Itemtexte, Itemnamen und die für die Invertierung benötigte Polung.</p></div><div class="card" data-source-id="AB3-E-04"><div class="card-title">Teilaufgabe (a): Variablenauswahl</div><p>Ein Datensatz mit den Items des eigenen Konstrukts wird erstellt. Als Tipp zeigt die Quelle:</p><div class="code-block">paste0("item",1:3)  →  "item1" "item2" "item3"</div></div><div class="card" data-source-id="AB3-E-05 AB3-E-06 AB3-E-07 AB3-E-08"><div class="card-title">Teilaufgaben (b) bis (e)</div><ol><li>Kopie mit angehängtem <code>i</code> anlegen und negativ gepolte Items invertieren.</li><li>Invertierung kontrollieren, zum Beispiel mit <code>corrgram()</code>, und Fehler korrigieren.</li><li>Eignung der Korrelationsmatrix für die Explorative Faktorenanalyse prüfen und gegebenenfalls problematische Items entfernen.</li><li>Datenmatrix speichern.</li></ol></div><div class="source-boundary"><strong>Quellenlücke:</strong> Die konkrete Invertierungsformel, ein konkreter Test der EFA-Eignung und Grenzwerte werden auf diesem Aufgabenblatt nicht spezifiziert.</div><div class="phase-label">Phase 3 — Anwenden · W2 + W8</div><div class="level-widget" data-level-group="g3"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g3')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g3')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g3')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><p class="widget-instruction">Ordne die fünf Teilaufgaben (a) bis (e).</p><ol class="order-list" id="dataOrder"><li class="order-step" data-key="save"><span>Datenmatrix speichern</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="copy"><span>Kopie mit i anlegen und negative Items invertieren</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="select"><span>Datensatz mit den Konstruktitems erstellen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="matrix"><span>Eignung der Korrelationsmatrix prüfen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="control"><span>Invertierung kontrollieren und Fehler korrigieren</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li></ol><button class="btn btn-accent" onclick="checkOrder('dataOrder','select,copy,control,matrix,save','dataOrderFb')">Reihenfolge prüfen</button><div class="widget-feedback" id="dataOrderFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><div class="form-grid" id="dataFiles"><label>Itemtexte und Itemnamen stammen aus<select data-answer="Items.xlsx"><option value="">– wählen –</option><option>sose2026.RData</option><option>Items.xlsx</option></select></label><label>Alle Erhebungsangaben liegen in<select data-answer="sose2026.RData"><option value="">– wählen –</option><option>sose2026.RData</option><option>Items.xlsx</option></select></label><label>paste0("item",1:3) ergibt<select data-answer="item1 item2 item3"><option value="">– wählen –</option><option value="item1 item2 item3">item1 item2 item3</option><option value="item0 item1 item2">item0 item1 item2</option></select></label><label>Kontrollfunktion laut Quelle<select data-answer="corrgram"><option value="">– wählen –</option><option value="corrgram">corrgram()</option><option value="paste0">paste0()</option></select></label></div><button class="btn btn-accent" onclick="checkFields('dataFiles','dataFilesFb','Dateien, Codebeispiel und Kontrollhinweis sind korrekt zugeordnet.')">Prüfen</button><div class="widget-feedback" id="dataFilesFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Trenne sichtbare Vorgaben von nicht spezifizierten methodischen Details.</p><div class="form-grid" id="dataLimits"><label>Kopie erhält angehängtes i<select data-answer="belegt"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Konkrete Invertierungsformel<select data-answer="offen"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Korrelationsmatrix auf EFA-Eignung prüfen<select data-answer="belegt"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Konkreter Eignungstest und Grenzwert<select data-answer="offen"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label></div><button class="btn btn-accent" onclick="checkFields('dataLimits','dataLimitsFb','Du ergänzt keine methodischen Details, die in der Quelle fehlen.')">Quellengrenze prüfen</button><div class="widget-feedback" id="dataLimitsFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq3"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Reliabilität ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4" data-source-id="AB4-A1-E01 AB4-A1-E02 AB4-A1-E03 AB4-A2-E01 AB4-A2-E02 AB4-A2-E03 AB4-A2-E04 L4-E-01 L4-E-02 L4-E-03 L4-E-04 L4-E-05 L4-E-06 L4-E-07" data-slides="AB4:1 · L4:1" data-source-status="integriert" data-learning-objective="LZ-RELIABILITAET" data-widget-type="W4+W5" data-cognitive-task="definition_erklaeren_und_formel_anwenden"><div class="sec-head"><div class="sec-title">⑤ Reliabilität verstehen und Tests verlängern</div><div class="sec-lz">Reliabilität definieren, Lernzuwachs korrekt einordnen und Spearman-Brown-Rechnungen schrittweise durchführen.</div><div class="source-meta">Quellenbereiche AB4:1 · L4:1 · Widget W4+W5</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Wenn alle Personen beim zweiten Test exakt denselben Punktzuwachs haben, muss die Retest-Reliabilität sinken. Stimmt das?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true">Nein. Laut Lösung verändert ein konstanter additiver Wertzuwachs die Korrelation nicht. Reliabilitätsmindernd sind unterschiedlich starke Lernzuwächse.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB4-A1-E01 AB4-A1-E02 AB4-A1-E03"><div class="card-title">Aufgabe 1: Itemindizes – sichtbarer Auftrag ohne Lösung</div><p>Für die jeweils sieben höchst ladenden Items der fünf Faktoren sollen Itemschwierigkeit, Itemstandardabweichung, Trennschärfe und Reliabilität bestimmt und auf auffällige Werte geprüft werden.</p><table><caption>Items mit den höchsten Ladungen je Faktor</caption><thead><tr><th>Faktor</th><th>Items</th></tr></thead><tbody><tr><td>Offenheit</td><td>o6, o12, o11, o24, o25, o16, o26</td></tr><tr><td>Gewissenhaftigkeit</td><td>c10, c20, c17, c9, c15, c11, c22</td></tr><tr><td>Extraversion</td><td>e6, e22, e21, e10, e11, e17, e3</td></tr><tr><td>Verträglichkeit</td><td>a10, a2, a9, a13, a6, a16, a17</td></tr><tr><td>Neurotizismus</td><td>n9, n24, n11, n1, n16, n3, n4</td></tr></tbody></table><div class="source-boundary"><strong>Keine Lösung im Paket:</strong> Formeln, Daumenregeln und konkrete Ergebnisse dieser Teilaufgabe werden nicht ergänzt.</div></div><div class="card" data-source-id="AB4-A2-E02 L4-E-02"><div class="card-title">Reliabilität in der KTT</div><p>Reliabilität bezeichnet die Zuverlässigkeit und Genauigkeit, mit der ein Test misst, was er faktisch misst. Die Lösung definiert sie als Verhältnis der wahren zur beobachteten Varianz. Sie sinkt bei wachsendem Messfehler und bei verringerter Varianz wahrer Werte, also bei zunehmender Homogenität der Population bezüglich des Merkmals.</p></div><div class="card" data-source-id="AB4-A2-E03 L4-E-04"><div class="card-title">Retest und Lernzuwachs</div><p>Ein gleicher additiver Lernzuwachs aller Personen verändert die Korrelation nicht. Unterschiedlich starke Lernzuwächse können die Retest-Reliabilität mindern.</p></div><div class="card" data-source-id="AB4-A2-E04 L4-E-05 L4-E-06 L4-E-07"><div class="card-title">Spearman-Brown: vollständiges Quellenbeispiel</div><div class="formula-box"><div class="formula">c = m* / m = (8 + 5) / 8 = 1.625</div><div class="formula">Rel* = (1.625 · 0.68) / [1 + (1.625 − 1) · 0.68] = 0.78</div></div><p>Für die Zielreliabilität 0.85 ergibt die umgestellte Formel <strong>c = 2.67</strong>. Damit gilt <strong>m* = 8 · 2.67 = 21.4</strong>; benötigt werden mindestens <strong>22 Items</strong>. Voraussetzung der ersten Rechnung: Die fünf zusätzlichen Items sind parallel.</p></div><div class="phase-label">Phase 3 — Anwenden · W4 + W5</div><div class="level-widget" data-level-group="g4"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g4')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g4')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g4')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="relBasics"><label>Reliabilität ist das Verhältnis<select data-answer="wahr_beob"><option value="">–</option><option value="wahr_beob">wahre / beobachtete Varianz</option><option value="beob_wahr">beobachtete / wahre Varianz</option></select></label><label>Gleicher Lernzuwachs aller Personen<select data-answer="kein_effekt"><option value="">–</option><option value="kein_effekt">kein Effekt auf die Korrelation</option><option value="senkt">senkt zwingend die Korrelation</option></select></label><label>Unterschiedlich starker Lernzuwachs<select data-answer="mindert"><option value="">–</option><option value="mindert">kann Reliabilität mindern</option><option value="kein_effekt">hat keinen Effekt</option></select></label></div><button class="btn btn-accent" onclick="checkFields('relBasics','relBasicsFb','Definition und Lernzuwachseffekt sind korrekt eingeordnet.')">Prüfen</button><div class="widget-feedback" id="relBasicsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Berechne die Verlängerung von 8 auf 13 parallele Items.</p><div class="formula-box"><div class="formula">c = m* / m = 13 / 8</div><div class="formula">Rel* = (c · Rel) / (1 + (c − 1) · Rel)</div></div><div class="form-grid" id="relCalc1"><label>Verlängerungsfaktor c<input type="number" step="0.001" data-answer="1.625" data-tolerance="0.001"></label><label>Erwartete Reliabilität Rel*<input type="number" step="0.01" data-answer="0.78" data-tolerance="0.01"></label></div><button class="btn btn-accent" onclick="checkFields('relCalc1','relCalc1Fb','c = 1.625 und Rel* ≈ 0.78 stimmen.')">Rechnung prüfen</button><div class="widget-feedback" id="relCalc1Fb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Bestimme den notwendigen Umfang für Rel* = 0.85.</p><div class="formula-box"><div class="formula">c = [Rel* · (1 − Rel)] / [Rel · (1 − Rel*)]</div><div class="formula">m* = m · c</div></div><div class="form-grid" id="relCalc2"><label>Verlängerungsfaktor c<input type="number" step="0.01" data-answer="2.67" data-tolerance="0.01"></label><label>Rechnerische Itemzahl m*<input type="number" step="0.1" data-answer="21.4" data-tolerance="0.1"></label><label>Mindestzahl ganzer Items<input type="number" step="1" data-answer="22" data-tolerance="0"></label></div><button class="btn btn-accent" onclick="checkFields('relCalc2','relCalc2Fb','Die Rechnung führt zu 21.4 und damit mindestens 22 Items.')">Rechnung prüfen</button><div class="widget-feedback" id="relCalc2Fb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq4"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Methoden ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5" data-source-id="AB4-A3-E01 AB4-A3-E02 L4-E-08" data-slides="AB4:2 · L4:2" data-source-status="integriert" data-learning-objective="LZ-RELMETHODEN" data-widget-type="W6" data-cognitive-task="matrixzellen_lokalisieren_und_zuordnen"><div class="sec-head"><div class="sec-title">⑥ Fehlerquellen der Reliabilitätsmethoden</div><div class="sec-lz">Fehlerquellen in einer 7×5-Matrix den Reliabilitätsmethoden und Zeitintervallen zuordnen.</div><div class="source-meta">Quellenbereiche AB4:2 · L4:2 · Widget W6</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Wirken sich dieselben Fehlerquellen bei Paralleltest, Retest, Split-Half und Cronbachs α immer gleich stark aus?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Die Lösungsmatrix zeigt methoden- und zeitabhängige Muster. Besonders Retest nach einer Woche und nach sechs Monaten unterscheiden sich bei Bedingungen, Merkmalsänderungen, Gedächtnis- und Lerneffekten.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB4-A3-E01 AB4-A3-E02"><div class="card-title">Arbeitsauftrag und Skala</div><p>Jede Fehlerquelle soll für fünf Reliabilitätsmethoden beziehungsweise Zeitvarianten klassifiziert werden: <strong>0</strong> = nicht oder kaum wirksam, <strong>+</strong> = kann wirksam werden, <strong>++</strong> = kann sich sehr stark auswirken.</p></div><div class="card" data-source-id="L4-E-08"><div class="card-title">Matrix lesen</div><p>Eine Zeile hält die Fehlerquelle konstant und vergleicht die fünf Methoden. Eine Spalte hält die Methode konstant und vergleicht die sieben Fehlerquellen. Die Lösung enthält zusätzlich die Zwischenkategorien <code>0/+</code> und <code>+/++</code>.</p><details><summary>Vollständige Lösungsmatrix als Referenz</summary><div class="matrix-scroll"><table><caption>Fehlerquellenmatrix aus der Lösung</caption><thead><tr><th>Fehlerquelle</th><th>Paralleltest (1 Tag)</th><th>Retest (1 Woche)</th><th>Retest (6 Monate)</th><th>Split-Half</th><th>Cronbachs α</th></tr></thead><tbody><tr><th scope="row">Unsystematischer Messfehler</th><td>+</td><td>+</td><td>+</td><td>+</td><td>+</td></tr><tr><th scope="row">Inhomogenität der Items</th><td>0</td><td>0</td><td>0</td><td>+</td><td>+</td></tr><tr><th scope="row">Variierende Bedingungen zwischen Testungen</th><td>+</td><td>+/++</td><td>++</td><td>0</td><td>0</td></tr><tr><th scope="row">Fehlende Parallelität der Tests bzw. Testhälften</th><td>+</td><td>0</td><td>0</td><td>+</td><td>0</td></tr><tr><th scope="row">Merkmalsänderungen</th><td>0/+</td><td>+</td><td>++</td><td>0</td><td>0</td></tr><tr><th scope="row">Gedächtniseffekte</th><td>0</td><td>++</td><td>+</td><td>0</td><td>0</td></tr><tr><th scope="row">Lerneffekte</th><td>+</td><td>++</td><td>+</td><td>0</td><td>0</td></tr></tbody></table></div></details></div><div class="card"><div class="card-title">Zwei zentrale Kontraste</div><p><strong>Inhomogenität der Items:</strong> 0 bei Paralleltest und beiden Retests, + bei Split-Half und Cronbachs α.</p><p><strong>Gedächtniseffekte:</strong> 0 beim Paralleltest, ++ beim Retest nach einer Woche, + nach sechs Monaten, 0 bei Split-Half und Cronbachs α.</p></div><div class="phase-label">Phase 3 — Anwenden · W6</div><div class="level-widget" id="relMatrix" data-active-tier="1"><div class="level-tabs" role="tablist" aria-label="Umfang der Matrixübung"><button class="level-tab" aria-selected="true" onclick="setMatrixLevel(this,'relMatrix',1)">Stufe 1 · Basis</button><button class="level-tab" aria-selected="false" onclick="setMatrixLevel(this,'relMatrix',2)">Stufe 2 · Standard</button><button class="level-tab" aria-selected="false" onclick="setMatrixLevel(this,'relMatrix',3)">Stufe 3 · Transfer</button></div><p class="widget-instruction">Nicht freigeschaltete Zellen sind deaktiviert. Die Stufen bauen bis zur vollständigen Originalmatrix auf.</p><div class="matrix-scroll"><table class="matrix-practice"><caption>Ausfüllmatrix</caption><thead><tr><th>Fehlerquelle</th><th scope="col">Paralleltest (1 Tag)</th><th scope="col">Retest (1 Woche)</th><th scope="col">Retest (6 Monate)</th><th scope="col">Split-Half</th><th scope="col">Cronbachs α</th></tr></thead><tbody><tr><th scope="row">Unsystematischer Messfehler</th><td><select data-answer="+" data-tier="1" aria-label="Unsystematischer Messfehler – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Unsystematischer Messfehler – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Unsystematischer Messfehler – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="3" aria-label="Unsystematischer Messfehler – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="3" aria-label="Unsystematischer Messfehler – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Inhomogenität der Items</th><td><select data-answer="0" data-tier="3" aria-label="Inhomogenität der Items – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="1" aria-label="Inhomogenität der Items – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="2" aria-label="Inhomogenität der Items – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Inhomogenität der Items – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="3" aria-label="Inhomogenität der Items – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Variierende Bedingungen zwischen Testungen</th><td><select data-answer="+" data-tier="3" aria-label="Variierende Bedingungen zwischen Testungen – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+/++" data-tier="3" aria-label="Variierende Bedingungen zwischen Testungen – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="++" data-tier="1" aria-label="Variierende Bedingungen zwischen Testungen – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="2" aria-label="Variierende Bedingungen zwischen Testungen – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="2" aria-label="Variierende Bedingungen zwischen Testungen – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Fehlende Parallelität der Tests bzw. Testhälften</th><td><select data-answer="+" data-tier="2" aria-label="Fehlende Parallelität der Tests bzw. Testhälften – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Fehlende Parallelität der Tests bzw. Testhälften – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Fehlende Parallelität der Tests bzw. Testhälften – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="1" aria-label="Fehlende Parallelität der Tests bzw. Testhälften – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="2" aria-label="Fehlende Parallelität der Tests bzw. Testhälften – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Merkmalsänderungen</th><td><select data-answer="0/+" data-tier="2" aria-label="Merkmalsänderungen – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Merkmalsänderungen – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="++" data-tier="3" aria-label="Merkmalsänderungen – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Merkmalsänderungen – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="1" aria-label="Merkmalsänderungen – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Gedächtniseffekte</th><td><select data-answer="0" data-tier="1" aria-label="Gedächtniseffekte – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="++" data-tier="2" aria-label="Gedächtniseffekte – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Gedächtniseffekte – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Gedächtniseffekte – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Gedächtniseffekte – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr><tr><th scope="row">Lerneffekte</th><td><select data-answer="+" data-tier="3" aria-label="Lerneffekte – Paralleltest (1 Tag)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="++" data-tier="1" aria-label="Lerneffekte – Retest (1 Woche)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="+" data-tier="2" aria-label="Lerneffekte – Retest (6 Monate)"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="2" aria-label="Lerneffekte – Split-Half"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td><td><select data-answer="0" data-tier="3" aria-label="Lerneffekte – Cronbachs α"><option value="">–</option><option value="0">0</option><option value="+">+</option><option value="++">++</option><option value="0/+">0/+</option><option value="+/++">+/++</option></select></td></tr></tbody></table></div><button class="btn btn-accent" onclick="checkReliabilityMatrix('relMatrix','relMatrixFb')">Freigeschaltete Zellen prüfen</button><div class="widget-feedback" id="relMatrixFb"></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq5"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Validität ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6" data-source-id="AB5-E-01-01 L5-A1-FRAGE L5-A1-FORMEL L5-A1-KERN" data-slides="AB5:1 · L5:1" data-source-status="integriert" data-learning-objective="LZ-KRITERIUMSVALIDITAET" data-widget-type="W4+W5" data-cognitive-task="formel_umstellen_rechnen_und_interpretieren"><div class="sec-head"><div class="sec-title">⑦ Empirische Kriteriumsvalidität berechnen</div><div class="sec-lz">Reliabilitätskorrigierte und empirisch beobachtete Validität unterscheiden und die Minderung berechnen.</div><div class="source-meta">Quellenbereiche AB5:1 · L5:1 · Widget W4+W5</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Muss eine reliabilitätskorrigierte Korrelation von 0.65 auch empirisch als 0.65 beobachtet werden?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq6" aria-hidden="true">Nein. Im Quellenbeispiel mindern Reliabilitäten von 0.80 und 0.60 die empirisch beobachtete Kriteriumsvalidität auf 0.45.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB5-E-01-01 L5-A1-FRAGE"><div class="card-title">Gegebene Werte</div><table><caption>Gegebene Werte der Validitätsaufgabe</caption><tbody><tr><th scope="row">reliabilitätskorrigierte Validität Val**</th><td>0.65</td></tr><tr><td>Reliabilität des Intelligenztests Rel<sub>x</sub></th><td>0.80</td></tr><tr><th scope="row">Reliabilität der Vorgesetztenbeurteilung Rel<sub>y</sub></th><td>0.60</td></tr></tbody></table></div><div class="card" data-source-id="L5-A1-FORMEL"><div class="card-title">Minderungskorrektur umstellen</div><div class="formula-box"><div class="formula">Val** = Val / (√Relx · √Rely)</div><div class="formula">Val = Val** · √Relx · √Rely</div><div class="formula">Val = 0.65 · √0.80 · √0.60 = 0.45</div></div></div><div class="card" data-source-id="L5-A1-KERN"><div class="card-title">Interpretation</div><p>Die Unreliabilität beider Messinstrumente verringert die beobachtete Validität gegenüber der reliabilitätskorrigierten beziehungsweise wahren Validität.</p></div><div class="phase-label">Phase 3 — Anwenden · W4 + W5</div><div class="level-widget" data-level-group="g6"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g6')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g6')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g6')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="valBasics"><label>Val** steht im Quellenbeispiel für<select data-answer="korrigiert"><option value="">–</option><option value="korrigiert">reliabilitätskorrigierte Validität</option><option value="empirisch">empirische Validität</option></select></label><label>Val ist gesucht als<select data-answer="empirisch"><option value="">–</option><option value="korrigiert">reliabilitätskorrigierte Validität</option><option value="empirisch">empirische Validität</option></select></label><label>Unreliabilität führt im Beispiel zu<select data-answer="minderung"><option value="">–</option><option value="minderung">Minderung</option><option value="steigerung">Steigerung</option></select></label></div><button class="btn btn-accent" onclick="checkFields('valBasics','valBasicsFb','Korrigierte und empirische Validität sind korrekt unterschieden.')">Prüfen</button><div class="widget-feedback" id="valBasicsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Setze die drei sichtbaren Werte in die umgestellte Formel ein.</p><div class="formula-box"><div class="formula">Val = 0.65 · √0.80 · √0.60</div></div><div class="form-grid" id="valCalc"><label>Empirische Validität<input type="number" step="0.01" data-answer="0.45" data-tolerance="0.01"></label></div><button class="btn btn-accent" onclick="checkFields('valCalc','valCalcFb','Die beobachtete Validität beträgt gerundet 0.45.')">Berechnung prüfen</button><div class="widget-feedback" id="valCalcFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Diagnostiziere den typischen Richtungsfehler.</p><div class="form-grid" id="valDebug"><label>Eine Rechnung teilt 0.65 durch beide Reliabilitätswurzeln und erhält einen größeren Wert. Welcher Fehler liegt vor?<select data-answer="richtung"><option value="">– wählen –</option><option value="richtung">Die nach Val umgestellte Formel wurde in die falsche Richtung verwendet.</option><option value="rundung">Nur die Rundung ist zu grob.</option><option value="stichprobe">Die Stichprobengröße wurde vergessen.</option></select></label><label>Welche Interpretation passt?<select data-answer="kleiner"><option value="">– wählen –</option><option value="kleiner">Empirische Validität ist hier kleiner als 0.65.</option><option value="groesser">Empirische Validität ist hier größer als 0.65.</option></select></label></div><button class="btn btn-accent" onclick="checkFields('valDebug','valDebugFb','Formelrichtung und Interpretation sind korrekt diagnostiziert.')">Fehler prüfen</button><div class="widget-feedback" id="valDebugFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq6"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ MTMM & Kriterien ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-source-id="AB5-E-02-01 AB5-E-02-02 AB5-E-02-03 AB5-E-02-04 AB5-E-03-01 AB5-E-03-02 AB5-E-03-03 L5-A2-FRAGEN L5-A2-TABELLE L5-A2-KONVERGENT L5-A2-DISKRIMINANT L5-A2-RELIABILITAET L5-A2-NORMALISIERUNG L5-A3-FRAGEN L5-A3-UNFALL L5-A3-FEHLZEIT L5-A3-KONTAMINATION L5-A3-DEFIZIENZ" data-slides="AB5:1–2 · L5:1–3" data-source-status="integriert" data-learning-objective="LZ-MTMM-KRITERIEN" data-widget-type="W6+W9+W11" data-cognitive-task="matrix_interpretieren_und_faelle_klassifizieren"><div class="sec-head"><div class="sec-title">⑧ MTMM-Matrix und Kriterienqualität</div><div class="sec-lz">Matrixwerte aktiv lesen sowie Defizienz und Kontamination an beruflichen Leistungskriterien unterscheiden.</div><div class="source-meta">Quellenbereiche AB5:1–2 · L5:1–3 · Widget W6+W9+W11</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Reicht es, in einer MTMM-Matrix einfach die größten Zahlen zu markieren?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq7" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq7" aria-hidden="true">Nein. Die Bedeutung hängt von Methodenblock, Merkmal, Hauptdiagonale und dem Vergleich korrespondierender versus nicht korrespondierender Zellen ab.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB5-E-02-01 AB5-E-02-02 L5-A2-TABELLE"><div class="card-title">Studien- und Matrixrahmen</div><p>Rammstedt et al. (2004) untersuchten 60 Befragte. Fünf Big-Five-Merkmale wurden mit einem NEO-FFI und einem neu konstruierten Einzelitem-Verfahren erfasst. Die NEO-FFI-Reliabilitäten stehen in Klammern auf der Hauptdiagonale.</p><div class="matrix-scroll"><table><caption>MTMM-Matrix</caption><thead><tr><th>Methode / Merkmal</th><th scope="col">Einzel E</th><th scope="col">Einzel V</th><th scope="col">Einzel G</th><th scope="col">Einzel N</th><th scope="col">Einzel O</th><th scope="col">NEOFFI E</th><th scope="col">NEOFFI V</th><th scope="col">NEOFFI G</th><th scope="col">NEOFFI N</th><th scope="col">NEOFFI O</th></tr></thead><tbody><tr><th scope="row">Einzelitem – Extraversion</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Verträglichkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r1c0','.21')" aria-label="Einzelitem – Verträglichkeit, Einzel E: .21">.21</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Gewissenhaftigkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r2c0','.10')" aria-label="Einzelitem – Gewissenhaftigkeit, Einzel E: .10">.10</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r2c1','.17')" aria-label="Einzelitem – Gewissenhaftigkeit, Einzel V: .17">.17</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Neurotizismus</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c0','-.08')" aria-label="Einzelitem – Neurotizismus, Einzel E: -.08">-.08</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c1','-.35')" aria-label="Einzelitem – Neurotizismus, Einzel V: -.35">-.35</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c2','-.03')" aria-label="Einzelitem – Neurotizismus, Einzel G: -.03">-.03</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Offenheit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c0','.31')" aria-label="Einzelitem – Offenheit, Einzel E: .31">.31</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c1','.15')" aria-label="Einzelitem – Offenheit, Einzel V: .15">.15</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c2','.07')" aria-label="Einzelitem – Offenheit, Einzel G: .07">.07</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c3','-.14')" aria-label="Einzelitem – Offenheit, Einzel N: -.14">-.14</button></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Extraversion</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c0','.60')" aria-label="NEO-FFI – Extraversion, Einzel E: .60">.60</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c1','.26')" aria-label="NEO-FFI – Extraversion, Einzel V: .26">.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c2','.15')" aria-label="NEO-FFI – Extraversion, Einzel G: .15">.15</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c3','-.37')" aria-label="NEO-FFI – Extraversion, Einzel N: -.37">-.37</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c4','.14')" aria-label="NEO-FFI – Extraversion, Einzel O: .14">.14</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c5','(.74)')" aria-label="NEO-FFI – Extraversion, NEOFFI E: (.74)">(.74)</button></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Verträglichkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c0','.26')" aria-label="NEO-FFI – Verträglichkeit, Einzel E: .26">.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c1','.60')" aria-label="NEO-FFI – Verträglichkeit, Einzel V: .60">.60</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c2','.36')" aria-label="NEO-FFI – Verträglichkeit, Einzel G: .36">.36</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c3','-.11')" aria-label="NEO-FFI – Verträglichkeit, Einzel N: -.11">-.11</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c4','.02')" aria-label="NEO-FFI – Verträglichkeit, Einzel O: .02">.02</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c5','.29')" aria-label="NEO-FFI – Verträglichkeit, NEOFFI E: .29">.29</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c6','(.83)')" aria-label="NEO-FFI – Verträglichkeit, NEOFFI V: (.83)">(.83)</button></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Gewissenhaftigkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c0','.21')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel E: .21">.21</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c1','.40')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel V: .40">.40</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c2','.80')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel G: .80">.80</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c3','-.34')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel N: -.34">-.34</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c4','.04')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel O: .04">.04</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c5','.22')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI E: .22">.22</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c6','.30')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI V: .30">.30</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c7','(.87)')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI G: (.87)">(.87)</button></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Neurotizismus</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c0','-.26')" aria-label="NEO-FFI – Neurotizismus, Einzel E: -.26">-.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c1','-.35')" aria-label="NEO-FFI – Neurotizismus, Einzel V: -.35">-.35</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c2','-.41')" aria-label="NEO-FFI – Neurotizismus, Einzel G: -.41">-.41</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c3','.68')" aria-label="NEO-FFI – Neurotizismus, Einzel N: .68">.68</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c4','-.05')" aria-label="NEO-FFI – Neurotizismus, Einzel O: -.05">-.05</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c5','-.48')" aria-label="NEO-FFI – Neurotizismus, NEOFFI E: -.48">-.48</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c6','-.23')" aria-label="NEO-FFI – Neurotizismus, NEOFFI V: -.23">-.23</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c7','-.54')" aria-label="NEO-FFI – Neurotizismus, NEOFFI G: -.54">-.54</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c8','(.86)')" aria-label="NEO-FFI – Neurotizismus, NEOFFI N: (.86)">(.86)</button></td><td></td></tr><tr><th scope="row">NEO-FFI – Offenheit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c0','-.17')" aria-label="NEO-FFI – Offenheit, Einzel E: -.17">-.17</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c1','.09')" aria-label="NEO-FFI – Offenheit, Einzel V: .09">.09</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c2','.05')" aria-label="NEO-FFI – Offenheit, Einzel G: .05">.05</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c3','-.04')" aria-label="NEO-FFI – Offenheit, Einzel N: -.04">-.04</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c4','.64')" aria-label="NEO-FFI – Offenheit, Einzel O: .64">.64</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c5','.01')" aria-label="NEO-FFI – Offenheit, NEOFFI E: .01">.01</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c6','.18')" aria-label="NEO-FFI – Offenheit, NEOFFI V: .18">.18</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c7','.01')" aria-label="NEO-FFI – Offenheit, NEOFFI G: .01">.01</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c8','.00')" aria-label="NEO-FFI – Offenheit, NEOFFI N: .00">.00</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c9','(.77)')" aria-label="NEO-FFI – Offenheit, NEOFFI O: (.77)">(.77)</button></td></tr></tbody></table></div></div><div class="card" data-source-id="L5-A2-KONVERGENT L5-A2-DISKRIMINANT L5-A2-RELIABILITAET"><div class="card-title">Quelleninterpretation</div><p>Die fünf korrespondierenden Zellen zwischen Einzelitem und NEO-FFI lauten <strong>.60, .60, .80, .68 und .64</strong>. Die Quelle deutet die hohen Werte als Stützung der konvergenten Validität. Cronbachs α kann bei einem einzelnen Item laut Lösung nicht bestimmt werden.</p></div><div class="source-issue" data-source-id="L5-A2-NORMALISIERUNG"><strong>Quellenkritik:</strong> Aus den fünf sichtbaren Werten ergibt sich <strong>.664</strong>; die PDF nennt <strong>.672</strong>. Außerdem nennt sie <strong>.40</strong> als größte HTHM-Korrelation, obwohl <strong>-.41</strong> den größeren Betrag hat. Der sichtbare Wechsel HTHM/HTMM wird nicht still harmonisiert.</div><div class="card" data-source-id="AB5-E-03-01 AB5-E-03-02 AB5-E-03-03 L5-A3-UNFALL L5-A3-FEHLZEIT L5-A3-KONTAMINATION L5-A3-DEFIZIENZ"><div class="card-title">Berufliche Leistungskriterien</div><p><strong>Unfälle:</strong> selten, daher in einem halben Jahr wenig Varianz; längerer Zeitraum und Berücksichtigung von Schuld beziehungsweise Vermeidbarkeit verbessern das Kriterium.</p><p><strong>Fehlzeiten:</strong> viele Ursachen; für motivational bedingtes Fehlen nennt die Lösung Häufigkeit statt Gesamtdauer, eintägiges Fehlen am Montag oder Freitag und einen längeren Zeitraum.</p><p><strong>Kontamination:</strong> Streckenrisiko, Busausstattung oder tatsächliche Erkrankungen beeinflussen das Maß. <strong>Defizienz:</strong> Freundlichkeit, Pünktlichkeit und Unterstützung von Kollegen fehlen.</p></div><div class="phase-label">Phase 3 — Anwenden · W6 + W9 + W11</div><div class="level-widget" id="mtmmPractice" data-level-group="g7" data-expected="r7c2"><div class="level-tabs" role="tablist"><button class="level-tab" data-level="1" aria-selected="true" onclick="switchLevel(this,'g7');setMatrixTask(this,'mtmmPractice','r7c2','Finde NEO-FFI Gewissenhaftigkeit × Einzelitem Gewissenhaftigkeit.')">Stufe 1 · Basis</button><button class="level-tab" data-level="2" aria-selected="false" onclick="switchLevel(this,'g7')">Stufe 2 · Standard</button><button class="level-tab" data-level="3" aria-selected="false" onclick="switchLevel(this,'g7')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><p>Klicke in der Matrix auf die Zelle <strong>NEO-FFI Gewissenhaftigkeit × Einzelitem Gewissenhaftigkeit</strong>. Der erwartete Wert ist nicht vorgegeben; du musst Zeile und Spalte lokalisieren.</p><div class="matrix-task">Finde NEO-FFI Gewissenhaftigkeit × Einzelitem Gewissenhaftigkeit.</div><div class="matrix-scroll"><table><caption>MTMM-Matrix</caption><thead><tr><th>Methode / Merkmal</th><th scope="col">Einzel E</th><th scope="col">Einzel V</th><th scope="col">Einzel G</th><th scope="col">Einzel N</th><th scope="col">Einzel O</th><th scope="col">NEOFFI E</th><th scope="col">NEOFFI V</th><th scope="col">NEOFFI G</th><th scope="col">NEOFFI N</th><th scope="col">NEOFFI O</th></tr></thead><tbody><tr><th scope="row">Einzelitem – Extraversion</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Verträglichkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r1c0','.21')" aria-label="Einzelitem – Verträglichkeit, Einzel E: .21">.21</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Gewissenhaftigkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r2c0','.10')" aria-label="Einzelitem – Gewissenhaftigkeit, Einzel E: .10">.10</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r2c1','.17')" aria-label="Einzelitem – Gewissenhaftigkeit, Einzel V: .17">.17</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Neurotizismus</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c0','-.08')" aria-label="Einzelitem – Neurotizismus, Einzel E: -.08">-.08</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c1','-.35')" aria-label="Einzelitem – Neurotizismus, Einzel V: -.35">-.35</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r3c2','-.03')" aria-label="Einzelitem – Neurotizismus, Einzel G: -.03">-.03</button></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">Einzelitem – Offenheit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c0','.31')" aria-label="Einzelitem – Offenheit, Einzel E: .31">.31</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c1','.15')" aria-label="Einzelitem – Offenheit, Einzel V: .15">.15</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c2','.07')" aria-label="Einzelitem – Offenheit, Einzel G: .07">.07</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r4c3','-.14')" aria-label="Einzelitem – Offenheit, Einzel N: -.14">-.14</button></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Extraversion</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c0','.60')" aria-label="NEO-FFI – Extraversion, Einzel E: .60">.60</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c1','.26')" aria-label="NEO-FFI – Extraversion, Einzel V: .26">.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c2','.15')" aria-label="NEO-FFI – Extraversion, Einzel G: .15">.15</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c3','-.37')" aria-label="NEO-FFI – Extraversion, Einzel N: -.37">-.37</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c4','.14')" aria-label="NEO-FFI – Extraversion, Einzel O: .14">.14</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r5c5','(.74)')" aria-label="NEO-FFI – Extraversion, NEOFFI E: (.74)">(.74)</button></td><td></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Verträglichkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c0','.26')" aria-label="NEO-FFI – Verträglichkeit, Einzel E: .26">.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c1','.60')" aria-label="NEO-FFI – Verträglichkeit, Einzel V: .60">.60</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c2','.36')" aria-label="NEO-FFI – Verträglichkeit, Einzel G: .36">.36</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c3','-.11')" aria-label="NEO-FFI – Verträglichkeit, Einzel N: -.11">-.11</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c4','.02')" aria-label="NEO-FFI – Verträglichkeit, Einzel O: .02">.02</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c5','.29')" aria-label="NEO-FFI – Verträglichkeit, NEOFFI E: .29">.29</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r6c6','(.83)')" aria-label="NEO-FFI – Verträglichkeit, NEOFFI V: (.83)">(.83)</button></td><td></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Gewissenhaftigkeit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c0','.21')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel E: .21">.21</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c1','.40')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel V: .40">.40</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c2','.80')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel G: .80">.80</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c3','-.34')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel N: -.34">-.34</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c4','.04')" aria-label="NEO-FFI – Gewissenhaftigkeit, Einzel O: .04">.04</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c5','.22')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI E: .22">.22</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c6','.30')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI V: .30">.30</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r7c7','(.87)')" aria-label="NEO-FFI – Gewissenhaftigkeit, NEOFFI G: (.87)">(.87)</button></td><td></td><td></td></tr><tr><th scope="row">NEO-FFI – Neurotizismus</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c0','-.26')" aria-label="NEO-FFI – Neurotizismus, Einzel E: -.26">-.26</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c1','-.35')" aria-label="NEO-FFI – Neurotizismus, Einzel V: -.35">-.35</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c2','-.41')" aria-label="NEO-FFI – Neurotizismus, Einzel G: -.41">-.41</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c3','.68')" aria-label="NEO-FFI – Neurotizismus, Einzel N: .68">.68</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c4','-.05')" aria-label="NEO-FFI – Neurotizismus, Einzel O: -.05">-.05</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c5','-.48')" aria-label="NEO-FFI – Neurotizismus, NEOFFI E: -.48">-.48</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c6','-.23')" aria-label="NEO-FFI – Neurotizismus, NEOFFI V: -.23">-.23</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c7','-.54')" aria-label="NEO-FFI – Neurotizismus, NEOFFI G: -.54">-.54</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r8c8','(.86)')" aria-label="NEO-FFI – Neurotizismus, NEOFFI N: (.86)">(.86)</button></td><td></td></tr><tr><th scope="row">NEO-FFI – Offenheit</th><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c0','-.17')" aria-label="NEO-FFI – Offenheit, Einzel E: -.17">-.17</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c1','.09')" aria-label="NEO-FFI – Offenheit, Einzel V: .09">.09</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c2','.05')" aria-label="NEO-FFI – Offenheit, Einzel G: .05">.05</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c3','-.04')" aria-label="NEO-FFI – Offenheit, Einzel N: -.04">-.04</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c4','.64')" aria-label="NEO-FFI – Offenheit, Einzel O: .64">.64</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c5','.01')" aria-label="NEO-FFI – Offenheit, NEOFFI E: .01">.01</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c6','.18')" aria-label="NEO-FFI – Offenheit, NEOFFI V: .18">.18</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c7','.01')" aria-label="NEO-FFI – Offenheit, NEOFFI G: .01">.01</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c8','.00')" aria-label="NEO-FFI – Offenheit, NEOFFI N: .00">.00</button></td><td><button type="button" class="matrix-cell-button" onclick="pickMatrixCell('mtmmPractice','r9c9','(.77)')" aria-label="NEO-FFI – Offenheit, NEOFFI O: (.77)">(.77)</button></td></tr></tbody></table></div><div class="widget-feedback" id="mtmmPickFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><div class="form-grid" id="mtmmMean"><label>Mittelwert von .60, .60, .80, .68, .64<input type="number" step="0.001" data-answer="0.664" data-tolerance="0.001"></label><label>PDF-Angabe dazu<select data-answer="0.672"><option value="">–</option><option value="0.664">.664</option><option value="0.672">.672</option></select></label><label>Cronbachs α für ein Einzelitem<select data-answer="nicht"><option value="">–</option><option value="nicht">nicht bestimmbar</option><option value="ja">bestimmbar</option></select></label></div><button class="btn btn-accent" onclick="checkFields('mtmmMean','mtmmMeanFb','Matrixmittel und Quellenabweichung sind korrekt getrennt.')">Prüfen</button><div class="widget-feedback" id="mtmmMeanFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Klassifiziere die Beispiele aus der Busfahreraufgabe.</p><table class="case-table" id="criterionCases"><caption>Einordnung beruflicher Leistungskriterien</caption><thead><tr><th>Beispiel</th><th>Einordnung</th></tr></thead><tbody><tr><td>Unfallzahl hängt von unfallträchtigeren Strecken ab.</td><td><select aria-label="Einordnung des Streckenrisikos" data-answer="kontamination"><option value="">–</option><option value="kontamination">Kontamination</option><option value="defizienz">Defizienz</option><option value="verbesserung">Verbesserung</option></select></td></tr><tr><td>Freundlichkeit gegenüber Kunden wird nicht erfasst.</td><td><select aria-label="Einordnung der nicht erfassten Freundlichkeit" data-answer="defizienz"><option value="">–</option><option value="kontamination">Kontamination</option><option value="defizienz">Defizienz</option><option value="verbesserung">Verbesserung</option></select></td></tr><tr><td>Unfälle über einen längeren Zeitraum beobachten.</td><td><select aria-label="Einordnung des längeren Beobachtungszeitraums" data-answer="verbesserung"><option value="">–</option><option value="kontamination">Kontamination</option><option value="defizienz">Defizienz</option><option value="verbesserung">Verbesserung</option></select></td></tr><tr><td>Fehlzeiten werden durch tatsächliche Erkrankungen beeinflusst.</td><td><select aria-label="Einordnung tatsächlicher Erkrankungen" data-answer="kontamination"><option value="">–</option><option value="kontamination">Kontamination</option><option value="defizienz">Defizienz</option><option value="verbesserung">Verbesserung</option></select></td></tr><tr><td>Pünktlichkeit bleibt außerhalb des Kriteriums.</td><td><select aria-label="Einordnung der nicht erfassten Pünktlichkeit" data-answer="defizienz"><option value="">–</option><option value="kontamination">Kontamination</option><option value="defizienz">Defizienz</option><option value="verbesserung">Verbesserung</option></select></td></tr></tbody></table><button class="btn btn-accent" onclick="checkFields('criterionCases','criterionCasesFb','Kontamination, Defizienz und Verbesserung sind korrekt unterschieden.')">Fälle prüfen</button><div class="widget-feedback" id="criterionCasesFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq7"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(6)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(8)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 9 — ⑨ Testvergleich ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8" data-source-id="AB5-E-04-01 AB5-E-04-02 AB5-E-04-03 L5-A4-FRAGEN L5-A4-RELIABILITAET L5-A4-WAHRE-VALIDITAET L5-A4-EMPIRISCHE-VALIDITAET L5-A4-ERFORDERLICHER-UMFANG L5-A4-PROZENT" data-slides="AB5:2 · L5:3–4" data-source-status="integriert" data-learning-objective="LZ-TESTVERGLEICH" data-widget-type="W4+W11" data-cognitive-task="mehrstufig_rechnen_entscheiden_und_quellenfehler_debuggen"><div class="sec-head"><div class="sec-title">⑨ Tests unter Zeitlimit vergleichen</div><div class="sec-lz">Testverlängerung, Minderungskorrektur und Prozentbezug in einer mehrstufigen Entscheidung verbinden.</div><div class="source-meta">Quellenbereiche AB5:2 · L5:3–4 · Widget W4+W11</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Test B startet mit höherer Reliabilität und höherer empirischer Validität. Muss er nach gleicher Testzeit weiterhin der bessere Test sein?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq8" onclick="revealEntry(this,'eq8')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq8" aria-hidden="true">Nein. Nach Verlängerung auf jeweils 30 Items erreicht die Lösung für Test A 0.57 und für Test B 0.55 empirische Validität.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB5-E-04-01 AB5-E-04-02 AB5-E-04-03 L5-A4-FRAGEN"><div class="card-title">Ausgangslage</div><table><caption>Ausgangsdaten der Tests A und B</caption><thead><tr><th>Test</th><th>Items</th><th>Reliabilität</th><th>Validität</th></tr></thead><tbody><tr><td>A: logische Denkfähigkeit</td><td>10</td><td>.25</td><td>.40</td></tr><tr><td>B: allgemeines Bildungsniveau</td><td>15</td><td>.64</td><td>.50</td></tr></tbody></table><p>Pro Item ist die Bearbeitungszeit gleich; verfügbar ist Zeit für 30 Items, parallele Items stehen praktisch beliebig zur Verfügung.</p></div><div class="card" data-source-id="L5-A4-RELIABILITAET L5-A4-WAHRE-VALIDITAET L5-A4-EMPIRISCHE-VALIDITAET"><div class="card-title">Rechenkette</div><ol><li>Auf 30 Items verlängern: Rel<sub>A</sub>* = .50, Rel<sub>B</sub>* = .78.</li><li>Korrigierte Validität: Val<sub>A</sub>* = .80, Val<sub>B</sub>* = .63.</li><li>Empirische Validität bei 30 Items: A = .57, B = .55.</li><li>Entscheidung: Test A ist knapp empirisch valider.</li></ol></div><div class="card" data-source-id="L5-A4-ERFORDERLICHER-UMFANG"><div class="card-title">Test B angleichen</div><p>Test B benötigt Rel = .82. Ausgehend von .78 ergibt sich c = 1.28; 1.28 · 30 = 38.32, also 39 Items.</p></div><div class="source-issue" data-source-id="L5-A4-PROZENT"><strong>Prozentbasis:</strong> Die PDF nennt 9/30 = 30 % als Ersparnis. Bezogen auf den längeren 39-Item-Test beträgt die tatsächliche Ersparnis 9/39 ≈ 23.1 %. Die 30 % beschreiben den Mehrbedarf des längeren Tests relativ zu 30 Items.</div><div class="phase-label">Phase 3 — Anwenden · W4 + W11</div><div class="level-widget" data-level-group="g8"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g8')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g8')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g8')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="testFactors"><label>cA = 30 / 10<input type="number" data-answer="3" data-tolerance="0"></label><label>cB = 30 / 15<input type="number" data-answer="2" data-tolerance="0"></label><label>RelA nach Verlängerung<input type="number" step="0.01" data-answer="0.50" data-tolerance="0.01"></label><label>RelB nach Verlängerung<input type="number" step="0.01" data-answer="0.78" data-tolerance="0.01"></label></div><button class="btn btn-accent" onclick="checkFields('testFactors','testFactorsFb','Verlängerungsfaktoren und neue Reliabilitäten stimmen.')">Stufe prüfen</button><div class="widget-feedback" id="testFactorsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><div class="form-grid" id="testValidities"><label>Korrigierte Validität Test A<input type="number" step="0.01" data-answer="0.80" data-tolerance="0.01"></label><label>Korrigierte Validität Test B<input type="number" step="0.01" data-answer="0.63" data-tolerance="0.01"></label><label>Empirische Validität Test A bei 30 Items<input type="number" step="0.01" data-answer="0.57" data-tolerance="0.01"></label><label>Empirische Validität Test B bei 30 Items<input type="number" step="0.01" data-answer="0.55" data-tolerance="0.01"></label><label>Besserer Test<select data-answer="A"><option value="">–</option><option>A</option><option>B</option></select></label></div><button class="btn btn-accent" onclick="checkFields('testValidities','testValiditiesFb','Test A ist mit 0.57 gegenüber 0.55 knapp besser.')">Vergleich prüfen</button><div class="widget-feedback" id="testValiditiesFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><div class="form-grid" id="testTransfer"><label>Benötigte Reliabilität von Test B<input type="number" step="0.01" data-answer="0.82" data-tolerance="0.01"></label><label>Verlängerungsfaktor ab 30 Items<input type="number" step="0.01" data-answer="1.28" data-tolerance="0.01"></label><label>Benötigte ganze Items<input type="number" step="1" data-answer="39" data-tolerance="0"></label><label>Ersparnis von 39 auf 30 relativ zu 39<input type="number" step="0.1" data-answer="23.1" data-tolerance="0.1"></label><label>9/30 = 30 % beschreibt<select data-answer="mehrbedarf"><option value="">– wählen –</option><option value="ersparnis">Ersparnis relativ zu 39</option><option value="mehrbedarf">Mehrbedarf relativ zu 30</option></select></label></div><button class="btn btn-accent" onclick="checkFields('testTransfer','testTransferFb','Du trennst Itembedarf, Ersparnis und Mehrbedarf korrekt.')">Transfer prüfen</button><div class="widget-feedback" id="testTransferFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq8"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(7)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(9)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 10 — ⑩ Abschluss ═══════════ -->
+<section class="section" id="s9" role="tabpanel" aria-hidden="true" aria-labelledby="nb9" data-source-id="AB6-EL-01 AB6-EL-02 AB6-EL-03 AB6-EL-04" data-slides="AB6:1" data-source-status="direkt" data-learning-objective="LZ-ABSCHLUSS" data-widget-type="W2+W8" data-cognitive-task="itemmengen_zuordnen_und_prozess_rekonstruieren"><div class="sec-head"><div class="sec-title">⑩ Skalen bilden und Validierung abschließen</div><div class="sec-lz">Finale Itemmengen, Invertierungsstatus und Abschlussreihenfolge quellentreu zusammenführen.</div><div class="source-meta">Quellenbereiche AB6:1 · Widget W2+W8</div></div><div class="phase-label">Phase 1 — Aktivieren</div><div class="entry-q"><p>Sind im Datensatz sose2026i bereits sämtliche Variablen für jede Skala vollständig invertiert?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq9" onclick="revealEntry(this,'eq9')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq9" aria-hidden="true">Nein. Für die Big5-Items sind die notwendigen Invertierungen enthalten. Bei den Validierungskriterien müssen erforderliche Invertierungen gegebenenfalls ergänzt werden.</div></div><div class="phase-label">Phase 2 — Verstehen</div><div class="card" data-source-id="AB6-EL-01 AB6-EL-02"><div class="card-title">Datensatz und Invertierungsstatus</div><p>Für die abschließende Validierung kann <code>sose2026i</code> weiterverwendet werden. Die notwendigen Invertierungen der Big5-Items sind vorhanden; Validierungskriterien müssen gegebenenfalls noch invertiert werden.</p></div><div class="card" data-source-id="AB6-EL-03"><div class="card-title">Finale sichtbare Itemmengen</div><div class="code-block">Offenheit:       paste0("o", c(6,12,11,24,25,16,26))
+Extraversion:    paste0("e", c(6,22,21,10,11,17,3))
+Verträglichkeit: paste0("a", c(10,2,9,13,6,16,17))
+Neurotizismus:   paste0("n", c(9,24,11,1,16,3,4))</div><div class="source-boundary"><strong>Sichtbare Besonderheit:</strong> Auf dieser Seite stehen vier finale Listen. Eine entsprechende Liste für Gewissenhaftigkeit ist nicht sichtbar und wird nicht ergänzt.</div></div><div class="card" data-source-id="AB6-EL-04"><div class="card-title">Abschlussauftrag</div><ol><li>Big5-Skalen bilden.</li><li>Skalen für die Validierungskriterien bilden.</li><li>anschließend Validierungstestung durchführen.</li></ol></div><div class="source-boundary"><strong>Nicht spezifiziert:</strong> konkrete Berechnungsregel der Skalen, konkrete Validierungskriterien und konkretes statistisches Validierungsverfahren.</div><div class="phase-label">Phase 3 — Anwenden · W2 + W8</div><div class="level-widget" data-level-group="g9"><div class="level-tabs" role="tablist" aria-label="Schwierigkeitsstufen"><button type="button" class="level-tab" role="tab" data-level="1" aria-selected="true" tabindex="0" onclick="switchLevel(this,'g9')">Stufe 1 · Basis</button><button type="button" class="level-tab" role="tab" data-level="2" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g9')">Stufe 2 · Standard</button><button type="button" class="level-tab" role="tab" data-level="3" aria-selected="false" tabindex="-1" onclick="switchLevel(this,'g9')">Stufe 3 · Transfer</button></div><div class="level-panel active" data-level="1" aria-hidden="false"><span class="level-tag">Basis</span><div class="form-grid" id="finalBasics"><label>Big5-Items in sose2026i<select data-answer="fertig"><option value="">–</option><option value="fertig">notwendige Invertierungen enthalten</option><option value="offen">Invertierungen generell offen</option></select></label><label>Validierungskriterien<select data-answer="pruefen"><option value="">–</option><option value="fertig">immer vollständig invertiert</option><option value="pruefen">gegebenenfalls Invertierungen ergänzen</option></select></label><label>Zahl sichtbarer finaler Skalenlisten<select data-answer="4"><option value="">–</option><option>4</option><option>5</option></select></label></div><button class="btn btn-accent" onclick="checkFields('finalBasics','finalBasicsFb','Invertierungsstatus und sichtbare Listenanzahl stimmen.')">Prüfen</button><div class="widget-feedback" id="finalBasicsFb"></div></div><div class="level-panel" data-level="2" aria-hidden="true"><span class="level-tag">Standard</span><p class="widget-instruction">Wähle exakt die sieben sichtbaren Offenheitsitems.</p><div class="check-grid" id="openItems"><label class="check-row"><input type="checkbox" data-answer="true"> o6</label><label class="check-row"><input type="checkbox" data-answer="true"> o12</label><label class="check-row"><input type="checkbox" data-answer="true"> o11</label><label class="check-row"><input type="checkbox" data-answer="true"> o24</label><label class="check-row"><input type="checkbox" data-answer="true"> o25</label><label class="check-row"><input type="checkbox" data-answer="true"> o16</label><label class="check-row"><input type="checkbox" data-answer="true"> o26</label><label class="check-row"><input type="checkbox" data-answer="false"> o3</label><label class="check-row"><input type="checkbox" data-answer="false"> c10</label></div><button class="btn btn-accent" onclick="checkFields('openItems','openItemsFb','Die Offenheitsliste ist exakt rekonstruiert.')">Itemmenge prüfen</button><div class="widget-feedback" id="openItemsFb"></div></div><div class="level-panel" data-level="3" aria-hidden="true"><span class="level-tag">Transfer</span><p class="widget-instruction">Ordne den Abschlussprozess und markiere die Quellengrenzen.</p><ol class="order-list" id="finalOrder"><li class="order-step" data-key="validate"><span>Validierungstestung durchführen</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="criteria"><span>Skalen für Validierungskriterien bilden</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li><li class="order-step" data-key="big5"><span>Big5-Skalen bilden</span><span class="order-controls"><button type="button" aria-label="Schritt nach oben" onclick="moveOrder(this,-1)">↑</button><button type="button" aria-label="Schritt nach unten" onclick="moveOrder(this,1)">↓</button></span></li></ol><button class="btn btn-accent" onclick="checkOrder('finalOrder','big5,criteria,validate','finalOrderFb')">Reihenfolge prüfen</button><div class="widget-feedback" id="finalOrderFb"></div><div class="form-grid" id="finalLimits"><label>Konkrete Skalenberechnungsregel<select data-answer="offen"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label><label>Konkretes statistisches Validierungsverfahren<select data-answer="offen"><option value="">–</option><option value="belegt">belegt</option><option value="offen">nicht spezifiziert</option></select></label></div><button class="btn btn-ghost" onclick="checkFields('finalLimits','finalLimitsFb','Die methodischen Quellengrenzen sind erkannt.')">Quellengrenzen prüfen</button><div class="widget-feedback" id="finalLimitsFb"></div></div></div><div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq9"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(8)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(10)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 11 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s10" role="tabpanel" aria-hidden="true" aria-labelledby="nb10" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">⚖ Zentrale Verwechslungs-Duelle</div>
+    <div class="sec-lz">Ähnliche Begriffe und Bezugsgrößen sicher auseinanderhalten</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Trait</h4>
+      <p>im Aufgabenblatt: stabil</p>
+      <p>Frage nach zeitlicher Stabilität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>State</h4>
+      <p>im Aufgabenblatt: situativ</p>
+      <p>nicht mit Dimensionalität verwechseln</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Trait und State unterscheiden, ob ein Konstrukt ein- oder mehrdimensional ist.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Unidimensional</h4>
+      <p>keine Teilbereichsaufgliederung verlangt</p>
+      <p>enge Definition für homogenes Merkmal</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Multidimensional</h4>
+      <p>Teilbereiche angeben</p>
+      <p>jeden Teilbereich in der Definition beschreiben</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Mehrdimensionalität macht eine enge Definition überflüssig.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gleicher Lernzuwachs</h4>
+      <p>konstanter additiver Zuwachs</p>
+      <p>Korrelation bleibt unverändert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Unterschiedlicher Lernzuwachs</h4>
+      <p>personenbezogen verschieden</p>
+      <p>kann Retest-Reliabilität mindern</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Jeder Lernzuwachs senkt zwangsläufig die Retest-Reliabilität.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Korrigierte Validität</h4>
+      <p>Minderung rechnerisch entfernt</p>
+      <p>in Aufgabe 1: 0.65</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Empirische Validität</h4>
+      <p>durch Unreliabilität gemindert</p>
+      <p>in Aufgabe 1: 0.45</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die wahre und empirisch beobachtete Validität müssen identisch sein.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kontamination</h4>
+      <p>kriteriumsfremde Einflüsse gehen ein</p>
+      <p>z. B. Streckenrisiko oder Busausstattung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Defizienz</h4>
+      <p>relevante Leistungsanteile fehlen</p>
+      <p>z. B. Freundlichkeit oder Pünktlichkeit</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Kriterium kann nur defizient oder nur kontaminiert sein.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ersparnis</h4>
+      <p>Referenz: längerer Test mit 39 Items</p>
+      <p>9/39 ≈ 23.1 %</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Mehrbedarf</h4>
+      <p>Referenz: kürzerer Test mit 30 Items</p>
+      <p>9/30 = 30 %</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> 23.1 % und 30 % beantworten dieselbe Bezugsfrage.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(9)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(11)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 12 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s11" role="tabpanel" aria-hidden="true" aria-labelledby="nb11" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl15</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl15';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "abex-s0-q1",
+      "q": "Welche Reihenfolge bildet den Gesamtpfad der sechs Aufgabenblätter am besten ab?",
+      "opts": [
+        "Konstrukt → Items → Daten → Prüfung → Skalen",
+        "Items → Skalen → Konstrukt → Daten → Prüfung",
+        "Daten → Konstrukt → Prüfung → Items → Skalen",
+        "Prüfung → Items → Skalen → Konstrukt → Daten"
+      ],
+      "c": 0,
+      "e": "Die Aufgabenblätter führen vom theoretisch eingegrenzten Konstrukt über Itementwicklung und Datenaufbereitung zu Reliabilitäts-/Validitätsprüfungen und abschließender Skalenbildung.",
+      "oe": [
+        "Diese Reihenfolge entspricht der Aufgabenfolge 1 bis 6.",
+        "Hier würden Skalen vor Konstruktklärung und Datenaufbereitung gebildet.",
+        "Die Datenaufbereitung setzt entwickelte Items und ein definiertes Konstrukt voraus.",
+        "Prüfung und Skalenbildung stehen in den Quellen erst nach Konstruktion und Datenarbeit."
+      ],
+      "mt": [
+        null,
+        "prozess_reihenfolge",
+        "prozess_reihenfolge",
+        "prozess_reihenfolge"
+      ],
+      "source_ids": [
+        "AB1-E-01",
+        "AB2-E-03",
+        "AB3-E-04",
+        "AB6-EL-04"
+      ]
+    },
+    {
+      "id": "abex-s0-q2",
+      "q": "Wie ist mit Arbeitsaufträgen ohne mitgelieferte Lösung im Lernmodul umzugehen?",
+      "opts": [
+        "Fehlende Lösungen durch Lehrbuchwissen ersetzen",
+        "Nur belegte Anforderungen und Abläufe trainieren",
+        "Nicht gelöste Aufgaben vollständig ausblenden",
+        "Beliebige Musterlösungen als Quelle kennzeichnen"
+      ],
+      "c": 1,
+      "e": "Bei fehlender Lösung werden die sichtbaren Anforderungen, Reihenfolgen und Quellengrenzen trainiert. Nicht belegte Formeln, Grenzwerte oder Verfahren werden nicht ergänzt.",
+      "oe": [
+        "Externe Fachinhalte sind für dieses quellengebundene Modul nicht zugelassen.",
+        "Das erhält die Quellenbindung und macht Wissensgrenzen sichtbar.",
+        "Auch ungelöste Arbeitsaufträge sind lernrelevant und werden als Anforderungen behandelt.",
+        "Eine frei erfundene Musterlösung wäre keine quellennahe Synthese."
+      ],
+      "mt": [
+        "quelle_unbelegt",
+        null,
+        "quelle_auslassung",
+        "quelle_erfindung"
+      ],
+      "source_ids": [
+        "AB3-E-07",
+        "AB4-A1-E03",
+        "AB6-EL-04"
+      ]
+    }
+  ],
+  "1": [
+    {
+      "id": "abex-s1-q1",
+      "q": "Welche Zuordnung entspricht der Formulierung des Aufgabenblatts zu Trait und State?",
+      "opts": [
+        "Trait situativ; State stabil",
+        "Trait stabil; State eindimensional",
+        "Trait stabil; State situativ",
+        "Trait zeitlich; State räumlich"
+      ],
+      "c": 2,
+      "e": "Das Aufgabenblatt kennzeichnet Trait ausdrücklich als stabil und State als situativ. Weitere Zuordnungen werden dort nicht vorgenommen.",
+      "oe": [
+        "Die beiden Merkmale sind vertauscht.",
+        "Dimensionalität ist eine andere Arbeitsfrage.",
+        "Diese Zuordnung steht so in Aufgabenblatt 1.",
+        "Beobachtbarkeit und Theoriebezug werden in der Quelle nicht zur Abgrenzung verwendet."
+      ],
+      "mt": [
+        "trait_state_vertauscht",
+        "dimension_verwechselt",
+        null,
+        "unbelegte_abgrenzung"
+      ],
+      "source_ids": [
+        "AB1-E-02"
+      ]
+    },
+    {
+      "id": "abex-s1-q2",
+      "q": "Welche Anforderung gilt für die Konstruktdefinition in Aufgabenblatt 1?",
+      "opts": [
+        "Sie soll möglichst viele Merkmale zugleich erfassen",
+        "Sie soll nur ein Alltagsbeispiel enthalten",
+        "Sie soll etablierte Tests vollständig auflisten",
+        "Sie soll homogene Items plausibel machen"
+      ],
+      "c": 3,
+      "e": "Die Definition soll eng genug sein, damit mögliche Items plausibel ein homogenes Merkmal erfassen; bei Mehrdimensionalität sind die Teilbereiche mit zu beschreiben.",
+      "oe": [
+        "Eine breite Sammeldefinition widerspricht dem geforderten Homogenitätsbezug.",
+        "Das Alltagsbeispiel ist ein eigener Arbeitsauftrag.",
+        "Testverfahren sind ebenfalls ein eigener Arbeitsauftrag.",
+        "Dies ist die zentrale Definitionsanforderung der Quelle."
+      ],
+      "mt": [
+        "definition_zu_breit",
+        "auftragsbestandteil_verwechselt",
+        "auftragsbestandteil_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "AB1-E-04"
+      ]
+    }
+  ],
+  "2": [
+    {
+      "id": "abex-s2-q1",
+      "q": "Welcher Umfang wird für die Itemkonstruktion ungefähr verlangt?",
+      "opts": [
+        "Etwa 4 je Subfacette und insgesamt etwa 24",
+        "Etwa 24 je Subfacette und insgesamt etwa 4",
+        "Genau 4 je Konstrukt und insgesamt genau 24",
+        "Beliebig viele je Subfacette ohne Gesamtumfang"
+      ],
+      "c": 0,
+      "e": "Aufgabenblatt 2 nennt ungefähr vier Items pro Subfacette, angelehnt an Costa und McCrae, und daraus insgesamt ungefähr 24 Items.",
+      "oe": [
+        "Beide ungefähren Umfangsangaben stimmen mit der Quelle überein.",
+        "Die beiden Zahlen wurden vertauscht.",
+        "Die Quelle formuliert Richtwerte, keine exakten Sollzahlen.",
+        "Ein Gesamtumfang wird ausdrücklich genannt."
+      ],
+      "mt": [
+        null,
+        "zahlen_vertauscht",
+        "richtwert_als_exakt",
+        "umfang_ignoriert"
+      ],
+      "source_ids": [
+        "AB2-E-03"
+      ]
+    },
+    {
+      "id": "abex-s2-q2",
+      "q": "Welche Kombination erfüllt die Anforderungen an Außenkriterien am vollständigsten?",
+      "opts": [
+        "Ein Kriterium, nur theoretisch plausibel und schwer messbar",
+        "Mindestens zwei, empirisch begründet und praktisch erhebbar",
+        "Zwei Kriterien, aber ohne Bezug zum eigenen Konstrukt",
+        "Beliebig viele Kriterien ohne Erhebungsinstrument"
+      ],
+      "c": 1,
+      "e": "Gefordert sind mindestens zwei Außenkriterien mit Bezug zum nomologischen Netzwerk, gestützt auf empirische Literatur und so praktikabel, dass sie in der Erhebung mitlaufen können.",
+      "oe": [
+        "Mindestzahl und praktische Erhebbarkeit werden verfehlt.",
+        "Diese Option verbindet Mindestzahl, Evidenz und praktische Erfassung.",
+        "Der Zusammenhang mit dem Konstrukt ist zentral.",
+        "Falls nötig soll ein geeigneter Fragebogen mit Items ausgewählt werden."
+      ],
+      "mt": [
+        "aussenkriterium_unvollstaendig",
+        null,
+        "nomologischer_bezug_fehlend",
+        "operationalisierung_fehlend"
+      ],
+      "source_ids": [
+        "AB2-E-08",
+        "AB2-E-09"
+      ]
+    }
+  ],
+  "3": [
+    {
+      "id": "abex-s3-q1",
+      "q": "Welcher Schritt folgt unmittelbar auf das Invertieren der negativ gepolten Items?",
+      "opts": [
+        "Die endgültige Validierung unmittelbar durchführen",
+        "Die theoretische Konstruktdefinition ändern",
+        "Kontrollieren, ob die Invertierung geklappt hat",
+        "Die Datenmatrix ungeprüft abspeichern lassen"
+      ],
+      "c": 2,
+      "e": "Nach der Kopie und Invertierung verlangt Aufgabenblatt 3 eine Kontrolle, beispielsweise mit corrgram(), und gegebenenfalls eine Fehlerkorrektur.",
+      "oe": [
+        "Die Validierungstestung steht erst in Aufgabenblatt 6.",
+        "Die Definition gehört zu Aufgabenblatt 1.",
+        "Dies ist Teilaufgabe (c) nach der Invertierung.",
+        "Das Speichern folgt erst nach Kontrolle und Matrixprüfung."
+      ],
+      "mt": [
+        "prozess_vorgezogen",
+        "prozessbereich_verwechselt",
+        null,
+        "kontrolle_uebersprungen"
+      ],
+      "source_ids": [
+        "AB3-E-05",
+        "AB3-E-06"
+      ]
+    },
+    {
+      "id": "abex-s3-q2",
+      "q": "Welchen Vektor erzeugt das sichtbare Beispiel paste0(\"item\",1:3)?",
+      "opts": [
+        "\"item0\" \"item1\" \"item2\"",
+        "„item“ und die Zahlen 1 bis 3",
+        "\"item1:3\" als einzelner Text",
+        "\"item1\" \"item2\" \"item3\""
+      ],
+      "c": 3,
+      "e": "Das Aufgabenblatt zeigt ausdrücklich den resultierenden Vektor mit den drei Variablennamen \"item1\", \"item2\" und \"item3\".",
+      "oe": [
+        "Die Sequenz beginnt im Beispiel bei 1, nicht bei 0.",
+        "paste0 verbindet Präfix und Zahlen zu Variablennamen.",
+        "Das Beispiel erzeugt drei Elemente, nicht einen Text.",
+        "Diese Ausgabe ist in Aufgabenblatt 3 sichtbar angegeben."
+      ],
+      "mt": [
+        "index_start_verwechselt",
+        "paste0_funktion_verwechselt",
+        "vektor_als_string",
+        null
+      ],
+      "source_ids": [
+        "AB3-E-04"
+      ]
+    }
+  ],
+  "4": [
+    {
+      "id": "abex-s4-q1",
+      "q": "Wie wird Reliabilität in der Lösung zu Aufgabenblatt 4 theoretisch bestimmt?",
+      "opts": [
+        "Als Verhältnis wahrer zu beobachteter Varianz",
+        "Als Verhältnis beobachteter zu wahrer Varianz",
+        "Als Differenz aus wahrer und beobachteter Varianz",
+        "Als Summe aus wahrer und Fehlervarianz"
+      ],
+      "c": 0,
+      "e": "Die Lösung definiert Reliabilität in der KTT als Verhältnis der wahren Varianz zur beobachteten Varianz und nennt Messfehler sowie wahre Varianz als Einflussgrößen.",
+      "oe": [
+        "Diese Verhältnisrichtung ist in der Lösung angegeben.",
+        "Zähler und Nenner wären vertauscht.",
+        "Eine Varianzdifferenz wird nicht als Reliabilität definiert.",
+        "Die Summe beschreibt keine Reliabilitätskennzahl."
+      ],
+      "mt": [
+        null,
+        "verhaeltnis_vertauscht",
+        "formelart_verwechselt",
+        "varianzsumme_verwechselt"
+      ],
+      "source_ids": [
+        "L4-E-02"
+      ]
+    },
+    {
+      "id": "abex-s4-q2",
+      "q": "Was geschieht laut Lösung bei gleichem additivem Lernzuwachs aller Personen?",
+      "opts": [
+        "Die Retest-Korrelation sinkt auf null",
+        "Die Korrelation bleibt unverändert",
+        "Die Korrelation steigt zwingend auf eins",
+        "Die Rangfolge wird vollständig umgekehrt"
+      ],
+      "c": 1,
+      "e": "Ein konstanter additiver Zuwachs für alle Personen verändert die Korrelation nicht; unterschiedlich starke Lernzuwächse können sie dagegen mindern.",
+      "oe": [
+        "Ein gemeinsamer Offset löscht den Zusammenhang nicht.",
+        "Dies ist die in der Lösung erläuterte Invarianz.",
+        "Ein konstanter Zuwachs garantiert keine perfekte Korrelation.",
+        "Ein gemeinsamer Zuwachs kehrt die Rangfolge nicht um."
+      ],
+      "mt": [
+        "korrelation_auf_null",
+        null,
+        "perfektion_unbelegt",
+        "rangfolge_vertauscht"
+      ],
+      "source_ids": [
+        "L4-E-04"
+      ]
+    }
+  ],
+  "5": [
+    {
+      "id": "abex-s5-q1",
+      "q": "Welche Fehlerquelle ist in der Lösung für Split-Half und Cronbachs α mit +, für beide Retests aber mit 0 bewertet?",
+      "opts": [
+        "Unsystematischer Messfehler",
+        "Variierende Testbedingungen",
+        "Inhomogenität der Items",
+        "Merkmalsänderungen im Verlauf"
+      ],
+      "c": 2,
+      "e": "Die Matrix bewertet Inhomogenität der Items bei Split-Half und Cronbachs α mit +, bei Retest nach einer Woche und sechs Monaten dagegen mit 0.",
+      "oe": [
+        "Unsystematischer Messfehler ist in allen fünf Spalten mit + bewertet.",
+        "Variierende Bedingungen betreffen die zeitlich getrennten Verfahren.",
+        "Dieses Zeilenmuster entspricht exakt der Lösungsmatrix.",
+        "Merkmalsänderungen sind vor allem bei Retests relevant."
+      ],
+      "mt": [
+        "matrixzeile_verwechselt",
+        "matrixzeile_verwechselt",
+        null,
+        "matrixzeile_verwechselt"
+      ],
+      "source_ids": [
+        "L4-E-08"
+      ]
+    },
+    {
+      "id": "abex-s5-q2",
+      "q": "Welche Sequenz nennt die Lösung für Gedächtniseffekte von Paralleltest bis Cronbachs α?",
+      "opts": [
+        "+ | + | + | + | +",
+        "0 | + | ++ | 0 | 0",
+        "+ | ++ | + | 0 | 0",
+        "0 | ++ | + | 0 | 0"
+      ],
+      "c": 3,
+      "e": "Für Gedächtniseffekte lautet die sichtbare Reihenfolge: Paralleltest 0, Retest eine Woche ++, Retest sechs Monate +, Split-Half 0 und Cronbachs α 0.",
+      "oe": [
+        "Dies ist die Zeile des unsystematischen Messfehlers.",
+        "Die beiden Reteststärken sind hier vertauscht.",
+        "Der Paralleltestwert müsste 0 sein.",
+        "Diese Sequenz stimmt mit der vollständigen Matrix überein."
+      ],
+      "mt": [
+        "matrixzeile_verwechselt",
+        "zeitintervall_vertauscht",
+        "paralleltest_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "L4-E-08"
+      ]
+    }
+  ],
+  "6": [
+    {
+      "id": "abex-s6-q1",
+      "q": "Welche empirische Validität ergibt sich aus 0.65, Relx = 0.80 und Rely = 0.60?",
+      "opts": [
+        "0.45",
+        "0.52",
+        "0.65",
+        "0.88"
+      ],
+      "c": 0,
+      "e": "Die Lösung setzt Val = 0.65 · √0.80 · √0.60 und erhält gerundet 0.45. Die Unreliabilität beider Messungen mindert den beobachteten Zusammenhang.",
+      "oe": [
+        "Dies ist das in der Lösung ausgewiesene Ergebnis.",
+        "Dieser Wert folgt nicht aus der angegebenen Einsetzung.",
+        "0.65 ist die reliabilitätskorrigierte Ausgangsangabe.",
+        "Dieser Wert wäre größer als die korrigierte Ausgangsangabe."
+      ],
+      "mt": [
+        null,
+        "rechenfehler",
+        "wahre_empirische_validitaet",
+        "richtung_der_minderung"
+      ],
+      "source_ids": [
+        "L5-A1-FORMEL",
+        "L5-A1-KERN"
+      ]
+    },
+    {
+      "id": "abex-s6-q2",
+      "q": "Welche Aussage beschreibt die Minderung durch Unreliabilität korrekt?",
+      "opts": [
+        "Die beobachtete Validität liegt über der korrigierten",
+        "Die beobachtete Validität fällt gegenüber der korrigierten",
+        "Beide Validitäten müssen trotz Unreliabilität identisch bleiben",
+        "Nur die Reliabilität des Kriteriums ist dabei relevant"
+      ],
+      "c": 1,
+      "e": "Die Lösung zeigt, dass Unreliabilität beider beteiligter Messinstrumente die empirisch beobachtete Validität gegenüber der reliabilitätskorrigierten Validität verringert.",
+      "oe": [
+        "Die Quelle zeigt gerade eine Verringerung von 0.65 auf 0.45.",
+        "Diese Richtung entspricht Rechnung und Kernaussage.",
+        "Identität gilt bei den gegebenen Reliabilitäten nicht.",
+        "In Aufgabe 1 gehen beide Reliabilitäten in die Rechnung ein."
+      ],
+      "mt": [
+        "minderungsrichtung_vertauscht",
+        null,
+        "reliabilitaet_ignoriert",
+        "nur_eine_reliabilitaet"
+      ],
+      "source_ids": [
+        "L5-A1-KERN"
+      ]
+    }
+  ],
+  "7": [
+    {
+      "id": "abex-s7-q1",
+      "q": "Welcher Mittelwert ergibt sich aus den fünf sichtbaren MTHM-Werten .60, .60, .80, .68 und .64?",
+      "opts": [
+        ".600",
+        ".640",
+        ".664",
+        ".672"
+      ],
+      "c": 2,
+      "e": "Die Summe der fünf sichtbaren Werte beträgt 3.32; geteilt durch fünf ergibt das .664. Die PDF nennt abweichend .672, was im Modul transparent markiert wird.",
+      "oe": [
+        "Dieser Wert entspricht nur dem kleinsten Einzelwert.",
+        "Dieser Wert ist nicht der Mittelwert der fünf Zellen.",
+        "Dies ist die interne Nachrechnung aus der sichtbaren Matrix.",
+        ".672 ist die abweichende Quellenangabe, nicht das Matrixmittel."
+      ],
+      "mt": [
+        "einzelwert_als_mittel",
+        "rechenfehler",
+        null,
+        "quellenfehler_unkritisch_uebernommen"
+      ],
+      "source_ids": [
+        "L5-A2-TABELLE",
+        "L5-A2-NORMALISIERUNG"
+      ]
+    },
+    {
+      "id": "abex-s7-q2",
+      "q": "Warum steht bei den Einzelitems kein Cronbachs α auf der Hauptdiagonale?",
+      "opts": [
+        "Weil Einzelitems keine Korrelationen besitzen",
+        "Weil die Stichprobe nur 60 Personen umfasst",
+        "Weil nur NEO-FFI-Werte positiv sind",
+        "Weil Cronbachs α mehrere Items voraussetzt"
+      ],
+      "c": 3,
+      "e": "Die Lösung begründet das Fehlen damit, dass Cronbachs α mehrere äquivalente Messungen beziehungsweise in der Regel mehrere Items voraussetzt und bei einem Einzelitem nicht bestimmbar ist.",
+      "oe": [
+        "Einzelitems können mit anderen Variablen korrelieren.",
+        "Die Stichprobengröße wird nicht als Begründung genannt.",
+        "Auch negative Werte sind in der Matrix sichtbar und nicht entscheidend.",
+        "Dies ist die ausdrücklich angegebene Begründung."
+      ],
+      "mt": [
+        "korrelation_mit_reliabilitaet_verwechselt",
+        "stichprobengroesse_verwechselt",
+        "vorzeichen_verwechselt",
+        null
+      ],
+      "source_ids": [
+        "L5-A2-RELIABILITAET"
+      ]
+    }
+  ],
+  "8": [
+    {
+      "id": "abex-s8-q1",
+      "q": "Welcher Test ist nach Verlängerung auf 30 Items laut Lösung empirisch valider?",
+      "opts": [
+        "Test A mit 0.57 gegenüber Test B mit 0.55",
+        "Test B mit 0.57 gegenüber Test A mit 0.55",
+        "Beide Tests mit jeweils genau 0.56",
+        "Keiner, weil Validität nicht berechenbar ist"
+      ],
+      "c": 0,
+      "e": "Nach Spearman-Brown-Verlängerung und Rückrechnung der empirischen Validität erreicht Test A 0.57 und Test B 0.55; damit ist Test A knapp besser.",
+      "oe": [
+        "Diese Zuordnung und Entscheidung entspricht der Lösung.",
+        "Die Werte wurden den Tests vertauscht zugeordnet.",
+        "Ein identischer Mittelwert wird nicht berechnet.",
+        "Die Lösung führt die Berechnung vollständig durch."
+      ],
+      "mt": [
+        null,
+        "testzuordnung_vertauscht",
+        "mittelwert_erfunden",
+        "berechenbarkeit_verneint"
+      ],
+      "source_ids": [
+        "L5-A4-EMPIRISCHE-VALIDITAET"
+      ]
+    },
+    {
+      "id": "abex-s8-q2",
+      "q": "Wie groß ist die Ersparnis beim Wechsel von 39 auf 30 Items bezogen auf die längere Testzeit?",
+      "opts": [
+        "9.0 %",
+        "23.1 %",
+        "30.0 %",
+        "39.0 %"
+      ],
+      "c": 1,
+      "e": "Die tatsächliche Reduktion relativ zur 39-Item-Ausgangszeit beträgt 9/39 ≈ 23.1 %. Die PDF-Rechnung 9/30 = 30 % beschreibt dagegen den Mehrbedarf relativ zu 30 Items.",
+      "oe": [
+        "9 Items sind nicht 9 Prozent der 39 Items.",
+        "Dieser Prozentwert verwendet die zur Einsparungsfrage passende Bezugsgröße.",
+        "30 % ist die abweichende Quellenrechnung mit anderer Bezugsbasis.",
+        "39 ist die Itemzahl, kein Prozentwert."
+      ],
+      "mt": [
+        "differenz_als_prozent",
+        null,
+        "prozentbasis_verwechselt",
+        "itemzahl_als_prozent"
+      ],
+      "source_ids": [
+        "L5-A4-PROZENT"
+      ]
+    }
+  ],
+  "9": [
+    {
+      "id": "abex-s9-q1",
+      "q": "Welche Invertierungen sind im Datensatz sose2026i laut Aufgabenblatt bereits enthalten?",
+      "opts": [
+        "Nur die Validierungskriterien sind schon invertiert",
+        "Sämtliche Variablen sind bereits vollständig invertiert",
+        "Die notwendigen Big5-Invertierungen sind enthalten",
+        "Noch keine Variable wurde bislang invertiert"
+      ],
+      "c": 2,
+      "e": "Aufgabenblatt 6 sagt ausdrücklich, dass die notwendigen Invertierungen der Big5-Items enthalten sind; bei Validierungskriterien müssen erforderliche Invertierungen gegebenenfalls ergänzt werden.",
+      "oe": [
+        "Für Validierungskriterien gilt gerade ein möglicher Ergänzungsbedarf.",
+        "Die Quelle schränkt die Vollständigkeit ausdrücklich ein.",
+        "Dies ist der angegebene Status der Big5-Items.",
+        "Der Datensatz enthält bereits die Big5-Invertierungen."
+      ],
+      "mt": [
+        "invertierungsstatus_vertauscht",
+        "alle_variablen_verallgemeinert",
+        null,
+        "vorarbeit_ignoriert"
+      ],
+      "source_ids": [
+        "AB6-EL-02"
+      ]
+    },
+    {
+      "id": "abex-s9-q2",
+      "q": "Welche Reihenfolge nennt der abschließende Arbeitsauftrag?",
+      "opts": [
+        "Validieren → invertieren → Items neu entwickeln",
+        "Items entwickeln → Daten erheben → Konstrukt definieren",
+        "Kriterien prüfen → Faktorenanalyse → Daten speichern",
+        "Big5-Skalen → Kriteriumsskalen → Validierungstestung"
+      ],
+      "c": 3,
+      "e": "Der sichtbare Arbeitsauftrag lautet: Skalen für die Big5 bilden, Skalen für die Validierungskriterien bilden und anschließend die Validierungstestung durchführen.",
+      "oe": [
+        "Die Validierung steht in der Quelle am Ende.",
+        "Diese Schritte gehören zu früheren Aufgabenblättern.",
+        "Die Quelle nennt diese Reihenfolge nicht.",
+        "Diese Abfolge entspricht dem abschließenden Arbeitsauftrag."
+      ],
+      "mt": [
+        "prozess_reihenfolge",
+        "aufgabenblaetter_vermischt",
+        "unbelegte_reihenfolge",
+        null
+      ],
+      "source_ids": [
+        "AB6-EL-04"
+      ]
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "abex-b-q1",
+    "q": "Welche Antwortskala wird für die Items verlangt?",
+    "opts": [
+      "5 bis 7 Stufen mit Zustimmungsankern",
+      "2 bis 4 Stufen mit Häufigkeitsankern",
+      "8 bis 10 Stufen ohne feste Anker",
+      "Nur offene Antworten ohne Skala"
+    ],
+    "c": 0,
+    "e": "Aufgabenblatt 2 verlangt Aussagen mit einer fünf- bis siebenstufigen Antwortskala von „stimme gar nicht zu“ bis „stimme voll und ganz zu“.",
+    "oe": [
+      "Diese Spannweite und die Zustimmungsanker sind quellentreu.",
+      "Diese Stufenzahl und Ankerart werden nicht genannt.",
+      "Eine solche Skala ist nicht gefordert.",
+      "Die Quelle verlangt ein Likert-Format."
+    ],
+    "mt": [
+      null,
+      "skalenformat_verwechselt",
+      "stufenzahl_erfunden",
+      "likert_format_ignoriert"
+    ],
+    "source_ids": [
+      "AB2-E-04",
+      "AB2-E-05"
+    ]
+  },
+  {
+    "id": "abex-b-q2",
+    "q": "Welche methodische Angabe fehlt in Aufgabenblatt 3 ausdrücklich?",
+    "opts": [
+      "Der vollständige Dateiname sose2026.RData",
+      "Die konkrete Formel zur Invertierung",
+      "Der Hinweis zur Kontrolle mit corrgram()",
+      "Der genannte Befehl paste0() im Beispiel"
+    ],
+    "c": 1,
+    "e": "Die Quelle nennt Dateien, paste0(), corrgram() und die Prozessschritte, spezifiziert aber keine konkrete Invertierungsformel. Diese Lücke wird nicht extern aufgefüllt.",
+    "oe": [
+      "Der Dateiname ist sichtbar angegeben.",
+      "Diese methodische Detailangabe ist nicht enthalten.",
+      "corrgram() wird als mögliche Kontrolle genannt.",
+      "paste0() wird mit Beispiel genannt."
+    ],
+    "mt": [
+      "sichtbare_angabe_uebersehen",
+      null,
+      "sichtbare_angabe_uebersehen",
+      "sichtbare_angabe_uebersehen"
+    ],
+    "source_ids": [
+      "AB3-E-05",
+      "AB3-E-06"
+    ]
+  },
+  {
+    "id": "abex-b-q3",
+    "q": "Wie viele Items sind für eine Zielreliabilität von 0.85 mindestens nötig?",
+    "opts": [
+      "13 Items",
+      "18 Items",
+      "22 Items",
+      "27 Items"
+    ],
+    "c": 2,
+    "e": "Die Lösung berechnet c = 2.67 und m* = 8 · 2.67 = 21.4; deshalb muss auf die nächste ganze Itemzahl, also mindestens 22, aufgerundet werden.",
+    "oe": [
+      "13 Items gehören zur ersten Verlängerungsfrage.",
+      "Dieser Umfang folgt nicht aus dem angegebenen Faktor.",
+      "Dies ist das gerundete Mindestresultat.",
+      "Dieser Wert überschätzt die berechnete Mindestlänge."
+    ],
+    "mt": [
+      "teilaufgaben_verwechselt",
+      "rechenfehler",
+      null,
+      "aufrundung_ueberzogen"
+    ],
+    "source_ids": [
+      "L4-E-07"
+    ]
+  },
+  {
+    "id": "abex-b-q4",
+    "q": "Wie stark wirken variierende Bedingungen beim Retest nach sechs Monaten laut Matrix?",
+    "opts": [
+      "0 – nicht oder kaum wirksam",
+      "0/+ – kaum bis wirksam",
+      "+ – kann wirksam werden",
+      "++ – kann sehr stark wirken"
+    ],
+    "c": 3,
+    "e": "In der Zeile „Variierende Bedingungen zwischen Testungen“ ist für den Retest nach sechs Monaten die stärkste Kategorie ++ eingetragen.",
+    "oe": [
+      "0 steht bei simultanen internen Verfahren.",
+      "0/+ gehört in der Matrix zu Merkmalsänderungen beim Paralleltest.",
+      "+ ist für den Paralleltest eingetragen.",
+      "++ ist der sichtbare Wert für sechs Monate."
+    ],
+    "mt": [
+      "matrixwert_verwechselt",
+      "matrixzeile_verwechselt",
+      "zeitintervall_verwechselt",
+      null
+    ],
+    "source_ids": [
+      "L4-E-08"
+    ]
+  },
+  {
+    "id": "abex-b-q5",
+    "q": "Welche Verbesserung wird für die Unfallhäufigkeit als Leistungskriterium genannt?",
+    "opts": [
+      "Länger beobachten und Vermeidbarkeit berücksichtigen",
+      "Nur die Buslinienzahl als Leistungskriterium verwenden",
+      "Alle Unfälle unabhängig von Schuld identisch bewerten",
+      "Den Beobachtungszeitraum deutlich weiter verkürzen"
+    ],
+    "c": 0,
+    "e": "Die Lösung nennt einen längeren Beobachtungszeitraum und eine Prüfung von Schuld beziehungsweise Vermeidbarkeit, weil Unfälle selten sind und wenig Varianz entstehen kann.",
+    "oe": [
+      "Beide Verbesserungen sind in der Lösung enthalten.",
+      "Die Zahl der Buslinien wird nicht als Leistungskriterium genannt.",
+      "Die Lösung fordert gerade eine differenziertere Bewertung.",
+      "Eine Verkürzung verschärft das Varianzproblem."
+    ],
+    "mt": [
+      null,
+      "kriterium_erfunden",
+      "differenzierung_ignoriert",
+      "beobachtungszeit_vertauscht"
+    ],
+    "source_ids": [
+      "L5-A3-UNFALL"
+    ]
+  },
+  {
+    "id": "abex-b-q6",
+    "q": "Welches Beispiel beschreibt Kriteriumskontamination?",
+    "opts": [
+      "Freundlichkeit wird im Leistungsmaß nicht erfasst",
+      "Unfallzahl hängt vom Streckenrisiko der Route ab",
+      "Pünktlichkeit fehlt im verwendeten Leistungsmaß",
+      "Kollegenhilfe bleibt im Leistungsmaß unberücksichtigt"
+    ],
+    "c": 1,
+    "e": "Kontamination liegt im Quellenbeispiel vor, wenn unfallträchtige Strecken oder schlechtere Busse die Unfallzahl beeinflussen, obwohl diese Faktoren nicht die individuelle Leistung sind.",
+    "oe": [
+      "Das ist ein Beispiel für Defizienz, weil ein relevanter Bereich fehlt.",
+      "Hier geht ein kriteriumsfremder Einfluss in das Maß ein.",
+      "Auch dies ist Defizienz.",
+      "Auch dies ist Defizienz."
+    ],
+    "mt": [
+      "defizienz_kontamination",
+      null,
+      "defizienz_kontamination",
+      "defizienz_kontamination"
+    ],
+    "source_ids": [
+      "L5-A3-KONTAMINATION",
+      "L5-A3-DEFIZIENZ"
+    ]
+  },
+  {
+    "id": "abex-b-q7",
+    "q": "Welche Aussage trifft die dokumentierte HTHM-Auffälligkeit?",
+    "opts": [
+      ".40 ist größter positiver Wert und größter Betrag",
+      "-.41 ist der größte positive Wert der Vergleichswerte",
+      ".40 ist größter positiver Wert, -.41 größer im Betrag",
+      "Alle verglichenen HTHM-Werte haben denselben Betrag"
+    ],
+    "c": 2,
+    "e": "Die PDF nennt .40 als größte HTHM-Korrelation. In den sichtbaren Vergleichswerten ist .40 der größte positive Wert, während -.41 den größeren absoluten Betrag besitzt.",
+    "oe": [
+      "Der Betrag von -.41 ist 0.41 und damit größer.",
+      "-.41 ist negativ und daher nicht der größte positive Wert.",
+      "Diese transparente Unterscheidung folgt aus der Matrix.",
+      "Die Werte unterscheiden sich deutlich."
+    ],
+    "mt": [
+      "betrag_ignoriert",
+      "vorzeichen_ignoriert",
+      null,
+      "matrixwerte_egalisiert"
+    ],
+    "source_ids": [
+      "L5-A2-DISKRIMINANT"
+    ]
+  },
+  {
+    "id": "abex-b-q8",
+    "q": "Welche Besonderheit zeigen die finalen Big5-Itemlisten in Aufgabenblatt 6?",
+    "opts": [
+      "Jede der fünf Dimensionen besitzt sieben Itemlisten",
+      "Nur Gewissenhaftigkeit wird als Itemliste angegeben",
+      "Alle Dimensionen werden ohne konkrete Itemnummern aufgeführt",
+      "Vier Dimensionen sind gelistet; Gewissenhaftigkeit fehlt"
+    ],
+    "c": 3,
+    "e": "Die sichtbare Seite führt Itemmengen für Offenheit, Extraversion, Verträglichkeit und Neurotizismus auf. Eine entsprechende Liste für Gewissenhaftigkeit steht dort nicht.",
+    "oe": [
+      "Es sind vier, nicht fünf Listen sichtbar.",
+      "Gewissenhaftigkeit ist gerade nicht als Liste enthalten.",
+      "Die vier vorhandenen Listen enthalten konkrete Itemnummern.",
+      "Diese Beobachtung bleibt quellentreu und wird nicht ergänzt."
+    ],
+    "mt": [
+      "anzahl_verallgemeinert",
+      "fehlende_liste_vertauscht",
+      "itemnummern_uebersehen",
+      null
+    ],
+    "source_ids": [
+      "AB6-EL-03"
+    ]
+  }
+];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+function initNavKeyboard(){
+  var nav=document.querySelector('.nav');if(!nav||nav.dataset.keysReady)return;nav.dataset.keysReady='1';
+  nav.addEventListener('keydown',function(e){
+    if(!e.target.classList.contains('nav-btn'))return;
+    var buttons=Array.from(nav.querySelectorAll('.nav-btn')),i=buttons.indexOf(e.target),next=i;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown')next=(i+1)%buttons.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp')next=(i-1+buttons.length)%buttons.length;
+    else if(e.key==='Home')next=0;else if(e.key==='End')next=buttons.length-1;else return;
+    e.preventDefault();buttons[next].focus();buttons[next].click();
+  });
+}
+function setWidgetFeedback(id, ok, text){
+  var el=document.getElementById(id); if(!el)return;
+  el.className='widget-feedback '+(ok?'good':'bad');
+  el.innerHTML=(ok?'✓ ':'✗ ')+text;
+  el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+  var live=document.getElementById('liveStatus'); if(live)live.textContent=text;
+}
+function switchLevel(btn, group){
+  var root=document.querySelector('[data-level-group="'+group+'"]'); if(!root)return;
+  root.querySelectorAll('.level-tab').forEach(function(b){var a=b===btn;b.setAttribute('aria-selected',a?'true':'false');b.setAttribute('tabindex',a?'0':'-1');});
+  var target=btn.dataset.level;
+  root.querySelectorAll('.level-panel').forEach(function(p){var a=p.dataset.level===target;p.classList.toggle('active',a);p.setAttribute('aria-hidden',a?'false':'true');});
+}
+function moveOrder(btn,dir){
+  var li=btn.closest('.order-step'),list=li&&li.parentElement;if(!li||!list)return;
+  if(dir<0&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);
+  if(dir>0&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);
+}
+function checkOrder(listId,expected,fbId){
+  var list=document.getElementById(listId);if(!list)return;
+  var got=Array.from(list.querySelectorAll('.order-step')).map(function(x){return x.dataset.key;}).join(',');
+  setWidgetFeedback(fbId,got===expected,got===expected?'Die Reihenfolge stimmt.':'Die Reihenfolge ist noch nicht korrekt. Prüfe die Abhängigkeiten zwischen den Arbeitsschritten.');
+}
+function checkFields(containerId,fbId,successText){
+  var root=document.getElementById(containerId);if(!root)return;
+  var fields=Array.from(root.querySelectorAll('[data-answer]'));var good=0;
+  fields.forEach(function(f){
+    var ans=String(f.dataset.answer);var ok=false;
+    if(f.type==='checkbox')ok=String(f.checked)===ans;
+    else if(f.type==='number'){var tol=parseFloat(f.dataset.tolerance||'0.01');ok=Math.abs(parseFloat(f.value)-parseFloat(ans))<=tol;}
+    else ok=String(f.value).trim()===ans;
+    f.setAttribute('aria-invalid',ok?'false':'true'); if(ok)good++;
+  });
+  var all=good===fields.length&&fields.length>0;
+  setWidgetFeedback(fbId,all,all?(successText||'Alle Angaben stimmen.'):(good+' von '+fields.length+' Angaben stimmen. Korrigiere die markierten Felder.'));
+}
+function setMatrixLevel(btn,tableId,level){
+  var wrap=document.getElementById(tableId);if(!wrap)return;
+  wrap.querySelectorAll('.level-tab').forEach(function(b){var a=b===btn;b.setAttribute('aria-selected',a?'true':'false');});
+  wrap.dataset.activeTier=level;
+  wrap.querySelectorAll('select[data-tier]').forEach(function(s){var active=parseInt(s.dataset.tier,10)<=level;s.disabled=!active;s.closest('td').classList.toggle('matrix-cell-off',!active);});
+}
+function checkReliabilityMatrix(tableId,fbId){
+  var wrap=document.getElementById(tableId);if(!wrap)return;
+  var selects=Array.from(wrap.querySelectorAll('select[data-answer]:not(:disabled)'));var good=selects.filter(function(s){return s.value===s.dataset.answer;}).length;
+  setWidgetFeedback(fbId,good===selects.length&&selects.length>0,good===selects.length?'Alle freigeschalteten Matrixzellen stimmen.':good+' von '+selects.length+' freigeschalteten Zellen stimmen.');
+}
+function setMatrixTask(btn,containerId,expected,prompt){
+  var root=document.getElementById(containerId);if(!root)return;
+  root.dataset.expected=expected;root.querySelectorAll('.level-tab').forEach(function(b){b.setAttribute('aria-selected',b===btn?'true':'false');});
+  var p=root.querySelector('.matrix-task');if(p)p.textContent=prompt;
+  var fb=root.querySelector('.widget-feedback');if(fb){fb.className='widget-feedback';fb.textContent='';}
+}
+function pickMatrixCell(containerId,cellId,value){
+  var root=document.getElementById(containerId);if(!root)return;
+  var ok=root.dataset.expected===cellId;
+  setWidgetFeedback(root.querySelector('.widget-feedback').id,ok,ok?'Richtige Zelle: '+value+'.':'Diese Zelle gehört nicht zur aktuellen Suchaufgabe.');
+}
+
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+qId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  initNavKeyboard();
+  var relBtn=document.querySelector('#relMatrix .level-tab');if(relBtn)setMatrixLevel(relBtn,'relMatrix',1);
+
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" aria-label="Beschreibung des gemeldeten Fehlers" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

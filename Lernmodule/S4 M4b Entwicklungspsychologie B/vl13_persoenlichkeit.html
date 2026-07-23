@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · VL13 Entwicklung des Selbst & der Persönlichkeit</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m4b-vl13
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:8px}
+.sim-toggle{display:flex;flex-wrap:wrap;gap:6px}
+.sim-tbtn{border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2)}
+.sim-tbtn.on{border-color:var(--accent);background:rgba(129,140,248,.12);color:var(--text)}
+.sim-verdict{margin-top:10px;font-size:.86rem;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · VL13 Entwicklung des Selbst & der Persönlichkeit</h1>
+<p class="page-sub">Entwicklungspsychologie B (Jost) · Klausur 17.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Selbst & Persönlichkeit definieren und abgrenzen · 2. Zusammenhang/Unterschied Temperament–Persönlichkeit · 3. Big-Five-Veränderungen über die Lebensspanne · 4. Selbst-/Persönlichkeitsveränderungen in den Phasen · 5. Persönlichkeit als stabil UND veränderlich · 6. Wie sich trotz Veränderung eine stabile Persönlichkeit herausbildet
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Selbst vs. Persönlichkeit</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Das Selbst</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Selbst über die Lebensspanne</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Drei Paradigmen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Die Big Five</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Temperament & Persönlichkeit</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Stabilität & Veränderung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Persönlichkeit & Alter (Studien)</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Selbst vs. Persönlichkeit ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Definitionen: Selbst vs. Persönlichkeit</div>
+    <div class="sec-lz">Persönlichkeit (Schneider & Lindenberger 2012) = die Gesamtheit der Eigenschaften und Verhaltensdispositionen, die einen Menschen zeitlich relativ stabil und über verschiedene Situationen hinweg charakterisieren und von anderen unterscheiden. Das Selbst = die Inhalte des Wissens/der Annahmen, die das Individuum über die eigene Person entwickelt, sowie die kognitiven Prozesse, durch die dieses Wissen hervorgebracht wird. Beide sind klar abzugrenzen (Lernziel 1).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Sie ist ein ruhiger, gewissenhafter Mensch.“ vs. „Ich sehe mich als jemanden, der gern anderen hilft.“ — welche Aussage betrifft die <em>Persönlichkeit</em>, welche das <em>Selbst</em>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Die erste Aussage beschreibt <strong>Persönlichkeit</strong> (zeitlich stabile Eigenschaften, hier von außen zugeschrieben). Die zweite beschreibt das <strong>Selbst</strong> (das Wissen/die Annahme der Person über sich selbst).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Persönlichkeit</div>
+    Die <strong>Gesamtheit der Eigenschaften und Verhaltensdispositionen</strong>, die einen Menschen <strong>zeitlich relativ stabil</strong> und <strong>über verschiedene Situationen hinweg</strong> charakterisieren und von anderen unterscheiden (Schneider & Lindenberger, 2012).
+  </div>
+  <div class="card">
+    <div class="card-title">Selbst</div>
+    Die <strong>Inhalte des Wissens oder der Annahmen</strong>, die das Individuum über die eigene Person entwickelt, <strong>und die kognitiven Prozesse</strong>, durch die dieses Wissen hervorgebracht wird. → Persönlichkeit ist ein <em>Inhalt</em> des Selbst, aber nicht mit ihm identisch.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Persönlichkeit oder Selbst?</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g00" onclick="switchTab(this,'g0')">Persönlichkeit</button><button class="tab-btn" data-tab="g01" onclick="switchTab(this,'g0')">Selbst</button></div>
+    <div class="tab-group" data-group="g0"><div class="tab-content active" data-tab="g00">Stabile Eigenschaften/Dispositionen, situationsübergreifend, von anderen unterscheidbar – z.B. „eher introvertiert und gewissenhaft“.</div><div class="tab-content" data-tab="g01">Das Wissen/die Annahmen über die eigene Person + die Prozesse dahinter – z.B. „Ich halte mich für hilfsbereit“; Inhalte: Biografie, Ziele, bewertende Aspekte.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Das Selbst ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Das Selbst: Inhalte & Entstehung</div>
+    <div class="sec-lz">Inhalte des Selbst: Persönlichkeit, Gruppenzugehörigkeit, Biografie, Ziele, bewertende Aspekte — durch die Person als erkennendes Subjekt produziert (über Selbstbeobachtung/-reflektion + Verarbeitung sozialen Feedbacks). Selbstschemata sind Generalisierungen über die eigene Person; schemakonsistente Verarbeitung führt zur Stabilisierung. Zwei Entwicklungstendenzen: Stabilisierung ↔ Veränderung (Transitionen, Lebens-/Entwicklungskrisen nach Erikson → neue „Ich-Qualität“).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Woher „weißt“ du, wer du bist – woraus speist sich das Wissen über die eigene Person?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Aus <strong>Selbstbeobachtung und -reflektion</strong> sowie der <strong>Verarbeitung sozialen Feedbacks</strong>. Das Wissen verdichtet sich zu <strong>Selbstschemata</strong>, die neue Erfahrungen schemakonsistent verarbeiten → Stabilisierung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Inhalte des Selbst</div>
+    Persönlichkeit, <strong>Gruppenzugehörigkeit, Biografie, Ziele, bewertende Aspekte</strong> – von der Person als erkennendem Subjekt produziert. Grundlage für die Bewertung der eigenen Person, die Planung selbstbezogener Zukunftsbilder und die Ausrichtung des Handelns.
+  </div>
+  <div class="card">
+    <div class="card-title">Entstehung & Stabilisierung</div>
+    Aktiver Prozess: Suche nach selbstrelevanter Information, Ausdifferenzierung über Erfahrungen. <strong>Selbstschemata</strong> = Generalisierungen über die eigene Person; schemakonsistente Verarbeitung → <strong>Stabilisierung</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Trotzdem: lebenslange Veränderung</div>
+    Trotz Stabilisierung gibt es <strong>Transitionen</strong>, Lebenskrisen und <strong>Entwicklungskrisen (Erikson)</strong> → eine gelöste Krise bringt eine neue „Ich-Qualität“ hervor. Das Selbst pendelt zwischen <strong>Stabilisierung</strong> und <strong>Veränderung</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwei Tendenzen des Selbst</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g10" onclick="switchTab(this,'g1')">Stabilisierung</button><button class="tab-btn" data-tab="g11" onclick="switchTab(this,'g1')">Veränderung</button><button class="tab-btn" data-tab="g12" onclick="switchTab(this,'g1')">Selbstschema</button></div>
+    <div class="tab-group" data-group="g1"><div class="tab-content active" data-tab="g10">Schemakonsistente Verarbeitung neuer Erfahrungen hält das Selbstbild stabil.</div><div class="tab-content" data-tab="g11">Neue Erfahrungen, Transitionen und gelöste Entwicklungskrisen (Erikson) verändern das Selbst lebenslang.</div><div class="tab-content" data-tab="g12">Generalisierung über die eigene Person; steuert, welche Information aufgenommen und wie sie verarbeitet wird.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Selbst über die Lebensspanne ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Selbstentwicklung über die Lebensspanne</div>
+    <div class="sec-lz">Kindheit: Wirksamkeitsempfinden/Intentionalität, Perspektivübernahme/ToM, autobiografisches Gedächtnis, domänenspezifische Fähigkeitsselbstkonzepte, soziale Vergleichsprozesse. Jugend: Identität versus Rollenkonfusion (Erikson) — Einheitlichkeit/Unverwechselbarkeit der Person über Zeit und Kontexte. Erwachsenenalter: Selbst als Entwicklungsbedingung (nicht nur -produkt), „possible selves“, höchste Autonomie im mittleren Erwachsenenalter; im höheren Alter abnehmender Selbstwert (ungünstige Gewinn-Verlust-Bilanz) und Verteidigung gegen Selbstbildbedrohung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche zentrale Aufgabe der Selbstentwicklung verortet Erikson in der <em>Jugend</em>?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Identität versus Rollenkonfusion</strong>: „Wer bin ich, wer will ich sein?“ Der Jugendliche erkennt zunehmend die Einheitlichkeit und Unverwechselbarkeit der eigenen Person über Zeit und Kontexte hinweg.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kindheit</div>
+    Wirksamkeitsempfinden/Intentionalität, Perspektivübernahme & <strong>ToM</strong>, <strong>autobiografisches Gedächtnis</strong>, domänenspezifische <strong>Fähigkeitsselbstkonzepte</strong> und soziale Vergleichsprozesse.
+  </div>
+  <div class="card">
+    <div class="card-title">Jugend: Identität (Erikson)</div>
+    <strong>Identität vs. Rollenkonfusion</strong>. Persönliche Identität beruht (Erikson, 1966) auf der Wahrnehmung eigener <strong>Gleichheit und Kontinuität in der Zeit</strong> + der Wahrnehmung, dass auch andere dies erkennen. Aktive Konstruktion der Person; Gruppenzugehörigkeit/Selbstkategorisierung.
+  </div>
+  <div class="card">
+    <div class="card-title">Erwachsenenalter</div>
+    Selbst als <strong>Entwicklungsbedingung</strong> (nicht nur -produkt); <strong>„possible selves“</strong>; höchste <strong>Autonomie im mittleren Erwachsenenalter</strong>. Im höheren Alter <strong>abnehmender Selbstwert</strong> (ungünstige Gewinn-Verlust-Bilanz) + Verteidigung gegen Selbstbildbedrohung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Selbstentwicklung über die Phasen</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g20" onclick="switchTab(this,'g2')">Kindheit</button><button class="tab-btn" data-tab="g21" onclick="switchTab(this,'g2')">Jugend</button><button class="tab-btn" data-tab="g22" onclick="switchTab(this,'g2')">Erwachsenenalter</button></div>
+    <div class="tab-group" data-group="g2"><div class="tab-content active" data-tab="g20">ToM, autobiografisches Gedächtnis, Fähigkeitsselbstkonzepte, soziale Vergleiche.</div><div class="tab-content" data-tab="g21">Identität vs. Rollenkonfusion (Erikson): Einheitlichkeit/Unverwechselbarkeit über Zeit und Kontexte.</div><div class="tab-content" data-tab="g22">„Possible selves“, Autonomie-Gipfel im mittleren Alter, später sinkender Selbstwert und Selbstbild-Verteidigung.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Drei Paradigmen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Persönlichkeitsentwicklung: drei Forschungsparadigmen</div>
+    <div class="sec-lz">Differenzielle Veränderung von Personen im intra- und interindividuellen Vergleich. Drei Paradigmen: (1) Trait-Ansatz (Costa & McCrae): fünf Faktoren, betont Stabilität, biologisch/genetisch determiniert, unterliegen einem Reifungsprozess; (2) Formung durch die soziale Umwelt: betont Veränderbarkeit; (3) Wechselwirkung von Person und Umwelt: Mittelposition, beide entwickeln sich in wechselseitiger Beeinflussung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist Persönlichkeit eher stabil oder veränderbar? Drei Forschungsparadigmen geben drei verschiedene Antworten – welche?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Trait-Ansatz</strong> (Costa & McCrae) → Stabilität/biologisch. <strong>Umwelt-Formung</strong> → Veränderbarkeit. <strong>Wechselwirkung Person × Umwelt</strong> → Mittelposition.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">1. Trait-Ansatz (Costa & McCrae)</div>
+    Fünf Faktoren, <strong>betont Stabilität</strong>, biologisch/genetisch determiniert; die Dimensionen unterliegen einem Reifungsprozess und bringen Einstellungen, Interessen, Gewohnheiten und Selbstkonzepte hervor; <strong>weitgehend stabil, besonders im Erwachsenenalter</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">2. Formung durch die soziale Umwelt</div>
+    <strong>Betont Veränderbarkeit</strong>: Persönlichkeit wird durch Einflüsse der sozialen Umwelt geformt.
+  </div>
+  <div class="card">
+    <div class="card-title">3. Wechselwirkung von Person und Umwelt</div>
+    <strong>Mittelposition</strong>: Person und Umwelt entwickeln sich in wechselseitiger Beeinflussung (interaktionaler Lebensspannen-Ansatz).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Stabilität, Veränderung oder beides?</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g30" onclick="switchTab(this,'g3')">Trait</button><button class="tab-btn" data-tab="g31" onclick="switchTab(this,'g3')">Umwelt</button><button class="tab-btn" data-tab="g32" onclick="switchTab(this,'g3')">Wechselwirkung</button></div>
+    <div class="tab-group" data-group="g3"><div class="tab-content active" data-tab="g30">Costa & McCrae: fünf Faktoren, biologisch determiniert, stabil → betont Stabilität.</div><div class="tab-content" data-tab="g31">Persönlichkeit als Produkt der sozialen Umwelt → betont Veränderbarkeit.</div><div class="tab-content" data-tab="g32">Person und Umwelt beeinflussen sich wechselseitig → Mittelposition.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Die Big Five ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Die Big Five (Costa & McCrae, 1987)</div>
+    <div class="sec-lz">Fünf Persönlichkeitsdimensionen (jeweils in Facetten zerlegbar): Neurotizismus (Pol: emotionale Stabilität ruhig/zufrieden ↔ ängstlich/launisch), Extraversion (gesprächig/energiegeladen ↔ ruhig/zurückhaltend), Offenheit (kreativ/intellektuell/offen ↔ einfach/oberflächlich), Gewissenhaftigkeit (organisiert/verantwortungsbewusst ↔ sorglos/leichtsinnig), Verträglichkeit (mitfühlend/freundlich ↔ kalt/streitsüchtig). Bipolare Definitionen nach Tabelle 14.1.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kannst du die fünf Faktoren des „Big Five“-Modells nennen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>N</strong>eurotizismus, <strong>E</strong>xtraversion, <strong>O</strong>ffenheit, <strong>G</strong>ewissenhaftigkeit, <strong>V</strong>erträglichkeit (Costa & McCrae, 1987) – jeweils in Facetten zerlegbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das Fünf-Faktoren-Modell (Costa & McCrae, 1987)</div>
+    Fünf Persönlichkeitsdimensionen: <strong>N</strong>eurotizismus · <strong>E</strong>xtraversion · <strong>O</strong>ffenheit · <strong>G</strong>ewissenhaftigkeit · <strong>V</strong>erträglichkeit. Jeder Faktor wird in <strong>Facetten</strong> zerlegt und über Fragebögen erfasst.
+  </div>
+  <div class="card">
+    <div class="card-title">Bipolare Definitionen (Tab. 14.1)</div>
+    Jeder Faktor spannt zwei Pole auf, z.B. Extraversion: <em>gesprächig, energiegeladen</em> ↔ <em>ruhig, zurückhaltend</em>. Probier den Faktor-Selektor unten für alle fünf Dimensionen + ihren typischen Verlauf über die Lebensspanne.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">🧪 Simulator: Big-Five-Faktor wählen</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="b5-N" onclick="b5Set('N')">N — Neurotizismus</button>
+        <button class="sim-tbtn" id="b5-E" onclick="b5Set('E')">E — Extraversion</button>
+        <button class="sim-tbtn" id="b5-O" onclick="b5Set('O')">O — Offenheit</button>
+        <button class="sim-tbtn" id="b5-G" onclick="b5Set('G')">G — Gewissenhaftigkeit</button>
+        <button class="sim-tbtn" id="b5-V" onclick="b5Set('V')">V — Verträglichkeit</button>
+      </div>
+      <div class="sim-verdict" id="b5-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Temperament & Persönlichkeit ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Temperament und Persönlichkeit</div>
+    <div class="sec-lz">Frühkindliches Temperament (Schneider & Lindenberger 2012) = stabile individuelle Unterschiede in Qualität/Intensität emotionaler Reaktionen, in der emotionalen Selbstregulation und im Aktivierungsniveau der Aufmerksamkeit. Zwei Ansätze zum Verhältnis: (a) synonyme Verwendung/starke Beziehung; (b) frühkindliches Temperament vs. Persönlichkeit als Denk-/Verhaltensmuster, das ein entwickeltes kognitives System voraussetzt. Persönlichkeitsmerkmale sind über das Temperament der frühen/mittleren Kindheit vorhersagbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist „Temperament“ einfach ein anderes Wort für „Persönlichkeit“?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Es gibt <strong>zwei Ansätze</strong>: einer verwendet sie quasi synonym (starke Beziehung), der andere trennt das <strong>frühkindliche Temperament</strong> von der <strong>Persönlichkeit</strong> als Denk-/Verhaltensmuster, das ein entwickeltes kognitives System voraussetzt.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Temperament (Schneider & Lindenberger, 2012)</div>
+    Frühkindliches Temperament = <strong>stabile individuelle Unterschiede</strong> in der <strong>Qualität und Intensität emotionaler Reaktionen</strong>, in der <strong>emotionalen Selbstregulation</strong> sowie im <strong>Aktivierungsniveau der Aufmerksamkeit</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei Ansätze + Vorhersage</div>
+    (a) <strong>synonyme Verwendung</strong> (starke Beziehung beider Konstrukte); (b) <strong>Temperament ≠ Persönlichkeit</strong> (Persönlichkeit als Denk-/Verhaltensmuster, das sich erst herausbildet). Persönlichkeitsmerkmale sind über das <strong>Temperament</strong> der frühen/mittleren Kindheit vorhersagbar.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Temperament vs. Persönlichkeit</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g50" onclick="switchTab(this,'g5')">Temperament</button><button class="tab-btn" data-tab="g51" onclick="switchTab(this,'g5')">Persönlichkeit</button><button class="tab-btn" data-tab="g52" onclick="switchTab(this,'g5')">2 Ansätze</button></div>
+    <div class="tab-group" data-group="g5"><div class="tab-content active" data-tab="g50">Frühkindlich; Qualität/Intensität emotionaler Reaktionen, emotionale Selbstregulation, Aktivierungsniveau der Aufmerksamkeit.</div><div class="tab-content" data-tab="g51">Denk- und Verhaltensmuster, das sich herausbildet und ein entwickeltes kognitives System voraussetzt.</div><div class="tab-content" data-tab="g52">(a) synonym/starke Beziehung; (b) Temperament ≠ Persönlichkeit. Vorhersage der Persönlichkeit über frühes Temperament.</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Stabilität & Veränderung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Stabilität & Veränderung über die Lebensspanne</div>
+    <div class="sec-lz">Niveaustabilität in der Kindheit: Extraversion ↓, Verträglichkeit ↑, Gewissenhaftigkeit ↑, Offenheit (Zunahme dann Abnahme), Neurotizismus zunächst ↑. Erwachsenenalter (Reifungsprinzip): Gewissenhaftigkeit + Verträglichkeit ↑, Offenheit ↓. Rangstabilität r (relative Position) nimmt über den Lebensverlauf kontinuierlich zu (Roberts & DelVecchio 2000), während sich die mittlere Ausprägung in höheren Altersgruppen immer weniger verändert. Person-Umwelt-Transaktionen: reaktiv, evokativ, proaktiv; Selbstklarheit → Persönlichkeitskontinuität.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Persönlichkeit ist „stabil“ – aber Mittelwerte verändern sich trotzdem mit dem Alter. Wie passt das zusammen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Zwei Stabilitätsbegriffe: Die <strong>Rangstabilität (r)</strong> (relative Position in der Gruppe) nimmt über das Leben zu, während sich die <strong>mittlere Ausprägung (Niveau)</strong> sehr wohl verändern kann – beides gleichzeitig.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Niveau- vs. Rangstabilität</div>
+    <strong>Niveaustabilität</strong> = mittlere Ausprägung (Cohens d); verändert sich in höheren Altersgruppen immer weniger. <strong>Rangstabilität (r)</strong> = relative Position in der Gruppe; nimmt über den Lebensverlauf <strong>kontinuierlich zu</strong> (Roberts & DelVecchio, 2000).
+  </div>
+  <div class="card">
+    <div class="card-title">Reifungsprinzip & Kindheit</div>
+    Kindheit (Niveau): Extraversion ↓, Verträglichkeit ↑, Gewissenhaftigkeit ↑, Offenheit (erst ↑ dann ↓), Neurotizismus zunächst ↑. Erwachsenenalter: <strong>Gewissenhaftigkeit + Verträglichkeit ↑, Offenheit ↓</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Person-Umwelt-Transaktionen</div>
+    <strong>reaktiv</strong> (unterschiedliche Reaktion auf dieselbe Umwelt) · <strong>evokativ</strong> (eigenes Verhalten ruft Reaktionen hervor) · <strong>proaktiv</strong> (Person sucht/erstellt ihre Umwelt). Selbstklarheit → Persönlichkeitskontinuität.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne das Beispiel der Person-Umwelt-Transaktion zu</div>
+    <div class="corr-item" id="w13a">Zwei Geschwister erleben dieselbe strenge Erziehung – eines wird ängstlich, das andere rebellisch.
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13a',this,'reaktiv')">reaktiv</button><button class="corr-btn" onclick="checkCorr('w13a',this,'evokativ')">evokativ</button><button class="corr-btn" onclick="checkCorr('w13a',this,'proaktiv')">proaktiv</button></div><div class="corr-fb" id="w13a-fb"></div>
+    </div>
+    <div class="corr-item" id="w13b">Ein fröhliches, zugewandtes Kind ruft bei fast allen Erwachsenen freundliche Reaktionen hervor.
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13b',this,'reaktiv')">reaktiv</button><button class="corr-btn" onclick="checkCorr('w13b',this,'evokativ')">evokativ</button><button class="corr-btn" onclick="checkCorr('w13b',this,'proaktiv')">proaktiv</button></div><div class="corr-fb" id="w13b-fb"></div>
+    </div>
+    <div class="corr-item" id="w13c">Eine sehr extravertierte Person sucht gezielt Partys und gesellige Vereine auf.
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13c',this,'reaktiv')">reaktiv</button><button class="corr-btn" onclick="checkCorr('w13c',this,'evokativ')">evokativ</button><button class="corr-btn" onclick="checkCorr('w13c',this,'proaktiv')">proaktiv</button></div><div class="corr-fb" id="w13c-fb"></div>
+    </div>
+    <div class="corr-item" id="w13d">Eine ängstliche Person meidet aktiv große Menschenmengen und wählt einen ruhigen Beruf.
+      <div class="corr-btns"><button class="corr-btn" onclick="checkCorr('w13d',this,'reaktiv')">reaktiv</button><button class="corr-btn" onclick="checkCorr('w13d',this,'evokativ')">evokativ</button><button class="corr-btn" onclick="checkCorr('w13d',this,'proaktiv')">proaktiv</button></div><div class="corr-fb" id="w13d-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Persönlichkeit & Alter (Studien) ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Persönlichkeit & Alter — aktuelle Studien</div>
+    <div class="sec-lz">Mueller et al. (2016, Berlin Aging Study II, 65–88 J.): Neurotizismus + Gewissenhaftigkeit ↓, Extraversion + Offenheit ↑, Verträglichkeit stabil; Persönlichkeit hängt mit Morbidität sowie körperlicher/kognitiver Funktion zusammen. Ziegler et al. (2015, OFCI-Modell): Offenheit als Puffer gegen kognitiven Abbau (environmental enrichment; wirkt über Gf indirekt auf Gc). Mayr, Rohovit & Freund: pure-altruism hypothesis (Prosozialität nimmt über das Erwachsenenalter zu). Anlage–Umwelt: Umwelt liefert Rahmen, bestimmt den Ausdruck und liefert Indikatoren der Traits (Costa et al. 2000).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was passiert mit den Big Five im <em>hohen</em> Alter? Die Berlin Aging Study II (Mueller et al., 2016) gibt eine differenzierte Antwort.</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Neurotizismus und Gewissenhaftigkeit nehmen ab</strong>, <strong>Extraversion und Offenheit nehmen zu</strong>, <strong>Verträglichkeit bleibt stabil</strong> – und Persönlichkeit hängt mit Morbidität sowie körperlicher/kognitiver Funktion zusammen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mueller et al. (2016) — Berlin Aging Study II</div>
+    1232 ältere Erwachsene (65–88 J.), latente Wachstumsmodelle: <strong>N + G ↓, E + O ↑, V stabil</strong>. Höhere Morbidität / schlechtere Griffkraft ↔ höherer Neurotizismus; Persönlichkeit hängt mit körperlichem und kognitivem Funktionsniveau zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">Ziegler et al. (2015) — OFCI-Modell</div>
+    <strong>Offenheit als Puffer gegen kognitiven Abbau</strong>: über <em>environmental enrichment</em> hängt Offenheit mit dem Verlauf der fluiden Intelligenz (Gf) zusammen und wirkt darüber indirekt auf die kristalline (Gc).
+  </div>
+  <div class="card">
+    <div class="card-title">Weiteres</div>
+    <strong>Mayr, Rohovit & Freund</strong>: <em>pure-altruism hypothesis</em> – prosoziales Verhalten nimmt über das Erwachsenenalter zu. <strong>Anlage–Umwelt</strong>: die Umwelt liefert den Rahmen, bestimmt den Ausdruck und liefert Indikatoren der Traits (Costa et al., 2000).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Drei aktuelle Befunde</div>
+    <div class="tab-bar"><button class="tab-btn active" data-tab="g70" onclick="switchTab(this,'g7')">Mueller 2016</button><button class="tab-btn" data-tab="g71" onclick="switchTab(this,'g7')">Ziegler 2015 (OFCI)</button><button class="tab-btn" data-tab="g72" onclick="switchTab(this,'g7')">Prosozialität</button></div>
+    <div class="tab-group" data-group="g7"><div class="tab-content active" data-tab="g70">BASE-II (65–88 J.): N+G ↓, E+O ↑, V stabil; Bezug zu Morbidität und Funktionsniveau.</div><div class="tab-content" data-tab="g71">Offenheit puffert kognitiven Abbau über environmental enrichment (wirkt über Gf auf Gc).</div><div class="tab-content" data-tab="g72">Mayr et al.: prosoziales Verhalten nimmt über das Erwachsenenalter zu (pure-altruism hypothesis).</div></div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VL13 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Persönlichkeit</h4>
+      <p>Eigenschaften/Dispositionen</p>
+      <p>zeitlich relativ stabil</p>
+      <p>über Situationen hinweg</p>
+      <p>unterscheidet von anderen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Selbst</h4>
+      <p>Wissen/Annahmen über sich</p>
+      <p>+ kognitive Prozesse dahinter</p>
+      <p>Inhalte: Ziele, Biografie …</p>
+      <p>von der Person produziert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das Selbst bezeichnet die zeitlich stabilen Eigenschaften, die Persönlichkeit das Wissen über die eigene Person.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Temperament</h4>
+      <p>frühkindlich</p>
+      <p>Qualität/Intensität von Emotionen</p>
+      <p>emot. Selbstregulation</p>
+      <p>Aktivierungsniveau Aufmerksamkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Persönlichkeit</h4>
+      <p>Denk-/Verhaltensmuster</p>
+      <p>braucht entwickeltes kogn. System</p>
+      <p>stabilisiert im Erwachsenenalter</p>
+      <p>über Temperament vorhersagbar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Persönlichkeit ist die frühkindliche Form, aus der sich später das Temperament herausbildet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Rangstabilität (r)</h4>
+      <p>relative Position in der Gruppe</p>
+      <p>nimmt über das Leben zu</p>
+      <p>Roberts & DelVecchio 2000</p>
+      <p>wer war hoch, bleibt eher hoch</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Niveaustabilität</h4>
+      <p>mittlere Ausprägung (Mittelwert)</p>
+      <p>verändert sich im Alter immer weniger</p>
+      <p>Cohens d</p>
+      <p>Mittelwert kann steigen/sinken</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Rangstabilität bedeutet, dass die mittlere Ausprägung eines Merkmals über die Zeit konstant bleibt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Trait-Ansatz (Costa & McCrae)</h4>
+      <p>betont Stabilität</p>
+      <p>biologisch/genetisch determiniert</p>
+      <p>Fünf Faktoren</p>
+      <p>stabil bes. im Erwachsenenalter</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Umwelt-Formungs-Ansatz</h4>
+      <p>betont Veränderbarkeit</p>
+      <p>Formung durch soziale Umwelt</p>
+      <p>Persönlichkeit als Produkt der Umwelt</p>
+      <p>Gegenpol zum Trait-Ansatz</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der Trait-Ansatz von Costa & McCrae betont die Formung der Persönlichkeit durch die soziale Umwelt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Reaktive Transaktion</h4>
+      <p>dieselbe Umwelt</p>
+      <p>unterschiedliche Reaktion</p>
+      <p>je nach Person</p>
+      <p>Umwelt wird verschieden erlebt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Proaktive Transaktion</h4>
+      <p>Person wählt Umwelt</p>
+      <p>sucht sie aus / stellt sie her</p>
+      <p>passend zu eigenen Eigenschaften</p>
+      <p>aktiv gestaltend</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine proaktive Transaktion liegt vor, wenn verschiedene Personen auf dieselbe Umwelt unterschiedlich reagieren.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m4b-vl13</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl13';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Worin unterscheiden sich die Begriffe „Persönlichkeit“ und „Selbst“ (Schneider & Lindenberger)?",
+      "opts": [
+        "Persönlichkeit = die zeitlich relativ stabilen Eigenschaften/Dispositionen; Selbst = das Wissen/die Annahmen über die eigene Person und die Prozesse, die es hervorbringen.",
+        "Persönlichkeit = das Wissen über die eigene Person; Selbst = die nach außen sichtbaren Eigenschaften.",
+        "Beide Begriffe sind synonym und werden austauschbar verwendet.",
+        "Persönlichkeit bezeichnet ausschließlich die genetisch festgelegten Anteile, das Selbst ausschließlich die durch die Umwelt geformten, weshalb sie sich nie überschneiden können."
+      ],
+      "c": 0,
+      "e": "Persönlichkeit = Gesamtheit der zeitlich relativ stabilen, situationsübergreifenden Eigenschaften/Verhaltensdispositionen; Selbst = Inhalte des Wissens/der Annahmen über die eigene Person + die kognitiven Prozesse, die dieses Wissen hervorbringen."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welches Merkmal gehört laut Definition zentral zum Begriff der Persönlichkeit?",
+      "opts": [
+        "Sie ändert sich von Situation zu Situation grundlegend.",
+        "Sie charakterisiert eine Person zeitlich relativ stabil und über verschiedene Situationen hinweg.",
+        "Sie umfasst nur das bewusste Wissen über die eigene Person.",
+        "Sie ist ausschließlich das Produkt sozialen Feedbacks und enthält keinerlei zeitlich stabile oder situationsübergreifende Komponente."
+      ],
+      "c": 1,
+      "e": "Persönlichkeit charakterisiert einen Menschen zeitlich relativ stabil und über Situationen hinweg und unterscheidet ihn von anderen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie entsteht laut Vorlesung Selbstwissen?",
+      "opts": [
+        "Ausschließlich durch genetische Reifung, ohne Beteiligung von Erfahrung.",
+        "Allein durch die Rückmeldung von Tests und Fragebögen.",
+        "Durch Selbstbeobachtung und -reflektion sowie durch die Verarbeitung sozialen Feedbacks.",
+        "Durch einen rein passiven Prozess, bei dem das Individuum Informationen über sich nur aufnimmt, ohne aktiv nach selbstrelevanter Information zu suchen."
+      ],
+      "c": 2,
+      "e": "Selbstwissen entsteht aktiv über Selbstbeobachtung/-reflektion und die Verarbeitung sozialen Feedbacks; Selbstschemata generalisieren das Wissen über die eigene Person."
+    },
+    {
+      "id": "s1q2",
+      "q": "Warum wirken Selbstschemata stabilisierend auf das Selbst?",
+      "opts": [
+        "Weil sie jede einzelne neue Erfahrung vollständig und unverändert in das Selbstbild übernehmen und dadurch eine ständige Neukonstruktion erzwingen.",
+        "Weil sie ausschließlich im hohen Alter entstehen.",
+        "Weil sie soziales Feedback grundsätzlich ausblenden.",
+        "Weil neue Erfahrungen schemakonsistent verarbeitet und über das Selbstwissen gesteuert werden."
+      ],
+      "c": 3,
+      "e": "Selbstschemata sind Generalisierungen über die eigene Person; schemakonsistente Verarbeitung führt zur Stabilisierung. Trotzdem bleiben lebenslange Veränderungen (Transitionen, Krisen) möglich."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Die Jugend ist nach Erikson v.a. durch welche Entwicklungsaufgabe des Selbst gekennzeichnet?",
+      "opts": [
+        "Wirksamkeitsempfinden vs. Intentionalität.",
+        "Identität versus Rollenkonfusion.",
+        "Integrität versus Verzweiflung.",
+        "Den Aufbau eines autobiografischen Gedächtnisses und domänenspezifischer Fähigkeitsselbstkonzepte, die erst im höheren Erwachsenenalter abgeschlossen werden."
+      ],
+      "c": 1,
+      "e": "Erikson verortet in der Jugend die Krise „Identität vs. Rollenkonfusion“ (Wer bin ich, wer will ich sein?). Autobiografisches Gedächtnis/Fähigkeitsselbstkonzepte gehören dagegen in die Kindheit."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wann wird laut Vorlesung die höchste Autonomie in der selbstbestimmten Lebensgestaltung erlebt?",
+      "opts": [
+        "Im mittleren Erwachsenenalter.",
+        "In der frühen Kindheit.",
+        "Erst im höchsten Alter (über 80).",
+        "Bereits in der Jugend, da mit dem Abschluss der Identitätsentwicklung jede weitere Selbstentwicklung vollständig zum Stillstand kommt."
+      ],
+      "c": 0,
+      "e": "Die höchste Autonomie wird im mittleren Erwachsenenalter erlebt. Im höheren Alter sinkt der Selbstwert u.a. wegen einer ungünstigeren Gewinn-Verlust-Bilanz."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Der Trait-Ansatz von Costa & McCrae betont vor allem …",
+      "opts": [
+        "… die starke Veränderbarkeit der Persönlichkeit, da die fünf Faktoren allein durch die soziale Umwelt geformt und jederzeit umgeformt werden.",
+        "… eine reine Mittelposition zwischen Anlage und Umwelt.",
+        "… dass Persönlichkeit ausschließlich ein Entwicklungsprodukt ohne biologische Basis ist.",
+        "… die Stabilität der Persönlichkeit und eine biologisch/genetisch determinierte Basis der fünf Faktoren."
+      ],
+      "c": 3,
+      "e": "Der Trait-Ansatz (Costa & McCrae) betont Stabilität und biologische/genetische Determination. Das Umwelt-Formungs-Paradigma betont Veränderbarkeit, das Wechselwirkungs-Paradigma die Mittelposition."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welches Forschungsparadigma der Persönlichkeitsentwicklung nimmt die „Mittelposition“ ein?",
+      "opts": [
+        "Der reine Trait-Ansatz von Costa & McCrae.",
+        "Das Paradigma der Formung durch die soziale Umwelt.",
+        "Das Paradigma der Wechselwirkung von Person und Umwelt.",
+        "Keines der drei — die Vorlesung verwirft die Vorstellung einer Mittelposition vollständig und vertritt ausschließlich eine rein biologische Sichtweise."
+      ],
+      "c": 2,
+      "e": "Die Wechselwirkung von Person und Umwelt ist die Mittelposition: beide entwickeln sich in wechselseitiger Beeinflussung."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Welche fünf Faktoren umfasst das Big-Five-Modell (Costa & McCrae, 1987)?",
+      "opts": [
+        "Neurotizismus, Extraversion, Offenheit, Gewissenhaftigkeit, Verträglichkeit.",
+        "Sensorik, Motorik, Sprache, Gedächtnis, Aufmerksamkeit.",
+        "Vertrauen, Autonomie, Initiative, Kompetenz, Identität.",
+        "Fluide Intelligenz, kristalline Intelligenz, Arbeitsgedächtnis, Verarbeitungsgeschwindigkeit und exekutive Funktionen, die gemeinsam die kognitive Leistung abbilden."
+      ],
+      "c": 0,
+      "e": "Die Big Five sind Neurotizismus, Extraversion, Offenheit, Gewissenhaftigkeit und Verträglichkeit (jeweils in Facetten zerlegbar)."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche Beschreibung passt zur bipolaren Definition von „Gewissenhaftigkeit“ (Tabelle 14.1)?",
+      "opts": [
+        "mitfühlend, freundlich, herzlich ↔ kalt, streitsüchtig, unbarmherzig.",
+        "gesprächig, energiegeladen, durchsetzungsfähig ↔ ruhig, zurückhaltend, schüchtern.",
+        "kreativ, intellektuell und offen für Neues ↔ einfach, oberflächlich und wenig an neuen Ideen oder Erfahrungen interessiert.",
+        "organisiert, verantwortungsbewusst, vorsichtig ↔ sorglos, leichtsinnig, verantwortungslos."
+      ],
+      "c": 3,
+      "e": "Gewissenhaftigkeit: organisiert/verantwortungsbewusst/vorsichtig ↔ sorglos/leichtsinnig/verantwortungslos. Mitfühlend/freundlich = Verträglichkeit, gesprächig/energiegeladen = Extraversion, kreativ/offen = Offenheit."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie wird frühkindliches Temperament definiert (Schneider & Lindenberger)?",
+      "opts": [
+        "Als das bewusste Wissen eines Kindes über die eigene Person.",
+        "Als die genetisch fixierte Endform der erwachsenen Persönlichkeit.",
+        "Als stabile individuelle Unterschiede in Qualität/Intensität emotionaler Reaktionen, emotionaler Selbstregulation und Aktivierungsniveau der Aufmerksamkeit.",
+        "Als ein rein situatives, von Moment zu Moment wechselndes Verhalten ohne jede zeitliche Stabilität, das sich vollständig zufällig und für Bezugspersonen völlig unvorhersehbar ausprägt."
+      ],
+      "c": 2,
+      "e": "Frühkindliches Temperament = stabile individuelle Unterschiede in Qualität/Intensität emotionaler Reaktionen, in der emotionalen Selbstregulation und im Aktivierungsniveau der Aufmerksamkeit."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche Aussage gibt einen der beiden Ansätze zum Verhältnis von Temperament und Persönlichkeit korrekt wieder?",
+      "opts": [
+        "Temperament und Persönlichkeit schließen sich gegenseitig vollständig aus.",
+        "Ein Ansatz verwendet beide synonym (starke Beziehung), ein anderer trennt frühkindliches Temperament von der Persönlichkeit als Denk-/Verhaltensmuster.",
+        "Persönlichkeit entsteht entwicklungslogisch immer vor dem Temperament.",
+        "Beide Konstrukte sind nach einhelliger Auffassung identisch, weshalb es in der Forschung gar keine zwei unterschiedlichen Traditionen zu ihrem Verhältnis gibt."
+      ],
+      "c": 1,
+      "e": "Zwei Traditionen: (a) synonyme Verwendung/starke Beziehung; (b) frühkindliches Temperament vs. Persönlichkeit als Denk-/Verhaltensmuster, das ein entwickeltes kognitives System voraussetzt."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was besagt die Zunahme der „Rangstabilität (r)“ über den Lebensverlauf (Roberts & DelVecchio, 2000)?",
+      "opts": [
+        "Dass die mittlere Ausprägung (das Niveau) der Big Five im höheren Alter besonders stark und sprunghaft ansteigt, während die Reihenfolge der Personen beliebig wechselt.",
+        "Dass alle Menschen im Alter dieselben Merkmalswerte erreichen.",
+        "Dass Persönlichkeit im Kindesalter völlig instabil ist.",
+        "Dass die relative Position einer Person in der Gruppe über die Zeit zunehmend stabil bleibt."
+      ],
+      "c": 3,
+      "e": "Rangstabilität (r) = Stabilität der relativen Position in der Gruppe; sie nimmt über den Lebensverlauf kontinuierlich zu. Davon zu trennen ist die mittlere Ausprägung (Niveau), die sich in höheren Altersgruppen immer weniger verändert."
+    },
+    {
+      "id": "s6q2",
+      "q": "Eine Person sucht sich gezielt ein anregendes soziales Umfeld, das zu ihrer hohen Offenheit passt. Welche Person-Umwelt-Transaktion ist das?",
+      "opts": [
+        "Proaktive Transaktion.",
+        "Reaktive Transaktion.",
+        "Evokative Transaktion.",
+        "Keine Transaktion im Sinne des Modells, da die Auswahl der eigenen Umwelt ausschließlich vom Zufall und nie von Persönlichkeitseigenschaften abhängt."
+      ],
+      "c": 0,
+      "e": "Proaktiv = Personen suchen sich ihre Umwelten selbst aus oder stellen sie her. Reaktiv = unterschiedliche Reaktion auf dieselbe Umwelt; evokativ = das eigene Verhalten ruft bei anderen Reaktionen hervor."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was fand die Berlin Aging Study II (Mueller et al., 2016) zur Persönlichkeitsentwicklung im hohen Alter?",
+      "opts": [
+        "Alle fünf Faktoren nahmen gleichmäßig stark zu.",
+        "Neurotizismus und Gewissenhaftigkeit nahmen ab, Extraversion und Offenheit zu, Verträglichkeit blieb stabil.",
+        "Die Persönlichkeit war über den Beobachtungszeitraum vollkommen unveränderlich.",
+        "Ausschließlich die Verträglichkeit veränderte sich, indem sie steil abfiel, während alle übrigen vier Faktoren konstant und ohne jeden Zusammenhang zur Gesundheit blieben."
+      ],
+      "c": 1,
+      "e": "Mueller et al. (2016, BASE-II, 65–88 J.): Neurotizismus + Gewissenhaftigkeit ↓, Extraversion + Offenheit ↑, Verträglichkeit stabil; Persönlichkeit hängt mit Morbidität sowie körperlicher und kognitiver Funktion zusammen."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was besagt das OFCI-Modell (Ziegler et al., 2015) zur Rolle der Offenheit im Alter?",
+      "opts": [
+        "Offenheit beschleunigt den kognitiven Abbau.",
+        "Offenheit ist im Alter ohne jeden Bezug zur Intelligenz.",
+        "Offenheit wirkt als Puffer gegen kognitiven Abbau (u.a. über environmental enrichment).",
+        "Offenheit ersetzt im hohen Alter die fluide Intelligenz vollständig, sodass die kristalline Intelligenz für den Wissenserwerb keine Rolle mehr spielt."
+      ],
+      "c": 2,
+      "e": "OFCI (Openness-Fluid-Crystallized-Intelligence): Offenheit puffert den kognitiven Abbau, u.a. über environmental enrichment; sie wirkt über die fluide Intelligenz (Gf) indirekt auf die kristalline (Gc)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Inhalte zählt die Vorlesung zum „Selbst“?",
+    "opts": [
+      "Persönlichkeit, Gruppenzugehörigkeit, Biografie, Ziele und bewertende Aspekte.",
+      "Ausschließlich die genetisch festgelegten Temperamentsmerkmale.",
+      "Nur die fünf Big-Five-Faktoren.",
+      "Allein die von außen beobachtbaren Verhaltensweisen einer Person, nicht aber deren Wissen, Ziele oder biografische Inhalte über sich selbst."
+    ],
+    "c": 0,
+    "e": "Zu den Inhalten des Selbst zählen Persönlichkeit, Gruppenzugehörigkeit, Biografie, Ziele und bewertende Aspekte — von der Person als erkennendem Subjekt produziert."
+  },
+  {
+    "id": "bq2",
+    "q": "Welche zwei grundlegenden Entwicklungstendenzen des Selbst nennt die Vorlesung?",
+    "opts": [
+      "Reifung und Verfall.",
+      "Stabilisierung und Veränderung.",
+      "Assimilation und Akkommodation.",
+      "Ausschließlich eine lebenslange, lineare Zunahme der Stabilität, die jede Form von Veränderung des Selbst von vornherein ausschließt."
+    ],
+    "c": 1,
+    "e": "Das Selbst steht zwischen zwei Tendenzen: Stabilisierung (über Selbstschemata) und Veränderung (Transitionen, Lebens- und Entwicklungskrisen)."
+  },
+  {
+    "id": "bq3",
+    "q": "Wie verändern sich Gewissenhaftigkeit und Verträglichkeit typischerweise über das Erwachsenenalter (Reifungsprinzip)?",
+    "opts": [
+      "Beide nehmen deutlich ab.",
+      "Beide bleiben über die gesamte Lebensspanne exakt konstant.",
+      "Beide nehmen zu.",
+      "Die Gewissenhaftigkeit nimmt zu, während die Verträglichkeit so stark abfällt, dass sie im hohen Alter den niedrigsten aller fünf Faktoren bildet."
+    ],
+    "c": 2,
+    "e": "Im Erwachsenenalter nehmen Gewissenhaftigkeit und Verträglichkeit zu, Offenheit für Erfahrung nimmt ab (Reifungsprinzip)."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Aussage zur Erfassung der Big Five in der Kindheit trifft zu?",
+    "opts": [
+      "Kinder schätzen sich grundsätzlich selbst über dieselben Fragebögen ein wie Erwachsene.",
+      "Eine Erfassung der Big Five in der Kindheit ist methodisch völlig unmöglich, weil Kinder grundsätzlich über keinerlei einschätzbare, zeitlich stabile Persönlichkeitsmerkmale verfügen.",
+      "Es zeigt sich über die Kindheit gar keine Stabilität der Merkmale.",
+      "Bei Kindern erfolgt die Erfassung über die Einschätzung durch erwachsene Bezugspersonen oder Lehrer."
+    ],
+    "c": 3,
+    "e": "Während Erwachsene sich per Fragebogen selbst einschätzen, werden Kinder über erwachsene Bezugspersonen/Lehrer eingeschätzt; es zeigt sich moderate relative Stabilität."
+  },
+  {
+    "id": "bq5",
+    "q": "Eine evokative Person-Umwelt-Transaktion liegt vor, wenn …",
+    "opts": [
+      "… das durch Eigenschaften bedingte Verhalten einer Person bei anderen bestimmte Reaktionen hervorruft.",
+      "… eine Person sich ihre Umwelt aktiv aussucht oder herstellt.",
+      "… verschiedene Personen auf dieselbe Umwelt unterschiedlich reagieren.",
+      "… die Umwelt sich völlig unabhängig von der Person verändert und dabei keinerlei Rückwirkung auf deren Verhalten oder Eigenschaften zeigt."
+    ],
+    "c": 0,
+    "e": "Evokativ: durch Persönlichkeitseigenschaften bedingte Verhaltensweisen rufen bei anderen bestimmte Reaktionen hervor. (Proaktiv = Umwelt aussuchen; reaktiv = unterschiedliche Reaktion auf dieselbe Umwelt.)"
+  },
+  {
+    "id": "bq6",
+    "q": "Welche Arbeit steht für die „pure-altruism hypothesis“ (Zunahme prosozialen Verhaltens über das Erwachsenenalter)?",
+    "opts": [
+      "Ziegler et al. (2015).",
+      "Mayr, Rohovit & Freund.",
+      "Roberts & DelVecchio (2000).",
+      "Costa & McCrae (1987), die in derselben Arbeit auch das Fünf-Faktoren-Modell erstmals als reines Alterungsmaß für Prosozialität definierten."
+    ],
+    "c": 1,
+    "e": "Mayr, Rohovit & Freund vertreten die pure-altruism hypothesis: prosoziales Verhalten nimmt über das Erwachsenenalter aus einem echten (nicht egoistischen) Motiv zu."
+  },
+  {
+    "id": "bq7",
+    "q": "Was meint „possible selves“ im Erwachsenenalter?",
+    "opts": [
+      "Die genetisch festgelegten Temperamentstypen.",
+      "Die bipolaren Pole der fünf Big-Five-Faktoren.",
+      "Vorstellungen davon, was man werden könnte, möchte oder befürchtet zu werden.",
+      "Ein rein diagnostisches Verfahren, mit dem die Rangstabilität der Persönlichkeit über mehrere Jahrzehnte hinweg objektiv gemessen wird."
+    ],
+    "c": 2,
+    "e": "„Possible selves“ sind selbstbezogene Zukunftsbilder (erwünschte/befürchtete mögliche Selbst); sie zeigen, dass das Selbst Entwicklungsbedingung und nicht nur -produkt ist."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Aussage zur Stabilität der Persönlichkeit ist KORREKT?",
+    "opts": [
+      "Persönlichkeit ist ab der Geburt vollständig fixiert und ändert sich nie.",
+      "Persönlichkeit verändert sich im hohen Alter so stark und sprunghaft wie in keiner anderen Lebensphase, da im Alter sämtliche zuvor stabilen Selbstschemata vollständig zerfallen und neu gebildet werden müssen.",
+      "Niveaustabilität und Rangstabilität bedeuten exakt dasselbe.",
+      "Persönlichkeit kann sich bis ins Jugendalter verändern, stabilisiert sich im Erwachsenenalter und bleibt bis ins hohe Alter weitgehend stabil."
+    ],
+    "c": 3,
+    "e": "Die Persönlichkeit verändert sich v.a. bis ins Jugendalter, stabilisiert sich im Erwachsenenalter und ist im hohen Alter weitgehend stabil; Niveaustabilität (mittlere Ausprägung) und Rangstabilität (relative Position) sind zu unterscheiden."
+  }
+];
+
+var corrCorrect = {
+  "w13a": "reaktiv",
+  "w13b": "evokativ",
+  "w13c": "proaktiv",
+  "w13d": "proaktiv"
+};
+var corrExpl = {
+  "w13a": "Reaktiv: unterschiedliche Personen reagieren auf dieselbe Umwelt (gleiche Erziehung) auf unterschiedliche Weise.",
+  "w13b": "Evokativ: das durch Eigenschaften bedingte Verhalten (Fröhlichkeit) ruft bei anderen bestimmte Reaktionen hervor.",
+  "w13c": "Proaktiv: die Person sucht sich aktiv eine zu ihren Eigenschaften passende Umwelt (Partys/Vereine) aus.",
+  "w13d": "Proaktiv: auch das aktive Meiden/Auswählen einer ruhigen Umwelt ist ein selbstgewähltes Herstellen der eigenen Umwelt."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* ── Big-Five-Selektor (bespoke) ── */
+function b5Set(k){
+  var F={
+   N:["Neurotizismus","stabil, ruhig und zufrieden ↔ ängstlich, instabil und launisch","Niveau: in der Kindheit zunächst ↑; im hohen Alter ↓ (Mueller et al. 2016)"],
+   E:["Extraversion","gesprächig, energiegeladen, durchsetzungsfähig ↔ ruhig, zurückhaltend, schüchtern","Niveau: in der Kindheit ↓; im hohen Alter ↑ (Mueller et al. 2016)"],
+   O:["Offenheit für Erfahrungen","kreativ, intellektuell, offen ↔ einfach, oberflächlich","Niveau: im Erwachsenenalter eher ↓; wirkt als Puffer gegen kogn. Abbau (OFCI, Ziegler et al. 2015)"],
+   G:["Gewissenhaftigkeit","organisiert, verantwortungsbewusst, vorsichtig ↔ sorglos, leichtsinnig, verantwortungslos","Niveau: im Erwachsenenalter ↑ (Reifung); im hohen Alter ↓ (Mueller et al. 2016)"],
+   V:["Verträglichkeit","mitfühlend, freundlich, herzlich ↔ kalt, streitsüchtig, unbarmherzig","Niveau: im Erwachsenenalter ↑; im hohen Alter stabil (Mueller et al. 2016)"]};
+  Object.keys(F).forEach(function(x){var b=document.getElementById("b5-"+x); if(b)b.classList.toggle("on",x===k);});
+  var f=F[k],o=document.getElementById("b5-out");
+  if(o)o.innerHTML="<strong>"+f[0]+"</strong><br>Bipolar: "+f[1]+"<br><span style=\"color:var(--text2)\">"+f[2]+"</span>";
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  b5Set('N');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

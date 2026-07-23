@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychologie · Lernmodule</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f172a;--surface:#1e293b;--surface2:#334155;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--border:#334155;--accent:#818cf8;--green:#34d399;--red:#f87171;--orange:#ea580c;--yellow:#fbbf24;--cyan:#38bdf8;--purple:#c084fc}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.app{max-width:700px;margin:0 auto;padding:24px 16px}
+
+h1{font-size:1.9rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#38bdf8,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:4px}
+.subtitle{color:var(--text2);font-size:.82rem;text-align:center;margin-bottom:28px}
+
+/* Stat bar */
+.stat-bar{display:flex;gap:8px;margin-bottom:28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.stat-item{flex:1;text-align:center}
+.stat-val{font-size:1.4rem;font-weight:800}
+.stat-lbl{font-size:.68rem;color:var(--text3)}
+
+/* Module card */
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.mod-head{display:flex;align-items:center;gap:14px;padding:16px 18px}
+.mod-icon{font-size:1.8rem;line-height:1}
+.mod-info{flex:1;min-width:0}
+.mod-name{font-weight:700;font-size:1rem;margin-bottom:2px}
+.mod-sub{color:var(--text2);font-size:.75rem}
+.mod-actions{display:flex;gap:8px;align-items:center}
+.btn-lm{background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-weight:600;font-size:.82rem;cursor:pointer;white-space:nowrap}
+.btn-lm:hover{border-color:var(--accent);color:var(--text)}
+.btn-lm.open{border-color:var(--accent);color:var(--accent)}
+
+/* Progress bar inside card */
+.mod-progress{padding:0 18px 4px;height:4px}
+.pbar-track{background:var(--surface2);border-radius:2px;height:4px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px;transition:width .4s}
+
+/* Lernmodule drawer */
+.lm-drawer{display:none;border-top:1px solid var(--border);padding:14px 18px}
+.lm-drawer.open{display:block}
+.lm-section{margin-bottom:14px}
+.lm-section-title{font-size:.7rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.lm-grid{display:flex;flex-wrap:wrap;gap:6px}
+.lm-link{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 11px;font-size:.78rem;color:var(--text2);text-decoration:none;transition:.15s}
+.lm-link:hover{border-color:var(--cyan);color:var(--cyan)}
+.lm-link.thema{border-color:var(--surface2);background:var(--surface2);color:var(--text)}
+.lm-link.thema:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Empty state */
+.coming-soon{color:var(--text3);font-size:.78rem;font-style:italic;padding:4px 0}
+.mod-kuerzel{font-family:'SF Mono','Menlo',monospace;font-size:.72rem;font-weight:700;color:var(--text3);margin-right:4px}
+.lernbereich-divider{display:flex;align-items:center;gap:12px;margin:32px 0 20px;color:var(--text3);font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
+.lernbereich-divider::before,.lernbereich-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.mod-exam{font-size:.72rem;margin-top:3px;font-weight:600}
+.mod-exam.laufend{color:var(--yellow)}
+.mod-exam.wiederholen{color:var(--red)}
+.mod-exam.verschoben{color:var(--cyan)}
+
+/* Studienfortschritt */
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:24px}
+.progress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.progress-title{font-size:.95rem;font-weight:700}
+.progress-credits{font-size:.78rem;color:var(--text2)}
+.status-counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.status-count{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 6px;text-align:center}
+.status-count .num{font-size:1.3rem;font-weight:800;line-height:1}
+.status-count .lbl{font-size:.65rem;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.4px}
+.status-count.bestanden .num{color:var(--green)}
+.status-count.wiederholen .num{color:var(--red)}
+.status-count.laufend .num{color:var(--yellow)}
+.status-count.offen .num{color:var(--text3)}
+.status-grid{display:flex;flex-wrap:wrap;gap:5px}
+.mbadge{font-size:.72rem;padding:4px 8px;border-radius:6px;border:1px solid var(--border);font-weight:600;cursor:help;font-family:'SF Mono','Menlo',monospace;letter-spacing:.2px}
+.mbadge.bestanden{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.35);color:var(--green)}
+.mbadge.wiederholen{background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.45);color:var(--red)}
+.mbadge.laufend{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35);color:var(--yellow)}
+.mbadge.offen{background:var(--bg);color:var(--text3)}
+.mbadge .note{opacity:.7;font-size:.65rem;margin-left:4px;font-weight:500}
+
+/* Status-Badge in Modulkarten */
+.card-status{display:inline-block;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:5px;margin-left:6px;vertical-align:middle;text-transform:uppercase;letter-spacing:.4px;font-family:'SF Mono','Menlo',monospace}
+.card-status.bestanden{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+.card-status.wiederholen{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.45)}
+.card-status.laufend{background:rgba(251,191,36,.15);color:var(--yellow);border:1px solid rgba(251,191,36,.35)}
+.card-status.offen{background:var(--bg);color:var(--text3);border:1px solid var(--border)}
+
+/* Alle-Module-Sektion (Wissens-Hub) */
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin:32px 4px 12px}
+.section-title{font-size:1.05rem;font-weight:700}
+.section-hint{font-size:.72rem;color:var(--text3)}
+.mini-list{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.mini-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:.85rem}
+.mini-row:last-child{border-bottom:none}
+.mini-row .mcode{font-family:'SF Mono','Menlo',monospace;font-size:.72rem;font-weight:700;min-width:42px;color:var(--text3)}
+.mini-row .mname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini-row .mnote{font-size:.7rem;color:var(--text3);font-family:'SF Mono','Menlo',monospace}
+.mini-row .mlinks{display:flex;gap:4px}
+.mini-row .mlink{font-size:.7rem;padding:3px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);color:var(--text2);text-decoration:none}
+.mini-row .mlink:hover{border-color:var(--accent);color:var(--accent)}
+.mini-row .mlink.disabled{opacity:.45;cursor:default}
+.mini-row.bestanden .mcode{color:var(--green)}
+.mini-row.wiederholen .mcode{color:var(--red)}
+.mini-row.wiederholen{background:rgba(248,113,113,.04)}
+.mini-row.laufend .mcode{color:var(--yellow)}
+.mini-row.offen{opacity:.6}
+.mini-row.offen .mcode{color:var(--text3)}
+.group-toggle{cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--surface2);font-size:.78rem;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border)}
+.group-toggle:hover{color:var(--text)}
+.group-toggle .arrow{transition:transform .2s}
+.group-toggle.collapsed .arrow{transform:rotate(-90deg)}
+.group-body.collapsed{display:none}
+
+/* Klausurfenster-Banner */
+.klausur-window{background:linear-gradient(135deg,rgba(56,189,248,.10),rgba(129,140,248,.10));border:1px solid rgba(129,140,248,.4);border-radius:14px;padding:18px 20px;margin-bottom:18px;display:flex;align-items:center;gap:18px}
+.kw-icon{font-size:2rem;line-height:1}
+.kw-body{flex:1;min-width:0}
+.kw-title{font-size:.95rem;font-weight:700}
+.kw-sub{color:var(--text2);font-size:.78rem;margin-top:3px}
+.kw-countdown-big{font-family:'SF Mono','Menlo',monospace;text-align:center;line-height:1;flex-shrink:0}
+.kw-countdown-big .num{font-size:2.2rem;font-weight:800;color:var(--accent);display:block}
+.kw-countdown-big .lbl{font-size:.65rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* Prüfungstermine */
+.pruef-section{margin-bottom:24px}
+.pruef-section-head{font-size:.75rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding:0 2px;display:flex;justify-content:space-between;align-items:baseline}
+.pruef-section-head span{font-weight:400;font-size:.7rem;color:var(--text3);text-transform:none;letter-spacing:0}
+.pruef-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:6px;transition:border-color .2s}
+.pruef-item.vorbei{opacity:.45}
+.pruef-item:not(.vorbei):hover{border-color:var(--surface2)}
+.pruef-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:1px}
+.pruef-dot.laufend{background:var(--yellow);box-shadow:0 0 6px rgba(251,191,36,.5)}
+.pruef-dot.wiederholen{background:var(--red);box-shadow:0 0 6px rgba(248,113,113,.5)}
+.pruef-dot.verschoben{background:var(--cyan);box-shadow:0 0 6px rgba(56,189,248,.4)}
+.pruef-dot.vorbei{background:var(--text3)}
+.pruef-info{flex:1;min-width:0}
+.pruef-name{font-size:.86rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pruef-name .kuerzel{font-family:'SF Mono','Menlo',monospace;font-size:.72rem;font-weight:700;opacity:.65;margin-right:6px}
+.pruef-meta{font-size:.71rem;color:var(--text3);margin-top:2px}
+.pruef-right{text-align:right;flex-shrink:0;min-width:80px}
+.pruef-datum{font-size:.72rem;color:var(--text2);font-weight:600;white-space:nowrap}
+.pruef-timer{font-family:'SF Mono','Menlo',monospace;font-size:.82rem;font-weight:800;margin-top:2px;white-space:nowrap}
+.pruef-timer.laufend{color:var(--yellow)}
+.pruef-timer.wiederholen{color:var(--red)}
+.pruef-timer.verschoben{color:var(--cyan)}
+.pruef-timer.urgent{color:#ff6b6b;animation:pruefpulse 1.2s ease-in-out infinite}
+.pruef-timer.vorbei{color:var(--text3);font-weight:500}
+@keyframes pruefpulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+@media(max-width:480px){
+  .mod-head{flex-wrap:wrap;gap:10px}
+  .mod-actions{width:100%}
+  .btn-lm{flex:1;text-align:center}
+  .pruef-item{gap:8px}
+  .pruef-right{min-width:60px}
+}
+</style>
+<style>
+.prog-box{max-width:700px;margin:0 auto 22px;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;font-family:system-ui,sans-serif}
+.prog-box>summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:.9rem;color:var(--text);list-style:none;user-select:none}
+.prog-box>summary::-webkit-details-marker{display:none}
+.prog-box>summary::before{content:"\25B8  ";color:var(--accent)}
+.prog-box[open]>summary::before{content:"\25BE  "}
+.prog-body{padding:0 18px 16px;color:var(--text2);font-size:.85rem;line-height:1.55}
+.prog-btns{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.prog-ta{width:100%;min-height:78px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:'SF Mono',Menlo,monospace;font-size:.72rem;resize:vertical}
+.prog-msg{min-height:18px;font-size:.8rem;color:var(--accent);margin-top:6px;font-weight:600}
+.prog-hint{font-size:.72rem;color:var(--text3);margin-top:10px}
+.prog-intro{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:4px 0 12px}
+.prog-steps{margin:0;padding-left:20px}
+.prog-steps li{margin:7px 0}
+.prog-steps em{color:var(--text);font-style:normal;font-weight:600;white-space:nowrap}
+.stat-cap{max-width:700px;margin:0 auto 6px;font-size:.74rem;font-weight:600;color:var(--text2);font-family:system-ui,sans-serif;text-align:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🧠 Psychologie — Lernmodule</h1>
+  <p class="subtitle" style="margin-bottom:18px;line-height:1.5">Interaktive Lernmodule, Übungssets und Modell-Trainer zur Klausurvorbereitung. Dein Fortschritt wird lokal in deinem Browser gespeichert.</p>
+
+  <div id="lernfortschritt"></div>
+
+  <div id="changelog" data-nur="inhalt"></div>
+
+  <details class="prog-box" open>
+    <summary>📦 Fortschritt sichern &amp; auf ein anderes Gerät übertragen</summary>
+    <div class="prog-body">
+      <div class="prog-intro"><strong>Was ist das?</strong> Dein Lernfortschritt wird <strong>nur in dem Browser/Gerät gespeichert, in dem du lernst</strong> — er wandert nicht von allein auf andere Geräte. Mit einem Code kannst du ihn <strong>mitnehmen</strong> (z. B. Handy → Laptop) oder als Sicherung aufbewahren.</div>
+      <strong>So geht's:</strong>
+      <ol class="prog-steps">
+        <li><strong>Auf dem Gerät, wo du gelernt hast:</strong> auf <em>⬇️ Code erzeugen</em> drücken, dann <em>📋 Kopieren</em>. Schick dir den Code an dich selbst (z. B. per WhatsApp, E-Mail oder in eine Notiz).</li>
+        <li><strong>Auf dem anderen Gerät:</strong> diese Seite öffnen, den Code unten in das Feld einfügen und auf <em>⬆️ Fortschritt aus Code laden</em> drücken.</li>
+        <li>Die Seite lädt kurz neu — oben bei <em>📊 Karten gelernt</em> siehst du sofort, dass dein Stand übernommen wurde. ✓</li>
+      </ol>
+      <div class="prog-btns">
+        <button class="btn-lm" onclick="pcExport()">⬇️ Code erzeugen</button>
+        <button class="btn-lm" onclick="pcCopy()">📋 Kopieren</button>
+      </div>
+      <textarea id="pcText" class="prog-ta" spellcheck="false" placeholder="Hier erscheint dein Code zum Kopieren — oder füge hier einen Code ein, den du laden möchtest."></textarea>
+      <div class="prog-btns">
+        <button class="btn-lm" onclick="pcImport()">⬆️ Fortschritt aus Code laden</button>
+      </div>
+      <div id="pcMsg" class="prog-msg"></div>
+      <p class="prog-hint">💡 Der Code ist eine Momentaufnahme: lernst du danach weiter, erzeuge vor dem nächsten Übertragen einfach einen neuen Code. „Laden" überschreibt den Stand der enthaltenen Module auf diesem Gerät.</p>
+    </div>
+  </details>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">👥</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M5</span> Sozialpsychologie</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub0')" id="pub0Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub0LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Vertiefung &amp; Anwendung (interaktiv)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vt01_schluesselstudien_replikationskrise.html" target="_blank">🔬 Vertiefung 1 — Schlüsselstudien &amp; die Replikationskrise</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vt02_socialmedia_persuasion_desinformation.html" target="_blank">📱 Vertiefung 2 — Social Media, Persuasion &amp; Desinformation</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vt03_vorurteile_abbauen.html" target="_blank">🤝 Vertiefung 3 — Vorurteile abbauen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vt04_helfen_eingreifen.html" target="_blank">🆘 Vertiefung 4 — Helfen &amp; Eingreifen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vt05_selbstbild_urteilsfehler_beziehungen.html" target="_blank">🪞 Vertiefung 5 — Selbstbild, Urteilsfehler &amp; Beziehungen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Modell-Trainer (Struktur — aktiv abrufen)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/struktur_m5.html" target="_blank">🧩 Modell-Trainer — 50 Modelle (Ober-/Unterpunkte) · Recall + Test</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/altklausur_m5.html" target="_blank">★ Echte Altklausur SoSe 2023 — 50 MC-Fragen (Vrecko)</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/lernfragen_m5.html" target="_blank">★ Lernfragen-Set — 36 MC aus den echten Dozentin-Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/ki_set_m5.html" target="_blank">🤖 KI-Übungsset — 50 Fragen über alle 12 Themen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/ki_set_m5_2.html" target="_blank">🤖 KI-Übungsset 2 — 50 Fragen zu vertieften &amp; weiteren Themen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/ki_uebungsset_3_m5.html" target="_blank">🤖 KI-Übungsset 3 — 50 Fragen, anwendungs- &amp; transferorientiert</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/lernfragen_set_m5.html" target="_blank">🤖 KI-Übungsset 4 — 80 Fragen aus den 35 offiziellen Lernfragen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">Einzel-VLs</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl01_einfuehrung.html" target="_blank">VL01 Einführung</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl02_soziale_kognition.html" target="_blank">VL02 Soziale Kognition</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl03_eindrucksbildung_attribution.html" target="_blank">VL03 Eindrucksbildung</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl04_einstellungen.html" target="_blank">VL04 Einstellungen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl05_einstellungen_verhalten_persuasion.html" target="_blank">VL05 Persuasion</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl06_sozialer_einfluss.html" target="_blank">VL06 Sozialer Einfluss</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl07_soziale_gruppen.html" target="_blank">VL07 Soziale Gruppen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl08_intergruppenbeziehungen.html" target="_blank">VL08 Intergruppen</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl09_prosoziales_hilfeverhalten.html" target="_blank">VL09 Prosoziales V.</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl10_aggression.html" target="_blank">VL10 Aggression</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl11_selbst.html" target="_blank">VL11 Selbst</a>
+          <a class="lm-link" href="Lernmodule/S4 M5 Sozialpsychologie/vl12_beziehungen_kultur.html" target="_blank">VL12 Beziehungen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">📊</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M12b</span> Allgemeine Verfahrenslehre II</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub1')" id="pub1Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub1LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Modell-Trainer (Struktur — aktiv abrufen)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/struktur_m12b.html" target="_blank">🧩 Modell-Trainer — 47 Modelle (Psychodynamik + Systemik) · Recall + Test</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/altklausur_m12b.html" target="_blank">★ Altklausur Systemische Therapie (Galbusera SoSe23) — 59 echte Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/ki_set_m12b.html" target="_blank">🤖 KI-Übungsset — 58 Fragen (PA + ST, alle 15 Themen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/ki_set_m12b_v2.html" target="_blank">🤖 KI Übungsset 58 Fragen PA+ST V2 (Distraktorenrevision)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12b.1 Psychodynamische Ansätze</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd1_grundlagen_psychodynamik.html" target="_blank">VL1 Einführung &amp; Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd2_abwehrmechanismen.html" target="_blank">VL2 Abwehrmechanismen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd3_strukturniveau_opd.html" target="_blank">VL3 Strukturniveau &amp; OPD</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd4_konflikte_opd.html" target="_blank">VL4 Konflikte (OPD-2)</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd5_objektbeziehung.html" target="_blank">VL5 Objektbeziehungstheorien</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd6_intersubjektive_wende.html" target="_blank">VL6 Die intersubjektive Wende</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/pd7_mentalisierung_mbt.html" target="_blank">VL7 Mentalisierungsbasierte Psychotherapie (MBT)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12b.1 KI-Übungssets je Vorlesung (je 40 Fragen, Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd1.html" target="_blank">🤖 KI-Set VL1 Einführung &amp; Grundlagen — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd8.html" target="_blank">🤖 KI-Set Psychodynamik 1 — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd2.html" target="_blank">🤖 KI-Set VL2 Abwehrmechanismen — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd4.html" target="_blank">🤖 KI-Set VL4 Konflikte (OPD-2) — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd6.html" target="_blank">🤖 KI-Set VL6 Die intersubjektive Wende — 32 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd7.html" target="_blank">🤖 KI-Set VL7 Mentalisierungsbasierte Psychotherapie (MBT) — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd5.html" target="_blank">🤖 KI-Set VL5 Objektbeziehungstheorien — 24 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd3.html" target="_blank">🤖 KI-Set VL3 Strukturniveau &amp; OPD — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd1_v2.html" target="_blank">🤖 KI-Set V2 VL1 Einführung &amp; Grundlagen (Distraktorenrevision) — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.1 Psychodynamische Ansätze/ki_pd4_v2.html" target="_blank">🤖 KI-Set V2 VL4 Konflikte (OPD-2) (Distraktorenrevision) — 40 Fragen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12b.2 Vertiefungsseminar PA — Freud-Grundlagen (klausurrelevant)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.2 Vertiefungsseminar PA/vt01_unbewusste_strukturmodell.html" target="_blank">Das Unbewusste &amp; das Strukturmodell (Topik · Es/Ich/Über-Ich)</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.2 Vertiefungsseminar PA/vt02_triebe_psychosexuelle_entwicklung.html" target="_blank">Triebe &amp; psychosexuelle Entwicklung (5 Phasen · Melanie Klein)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12b.3 Systemische Therapie</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st1_einfuehrung.html" target="_blank">VL1 Einführung &amp; Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st2_geschichte.html" target="_blank">VL2 Ursprünge &amp; Geschichte</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st3_grundlagen.html" target="_blank">VL3 Theoretische Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st4_palo_alto_mailand.html" target="_blank">VL4 Palo Alto &amp; Mailand</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st5_strukturell_strategisch.html" target="_blank">VL5 Strukturell &amp; strategisch</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st6_narrativ_loesungsorientiert.html" target="_blank">VL6 Narrativ &amp; lösungsorientiert</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st7_humanistisch_satir.html" target="_blank">VL7 Erfahrungs-/humanistisch</a>
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/st8_mehrgenerationen_wirksamkeit.html" target="_blank">VL8 Mehrgenerationen &amp; Wirksamkeit</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12b.3 KI-Übungsset (alle 8 Vorlesungen, Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M12b Allgemeine Verfahrenslehre II/M12b.3 Systemische Therapie/ki_st.html" target="_blank">🤖 KI-Set Systemische Therapie VL1–8 — 46 Fragen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">🌱</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M4b</span> Entwicklungspsychologie B</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub2')" id="pub2Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub2LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Modell-Trainer (Struktur — aktiv abrufen)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/struktur_m4b.html" target="_blank">🧩 Modell-Trainer — 76 Modelle (Grundlagen … Persönlichkeit … Tod &amp; Sterben) · Recall + Test</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/altklausur_m4b.html" target="_blank">★ Altklausur (Jost) — 52 echte Prüfungsfragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/altklausur_m4b_sose19.html" target="_blank">★ Altklausur SoSe 2019 — 9 rekonstruierte Prüfungsfragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/altklausur_m4b_sose19_masterbank.html" target="_blank">★ Altklausur SoSe 2019 · Masterbank — 54 quellengeprüfte Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b.html" target="_blank">🤖 KI-Übungsset — 81 Fragen (alle M4b-Themen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_v2.html" target="_blank">🤖 KI-Übungsset V2 — 81 Fragen (alle M4b-Themen) (Distraktorenrevision)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_ueberblick.html" target="_blank">🤖 KI-Übungsset Überblick — 35 Fragen (Gesamtüberblick &amp; Klausurvorbereitung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl01_t1.html" target="_blank">🤖 KI-Übungsset VL01 · Teil 1/2 — 37 Fragen (Einführung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl01_t2.html" target="_blank">🤖 KI-Übungsset VL01 · Teil 2/2 — 37 Fragen (Einführung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl02_t1.html" target="_blank">🤖 KI-Übungsset VL02 · Teil 1/3 — 34 Fragen (Kognitive Entwicklung — Theorien)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl02_t2.html" target="_blank">🤖 KI-Übungsset VL02 · Teil 2/3 — 34 Fragen (Kognitive Entwicklung — Theorien)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl02_t3.html" target="_blank">🤖 KI-Übungsset VL02 · Teil 3/3 — 34 Fragen (Kognitive Entwicklung — Theorien)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl03_t1.html" target="_blank">🤖 KI-Übungsset VL03 · Teil 1/3 — 30 Fragen (Neurobiologische Grundlagen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl03_t2.html" target="_blank">🤖 KI-Übungsset VL03 · Teil 2/3 — 29 Fragen (Neurobiologische Grundlagen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl03_t3.html" target="_blank">🤖 KI-Übungsset VL03 · Teil 3/3 — 29 Fragen (Neurobiologische Grundlagen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl04_t1.html" target="_blank">🤖 KI-Übungsset VL04 · Teil 1/4 — 33 Fragen (Demenz)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl04_t2.html" target="_blank">🤖 KI-Übungsset VL04 · Teil 2/4 — 32 Fragen (Demenz)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl04_t3.html" target="_blank">🤖 KI-Übungsset VL04 · Teil 3/4 — 32 Fragen (Demenz)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl04_t4.html" target="_blank">🤖 KI-Übungsset VL04 · Teil 4/4 — 32 Fragen (Demenz)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl05_t1.html" target="_blank">🤖 KI-Übungsset VL05 · Teil 1/3 — 30 Fragen (Demenz II — Behandlung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl05_t2.html" target="_blank">🤖 KI-Übungsset VL05 · Teil 2/3 — 29 Fragen (Demenz II — Behandlung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl05_t3.html" target="_blank">🤖 KI-Übungsset VL05 · Teil 3/3 — 29 Fragen (Demenz II — Behandlung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl06_t1.html" target="_blank">🤖 KI-Übungsset VL06 · Teil 1/3 — 32 Fragen (Training kognitiver Funktionen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl06_t2.html" target="_blank">🤖 KI-Übungsset VL06 · Teil 2/3 — 32 Fragen (Training kognitiver Funktionen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl06_t3.html" target="_blank">🤖 KI-Übungsset VL06 · Teil 3/3 — 32 Fragen (Training kognitiver Funktionen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl07_t1.html" target="_blank">🤖 KI-Übungsset VL07 · Teil 1/3 — 38 Fragen (Lebensstil, Ernährung &amp; Fitness)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl07_t2.html" target="_blank">🤖 KI-Übungsset VL07 · Teil 2/3 — 38 Fragen (Lebensstil, Ernährung &amp; Fitness)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl07_t3.html" target="_blank">🤖 KI-Übungsset VL07 · Teil 3/3 — 37 Fragen (Lebensstil, Ernährung &amp; Fitness)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl08_t1.html" target="_blank">🤖 KI-Übungsset VL08 · Teil 1/3 — 34 Fragen (Weisheit)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl08_t2.html" target="_blank">🤖 KI-Übungsset VL08 · Teil 2/3 — 33 Fragen (Weisheit)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl08_t3.html" target="_blank">🤖 KI-Übungsset VL08 · Teil 3/3 — 33 Fragen (Weisheit)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl09_t1.html" target="_blank">🤖 KI-Übungsset VL09 · Teil 1/2 — 39 Fragen (Altersbilder)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl09_t2.html" target="_blank">🤖 KI-Übungsset VL09 · Teil 2/2 — 38 Fragen (Altersbilder)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl10_t1.html" target="_blank">🤖 KI-Übungsset VL10 · Teil 1/3 — 38 Fragen (Entwicklungsaufgaben)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl10_t2.html" target="_blank">🤖 KI-Übungsset VL10 · Teil 2/3 — 37 Fragen (Entwicklungsaufgaben)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl10_t3.html" target="_blank">🤖 KI-Übungsset VL10 · Teil 3/3 — 37 Fragen (Entwicklungsaufgaben)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl11_t1.html" target="_blank">🤖 KI-Übungsset VL11 · Teil 1/3 — 37 Fragen (Erfolgreiche Entwicklung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl11_t2.html" target="_blank">🤖 KI-Übungsset VL11 · Teil 2/3 — 37 Fragen (Erfolgreiche Entwicklung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/ki_set_m4b_vl11_t3.html" target="_blank">🤖 KI-Übungsset VL11 · Teil 3/3 — 37 Fragen (Erfolgreiche Entwicklung)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">Einzel-VLs (VL01–14 — alle Vorlesungen abgedeckt)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl01_einfuehrung.html" target="_blank">VL01 Einführung &amp; Überblick</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl02_kognitive_entwicklung.html" target="_blank">VL02 Kognitive Entwicklung &amp; Theorien kogn. Alterns</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl03_neurobiologie.html" target="_blank">VL03 Neurobiologische Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl04_demenz.html" target="_blank">VL04 Demenz &amp; Diagnostik</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl05_demenz2_behandlung.html" target="_blank">VL05 Demenz II — Behandlung</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl06_training.html" target="_blank">VL06 Training kogn. Funktionen</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl07_lebensstil.html" target="_blank">VL07 Lebensstil &amp; Fitness</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl08_weisheit.html" target="_blank">VL08 Weisheit</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl09_altersbilder.html" target="_blank">VL09 Altersbilder &amp; Produktivität</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl10_entwicklungsaufgaben.html" target="_blank">VL10 Entwicklungsaufgaben</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl11_erfolgreiche_entwicklung.html" target="_blank">VL11 Erfolgreiche Entwicklung &amp; SOK</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl12_lebenszufriedenheit.html" target="_blank">VL12 Lebenszufriedenheit</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl13_persoenlichkeit.html" target="_blank">VL13 Entwicklung des Selbst &amp; der Persönlichkeit</a>
+          <a class="lm-link" href="Lernmodule/S4 M4b Entwicklungspsychologie B/vl14_tod_sterben.html" target="_blank">VL14 Tod und Sterben</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">🧪</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M11b</span> Psychologische Diagnostik II</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub3')" id="pub3Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub3LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ OSCE-Prüfungssimulation — Gespräch mit Simulationsperson</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/osce_sim_m11b.html" target="_blank">🎭 OSCE-Simulation — 8 echte SP-Szenarien + Gesprächsführung &amp; Berlin Global Rating</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">11b.1 Psychopathologischer Befund (AMDP)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl01_amdp_grundlagen_basisfunktionen.html" target="_blank">VL01 AMDP-Grundlagen &amp; Basisfunktionen</a>
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl02_formale_denk_befuerchtungen_zwaenge.html" target="_blank">VL02 Formale Denkstörungen &amp; Befürchtungen/Zwänge</a>
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl03_wahn_sinnestaeuschungen_ich.html" target="_blank">VL03 Wahn, Sinnestäuschungen &amp; Ich-Störungen</a>
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl04_affektivitaet_antrieb.html" target="_blank">VL04 Affektivität &amp; Antrieb/Psychomotorik</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">11b.2 Anamneseerhebung</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl05_anamnese_grundlagen_symptom.html" target="_blank">VL05 Anamnese-Grundlagen &amp; Symptomanamnese</a>
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl06_sozial_biografisch_sucht.html" target="_blank">VL06 Sozial-, Biografische &amp; Suchtanamnese</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">11b.3 Diagnostischer Prozess &amp; Verfahren</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl07_diagnostischer_prozess.html" target="_blank">VL07 Diagnostischer Prozess &amp; Verfahren-Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S2 M11b Psychologische Diagnostik II/vl08_verfahren.html" target="_blank">VL08 Die diagnostischen Verfahren (BDI-II, SKID, WAIS-IV …)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">📈</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M12a</span> Allgemeine Verfahrenslehre I</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub4')" id="pub4Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub4LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Modell-Trainer (Struktur — aktiv abrufen)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/struktur_m12a.html" target="_blank">🧩 Modell-Trainer — 49 Modelle (Verfahrenslehre + Verhaltenstherapie) · Recall + Test</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/altklausur_m12a.html" target="_blank">★ Altklausur Böge/Lindenmeyer SoSe2024 — 25 geprüfte MC-Fragen</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/ki_set_m12a.html" target="_blank">🤖 KI-Übungsset — 50 Fragen über alle 26 Themen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12a.1 Allgemeine Verfahrenslehre (Böge)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl01_ueberblick.html" target="_blank">VL01 Verfahren im Überblick</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl02_versorgung.html" target="_blank">VL02 Versorgung psychischer Störungen</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl03_wirksamkeitspruefung.html" target="_blank">VL03 Wirksamkeitsprüfung</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl04_leitlinien.html" target="_blank">VL04 Leitlinien</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl05_nvl_depression.html" target="_blank">VL05 NVL Depression</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl06_schizophrenie.html" target="_blank">VL06 Leitlinie Schizophrenie</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl07_wirksamkeit.html" target="_blank">VL07 Absolute &amp; relative Wirksamkeit</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl08_therapeuteneffekte.html" target="_blank">VL08 Therapeuteneffekte</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl09_prozess_ergebnis.html" target="_blank">VL09 Prozess-Ergebnis-Forschung</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl10_risiken.html" target="_blank">VL10 Misserfolge, Risiken &amp; Nebenwirkungen</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl11_aufklaerung.html" target="_blank">VL11 Leitliniengerechte Aufklärung</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.1 Allgemeine Verfahrenslehre/vl12_quo_vadis.html" target="_blank">VL12 Psychotherapie Quo Vadis</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">M12a.2 Verhaltenstherapie (Lindenmeyer)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt01_refresher_grundlagen.html" target="_blank">VT01 Refresher VT-Grundlagen</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt02_sorkc.html" target="_blank">VT02 Verhaltensanalyse (SORKC)</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt03_plananalyse.html" target="_blank">VT03 Plananalyse</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt04_selbstmanagement.html" target="_blank">VT04 Selbstmanagement-Therapie</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt05_motivational_interviewing.html" target="_blank">VT05 Motivational Interviewing</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt06_stoerungsmodell.html" target="_blank">VT06 Vermittlung eines Störungsmodells</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt07_exposition.html" target="_blank">VT07 Expositionsbehandlung</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt08_kognitive_umstrukturierung.html" target="_blank">VT08 Kognitive Umstrukturierung</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt09_paartherapie.html" target="_blank">VT09 Paartherapie</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt10_offene_gruppen.html" target="_blank">VT10 Therapie in offenen Gruppen</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt11_rueckfallpraevention.html" target="_blank">VT11 Rückfallprävention</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt12_kompetenztraining.html" target="_blank">VT12 Soziales Kompetenztraining</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt13_problemloesetraining.html" target="_blank">VT13 Problemlösetraining</a>
+          <a class="lm-link" href="Lernmodule/S3 M12a Allgemeine Verfahrenslehre I/M12a.2 Verhaltenstherapie/vt14_dritte_welle.html" target="_blank">VT14 Die dritte Welle der VT</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">📋</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M11a</span> Psychologische Diagnostik I</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub5')" id="pub5Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub5LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Modell-Trainer (Struktur — aktiv abrufen)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/struktur_m11a.html" target="_blank">🧩 Modell-Trainer — 76 Modelle (Psychometrie/Testtheorie/Verhaltensbeobachtung/Neuropsychologie/Vertiefungsseminar) · Recall + Test</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/klausur_m11a.html" target="_blank">🎓 Klausurformat-Übung — 32 × 3 Mehrfachwahl mit Malus (echtes Prüfungsformat!)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/klausur_m11a_set1.html" target="_blank">🎓 Klausursimulation Set 1 — 33 Altklausur-Fragen im Malus-Format (mit Erklärungen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/klausur_m11a_set2.html" target="_blank">🎓 Klausursimulation Set 2 — 33 Altklausur-Fragen im Malus-Format (mit Erklärungen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/klausur_m11a_ak44.html" target="_blank">🎓 Altklausur als Voll-Probeklausur — 44 echte Prüfungsfragen im Malus-Format (💡 Hinweis + 🔓 Lösung)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/altklausur_m11a.html" target="_blank">★ Altklausur (Wedderhoff u. a.) — 44 echte Prüfungsfragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a.html" target="_blank">🤖 KI-Übungsset — 80 Fragen (13 M11a-Themen + Vertiefungsseminar)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">KI-Übungssets je Vorlesung (MCQ-Kette, max. 40 Fragen je Teil)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd01_t1.html" target="_blank">🤖 KI-Set PD01 Einführung · Teil 1/3 — 36 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd01_t2.html" target="_blank">🤖 KI-Set PD01 Einführung · Teil 2/3 — 36 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd01_t3.html" target="_blank">🤖 KI-Set PD01 Einführung · Teil 3/3 — 36 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd02_t1.html" target="_blank">🤖 KI-Set PD02 Testkonstruktion · Teil 1/5 — 34 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd02_t2.html" target="_blank">🤖 KI-Set PD02 Testkonstruktion · Teil 2/5 — 34 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd02_t3.html" target="_blank">🤖 KI-Set PD02 Testkonstruktion · Teil 3/5 — 34 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd02_t4.html" target="_blank">🤖 KI-Set PD02 Testkonstruktion · Teil 4/5 — 34 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd02_t5.html" target="_blank">🤖 KI-Set PD02 Testkonstruktion · Teil 5/5 — 33 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd03_t1.html" target="_blank">🤖 KI-Set PD03 Klassische Testtheorie · Teil 1/2 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd03_t2.html" target="_blank">🤖 KI-Set PD03 Klassische Testtheorie · Teil 2/2 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd04_t1.html" target="_blank">🤖 KI-Set PD04 Explorative Faktorenanalyse · Teil 1/3 — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd04_t2.html" target="_blank">🤖 KI-Set PD04 Explorative Faktorenanalyse · Teil 2/3 — 40 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd04_t3.html" target="_blank">🤖 KI-Set PD04 Explorative Faktorenanalyse · Teil 3/3 — 39 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd05_t1.html" target="_blank">🤖 KI-Set PD05 Itemanalyse · Teil 1/2 — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd05_t2.html" target="_blank">🤖 KI-Set PD05 Itemanalyse · Teil 2/2 — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd06_t1.html" target="_blank">🤖 KI-Set PD06 Gütekriterien I · Teil 1/3 — 31 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd06_t2.html" target="_blank">🤖 KI-Set PD06 Gütekriterien I · Teil 2/3 — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd06_t3.html" target="_blank">🤖 KI-Set PD06 Gütekriterien I · Teil 3/3 — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd07_t1.html" target="_blank">🤖 KI-Set PD07 Gütekriterien II (Validität) · Teil 1/3 — 33 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd07_t2.html" target="_blank">🤖 KI-Set PD07 Gütekriterien II (Validität) · Teil 2/3 — 33 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd07_t3.html" target="_blank">🤖 KI-Set PD07 Gütekriterien II (Validität) · Teil 3/3 — 33 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd08_t1.html" target="_blank">🤖 KI-Set PD08 Normierung · Teil 1/2 — 36 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd08_t2.html" target="_blank">🤖 KI-Set PD08 Normierung · Teil 2/2 — 36 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd09_t1.html" target="_blank">🤖 KI-Set PD09 Diagnostische Entscheidungen · Teil 1/2 — 30 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd09_t2.html" target="_blank">🤖 KI-Set PD09 Diagnostische Entscheidungen · Teil 2/2 — 29 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd10_t1.html" target="_blank">🤖 KI-Set PD10 Probabilistische Testtheorie (IRT) · Teil 1/3 — 29 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd10_t2.html" target="_blank">🤖 KI-Set PD10 Probabilistische Testtheorie (IRT) · Teil 2/3 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd10_t3.html" target="_blank">🤖 KI-Set PD10 Probabilistische Testtheorie (IRT) · Teil 3/3 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd11_t1.html" target="_blank">🤖 KI-Set PD11 Verhaltensbeobachtung · Teil 1/2 — 38 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd11_t2.html" target="_blank">🤖 KI-Set PD11 Verhaltensbeobachtung · Teil 2/2 — 38 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd12_t1.html" target="_blank">🤖 KI-Set PD12 Neuropsychologie · Teil 1/2 — 25 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd12_t2.html" target="_blank">🤖 KI-Set PD12 Neuropsychologie · Teil 2/2 — 25 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd13_t1.html" target="_blank">🤖 KI-Set PD13 Leistungstests · Teil 1/3 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd13_t2.html" target="_blank">🤖 KI-Set PD13 Leistungstests · Teil 2/3 — 28 Fragen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/ki_set_m11a_pd13_t3.html" target="_blank">🤖 KI-Set PD13 Leistungstests · Teil 3/3 — 27 Fragen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">★ Vertiefungsseminar — Testkonstruktion in der Praxis</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/sem_vertiefungsseminar.html" target="_blank">Testkonstruktion in der Praxis (Big-Five-Projekt · Spearman-Brown · Verdünnungsformel · MTMM · Kriteriumsgüte)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/m11a_uebungsmodul_arbeitsblaetter.html" target="_blank">🆕 Übungsmodul Aufgabenblätter 1–6 (Vom Konstrukt zur validierten Skala · quellengebundenes Training in drei Schwierigkeitsstufen)</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">🧩 Anwendungstrainer — psychometrische Anwendungskompetenz (10 Module, neue Fälle)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/START.html" target="_blank">🧩 Anwendungstrainer — Übersicht &amp; Navigation (Start hier)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_01_Polung_Invertierung.html" target="_blank">01 · Polung, Invertierung und Datenaufbereitung</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_02_EFA_Voraussetzungen.html" target="_blank">02 · EFA-Voraussetzungen und Datenprüfung</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_03_Faktorenanzahl_Rotation_Itemselektion.html" target="_blank">03 · Faktorenanzahl, Rotation und Itemselektion</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_04_Itemanalyse_Reliabilitaet.html" target="_blank">04 · Itemanalyse und Reliabilität</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_05_Reliabilitaetsverfahren_Testverlaengerung.html" target="_blank">05 · Reliabilitätsverfahren und Testverlängerung</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_06_Validitaet_MTMM.html" target="_blank">06 · Validität und MTMM</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_07_Kriterienqualitaet_Testvergleich.html" target="_blank">07 · Kriterienqualität und Testvergleich</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_08_Konstruktklaerung_Itemkonstruktion.html" target="_blank">08 · Konstruktklärung und Itemkonstruktion</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_09_Skalenbildung_Abschlussvalidierung.html" target="_blank">09 · Skalenbildung und Abschlussvalidierung</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/M11a_Anwendungstrainer_10_Integrativer_Abschlussfall.html" target="_blank">10 · Integrativer Abschlussfall</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">Testtheorie &amp; Testkonstruktion (Wedderhoff)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd01_einfuehrung.html" target="_blank">PD01 Einführung in die Diagnostik</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd02_testkonstruktion.html" target="_blank">PD02 Testkonstruktion</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd03_ktt.html" target="_blank">PD03 Klassische Testtheorie (KTT)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd04_efa.html" target="_blank">PD04 Explorative Faktorenanalyse (EFA)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd05_itemanalyse.html" target="_blank">PD05 Itemanalyse</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd06_guetekriterien1.html" target="_blank">PD06 Gütekriterien I (Objektivität &amp; Reliabilität)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd07_guetekriterien2.html" target="_blank">PD07 Gütekriterien II (Validität)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd08_normierung.html" target="_blank">PD08 Interpretation von Testwerten (Normen)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd09_entscheidungen.html" target="_blank">PD09 Diagnostische Entscheidungen</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd10_ptt.html" target="_blank">PD10 Probabilistische Testtheorie (IRT)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd11_beobachtung.html" target="_blank">PD11 Verhaltensbeobachtung (Standardisierung · nicht-reaktive Verfahren · Cohens κ)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd12_neuropsychologie.html" target="_blank">PD12 Diagnostik der Neuropsychologie (Verfahren · prämorbide Leistung · symptom validity tests)</a>
+          <a class="lm-link" href="Lernmodule/S4 M11a Psychologische Diagnostik I/pd13_leistungstests.html" target="_blank">PD13 Leistungsmessung (Leistungstests · Aufmerksamkeit &amp; Konzentration)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">👁️</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M2a</span> Allgemeine Psychologie A</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub6')" id="pub6Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub6LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/altklausur_m2a.html" target="_blank">★ Altklausur — 65 echte, geprüfte MC-Fragen (ganzes Modul)</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/ki_set_m2a.html" target="_blank">🤖 KI-Übungsset — 52 Fragen über alle 14 Themen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">Lernmodule VL01–VL14</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl01_wahrnehmung1.html" target="_blank">VL01 Wahrnehmung I</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl02_wahrnehmung2.html" target="_blank">VL02 Wahrnehmung II</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl03_aufmerksamkeit.html" target="_blank">VL03 Aufmerksamkeit</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl04_bewusstsein.html" target="_blank">VL04 Bewusstsein</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl05_gedaechtnis1.html" target="_blank">VL05 Gedächtnis I</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl06_gedaechtnis2.html" target="_blank">VL06 Gedächtnis II</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl07_gedaechtnis3.html" target="_blank">VL07 Gedächtnis III</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl08_kategorien.html" target="_blank">VL08 Kategorisierung</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl09_sprache1.html" target="_blank">VL09 Sprache I (Perzeption)</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl10_sprache2.html" target="_blank">VL10 Sprache II (Produktion)</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl11_sprache3.html" target="_blank">VL11 Sprache III (Erwerb)</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl12_denken1.html" target="_blank">VL12 Denken &amp; Problemlösen I</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl13_denken2.html" target="_blank">VL13 Denken &amp; Problemlösen II</a>
+          <a class="lm-link" href="Lernmodule/S2 M2a Allgemeine Psychologie A/vl14_urteilen.html" target="_blank">VL14 Urteilen &amp; Entscheiden</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-card">
+    <div class="mod-head">
+      <span class="mod-icon">📐</span>
+      <div class="mod-info">
+        <div class="mod-name"><span class="mod-kuerzel">M14b</span> Wissenschaftliche Methodenlehre II</div>
+      </div>
+      <div class="mod-actions">
+        <button class="btn-lm" onclick="toggleLM('pub7')" id="pub7Btn">📖 Lernmodule</button>
+      </div>
+    </div>
+    <div class="lm-drawer" id="pub7LM">
+      <div class="lm-section">
+        <div class="lm-section-title">★ Übungssets — Quiz (Üben + Klausur-Modus)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/altklausur_m14b.html" target="_blank">★ Altklausur — 30 echte, geprüfte Klausurfragen</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/freitext_m14b.html" target="_blank">✍️ Freitext-Selbsttest — 22 echte Freitext-/Rechenfragen mit Musterlösung</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/ki_set_m14b.html" target="_blank">🤖 KI-Übungsset — 52 Fragen über alle 14 Themen</a>
+        </div>
+      </div>
+      <div class="lm-section">
+        <div class="lm-section-title">Lernmodule VL01–VL14 (Dirk Lubbe)</div>
+        <div class="lm-grid">
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl01_einfuehrung.html" target="_blank">VL01 Einführung &amp; Wiederholung</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl02_einfaktorielle_va.html" target="_blank">VL02 Einfaktorielle Varianzanalyse</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl03_einfaktorielle_kontraste.html" target="_blank">VL03 Einfaktorielle Kontraste</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl04_zweifaktorielle_va.html" target="_blank">VL04 Zweifaktorielle Varianzanalyse</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl05_interaktion_und_modelle.html" target="_blank">VL05 Interaktion und Modelle</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl06_zweifaktorielle_kontraste.html" target="_blank">VL06 Kontraste (zweifaktoriell)</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl07_messwiederholung.html" target="_blank">VL07 Messwiederholung</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl08_partielle_korrelation.html" target="_blank">VL08 Partielle Korrelation</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl09_multiple_regression_i.html" target="_blank">VL09 Multiple Regression I</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl10_multiple_regression_ii.html" target="_blank">VL10 Multiple Regression II</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl11_einflussreiche_beobachtungen.html" target="_blank">VL11 Einflussreiche Beobachtungen</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl12_effekt_teststaerke.html" target="_blank">VL12 Effekt- &amp; Teststärke</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl13_verletzungen_modellannahmen.html" target="_blank">VL13 Verletzungen von Modellannahmen</a>
+          <a class="lm-link" href="Lernmodule/S2 M14b Wissenschaftliche Methodenlehre II/vl14_fehlende_werte.html" target="_blank">VL14 Fehlende Werte</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleLM(mod) {
+  var drawer = document.getElementById(mod + 'LM');
+  var btn    = document.getElementById(mod + 'Btn');
+  var isOpen = drawer.classList.contains('open');
+  drawer.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? '📖 Lernmodule' : '📖 Lernmodule ▴';
+}
+
+function pcMsg(t){var m=document.getElementById('pcMsg');if(m)m.textContent=t;}
+function pcB2b(u8){var s='';for(var i=0;i<u8.length;i++)s+=String.fromCharCode(u8[i]);return btoa(s);}
+function pcB2u(b){var s=atob(b),u=new Uint8Array(s.length);for(var i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u;}
+async function pcExport(){
+  var d={},n=0;
+  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('lm-')===0){d[k]=localStorage.getItem(k);n++;}}
+  if(!n){pcMsg('Noch kein Fortschritt auf diesem Gerät.');return;}
+  var json=JSON.stringify(d),code;
+  try{
+    if(window.CompressionStream){
+      var buf=await new Response(new Blob([json]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer();
+      code='G1:'+pcB2b(new Uint8Array(buf));
+    }else{code='B1:'+btoa(unescape(encodeURIComponent(json)));}
+  }catch(e){code='B1:'+btoa(unescape(encodeURIComponent(json)));}
+  document.getElementById('pcText').value=code;
+  localStorage.setItem('lm-backup-ts',''+Date.now());
+  pcMsg(n+' Einträge gesichert · jetzt 📋 Kopieren.');
+}
+function pcHint(){
+  var hat=false;
+  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&/^lm-.+-vl\d+$/.test(k)){hat=true;break;}}
+  if(!hat)return;
+  var ts=parseInt(localStorage.getItem('lm-backup-ts')||'0',10);
+  if(!ts){pcMsg('⚠️ Lernstand noch nie gesichert — einmal „⬇️ Code erzeugen" + Kopieren (geht bei Browser-Datenlöschung verloren!).');return;}
+  var tage=Math.floor((Date.now()-ts)/86400000);
+  if(tage>=7)pcMsg('⚠️ Letzte Sicherung vor '+tage+' Tagen — wieder sichern?');
+}
+pcHint();
+function pcCopy(){
+  var t=document.getElementById('pcText');
+  if(!t.value){pcMsg('Erst „Code erzeugen".');return;}
+  t.select();t.setSelectionRange(0,t.value.length);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(function(){pcMsg('Code kopiert ✓');},function(){pcMsg('Markiert — bitte manuell kopieren.');});}
+  else{try{document.execCommand('copy');pcMsg('Code kopiert ✓');}catch(e){pcMsg('Markiert — bitte manuell kopieren.');}}
+}
+async function pcImport(){
+  var code=(document.getElementById('pcText').value||'').trim();
+  if(!code){pcMsg('Bitte einen Code einfügen.');return;}
+  var json;
+  try{
+    if(code.indexOf('G1:')===0){
+      var buf=await new Response(new Blob([pcB2u(code.slice(3))]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+      json=new TextDecoder().decode(buf);
+    }else if(code.indexOf('B1:')===0){json=decodeURIComponent(escape(atob(code.slice(3))));}
+    else{throw 0;}
+    var d=JSON.parse(json),n=0;
+    for(var k in d){if(k.indexOf('lm-')===0){localStorage.setItem(k,d[k]);n++;}}
+    pcMsg(n+' Einträge geladen — Seite wird neu geladen…');
+    setTimeout(function(){location.reload();},900);
+  }catch(e){pcMsg('❌ Ungültiger oder beschädigter Code.');}
+}
+function pcStats(){
+  var seen=0,mast=0,corr=0,tot=0,due=0,now=Date.now();
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);if(!k||k.indexOf('lm-')!==0)continue;
+    var obj;try{obj=JSON.parse(localStorage.getItem(k));}catch(e){continue;}
+    if(!obj||typeof obj!=='object'||Array.isArray(obj))continue;
+    for(var id in obj){
+      var p=obj[id];
+      if(!p||typeof p!=='object'||(p.reps===undefined&&p.stability===undefined&&p.state===undefined))continue;
+      seen++;
+      if((p.stability||0)>21)mast++;
+      corr+=Math.max(0,(p.reps||0)-(p.lapses||0));
+      tot+=(p.reps||0);
+      if(p.due&&now>=p.due)due++;
+      else if(!p.due&&p.state==='new')due++;
+    }
+  }
+  var s=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+  s('psSeen',seen);s('psDue',due);s('psMast',mast);s('psQuote',tot?Math.round(corr/tot*100)+'%':'—');
+}
+
+</script>
+<script src="progress.js"></script>
+<script src="changelog.js?v=b0128fa0"></script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · 🎓 Klausurformat-Übung (32 × 3, Mehrfachwahl + Malus)</title>
+<!--
+  Klausurformat-Übungsset von build_klausurformat.py (Engine-CSS = scaffold_lernmodul.py;
+  eigener Kprim/Malus-Runner). Format: 32×3 Mehrfachwahl mit Maluspunkten.
+  Storage-Key: lm-m11a-vl96
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Klausurformat-Runner (Kprim + Malus) */
+.kp-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.kp-scoreline{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:8px 0;font-size:.85rem;color:var(--text2)}
+.kp-opt{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;margin:7px 0;cursor:pointer;background:var(--surface2);transition:.12s}
+.kp-opt:hover{border-color:var(--accent)}
+.kp-opt.on{border-color:var(--accent);background:rgba(129,140,248,.10)}
+.kp-opt input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:0 0 auto}
+.kp-opt .kp-ltr{font-weight:700;color:var(--text2);flex:0 0 20px}
+.kp-opt .kp-txt{flex:1;color:var(--text);font-size:.9rem;line-height:1.45}
+.kp-opt.kp-corr{border-color:var(--green);background:rgba(52,211,153,.12)}
+.kp-opt.kp-wrong{border-color:var(--red);background:rgba(248,113,113,.12)}
+.kp-tag{font-size:.7rem;font-weight:700;margin-left:6px;border-radius:6px;padding:1px 7px}
+.kp-tag.plus{background:rgba(52,211,153,.2);color:var(--green)}
+.kp-tag.zero{background:rgba(148,163,184,.18);color:var(--text3)}
+.kp-tag.minus{background:rgba(248,113,113,.2);color:var(--red)}
+.kp-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.kp-exp{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.28);border-radius:9px;padding:12px;margin-top:10px;font-size:.86rem;color:var(--text2);display:none}
+.kp-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.kp-hint{background:rgba(217,154,38,.07);border:1px solid rgba(217,154,38,.32);border-radius:9px;padding:12px;margin-top:10px;font-size:.86rem;color:var(--text2)}
+.kp-hint .lbl{font-size:.63rem;font-weight:700;color:#d99a26;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.kp-gloss{background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.30);border-radius:9px;padding:12px;margin-top:10px;font-size:.86rem;color:var(--text2)}
+.kp-gloss .lbl{font-size:.63rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kp-gloss dl{margin:0}
+.kp-gloss dt{font-weight:700;color:var(--text);margin-top:6px}
+.kp-gloss dt:first-of-type{margin-top:0}
+.kp-gloss dd{margin:1px 0 0;padding-left:0;line-height:1.45}
+.kp-qmeta{font-size:.8rem;color:var(--text3);margin-bottom:6px}
+.kp-passbar{height:14px;border-radius:7px;background:var(--surface2);overflow:hidden;margin:8px 0;position:relative;border:1px solid var(--border)}
+.kp-passbar > i{display:block;height:100%;background:var(--accent)}
+.kp-passmark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--text);left:50%}
+.kp-verdict{font-size:1rem;font-weight:800;margin:6px 0}
+.kp-verdict.pass{color:var(--green)}.kp-verdict.fail{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · 🎓 Klausurformat-Übung (32 × 3, Mehrfachwahl + Malus)</h1>
+<p class="page-sub">Psychologische Diagnostik I · Dr. Nadine Wedderhoff · echtes Klausurformat (32 Aufgaben, 3 Optionen, Maluspunkte) · 23.07.2026</p>
+<div class="badge-line"><strong>🎓 Übung im ECHTEN Klausurformat.</strong> 32 Mehrfachwahl-Aufgaben mit je 3 unabhängig richtigen/falschen Optionen — exakt das Format der offiziellen Klausurinfo (mind. 1 richtig, auch 2 oder 3; Bewertung pro Option mit Maluspunkt für falsch Angekreuztes, 96 Punkte, 48 zum Bestehen). Inhalt über alle 13 VL (PD01–PD13) + Vertiefungsseminar; die 3 offiziellen Beispielitems sind enthalten.</div>
+
+<div class="section-nav" style="margin:14px 0">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">🎓 Klausur-Übung</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">ℹ️ Format &amp; Bewertung</button>
+</div>
+
+<!-- ═══════════ SEKTION 1 — Klausurformat-Runner ═══════════ -->
+<section class="section active" id="s0">
+  <div id="kRunner"></div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — Format & Bewertung ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">ℹ️ Klausurformat &amp; Bewertung</div>
+    <div class="sec-lz">Übung im echten Klausurformat: 32 Aufgaben × 3 Optionen, Mehrfachwahl mit Malus-Bewertung — Üben (Sofort-Feedback) und Klausur (Auswertung am Ende).</div>
+  </div>
+  <div class="card"><div class="card-title">Aufbau</div>Die echte Klausur besteht aus <strong>32 Aufgaben</strong> mit je <strong>3 Antwortoptionen</strong>. Pro Aufgabe ist <strong>mindestens eine</strong> Option richtig — es können auch zwei oder alle drei richtig sein (Mehrfachwahl). 90 Minuten, Taschenrechner erlaubt.</div>
+  <div class="card"><div class="card-title">Bewertung pro Option (Teilaufgabe)</div>richtig angekreuzt → <strong style="color:var(--green)">+1</strong> · falsche Option nicht angekreuzt → <strong style="color:var(--green)">+1</strong> · richtige Option nicht angekreuzt → <strong>0</strong> · falsche Option angekreuzt → <strong style="color:var(--red)">−1 (Malus)</strong>. Dieses Set: 32 × 3 = <strong>96 Punkte</strong>, zum Bestehen die Hälfte (<strong>48</strong>) — in der echten Klausur 32 × 3 = 96 Punkte / 48.</div>
+  <div class="card"><div class="card-title">⚠ Strategie</div>Weil falsche Kreuze bestraft werden, lohnt sich Ankreuzen erst ab ausreichender Sicherheit: Erwartungswert „ankreuzen" = 2p−1, „weglassen" = 1−p (mit p = Wahrscheinlichkeit, dass die Option richtig ist). Beide sind ab <strong>p ≈ 2/3</strong> gleich — darunter besser <strong>nicht ankreuzen</strong>.</div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(0)">← Zur Übung</button>
+  </div>
+</section>
+
+</div>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+<script>
+var LS_KEY = 'lm-m11a-vl96';
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {};
+
+var bonusFragen = [];
+
+var corrCorrect = {};
+var corrExpl = {};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var view = OPT_SHUF ? _shufCopy(q) : {opts:q.opts, c:q.c};
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  view.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+view.c+','+isFinal+')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* ─── Options-Shuffle: bei JEDEM Rendern/Durchgang frisch (nicht mehr nur einmal
+   pro Seitenladung), damit sich die Position der richtigen Antwort bei erneuten
+   Versuchen/Durchgängen ändert. Gibt eine NEUE {opts,c}-Kopie zurück, mutiert q
+   NICHT — die Originaldaten (data.json-Reihenfolge) bleiben als Quelle erhalten.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufCopy(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number'||_hasLtrRef(q.e)) return {opts:(q?q.opts:[]), c:(q?q.c:0)};
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  return {opts:idx.map(function(i){return q.opts[i];}), c:idx.indexOf(q.c)};
+}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+var GLOSSAR = [
+  {
+    "t": "Psychologische Diagnostik",
+    "a": [
+      "Diagnostik"
+    ],
+    "d": "Systematische Erhebung und Verrechnung von Informationen über Menschen zur Beantwortung von Fragestellungen zu Beschreibung, Klassifikation, Erklärung oder Vorhersage von Erleben und Verhalten."
+  },
+  {
+    "t": "Test",
+    "a": [
+      "Tests",
+      "Testen",
+      "psychometrischer Test"
+    ],
+    "d": "Wissenschaftliches Routineverfahren, mit dem ein Merkmal gemessen wird."
+  },
+  {
+    "t": "Diagnostischer Prozess",
+    "a": [],
+    "d": "Abfolge diagnostischer Teilschritte: 1. globale Fragestellung, 2. Differenzierung der psychologischen Fragen, 3. Auswahl der Instrumente, 4. Durchführung und Auswertung, 5. Integration der Ergebnisse."
+  },
+  {
+    "t": "Eigenschaftsdiagnostik",
+    "a": [
+      "Trait",
+      "Traits"
+    ],
+    "d": "Paradigma, das Verhalten primär auf zeitlich stabile Persönlichkeitseigenschaften (Traits) zurückführt und die Situation eher ausblendet."
+  },
+  {
+    "t": "Verhaltensdiagnostik",
+    "a": [],
+    "d": "Paradigma, das Verhalten als Funktion der Situation erklärt; zentrales Werkzeug ist die funktionale Verhaltensanalyse (S-O-R-K-C)."
+  },
+  {
+    "t": "S-O-R-K-C",
+    "a": [
+      "SORKC"
+    ],
+    "d": "Verhaltensgleichung der funktionalen Verhaltensanalyse: Stimulus – Organismus – Reaktion – Kontingenz – Konsequenz. Repräsentativ für die Verhaltensdiagnostik."
+  },
+  {
+    "t": "Interaktionismus",
+    "a": [
+      "interaktionistisch",
+      "Dynamisch-Interaktionistisches"
+    ],
+    "d": "Position, nach der Situation und Persönlichkeitseigenschaften das Verhalten gemeinsam bestimmen."
+  },
+  {
+    "t": "NIPS",
+    "a": [
+      "Nonlinear Interaction of Person and Situation"
+    ],
+    "d": "Nonlinear Interaction of Person and Situation (Schmitt et al., 2013): Beispielmodell des Interaktionismus, bei dem Trait-Ausprägung und situative Provokation nichtlinear zusammenwirken."
+  },
+  {
+    "t": "L-Daten",
+    "a": [
+      "Life-Record"
+    ],
+    "d": "Datenart nach Cattell: Verhaltens- und Biografiedaten aus dem realen Leben (z. B. Verhaltensregistrierung, Akten)."
+  },
+  {
+    "t": "Q-Daten",
+    "a": [
+      "questionnaire data"
+    ],
+    "d": "Datenart nach Cattell: Selbst- oder Fremdauskünfte aus Fragebögen und Interviews (subjektive Ratings)."
+  },
+  {
+    "t": "T-Daten",
+    "a": [
+      "test data"
+    ],
+    "d": "Datenart nach Cattell: objektive Testdaten, bei denen Antworten eindeutig als richtig oder falsch klassifizierbar sind."
+  },
+  {
+    "t": "Testkonstruktion",
+    "a": [
+      "Testentwicklung"
+    ],
+    "d": "Systematischer Ablauf von der Merkmalsfestlegung über Testplanung und Testrohform bis zur Normierung der Testendform."
+  },
+  {
+    "t": "Konstruktionsstrategie",
+    "a": [
+      "Konstruktionsstrategien",
+      "Strategie der Testkonstruktion"
+    ],
+    "d": "Weg, auf dem Items gewonnen und ausgewählt werden: rational/deduktiv, external/kriteriumsbezogen oder induktiv/faktorenanalytisch."
+  },
+  {
+    "t": "rationale Strategie",
+    "a": [
+      "deduktive Strategie",
+      "rational/deduktiv"
+    ],
+    "d": "Items werden theoriegeleitet aus einer ausgearbeiteten Konstruktdefinition abgeleitet."
+  },
+  {
+    "t": "externale Strategie",
+    "a": [
+      "kriteriumsbezogene Strategie",
+      "kriteriumsorientierte Testkonstruktion"
+    ],
+    "d": "Items werden danach ausgewählt, wie gut sie zwischen Kriteriumsgruppen trennen — unabhängig vom Inhalt. Klassisches Beispiel: MMPI."
+  },
+  {
+    "t": "induktive Strategie",
+    "a": [
+      "faktorenanalytische Strategie"
+    ],
+    "d": "Konstruktionsstrategie, die Items anhand der empirischen (faktorenanalytischen) Struktur der Daten auswählt."
+  },
+  {
+    "t": "Itemformat",
+    "a": [
+      "Itemformate",
+      "Aufgabenformat",
+      "Antwortformat"
+    ],
+    "d": "Art, wie eine Antwort gegeben wird: freies (offenes), gebundenes (geschlossenes) oder atypisches Antwortformat."
+  },
+  {
+    "t": "offenes Antwortformat",
+    "a": [
+      "freies Antwortformat"
+    ],
+    "d": "Antwort wird selbst produziert (Ergänzungs- und Kurzaufsatzaufgaben) statt aus Vorgaben ausgewählt."
+  },
+  {
+    "t": "geschlossenes Antwortformat",
+    "a": [
+      "gebundenes Antwortformat"
+    ],
+    "d": "Antwort wird aus Vorgaben gewählt oder beurteilt: Ordnungs-, Auswahl- und Beurteilungsaufgaben."
+  },
+  {
+    "t": "Ergänzungsaufgaben",
+    "a": [
+      "Ergänzungsaufgabe"
+    ],
+    "d": "Offenes Format: eine Lücke bzw. kurze Antwort wird frei ergänzt."
+  },
+  {
+    "t": "Kurzaufsatzaufgaben",
+    "a": [
+      "Kurzaufsatzaufgabe"
+    ],
+    "d": "Offenes Format: die Antwort wird als kurzer freier Text formuliert."
+  },
+  {
+    "t": "Beurteilungsaufgaben",
+    "a": [
+      "Beurteilungsaufgabe"
+    ],
+    "d": "Geschlossenes Format: eine Aussage wird auf einer Skala eingestuft (Rating- bzw. Analogskala-Aufgaben)."
+  },
+  {
+    "t": "Ratingskala",
+    "a": [
+      "Ratingskalen",
+      "Ratingkategorien"
+    ],
+    "d": "Abgestufte Antwortskala; Gestaltungsmerkmale sind u. a. Polarität (uni-/bipolar), Stufenzahl (gerade/ungerade) und Art der Verankerung."
+  },
+  {
+    "t": "Likert",
+    "a": [
+      "Likert-Format",
+      "Likert-Skala"
+    ],
+    "d": "Antwortformat, bei dem Aussagen auf einer mehrstufigen Zustimmungsskala beantwortet werden."
+  },
+  {
+    "t": "Verankerung",
+    "a": [
+      "verankert",
+      "numerische Verankerung"
+    ],
+    "d": "Etikettierung der Skalenstufen — verbal, numerisch oder symbolisch; vollständig oder nur an den Extrempolen."
+  },
+  {
+    "t": "Ranking",
+    "a": [],
+    "d": "Antwortformat, bei dem Objekte in eine Rangreihe gebracht werden: Daten sind ordinal, relativ verankert und ipsativ (voneinander abhängig)."
+  },
+  {
+    "t": "ipsativ",
+    "a": [
+      "ipsative"
+    ],
+    "d": "Werte sind nur innerhalb einer Person vergleichbar, weil die Bewertung eines Objekts von den übrigen abhängt (z. B. bei Rangreihen)."
+  },
+  {
+    "t": "Antworttendenz",
+    "a": [
+      "Antworttendenzen",
+      "Response Set"
+    ],
+    "d": "Systematische Antwortverzerrung unabhängig vom Iteminhalt, z. B. Akquieszenz, soziale Erwünschtheit oder Extremitätstendenz."
+  },
+  {
+    "t": "Akquieszenz",
+    "a": [
+      "Ja-Sage-Tendenz"
+    ],
+    "d": "Antworttendenz, bei der Items unabhängig von ihrem Inhalt bevorzugt bejaht werden."
+  },
+  {
+    "t": "soziale Erwünschtheit",
+    "a": [
+      "sozial erwünscht"
+    ],
+    "d": "Tendenz, sich in einem gesellschaftlich vorteilhaften Licht darzustellen; aufdeckbar über Kontrollskalen (Lügenskalen)."
+  },
+  {
+    "t": "Rekodierung",
+    "a": [
+      "rekodiert",
+      "recodiert",
+      "invertiert",
+      "Umpolung"
+    ],
+    "d": "Umdrehen der Antwortwerte negativ gepolter Items, damit alle Items in dieselbe Richtung zeigen."
+  },
+  {
+    "t": "reflektives Messprinzip",
+    "a": [
+      "reflektiv"
+    ],
+    "d": "Messprinzip, bei dem das latente Merkmal als Ursache der Itemantworten modelliert wird."
+  },
+  {
+    "t": "formatives Messprinzip",
+    "a": [
+      "formativ"
+    ],
+    "d": "Messprinzip, bei dem die Indikatoren das Konstrukt gemeinsam zusammensetzen."
+  },
+  {
+    "t": "Klassische Testtheorie",
+    "a": [
+      "KTT"
+    ],
+    "d": "Messfehlertheorie, die den beobachteten Wert in einen wahren Wert und einen Messfehler zerlegt."
+  },
+  {
+    "t": "wahrer Wert",
+    "a": [
+      "Tau",
+      "τ"
+    ],
+    "d": "Erwartungswert des beobachteten Testwerts einer Person bei unendlich vielen Messwiederholungen (Existenzaxiom der KTT)."
+  },
+  {
+    "t": "Messfehler",
+    "a": [
+      "Messfehlers",
+      "Fehlerwert",
+      "Epsilon"
+    ],
+    "d": "Zufällige Abweichung des beobachteten Messwerts vom wahren Wert."
+  },
+  {
+    "t": "Axiom",
+    "a": [
+      "Axiome",
+      "Axiomen"
+    ],
+    "d": "Nicht beweisbare Grundannahme, auf der die Klassische Testtheorie aufbaut."
+  },
+  {
+    "t": "Erwartungswert",
+    "a": [],
+    "d": "Theoretischer Mittelwert einer Zufallsvariablen über unendlich viele Wiederholungen."
+  },
+  {
+    "t": "Varianz",
+    "a": [
+      "Varianzen"
+    ],
+    "d": "Mittlere quadrierte Abweichung vom Mittelwert; Maß der Streuung. Beobachtete Varianz = wahre Varianz + Fehlervarianz."
+  },
+  {
+    "t": "Standardabweichung",
+    "a": [
+      "Streuung",
+      "SD"
+    ],
+    "d": "Wurzel aus der Varianz; Streuungsmaß in der Einheit der Messwerte."
+  },
+  {
+    "t": "Korrelation",
+    "a": [
+      "Korrelationen",
+      "korreliert",
+      "Produkt-Moment"
+    ],
+    "d": "Standardisiertes Maß des linearen Zusammenhangs zweier Variablen, Wertebereich −1 bis +1."
+  },
+  {
+    "t": "Kovarianz",
+    "a": [],
+    "d": "Unstandardisiertes Maß des gemeinsamen Variierens zweier Variablen; geteilt durch die Streuungen ergibt sich die Korrelation."
+  },
+  {
+    "t": "Paralleltest",
+    "a": [
+      "parallele Messungen",
+      "Parallelität",
+      "Paralleltestreliabilität"
+    ],
+    "d": "Zwei Messungen mit identischen wahren Werten und gleicher Fehlervarianz; ihre Korrelation schätzt die Reliabilität."
+  },
+  {
+    "t": "Testhälften",
+    "a": [
+      "Testhalbierung",
+      "Split-half",
+      "Halbierungsreliabilität"
+    ],
+    "d": "Aufteilung eines Tests in zwei Hälften; deren Korrelation wird per Spearman-Brown auf die volle Testlänge hochgerechnet."
+  },
+  {
+    "t": "tau-äquivalent",
+    "a": [
+      "kongenerisch",
+      "Tau-Äquivalente"
+    ],
+    "d": "Abgestufte Äquivalenzannahmen von Messungen: kongenerisch (schwächste) – tau-äquivalent – parallel (strengste, Voraussetzung von Spearman-Brown)."
+  },
+  {
+    "t": "Reliabilität",
+    "a": [
+      "Messgenauigkeit",
+      "reliabel"
+    ],
+    "d": "Gütekriterium der Messgenauigkeit eines Tests."
+  },
+  {
+    "t": "Retestreliabilität",
+    "a": [
+      "Wiederholungsreliabilität",
+      "Retest"
+    ],
+    "d": "Korrelation derselben Messung zu zwei Zeitpunkten; bei reinen Speedtests problematisch wegen Übungseffekten."
+  },
+  {
+    "t": "interne Konsistenz",
+    "a": [
+      "Konsistenz"
+    ],
+    "d": "Reliabilitätsschätzung aus der Homogenität der Items eines Tests (üblich: Cronbachs Alpha)."
+  },
+  {
+    "t": "Cronbachs Alpha",
+    "a": [
+      "Alpha",
+      "Cronbach"
+    ],
+    "d": "Maß der internen Konsistenz; braucht mindestens zwei Items und steigt mit Itemzahl und Itemhomogenität."
+  },
+  {
+    "t": "Spearman-Brown",
+    "a": [
+      "Spearman-Brown-Formel",
+      "Verlängerungsfaktor"
+    ],
+    "d": "Formel, die schätzt, wie sich die Reliabilität verändert, wenn ein Test verlängert oder verkürzt wird."
+  },
+  {
+    "t": "Standardmessfehler",
+    "a": [
+      "standard error of measurement"
+    ],
+    "d": "Streuung der Messwerte um den wahren Wert: SE(ε) = SD(x)·√(1 − Rel). Je größer, desto ungenauer der Test."
+  },
+  {
+    "t": "Konfidenzintervall",
+    "a": [
+      "Vertrauensintervall"
+    ],
+    "d": "Wertebereich um einen Testwert, in dem der wahre Wert mit einer bestimmten Sicherheit liegt."
+  },
+  {
+    "t": "kritische Differenz",
+    "a": [],
+    "d": "Mindestunterschied zweier Testwerte, ab dem die Differenz nicht mehr durch Messfehler erklärbar ist."
+  },
+  {
+    "t": "Reliabilitätsindex",
+    "a": [],
+    "d": "Wurzel aus dem Reliabilitätskoeffizienten."
+  },
+  {
+    "t": "Regressionsansatz",
+    "a": [],
+    "d": "Schätzung des wahren Werts durch Gewichtung mit der Reliabilität und Beimischung des Mittelwerts; der Schätzer liegt näher am Populationsmittel und streut weniger."
+  },
+  {
+    "t": "Itemanalyse",
+    "a": [],
+    "d": "Prüfung der Einzelitems anhand von Schwierigkeit, Varianz und Trennschärfe zur Auswahl der Items für die Testendform."
+  },
+  {
+    "t": "Itemschwierigkeit",
+    "a": [
+      "Schwierigkeitsindex",
+      "Schwierigkeit"
+    ],
+    "d": "Kennwert dafür, welcher Anteil der Personen ein Item gelöst hat."
+  },
+  {
+    "t": "Itemvarianz",
+    "a": [],
+    "d": "Streuung der Antworten auf ein einzelnes Item."
+  },
+  {
+    "t": "Trennschärfe",
+    "a": [
+      "Trennschärfen",
+      "Trennschärfeindex",
+      "trennscharf"
+    ],
+    "d": "Kennwert für den Zusammenhang zwischen den Antworten auf ein Item und dem Gesamttestwert."
+  },
+  {
+    "t": "part-whole",
+    "a": [
+      "part-whole-korrigiert",
+      "part-whole-Korrektur"
+    ],
+    "d": "Korrektur der Trennschärfe um den Eigenanteil des Items am Gesamtwert."
+  },
+  {
+    "t": "Deckeneffekt",
+    "a": [
+      "Deckeneffekte"
+    ],
+    "d": "Häufung von Messwerten am oberen Rand der Skala."
+  },
+  {
+    "t": "Bodeneffekt",
+    "a": [
+      "Bodeneffekte"
+    ],
+    "d": "Häufung von Messwerten am unteren Rand der Skala."
+  },
+  {
+    "t": "Selektionskriterien",
+    "a": [
+      "Itemselektion"
+    ],
+    "d": "Regeln, nach denen aus der Testrohform die Items für die Testendform ausgewählt werden."
+  },
+  {
+    "t": "Validität",
+    "a": [
+      "valide",
+      "Gültigkeit"
+    ],
+    "d": "Gütekriterium der Frage, ob ein Test tatsächlich das erfasst, was er erfassen soll."
+  },
+  {
+    "t": "Inhaltsvalidität",
+    "a": [],
+    "d": "Validitätsart, die sich darauf bezieht, wie angemessen die Items eines Tests das zu messende Merkmal (Itemuniversum) inhaltlich repräsentieren."
+  },
+  {
+    "t": "Kriteriumsvalidität",
+    "a": [
+      "Außenkriterium",
+      "Kriterium"
+    ],
+    "d": "Zusammenhang des Tests mit einem praktisch bedeutsamen Außenkriterium; gegliedert nach dem Zeitpunkt der Kriteriumserhebung."
+  },
+  {
+    "t": "prädiktive Validität",
+    "a": [
+      "prognostische Validität"
+    ],
+    "d": "Form der Kriteriumsvalidität: das Kriterium wird NACH der Testung erhoben (Vorhersage)."
+  },
+  {
+    "t": "konkurrente Validität",
+    "a": [
+      "Übereinstimmungsvalidität"
+    ],
+    "d": "Form der Kriteriumsvalidität: Test und Kriterium werden gleichzeitig erhoben."
+  },
+  {
+    "t": "retrograde Validität",
+    "a": [
+      "retrospektive Validität"
+    ],
+    "d": "Form der Kriteriumsvalidität: das Kriterium liegt zeitlich VOR der Testung."
+  },
+  {
+    "t": "Konstruktvalidität",
+    "a": [],
+    "d": "Bettet der Test sich theoriekonform in ein Netz von Zusammenhängen ein? Umfasst konvergente, diskriminante und faktorielle Validität."
+  },
+  {
+    "t": "konvergente Validität",
+    "a": [
+      "Konvergente"
+    ],
+    "d": "Hohe Korrelationen mit Verfahren, die dasselbe Konstrukt messen (auch mit anderer Methode)."
+  },
+  {
+    "t": "diskriminante Validität",
+    "a": [
+      "divergente Validität"
+    ],
+    "d": "Niedrige Korrelationen mit Verfahren, die ein konstruktfremdes Merkmal messen."
+  },
+  {
+    "t": "faktorielle Validität",
+    "a": [],
+    "d": "Prüft, ob die empirische Faktorenstruktur die theoretisch erwartete Dimensionalität eines Konstrukts abbildet."
+  },
+  {
+    "t": "Augenscheinvalidität",
+    "a": [
+      "face validity"
+    ],
+    "d": "Wirkt der Test für Laien plausibel, das zu messen, was er messen soll? Kein Beleg für tatsächliche Validität."
+  },
+  {
+    "t": "Minderungskorrektur",
+    "a": [
+      "Verdünnungsformel",
+      "Attenuation",
+      "attenuation"
+    ],
+    "d": "Rechnerische Korrektur, die schätzt, wie hoch die Validität bei fehlerfreier Messung ausfiele."
+  },
+  {
+    "t": "Multitrait-Multimethod",
+    "a": [
+      "MTMM",
+      "Multitrait-Multimethod-Matrix"
+    ],
+    "d": "Matrix aus mehreren Merkmalen × mehreren Methoden zur Prüfung konvergenter und diskriminanter Validität (Campbell & Fiske, 1959)."
+  },
+  {
+    "t": "Monotrait-Heteromethod",
+    "a": [
+      "MTHM",
+      "Monotrait-Heteromethod-Korrelationen"
+    ],
+    "d": "Gleiches Merkmal, andere Methode — eine der vier Zellenarten der MTMM-Matrix."
+  },
+  {
+    "t": "Heterotrait-Monomethod",
+    "a": [
+      "HTMM",
+      "Heterotrait-Monomethod-Korrelationen"
+    ],
+    "d": "Verschiedene Merkmale, gleiche Methode — eine der vier Zellenarten der MTMM-Matrix."
+  },
+  {
+    "t": "Heterotrait-Heteromethod",
+    "a": [
+      "HTHM"
+    ],
+    "d": "Verschiedene Merkmale, verschiedene Methoden — eine der vier Zellenarten der MTMM-Matrix."
+  },
+  {
+    "t": "Kriteriumskontamination",
+    "a": [
+      "kontaminiert"
+    ],
+    "d": "Das Kriterium wird durch aufgabenfremde Einflüsse mitbestimmt und misst dadurch teilweise etwas anderes."
+  },
+  {
+    "t": "Kriteriumsdefizienz",
+    "a": [
+      "defizient"
+    ],
+    "d": "Das Kriterium erfasst relevante Anteile der Zielleistung nicht und bildet sie damit unvollständig ab."
+  },
+  {
+    "t": "nomologisches Netzwerk",
+    "a": [],
+    "d": "Theoretisches Geflecht erwarteter Zusammenhänge eines Konstrukts mit anderen Konstrukten und Indikatoren."
+  },
+  {
+    "t": "Objektivität",
+    "a": [
+      "objektiv"
+    ],
+    "d": "Gütekriterium der Unabhängigkeit eines Testergebnisses von der Person, die den Test einsetzt."
+  },
+  {
+    "t": "Durchführungsobjektivität",
+    "a": [],
+    "d": "Das Ergebnis hängt nicht davon ab, wer den Test vorgibt (standardisierte Instruktion und Bedingungen)."
+  },
+  {
+    "t": "Auswertungsobjektivität",
+    "a": [],
+    "d": "Das Ergebnis hängt nicht davon ab, wer auswertet (eindeutige Auswertungsregeln)."
+  },
+  {
+    "t": "Interpretationsobjektivität",
+    "a": [],
+    "d": "Das Ergebnis hängt nicht davon ab, wer die Werte deutet (normierte Interpretationsregeln)."
+  },
+  {
+    "t": "Hauptgütekriterien",
+    "a": [],
+    "d": "Objektivität, Reliabilität und Validität — jedes ist Voraussetzung des nächsten."
+  },
+  {
+    "t": "Nebengütekriterien",
+    "a": [],
+    "d": "Normierung, Ökonomie, Nützlichkeit, Zumutbarkeit, Fairness, Vergleichbarkeit und Testsicherheit."
+  },
+  {
+    "t": "Fairness",
+    "a": [],
+    "d": "Nebengütekriterium: keine systematische Benachteiligung von Personengruppen durch den Test."
+  },
+  {
+    "t": "Normierung",
+    "a": [
+      "Eichung",
+      "Normen",
+      "Norm"
+    ],
+    "d": "Bezugssystem, das einen individuellen Testwert durch Vergleich mit einer Normstichprobe interpretierbar macht."
+  },
+  {
+    "t": "Normstichprobe",
+    "a": [
+      "Normierungsstichprobe",
+      "Konstruktionsstichprobe"
+    ],
+    "d": "Stichprobe zur Gewinnung der Normwerte; sollte repräsentativ und unabhängig von der Konstruktionsstichprobe sein, sonst werden Kennwerte überschätzt."
+  },
+  {
+    "t": "Standardnormen",
+    "a": [
+      "Standardwerte",
+      "Standardwert"
+    ],
+    "d": "Normwerte auf einer Skala mit festgelegtem Mittelwert und festgelegter Streuung."
+  },
+  {
+    "t": "z-Wert",
+    "a": [
+      "z-Werte",
+      "z-Transformation"
+    ],
+    "d": "Standardisierter Wert, der angibt, wie weit ein Messwert in Streuungseinheiten vom Mittelwert entfernt liegt."
+  },
+  {
+    "t": "T-Wert",
+    "a": [
+      "T-Werte",
+      "T-Normwert"
+    ],
+    "d": "Standardnormskala, die in Persönlichkeits- und Leistungstests gebräuchlich ist."
+  },
+  {
+    "t": "IQ",
+    "a": [
+      "Intelligenzquotient"
+    ],
+    "d": "Standardnormskala der Intelligenzdiagnostik."
+  },
+  {
+    "t": "Prozentrang",
+    "a": [
+      "Prozentrangnormen",
+      "PR"
+    ],
+    "d": "Normwert, der die Position eines Testwerts als Position innerhalb der Bezugsgruppe ausdrückt."
+  },
+  {
+    "t": "spezifisch repräsentativ",
+    "a": [
+      "Repräsentativität",
+      "repräsentativ"
+    ],
+    "d": "Kennzeichnet, unter welcher Bedingung eine Stichprobe repräsentativ genug für eine gültige Normierung ist."
+  },
+  {
+    "t": "Flynn-Effekt",
+    "a": [],
+    "d": "Säkularer Anstieg der Intelligenztestwerte über die Jahrzehnte (ca. 3 IQ-Punkte pro Dekade) — Normen veralten."
+  },
+  {
+    "t": "kriteriumsorientiert",
+    "a": [
+      "kriteriumsorientierte Normierung"
+    ],
+    "d": "Interpretation am inhaltlichen Kriterium (Lernziel erreicht/nicht erreicht) statt am Vergleich mit einer Bezugsgruppe."
+  },
+  {
+    "t": "Sensitivität",
+    "a": [],
+    "d": "Kennwert der Entscheidungsgüte, der sich auf die tatsächlich betroffenen Personen bezieht."
+  },
+  {
+    "t": "Spezifität",
+    "a": [],
+    "d": "Kennwert der Entscheidungsgüte, der sich auf die tatsächlich nicht betroffenen Personen bezieht."
+  },
+  {
+    "t": "positiver Prädiktionswert",
+    "a": [
+      "PPV",
+      "Prädiktionswert"
+    ],
+    "d": "Kennwert dafür, wie verlässlich ein positives Testergebnis ist."
+  },
+  {
+    "t": "Basisrate",
+    "a": [
+      "Prävalenzrate"
+    ],
+    "d": "Anteil der Personen in der Population, bei denen der gesuchte Zustand vorliegt."
+  },
+  {
+    "t": "Selektionsrate",
+    "a": [],
+    "d": "Anteil der Personen, die aufgrund des Tests als positiv eingestuft bzw. ausgewählt werden: (TP+FP)/N."
+  },
+  {
+    "t": "Vierfeldertafel",
+    "a": [
+      "TP",
+      "FP",
+      "FN",
+      "TN"
+    ],
+    "d": "Kreuztabelle aus Testentscheidung × Wahrheit mit den Feldern richtig positiv (TP), falsch positiv (FP), falsch negativ (FN) und richtig negativ (TN)."
+  },
+  {
+    "t": "kompensatorisch",
+    "a": [
+      "Kompensatorisches Modell",
+      "kompensatorische Strategie"
+    ],
+    "d": "Entscheidungsstrategie, bei der eine schwache Leistung durch eine starke ausgeglichen werden kann (Summe oder Mittelwert über die Tests)."
+  },
+  {
+    "t": "konjunktive Strategie",
+    "a": [
+      "konjunktiv",
+      "Und-Strategie"
+    ],
+    "d": "Alle vorab definierten Cut-off-Werte müssen erreicht werden (UND-Verknüpfung), Schwächen sind nicht kompensierbar."
+  },
+  {
+    "t": "disjunktive Strategie",
+    "a": [
+      "disjunktiv",
+      "Oder-Strategie"
+    ],
+    "d": "Es genügt, mindestens einen der geforderten Cut-off-Werte zu erreichen (ODER-Verknüpfung)."
+  },
+  {
+    "t": "Pareto",
+    "a": [
+      "pareto-optimal",
+      "Pareto-optimale Teilmenge"
+    ],
+    "d": "Auswahlprinzip über mehrere Kriterien: betrachtet wird, wer von keiner anderen Person in allen Kriterien übertroffen wird."
+  },
+  {
+    "t": "Taylor-Russell",
+    "a": [
+      "Taylor-Russel"
+    ],
+    "d": "Tafeln, die den Zugewinn an Trefferquote durch einen Test in Abhängigkeit von Validität, Basisrate und Selektionsrate angeben."
+  },
+  {
+    "t": "ROC",
+    "a": [
+      "ROC-Kurve"
+    ],
+    "d": "Kurve, die Sensitivität gegen die Falsch-Positiv-Rate über alle möglichen Cut-off-Werte abträgt."
+  },
+  {
+    "t": "Urteilsbildung",
+    "a": [
+      "klinische Urteilsbildung",
+      "statistische Urteilsbildung"
+    ],
+    "d": "Klinisch = Integration der Informationen durch fachliches Urteil; statistisch = Verrechnung nach festen Regeln/Formeln (meist treffsicherer)."
+  },
+  {
+    "t": "Explorative Faktorenanalyse",
+    "a": [
+      "EFA",
+      "Faktorenanalyse"
+    ],
+    "d": "Verfahren zur Aufdeckung latenter Faktoren hinter den Korrelationen vieler Variablen — ohne vorab festgelegte Struktur."
+  },
+  {
+    "t": "Faktor",
+    "a": [
+      "Faktoren"
+    ],
+    "d": "Latente Dimension, die einen Teil der gemeinsamen Varianz mehrerer Variablen erklärt."
+  },
+  {
+    "t": "Faktorladung",
+    "a": [
+      "Ladung",
+      "Ladungen",
+      "Faktorladungen"
+    ],
+    "d": "Zusammenhang einer Variablen mit einem Faktor; quadriert entspricht sie dem durch den Faktor erklärten Varianzanteil."
+  },
+  {
+    "t": "Eigenwert",
+    "a": [
+      "Eigenwerte",
+      "Elgenwerte"
+    ],
+    "d": "Kennwert eines Faktors, der dessen Varianzanteil über alle Variablen hinweg angibt."
+  },
+  {
+    "t": "Kommunalität",
+    "a": [
+      "Kommunalitäten"
+    ],
+    "d": "Kennwert einer Variablen, der deren durch die Faktoren aufgeklärten Varianzanteil angibt."
+  },
+  {
+    "t": "Kaiser-Guttman",
+    "a": [
+      "Kaiser-Guttman-Kriterium"
+    ],
+    "d": "Kriterium, das anhand der Eigenwerte festlegt, wie viele Faktoren behalten werden."
+  },
+  {
+    "t": "Scree",
+    "a": [
+      "Scree-Test",
+      "Scree-Plot"
+    ],
+    "d": "Grafisches Kriterium der Faktorenzahl: Faktoren bis zum deutlichen Knick im Eigenwerteverlauf werden behalten."
+  },
+  {
+    "t": "Parallelanalyse",
+    "a": [
+      "Parallel-Analyse"
+    ],
+    "d": "Kriterium der Faktorenzahl: empirische Eigenwerte werden mit Eigenwerten aus Zufallsdaten verglichen."
+  },
+  {
+    "t": "Bartlett-Test",
+    "a": [
+      "Sphärizitätstest"
+    ],
+    "d": "Eignungsprüfung der Korrelationsmatrix: signifikant bedeutet, dass sie sich von einer Identitätsmatrix unterscheidet (Zusammenhänge vorhanden)."
+  },
+  {
+    "t": "Kaiser-Meyer-Olkin",
+    "a": [
+      "KMO",
+      "MSA"
+    ],
+    "d": "Kennwert, der vor einer Faktorenanalyse beurteilt, wie gut sich die Variablen für das Verfahren eignen."
+  },
+  {
+    "t": "Rotation",
+    "a": [
+      "Rotationen",
+      "rotiert"
+    ],
+    "d": "Transformation der Faktorladungen, die die Interpretation der Faktoren erleichtern soll."
+  },
+  {
+    "t": "orthogonale Rotation",
+    "a": [
+      "Varimax",
+      "orthogonal"
+    ],
+    "d": "Rotationsart, bei der die Faktoren unkorreliert bleiben (z. B. Varimax)."
+  },
+  {
+    "t": "oblique Rotation",
+    "a": [
+      "oblique",
+      "schiefwinklig"
+    ],
+    "d": "Rotationsart, die Korrelationen zwischen den Faktoren zulässt."
+  },
+  {
+    "t": "Einfachstruktur",
+    "a": [],
+    "d": "Angestrebtes Ladungsmuster: jede Variable lädt möglichst hoch auf genau einem Faktor und niedrig auf allen anderen."
+  },
+  {
+    "t": "RMSEA",
+    "a": [
+      "Fit-Indizes",
+      "Fit-Index",
+      "Anpassungsgüte",
+      "Passung"
+    ],
+    "d": "Fit-Index zur Beurteilung der Modellpassung; kleinere Werte stehen für bessere Passung."
+  },
+  {
+    "t": "spezifischer Faktor",
+    "a": [],
+    "d": "Faktor, der nur die Varianz einer einzigen Variablen bzw. eines einzigen Items erklärt (im Gegensatz zum gemeinsamen Faktor)."
+  },
+  {
+    "t": "Hauptkomponentenanalyse",
+    "a": [
+      "PCA"
+    ],
+    "d": "Verfahren zur Varianzbündelung, das im Unterschied zur Faktorenanalyse die gesamte (nicht nur die gemeinsame) Varianz zerlegt."
+  },
+  {
+    "t": "Probabilistische Testtheorie",
+    "a": [
+      "IRT",
+      "PTT",
+      "Item-Response-Theorie"
+    ],
+    "d": "Modellfamilie, die die Lösungswahrscheinlichkeit eines Items aus Personenfähigkeit und Itemparametern vorhersagt; ihre Annahmen sind empirisch prüfbar."
+  },
+  {
+    "t": "Rasch-Modell",
+    "a": [
+      "1PL",
+      "1PL-Modell",
+      "Rasch"
+    ],
+    "d": "Einfachstes Modell der probabilistischen Testtheorie; beschreibt Items über Itemparameter auf derselben Skala wie die Personenfähigkeit."
+  },
+  {
+    "t": "2PL",
+    "a": [
+      "2PL-Modell",
+      "Birnbaum"
+    ],
+    "d": "Erweiterung des Rasch-Modells um einen zweiten Itemparameter (Birnbaum)."
+  },
+  {
+    "t": "3PL",
+    "a": [
+      "3PL-Modell"
+    ],
+    "d": "IRT-Modell mit einem dritten Itemparameter zusätzlich zu Schwierigkeit und Trennschärfe."
+  },
+  {
+    "t": "Item Characteristic Curve",
+    "a": [
+      "ICC",
+      "ICCs",
+      "Itemcharakteristik"
+    ],
+    "d": "Kurve, die die Lösungswahrscheinlichkeit eines Items in Abhängigkeit von der Personenfähigkeit darstellt (logistischer S-förmiger Verlauf)."
+  },
+  {
+    "t": "Personenfähigkeit",
+    "a": [
+      "Theta",
+      "θ"
+    ],
+    "d": "Ausprägung der latenten Fähigkeit einer Person auf der Skala eines IRT-Modells (θ)."
+  },
+  {
+    "t": "logOdds",
+    "a": [
+      "Logit",
+      "Log-Odds"
+    ],
+    "d": "Logarithmus des Wettquotienten (Odds) einer Lösungswahrscheinlichkeit."
+  },
+  {
+    "t": "suffiziente Statistik",
+    "a": [
+      "suffizient"
+    ],
+    "d": "Kennwert, der die gesamte Information über einen Parameter enthält — im Rasch-Modell ist der Summenwert suffizient für die Personenfähigkeit."
+  },
+  {
+    "t": "lokale Unabhängigkeit",
+    "a": [
+      "Lokale Unabhangigkeit"
+    ],
+    "d": "IRT-Annahme: bei gegebener Fähigkeit sind die Antworten auf verschiedene Items voneinander unabhängig."
+  },
+  {
+    "t": "spezifische Objektivität",
+    "a": [],
+    "d": "Eigenschaft des Rasch-Modells: Vergleiche zwischen Personen sind unabhängig davon, welche Items verwendet wurden (und umgekehrt)."
+  },
+  {
+    "t": "Modelltest",
+    "a": [
+      "Modellgeltung",
+      "Modellpassung"
+    ],
+    "d": "Statistische Prüfung, ob ein IRT-Modell zu den vorliegenden Daten passt."
+  },
+  {
+    "t": "Monotonie",
+    "a": [
+      "monoton"
+    ],
+    "d": "IRT-Annahme: die Lösungswahrscheinlichkeit steigt mit zunehmender Fähigkeit monoton an."
+  },
+  {
+    "t": "Eindimensionalität",
+    "a": [
+      "eindimensional"
+    ],
+    "d": "Annahme, dass alle Items dasselbe eine latente Merkmal messen."
+  },
+  {
+    "t": "Verhaltensbeobachtung",
+    "a": [
+      "Beobachtung"
+    ],
+    "d": "Systematische Registrierung von Verhalten; unterscheidbar nach Standardisierung, Zugang (direkt/vermittelt), Teilnahme, Offenheit und Reaktivität."
+  },
+  {
+    "t": "Zeichensystem",
+    "a": [
+      "Zeichensysteme"
+    ],
+    "d": "Eine der Standardisierungsformen der Verhaltensbeobachtung (neben Kategoriensystem und Ratingskala)."
+  },
+  {
+    "t": "Kategoriensystem",
+    "a": [
+      "Kategoriensysteme"
+    ],
+    "d": "Eine der Standardisierungsformen der Verhaltensbeobachtung (neben Zeichensystem und Ratingskala)."
+  },
+  {
+    "t": "Event Sampling",
+    "a": [
+      "Ereignisstichprobe"
+    ],
+    "d": "Registrierung immer dann, wenn ein definiertes Ereignis auftritt (inkl. Anfang und Ende der Verhaltenssequenz) — unabhängig von festen Zeitintervallen."
+  },
+  {
+    "t": "Time Sampling",
+    "a": [
+      "Zeitstichprobe"
+    ],
+    "d": "Beobachtung in festgelegten Zeitintervallen unabhängig davon, ob gerade ein Ereignis auftritt."
+  },
+  {
+    "t": "nicht-reaktiv",
+    "a": [
+      "nonreaktiv",
+      "nicht-reaktive Verfahren",
+      "Reaktivität"
+    ],
+    "d": "Erhebungsform, bei der die untersuchte Person die Messung nicht bemerkt."
+  },
+  {
+    "t": "Lost-Letter",
+    "a": [
+      "Lost-Letter-Technik"
+    ],
+    "d": "Nicht-reaktives Verfahren: ausgelegte adressierte Briefe messen über die Rücksendequote Einstellungen gegenüber der Adressatengruppe."
+  },
+  {
+    "t": "Beurteilerübereinstimmung",
+    "a": [
+      "Beobachterübereinstimmung",
+      "Interrater"
+    ],
+    "d": "Grad der Übereinstimmung zweier Urteilender; das passende Maß hängt vom Skalenniveau ab."
+  },
+  {
+    "t": "Cohens Kappa",
+    "a": [
+      "Kappa"
+    ],
+    "d": "Kennwert für die Übereinstimmung zweier Beurteilender bei kategorialen (nominalen) Urteilen."
+  },
+  {
+    "t": "Intraklassenkorrelation",
+    "a": [
+      "ICC-Koeffizient",
+      "Intraklassenkorr"
+    ],
+    "d": "Übereinstimmungsmaß für intervallskalierte Urteile mehrerer Beobachter."
+  },
+  {
+    "t": "Neuropsychologische Diagnostik",
+    "a": [
+      "Neuropsychologie",
+      "neuropsychologisch"
+    ],
+    "d": "Teilgebiet der Diagnostik, das sich mit den kognitiven und affektiven Folgen einer Hirnschädigung befasst — inkl. Zielen, Verfahren und Ablauf."
+  },
+  {
+    "t": "Symptom Validity Test",
+    "a": [
+      "SVT",
+      "symptom validity",
+      "Symptomvaliditätstest",
+      "MSVT",
+      "TOMM"
+    ],
+    "d": "Verfahren, das prüft, ob Testleistungen absichtlich verfälscht bzw. Symptome vorgetäuscht werden (u. a. MSVT, TOMM, FIT)."
+  },
+  {
+    "t": "Simulation",
+    "a": [
+      "Simulanten",
+      "Dissimulation",
+      "Verfälschung"
+    ],
+    "d": "Vortäuschen (Simulation) bzw. Verbergen (Dissimulation) von Symptomen, etwa bei Entschädigungsansprüchen."
+  },
+  {
+    "t": "prämorbide Leistungsfähigkeit",
+    "a": [
+      "prämorbid"
+    ],
+    "d": "Leistungsniveau vor der Schädigung; klinisch aus Biografie/Beruf oder statistisch über Schätzformeln (Barona) und Lesetests geschätzt, da Lesefähigkeit relativ robust bleibt."
+  },
+  {
+    "t": "Barona",
+    "a": [
+      "Barona-Gleichung",
+      "Barona-Formel"
+    ],
+    "d": "Regressionsformel zur statistischen Schätzung der prämorbiden Intelligenz aus demografischen Daten."
+  },
+  {
+    "t": "Benton",
+    "a": [
+      "Benton-Test"
+    ],
+    "d": "Neuropsychologisches Verfahren zur Prüfung der visuellen Merkfähigkeit."
+  },
+  {
+    "t": "Aachener Aphasietest",
+    "a": [
+      "AAT"
+    ],
+    "d": "Verfahren zur Diagnostik und Differenzierung von Aphasien (Sprachstörungen)."
+  },
+  {
+    "t": "Turm von London",
+    "a": [],
+    "d": "Neuropsychologisches Verfahren aus dem Bereich der exekutiven Funktionen."
+  },
+  {
+    "t": "Aufmerksamkeit",
+    "a": [
+      "Vigilanz",
+      "Alertness",
+      "selektive Aufmerksamkeit"
+    ],
+    "d": "Mehrdimensionales Konstrukt der kognitiven Leistungsdiagnostik, das in der Neuropsychologie in Teilfunktionen untergliedert wird."
+  },
+  {
+    "t": "Speedtest",
+    "a": [
+      "Speed-Test",
+      "Geschwindigkeitstest"
+    ],
+    "d": "Test mit leichten Aufgaben unter starkem Zeitdruck; die Bearbeitungsgeschwindigkeit entscheidet."
+  },
+  {
+    "t": "Powertest",
+    "a": [
+      "Power-Test",
+      "Niveautest"
+    ],
+    "d": "Test, bei dem die Aufgabenschwierigkeit ohne relevante Zeitbegrenzung entscheidet."
+  },
+  {
+    "t": "Entwicklungstests",
+    "a": [
+      "Entwicklungstest"
+    ],
+    "d": "Verfahren zur Erfassung des Entwicklungsstands über mehrere Funktionsbereiche, mit Altersnormen; von reinen Intelligenztests abzugrenzen."
+  },
+  {
+    "t": "Testbatterie",
+    "a": [],
+    "d": "Zusammenstellung mehrerer Verfahren, die gemeinsam ein breiteres Funktionsprofil abdecken."
+  },
+  {
+    "t": "Gruppentestung",
+    "a": [
+      "Gruppentest"
+    ],
+    "d": "Durchführung mit mehreren Personen gleichzeitig (meist Papier-Bleistift), im Gegensatz zur Einzeltestung mit individuellem Material."
+  },
+  {
+    "t": "Interview",
+    "a": [
+      "Interviewformen",
+      "halbstandardisiert",
+      "Leitfaden"
+    ],
+    "d": "Erhebungsmethode mit Standardisierungsgraden von unstrukturiert über halbstandardisiert (Leitfaden, offene Fragen, adaptive Zusatzfragen) bis vollstandardisiert."
+  },
+  {
+    "t": "Testing on Demand",
+    "a": [
+      "Demand"
+    ],
+    "d": "Computerbasierte Testdurchführung auf Abruf: einmalige Onlinenutzung ohne dauerhafte Lizenz oder Materialanschaffung."
+  },
+  {
+    "t": "Marburger Modell",
+    "a": [],
+    "d": "Vorschlag zur verbalen Beschreibung von Testwerten: Wertebereiche erhalten Labels von 'sehr niedrig' bis 'sehr hoch', symmetrisch um eine Durchschnittskategorie."
+  },
+  {
+    "t": "NEO-PI-R",
+    "a": [
+      "NEO-PI",
+      "NEO"
+    ],
+    "d": "Etabliertes Persönlichkeitsinventar zur Erfassung der Big Five mit Facetten; die Globalskalen erreichen hohe interne Konsistenzen."
+  },
+  {
+    "t": "MMPI",
+    "a": [],
+    "d": "Umfangreiches klinisches Persönlichkeitsinventar (Hathaway & McKinley, 1951)."
+  },
+  {
+    "t": "Gustav Lienert",
+    "a": [
+      "Lienert"
+    ],
+    "d": "Wegbereiter der deutschsprachigen Testkonstruktion; Autor eines Standardwerks zu Testaufbau und Testanalyse."
+  },
+  {
+    "t": "Big Five",
+    "a": [
+      "Big-Five",
+      "Fünf-Faktoren-Modell"
+    ],
+    "d": "Fünf-Faktoren-Modell der Persönlichkeit: Neurotizismus, Extraversion, Offenheit, Verträglichkeit und Gewissenhaftigkeit."
+  },
+  {
+    "t": "Skalenniveau",
+    "a": [
+      "Skalenniveaus"
+    ],
+    "d": "Informationsgehalt einer Messung; er bestimmt, welche Rechenoperationen und Kennwerte zulässig sind."
+  },
+  {
+    "t": "Nominalskala",
+    "a": [
+      "nominal",
+      "nominalskaliert"
+    ],
+    "d": "Skalenniveau, auf dem die Werte nur Kategorien unterscheiden."
+  },
+  {
+    "t": "Ordinalskala",
+    "a": [
+      "ordinal",
+      "ordinalskaliert",
+      "Rangskala"
+    ],
+    "d": "Skalenniveau, auf dem die Werte eine Rangfolge bilden."
+  },
+  {
+    "t": "Intervallskala",
+    "a": [
+      "intervallskaliert",
+      "metrisch"
+    ],
+    "d": "Skalenniveau, das über die Rangfolge hinaus auch die Abstände zwischen den Werten abbildet."
+  },
+  {
+    "t": "Verhältnisskala",
+    "a": [
+      "Ratioskala",
+      "Verhältnisskalenniveau"
+    ],
+    "d": "Skalenniveau mit einem absoluten Nullpunkt, das auch Verhältnisaussagen erlaubt."
+  },
+  {
+    "t": "Konstrukt",
+    "a": [
+      "latentes Merkmal",
+      "latente Variable",
+      "latent"
+    ],
+    "d": "Nicht direkt beobachtbares Merkmal (z. B. Intelligenz), das nur über beobachtbare Indikatoren erschlossen wird."
+  },
+  {
+    "t": "manifest",
+    "a": [
+      "manifeste",
+      "Indikator",
+      "Indikatoren"
+    ],
+    "d": "Direkt beobachtbare Größe (die Itemantwort), aus der auf das latente Merkmal geschlossen wird."
+  },
+  {
+    "t": "Barthel-Index",
+    "a": [
+      "Barthel"
+    ],
+    "d": "Index, der grundlegende Alltagsfunktionen (Essen, Waschen, Gehen …) zu einem Gesamtwert zusammenfasst."
+  },
+  {
+    "t": "Testplanung",
+    "a": [],
+    "d": "Phase der Testkonstruktion, in der Datenart, Itemzahl, Antwortformat und Auswertungslogik festgelegt werden."
+  },
+  {
+    "t": "Testrohform",
+    "a": [
+      "Rohform"
+    ],
+    "d": "Erste, noch ungeprüfte Itemsammlung, die einer Stichprobe zur Optimierung vorgelegt wird."
+  },
+  {
+    "t": "Testendform",
+    "a": [
+      "Endform"
+    ],
+    "d": "Nach der Itemselektion verbleibende endgültige Testversion, die einer Normstichprobe vorgegeben wird."
+  },
+  {
+    "t": "Analysestichprobe",
+    "a": [],
+    "d": "Stichprobe zur Itemanalyse und Strukturprüfung; sollte groß genug und von der Normstichprobe getrennt sein."
+  },
+  {
+    "t": "Trennkraft",
+    "a": [],
+    "d": "Fähigkeit eines Items, zwischen definierten Kriteriumsgruppen zu unterscheiden — Auswahlkriterium der externalen Konstruktionsstrategie."
+  },
+  {
+    "t": "Polung",
+    "a": [
+      "gepolt",
+      "ausgewogene Polung",
+      "invertierte Items"
+    ],
+    "d": "Richtung, in der ein Item formuliert ist (zustimmungs- oder ablehnungsseitig)."
+  },
+  {
+    "t": "Kontrollskala",
+    "a": [
+      "Lügenskala",
+      "Offenheitsskala"
+    ],
+    "d": "Zusatzskala, die Verfälschungstendenzen wie soziale Erwünschtheit aufdecken soll."
+  },
+  {
+    "t": "Fremdtrennschärfe",
+    "a": [],
+    "d": "Korrelation eines Items mit einer ANDEREN Skala als der eigenen; sollte niedrig sein (Hinweis auf Dimensionsreinheit)."
+  },
+  {
+    "t": "Eisbrecher",
+    "a": [
+      "Eisbrecher-Item"
+    ],
+    "d": "Bewusst sehr leichtes Item am Testbeginn, das Anspannung reduziert."
+  },
+  {
+    "t": "odd-even",
+    "a": [
+      "Odd-Even"
+    ],
+    "d": "Testhalbierung nach geraden und ungeraden Itemnummern — verteilt Schwierigkeit und Ermüdung gleichmäßig auf beide Hälften."
+  },
+  {
+    "t": "unipolar",
+    "a": [
+      "bipolar",
+      "uni- vs. bipolar"
+    ],
+    "d": "Gestaltung der Ratingskala: unipolar von null bis maximal, bipolar mit negativem und positivem Pol um eine neutrale Mitte."
+  },
+  {
+    "t": "Mittelwert",
+    "a": [
+      "arithmetisches Mittel"
+    ],
+    "d": "Durchschnitt aller Messwerte; zusammen mit der Standardabweichung Basis jeder Normwert-Transformation."
+  },
+  {
+    "t": "Identitätsmatrix",
+    "a": [],
+    "d": "Korrelationsmatrix, in der außerhalb der Diagonale keine Zusammenhänge stehen."
+  },
+  {
+    "t": "Regressionseffekt",
+    "a": [
+      "Regression zur Mitte",
+      "Schrumpfung"
+    ],
+    "d": "Extreme Messwerte fallen bei erneuter Messung im Schnitt weniger extrem aus; deshalb liegt der regressionsgeschätzte wahre Wert näher am Mittelwert."
+  },
+  {
+    "t": "Varianzeinschränkung",
+    "a": [
+      "Varianzeinschränkungen",
+      "range restriction"
+    ],
+    "d": "Künstlich verkleinerte Streuung (z. B. durch Vorauswahl der Stichprobe); senkt Korrelationen und damit die beobachtete Validität."
+  },
+  {
+    "t": "Normalverteilung",
+    "a": [
+      "normalverteilt"
+    ],
+    "d": "Glockenförmige Verteilung, auf der viele klassische statistische Verfahren aufbauen."
+  },
+  {
+    "t": "Cut-off",
+    "a": [
+      "Cutoff",
+      "Cut-off-Wert",
+      "Trennwert"
+    ],
+    "d": "Festgelegter Schwellenwert, ab dem eine diagnostische Entscheidung positiv ausfällt; verschiebt Sensitivität und Spezifität gegenläufig."
+  },
+  {
+    "t": "Prädiktor",
+    "a": [
+      "Prädiktoren"
+    ],
+    "d": "Testvariable, mit der ein Kriterium vorhergesagt werden soll."
+  },
+  {
+    "t": "Trefferquote",
+    "a": [
+      "Treffer",
+      "richtige Entscheidungen"
+    ],
+    "d": "Anteil korrekter diagnostischer Entscheidungen (TP + TN) an allen Fällen."
+  },
+  {
+    "t": "Lösungswahrscheinlichkeit",
+    "a": [],
+    "d": "Von der IRT modellierte Wahrscheinlichkeit, dass eine Person ein Item löst — abhängig von Personenfähigkeit und Itemparametern."
+  },
+  {
+    "t": "logistische Funktion",
+    "a": [
+      "logistisch"
+    ],
+    "d": "S-förmige Funktion, die den Anstieg der Lösungswahrscheinlichkeit mit der Fähigkeit beschreibt (Grundform der ICC)."
+  },
+  {
+    "t": "Odds",
+    "a": [
+      "Wettquotient",
+      "Chancenverhältnis"
+    ],
+    "d": "Verhältnis von Lösungs- zu Nichtlösungswahrscheinlichkeit; ihr Logarithmus ergibt die logOdds."
+  },
+  {
+    "t": "Diskriminierbarkeitsparameter",
+    "a": [
+      "Trennschärfeparameter",
+      "Steigungsparameter"
+    ],
+    "d": "Parameter β im 2PL-Modell: je größer, desto steiler die ICC und desto besser trennt das Item."
+  },
+  {
+    "t": "Schätzfunktion",
+    "a": [
+      "Parameterschätzung",
+      "Schätzer"
+    ],
+    "d": "Verfahren, mit dem Item- und Personenparameter aus den Daten geschätzt werden (in der IRT aufwendig und stichprobenintensiv)."
+  },
+  {
+    "t": "teilnehmende Beobachtung",
+    "a": [
+      "teilnehmend"
+    ],
+    "d": "Die beobachtende Person ist Teil des Geschehens (im Gegensatz zur nicht-teilnehmenden Außenbeobachtung)."
+  },
+  {
+    "t": "verdeckte Beobachtung",
+    "a": [
+      "verdeckt",
+      "offene Beobachtung"
+    ],
+    "d": "Die Beobachteten wissen nichts von der Beobachtung (verdeckt) bzw. sind darüber informiert (offen)."
+  },
+  {
+    "t": "freie Verhaltensbeobachtung",
+    "a": [
+      "freie Beobachtung",
+      "unstrukturierte Beobachtung"
+    ],
+    "d": "Verhaltensbeobachtung ohne vorab festgelegtes Beobachtungssystem — im Gegensatz zur systematischen Beobachtung mit Zeichen- oder Kategoriensystem."
+  },
+  {
+    "t": "vermittelte Beobachtung",
+    "a": [
+      "indirekte Beobachtung",
+      "direkte Verhaltensbeobachtung"
+    ],
+    "d": "Direkt = unmittelbar am Geschehen; vermittelt = über Aufzeichnungen (Video, Protokolle) zeitversetzt."
+  },
+  {
+    "t": "Verhaltensspuren",
+    "a": [
+      "Verhaltensspur"
+    ],
+    "d": "Physische Rückstände des Verhaltens (Abnutzung, Müll, Klickdaten), die nachträglich ausgewertet werden."
+  },
+  {
+    "t": "Halo-Effekt",
+    "a": [
+      "Hof-Effekt"
+    ],
+    "d": "Beobachtungsfehler: ein Gesamteindruck überstrahlt die Beurteilung einzelner Merkmale."
+  },
+  {
+    "t": "Milde-Fehler",
+    "a": [
+      "Strenge-Fehler",
+      "Milde",
+      "Strenge"
+    ],
+    "d": "Beobachtungsfehler: systematisch zu milde bzw. zu strenge Urteile einer beurteilenden Person."
+  },
+  {
+    "t": "zentrale Tendenz",
+    "a": [
+      "Tendenz zur Mitte"
+    ],
+    "d": "Beobachtungsfehler: Vermeidung von Extremurteilen, alle Urteile drängen zur Skalenmitte."
+  },
+  {
+    "t": "Neglect",
+    "a": [],
+    "d": "Halbseitige Vernachlässigung einer Raum- oder Körperhälfte nach Hirnschädigung; erfasst z. B. mit dem BIT."
+  },
+  {
+    "t": "Aphasie",
+    "a": [
+      "Aphasien"
+    ],
+    "d": "Erworbene Sprachstörung nach Hirnschädigung; differenziert u. a. mit dem Aachener Aphasietest (AAT)."
+  },
+  {
+    "t": "exekutive Funktionen",
+    "a": [
+      "exekutiv",
+      "Planungsleistung"
+    ],
+    "d": "Übergeordnete Steuerungsleistungen wie Planen, Umstellen und Handlungskontrolle (z. B. Turm von London)."
+  },
+  {
+    "t": "TAP",
+    "a": [
+      "KiTAP",
+      "Testbatterie zur Aufmerksamkeitsprüfung"
+    ],
+    "d": "Computergestützte Testbatterie zur differenzierten Prüfung von Aufmerksamkeitsfunktionen (KiTAP = Kinderversion)."
+  },
+  {
+    "t": "NART",
+    "a": [
+      "Lesetest",
+      "Wortschatztest"
+    ],
+    "d": "Lesetest zur Schätzung der prämorbiden Intelligenz — Lesefähigkeit bleibt nach Hirnschädigung relativ lange erhalten."
+  },
+  {
+    "t": "Slick",
+    "a": [
+      "Slick-Kriterien"
+    ],
+    "d": "Kriterienkatalog zur Einstufung wahrscheinlicher/definitiver Simulation neurokognitiver Störungen (Slick et al.)."
+  },
+  {
+    "t": "Konzentrationstest",
+    "a": [
+      "Konzentration",
+      "Konzentrations-Leistungs-Test"
+    ],
+    "d": "Verfahren zur Messung der Konzentrationsleistung unter Zeitdruck."
+  },
+  {
+    "t": "Übungseffekt",
+    "a": [
+      "Übungs- und Trainingseffekte",
+      "Trainingseffekt"
+    ],
+    "d": "Leistungssteigerung durch wiederholte Testbearbeitung; gefährdet vor allem die Retestreliabilität."
+  },
+  {
+    "t": "Testangst",
+    "a": [],
+    "d": "Leistungsmindernde Ängstlichkeit in Prüfungssituationen; Störvariable der Leistungsdiagnostik."
+  },
+  {
+    "t": "WAIS",
+    "a": [
+      "WAIS-IV",
+      "Wechsler"
+    ],
+    "d": "Wechsler Adult Intelligence Scale: Intelligenztest für Erwachsene, ausschließlich als Einzeltestung durchführbar."
+  },
+  {
+    "t": "WISC",
+    "a": [
+      "WISC-V"
+    ],
+    "d": "Wechsler Intelligence Scale for Children: Intelligenztest für Kinder, ebenfalls Einzeltestung."
+  },
+  {
+    "t": "KABC",
+    "a": [
+      "KABC-II"
+    ],
+    "d": "Kaufman Assessment Battery for Children: Intelligenztestbatterie für Kinder, Einzeltestung."
+  },
+  {
+    "t": "IST-2000-R",
+    "a": [
+      "IST 2000",
+      "Intelligenz-Struktur-Test"
+    ],
+    "d": "Intelligenz-Struktur-Test: Papier-Bleistift-Verfahren, das auch als Gruppentestung durchführbar ist."
+  },
+  {
+    "t": "BIP",
+    "a": [
+      "Bochumer Inventar"
+    ],
+    "d": "Bochumer Inventar zur berufsbezogenen Persönlichkeitsbeschreibung — Persönlichkeitsfragebogen aus der Personalauswahl."
+  },
+  {
+    "t": "CFI",
+    "a": [
+      "CFT"
+    ],
+    "d": "Kulturfairer Intelligenztest (Culture Fair Test): sprachfreies Verfahren zur Reduktion sprachlich-kultureller Benachteiligung."
+  },
+  {
+    "t": "projektives Verfahren",
+    "a": [
+      "projektiv",
+      "Thematischer Apperzeptionstest",
+      "TAT"
+    ],
+    "d": "Verfahren mit mehrdeutigem Material, in das die Person eigene Motive hineinlegt (z. B. TAT von Murray); geringe Objektivität."
+  },
+  {
+    "t": "Ökonomie",
+    "a": [
+      "ökonomisch"
+    ],
+    "d": "Nebengütekriterium: geringer Aufwand an Zeit, Material und Kosten im Verhältnis zum Nutzen."
+  },
+  {
+    "t": "Zumutbarkeit",
+    "a": [
+      "zumutbar"
+    ],
+    "d": "Nebengütekriterium: der Test beansprucht die Testperson zeitlich und psychisch in vertretbarem Maß."
+  },
+  {
+    "t": "Nützlichkeit",
+    "a": [
+      "nützlich",
+      "Nutzen"
+    ],
+    "d": "Nebengütekriterium: für das gemessene Merkmal besteht praktischer Bedarf und der Test liefert brauchbare Entscheidungen."
+  },
+  {
+    "t": "Vergleichbarkeit",
+    "a": [
+      "Parallelformen"
+    ],
+    "d": "Nebengütekriterium: es liegen Parallelformen oder vergleichbare Verfahren vor."
+  },
+  {
+    "t": "Testsicherheit",
+    "a": [
+      "Unverfälschbarkeit"
+    ],
+    "d": "Nebengütekriterium: der Test ist gegen absichtliche Verfälschung der Ergebnisse geschützt."
+  },
+  {
+    "t": "Änderungssensitivität",
+    "a": [
+      "änderungssensitiv"
+    ],
+    "d": "Nebengütekriterium: der Test bildet echte Veränderungen des Merkmals (z. B. Therapieerfolg) zuverlässig ab."
+  },
+  {
+    "t": "Altersnormen",
+    "a": [
+      "Altersnorm"
+    ],
+    "d": "Nach Altersgruppen getrennte Normwerte — nötig, wenn sich das Merkmal mit dem Alter systematisch verändert."
+  },
+  {
+    "t": "Methodeneffekt",
+    "a": [
+      "Methodeneffekte",
+      "Methodenvarianz"
+    ],
+    "d": "Anteil der Messwertvarianz, der auf die Erhebungsmethode statt auf das Merkmal zurückgeht — sichtbar in hohen Heterotrait-Monomethod-Korrelationen."
+  }
+];
+var KP = [
+  {
+    "id": "k1",
+    "q": "Welche Aussagen zum reflektiven Messprinzip sind richtig?",
+    "opts": [
+      {
+        "t": "Der Barthel-Index zur Bewertung grundlegender Alltagsfunktionen ist ein Beispiel für ein reflektives Messprinzip.",
+        "k": false
+      },
+      {
+        "t": "Die manifesten Itemantworten werden durch das latente Merkmal kausal erklärt.",
+        "k": true
+      },
+      {
+        "t": "Formatives und reflektives Messprinzip unterscheiden sich vorrangig über die Anzahl der herangezogenen Items.",
+        "k": false
+      }
+    ],
+    "e": "A falsch: Der Barthel-Index (Summe grundverschiedener Alltagsfunktionen) ist das klassische FORMATIVE Beispiel — die Indikatoren bilden das Konstrukt, es erklärt sie nicht. B richtig: reflektiv = das latente Merkmal verursacht die Itemantworten (Pfeile vom Konstrukt zu den Items). C falsch: Der Unterschied liegt in der KAUSALRICHTUNG, nicht in der Itemzahl. (Offizielles Beispielitem 1)",
+    "h": "Reflektives und formatives Messprinzip unterscheiden sich in der Wirkrichtung zwischen latentem Merkmal und Indikatoren. Mach dir diese Richtung für beide Prinzipien klar und prüfe dann jede Aussage daran — auch, ob das genannte Beispiel dazu passt und ob die Item-Anzahl überhaupt das Unterscheidungskriterium ist."
+  },
+  {
+    "id": "k2",
+    "q": "Welche Formen der Kriteriumsvalidität lassen sich unterscheiden?",
+    "opts": [
+      {
+        "t": "Konvergente Validität.",
+        "k": false
+      },
+      {
+        "t": "Prädiktive Validität.",
+        "k": true
+      },
+      {
+        "t": "Retrograde Validität.",
+        "k": true
+      }
+    ],
+    "e": "A falsch: Konvergente (und diskriminante) Validität gehört zur KONSTRUKTvalidität, nicht zur Kriteriumsvalidität. B richtig: prädiktive (prognostische) Validität — Kriterium wird später erhoben. C richtig: retrograde Validität — das Kriterium liegt zeitlich VOR der Testung (neben konkurrenter und prädiktiver eine Form der Kriteriumsvalidität). (Offizielles Beispielitem 2)",
+    "h": "Kriteriumsvalidität und Konstruktvalidität sind verschiedene Validitätsfamilien mit je eigenen Unterformen. Ruf dir ab, welche Formen zur Kriteriumsvalidität zählen und wie sie sich über den Zeitpunkt der Kriteriumserhebung (vor, gleichzeitig, nach der Testung) einteilen — und ordne jeden genannten Begriff einer der beiden Familien zu."
+  },
+  {
+    "id": "k3",
+    "q": "Welches sind Methoden zur Bestimmung der Faktorenanzahl bei der explorativen Faktorenanalyse?",
+    "opts": [
+      {
+        "t": "Parallel-Analyse.",
+        "k": true
+      },
+      {
+        "t": "Bartlett-Test.",
+        "k": false
+      },
+      {
+        "t": "Kaiser-Meyer-Olkin-Kriterium.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Die Parallelanalyse vergleicht empirische mit Zufalls-Eigenwerten und bestimmt die Faktorenanzahl (gilt als genauestes Kriterium). B falsch: Der Bartlett-Test auf Sphärizität prüft die EIGNUNG der Matrix (H0: Identitätsmatrix). C falsch: KMO ist ebenfalls ein EIGNUNGSmaß. Bartlett und KMO sagen nur, OB faktorisiert werden kann, nicht WIE VIELE Faktoren. (Offizielles Beispielitem 3)",
+    "h": "Bei der EFA gibt es einen Schritt, der prüft, ob sich eine Matrix überhaupt sinnvoll faktorisieren lässt, und einen, der die Zahl der zu behaltenden Faktoren bestimmt. Ruf dir ab, was jedes der drei genannten Verfahren berechnet, und ordne es einem dieser beiden Schritte zu."
+  },
+  {
+    "id": "k4",
+    "q": "Welche Aussagen zu den drei Hauptgütekriterien sind richtig?",
+    "opts": [
+      {
+        "t": "Objektivität betrifft die Unabhängigkeit der Ergebnisse von der durchführenden/auswertenden Person.",
+        "k": true
+      },
+      {
+        "t": "Die Reliabilität ist die Voraussetzung dafür, dass ein Test überhaupt valide sein kann.",
+        "k": true
+      },
+      {
+        "t": "Die Validität ist ein Spezialfall der Reliabilität und kann diese nie übersteigen, aber beliebig unterschreiten.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Objektivität = Unabhängigkeit von der Testleiter-/Auswerter-/Interpretationsperson (WER testet). B richtig: Reliabilität ist notwendige (nicht hinreichende) Bedingung der Validität — ein unreliabler Test kann nicht valide sein. C falsch: Validität ist KEIN Spezialfall der Reliabilität; zwar begrenzt die (Wurzel der) Reliabilität die Validität nach oben, aber die Begriffe messen Unterschiedliches (WIE GENAU vs. WAS).",
+    "h": "Die drei Hauptgütekriterien bauen aufeinander auf — kläre für dich, was jedes genau meint und in welchem Bedingungsverhältnis (Voraussetzung/Folge) sie stehen. Prüfe dann jede Aussage daran, ohne dich von plausibel klingenden Zuspitzungen leiten zu lassen."
+  },
+  {
+    "id": "k5",
+    "q": "Welche Arten der Objektivität werden unterschieden?",
+    "opts": [
+      {
+        "t": "Durchführungsobjektivität.",
+        "k": true
+      },
+      {
+        "t": "Auswertungsobjektivität.",
+        "k": true
+      },
+      {
+        "t": "Interpretationsobjektivität.",
+        "k": true
+      }
+    ],
+    "e": "Alle drei richtig: Die Objektivität gliedert sich klassisch in Durchführungs-, Auswertungs- und Interpretationsobjektivität — die drei Phasen einer Testung, in denen jeweils Unabhängigkeit von der durchführenden Person gefordert ist. (Ein Item, bei dem tatsächlich alle drei Optionen korrekt sind.)",
+    "h": "Die Objektivität wird nach den Phasen einer Testung gegliedert. Überleg dir, welche Arbeitsschritte eine Testleitung von der Vorgabe über die Auswertung bis zur Deutung durchläuft und für welche davon jeweils Unabhängigkeit von der beteiligten Person gefordert wird."
+  },
+  {
+    "id": "k6",
+    "q": "Welche Verfahren dienen der Schätzung der Reliabilität?",
+    "opts": [
+      {
+        "t": "Paralleltestreliabilität.",
+        "k": true
+      },
+      {
+        "t": "Retestreliabilität.",
+        "k": true
+      },
+      {
+        "t": "Bestimmung der Itemschwierigkeit über den Mittelwert.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Paralleltest (zwei äquivalente Testformen). B richtig: Retest (Wiederholung nach Zeitintervall). C falsch: Die Itemschwierigkeit (Mittelwert) ist ein ITEMkennwert, keine Reliabilitätsschätzung. Weitere Reliabilitätsschätzer wären Split-Half und interne Konsistenz (Cronbachs α).",
+    "h": "Trenne echte Reliabilitätsschätzer von reinen Itemkennwerten. Ruf dir ab, mit welchen Ansätzen man die Messgenauigkeit schätzt (über die Zeit, über äquivalente Formen, über die interne Struktur) — und ob eine Kennzahl, die den Lösungsanteil eines Items beschreibt, überhaupt in diese Gruppe gehört."
+  },
+  {
+    "id": "k7",
+    "q": "Welche Aussagen zu den Axiomen der Klassischen Testtheorie sind richtig?",
+    "opts": [
+      {
+        "t": "Der beobachtete Wert setzt sich additiv aus wahrem Wert und Messfehler zusammen (X = T + E).",
+        "k": true
+      },
+      {
+        "t": "Der Erwartungswert des Messfehlers ist null.",
+        "k": true
+      },
+      {
+        "t": "Der Messfehler korreliert positiv mit dem wahren Wert.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Grundgleichung X = T + E. B richtig: E(E) = 0 (der Fehler ist unsystematisch, im Mittel null). C falsch: Der Messfehler korreliert per Axiom NICHT mit dem wahren Wert (Corr(T,E) = 0) — nicht positiv und nicht negativ.",
+    "h": "Ruf dir die Axiome der Klassischen Testtheorie ab: die Grundzerlegung des Messwerts, die Annahme über den Erwartungswert des Fehlers und die Annahmen über die Zusammenhänge des Fehlers mit dem wahren Wert. Prüfe jede Aussage gegen genau diese Setzungen."
+  },
+  {
+    "id": "k8",
+    "q": "Welche Aussagen zur Itemschwierigkeit sind richtig?",
+    "opts": [
+      {
+        "t": "Ein hoher Schwierigkeitsindex p bedeutet ein LEICHTES Item (viele lösen es).",
+        "k": true
+      },
+      {
+        "t": "Items mittlerer Schwierigkeit differenzieren in der Regel am besten.",
+        "k": true
+      },
+      {
+        "t": "Ein Item mit p = 1.0 hat maximale Trennschärfe.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Der Schwierigkeitsindex ist gegenintuitiv — hohes p = hoher Lösungsanteil = LEICHTES Item. B richtig: mittlere Schwierigkeit (um p = .50) maximiert die Varianz und differenziert am besten. C falsch: Bei p = 1.0 lösen ALLE das Item → keine Varianz → Trennschärfe = 0 (nicht maximal).",
+    "h": "Der Schwierigkeitsindex ist gegenintuitiv definiert — mach dir klar, ob ein hoher Wert viele oder wenige Löser bedeutet. Überleg dann, bei welcher Schwierigkeit ein Item am besten differenziert und wie Trennschärfe und Varianz zusammenhängen, wenn ein Item von allen oder von niemandem gelöst wird."
+  },
+  {
+    "id": "k9",
+    "q": "Welche Aussagen zur Trennschärfe eines Items sind richtig?",
+    "opts": [
+      {
+        "t": "Die Trennschärfe ist die Korrelation eines Items mit dem Gesamttestwert.",
+        "k": true
+      },
+      {
+        "t": "Eine negative Trennschärfe deutet auf ein falsch gepoltes oder problematisches Item hin.",
+        "k": true
+      },
+      {
+        "t": "Die Trennschärfe ist unabhängig von der Itemschwierigkeit.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Trennschärfe = Korrelation Item–Skala (part-whole; oft korrigiert). B richtig: negative Trennschärfe → Item misst gegenläufig (falsch gepolt) oder ist defekt. C falsch: Trennschärfe und Schwierigkeit hängen zusammen — extreme Schwierigkeiten (p nahe 0 oder 1) begrenzen die mögliche Trennschärfe.",
+    "h": "Kläre für dich die Definition der Trennschärfe (Zusammenhang eines Items womit?), was eine negative Trennschärfe über ein Item aussagt und ob Trennschärfe und Itemschwierigkeit voneinander unabhängig sind. Prüfe jede Aussage an diesem Grundwissen."
+  },
+  {
+    "id": "k10",
+    "q": "Welche Aussagen zu Standardnormen sind richtig?",
+    "opts": [
+      {
+        "t": "Der IQ hat einen Mittelwert von 100 und eine Standardabweichung von 15.",
+        "k": true
+      },
+      {
+        "t": "Der z-Wert hat einen Mittelwert von 0 und eine Standardabweichung von 1.",
+        "k": true
+      },
+      {
+        "t": "Ein Prozentrang gibt an, wie viele Standardabweichungen ein Wert vom Mittelwert entfernt liegt.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: IQ-Skala M = 100, SD = 15. B richtig: z-Standardnormalverteilung M = 0, SD = 1. C falsch: Der Prozentrang gibt den ANTEIL der Vergleichsgruppe an, den man erreicht oder übertrifft — die Zahl der Standardabweichungen ist der z-Wert.",
+    "h": "Ruf dir die Kennwerte der gängigen Standardskalen ab (IQ-Skala und z-Skala, je mit Mittelwert und Streuung). Kläre getrennt davon, was ein Prozentrang inhaltlich ausdrückt — einen Anteil an der Bezugsgruppe oder einen Abstand in Streuungseinheiten. Merke: Anteil und Streuungsabstand sind zwei verschiedene Kennwerte."
+  },
+  {
+    "id": "k11",
+    "q": "Welche Aussagen zum Rasch-Modell (1PL) der probabilistischen Testtheorie sind richtig?",
+    "opts": [
+      {
+        "t": "Alle Items haben dieselbe (parallele) Trennschärfe; die ICCs schneiden sich nicht.",
+        "k": true
+      },
+      {
+        "t": "Bei θ = δ beträgt die Lösungswahrscheinlichkeit 0.50.",
+        "k": true
+      },
+      {
+        "t": "Das Rasch-Modell hat die Klassische Testtheorie vollständig abgelöst.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Im Rasch-Modell sind alle Trennschärfen gleich → parallele, sich nicht schneidende ICCs (Voraussetzung spezifischer Objektivität). B richtig: Bei Personenfähigkeit = Itemschwierigkeit (θ = δ) ist p = .50. C falsch: Die IRT hat die KTT NICHT abgelöst — beide werden weiter nebeneinander verwendet.",
+    "h": "Ruf dir die Kernannahmen des Rasch-Modells ab: Was gilt dort für die Trennschärfen aller Items und damit für die Lage der Item-Kennlinien, und welche Lösungswahrscheinlichkeit ergibt sich, wenn Personenfähigkeit und Itemschwierigkeit gleich sind? Kläre außerdem das tatsächliche Verhältnis von IRT und KTT."
+  },
+  {
+    "id": "k12",
+    "q": "Ein diagnostischer Test soll eine seltene Störung erkennen. Welche Aussagen sind richtig?",
+    "opts": [
+      {
+        "t": "Die Sensitivität ist der Anteil der korrekt als krank erkannten tatsächlich Kranken.",
+        "k": true
+      },
+      {
+        "t": "Die Spezifität ist der Anteil der korrekt als gesund erkannten tatsächlich Gesunden.",
+        "k": true
+      },
+      {
+        "t": "Bei einer sehr niedrigen Basisrate ist der positive prädiktive Wert (PPV) besonders hoch.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Sensitivität = richtig Positive / alle Kranken. B richtig: Spezifität = richtig Negative / alle Gesunden. C falsch: Gerade bei NIEDRIGER Basisrate sinkt der PPV stark (viele falsch Positive gegenüber wenigen echten Fällen) — ein zentrales Problem beim Screening seltener Störungen.",
+    "h": "Halte die Definitionen von Sensitivität und Spezifität sauber auseinander (Anteil woran gemessen?). Denk dann durch, wie sich eine sehr niedrige Basisrate auf den positiven prädiktiven Wert auswirkt — was passiert mit den falsch Positiven im Verhältnis zu den wenigen echten Fällen?"
+  },
+  {
+    "id": "k13",
+    "q": "Welche Aussagen zur Konstruktvalidität sind richtig?",
+    "opts": [
+      {
+        "t": "Konvergente Validität zeigt sich in hohen Korrelationen mit Tests desselben Konstrukts.",
+        "k": true
+      },
+      {
+        "t": "Diskriminante Validität zeigt sich in niedrigen Korrelationen mit konstruktfremden Maßen.",
+        "k": true
+      },
+      {
+        "t": "Die Multitrait-Multimethod-Matrix prüft ausschließlich die Durchführungsobjektivität.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: konvergent = hohe Korrelation mit gleichem Konstrukt (andere Methode). B richtig: diskriminant = niedrige Korrelation mit anderen Konstrukten. C falsch: Die MTMM-Matrix (Campbell & Fiske) prüft konvergente UND diskriminante Konstruktvalidität und trennt Merkmals- von Methodeneffekten — nicht die Objektivität.",
+    "h": "Konvergente und diskriminante Validität gehören zur Konstruktvalidität und zeigen sich in bestimmten Korrelationsmustern — ruf dir ab, welches Muster (hoch/niedrig, gleiches/anderes Konstrukt) für welche steht. Kläre außerdem, was die Multitrait-Multimethod-Matrix eigentlich prüft."
+  },
+  {
+    "id": "k14",
+    "q": "Welche Aussagen zu Strategien der Testkonstruktion sind richtig?",
+    "opts": [
+      {
+        "t": "Bei der rationalen (deduktiven) Strategie werden Items aus einer Theorie des Konstrukts abgeleitet.",
+        "k": true
+      },
+      {
+        "t": "Bei der kriteriumsbezogenen (externalen) Strategie werden Items nach ihrer Trennkraft zwischen Kriteriumsgruppen ausgewählt.",
+        "k": true
+      },
+      {
+        "t": "Die induktive (faktorenanalytische) Strategie setzt eine fertige Theorie des Konstrukts zwingend voraus.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: rational/deduktiv = theoriegeleitete Itemableitung. B richtig: kriteriumsbezogen = Items werden gewählt, weil sie empirisch zwischen Gruppen (z. B. klinisch vs. gesund) trennen. C falsch: Die induktive/faktorenanalytische Strategie kommt gerade OHNE fertige Theorie aus — die Struktur ergibt sich aus den Daten.",
+    "h": "Ruf dir die Konstruktionsstrategien ab (theoriegeleitet-deduktiv, kriteriumsbezogen-external, induktiv-faktorenanalytisch) und woher jede ihre Items bezieht. Achte besonders auf das Verhältnis jeder Strategie zu einer vorab vorliegenden Theorie des Konstrukts."
+  },
+  {
+    "id": "k15",
+    "q": "Welche Aussagen zu Antworttendenzen (Response Sets) sind richtig?",
+    "opts": [
+      {
+        "t": "Akquieszenz ist die Tendenz, Items unabhängig vom Inhalt eher zuzustimmen.",
+        "k": true
+      },
+      {
+        "t": "Soziale Erwünschtheit kann durch die Erfassung mit einer Kontrollskala aufgedeckt werden.",
+        "k": true
+      },
+      {
+        "t": "Ausgewogene Polung (positiv/negativ gepolte Items) verstärkt die Akquieszenz.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Akquieszenz = Zustimmungstendenz. B richtig: soziale Erwünschtheit lässt sich über Lügen-/Kontrollskalen aufdecken. C falsch: Ausgewogene Polung KONTROLLIERT die Akquieszenz (sie verstärkt sie nicht) — wer inhaltsunabhängig zustimmt, fällt bei gemischter Polung durch Widersprüche auf.",
+    "h": "Kläre, was Akquieszenz und soziale Erwünschtheit als Antworttendenzen bedeuten und mit welchen Mitteln man ihnen begegnet. Denk besonders darüber nach, wie eine ausgewogene positive/negative Polung der Items auf die Zustimmungstendenz wirkt — verstärkt oder kontrolliert sie diese?"
+  },
+  {
+    "id": "k16",
+    "q": "Welche Aussagen zur Eignungsprüfung der Korrelationsmatrix vor einer EFA sind richtig?",
+    "opts": [
+      {
+        "t": "Ein signifikanter Bartlett-Test spricht dafür, dass sich die Matrix von einer Identitätsmatrix unterscheidet.",
+        "k": true
+      },
+      {
+        "t": "Ein KMO-Wert über .80 gilt als gute Eignung.",
+        "k": true
+      },
+      {
+        "t": "Bartlett-Test und KMO legen fest, wie viele Faktoren zu extrahieren sind.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: signifikanter Bartlett → H0 (Identitätsmatrix) verworfen → es gibt Korrelationen → faktorisierbar. B richtig: KMO > .80 = gute Eignung (> .60 akzeptabel). C falsch: Beide prüfen nur die EIGNUNG, nicht die Faktorenanzahl (die liefern Kaiser-Guttman, Scree, Parallelanalyse).",
+    "h": "Ruf dir ab, was ein signifikanter Bartlett-Test inhaltlich bedeutet (welche Nullhypothese?) und welche KMO-Werte als gute Eignung gelten. Kläre für dich, welche Rolle diese beiden Kennzahlen bei der Frage nach der Faktorenanzahl spielen — im Unterschied zu den Verfahren, die die Zahl der Faktoren bestimmen."
+  },
+  {
+    "id": "k17",
+    "q": "Welche Aussagen zur Rotation in der Faktorenanalyse sind richtig?",
+    "opts": [
+      {
+        "t": "Die Varimax-Rotation ist ein orthogonales Verfahren und erzeugt unkorrelierte Faktoren.",
+        "k": true
+      },
+      {
+        "t": "Oblique Rotationen lassen Korrelationen zwischen den Faktoren zu.",
+        "k": true
+      },
+      {
+        "t": "Eine Rotation verändert die Kommunalitäten der Items grundlegend.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Varimax = orthogonal → Faktoren bleiben unkorreliert; Ziel ist die Einfachstruktur. B richtig: oblique Rotationen (z. B. Promax) erlauben korrelierte Faktoren. C falsch: Die Rotation verteilt die Varianz nur um; die KOMMUNALITÄTEN (erklärte Varianz je Item) bleiben unverändert.",
+    "h": "Ruf dir den Unterschied zwischen orthogonaler und obliquer Rotation ab (was gilt jeweils für die Korrelation der Faktoren?) und ordne die genannten Verfahren zu. Kläre außerdem, was eine Rotation mit den Kommunalitäten macht — verändert sie die erklärte Varianz je Item oder verteilt sie die Varianz nur um?"
+  },
+  {
+    "id": "k18",
+    "q": "Welche Aussagen zur Standardisierung von Verhaltensbeobachtungen sind richtig?",
+    "opts": [
+      {
+        "t": "Ein Zeichensystem registriert das Auftreten vorab definierter Verhaltensweisen in einem Zeitintervall.",
+        "k": true
+      },
+      {
+        "t": "Ein Kategoriensystem soll erschöpfend und die Kategorien sollen wechselseitig exklusiv sein.",
+        "k": true
+      },
+      {
+        "t": "Ratingskalen erfassen ausschließlich die Häufigkeit, nie die Intensität eines Verhaltens.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Zeichensystem = Registrieren definierter Zeichen im Intervall (Event-/Time-Sampling). B richtig: gutes Kategoriensystem = erschöpfend + disjunkt (exhaustiv und exklusiv). C falsch: Ratingskalen erfassen gerade die INTENSITÄT/Ausprägung (Einschätzung auf einer Skala), nicht nur Häufigkeit.",
+    "h": "Trenne die Beobachtungssysteme: Was registriert ein Zeichensystem, welche Anforderungen (erschöpfend, wechselseitig exklusiv) stellt man an ein Kategoriensystem, und was erfasst eine Ratingskala — Häufigkeit, Intensität oder beides? Prüfe jede Aussage an diesen Definitionen."
+  },
+  {
+    "id": "k19",
+    "q": "Welche Aussagen zu Cohens Kappa als Maß der Beurteilerübereinstimmung sind richtig?",
+    "opts": [
+      {
+        "t": "Cohens Kappa korrigiert die beobachtete Übereinstimmung um die zufällig erwartete.",
+        "k": true
+      },
+      {
+        "t": "Ein Kappa von 0 bedeutet, dass die Übereinstimmung nicht über dem Zufall liegt.",
+        "k": true
+      },
+      {
+        "t": "Cohens Kappa kann Werte deutlich über 1 annehmen.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: κ = (p_o − p_e)/(1 − p_e) korrigiert um die Zufallsübereinstimmung. B richtig: κ = 0 → Übereinstimmung nur auf Zufallsniveau. C falsch: Kappa ist nach oben durch 1 begrenzt (perfekte Übereinstimmung); Werte > 1 sind nicht möglich (negativ dagegen schon).",
+    "h": "Ruf dir ab, wie Cohens Kappa die beobachtete Übereinstimmung mit der zufällig erwarteten verrechnet, was der Wert 0 bedeutet und in welchem Wertebereich Kappa überhaupt liegen kann (welche Ober- und Untergrenze?). Prüfe jede Aussage an diesem Grundwissen."
+  },
+  {
+    "id": "k20",
+    "q": "Welche Verfahren sind nicht-reaktive (nonreaktive) Erhebungsmethoden?",
+    "opts": [
+      {
+        "t": "Die Lost-Letter-Technik.",
+        "k": true
+      },
+      {
+        "t": "Die Auswertung von Verhaltensspuren.",
+        "k": true
+      },
+      {
+        "t": "Ein offenes Interview, bei dem die befragte Person über den Zweck aufgeklärt wird.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Lost-Letter-Technik (Auffinden/Weiterleiten verlorener Briefe) — Person weiß nichts von der Messung. B richtig: Verhaltensspuren (z. B. Abnutzung) werden unbemerkt ausgewertet. C falsch: Ein offenes, aufgeklärtes Interview ist REAKTIV — die Person weiß um die Erhebung (Reaktivität).",
+    "h": "Das entscheidende Kriterium ist die Reaktivität: Weiß die untersuchte Person, dass gerade gemessen wird? Geh die drei genannten Verfahren durch und frag dich bei jedem, ob die Person von der Erhebung Kenntnis hat — nur ohne dieses Wissen ist eine Methode nicht-reaktiv."
+  },
+  {
+    "id": "k21",
+    "q": "Welche Aussagen zu Zielen und Ablauf der neuropsychologischen Diagnostik sind richtig?",
+    "opts": [
+      {
+        "t": "Ziel ist die Erfassung und Objektivierung kognitiver und affektiver Funktionsstörungen nach einer Hirnschädigung.",
+        "k": true
+      },
+      {
+        "t": "Die neuropsychologische Diagnostik findet oft hypothesengeleitet nach der medizinischen Diagnostik statt.",
+        "k": true
+      },
+      {
+        "t": "Vorrangiges Ziel ist die exakte anatomische Lokalisation der Hirnläsion.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: GNP-Definition (2005) — Erfassung + Objektivierung kognitiver/affektiver Funktionsstörungen. B richtig: oft hypothesengeleitet im Anschluss an die medizinische Diagnostik. C falsch: Die Läsions-Lokalisation ist Aufgabe der MEDIZINISCHEN Diagnostik (Bildgebung); die Neuropsychologie beschreibt Art und Schwere der Funktionsstörung.",
+    "h": "Ruf dir das Ziel neuropsychologischer Diagnostik nach der GNP-Definition ab und ihren Platz im Ablauf (Verhältnis zur medizinischen Diagnostik). Kläre besonders, wessen Aufgabe die exakte anatomische Lokalisation einer Läsion ist und was die Neuropsychologie demgegenüber beschreibt."
+  },
+  {
+    "id": "k22",
+    "q": "Welche Aussagen zu symptom validity tests und der Studie von Blaskewitz et al. (2008) sind richtig?",
+    "opts": [
+      {
+        "t": "Symptom validity tests nutzen aus, dass Simulanten die Leistung echt hirngeschädigter Personen nicht gut einschätzen können.",
+        "k": true
+      },
+      {
+        "t": "In der Studie wurde kein Kind der Kontrollgruppe fälschlich als Simulant eingestuft.",
+        "k": true
+      },
+      {
+        "t": "Der Fifteen Item Test (FIT) war mit einer Entdeckungsrate von 90 % das beste Verfahren.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: SVT-Prinzip — scheinbar schwere, tatsächlich leichte Aufgaben; Simulanten schneiden unplausibel schlecht ab. B richtig: keine falsch Positiven in der Kontrollgruppe. C falsch: Der FIT entdeckte nur 10 % (wenig geeignet); 90 % erreichte der MSVT, 68 % der TOMM.",
+    "h": "Ruf dir das Grundprinzip von Symptomvaliditätstests ab (warum scheinbar schwere, real leichte Aufgaben Simulanten entlarven) und den Kernbefund der Blaskewitz-Studie zur Kontrollgruppe. Bei den Entdeckungsraten von FIT, TOMM und MSVT hilft nur das Abrufen der konkreten Prozentwerte — präg sie dir als Rangfolge ein, welches Verfahren am wenigsten und welches am besten entdeckte."
+  },
+  {
+    "id": "k23",
+    "q": "Welche Aussagen zur Schätzung der prämorbiden Leistungsfähigkeit sind richtig?",
+    "opts": [
+      {
+        "t": "Bei der klinischen Urteilsbildung werden u. a. Beruf, Schulleistungen und Hobbys herangezogen.",
+        "k": true
+      },
+      {
+        "t": "Die statistische Urteilsbildung nutzt Schätzformeln auf Basis biografischer Daten (z. B. Barona-Gleichung).",
+        "k": true
+      },
+      {
+        "t": "Lesetests eignen sich nicht zur Schätzung der prämorbiden Intelligenz, weil Lesen bei jeder Hirnschädigung als erstes ausfällt.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: klinische Urteilsbildung = biografische Informationen über den früheren Zustand. B richtig: statistische Urteilsbildung = Schätzformeln (Barona). C falsch: Lesetests (z. B. National Adult Reading Test) eignen sich GERADE, weil die Lesefähigkeit bei Hirnschädigung weitgehend erhalten bleibt und das frühere Niveau konserviert.",
+    "h": "Trenne klinische und statistische Urteilsbildung bei der Schätzung der prämorbiden Leistung (biografisches Urteil vs. Schätzformel wie Barona). Denk dann durch, warum man ausgerechnet Lesetests einsetzt — wie verhält sich die Lesefähigkeit bei einer Hirnschädigung im Vergleich zu anderen Funktionen?"
+  },
+  {
+    "id": "k24",
+    "q": "Welche Aussagen zur Spearman-Brown-Formel (Testverlängerung) sind richtig?",
+    "opts": [
+      {
+        "t": "Der Verlängerungsfaktor c ist das Verhältnis der neuen zur alten Itemzahl.",
+        "k": true
+      },
+      {
+        "t": "Das Hinzufügen paralleler Items erhöht die Reliabilität mit abnehmendem Grenzertrag.",
+        "k": true
+      },
+      {
+        "t": "Die Formel schätzt die durch Unreliabilität verdünnte Validität eines Tests.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: c = m*/m. B richtig: mehr parallele Items → höhere Reliabilität, aber jeder Zuwachs wird kleiner (z. B. 8 Items .68 → +5 Items .78; für .85 schon 22 Items). C falsch: Die Verdünnung/Validität behandelt die MINDERUNGSKORREKTUR — Spearman-Brown betrifft die Reliabilität. (Vertiefungsseminar AB4)",
+    "h": "Ruf dir ab, wie der Verlängerungsfaktor bei Spearman-Brown definiert ist und wie sich die Messgenauigkeit mit jedem weiteren parallelen Item entwickelt (bleibt der Zuwachs konstant?). Kläre für dich, welchen Kennwert diese Formel überhaupt betrifft — Reliabilität oder Validität — und grenze sie gegen die Minderungskorrektur ab."
+  },
+  {
+    "id": "k25",
+    "q": "Welche Aussagen zur Minderungskorrektur (Verdünnungsformel) sind richtig?",
+    "opts": [
+      {
+        "t": "Bei einer wahren Korrelation von 0.65 und Reliabilitäten 0.80 und 0.60 resultiert empirisch Val = 0.65 · √0.80 · √0.60 ≈ 0.45.",
+        "k": true
+      },
+      {
+        "t": "Die Reliabilität der Instrumente begrenzt die maximal beobachtbare Validität.",
+        "k": true
+      },
+      {
+        "t": "Bei perfekter Reliabilität beider Instrumente ist die beobachtete Validität kleiner als die wahre Korrelation.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: doppelte Minderungskorrektur, 0.65·√0.80·√0.60 ≈ 0.45. B richtig: Unreliabilität verdünnt jeden Zusammenhang → Reliabilität ist eine Obergrenze der Validität. C falsch: Bei Rel = 1.0 (beide) verschwindet die Verdünnung → die beobachtete Validität ERREICHT die wahre Korrelation (ist nicht kleiner). (Vertiefungsseminar AB5)",
+    "h": "Diese Frage nutzt die doppelte Minderungskorrektur: wahre Korrelation mal Wurzel der einen Reliabilität mal Wurzel der anderen. Rechne den angegebenen Fall selbst nach, statt das Ergebnis zu übernehmen, und überleg getrennt, welchen Wert die beobachtete Validität annimmt, wenn beide Instrumente perfekt reliabel sind (Wurzel aus 1)."
+  },
+  {
+    "id": "k26",
+    "q": "Welche Aussagen zur Multitrait-Multimethod-Matrix (Rammstedt et al. 2004) sind richtig?",
+    "opts": [
+      {
+        "t": "Konvergente Validität zeigt sich in hohen Monotrait-Heteromethod-Korrelationen (gleiches Merkmal, andere Methode).",
+        "k": true
+      },
+      {
+        "t": "Für ein Einzelitem-Verfahren lässt sich kein Cronbachs Alpha bestimmen.",
+        "k": true
+      },
+      {
+        "t": "Hohe Heterotrait-Monomethod-Korrelationen sind ein Beleg für gute diskriminante Validität.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Monotrait-Heteromethod = Validitätsdiagonale, soll hoch sein (Ø .672). B richtig: α braucht mehrere Items; bei einem Einzelitem nicht bestimmbar. C falsch: HOHE Heterotrait-Monomethod-Korrelationen sprechen für einen METHODENeffekt und GEGEN diskriminante Validität — diese verlangt NIEDRIGE Heterotrait-Werte. (Vertiefungsseminar AB5)",
+    "h": "Ruf dir die Logik der Multitrait-Multimethod-Matrix ab: Welche Zellen (gleiches Merkmal/andere Methode; anderes Merkmal/gleiche Methode) stehen für konvergente Validität und welche für Methodeneffekte? Kläre zusätzlich, was Cronbachs Alpha voraussetzt und ob es sich für ein Verfahren mit nur einem Item berechnen lässt."
+  },
+  {
+    "id": "k27",
+    "q": "Welche Aussagen zur Güte von Validierungskriterien sind richtig?",
+    "opts": [
+      {
+        "t": "Ein Kriterium ist kontaminiert, wenn es durch aufgabenfremde Einflüsse (mit)bestimmt wird.",
+        "k": true
+      },
+      {
+        "t": "Ein Kriterium ist defizient, wenn es relevante Leistungsanteile nicht erfasst.",
+        "k": true
+      },
+      {
+        "t": "Ein selten auftretendes Kriterium (z. B. Unfälle) ist besonders gut geeignet, weil es viel Varianz erzeugt.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Kontamination = irrelevante Fremdeinflüsse (misst zu viel). B richtig: Defizienz = fehlende relevante Anteile (misst zu wenig). C falsch: Seltene Kriterien erzeugen WENIG Varianz (viele Nullwerte) und sind gerade deshalb problematisch — man braucht längere Beobachtungszeiträume. (Vertiefungsseminar AB5)",
+    "h": "Kläre die Begriffe Kontamination und Defizienz eines Kriteriums (misst es zu viel Fremdes oder zu wenig Relevantes?) und ordne die Aussagen zu. Denk außerdem durch, wie viel Varianz ein sehr selten auftretendes Kriterium liefert und ob das für oder gegen seine Eignung spricht."
+  },
+  {
+    "id": "k28",
+    "q": "Welche Aussagen zur Itemkonstruktion im Vertiefungsseminar (Big-Five-Fragebogen) sind richtig?",
+    "opts": [
+      {
+        "t": "Die Items werden im Likert-Format als Aussagen mit 5- bis 7-stufiger Zustimmungsskala formuliert.",
+        "k": true
+      },
+      {
+        "t": "Negativ gepolte Items müssen vor der Analyse invertiert werden (bei 5 Stufen: 6 − Rohwert).",
+        "k": true
+      },
+      {
+        "t": "Ein ausgewogenes Verhältnis positiv und negativ gepolter Items ist zu vermeiden, weil es die interne Konsistenz senkt.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Likert-Aussagen, 5–7 Stufen. B richtig: Invertierung bei 5-stufiger Skala = 6 − Rohwert. C falsch: Ausgewogene Polung ist ERWÜNSCHT (kontrolliert Akquieszenz); sie senkt nicht per se die interne Konsistenz — man muss nur vor der Analyse korrekt umpolen. (Vertiefungsseminar AB2/AB3)",
+    "h": "Ruf dir die Merkmale der Itemkonstruktion für einen Likert-Fragebogen ab (Antwortformat, Stufenzahl) und die Regel zum Umpolen negativ formulierter Items. Überleg schließlich, ob ein ausgewogenes Verhältnis positiv/negativ gepolter Items erwünscht oder zu vermeiden ist — welchen Effekt (etwa auf Akquieszenz) verfolgt man damit?"
+  },
+  {
+    "id": "k29",
+    "q": "Welche Aussagen zu neuropsychologischen Leistungs- und Gedächtnistests sind richtig?",
+    "opts": [
+      {
+        "t": "Der Benton-Test erfasst die visuelle Merkfähigkeit.",
+        "k": true
+      },
+      {
+        "t": "Der Aachener Aphasietest (AAT) dient der Differenzierung von Aphasien.",
+        "k": true
+      },
+      {
+        "t": "Der Turm von London ist ein Verfahren zur Messung der visuellen Merkfähigkeit.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Benton-Test = visuelle Merkfähigkeit (Vorlagen aus dem Gedächtnis zeichnen). B richtig: AAT (Huber et al. 1983) = Aphasie-Diagnostik. C falsch: Der Turm von London misst PLANUNG und Handlungskontrolle (exekutive Funktionen), nicht die visuelle Merkfähigkeit.",
+    "h": "Ordne die drei genannten Verfahren ihren Funktionsbereichen zu — ruf dir für jedes ab, welche kognitive Funktion es prüft (Gedächtnis, Sprache oder exekutive Planung), und prüfe, ob die im Text behauptete Zuordnung dazu passt."
+  },
+  {
+    "id": "k30",
+    "q": "Welche Aussagen zur Unterscheidung von Speed- und Power-Tests sind richtig?",
+    "opts": [
+      {
+        "t": "Ein reiner Speedtest enthält leichte Aufgaben unter starkem Zeitdruck.",
+        "k": true
+      },
+      {
+        "t": "Bei einem reinen Powertest entscheidet die Aufgabenschwierigkeit ohne relevante Zeitbegrenzung.",
+        "k": true
+      },
+      {
+        "t": "In einem reinen Speedtest ist die Retestreliabilität grundsätzlich nicht bestimmbar.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Speedtest = viele leichte Items, Zeitdruck (Bearbeitungsgeschwindigkeit zählt). B richtig: Powertest = Schwierigkeit entscheidet, keine (relevante) Zeitgrenze. C falsch: Bei Speedtests ist vor allem die INTERNE Konsistenz/Halbierungsreliabilität problematisch (weil Items am Ende unbearbeitet bleiben) — die Retestreliabilität ist dennoch bestimmbar.",
+    "h": "Kläre den Unterschied zwischen Speed- und Powertest (entscheidet Tempo oder Schwierigkeit?). Denk dann durch, welche Reliabilitätsart bei einem reinen Speedtest problematisch wird — die interne Konsistenz/Halbierung oder die Wiederholungsreliabilität — und ob die genannte Reliabilitätsart tatsächlich unbestimmbar ist."
+  },
+  {
+    "id": "k31",
+    "q": "Welche Aussagen zu Datenarten und Skalenniveaus in der Diagnostik sind richtig?",
+    "opts": [
+      {
+        "t": "L-Daten (Life-Record-Daten) stammen z. B. aus Biografie und Verhaltensregistrierung.",
+        "k": true
+      },
+      {
+        "t": "Q-Daten sind Selbstauskünfte aus Fragebögen und Interviews.",
+        "k": true
+      },
+      {
+        "t": "Auf Ordinalskalenniveau sind Abstände zwischen den Werten gleich und interpretierbar.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: L-Daten = Lebens-/Verhaltensdaten (biografisch, registriert). B richtig: Q-Daten = questionnaire (Selbstbericht). C falsch: Gleiche, interpretierbare Abstände gelten erst ab INTERVALLskalenniveau; die Ordinalskala liefert nur eine Rangordnung ohne gleiche Abstände. (Zusätzlich T-Daten = objektive Testdaten.)",
+    "h": "Ruf dir das Datenarten-Schema ab (L-, Q-, T-Daten — woher stammt jede Art?) und ordne die Aussagen zu. Kläre getrennt davon, ab welchem Skalenniveau gleiche, interpretierbare Abstände zwischen den Werten vorliegen und wo die Ordinalskala in dieser Hierarchie steht."
+  },
+  {
+    "id": "k32",
+    "q": "Welche Aussagen zu den Nebengütekriterien eines Tests sind richtig?",
+    "opts": [
+      {
+        "t": "Ökonomie und Zumutbarkeit gehören zu den Nebengütekriterien.",
+        "k": true
+      },
+      {
+        "t": "Die Normierung (Eichung) macht individuelle Testwerte über eine Bezugsgruppe interpretierbar.",
+        "k": true
+      },
+      {
+        "t": "Nützlichkeit und Fairness sind Hauptgütekriterien, die der Objektivität übergeordnet sind.",
+        "k": false
+      }
+    ],
+    "e": "A richtig: Ökonomie und Zumutbarkeit zählen zu den Nebengütekriterien. B richtig: Normierung liefert den Bezugsmaßstab (Normstichprobe) zur Interpretation. C falsch: Nützlichkeit und Fairness sind ebenfalls NEBENgütekriterien — die drei HAUPTgütekriterien sind Objektivität, Reliabilität und Validität (keinem übergeordnet).",
+    "h": "Diese Frage prüft die Einteilung in Haupt- und Nebengütekriterien. Ruf dir ab, welche drei Kriterien den Kern (Hauptgütekriterien) bilden, was die Normierung leistet und in welche Gruppe Merkmale wie Ökonomie, Zumutbarkeit, Nützlichkeit und Fairness fallen. Prüfe jede Aussage an dieser Zuordnung."
+  }
+];
+
+/* ═══ Klausurformat-Runner (Mehrfachwahl 3 Optionen + Malus) ═══════════ */
+var KRUN = {mode:'ueben', shuffle:false, order:[], pos:0, picks:{}, checked:{}, hint:{}, sol:{}, gloss:{}, started:false, finished:false};
+if(typeof GLOSSAR === 'undefined') var GLOSSAR = [];
+/* Begriffe-Fenster: Glossareinträge werden zur Laufzeit gegen Fragetext + Optionstexte
+   gematcht (längster Treffer zuerst, nur am Wortanfang, keine Überlappung, je Begriff 1×). */
+var _GKEYS = (function(){
+  var ks=[];
+  GLOSSAR.forEach(function(e){ [e.t].concat(e.a||[]).forEach(function(k){ ks.push({k:k.toLowerCase(), e:e}); }); });
+  ks.sort(function(a,b){ return b.k.length - a.k.length; });
+  return ks;
+})();
+function _isAlpha(ch){ return ch && /[a-zäöüßA-ZÄÖÜ]/.test(ch); }
+function _kGlossTerms(qi){
+  var q=KP[qi];
+  /* HTML-Auszeichnung (z. B. <em>keine</em> in Negativ-Fragen) vor dem Matchen entfernen,
+     sonst zerschneiden Tags die Begriffe. */
+  var txt=(q.q+' '+q.opts.map(function(o){return o.t;}).join(' ')).replace(/<[^>]+>/g,' ').toLowerCase();
+  var out=[], used=[];
+  _GKEYS.forEach(function(item){
+    if(out.indexOf(item.e)>=0) return;
+    var i=txt.indexOf(item.k);
+    while(i>=0){
+      var free=true;
+      for(var u=0;u<used.length;u++){ if(i<used[u][1] && i+item.k.length>used[u][0]){ free=false; break; } }
+      /* Wortanfang immer nötig; bei kurzen Schlüsseln (Akronyme wie PR, FIT, TAP) zusätzlich
+         Wortende, sonst matcht "pr" den Anfang von "probabilistisch". Längere Begriffe dürfen
+         Flexionsendungen haben ("Trennschärfe" in "Trennschärfen"). */
+      var endOk = item.k.length > 4 || !_isAlpha(txt.charAt(i+item.k.length));
+      if(free && endOk && !_isAlpha(txt.charAt(i-1))){ out.push(item.e); used.push([i,i+item.k.length]); return; }
+      i=txt.indexOf(item.k,i+1);
+    }
+  });
+  return out;
+}
+var KLTRS=['A','B','C','D'];
+/* Persistenz (load/save aus der geteilten Engine, s. scaf.JS_ENGINE) — Fix 15.07.2026:
+   vorher fehlte diese Definition; kCheckOne/kFinish riefen _qSched auf, das nirgends im
+   injizierten JS existierte und im try/catch still verschluckt wurde (kein SRS-Lernstand). */
+function _qSched(qid, correct){
+  var p=load(), now=Date.now(), DAY=86400000;
+  var card=p[qid]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(correct){ card.stability*=2.5; card.due=now+Math.max(DAY,card.stability*DAY); card.state='review'; }
+  else { card.lapses++; card.stability=Math.max(1,card.stability*0.5); card.due=now+600000; card.state='learning'; }
+  card.reps++; p[qid]=card; save(p);
+}
+function _kOrder(){ KRUN.order = KP.map(function(_,i){return i;}); if(KRUN.shuffle){ for(var i=KRUN.order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=KRUN.order[i];KRUN.order[i]=KRUN.order[j];KRUN.order[j]=t;} } }
+/* Optionsreihenfolge: perm[qi] = Originalindizes in Anzeigereihenfolge. Einmal pro Durchgang
+   gewürfelt (stabil über Re-Renderings, sonst würden Häkchen springen). Picks bleiben am
+   ORIGINALINDEX → Scoring unverändert; nur Anzeige + Buchstaben ändern sich. */
+function _kPerms(){
+  KRUN.perm = {};
+  KP.forEach(function(q,qi){
+    var p=q.opts.map(function(_,i){return i;});
+    if(KRUN.shuffle){ for(var i=p.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=p[i];p[i]=p[j];p[j]=t;} }
+    KRUN.perm[qi]=p;
+  });
+}
+/* Auflösungstexte referenzieren Optionen als "A richtig: …" — beim Mischen müssen die
+   Buchstaben auf die neue Anzeigeposition umgeschrieben werden (sonst zeigt die Auflösung
+   auf die falsche Option). Nur dieses Muster wird angefasst, übrige Prosa bleibt unberührt. */
+function _kRelabel(txt, qi){
+  var p=KRUN.perm&&KRUN.perm[qi]; if(!p||!txt) return txt;
+  var map={}, ident=true;
+  for(var d=0; d<p.length; d++){ map[KLTRS[p[d]]]=KLTRS[d]; if(p[d]!==d) ident=false; }
+  if(ident) return txt;
+  return txt.replace(/(^|[^A-Za-zÄÖÜäöü])([ABC])(\s+(?:richtig|falsch)\s*:)/g,
+    function(m,pre,L,post){ return pre+(map[L]||L)+post; });
+}
+/* Zerlegt eine Auflösung im Muster "A richtig: … B falsch: … C falsch: …" in
+   einzelne, farbig markierte Segmente (grün=richtig/rot=falsch) statt eines
+   Textblocks. Ordnet nach der AKTUELLEN Anzeigeposition (Mischen-sicher) —
+   nicht nach dem Original-Buchstaben. Fällt bei untypischem Format (z. B.
+   "Alle drei richtig: …") auf den unveränderten Fließtext zurück. */
+function _kExpParts(qi){
+  var q=KP[qi], txt=q.e||'', meta='';
+  var metaIdx=txt.lastIndexOf(' — [');
+  if(metaIdx>-1){ meta=txt.slice(metaIdx+3); txt=txt.slice(0,metaIdx); }
+  var re=/([ABC])\s+(richtig|falsch):\s*/g, m, marks=[];
+  while((m=re.exec(txt))){ marks.push({letter:m[1], start:m.index, contentStart:re.lastIndex}); }
+  if(marks.length!==3 || marks[0].letter!=='A' || marks[1].letter!=='B' || marks[2].letter!=='C') return null;
+  var parts=[];
+  for(var i=0;i<3;i++){
+    var end=(i+1<3)?marks[i+1].start:txt.length;
+    parts.push({letter:marks[i].letter, text:txt.slice(marks[i].contentStart,end).trim()});
+  }
+  return {parts:parts, meta:meta};
+}
+function _kExpHTML(qi, label){
+  var q=KP[qi], parsed=_kExpParts(qi);
+  if(!parsed) return '<div class="kp-exp" style="display:block"><div class="lbl">'+label+'</div>'+_kRelabel(q.e,qi)+'</div>';
+  var perm=(KRUN.perm&&KRUN.perm[qi])||q.opts.map(function(_,i){return i;});
+  var rows=parsed.parts.map(function(p){
+    var oi=KLTRS.indexOf(p.letter), d=perm.indexOf(oi); if(d<0) d=oi;
+    return {d:d, ltr:KLTRS[d], correct:!!q.opts[oi].k, text:p.text};
+  });
+  rows.sort(function(a,b){return a.d-b.d;});
+  var h='<div class="kp-exp" style="display:block"><div class="lbl">'+label+'</div>'
+      +'<div style="display:flex;flex-direction:column;gap:6px;margin-top:2px">';
+  rows.forEach(function(r){
+    var col=r.correct?'var(--green)':'var(--red)';
+    var bg=r.correct?'rgba(52,211,153,.08)':'rgba(248,113,113,.08)';
+    h+='<div style="display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:1px solid '+col+';background:'+bg+'">'
+      +'<span style="font-weight:700;color:'+col+';flex:0 0 auto">'+r.ltr+' '+(r.correct?'✔':'✘')+'</span>'
+      +'<span style="color:var(--text2);font-size:.86rem;line-height:1.42">'+r.text+'</span></div>';
+  });
+  h+='</div>';
+  if(parsed.meta) h+='<div style="margin-top:6px;font-size:.72rem;color:var(--text3)">'+parsed.meta+'</div>';
+  h+='</div>';
+  return h;
+}
+function kModeUeben(){ KRUN.mode='ueben'; kStart(); }
+function kModeKlausur(){ KRUN.mode='klausur'; kStart(); }
+function kStart(){ _kOrder(); _kPerms(); KRUN.pos=0; KRUN.picks={}; KRUN.checked={}; KRUN.hint={}; KRUN.sol={}; KRUN.gloss={}; KRUN.started=true; KRUN.finished=false; kRender(); }
+function kReset(){ if(!confirm('Fortschritt dieses Sets wirklich zurücksetzen?')) return; KP.forEach(function(q){ try{ var s=load(); delete s[q.id]; save(s);}catch(e){} }); kStart(); }
+/* Options-Scoring exakt nach Klausurinfo: richtig&angekreuzt +1 · falsch&nicht +1 · richtig&nicht 0 · falsch&angekreuzt -1 */
+function _optScore(correct, picked){ if(correct&&picked) return 1; if(!correct&&!picked) return 1; if(correct&&!picked) return 0; return -1; }
+function _qScore(qi){ var q=KP[qi], p=KRUN.picks[qi]||{}, s=0; q.opts.forEach(function(o,i){ s+=_optScore(!!o.k, !!p[i]); }); return s; }
+function _qMax(){ return 3; }
+function kToggle(qi,i){ if(KRUN.mode==='ueben' && KRUN.checked[qi]) return; if(!KRUN.picks[qi]) KRUN.picks[qi]={}; KRUN.picks[qi][i]=!KRUN.picks[qi][i]; kRender(); }
+/* Doppel-Button (nur Üben-Modus, nur vor dem Prüfen): 💡 spoilerfreier Hinweis (Feld h) · 🔓 volle Auflösung (Feld e) vorab — ohne Punktevergabe/Prüfung */
+function kHint(qi){ KRUN.hint[qi]=!KRUN.hint[qi]; kRender(); }
+function kSol(qi){ KRUN.sol[qi]=!KRUN.sol[qi]; kRender(); }
+function kGloss(qi){ KRUN.gloss[qi]=!KRUN.gloss[qi]; kRender(); }
+/* Fragenreihenfolge mischen (wie im Übungsset-Runner). Wirkt sofort → Durchgang startet neu;
+   bei bereits begonnenem Durchgang erst nach Rückfrage. */
+function kToggleShuffle(){
+  var dirty = Object.keys(KRUN.picks).length>0 || Object.keys(KRUN.checked).length>0;
+  if(dirty && !confirm('Reihenfolge ändern startet den Durchgang neu. Fortfahren?')) return;
+  KRUN.shuffle=!KRUN.shuffle; kStart();
+}
+function kCheckOne(qi){ KRUN.checked[qi]=true; var sc=_qScore(qi); try{ _qSched(KP[qi].id, sc===_qMax()); }catch(e){} if(KRUN.mode==='ueben' && sc!==_qMax()){ KRUN.order.push(qi); } kRender(); }
+function kNext(){
+  var qi=KRUN.order[KRUN.pos];
+  if(KRUN.mode==='ueben' && KRUN.checked[qi] && _qScore(qi)!==_qMax()){
+    delete KRUN.checked[qi]; delete KRUN.picks[qi]; delete KRUN.hint[qi]; delete KRUN.sol[qi];
+  }
+  if(KRUN.pos<KRUN.order.length-1){KRUN.pos++; kRender();} else kFinish();
+}
+function kPrev(){ if(KRUN.pos>0){KRUN.pos--; kRender();} }
+function kFinish(){ KRUN.finished=true; if(KRUN.mode==='klausur'){ KRUN.order.forEach(function(qi){ try{ _qSched(KP[qi].id, _qScore(qi)===_qMax()); }catch(e){} }); } kRender(); }
+function _kOptsHTML(qi){
+  var q=KP[qi], p=KRUN.picks[qi]||{}, reveal=(KRUN.mode==='ueben'&&KRUN.checked[qi]);
+  var perm=(KRUN.perm&&KRUN.perm[qi])||q.opts.map(function(_,i){return i;});
+  var h='';
+  perm.forEach(function(oi,d){
+    var o=q.opts[oi], on=!!p[oi], cls='kp-opt'+(on?' on':''), tag='';
+    if(reveal){
+      var sc=_optScore(!!o.k,on);
+      cls='kp-opt '+(o.k?'kp-corr':(on?'kp-wrong':''));
+      tag=' <span class="kp-tag '+(sc>0?'plus':(sc<0?'minus':'zero'))+'">'+(sc>0?'+1':(sc<0?'−1':'0'))+'</span>';
+    }
+    h+='<label class="'+cls+'" onclick="kToggle('+qi+','+oi+')"><input type="checkbox" '+(on?'checked':'')+' onclick="event.preventDefault()">'
+      +'<span class="kp-ltr">'+KLTRS[d]+'</span><span class="kp-txt">'+o.t+(reveal?' <em style="color:'+(o.k?'var(--green)':'var(--red)')+';font-style:normal">('+(o.k?'richtig':'falsch')+')</em>':'')+tag+'</span></label>';
+  });
+  return h;
+}
+function kRender(){
+  var host=document.getElementById('kRunner'); if(!host) return;
+  if(!KRUN.started){ host.innerHTML=''; return; }
+  var N=KRUN.order.length;
+  if(KRUN.finished){ host.innerHTML=_kDone(); return; }
+  var qi=KRUN.order[KRUN.pos], q=KP[qi], checked=KRUN.checked[qi];
+  var h='<div class="kp-modebar">'
+      +'<button class="nav-btn'+(KRUN.mode==='ueben'?' active':'')+'" onclick="kModeUeben()">📝 Üben · Sofort-Feedback</button>'
+      +'<button class="nav-btn'+(KRUN.mode==='klausur'?' active':'')+'" onclick="kModeKlausur()">🎓 Klausur · Auswertung am Ende</button>'
+      +'<button class="nav-btn'+(KRUN.shuffle?' active':'')+'" onclick="kToggleShuffle()">🔀 Fragen &amp; Antworten mischen: '+(KRUN.shuffle?'AN':'aus')+'</button>'
+      +'</div>';
+  var doneCnt=KRUN.order.filter(function(x){return KRUN.mode==='klausur'?(KRUN.picks[x]&&Object.keys(KRUN.picks[x]).some(function(k){return KRUN.picks[x][k];}))!==undefined&&_answeredK(x):KRUN.checked[x];}).length;
+  h+='<div class="kp-scoreline">Frage '+(KRUN.pos+1)+' / '+N+'  ·  '+(KRUN.mode==='klausur'?'🎓 Klausur-Modus (Malus aktiv, Auswertung am Ende)':'📝 Üben-Modus (Sofort-Feedback pro Option)')+'</div>';
+  h+='<div class="mc-wrap"><div class="kp-qmeta">Mehrfachwahl — mindestens eine Option ist richtig, es können auch zwei oder alle drei richtig sein. Falsch angekreuzt = −1 (Malus).</div>'
+    +'<div class="mc-q-text">'+q.q+'</div>'+_kOptsHTML(qi);
+  if(KRUN.mode==='ueben'&&checked){
+    h+='<div class="kp-scoreline">Diese Frage: <strong>'+_qScore(qi)+' / '+_qMax()+'</strong> Punkte</div>';
+    h+=_kExpHTML(qi,'Auflösung');
+  }
+  if(KRUN.mode==='ueben'&&KRUN.hint[qi]&&q.h){
+    h+='<div class="kp-hint"><div class="lbl">💡 Hinweis — verrät die Lösung nicht</div>'+q.h+'</div>';
+  }
+  if(KRUN.mode==='ueben'&&!checked&&KRUN.sol[qi]){
+    h+=_kExpHTML(qi,'🔓 Lösung');
+  }
+  if(KRUN.mode==='ueben'&&KRUN.gloss[qi]){
+    var _tm=_kGlossTerms(qi);
+    h+='<div class="kp-gloss"><div class="lbl">📖 Fachbegriffe in dieser Aufgabe</div>';
+    if(_tm.length){ h+='<dl>'; _tm.forEach(function(e){ h+='<dt>'+e.t+'</dt><dd>'+e.d+'</dd>'; }); h+='</dl>'; }
+    else h+='<em>Keine Glossarbegriffe in dieser Aufgabe gefunden.</em>';
+    h+='</div>';
+  }
+  h+='</div><div class="kp-ctrl">';
+  if(KRUN.pos>0) h+='<button class="btn btn-ghost" onclick="kPrev()">← Zurück</button>';
+  if(KRUN.mode==='ueben'&&GLOSSAR.length) h+='<button class="btn btn-ghost" onclick="kGloss('+qi+')">📖 '+(KRUN.gloss[qi]?'Begriffe ausblenden':'Begriffe')+'</button>';
+  if(KRUN.mode==='ueben'){
+    if(q.h) h+='<button class="btn btn-ghost" onclick="kHint('+qi+')">💡 '+(KRUN.hint[qi]?'Hinweis ausblenden':'Hinweis')+'</button>';
+    h+='<button class="btn btn-ghost" onclick="kSol('+qi+')">🔓 '+(KRUN.sol[qi]?'Lösung ausblenden':'Lösung')+'</button>';
+  }
+  if(KRUN.mode==='ueben'&&!checked){
+    h+='<button class="btn btn-accent" onclick="kCheckOne('+qi+')">Prüfen</button>';
+  } else h+='<button class="btn btn-accent" onclick="kNext()">'+(KRUN.pos<N-1?'Weiter →':'Abgeben & auswerten ✓')+'</button>';
+  h+='<button class="btn btn-ghost" onclick="kReset()">↺ Zurücksetzen</button></div>';
+  host.innerHTML=h;
+}
+function _answeredK(qi){ return KRUN.picks[qi]&&Object.keys(KRUN.picks[qi]).length>0; }
+function _kDone(){
+  var _uniqK=[]; var _seenK={}; KRUN.order.forEach(function(qi){ if(!_seenK[qi]){_seenK[qi]=true; _uniqK.push(qi);} });
+  var _tallyOrder = KRUN.mode==='ueben' ? _uniqK : KRUN.order;
+  var total=0, maxT=_tallyOrder.length*3;
+  _tallyOrder.forEach(function(qi){ total+=_qScore(qi); });
+  if(total<0) total=total; /* Malus kann negativ werden */
+  var pass=Math.ceil(maxT/2);
+  var passed=total>=pass;
+  var pct=Math.max(0,Math.min(100,Math.round(total/maxT*100)));
+  var retries=KRUN.order.length-_tallyOrder.length;
+  var h='<div class="done-box"><div class="done-emoji">'+(KRUN.mode==='ueben'?'🎉':(passed?'🎉':'📚'))+'</div>'
+    +(KRUN.mode==='ueben'
+      ? '<div class="kp-verdict pass">Alle Fragen gemeistert</div>'
+      : '<div class="kp-verdict '+(passed?'pass':'fail')+'">'+(passed?'Bestanden':'Nicht bestanden')+'</div>')
+    +'<div class="done-sub">Modus: '+(KRUN.mode==='klausur'?'Klausur':'Üben')+'  ·  '+_tallyOrder.length+' Fragen à 3 Optionen'+(KRUN.mode==='ueben'&&retries>0?' · '+retries+' Wiederholung(en) bis alles saß':'')+'</div>'
+    +(KRUN.mode==='ueben'
+      ? '<div class="kp-qmeta">Jede Frage wurde so lange erneut gestellt, bis sie vollständig korrekt (3/3) beantwortet war.</div>'
+      : '<div class="kp-scoreline"><strong>'+total+' / '+maxT+' Punkten</strong> — Bestehensgrenze '+pass+' (die Hälfte). '+(passed?'Geschafft!':'Noch '+(pass-total)+' Punkte fehlen.')+'</div>'
+        +'<div class="kp-passbar"><i style="width:'+pct+'%"></i><span class="kp-passmark"></span></div>'
+        +'<div class="kp-qmeta">Die Marke zeigt die 50-%-Bestehensgrenze. Jede falsch angekreuzte Option kostet einen Maluspunkt — im Zweifel lieber nicht ankreuzen.</div>');
+  /* Aufschlüsselung */
+  h+='<div class="qr-review" style="margin-top:14px;text-align:left">';
+  _tallyOrder.forEach(function(qi){
+    var q=KP[qi], sc=_qScore(qi), p=KRUN.picks[qi]||{};
+    h+='<div class="card"><div style="font-size:.8rem;color:var(--text3)">'+q.q+' — <strong style="color:'+(sc===3?'var(--green)':(sc<=0?'var(--red)':'var(--text)'))+'">'+sc+'/3</strong></div>';
+    q.opts.forEach(function(o,i){ var picked=!!p[i]; var s=_optScore(!!o.k,picked);
+      h+='<div style="font-size:.82rem;margin-top:3px;color:'+(s>0?'var(--green)':(s<0?'var(--red)':'var(--text3)'))+'">'+KLTRS[i]+') '+o.t+'  ['+(o.k?'richtig':'falsch')+', '+(picked?'angekreuzt':'nicht')+' → '+(s>0?'+1':(s<0?'−1':'0'))+']</div>';
+    });
+    h+=_kExpHTML(qi,'Auflösung')+'</div>';
+  });
+  h+='</div><div class="kp-ctrl"><button class="btn btn-accent" onclick="kStart()">↻ Neuer Durchgang</button></div></div>';
+  return h;
+}
+(function(){ kStart(); })();
+</script>
+</body>
+</html>

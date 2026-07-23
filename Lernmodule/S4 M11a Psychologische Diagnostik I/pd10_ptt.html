@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11a · PD10 Probabilistische Testtheorie</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11a-vl10
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+/* V3: Provenienz, Speicherstatus und Accessibility */
+.source-meta{font-size:.68rem;color:var(--text3);margin-top:6px;font-family:ui-monospace,monospace}
+.storage-warning{display:none;background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:10px 12px;margin:10px 0 16px;color:var(--text);font-size:.8rem}
+.progress-tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}
+.import-label{display:inline-flex;align-items:center}
+.import-label input{position:absolute;inline-size:1px;block-size:1px;opacity:0;pointer-events:none}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+button,input,select,[tabindex]:not([tabindex="-1"]){min-height:24px}
+.nav-btn,.btn,.mc-opt,.mc-rate,.corr-btn,.tab-btn{min-height:44px}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.section[aria-hidden="true"]{display:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+
+/* PD10 bespoke widgets */
+.source-meta{font-size:.69rem;color:var(--text3);margin-top:5px}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px;margin:9px 0;overflow:auto;color:var(--text)}.formula.small{font-size:.78rem}.elo-line{height:110px;margin:26px 18px 0;border-top:3px solid var(--text2);position:relative}.elo-line span{position:absolute;transform:translateX(-50%);bottom:8px;text-align:center;font-size:.72rem;color:var(--text2)}.elo-line span::after{content:"";position:absolute;left:50%;top:42px;width:2px;height:18px;background:var(--accent)}.elo-line span.below{bottom:-58px}.elo-line span.below::after{top:-18px}.scale-labels{display:flex;justify-content:space-between;margin:55px 10px 0;font-size:.7rem;color:var(--text3)}.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}label{display:block;font-size:.82rem;color:var(--text2)}input[type=range]{width:100%;margin-top:7px;accent-color:var(--accent)}.chart{width:100%;max-height:330px;background:#fff;border-radius:10px;border:1px solid var(--border);margin:12px 0}.axis{stroke:#111;stroke-width:1.5}.guide{stroke:#94a3b8;stroke-width:1;stroke-dasharray:5 5}.diag{stroke:#64748b}.curve{fill:none;stroke:#4f46e5;stroke-width:4}.curve.dashed{stroke:#dc2626;stroke-dasharray:8 5}.curve.a{stroke:#059669}.curve.b{stroke:#4f46e5}.curve.c{stroke:#dc2626}.person-line{stroke:#f59e0b;stroke-width:2;stroke-dasharray:4 4}.point{fill:#f59e0b;stroke:#111}.chart text{font:13px system-ui;fill:#111}.choice-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.choice-row button,.debug-item button{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;min-height:42px;padding:8px 12px;cursor:pointer}.widget-feedback{min-height:28px;margin:8px 0;padding:8px 10px;border-left:3px solid var(--border);font-size:.82rem;color:var(--text2)}.widget-feedback.good{border-color:var(--green);color:var(--green)}.widget-feedback.bad{border-color:var(--red);color:var(--red)}.text-alt{font-size:.8rem;color:var(--text2);background:var(--bg);padding:9px;border-radius:8px}.mini-reveal{border:1px solid var(--accent);background:var(--surface2);color:var(--text);border-radius:5px;padding:2px 8px}.steps .step-item{display:none}.steps .step-item.shown{display:block;background:var(--bg);border-left:3px solid var(--accent);padding:10px;margin:8px 0;font-size:.84rem}.assumption-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.debug-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin:9px 0}.response-matrix button{width:100%;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:5px;padding:6px}.response-matrix button:hover,.response-matrix button:focus{border-color:var(--accent)}.suff-box{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);border-radius:9px;padding:12px;margin-top:10px}.metric{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin:10px 0}.metric strong{font-size:1.4rem;color:var(--green)}.r-output{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#0b1220;color:#d1fae5;border:1px solid var(--border);border-radius:9px;padding:12px;overflow:auto;font-size:.72rem;line-height:1.45;white-space:pre}.decision-chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.decision-chain span{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px}.output-task{background:var(--bg);padding:12px;border-radius:8px;margin:10px 0}.tab-buttons{display:flex;gap:7px;flex-wrap:wrap}.tab-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text2);border-radius:8px;padding:8px 12px}.tab-btn.active{border-color:var(--accent);color:var(--text)}.fit-thresholds td,.fit-thresholds th{text-align:left}.fit-thresholds tr:nth-child(3) td{background:rgba(52,211,153,.06)}.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:9px;align-items:stretch}.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px}.duel-mid{align-self:center;font-weight:800;color:var(--text3)}.storage-warning{display:none;background:rgba(248,113,113,.12);border:1px solid var(--red);border-radius:9px;padding:10px;margin:10px 0}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:650px){.slider-grid,.assumption-grid{grid-template-columns:1fr}.duel{grid-template-columns:1fr}.duel-mid{text-align:center}.r-output{font-size:.64rem}.elo-line{margin-left:8px;margin-right:8px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11a · PD10 Probabilistische Testtheorie</h1>
+<p class="page-sub">Modul 11a: Psychologische Diagnostik · BSc. Psychologie (Präsenz) · Dr. Nadine Wedderhoff · Rasch-Modell · ICC · Likelihood · Information · Modellfit · 1PL/2PL</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> Wie entsteht eine Lösungswahrscheinlichkeit? · Welche Rasch-Annahmen sind zentral? · Wie werden R-Outputs und Modelltests interpretiert? · Was ändert sich im 2PL-Modell?
+</div>
+<div id="storageWarning" class="storage-warning" role="alert"></div>
+<div id="liveStatus" class="sr-only" aria-live="polite"></div>
+
+<nav class="nav" role="tablist" aria-label="Lernabschnitte">
+  <button type="button" role="tab" aria-controls="s0" aria-selected="true" tabindex="0" class="nav-btn active" onclick="goTo(0)" id="nb0">① Orientierung</button>
+  <button type="button" role="tab" aria-controls="s1" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(1)" id="nb1">② Rasch & ICC</button>
+  <button type="button" role="tab" aria-controls="s2" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(2)" id="nb2">③ Annahmen</button>
+  <button type="button" role="tab" aria-controls="s3" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(3)" id="nb3">④ Likelihood</button>
+  <button type="button" role="tab" aria-controls="s4" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Information</button>
+  <button type="button" role="tab" aria-controls="s5" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Modelltests</button>
+  <button type="button" role="tab" aria-controls="s6" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Fit</button>
+  <button type="button" role="tab" aria-controls="s7" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(7)" id="nb7">⑧ 1PL vs. 2PL</button>
+  <button type="button" role="tab" aria-controls="s8" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button type="button" role="tab" aria-controls="s9" aria-selected="false" tabindex="-1" class="nav-btn" onclick="goTo(9)" id="nb9">🎯 SRS & Transfer</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Orientierung ═══════════ -->
+<section class="section active" id="s0" role="tabpanel" aria-hidden="false" aria-labelledby="nb0" data-source-id="PD10-F02-KTT PD10-F02-ALT" data-slides="2" data-source-status="direkt" data-learning-objective="LZ-01" data-widget-type="W1" data-cognitive-task="unterscheiden und zuordnen">
+<div class="sec-head"><div class="sec-title">① Grenzen der KTT und probabilistische Alternativen</div><div class="sec-lz">KTT-Kritikpunkte und Modellklassen nach Antwortformat beziehungsweise diagnostischem Ziel unterscheiden.</div><div class="source-meta">Folien 2 · Quellen PD10-F02-KTT PD10-F02-ALT · Widget W1</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Sind die drei genannten KTT-Kritikpunkte selbst schon ein Beweis, dass die KTT grundsätzlich unbrauchbar ist?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq0" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq0" aria-hidden="true">Nein. Die Quelle listet konkrete Grenzen: strenge beziehungsweise nicht testbare Annahmen, ungeprüftes Intervallskaleniveau und stichprobenabhängige Kennwerte. Daraus folgt keine pauschale Widerlegung sämtlicher KTT-Anwendungen.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card ktt-kritik" data-source-id="PD10-F02-KTT"><div class="card-title">Drei in der Quelle genannte Grenzen</div><ol><li><strong>Axiome und Annahmen:</strong> sehr streng, nicht testbar und teilweise unplausibel.</li><li><strong>Skalenniveau:</strong> Für Testwerte wird Intervallskaleniveau vorausgesetzt; eine Prüfung bleibt aus.</li><li><strong>Kennwerte:</strong> Die im Rahmen der KTT gewonnenen Kennwerte sind stichprobenabhängig.</li></ol><div class="hinweis"><strong>Abgrenzung:</strong> Die Aussagen beschreiben Kritikpunkte. Sie bedeuten nicht, dass jeder KTT-Kennwert in jeder Anwendung falsch ist.</div></div>
+<div class="card model-map" data-source-id="PD10-F02-ALT"><div class="card-title">Probabilistische Alternativen</div><table><thead><tr><th>Aufgabe / Daten</th><th>Genannte Modellklasse</th></tr></thead><tbody><tr><td>Dichotomes Antwortformat, Merkmalsquantifizierung</td><td>Dichotome Rasch-Modelle</td></tr><tr><td>Ratingskalen</td><td>Ordinale IRT-Modelle</td></tr><tr><td>Klassifikation von Personen</td><td>Latent-Class-Analysen</td></tr></tbody></table><p>Das Deck konzentriert sich anschließend auf den ersten Fall: das dichotome Rasch-Modell.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · W1 Concept Duel</div>
+<div class="card"><div class="card-title">Modellklasse zuordnen</div><p>Wähle für jeden Fall die in der Quelle genannte Modellklasse.</p>
+<div class="corr-item"><strong>Dichotome Antworten zur Merkmalsquantifizierung</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('alt-dichotom',this,'rasch')">Rasch</button><button class="corr-btn" onclick="checkCorr('alt-dichotom',this,'ordinal')">Ordinales IRT</button><button class="corr-btn" onclick="checkCorr('alt-dichotom',this,'lca')">Latent Class</button></div><div class="corr-fb" id="fb-alt-dichotom"></div></div>
+<div class="corr-item"><strong>Ratingskala</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('alt-rating',this,'rasch')">Rasch</button><button class="corr-btn" onclick="checkCorr('alt-rating',this,'ordinal')">Ordinales IRT</button><button class="corr-btn" onclick="checkCorr('alt-rating',this,'lca')">Latent Class</button></div><div class="corr-fb" id="fb-alt-rating"></div></div>
+<div class="corr-item"><strong>Personenklassifikation</strong><div class="corr-btns"><button class="corr-btn" onclick="checkCorr('alt-class',this,'rasch')">Rasch</button><button class="corr-btn" onclick="checkCorr('alt-class',this,'ordinal')">Ordinales IRT</button><button class="corr-btn" onclick="checkCorr('alt-class',this,'lca')">Latent Class</button></div><div class="corr-fb" id="fb-alt-class"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq0"></div></div><div class="section-nav"><button type="button" class="btn btn-accent" onclick="goTo(1)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 2 — ② Rasch & ICC ═══════════ -->
+<section class="section" id="s1" role="tabpanel" aria-hidden="true" aria-labelledby="nb1" data-source-id="PD10-F03-ZIEL PD10-F04-ICC PD10-F05-ICC PD10-F06-FORMEL PD10-F07-EIG" data-slides="3–7" data-source-status="direkt" data-learning-objective="LZ-02" data-widget-type="W4+W5+W7" data-cognitive-task="prognostizieren, rechnen, interpretieren">
+<div class="sec-head"><div class="sec-title">② Rasch-Grundidee, ICC und logistische Funktion</div><div class="sec-lz">Personenfähigkeit, Itemschwierigkeit und Lösungswahrscheinlichkeit formal und grafisch verknüpfen.</div><div class="source-meta">Folien 3–7 · Quellen PD10-F03-ZIEL PD10-F04-ICC PD10-F05-ICC PD10-F06-FORMEL PD10-F07-EIG · Widget W4+W5+W7</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Wenn die Fähigkeit einer Person genau der Itemschwierigkeit entspricht: Ist das Item dann „leicht“, „schwer“ oder mit 50 % Wahrscheinlichkeit lösbar?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq1" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq1" aria-hidden="true">Im Rasch-Modell gilt θ−δ=0. Deshalb ist exp(0)=1 und P(1)=1/(1+1)=0,50. Der .50-Punkt definiert die Itemschwierigkeit auf dem Merkmalskontinuum.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card elo-scale" data-source-id="PD10-F03-ZIEL"><div class="card-title">Grundidee auf gemeinsamer Skala</div><p>Die Lösungswahrscheinlichkeit wird aus der Relation zwischen <strong>Personenfähigkeit θ</strong> und <strong>Itemschwierigkeit δ</strong> beschrieben. Die Quelle illustriert die gemeinsame Skalenlogik mit FIDE-Elo-Werten:</p><div class="elo-line" aria-label="FIDE-Elo-Skala von 2700 bis 2900"><span style="left:21.5%">Keymer<br><b>2743</b></span><span class="below" style="left:31.5%">Gukesh<br><b>2763</b></span><span class="below" style="left:58%">Ding Liren<br><b>2816</b></span><span style="left:91%">Carlsen<br><b>2882</b></span></div><div class="scale-labels"><span>2700</span><span>2750</span><span>2800</span><span>2850</span><span>2900</span></div></div>
+<div class="card icc-candidates" data-source-id="PD10-F04-ICC"><div class="card-title">Was eine ICC darstellt</div><p>Eine Item Characteristic Curve zeigt den theoretischen Zusammenhang zwischen latenter Merkmalsausprägung und Lösungswahrscheinlichkeit. Auf Folie 4 werden vier Kandidaten gezeigt: eine harte Stufe A, ein unregelmäßiger Verlauf B, eine glatte monotone S-Kurve C und eine annähernde Gerade D. Die anschließende Auflösung bevorzugt die logistische S-Form.</p></div>
+<div class="card formula-ladder" data-source-id="PD10-F06-FORMEL"><div class="card-title">Formeln und Variablen</div><div class="formula" aria-label="Allgemeine Rasch-Antwortwahrscheinlichkeit">P(x<sub>ij</sub> | θ<sub>i</sub>, δ<sub>j</sub>) = exp[x<sub>ij</sub> · (θ<sub>i</sub> − δ<sub>j</sub>)] / (1 + exp(θ<sub>i</sub> − δ<sub>j</sub>))</div><div class="formula">P(1 | θ,δ) = exp(θ−δ) / [1+exp(θ−δ)]</div><div class="formula">P(0 | θ,δ) = 1 / [1+exp(θ−δ)]</div><table><tbody><tr><td>θ<sub>i</sub></td><td>Fähigkeitsparameter der Person i</td></tr><tr><td>δ<sub>j</sub></td><td>Schwierigkeitsparameter des Items j</td></tr><tr><td>x<sub>ij</sub></td><td>beobachtete Reaktion: 1 richtig, 0 falsch</td></tr></tbody></table></div>
+<div class="card" data-source-id="PD10-F05-ICC PD10-F07-EIG"><div class="card-title">Eigenschaften der Rasch-ICC</div><ul><li>monoton ansteigend;</li><li>asymptotische Annäherung an 0 und 1;</li><li>bei θ=δ liegt P=.50;</li><li>Rasch-Items haben gleiche Trennschärfen und unterscheiden sich nur durch horizontale Verschiebung.</li></ul></div>
+<div class="phase-label">Phase 3 — Anwenden · W4/W5/W7</div>
+<div class="card icc-widget"><div class="card-title">Prognose → Manipulation → Interpretation</div><p><strong>Prognose:</strong> Was passiert mit P(1), wenn θ steigt und δ gleich bleibt?</p><div class="choice-row"><button class="btn btn-ghost" onclick="pdPredict(this,'icc','steigt')">P steigt</button><button class="btn btn-ghost" onclick="pdPredict(this,'icc','sinkt')">P sinkt</button><button class="btn btn-ghost" onclick="pdPredict(this,'icc','gleich')">P bleibt gleich</button></div><div id="pred-icc" class="widget-feedback" role="status"></div>
+<div class="slider-grid"><label>Fähigkeit θ <output id="thetaOut">0.0</output><input id="thetaSlider" type="range" min="-3" max="3" step="0.1" value="0" oninput="updateICC()"></label><label>Schwierigkeit δ <output id="deltaOut">0.0</output><input id="deltaSlider" type="range" min="-3" max="3" step="0.1" value="0" oninput="updateICC()"></label></div>
+<svg id="iccSvg" class="chart" viewBox="0 0 520 300" role="img" aria-labelledby="iccTitle iccDesc"><title id="iccTitle">Interaktive Rasch-ICC</title><desc id="iccDesc">Logistische Lösungswahrscheinlichkeit über Fähigkeit; Schwierigkeit verschiebt die Kurve horizontal.</desc><line x1="50" y1="250" x2="500" y2="250" class="axis"/><line x1="50" y1="20" x2="50" y2="250" class="axis"/><line x1="50" y1="135" x2="500" y2="135" class="guide"/><path id="iccPath" class="curve" d=""/><line id="personLine" y1="20" y2="250" class="person-line"/><circle id="personPoint" r="6" class="point"/><text x="12" y="28">1.0</text><text x="18" y="140">.5</text><text x="24" y="254">0</text><text x="225" y="286">Fähigkeit θ</text></svg><p id="iccText" class="text-alt"></p></div>
+<div class="card"><div class="card-title">Faded Worked Example</div><div class="steps"><div class="step-item shown"><strong>Vollständig:</strong> θ=.8, δ=−.2 → θ−δ=1 → exp(1)=2.718 → P=2.718/(1+2.718)≈.731.</div><div class="step-item"><strong>Teilweise ausgeblendet:</strong> θ=−.3, δ=.7 → Differenz = <button class="mini-reveal" onclick="this.textContent='−1.0';this.disabled=true">?</button> → P≈.269.</div><div class="step-item"><strong>Selbstständig:</strong> θ=1, δ=1 → P=<input id="raschSelf" inputmode="decimal" aria-label="Lösungswahrscheinlichkeit" size="5"> <button class="btn btn-ghost" onclick="checkRaschSelf()">prüfen</button><span id="raschSelfFb" role="status"></span></div><div class="step-item"><strong>Transfer:</strong> Bei gleichem θ liegt die ICC eines schwierigeren Items weiter rechts; die Steilheit bleibt im Rasch-Modell gleich.</div></div><button class="btn btn-ghost" onclick="revealStep(this,'raschSteps')" data-step-target="raschSteps">Nächsten Schritt zeigen</button><div id="raschSteps" class="sr-only"></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq1"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(0)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(2)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 3 — ③ Annahmen ═══════════ -->
+<section class="section" id="s2" role="tabpanel" aria-hidden="true" aria-labelledby="nb2" data-source-id="PD10-F08-EINDIM PD10-F08-LOKAL PD10-F08-SUFF PD10-F08-OBJEKT" data-slides="8" data-source-status="direkt" data-learning-objective="LZ-03" data-widget-type="W11" data-cognitive-task="Fehlkonzepte diagnostizieren">
+<div class="sec-head"><div class="sec-title">③ Modellannahmen des Rasch-Modells</div><div class="sec-lz">Eindimensionalität, lokale Unabhängigkeit, Suffizienz und spezifische Objektivität präzise abgrenzen.</div><div class="source-meta">Folien 8 · Quellen PD10-F08-EINDIM PD10-F08-LOKAL PD10-F08-SUFF PD10-F08-OBJEKT · Widget W11</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Zwei Items korrelieren stark. Ist damit lokale stochastische Unabhängigkeit automatisch verletzt?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq2" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq2" aria-hidden="true">Nicht zwingend. Die Annahme bezieht sich auf den Zusammenhang <em>bei konstant gehaltener Personenfähigkeit</em>. Der beobachtete Zusammenhang darf über Fähigkeitsunterschiede vermittelt sein.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="assumption-grid">
+<div class="card" data-source-id="PD10-F08-EINDIM"><div class="card-title">Eindimensionalität / Rasch-Homogenität</div><p>Das Antwortverhalten soll aufgrund einer einzigen latenten Fähigkeit zustande kommen. Die Quelle nennt diese Forderung in der Praxis „meist etwas überambitioniert“.</p></div>
+<div class="card" data-source-id="PD10-F08-LOKAL"><div class="card-title">Lokale stochastische Unabhängigkeit</div><p>Bei konstant gehaltener Fähigkeit soll die Lösungswahrscheinlichkeit eines Items nichts über die Lösungswahrscheinlichkeit anderer Items aussagen. Der Zusammenhang der Antworten soll ausschließlich über Fähigkeitsunterschiede entstehen.</p></div>
+<div class="card" data-source-id="PD10-F08-SUFF"><div class="card-title">Suffizienz des Summenscores</div><p>Für den Personenscore zählt, wie viele Items gelöst wurden, nicht welche. Der Summenwert ist eine erschöpfende Statistik.</p></div>
+<div class="card" data-source-id="PD10-F08-OBJEKT"><div class="card-title">Spezifische Objektivität</div><p>Die geschätzte Personenfähigkeit soll von der konkreten Itemauswahl aus der Itempopulation unabhängig sein; umgekehrt sollen Itemparameter von der Personenauswahl unabhängig sein. Die <strong>Genauigkeit</strong> der Schätzung bleibt dennoch stichprobenabhängig. Die Eigenschaft ist Grundlage adaptiven Testens.</p></div></div>
+<div class="phase-label">Phase 3 — Anwenden · W11 Misconception Debugger</div>
+<div class="card"><div class="card-title">Welche Annahme wird verletzt?</div><div class="debug-item"><p>„Für den Score müssen schwierige gelöste Items stärker zählen als leichte.“</p><div class="choice-row"><button onclick="checkAssumption(this,'suff')">Suffizienz</button><button onclick="checkAssumption(this,'obj')">Objektivität</button><button onclick="checkAssumption(this,'local')">Lokale Unabhängigkeit</button></div><div class="widget-feedback"></div></div><div class="debug-item"><p>„Wenn θ konstant ist, sagt die Antwort auf Item A trotzdem die Antwort auf Item B vorher.“</p><div class="choice-row"><button onclick="checkAssumption(this,'dim')">Eindimensionalität</button><button onclick="checkAssumption(this,'local')">Lokale Unabhängigkeit</button><button onclick="checkAssumption(this,'suff')">Suffizienz</button></div><div class="widget-feedback"></div></div><div class="debug-item"><p>„Mit einer anderen zulässigen Itemauswahl verschiebt sich die geschätzte Personenfähigkeit systematisch.“</p><div class="choice-row"><button onclick="checkAssumption(this,'obj')">Objektivität</button><button onclick="checkAssumption(this,'dim')">Eindimensionalität</button><button onclick="checkAssumption(this,'suff')">Suffizienz</button></div><div class="widget-feedback"></div></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq2"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(1)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(3)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 4 — ④ Likelihood ═══════════ -->
+<section class="section" id="s3" role="tabpanel" aria-hidden="true" aria-labelledby="nb3" data-source-id="PD10-F09-LIK PD10-F09-LOGL PD10-F10-MATRIX PD10-F11-HERL PD10-F11-SUFF" data-slides="9–11" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W6+W5" data-cognitive-task="Matrix lesen und Herleitung rekonstruieren">
+<div class="sec-head"><div class="sec-title">④ Likelihood, Antwortmatrix und Suffizienz</div><div class="sec-lz">Die Produktlikelihood aus einer Antwortmatrix lesen und die Summenscore-Suffizienz nachvollziehen.</div><div class="source-meta">Folien 9–11 · Quellen PD10-F09-LIK PD10-F09-LOGL PD10-F10-MATRIX PD10-F11-HERL PD10-F11-SUFF · Widget W6+W5</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Warum reicht es bei der Likelihood nicht, die Reaktionswahrscheinlichkeiten einfach zu addieren?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq3" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq3" aria-hidden="true">Die Wahrscheinlichkeit des gesamten beobachteten Antwortmusters wird in der Quelle als Produkt der Wahrscheinlichkeiten aller beobachteten Reaktionen gebildet. Eine Summe wäre nicht die dargestellte Gesamtlikelihood.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card likelihood-card" data-source-id="PD10-F09-LIK"><div class="card-title">Likelihood als Schätz- und Passungskriterium</div><p>Personen- und Itemparameter werden so geschätzt, dass das beobachtete Datenmuster unter Annahme des dichotomen Rasch-Modells möglichst wahrscheinlich ist.</p><div class="formula">L = ∏<sub>i=1…n</sub> ∏<sub>j=1…m</sub> p(x<sub>ij</sub>)</div><p>Die Likelihood ist damit Optimierungskriterium und Hinweis auf die Modellpassung.</p></div>
+<div class="card loglik-card" data-source-id="PD10-F09-LOGL"><div class="card-title">Warum log(L)?</div><p>Das Produkt vieler Reaktionswahrscheinlichkeiten wird sehr klein. Deshalb werden üblicherweise logarithmierte Werte berichtet. In der verwendeten Darstellung sprechen Werte nahe 0 für hohen Fit.</p></div>
+<div class="card" data-source-id="PD10-F10-MATRIX"><div class="card-title">Antwortmatrix</div><table class="response-matrix"><caption>Dichotome Reaktionen und Randsummen</caption><thead><tr><th scope="col">Person</th><th scope="col">Item 1</th><th scope="col">Item 2</th><th scope="col">Item 3</th><th scope="col">Item 4</th><th scope="col">Σ Person</th></tr></thead><tbody><tr><th scope="row">Person 1</th><td><button onclick="matrixCell(this,'P1 beantwortet Item 1 falsch.')">0</button></td><td><button onclick="matrixCell(this,'P1 beantwortet Item 2 richtig.')">1</button></td><td><button onclick="matrixCell(this,'P1 beantwortet Item 3 richtig.')">1</button></td><td><button onclick="matrixCell(this,'P1 beantwortet Item 4 richtig.')">1</button></td><td><strong>3</strong></td></tr><tr><th scope="row">Person 2</th><td><button onclick="matrixCell(this,'P2 beantwortet Item 1 falsch.')">0</button></td><td><button onclick="matrixCell(this,'P2 beantwortet Item 2 falsch.')">0</button></td><td><button onclick="matrixCell(this,'P2 beantwortet Item 3 richtig.')">1</button></td><td><button onclick="matrixCell(this,'P2 beantwortet Item 4 richtig.')">1</button></td><td><strong>2</strong></td></tr><tr><th scope="row">Person 3</th><td><button onclick="matrixCell(this,'P3 beantwortet Item 1 richtig.')">1</button></td><td><button onclick="matrixCell(this,'P3 beantwortet Item 2 falsch.')">0</button></td><td><button onclick="matrixCell(this,'P3 beantwortet Item 3 falsch.')">0</button></td><td><button onclick="matrixCell(this,'P3 beantwortet Item 4 falsch.')">0</button></td><td><strong>1</strong></td></tr></tbody><tfoot><tr><th scope="row">Σ Item</th><td>1</td><td>1</td><td>2</td><td>2</td><td>–</td></tr></tfoot></table><p id="matrixFb" class="text-alt" role="status">Wähle eine Zelle, um Person, Item und Reaktion zu benennen.</p></div>
+<div class="card suff-proof" data-source-id="PD10-F11-HERL PD10-F11-SUFF"><div class="card-title">Warum wird der Summenscore sichtbar?</div><p>Ersetzt man jede Zelle durch die passende Rasch-Wahrscheinlichkeit und betrachtet zunächst nur die Zähler, bleiben für richtige Antworten Exponentialterme, für falsche Antworten der Faktor 1.</p><details><summary>Vollständige Zählerfolge und Verdichtung</summary><div class="formula small">1·exp(θ₁−δ₂)·exp(θ₁−δ₃)·exp(θ₁−δ₄)·1·1·exp(θ₂−δ₃)·exp(θ₂−δ₄)·exp(θ₃−δ₁)·1·1·1</div><p>Mit exp(x)·exp(y)=exp(x+y):</p><div class="formula small">exp[(3θ₁)+(2θ₂)+(1θ₃)−(1δ₁)−(1δ₂)−(2δ₃)−(2δ₄)]</div></details><div class="suff-box"><strong>Interpretation:</strong> Die Koeffizienten 3,2,1 vor den Personenparametern sind die Zeilensummen; 1,1,2,2 vor den Itemparametern sind die Spaltensummen. Für den Personenscore zählt damit die Anzahl gelöster Items.</div></div>
+<div class="phase-label">Phase 3 — Anwenden · W6 Matrix Reader</div>
+<div class="card"><div class="card-title">Randsumme lokalisieren</div><p>Welche Größe zeigt, wie viele Personen Item 3 gelöst haben?</p><div class="choice-row"><button onclick="matrixQuiz(this,'row')">Zeilensumme 2</button><button onclick="matrixQuiz(this,'col')">Spaltensumme 2</button><button onclick="matrixQuiz(this,'cell')">Zelle P2/I3</button></div><div id="matrixQuizFb" class="widget-feedback" role="status"></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq3"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(2)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(4)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Information ═══════════ -->
+<section class="section" id="s4" role="tabpanel" aria-hidden="true" aria-labelledby="nb4" data-source-id="PD10-F12-INFO PD10-F12-SEM PD10-F12-DIAG" data-slides="12" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W4+W7" data-cognitive-task="prognostizieren und berechnen">
+<div class="sec-head"><div class="sec-title">⑤ Messgenauigkeit, Information und Standardmessfehler</div><div class="sec-lz">Die positionsabhängige Messgenauigkeit und die inverse Beziehung zwischen Information und Messfehler anwenden.</div><div class="source-meta">Folien 12 · Quellen PD10-F12-INFO PD10-F12-SEM PD10-F12-DIAG · Widget W4+W7</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Verdoppelt sich der Standardmessfehler, wenn sich die Information verdoppelt?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq4" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq4" aria-hidden="true">Nein. Es gilt SEM=1/√Information. Die Quadratwurzel und der Kehrwert erzeugen eine nichtlineare, gegenläufige Beziehung.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card info-compare" data-source-id="PD10-F12-INFO"><div class="card-title">KTT und PTT</div><table><thead><tr><th>KTT</th><th>PTT</th></tr></thead><tbody><tr><td>Messgenauigkeit über Reliabilitätskoeffizienten</td><td>Messgenauigkeit über Item-/Testinformationsfunktionen</td></tr><tr><td>ein zusammenfassender Index</td><td>abhängig von der Position auf dem latenten Kontinuum</td></tr></tbody></table><p>Die Testinformation entsteht durch Summation der Iteminformationen.</p></div>
+<div class="card" data-source-id="PD10-F12-SEM"><div class="card-title">Formelrelation</div><div class="formula">Standardmessfehler = 1 / √Information</div><p>Wenig Information bedeutet größeren Messfehler; viel Information bedeutet kleineren Messfehler.</p></div>
+<div class="card" data-source-id="PD10-F12-DIAG"><div class="card-title">Quellenkurven</div><p>Im Beispiel eines Rechtschreibtests ist die durchgezogene Testinformation im mittleren Bereich am höchsten. Der gestrichelte Standardmessfehler ist dort am niedrigsten und steigt an den Rändern des Kontinuums.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · W4/W7</div>
+<div class="card sem-widget"><div class="card-title">Prognose zuerst</div><p>Wenn Information steigt, wie verändert sich der SEM?</p><div class="choice-row"><button onclick="pdPredict(this,'sem','sinkt')">sinkt</button><button onclick="pdPredict(this,'sem','steigt')">steigt</button><button onclick="pdPredict(this,'sem','gleich')">bleibt gleich</button></div><div id="pred-sem" class="widget-feedback"></div><label>Information I <output id="infoOut">4.00</output><input id="infoSlider" type="range" min="0.25" max="9" step="0.25" value="4" oninput="updateSEM()"></label><div class="metric"><span>SEM</span><strong id="semOut">0.50</strong></div><svg class="chart info-chart" viewBox="0 0 520 280" role="img" aria-labelledby="infoTitle infoDesc"><title id="infoTitle">Schematische Informations- und Fehlerkurve</title><desc id="infoDesc">Information ist in der Mitte hoch, Standardmessfehler dort niedrig; an den Rändern ist die Relation umgekehrt.</desc><line x1="50" y1="235" x2="500" y2="235" class="axis"/><line x1="50" y1="20" x2="50" y2="235" class="axis"/><path d="M50 215 C150 205 170 55 275 45 C380 55 400 205 500 215" class="curve"/><path d="M50 55 C150 65 180 205 275 215 C370 205 400 65 500 55" class="curve dashed"/><text x="200" y="270">Merkmalsposition</text><text x="330" y="55">Information</text><text x="330" y="205">Standardmessfehler</text></svg><p id="semText" class="text-alt">Bei Information 4,00 ergibt sich SEM=1/√4=0,50.</p></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq4"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(3)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(5)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Modelltests ═══════════ -->
+<section class="section" id="s5" role="tabpanel" aria-hidden="true" aria-labelledby="nb5" data-source-id="PD10-F13-DATEN PD10-F14-CML PD10-F15-MODELLTEST PD10-F16-ALR PD10-F17-GOF PD10-F18-WALD" data-slides="13–18" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W8" data-cognitive-task="R-Output lokalisieren und interpretieren">
+<div class="sec-head"><div class="sec-title">⑥ Rasch-Schätzung und Modelltests in R</div><div class="sec-lz">CML-Ausgabe, Andersen-LR-Test, Graphical Model Check und Wald-Test lokalisieren und interpretieren.</div><div class="source-meta">Folien 13–18 · Quellen PD10-F13-DATEN PD10-F14-CML PD10-F15-MODELLTEST PD10-F16-ALR PD10-F17-GOF PD10-F18-WALD · Widget W8</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Ein signifikanter Modelltest klingt oft wie ein „gutes“ Ergebnis. Gilt das auch beim Andersen-LR-Test?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq5" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq5" aria-hidden="true">Nein. Hier lautet die Nullidee annähernd gleicher Itemparameter in den Subgruppen. Ein signifikanter Test spricht im gezeigten Beispiel gegen eine gute Rasch-Modellpassung.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card r-data" data-source-id="PD10-F13-DATEN"><div class="card-title">Pakete und Datensatz</div><pre class="r-output"><code>library(eRm)
+library(ltm)
+library(difR)
+data(verbal, package = "difR")
+dat1 &lt;- verbal[,1:24]</code></pre><p><code>verbal</code> umfasst 316 Personen und 24 dichotome Items zur verbalen Aggression. Vier Situationen S1–S4 werden mit <em>curse, scold, shout</em> sowie <em>would</em> versus <em>do</em> kombiniert. Geschlecht und Summenscore sind zusätzliche Variablen und werden für <code>dat1</code> zunächst nicht verwendet.</p></div>
+<div class="card" data-source-id="PD10-F14-CML"><div class="card-title">CML-Schätzung in eRm</div><pre class="r-output"><code>cml &lt;- RM(dat1)
+summary(cml)</code></pre><pre class="r-output cml-output"><code>Item Easiness Parameters (beta) with 0.95 CI:
+                      Estimate Std. Error lower CI upper CI
+beta S1wantCurse        1.383      0.140    1.109    1.658
+beta S1WantScold        0.731      0.131    0.475    0.987
+beta S1WantShout        0.249      0.128   -0.003    0.501
+beta S2WantCurse        1.909      0.153    1.608    2.210
+…
+beta S3DoScold         -1.335      0.149   -1.626   -1.044
+beta S3DoShout         -2.871      0.222   -3.306   -2.436
+beta S4DoCurse          0.873      0.132    0.614    1.132
+beta S4DoScold         -0.213      0.130   -0.467    0.042
+beta S4DoShout         -1.840      0.165   -2.165   -1.516</code></pre><div class="hinweis"><strong>Vorzeichenbezug:</strong> Der Output nennt Itemleichtigkeit <code>beta</code>, nicht Schwierigkeit <code>eta</code>. Umrechnung: <code>eta = −beta</code>.</div></div>
+<div class="card modeltest-chain" data-source-id="PD10-F15-MODELLTEST"><div class="card-title">Wozu das Rasch-Modell?</div><div class="decision-chain"><span>Rasch-Modell schätzen</span><b>→</b><span>Passung prüfen</span><b>→</b><span>bei Passung: Annahmen gestützt</span></div><p>Modelltests können grafisch und/oder inferenzstatistisch erfolgen.</p></div>
+<div class="card andersen-output" data-source-id="PD10-F16-ALR"><div class="card-title">Andersen-LR-Test nach Geschlecht</div><pre class="r-output"><code>Andersen LR-test:
+LR-value: 70.693
+Chi-square df: 23
+p-value = 0</code></pre><p><strong>Quellenschluss:</strong> Für die vorliegenden Daten passt das Modell nicht gut.</p></div>
+<div class="card gof-chart" data-source-id="PD10-F17-GOF"><div class="card-title">Graphical Model Check</div><p>x-Achse: Women; y-Achse: Men. Die Diagonale steht für gleiche Itemparameterschätzungen. Die 24 Itempunkte liegen überwiegend im Bereich der Diagonalen; auffällige Randpositionen sind unter anderem 4, 21 und 24.</p><svg class="chart" viewBox="0 0 520 320" role="img" aria-labelledby="gofTitle gofDesc"><title id="gofTitle">Schematischer Graphical Model Check</title><desc id="gofDesc">24 nummerierte Itempunkte mit Unsicherheitsellipsen liegen überwiegend um eine Diagonale; Items 4, 21 und 24 befinden sich am Rand.</desc><line x1="55" y1="270" x2="490" y2="35" class="guide diag"/><line x1="55" y1="270" x2="500" y2="270" class="axis"/><line x1="55" y1="25" x2="55" y2="270" class="axis"/><g id="gofPoints"></g><text x="245" y="305">Women</text><text x="12" y="150" transform="rotate(-90 12 150)">Men</text></svg></div>
+<div class="card" data-source-id="PD10-F18-WALD"><div class="card-title">Wald-Test für einzelne Items</div><pre class="r-output"><code>Waldtest(cml, splitcr = verbal$Gender)</code></pre><pre class="r-output wald-output"><code>                    z-statistic p-value
+beta S1wantCurse          1.402   0.161
+beta S1WantScold          1.306   0.192
+beta S1WantShout          1.408   0.159
+beta S2WantCurse          2.028   0.043
+beta S2WantScold          1.595   0.111
+beta S2WantShout          3.260   0.001
+beta S3WantCurse          0.518   0.604
+beta S3WantScold         -1.304   0.192
+beta S3WantShout          1.579   0.114
+beta S4WantCurse          1.518   0.129
+beta S4WantScold         -0.146   0.884
+beta S4WantShout          2.038   0.042
+beta S1DoCurse           -0.675   0.500
+beta S1DoScold           -1.963   0.050
+beta S1DoShout            0.789   0.430
+beta S2DoCurse           -2.610   0.009
+beta S2DoScold           -2.898   0.004
+beta S2DoShout           -0.368   0.713
+beta S3DoCurse           -2.645   0.008
+beta S3DoScold           -2.218   0.027
+beta S3DoShout           -0.773   0.440
+…</code></pre><div class="hinweis"><strong>Richtung:</strong> Negative Werte deuten hier auf leichtere Items für die zweite Gruppe, also Männer. Das findet sich bei mehreren „do“-Items. Mehrere p-Werte sind signifikant und weisen auf Gruppenunterschiede hin.</div></div>
+<div class="phase-label">Phase 3 — Anwenden · W8 R-Output Explorer</div>
+<div class="card output-explorer"><div class="card-title">Kennwert lokalisieren und Schluss wählen</div><div class="tab-buttons" role="tablist"><button class="tab-btn active" data-tab="andersen" onclick="switchOutput(this,'andersen')">Andersen</button><button class="tab-btn" data-tab="graph" onclick="switchOutput(this,'graph')">Grafik</button><button class="tab-btn" data-tab="wald" onclick="switchOutput(this,'wald')">Wald</button></div><div id="outputTask" class="output-task"></div><div class="choice-row" id="outputChoices"></div><div id="outputFb" class="widget-feedback" role="status"></div></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq5"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(4)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(6)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Fit ═══════════ -->
+<section class="section" id="s6" role="tabpanel" aria-hidden="true" aria-labelledby="nb6" data-source-id="PD10-F19-ITEMFIT PD10-F20-OUTFIT PD10-F20-INFIT PD10-F20-GRENZ PD10-F21-PERSONFIT" data-slides="19–21" data-source-status="direkt" data-learning-objective="LZ-04" data-widget-type="W8+W11" data-cognitive-task="Kennwerte klassifizieren und Bezug unterscheiden">
+<div class="sec-head"><div class="sec-title">⑦ Itemfit, Infit/Outfit und Personfit</div><div class="sec-lz">Residualbasierte Fitkennwerte und die angegebenen Grenzbereiche auf Items und Personen anwenden.</div><div class="source-meta">Folien 19–21 · Quellen PD10-F19-ITEMFIT PD10-F20-OUTFIT PD10-F20-INFIT PD10-F20-GRENZ PD10-F21-PERSONFIT · Widget W8+W11</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Ist ein besonders niedriger MSQ-Wert automatisch ein Zeichen besonders guter Passung?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq6" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq6" aria-hidden="true">Nein. Die Quelle klassifiziert Werte unter 0,5 zusammen mit t unter −2 als „überangepasst“. Gute Passung liegt im mittleren Bereich.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card" data-source-id="PD10-F19-ITEMFIT"><div class="card-title">Residualbasierter Itemfit</div><pre class="r-output"><code>ppar &lt;- person.parameter(cml)
+itemfit(ppar)</code></pre><pre class="r-output itemfit-output"><code>Itemfit Statistics:
+              Chisq  df p-value Outfit MSQ Infit MSQ Outfit t Infit t Discrim
+S1wantCurse  333.752 306   0.132      1.087     0.973    0.581  -0.361  0.455
+S1WantScold  285.433 306   0.795      0.930     0.959   -0.575  -0.693  0.498
+S1WantShout  303.008 306   0.538      0.987     0.981   -0.092  -0.332  0.500
+S2WantCurse  231.914 306   0.999      0.755     0.976   -1.184  -0.253  0.424
+S2WantScold  274.211 306   0.904      0.893     0.950   -0.849  -0.825  0.505
+S2WantShout  296.628 306   0.639      0.966     1.001   -0.298   0.035  0.490
+S3WantCurse  370.936 306   0.006      1.208     1.138    1.728   2.272  0.365
+…
+S3DoShout   1001.107 306   0.000      3.261     0.986    3.703  -0.040  0.231
+S4DoCurse    285.345 306   0.796      0.929     0.970   -0.539  -0.486  0.481
+S4DoScold    289.620 306   0.741      0.943     0.996   -0.502  -0.048  0.485
+S4DoShout    312.841 306   0.382      1.019     1.035    0.159   0.381  0.372</code></pre><p>Ein signifikanter χ²-Test spricht hier für eine Abweichung von den Modellannahmen. Alternativ werden Infit- und Outfit-Statistiken betrachtet.</p></div>
+<div class="card fit-defs" data-source-id="PD10-F20-OUTFIT PD10-F20-INFIT"><div class="card-title">Infit und Outfit</div><div class="duel"><div class="duel-side duel-a"><h4>Outfit</h4><p>Maß der „Extremheit“; bei Items insbesondere extreme Schwierigkeit oder Leichtigkeit.</p></div><div class="duel-mid">vs.</div><div class="duel-side duel-b"><h4>Infit</h4><p>Maß der Passung von Response-Mustern; problematisch sind nicht modellkonforme Antwortmuster.</p></div></div></div>
+<div class="card fit-thresholds" data-source-id="PD10-F20-GRENZ"><div class="card-title">In der Quelle angegebene Grenzwerte</div><table><caption>MSQ- und t-Bereiche</caption><thead><tr><th>MSQ</th><th>t</th><th>Interpretation</th></tr></thead><tbody><tr><td>&gt; 2</td><td>&gt; 3</td><td>Ungenügende Passung</td></tr><tr><td>1,5–2,0</td><td>2,0–2,9</td><td>Kritische Passung</td></tr><tr><td>0,5–1,5</td><td>−1,9–1,9</td><td>Gute Passung</td></tr><tr><td>&lt; 0,5</td><td>&lt; −2</td><td>Überangepasst</td></tr></tbody></table></div>
+<div class="card" data-source-id="PD10-F21-PERSONFIT"><div class="card-title">Personfit</div><pre class="r-output"><code>personfit(ppar)</code></pre><pre class="r-output personfit-output"><code>Personfit Statistics:
+     Chisq df p-value Outfit MSQ Infit MSQ Outfit t Infit t
+P1  43.956 23   0.005      1.831     1.438     1.99    2.17
+P2  39.872 23   0.016      1.661     1.106     0.91    0.41
+P3  26.882 23   0.261      1.120     1.133     0.47    0.77
+P4  21.947 23   0.523      0.914     0.930    -0.22   -0.28
+P5  14.210 23   0.921      0.592     0.689    -1.40   -1.89
+P6  23.848 23   0.412      0.994     1.034     0.08    0.24
+P7  24.917 23   0.355      1.038     1.067     0.23    0.39
+P8  19.137 23   0.693      0.797     1.025    -0.04    0.18
+…</code></pre><p>Die Bezugsebene wechselt: Geprüft wird jetzt das Antwortmuster einzelner Personen.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · W8/W11</div>
+<div class="card"><div class="card-title">Fit-Klassifikator</div><p>Ordne das Wertepaar <strong id="fitPair">MSQ 1,70 · t 2,40</strong> ein.</p><div class="choice-row"><button onclick="checkFit(this,'ungenuegend')">ungenügend</button><button onclick="checkFit(this,'kritisch')">kritisch</button><button onclick="checkFit(this,'gut')">gut</button><button onclick="checkFit(this,'over')">überangepasst</button></div><div id="fitFb" class="widget-feedback"></div><button class="btn btn-ghost" onclick="nextFitCase()">Nächster Fall</button></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq6"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(5)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(7)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ 1PL vs. 2PL ═══════════ -->
+<section class="section" id="s7" role="tabpanel" aria-hidden="true" aria-labelledby="nb7" data-source-id="PD10-F22-2PL PD10-F23-ICCS PD10-F24-MML PD10-F25-LRT" data-slides="22–25" data-source-status="direkt" data-learning-objective="LZ-05" data-widget-type="W7+W8" data-cognitive-task="Modelle abgrenzen und Kurven interpretieren">
+<div class="sec-head"><div class="sec-title">⑧ 1PL-, 2PL- und Modellvergleich</div><div class="sec-lz">Parameterzahl, ICC-Steigung, Objektivität, MML-Ausgabe und Likelihood-Ratio-Vergleich zusammenführen.</div><div class="source-meta">Folien 22–25 · Quellen PD10-F22-2PL PD10-F23-ICCS PD10-F24-MML PD10-F25-LRT · Widget W7+W8</div></div>
+<div class="phase-label">Phase 1 — Aktivieren</div>
+<div class="entry-q"><p>Ein Item hat im 2PL-Modell eine größere Trennschärfe β. Verschiebt sich dadurch nur seine Lage oder ändert sich die Steilheit der ICC?</p><button type="button" class="btn btn-ghost" aria-expanded="false" aria-controls="eq7" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button><div class="entry-q-reveal" id="eq7" aria-hidden="true">β steuert die Steilheit beziehungsweise Diskriminierbarkeit. Die Schwierigkeit δ bestimmt den .50-Punkt. Im 2PL-Modell können ICCs daher unterschiedlich steil sein und sich schneiden.</div></div>
+<div class="phase-label">Phase 2 — Verstehen</div>
+<div class="card model-compare" data-source-id="PD10-F22-2PL"><div class="card-title">1PL/Rasch versus 2PL</div><table><thead><tr><th>1PL / Rasch</th><th>2PL / Birnbaum</th></tr></thead><tbody><tr><td>ein Itemparameter: Schwierigkeit δ</td><td>Schwierigkeit δ + Trennschärfe β</td></tr><tr><td>gleiche Steilheiten</td><td>unterschiedliche Steilheiten möglich</td></tr><tr><td>ICCs nur horizontal verschoben</td><td>ICCs können sich schneiden</td></tr><tr><td>spezifische Objektivität</td><td>gilt laut Quelle nicht mehr</td></tr></tbody></table><div class="formula">p<sub>ij</sub> = exp[β<sub>j</sub>(θ<sub>i</sub>−δ<sub>j</sub>)] / [1+exp[β<sub>j</sub>(θ<sub>i</sub>−δ<sub>j</sub>)]]</div><p>β<sub>j</sub>&gt;0 liegt laut Quelle meist zwischen 0,5 und 2,0. Kleine Trennschärfen diskriminieren Personen nur schwach. Das 3PL-Modell ergänzt als weitere Erweiterung eine Ratewahrscheinlichkeit.</p><div class="hinweis"><strong>Notationswarnung:</strong> Auf Folie 14 bezeichnet <code>beta</code> die Itemleichtigkeit im eRm-Output; auf Folie 22 bezeichnet β<sub>j</sub> den 2PL-Trennschärfeparameter. Der Kontext entscheidet.</div></div>
+<div class="card" data-source-id="PD10-F23-ICCS"><div class="card-title">Drei Kurven im Quellenbeispiel</div><p>Schwierigkeiten: δ<sub>A</sub>&lt;δ<sub>B</sub>&lt;δ<sub>C</sub>. Trennschärfen: β<sub>A</sub>&gt;β<sub>B</sub>&gt;β<sub>C</sub>. A liegt links und ist steil; C liegt rechts und ist flach.</p></div>
+<div class="card" data-source-id="PD10-F24-MML"><div class="card-title">Schätzung in ltm</div><pre class="r-output"><code># 1PL-Modell
+mml1 &lt;- rasch(dat1)
+# 2PL-Modell
+mml2 &lt;- ltm(dat1 ~ z1)
+mml2</code></pre><pre class="r-output mml-output"><code>                Dffclt Dscrmn
+S1wantCurse     -0.913  1.358
+S1WantScold     -0.409  1.525
+S1WantShout     -0.078  1.340
+S2WantCurse     -1.243  1.468
+S2WantScold     -0.500  1.567
+S2WantShout     -0.026  1.249
+S3WantCurse     -0.531  0.880
+…
+S4DoShout        1.592  1.180
+
+Log.Lik: -4017.413</code></pre><p>Das 2PL-Modell wird per Marginal Maximum Likelihood geschätzt. Für den Vergleich wird auch das 1PL-Modell mit dieser Methode geschätzt.</p></div>
+<div class="card" data-source-id="PD10-F25-LRT"><div class="card-title">Likelihood-Ratio-Vergleich</div><pre class="r-output"><code>anova(mml1, mml2)</code></pre><pre class="r-output lrt-output"><code>Likelihood Ratio Table
+        AIC     BIC  log.Lik   LRT df p.value
+mml1 8124.80 8218.7 -4037.40
+mml2 8130.83 8311.1 -4017.41 39.98 23   0.015</code></pre><p><strong>Berichteter Schluss:</strong> Das komplexere 2PL-Modell passt in diesem Fall signifikant besser.</p></div>
+<div class="phase-label">Phase 3 — Anwenden · W7/W8</div>
+<div class="card twopl-widget"><div class="card-title">Kurven zuerst prognostizieren, dann verändern</div><p>Erhöhe β von Item B: Welche Eigenschaft ändert sich?</p><div class="choice-row"><button onclick="pdPredict(this,'2pl','steiler')">Kurve wird steiler</button><button onclick="pdPredict(this,'2pl','rechts')">Kurve wandert nur nach rechts</button><button onclick="pdPredict(this,'2pl','flacher')">Kurve wird flacher</button></div><div id="pred-2pl" class="widget-feedback"></div><label>β<sub>B</sub> <output id="betaBOut">1.0</output><input id="betaB" type="range" min="0.5" max="2" step="0.1" value="1" oninput="update2PL()"></label><label>δ<sub>B</sub> <output id="deltaBOut">0.0</output><input id="deltaB" type="range" min="-1.5" max="1.5" step="0.1" value="0" oninput="update2PL()"></label><svg id="twoplSvg" class="chart" viewBox="0 0 520 300" role="img" aria-labelledby="twoplTitle twoplDesc"><title id="twoplTitle">Drei Itemcharakteristiken im 2PL-Modell</title><desc id="twoplDesc">Kurven A, B und C unterscheiden sich in Lage und Steilheit und können sich schneiden.</desc><line x1="50" y1="250" x2="500" y2="250" class="axis"/><line x1="50" y1="20" x2="50" y2="250" class="axis"/><line x1="50" y1="135" x2="500" y2="135" class="guide"/><path id="curveA" class="curve a"/><path id="curveB" class="curve b"/><path id="curveC" class="curve c"/><text x="225" y="286">Fähigkeit θ</text></svg><p id="twoplText" class="text-alt"></p></div>
+<div class="quiz-phase"><div class="phase-label">Phase 4 — Abrufen</div><div id="sq7"></div></div><div class="section-nav"><button type="button" class="btn btn-ghost" onclick="goTo(6)">← Zurück</button><button type="button" class="btn btn-accent" onclick="goTo(8)">Weiter →</button></div></section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8" role="tabpanel" aria-hidden="true" aria-labelledby="nb8" data-widget-type="W1">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungslernen</div>
+    <div class="sec-lz">Vier prüfungsnahe Grenzlinien aktiv stabilisieren</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Itemschwierigkeit δ</h4>
+      <p>Lage der ICC auf dem Fähigkeitskontinuum</p>
+      <p>Bei θ=δ liegt P=0,50</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Trennschärfe β</h4>
+      <p>Steilheit der ICC</p>
+      <p>Im Rasch-Modell für alle Items gleich</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein weiter rechts liegendes Rasch-Item sei automatisch trennschärfer.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Andersen-LR-Test</h4>
+      <p>Vergleich der Parameterstruktur zwischen Subgruppen</p>
+      <p>Modelltest auf globalerer Ebene</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Wald-Test</h4>
+      <p>Vergleich einzelner Itemparameter zwischen Subgruppen</p>
+      <p>liefert itembezogene z- und p-Werte</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beide Tests würden ausschließlich den Personfit einzelner Personen prüfen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Infit</h4>
+      <p>Passung von Antwortmustern</p>
+      <p>reagiert auf nicht modellkonforme Muster</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Outfit</h4>
+      <p>Maß der Extremheit</p>
+      <p>bei Items Bezug zu extremer Schwierigkeit oder Leichtigkeit</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Infit und Outfit seien Subgruppentests für Frauen und Männer.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Rasch-/1PL-Modell</h4>
+      <p>ein Itemparameter: Schwierigkeit</p>
+      <p>gleiche Trennschärfen; spezifische Objektivität</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>2PL-Modell</h4>
+      <p>zusätzlicher Trennschärfeparameter</p>
+      <p>unterschiedliche Steilheiten; Kurven können sich schneiden</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das 2PL-Modell erhalte alle Rasch-Eigenschaften unverändert.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" role="tabpanel" aria-hidden="true" aria-labelledby="nb9" data-quiz data-widget-type="SRS">
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11a-vl10</div>
+  </div>
+  <div class="progress-tools">
+    <button type="button" class="btn btn-ghost" onclick="exportProgress()">Lernstand exportieren</button>
+    <label class="btn btn-ghost import-label">Lernstand importieren<input type="file" accept="application/json" onchange="importProgress(this)"></label>
+  </div>
+  <div class="prog-bar" aria-label="Lernfortschritt"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11a-vl10';
+var STORAGE_SCHEMA = '3.0';
+var STORAGE_OK = false;
+var MEMORY_STORE = {};
+var OPT_SHUF = false;   /* Optionen bei Anzeige mischen? (Sets: true, Module: false) */
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "pd10-s0-q1",
+      "q": "Welcher Kritikpunkt an der klassischen Testtheorie betrifft das Skalenniveau?",
+      "opts": [
+        "Intervallskaleniveau wird vorausgesetzt, ohne es zu prüfen.",
+        "Nominalskaleniveau wird verlangt, obwohl es geprüft wurde.",
+        "Ordinalskaleniveau wird verworfen, obwohl es geprüft wurde.",
+        "Verhältnisskaleniveau wird geschätzt, ohne es zu berichten."
+      ],
+      "c": 0,
+      "e": "Die Quelle kritisiert, dass für Testwerte Intervallskaleniveau vorausgesetzt wird, während eine Prüfung dieses Skalenniveaus ausbleibt.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F02-KTT"
+      ]
+    },
+    {
+      "id": "pd10-s0-q2",
+      "q": "Welche Modellklasse ordnet die Quelle einem dichotomen Antwortformat zu?",
+      "opts": [
+        "Ordinale IRT-Modelle zur Merkmalsquantifizierung hier.",
+        "Dichotome Rasch-Modelle zur Merkmalsquantifizierung.",
+        "Latent-Class-Analysen zur Merkmalsquantifizierung.",
+        "Reliabilitätsmodelle zur Merkmalsquantifizierung."
+      ],
+      "c": 1,
+      "e": "Für dichotome Antworten nennt die Quelle dichotome Rasch-Modelle; ordinale IRT-Modelle und Latent-Class-Analysen werden anderen Aufgaben zugeordnet.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F02-ALT"
+      ]
+    },
+    {
+      "id": "pd10-s0-q3",
+      "q": "Welche Abhängigkeit der KTT-Kennwerte wird ausdrücklich kritisiert?",
+      "opts": [
+        "Die Kennwerte hängen von Testlänge und Bearbeitungszeit ab.",
+        "Die Kennwerte hängen von Skalenniveau und Auswertung ab.",
+        "Die Kennwerte hängen von der untersuchten Stichprobe ab.",
+        "Die Kennwerte hängen von Antwortformat und Testdauer ab."
+      ],
+      "c": 2,
+      "e": "Als dritter Kritikpunkt wird die Stichprobenabhängigkeit der im Rahmen der KTT gewonnenen Kennwerte genannt.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F02-KTT"
+      ]
+    }
+  ],
+  "1": [
+    {
+      "id": "pd10-s1-q1",
+      "q": "Wovon hängt die Lösungswahrscheinlichkeit im dichotomen Rasch-Modell unmittelbar ab?",
+      "opts": [
+        "Von der Summe aus Personenfähigkeit und Itemschwierigkeit direkt.",
+        "Vom Produkt aus Personenfähigkeit und Itemschwierigkeit direkt.",
+        "Vom Quotienten aus Personenfähigkeit und Itemschwierigkeit.",
+        "Von der Differenz aus Personenfähigkeit und Itemschwierigkeit."
+      ],
+      "c": 3,
+      "e": "Die logistische Funktion verwendet die Differenz θ_i−δ_j. Ein größerer positiver Wert führt zu einer höheren Erfolgswahrscheinlichkeit.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F03-ZIEL",
+        "PD10-F06-FORMEL"
+      ]
+    },
+    {
+      "id": "pd10-s1-q2",
+      "q": "Welche Lösungswahrscheinlichkeit ergibt sich bei θ_i = δ_j?",
+      "opts": [
+        "Die Lösungswahrscheinlichkeit beträgt 0,50.",
+        "Die Lösungswahrscheinlichkeit beträgt 0,25.",
+        "Die Lösungswahrscheinlichkeit beträgt 0,75.",
+        "Die Lösungswahrscheinlichkeit beträgt 1,00."
+      ],
+      "c": 0,
+      "e": "Bei gleicher Fähigkeit und Schwierigkeit ist θ_i−δ_j=0; wegen exp(0)=1 ergibt sich 1/(1+1)=0,50.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F05-ICC",
+        "PD10-F07-EIG"
+      ]
+    },
+    {
+      "id": "pd10-s1-q3",
+      "q": "Wie unterscheiden sich Items im Rasch-Modell nach der dargestellten 1PL-Logik?",
+      "opts": [
+        "Sie unterscheiden sich in der Trennschärfe, nicht in der Schwierigkeit.",
+        "Sie unterscheiden sich in der Schwierigkeit, nicht in der Trennschärfe.",
+        "Sie unterscheiden sich gleichzeitig in Schwierigkeit und Trennschärfe.",
+        "Sie unterscheiden sich weder in Schwierigkeit noch in Trennschärfe."
+      ],
+      "c": 1,
+      "e": "Im Rasch-Modell haben alle Items gleiche Trennschärfen. Verschiedene Schwierigkeiten verschieben die ICCs horizontal.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F07-EIG"
+      ]
+    }
+  ],
+  "2": [
+    {
+      "id": "pd10-s2-q1",
+      "q": "Was verlangt die Annahme der Eindimensionalität beziehungsweise Rasch-Homogenität?",
+      "opts": [
+        "Das Antwortverhalten soll auf mehreren beobachteten Summenwerten beruhen.",
+        "Das Antwortverhalten soll auf voneinander abhängigen Itemfehlern beruhen.",
+        "Das Antwortverhalten soll auf einer einzigen latenten Fähigkeit beruhen.",
+        "Das Antwortverhalten soll auf wechselnden Itemtrennschärfen beruhen."
+      ],
+      "c": 2,
+      "e": "Eindimensionalität bedeutet in der Quelle, dass das Antwortverhalten durch ein einziges latentes Fähigkeitskontinuum zustande kommt.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F08-EINDIM"
+      ]
+    },
+    {
+      "id": "pd10-s2-q2",
+      "q": "Was bedeutet lokale stochastische Unabhängigkeit bei konstant gehaltener Fähigkeit?",
+      "opts": [
+        "Eine Itemantwort bestimmt die Schwierigkeit aller verbleibenden Items.",
+        "Eine Itemantwort verändert die Fähigkeit der untersuchten Person.",
+        "Eine Itemantwort legt den Summenscore bereits weitgehend fest.",
+        "Eine Itemantwort liefert keine Information über andere Itemantworten."
+      ],
+      "c": 3,
+      "e": "Wird die Personenfähigkeit konstant gehalten, soll die Lösungswahrscheinlichkeit eines Items nichts über die anderer Items aussagen.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F08-LOKAL"
+      ]
+    },
+    {
+      "id": "pd10-s2-q3",
+      "q": "Welche Aussage beschreibt die Suffizienz des Summenscores?",
+      "opts": [
+        "Entscheidend ist die Anzahl gelöster Items, nicht deren Identität.",
+        "Entscheidend ist die Identität gelöster Items, nicht deren Anzahl.",
+        "Entscheidend ist die Reihenfolge gelöster Items, nicht deren Anzahl.",
+        "Entscheidend ist die Trennschärfe gelöster Items, nicht deren Anzahl."
+      ],
+      "c": 0,
+      "e": "Die Quelle bezeichnet den Summenwert als erschöpfende beziehungsweise suffiziente Statistik: Für den Score zählt, wie viele Items gelöst wurden.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F08-SUFF",
+        "PD10-F11-SUFF"
+      ]
+    }
+  ],
+  "3": [
+    {
+      "id": "pd10-s3-q1",
+      "q": "Wie wird die Likelihood der gesamten Antwortmatrix gebildet?",
+      "opts": [
+        "Als Summe der Wahrscheinlichkeiten aller beobachteten Reaktionen.",
+        "Als Produkt der Wahrscheinlichkeiten aller beobachteten Reaktionen.",
+        "Als Mittelwert der Wahrscheinlichkeiten aller beobachteten Reaktionen.",
+        "Als Differenz der Wahrscheinlichkeiten aller beobachteten Reaktionen."
+      ],
+      "c": 1,
+      "e": "Die Gesamtlikelihood ist das Produkt der Reaktionswahrscheinlichkeiten über alle Personen und Items.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F09-LIK"
+      ]
+    },
+    {
+      "id": "pd10-s3-q2",
+      "q": "Warum werden in der Darstellung üblicherweise logarithmierte Likelihood-Werte berichtet?",
+      "opts": [
+        "Summen vieler Reaktionswahrscheinlichkeiten werden sehr groß.",
+        "Differenzen vieler Reaktionswahrscheinlichkeiten werden negativ.",
+        "Produkte vieler Reaktionswahrscheinlichkeiten werden sehr klein.",
+        "Quotienten vieler Reaktionswahrscheinlichkeiten werden instabil."
+      ],
+      "c": 2,
+      "e": "Viele Wahrscheinlichkeiten zwischen 0 und 1 werden multipliziert; dadurch entstehen sehr kleine L-Werte, weshalb log(L) verwendet wird.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F09-LOGL"
+      ]
+    },
+    {
+      "id": "pd10-s3-q3",
+      "q": "Welche Größe entspricht in der gezeigten Matrix den Personensummenscores?",
+      "opts": [
+        "Die Spaltensummen der Antwortmatrix.",
+        "Die Diagonalsummen der Antwortmatrix.",
+        "Die Gesamtsumme der Antwortmatrix.",
+        "Die Zeilensummen der Antwortmatrix."
+      ],
+      "c": 3,
+      "e": "Jede Zeile gehört zu einer Person. Ihre Summe gibt an, wie viele Items diese Person gelöst hat und bildet damit den Summenscore.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F10-MATRIX",
+        "PD10-F11-HERL"
+      ]
+    }
+  ],
+  "4": [
+    {
+      "id": "pd10-s4-q1",
+      "q": "Wie beschreibt die PTT die Messgenauigkeit eines Tests?",
+      "opts": [
+        "Über Informationsfunktionen in Abhängigkeit von der Merkmalsposition.",
+        "Über einen einzigen Koeffizienten unabhängig von der Merkmalsposition.",
+        "Über Itemschwierigkeiten unabhängig von der Merkmalsposition.",
+        "Über Summenscores unabhängig von der Merkmalsposition."
+      ],
+      "c": 0,
+      "e": "Die PTT verwendet Item- beziehungsweise Testinformationsfunktionen; die Messgenauigkeit wird positionsabhängig auf dem latenten Kontinuum beschrieben.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F12-INFO"
+      ]
+    },
+    {
+      "id": "pd10-s4-q2",
+      "q": "Welche Beziehung gilt zwischen Information und Standardmessfehler?",
+      "opts": [
+        "Mehr Information geht mit größerem Standardmessfehler einher.",
+        "Mehr Information bedeutet einen kleineren Standardmessfehler.",
+        "Mehr Information lässt den Standardmessfehler unverändert.",
+        "Mehr Information macht den Standardmessfehler negativ."
+      ],
+      "c": 1,
+      "e": "Aus Standardmessfehler = 1/√Information folgt eine gegenläufige Beziehung: Mit zunehmender Information sinkt der Standardmessfehler.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F12-SEM"
+      ]
+    },
+    {
+      "id": "pd10-s4-q3",
+      "q": "Was zeigt das Beispiel für die Randbereiche des Merkmalskontinuums?",
+      "opts": [
+        "Dort ist die Information größer und der Messfehler geringer.",
+        "Dort sind Information und Messfehler beide größer.",
+        "Dort ist die Information geringer und der Messfehler größer.",
+        "Dort sind Information und Messfehler beide geringer."
+      ],
+      "c": 2,
+      "e": "Die dargestellte Testinformation fällt an den Rändern ab, während die gestrichelte Kurve des Standardmessfehlers dort ansteigt.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F12-DIAG"
+      ]
+    }
+  ],
+  "5": [
+    {
+      "id": "pd10-s5-q1",
+      "q": "Wie wird das Rasch-Modell in der gezeigten eRm-Auswertung geschätzt?",
+      "opts": [
+        "Mit einem Marginal-Maximum-Likelihood-Verfahren.",
+        "Mit einem gewöhnlichen Kleinste-Quadrate-Verfahren.",
+        "Mit einem reinen Korrelationsschätzverfahren.",
+        "Mit einem Conditional-Maximum-Likelihood-Verfahren."
+      ],
+      "c": 3,
+      "e": "Die Funktion RM() aus eRm verwendet in der dargestellten Auswertung ein Conditional-Maximum-Likelihood-Verfahren.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F14-CML"
+      ]
+    },
+    {
+      "id": "pd10-s5-q2",
+      "q": "Was bedeutet ein signifikanter Andersen-LR-Test im gezeigten Beispiel?",
+      "opts": [
+        "Die Rasch-Modellpassung ist für die Daten nicht gut.",
+        "Die Rasch-Modellpassung ist für die Daten sehr gut.",
+        "Die Itemparameter sind in beiden Gruppen identisch.",
+        "Die Personenparameter sind ohne Messfehler bestimmt."
+      ],
+      "c": 0,
+      "e": "Der Andersen-LR-Test fällt mit LR=70,693, df=23 und p=0 signifikant aus; die Quelle schließt auf unzureichende Modellpassung.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F16-ALR"
+      ]
+    },
+    {
+      "id": "pd10-s5-q3",
+      "q": "Worin unterscheidet sich der Wald-Test vom Andersen-LR-Test?",
+      "opts": [
+        "Der Wald-Test setzt bei der gesamten Modellstruktur an.",
+        "Der Wald-Test setzt bei einzelnen Items an.",
+        "Der Wald-Test setzt nur bei Personensummenscores an.",
+        "Der Wald-Test setzt nur bei Testinformationen an."
+      ],
+      "c": 1,
+      "e": "Der Andersen-LR-Test prüft die Parameterstruktur auf Modellebene; der Wald-Test vergleicht die Subgruppenparameter für einzelne Items.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F16-ALR",
+        "PD10-F18-WALD"
+      ]
+    }
+  ],
+  "6": [
+    {
+      "id": "pd10-s6-q1",
+      "q": "Worauf basieren Infit und Outfit in der dargestellten Auswertung?",
+      "opts": [
+        "Auf Subgruppenunterschieden und nicht auf Residuen.",
+        "Auf Itemschwierigkeiten und nicht auf Residuen.",
+        "Auf Residuen und nicht auf Subgruppenunterschieden.",
+        "Auf Testinformationen und nicht auf Residuen."
+      ],
+      "c": 2,
+      "e": "Infit und Outfit werden als residualbasierte Kennwerte eingeführt. Damit können problematische Items und auch Personen identifiziert werden.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F19-ITEMFIT"
+      ]
+    },
+    {
+      "id": "pd10-s6-q2",
+      "q": "Wie wird ein MSQ-Wert zwischen 0,5 und 1,5 bei passendem t-Bereich interpretiert?",
+      "opts": [
+        "Als ungenügende Passung des betrachteten Musters.",
+        "Als kritische Passung des betrachteten Musters.",
+        "Als überangepasste Passung des betrachteten Musters.",
+        "Als gute Passung des betrachteten Musters."
+      ],
+      "c": 3,
+      "e": "Die Grenzwerttabelle ordnet MSQ 0,5–1,5 zusammen mit t von −1,9 bis 1,9 der Kategorie gute Passung zu.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F20-GRENZ"
+      ]
+    },
+    {
+      "id": "pd10-s6-q3",
+      "q": "Was wird mit dem Personfit geprüft?",
+      "opts": [
+        "Die Passung individueller Antwortmuster an das Rasch-Modell.",
+        "Die Passung gruppenweiser Itemparameter an das Rasch-Modell.",
+        "Die Passung der Testinformation an das Rasch-Modell.",
+        "Die Passung der Itemanzahl an das Rasch-Modell."
+      ],
+      "c": 0,
+      "e": "Analog zum Itemfit wird beim Personfit geprüft, wie gut das Antwortmuster einer einzelnen Person mit dem Rasch-Modell vereinbar ist.",
+      "oe": [
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        null,
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F21-PERSONFIT"
+      ]
+    }
+  ],
+  "7": [
+    {
+      "id": "pd10-s7-q1",
+      "q": "Welcher zweite Itemparameter kommt im 2PL-Modell hinzu?",
+      "opts": [
+        "Ein positiver Summenscore- beziehungsweise Reliabilitätsparameter.",
+        "Ein positiver Trennschärfe- oder Diskriminationsparameter.",
+        "Ein positiver Informations- beziehungsweise Messfehlerparameter.",
+        "Ein positiver Stichproben- beziehungsweise Objektivitätsparameter."
+      ],
+      "c": 1,
+      "e": "Im 2PL-Modell ergänzt β_j die Itemschwierigkeit als Trennschärfe- beziehungsweise Diskriminationsparameter.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        null,
+        "Begriffsverwechslung",
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F22-2PL"
+      ]
+    },
+    {
+      "id": "pd10-s7-q2",
+      "q": "Welche Folge haben unterschiedliche Trennschärfen für die ICCs?",
+      "opts": [
+        "Die Kurven bleiben gleich steil und nur horizontal verschoben.",
+        "Die Kurven bleiben parallel und können sich nicht schneiden.",
+        "Die Kurven können verschieden steil sein und sich schneiden.",
+        "Die Kurven werden geradlinig und verlieren ihre S-Form."
+      ],
+      "c": 2,
+      "e": "Im 2PL-Modell dürfen sich die ICCs sowohl in ihrer Lage als auch in ihrer Steilheit unterscheiden; dadurch sind Schnittpunkte möglich.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        null,
+        "Bezugswechsel"
+      ],
+      "source_ids": [
+        "PD10-F22-2PL",
+        "PD10-F23-ICCS"
+      ]
+    },
+    {
+      "id": "pd10-s7-q3",
+      "q": "Wie fällt der Modellvergleich in der dargestellten Likelihood-Ratio-Tabelle aus?",
+      "opts": [
+        "Das einfachere 1PL-Modell passt signifikant besser.",
+        "Beide Modelle passen nach dem Test gleich gut.",
+        "Keines der beiden Modelle wurde miteinander verglichen.",
+        "Das komplexere 2PL-Modell passt signifikant besser."
+      ],
+      "c": 3,
+      "e": "Für den Vergleich wird LRT=39,98 bei df=23 und p=0,015 berichtet; die Quelle bewertet das 2PL-Modell als signifikant besser.",
+      "oe": [
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+        "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+      ],
+      "mt": [
+        "Richtungsfehler",
+        "Begriffsverwechslung",
+        "Bezugswechsel",
+        null
+      ],
+      "source_ids": [
+        "PD10-F25-LRT"
+      ]
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "pd10-b-q1",
+    "q": "Eine Person hat eine höhere Fähigkeit als die Schwierigkeit eines Items. Wo liegt ihre Rasch-Lösungswahrscheinlichkeit?",
+    "opts": [
+      "Die Lösungswahrscheinlichkeit liegt über 0,50.",
+      "Die Lösungswahrscheinlichkeit liegt genau bei 0,50.",
+      "Die Lösungswahrscheinlichkeit liegt unter 0,50.",
+      "Die Richtung der Wahrscheinlichkeit bleibt unbestimmt."
+    ],
+    "c": 0,
+    "e": "Ist θ_i−δ_j positiv, liegt die logistische Erfolgswahrscheinlichkeit über dem Mittelpunkt von 0,50.",
+    "oe": [
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      null,
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F06-FORMEL",
+      "PD10-F07-EIG"
+    ]
+  },
+  {
+    "id": "pd10-b-q2",
+    "q": "Zwei Personen lösen gleich viele, aber unterschiedliche Items. Was folgt unter der Suffizienzannahme?",
+    "opts": [
+      "Sie besitzen in jedem Fall verschiedene Summenscores.",
+      "Sie besitzen denselben relevanten Summenscore.",
+      "Nur die schwereren gelösten Items zählen zum Score.",
+      "Nur die leichteren gelösten Items zählen zum Score."
+    ],
+    "c": 1,
+    "e": "Unter der Suffizienzannahme zählt die Anzahl gelöster Items; die konkrete Identität der gelösten Items ist für den Score nicht entscheidend.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      null,
+      "Begriffsverwechslung",
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F08-SUFF",
+      "PD10-F11-SUFF"
+    ]
+  },
+  {
+    "id": "pd10-b-q3",
+    "q": "Ein Item weist im gezeigten Wald-Test einen signifikanten negativen z-Wert auf. Wie ist die Richtung im Beispiel codiert?",
+    "opts": [
+      "Das Item ist für die erste Gruppe, hier die Frauen, leichter.",
+      "Das Item ist für beide Gruppen exakt gleich schwierig.",
+      "Das Item ist für die zweite Gruppe, hier Männer, leichter.",
+      "Das Item kann nur über Personfit interpretiert werden."
+    ],
+    "c": 2,
+    "e": "Der Quellenkasten erläutert negative Werte als Hinweis darauf, dass das Item für die zweite Gruppe, in diesem Beispiel Männer, leichter ist.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      null,
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F18-WALD"
+    ]
+  },
+  {
+    "id": "pd10-b-q4",
+    "q": "Welche Schätzmethode muss für den gezeigten 1PL-gegen-2PL-Vergleich einheitlich verwendet werden?",
+    "opts": [
+      "Conditional Maximum Likelihood für beide Modelle.",
+      "Methode der kleinsten Quadrate für beide Modelle.",
+      "Reine Summenscore-Schätzung für beide Modelle.",
+      "Marginal Maximum Likelihood für beide Modelle."
+    ],
+    "c": 3,
+    "e": "Das Paket ltm schätzt das 2PL-Modell per MML; deshalb wird auch das 1PL-Modell für den Vergleich noch einmal per MML geschätzt.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      "Bezugswechsel",
+      null
+    ],
+    "source_ids": [
+      "PD10-F24-MML"
+    ]
+  },
+  {
+    "id": "pd10-b-q5",
+    "q": "Welche Zeile der Antwortmatrix enthält die Information über eine einzelne Person?",
+    "opts": [
+      "Eine Personenzeile mit ihren Itemreaktionen.",
+      "Eine Itemspalte mit allen Personenreaktionen.",
+      "Eine Diagonale mit ausgewählten Reaktionen.",
+      "Eine Randspalte mit den Itemhäufigkeiten."
+    ],
+    "c": 0,
+    "e": "In der gezeigten Matrix stehen Personen in den Zeilen und Items in den Spalten; die Zeilensumme ist der Personensummenscore.",
+    "oe": [
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      null,
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F10-MATRIX"
+    ]
+  },
+  {
+    "id": "pd10-b-q6",
+    "q": "Was zeigt ein Punkt nahe der Diagonalen im Graphical Model Check?",
+    "opts": [
+      "Starke Abweichung der Itemparameter beider Gruppen.",
+      "Annähernd gleiche Itemparameter in beiden Gruppen.",
+      "Hohe Testinformation an beiden Kontinuumsrändern.",
+      "Identische Personensummenscores in beiden Gruppen."
+    ],
+    "c": 1,
+    "e": "Die Diagonale repräsentiert gleiche Parameterschätzungen. Punkte nahe dieser Linie sprechen daher für annähernde Übereinstimmung.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      null,
+      "Begriffsverwechslung",
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F17-GOF"
+    ]
+  },
+  {
+    "id": "pd10-b-q7",
+    "q": "Ein Test liefert an einer Merkmalsposition Information = 4. Welcher Standardmessfehler folgt aus der Quellenformel?",
+    "opts": [
+      "Der Standardmessfehler beträgt 0,25.",
+      "Der Standardmessfehler beträgt 2,00.",
+      "Der Standardmessfehler beträgt 0,50.",
+      "Der Standardmessfehler beträgt 4,00."
+    ],
+    "c": 2,
+    "e": "Nach Standardmessfehler = 1/√Information gilt bei Information 4: 1/√4 = 1/2 = 0,50.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      null,
+      "Bezugswechsel"
+    ],
+    "source_ids": [
+      "PD10-F12-SEM"
+    ]
+  },
+  {
+    "id": "pd10-b-q8",
+    "q": "Welche Rasch-Annahme wird durch stark gruppenabhängige Itemparameter besonders berührt?",
+    "opts": [
+      "Die logarithmische Darstellung der Likelihoodwerte.",
+      "Die asymptotische Form der logistischen Kurven.",
+      "Die Berechnung des Standardmessfehlers im Test.",
+      "Die spezifische Objektivität der Parameter."
+    ],
+    "c": 3,
+    "e": "Wenn Itemparameter zwischen Subgruppen nicht annähernd invariant sind, ist die für das Rasch-Modell zentrale spezifische Objektivität nicht gestützt.",
+    "oe": [
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage ist nicht die passende Quelleninterpretation; sie verschiebt den Bezug oder vertauscht die Modelllogik.",
+      "Diese Aussage trifft die in der Quellenbasis dargestellte Regel beziehungsweise Interpretation."
+    ],
+    "mt": [
+      "Richtungsfehler",
+      "Begriffsverwechslung",
+      "Bezugswechsel",
+      null
+    ],
+    "source_ids": [
+      "PD10-F08-OBJEKT",
+      "PD10-F16-ALR"
+    ]
+  }
+];
+
+var corrCorrect = {
+  "alt-dichotom": "rasch",
+  "alt-rating": "ordinal",
+  "alt-class": "lca"
+};
+var corrExpl = {
+  "alt-dichotom": "Dichotomes Antwortformat → dichotomes Rasch-Modell.",
+  "alt-rating": "Ratingskala → ordinales IRT-Modell.",
+  "alt-class": "Klassifikation von Personen → Latent-Class-Analyse."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(sec){sec.classList.remove('active');sec.setAttribute('aria-hidden','true');});
+  document.querySelectorAll('.nav-btn').forEach(function(btn){btn.classList.remove('active');btn.setAttribute('aria-selected','false');btn.setAttribute('tabindex','-1');});
+  var sec=document.getElementById('s'+idx), nb=document.getElementById('nb'+idx);
+  if(sec){sec.classList.add('active');sec.setAttribute('aria-hidden','false');}
+  if(nb){nb.classList.add('active');nb.setAttribute('aria-selected','true');nb.setAttribute('tabindex','0');}
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el=document.getElementById(id), open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  el.setAttribute('aria-hidden',open?'true':'false');
+  btn.setAttribute('aria-expanded',open?'false':'true');
+  btn.textContent=open?'Auflösung zeigen':'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key) || btn.parentElement;
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which=btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){var active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');b.setAttribute('tabindex',active?'0':'-1');});
+  var g=document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){var active=c.dataset.tab===which;c.classList.toggle('active',active);c.setAttribute('aria-hidden',active?'false':'true');});
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function findQuestion(qId){return alleFragen.find(function(q){return q.id===qId;});}
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'], domId=q.id+(isFinal?'-final':'');
+  var h='<div class="mc-wrap" id="mcq-'+domId+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts" role="group" aria-label="Antwortoptionen">';
+  q.opts.forEach(function(o,i){
+    h+='<button type="button" class="mc-opt" id="opt-'+domId+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+',\''+domId+'\')">';
+    h+=(OPT_SHUF?'':'<span class="ltr">'+ltrs[i]+'.</span>')+'<span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+domId+'" role="status" aria-live="polite"><div class="lbl">Erklärung</div><div class="mc-exp-body">'+q.e+'</div></div>';
+  h+='<div class="mc-rating" id="rat-'+domId+'">';
+  h+='<button type="button" class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+',\''+domId+'\')">✕ Nochmal</button>';
+  h+='<button type="button" class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+',\''+domId+'\')">✓ Gut</button>';
+  h+='<button type="button" class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+',\''+domId+'\')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal, domId) {
+  domId=domId||qId;
+  document.querySelectorAll('[id^="opt-'+domId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+domId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+domId+'-'+chosen).classList.add('wrong');
+  var q=findQuestion(qId),exp=document.getElementById('exp-'+domId),body=exp?exp.querySelector('.mc-exp-body'):null;
+  if(q&&body&&Array.isArray(q.oe)&&q.oe.length===q.opts.length){
+    var detail='<p><strong>Deine Wahl:</strong> '+q.oe[chosen]+'</p>';
+    if(chosen!==correct)detail+='<p><strong>Richtige Option:</strong> '+q.oe[correct]+'</p>';
+    if(Array.isArray(q.mt)&&q.mt[chosen])detail+='<p><strong>Fehlkonzept:</strong> '+q.mt[chosen]+'</p>';
+    body.innerHTML=detail+'<p><strong>Zusammenfassung:</strong> '+q.e+'</p>';
+  }
+  if(exp)exp.style.display='block';
+  document.getElementById('rat-'+domId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal, domId) {
+  domId=domId||qId;
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+domId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function setStorageWarning(msg){var el=document.getElementById('storageWarning');if(el){el.style.display='block';el.textContent=msg;}}
+function initStorage(){try{var k='__lm_test__';localStorage.setItem(k,'1');localStorage.removeItem(k);STORAGE_OK=true;}catch(e){STORAGE_OK=false;setStorageWarning('Fortschritt kann nicht dauerhaft gespeichert werden. Temporärer Arbeitsspeicher aktiv; bitte Lernstand exportieren.');}}
+function load(){if(!STORAGE_OK)return MEMORY_STORE;try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}');}catch(e){STORAGE_OK=false;setStorageWarning('Gespeicherter Lernstand konnte nicht gelesen werden. Temporärer Fallback aktiv.');return MEMORY_STORE;}}
+function save(p){MEMORY_STORE=p;if(!STORAGE_OK)return;try{localStorage.setItem(LS_KEY,JSON.stringify(p));}catch(e){STORAGE_OK=false;setStorageWarning('Lernstand konnte nicht gespeichert werden. Bitte als JSON exportieren.');}}
+function exportProgress(){var payload={schema_version:STORAGE_SCHEMA,storage_key:LS_KEY,module:document.title,exported_at:new Date().toISOString(),progress:load()};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=LS_KEY+'-fortschritt.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},500);}
+function importProgress(input){var file=input.files&&input.files[0];if(!file)return;var r=new FileReader();r.onload=function(){try{var payload=JSON.parse(r.result);if(payload.storage_key!==LS_KEY||typeof payload.progress!=='object')throw new Error('Datei gehört nicht zu diesem Modul.');save(payload.progress);renderFinal();alert('Lernstand importiert.');}catch(e){alert('Import fehlgeschlagen: '+e.message);}finally{input.value='';}};r.readAsText(file);}
+
+/* ─── Options-Shuffle: einmal pro Seitenladung, in-place; c wird mitgeführt.
+   Auto-Skip, wenn die Erklärung im Text auf einen Buchstaben/eine Position verweist
+   (sonst würde „Richtig ist c)"/„Option d"/„✔/✘" nach dem Mischen falsch zeigen). ── */
+function _hasLtrRef(e){ return /[✔✘]|[Rr]ichtig ist [a-d]\)|Option [a-d]|\([a-d]\)/.test(e||''); }
+function _shufOpts(q){
+  if(!q||!q.opts||q.opts.length<2||typeof q.c!=='number') return;
+  if(_hasLtrRef(q.e)) return;
+  var idx=q.opts.map(function(_,i){return i;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  q.opts=idx.map(function(i){return q.opts[i];});
+  q.c=idx.indexOf(q.c);
+}
+
+(function(){
+  initStorage();
+  if(OPT_SHUF){ Object.keys(sofortFragen).forEach(function(k){ sofortFragen[k].forEach(_shufOpts); }); bonusFragen.forEach(_shufOpts); }
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+
+function pdSetFeedback(el,ok,msg){el.classList.remove('good','bad');el.classList.add(ok?'good':'bad');el.textContent=msg;}
+function pdPredict(btn,key,choice){var correct={icc:'steigt',sem:'sinkt','2pl':'steiler'}[key],el=document.getElementById('pred-'+key);pdSetFeedback(el,choice===correct,choice===correct?'Richtig. '+({icc:'Bei konstantem δ wird θ−δ größer und P steigt.',sem:'Wegen SEM=1/√I sinkt der Fehler.', '2pl':'β multipliziert θ−δ und verändert die Steilheit.'}[key]):'Noch nicht. Prüfe die Richtung der Formel beziehungsweise die Rolle des Parameters.');}
+function logistic(x){return 1/(1+Math.exp(-x));}
+function pathLogistic(delta,beta){var pts=[];for(var k=0;k<=100;k++){var theta=-3+6*k/100,p=logistic(beta*(theta-delta)),x=50+450*k/100,y=250-230*p;pts.push((k?'L':'M')+x.toFixed(1)+' '+y.toFixed(1));}return pts.join(' ');}
+function updateICC(){var th=+document.getElementById('thetaSlider').value,de=+document.getElementById('deltaSlider').value,p=logistic(th-de);document.getElementById('thetaOut').textContent=th.toFixed(1);document.getElementById('deltaOut').textContent=de.toFixed(1);document.getElementById('iccPath').setAttribute('d',pathLogistic(de,1));var x=50+450*(th+3)/6,y=250-230*p;document.getElementById('personLine').setAttribute('x1',x);document.getElementById('personLine').setAttribute('x2',x);document.getElementById('personPoint').setAttribute('cx',x);document.getElementById('personPoint').setAttribute('cy',y);document.getElementById('iccText').textContent='θ='+th.toFixed(1)+', δ='+de.toFixed(1)+', θ−δ='+(th-de).toFixed(1)+' → P(1)='+p.toFixed(3)+'. Die Schwierigkeit verschiebt die ICC horizontal; ihre Steilheit bleibt im Rasch-Modell gleich.';}
+function checkRaschSelf(){var v=parseFloat((document.getElementById('raschSelf').value||'').replace(',','.')),el=document.getElementById('raschSelfFb');pdSetFeedback(el,Math.abs(v-.5)<.02,Math.abs(v-.5)<.02?' Richtig: θ=δ ergibt P=.50.':' Nutze θ−δ=0 und exp(0)=1.');}
+function checkAssumption(btn,ans){var item=btn.closest('.debug-item'),q=item.querySelector('p').textContent,correct=q.includes('schwierige')?'suff':q.includes('konstant')?'local':'obj',fb=item.querySelector('.widget-feedback');pdSetFeedback(fb,ans===correct,ans===correct?'Richtig. Das entscheidende Kriterium wurde korrekt erkannt.':'Noch nicht. Achte darauf, ob es um Itemidentität, bedingte Unabhängigkeit oder Stichprobeninvarianz geht.');}
+function matrixCell(btn,msg){document.querySelectorAll('.response-matrix button').forEach(function(b){b.removeAttribute('aria-pressed');});btn.setAttribute('aria-pressed','true');document.getElementById('matrixFb').textContent=msg;}
+function matrixQuiz(btn,ans){pdSetFeedback(document.getElementById('matrixQuizFb'),ans==='col',ans==='col'?'Richtig: Die Spaltensumme von Item 3 ist 2.':'Nicht passend: Gesucht ist eine Häufigkeit über Personen, also eine Spaltensumme.');}
+function updateSEM(){var I=+document.getElementById('infoSlider').value,sem=1/Math.sqrt(I);document.getElementById('infoOut').textContent=I.toFixed(2);document.getElementById('semOut').textContent=sem.toFixed(2);document.getElementById('semText').textContent='Bei Information '+I.toFixed(2)+' ergibt sich SEM=1/√'+I.toFixed(2)+'='+sem.toFixed(2)+'. Höhere Information bedeutet kleineren Messfehler.';}
+var outTasks={andersen:{text:'LR=70,693; df=23; p=0. Welche Schlussfolgerung ist zulässig?',opts:[['Modell passt nicht gut','badfit'],['Modell passt sehr gut','goodfit']]},graph:{text:'Ein Itempunkt liegt nahe der Diagonalen Women=Men. Was bedeutet das?',opts:[['Parameter stimmen annähernd überein','agree'],['Item hat maximale Information','info']]},wald:{text:'Ein signifikanter z-Wert ist negativ. Wie lautet die Richtung im gezeigten Beispiel?',opts:[['leichter für Männer','men'],['leichter für Frauen','women']]}};
+var currentOutput='andersen';function switchOutput(btn,key){currentOutput=key;btn.parentElement.querySelectorAll('button').forEach(function(b){b.classList.toggle('active',b===btn);});renderOutputTask();}
+function renderOutputTask(){var t=outTasks[currentOutput];document.getElementById('outputTask').textContent=t.text;document.getElementById('outputChoices').innerHTML=t.opts.map(function(o){return '<button onclick="checkOutput(\''+o[1]+'\')">'+o[0]+'</button>';}).join('');document.getElementById('outputFb').textContent='';}
+function checkOutput(ans){var correct={andersen:'badfit',graph:'agree',wald:'men'}[currentOutput];pdSetFeedback(document.getElementById('outputFb'),ans===correct,ans===correct?'Richtig. Die Quelleninterpretation wurde getroffen.':'Nicht passend. Prüfe Signifikanzrichtung, Diagonalbezug oder Gruppencodierung.');}
+var fitCases=[{t:'MSQ 1,70 · t 2,40',a:'kritisch'},{t:'MSQ 2,20 · t 3,20',a:'ungenuegend'},{t:'MSQ 1,10 · t 0,40',a:'gut'},{t:'MSQ 0,40 · t −2,30',a:'over'}],fitIdx=0;function checkFit(btn,a){var ok=a===fitCases[fitIdx].a;pdSetFeedback(document.getElementById('fitFb'),ok,ok?'Richtig nach der angegebenen Grenzwerttabelle.':'Noch nicht. Ordne beide Werte derselben Tabellenzeile zu.');}function nextFitCase(){fitIdx=(fitIdx+1)%fitCases.length;document.getElementById('fitPair').textContent=fitCases[fitIdx].t;document.getElementById('fitFb').textContent='';}
+function update2PL(){var b=+document.getElementById('betaB').value,d=+document.getElementById('deltaB').value;document.getElementById('betaBOut').textContent=b.toFixed(1);document.getElementById('deltaBOut').textContent=d.toFixed(1);document.getElementById('curveA').setAttribute('d',pathLogistic(-1,1.8));document.getElementById('curveB').setAttribute('d',pathLogistic(d,b));document.getElementById('curveC').setAttribute('d',pathLogistic(1,0.6));document.getElementById('twoplText').textContent='Item A: δ=−1, β=1,8; Item B: δ='+d.toFixed(1)+', β='+b.toFixed(1)+'; Item C: δ=1, β=0,6. δ steuert den .50-Punkt, β die Steilheit.';}
+function initGOF(){var g=document.getElementById('gofPoints');if(!g)return;var pts=[[-2.1,-1.4],[-1.0,-.6],[-.3,.1],[-2.2,-1.4],[-.9,-.5],[-.2,.6],[.7,-.8],[.8,.2],[1.5,1.8],[-1.3,-.9],[.5,.1],[.9,1.4],[-1.1,-1.6],[.1,-1.1],[.7,.9],[-.7,-1.7],[.7,-.7],[1.4,1.2],[.7,-.5],[1.7,.8],[3.0,2.6],[ -.3,-1.2],[.5,-.1],[1.8,2.1]];function sx(x){return 55+(x+4)/10*435}function sy(y){return 270-(y+2.5)/6*235}pts.forEach(function(p,i){var ns='http://www.w3.org/2000/svg',e=document.createElementNS(ns,'ellipse');e.setAttribute('cx',sx(p[0]));e.setAttribute('cy',sy(p[1]));e.setAttribute('rx',17);e.setAttribute('ry',25);e.setAttribute('fill','none');e.setAttribute('stroke','#f87171');e.setAttribute('opacity','.65');g.appendChild(e);var t=document.createElementNS(ns,'text');t.setAttribute('x',sx(p[0])-5);t.setAttribute('y',sy(p[1])+4);t.textContent=i+1;g.appendChild(t);});}
+function initPD10(){updateICC();updateSEM();update2PL();renderOutputTask();initGOF();}
+initPD10();
+
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;right:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){console.warn('Fehlerberichte konnten nicht dauerhaft gespeichert werden.',e);alert('Der Fehlerbericht konnte nicht dauerhaft gespeichert werden. Bitte den Bericht vor dem Schließen kopieren.');}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

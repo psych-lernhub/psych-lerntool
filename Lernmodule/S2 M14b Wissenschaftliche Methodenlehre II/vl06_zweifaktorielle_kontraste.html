@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14b · VL06 Kontraste für zweifaktorielle Versuchspläne</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m14b-vl06
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Simulator (M14b) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-axis{font-size:.78rem;color:var(--text2);margin:8px 0 4px}
+.sim-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.82rem}
+.sim-row > span.lab{flex:0 0 160px;color:var(--text2)}
+.sim-row input[type=range]{flex:1}
+.sim-row > span.val{flex:0 0 76px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M14b · VL06 Kontraste für zweifaktorielle Versuchspläne</h1>
+<p class="page-sub">Wissenschaftliche Methodenlehre II (Statistik 2) · Dirk Lubbe · Klausur Sept 2026 (WH) · Freitext/Rechnen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Vier Kontrastarten · 2. Treatmentkontraste · 3. Einfache Haupteffekte · 4. Interaktionskontraste · 5. Einfache Treatmentkontraste · 6. F-Test & Freiheitsgrade · 7. Gewichtung & Rechenbeispiel · 8. A-posteriori-Korrekturen
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Vier Arten</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Treatmentkontraste</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Einfache Haupteffekte</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Interaktionskontraste</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Einf. Treatmentkontraste</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ F-Test & df</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Gewichtung & Rechnung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ A-posteriori</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Vier Arten ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Vier Arten von Kontrasten</div>
+    <div class="sec-lz">Treatmentkontraste & einfache Haupteffekte (Haupteffekte); Interaktionskontraste & einfache Treatmentkontraste (Interaktion).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Nach einem signifikanten zweifaktoriellen Test will man genauer hinschauen. Welche vier Kontrastarten stehen zur Verfügung — und wofür?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Für <strong>Haupteffekte</strong>: Treatmentkontraste und einfache Haupteffekte. Für <strong>Interaktionen</strong>: Interaktionskontraste und einfache Treatmentkontraste.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei für Haupteffekte</div>
+    <strong>Treatmentkontraste</strong> (analog zur einfaktoriellen ANOVA) und <strong>einfache Haupteffekte</strong> dienen der genaueren Analyse von <strong>Haupteffekten</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Zwei für Interaktionen</div>
+    <strong>Interaktionskontraste</strong> und <strong>einfache Treatmentkontraste</strong> dienen der genaueren Analyse von <strong>Interaktionen</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Datenbeispiel (Boik 1979)</div>
+    3×4-Plan: A = Therapie (Kontrolle / Verhaltenstherapie / Gesprächstherapie), B = Medikation (Placebo / D1 / D2 / D3), n = 6, AV = edr (Hautreaktion bei Blutphobie).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne zu: Haupteffekt- oder Interaktions-Analyse?</div>
+    <div class="corr-item" id="ka">Treatmentkontraste
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ka',this,'haupteffekt')">Haupteffekt</button>
+        <button class="corr-btn" onclick="checkCorr('ka',this,'interaktion')">Interaktion</button>
+      </div><div class="corr-fb" id="ka-fb"></div>
+    </div>
+    <div class="corr-item" id="kb">Einfache Haupteffekte
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kb',this,'haupteffekt')">Haupteffekt</button>
+        <button class="corr-btn" onclick="checkCorr('kb',this,'interaktion')">Interaktion</button>
+      </div><div class="corr-fb" id="kb-fb"></div>
+    </div>
+    <div class="corr-item" id="kc">Interaktionskontraste
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kc',this,'haupteffekt')">Haupteffekt</button>
+        <button class="corr-btn" onclick="checkCorr('kc',this,'interaktion')">Interaktion</button>
+      </div><div class="corr-fb" id="kc-fb"></div>
+    </div>
+    <div class="corr-item" id="kd">Einfache Treatmentkontraste
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('kd',this,'haupteffekt')">Haupteffekt</button>
+        <button class="corr-btn" onclick="checkCorr('kd',this,'interaktion')">Interaktion</button>
+      </div><div class="corr-fb" id="kd-fb"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Kontrastarten-Simulator (zweifaktoriell)</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="kz-tk" onclick="kzSet('tk')">Treatmentkontrast</button>
+        <button class="sim-tbtn" id="kz-she" onclick="kzSet('she')">Einfacher Haupteffekt</button>
+        <button class="sim-tbtn" id="kz-ik" onclick="kzSet('ik')">Interaktionskontrast</button>
+        <button class="sim-tbtn" id="kz-etk" onclick="kzSet('etk')">Einfacher Treatmentkontrast</button>
+      </div>
+      <div class="sim-verdict" id="kz-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Im zweifaktoriellen Plan gibt es vier Kontrastarten — sie unterscheiden sich darin, ob sie über die Stufen des anderen Faktors <strong>gemittelt</strong> oder auf eine Stufe <strong>bedingt</strong> sind.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Treatmentkontraste ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Treatmentkontraste</div>
+    <div class="sec-lz">Kontrast der Randmittel eines Faktors (analog einfaktoriell); D(A)=Σc_i·Ā_i, QS = nq·D²/Σc_i², 1 df.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum steht in der Quadratsumme eines Treatmentkontrasts der Faktor nq und nicht nur n?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Weil ein Treatmentkontrast über die <strong>Randmittel</strong> Ā_i gebildet wird, und jedes Randmittel auf <strong>q·n</strong> Personen beruht (alle B-Stufen zusammengefasst). Daher: <strong>QS = nq·D(A)²/Σc_i²</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was ist ein Treatmentkontrast?</div>
+    Möchte man spezifische Stufen <strong>eines</strong> Faktors vergleichen, nutzt man Treatmentkontraste — <strong>identisch</strong> zum Kontrast der einfaktoriellen ANOVA. Die anderen Faktoren werden dabei ignoriert.
+  </div>
+  <div class="card">
+    <div class="card-title">Berechnung</div>
+    <strong>D(A) = Σc_i·Ā_i</strong> (mit Σc_i = 0); <strong>QS = nq·D(A)²/Σc_i²</strong>; F = QS/MQ_e; <strong>1 df</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel</div>
+    Kontrolle vs. beide Therapien, c = (1, −½, −½): D = 47,9 − 0,5·33,9 − 0,5·38,5 = 11,7; QS = 6·4·11,7²/1,5 = 2190,24; F = 2190,24/19,15 ≈ 114,4.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg Treatmentkontrast</div>
+    <div id="step1">
+      <div class="step-item"><strong>Schritt 1:</strong> Koeffizienten festlegen (Σc_i = 0), z. B. c = (1, −½, −½).</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Kontrastwert D(A) = Σc_i·Ā_i = 11,7.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> QS = nq·D²/Σc² = 6·4·11,7²/1,5 = 2190,24.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> F = QS/MQ_e = 2190,24/19,15 ≈ 114,4 (1 df).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Einfache Haupteffekte ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Einfache Haupteffekte (simple main effects)</div>
+    <div class="sec-lz">A-Stufen unter einer B-Stufe; QS_{A|bj} = n·Σ_i(ĀB_ij − B̄_j)², df = p − 1.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was ist ein „einfacher Haupteffekt" — und wie unterscheidet er sich vom gewöhnlichen Haupteffekt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Ein einfacher Haupteffekt prüft die Unterschiedlichkeit der A-Stufen <strong>unter einer einzelnen Stufe von B</strong> — wie eine einfaktorielle ANOVA für A, beschränkt auf die Beobachtungen einer B-Stufe. Der gewöhnliche Haupteffekt mittelt dagegen über alle B-Stufen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition</div>
+    Einfache Haupteffekte beziehen sich auf die Unterschiedlichkeit der Stufen von A <strong>unter den einzelnen Stufen von B</strong> — vergleichbar mit einer einfaktoriellen ANOVA für A, nur für die Daten einer B-Stufe.
+  </div>
+  <div class="card">
+    <div class="card-title">Berechnung</div>
+    <strong>QS_{A|bj} = n·Σ_i(ĀB_ij − B̄_j)²</strong>, mit <strong>df = p − 1</strong>. F = [QS_{A|bj}/(p − 1)] / MQ_e.
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel (A unter b1)</div>
+    QS = 6·[(50,2−48,6)²+(49,9−48,6)²+(45,7−48,6)²] = 75,96; F = (75,96/2)/19,15 ≈ 1,98. Analog b2: 8,24, b3: 24,05, b4: 65,48.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg einfacher Haupteffekt (A unter b1)</div>
+    <div id="step2">
+      <div class="step-item"><strong>Schritt 1:</strong> Zellmittel unter b1: 50,2 / 49,9 / 45,7; Randmittel B̄_1 = 48,6.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> QS = 6·[(50,2−48,6)²+(49,9−48,6)²+(45,7−48,6)²] = 75,96.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> MQ = QS/(p−1) = 75,96/2 = 37,98.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> F = 37,98/19,15 ≈ 1,98 (df = p−1 = 2).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step2')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Interaktionskontraste ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Interaktionskontraste</div>
+    <div class="sec-lz">Spezifische 2×2-Interaktion; D = ΣΣc_ij·ĀB_ij, QS = n·D²/ΣΣc², 1 df.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie testet man gezielt EINE bestimmte Wechselwirkung, etwa (Verhaltens- vs. Gesprächstherapie) × (Placebo vs. hohe Dosis)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Mit einem <strong>Interaktionskontrast</strong> — einer spezifischen <strong>2×2-Interaktion</strong>. Sein Wert ist <strong>D = ΣΣc_ij·ĀB_ij</strong>, wobei die Koeffizienten das Produkt der beiden Einzelkontraste sind: z. B. (a2−a3)×(b1−b4).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Was ist ein Interaktionskontrast?</div>
+    Mit Interaktionskontrasten untersucht man die Interaktion mehrstufiger Faktoren anhand spezifischer <strong>2×2-Interaktionen</strong> (zwei Stufen von A gegen zwei Stufen von B).
+  </div>
+  <div class="card">
+    <div class="card-title">Berechnung</div>
+    <strong>D = ΣΣc_ij·ĀB_ij</strong>; <strong>QS = n·D²/ΣΣc_ij²</strong>; F = QS/MQ_e; <strong>1 df</strong>. Die 2×2-Koeffizienten sind das Produkt der beiden Einzelkontraste.
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel (a2−a3)×(b1−b4)</div>
+    D = ĀB_21 − ĀB_31 − ĀB_24 + ĀB_34 = 49,9 − 45,7 − 19,0 + 32,7 = 17,9; QS = 6·17,9²/4 = 480,6; F = 480,6/19,15 ≈ 25,1.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vorzeichen der 2×2-Koeffizienten bestimmen</div>
+    <div id="step3">
+      <div class="step-item"><strong>Schritt 1:</strong> Einzelkontrast A: (a2 − a3) → a2 bekommt +, a3 bekommt −.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Einzelkontrast B: (b1 − b4) → b1 bekommt +, b4 bekommt −.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Zellkoeffizient = Produkt: ĀB_21 (+·+ = +), ĀB_31 (−·+ = −), ĀB_24 (+·− = −), ĀB_34 (−·− = +).</div>
+      <div class="step-item"><strong>Schritt 4:</strong> D = +ĀB_21 − ĀB_31 − ĀB_24 + ĀB_34 = 17,9.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step3')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Einf. Treatmentkontraste ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Einfache Treatmentkontraste</div>
+    <div class="sec-lz">Kontrast der A-Zellmittel innerhalb einer B-Stufe; D(A|bj) = Σc_i·ĀB_ij, QS = n·D²/Σc², 1 df.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein einfacher Treatmentkontrast und ein einfacher Haupteffekt arbeiten beide „innerhalb einer B-Stufe". Was unterscheidet sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Der einfache <strong>Haupteffekt</strong> vergleicht <strong>alle p</strong> A-Stufen unter b_j (df = p−1). Der einfache <strong>Treatmentkontrast</strong> ist ein gerichteter <strong>Einzelvergleich</strong> daraus (df = 1): D(A|bj) = Σc_i·ĀB_ij.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Definition</div>
+    Ein einfacher Treatmentkontrast für A ist ein <strong>Kontrast von Zellmittelwerten, die alle zur gleichen Stufe von B gehören</strong> (z. B. die A-Stufen nur unter b1).
+  </div>
+  <div class="card">
+    <div class="card-title">Berechnung</div>
+    <strong>D(A|bj) = Σc_i·ĀB_ij</strong>; <strong>QS = n·D(A|bj)²/Σc_i²</strong>; F = QS/MQ_e; <strong>1 df</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel</div>
+    D_1(A|b1) = 2·50,2 − 49,9 − 45,7 = 4,8; QS = 6·4,8²/6 = 23,04; F = 23,04/19,15 ≈ 1,20. Analog b2: 16,36, b3: 38,07, b4: 101,56.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg einfacher Treatmentkontrast (b1)</div>
+    <div id="step4">
+      <div class="step-item"><strong>Schritt 1:</strong> Koeffizienten c = (2, −1, −1) für die A-Zellmittel unter b1.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> D(A|b1) = 2·50,2 − 49,9 − 45,7 = 4,8.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> QS = n·D²/Σc² = 6·4,8²/6 = 23,04.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> F = 23,04/19,15 ≈ 1,20 (1 df).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ F-Test & df ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Signifikanzprüfung & Freiheitsgrade</div>
+    <div class="sec-lz">Alle vier gegen MQ_e; drei mit 1 df, einfacher Haupteffekt mit p − 1.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wogegen werden die vier Kontrastarten geprüft — und welche hat als Einzige nicht genau einen Freiheitsgrad?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Alle vier werden an <strong>MQ_e</strong> relativiert. Drei sind gerichtete Einzelvergleiche mit <strong>1 df</strong>; nur der <strong>einfache Haupteffekt</strong> vergleicht p Gruppen → <strong>df = p − 1</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gemeinsamer Nenner: MQ_e</div>
+    Jede Kontrast-Quadratsumme wird an der <strong>Fehlervarianz MQ_e</strong> relativiert: F = QS/MQ_e (bzw. [QS/(p−1)]/MQ_e beim einfachen Haupteffekt).
+  </div>
+  <div class="card">
+    <div class="card-title">Freiheitsgrade</div>
+    Treatmentkontrast, Interaktionskontrast und einfacher Treatmentkontrast sind <strong>gerichtete Einzelvergleiche → 1 df</strong>. Der einfache Haupteffekt vergleicht p Gruppen → <strong>p − 1 df</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne die Freiheitsgrade zu</div>
+    <div class="corr-item" id="qa">Treatmentkontrast D(A)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('qa',this,'1')">1 df</button>
+        <button class="corr-btn" onclick="checkCorr('qa',this,'p1')">p − 1 df</button>
+      </div><div class="corr-fb" id="qa-fb"></div>
+    </div>
+    <div class="corr-item" id="qb">Einfacher Haupteffekt A|b_j
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('qb',this,'1')">1 df</button>
+        <button class="corr-btn" onclick="checkCorr('qb',this,'p1')">p − 1 df</button>
+      </div><div class="corr-fb" id="qb-fb"></div>
+    </div>
+    <div class="corr-item" id="qc">Interaktionskontrast (2×2)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('qc',this,'1')">1 df</button>
+        <button class="corr-btn" onclick="checkCorr('qc',this,'p1')">p − 1 df</button>
+      </div><div class="corr-fb" id="qc-fb"></div>
+    </div>
+    <div class="corr-item" id="qd">Einfacher Treatmentkontrast D(A|b_j)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('qd',this,'1')">1 df</button>
+        <button class="corr-btn" onclick="checkCorr('qd',this,'p1')">p − 1 df</button>
+      </div><div class="corr-fb" id="qd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Gewichtung & Rechnung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Gewichtung (nq vs. n) & Rechenbeispiel</div>
+    <div class="sec-lz">Randmittel → nq, Zellmittel → n; Interaktionskontrast D = 17,9 → F = 25,1.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welcher Gewichtungsfaktor (nq oder n) steht in der Quadratsumme der jeweiligen Kontrastart?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Der <strong>Treatmentkontrast</strong> nutzt <strong>nq</strong> (er beruht auf Randmitteln mit q·n Personen). Alle drei anderen Arten beruhen auf <strong>Zellmitteln</strong> (n Personen) und nutzen daher <strong>n</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Randmittel → nq</div>
+    Ein <strong>Randmittel</strong> Ā_i fasst alle q Stufen des anderen Faktors zusammen und beruht auf <strong>q·n</strong> Personen. Deshalb wird die QS eines Treatmentkontrasts mit <strong>nq</strong> gewichtet.
+  </div>
+  <div class="card">
+    <div class="card-title">Zellmittel → n</div>
+    Ein <strong>Zellmittel</strong> ĀB_ij beruht auf nur <strong>n</strong> Personen. Einfacher Haupteffekt, Interaktionskontrast und einfacher Treatmentkontrast nutzen daher den Faktor <strong>n</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Nur der Treatmentkontrast nutzt nq. Wer beim Interaktionskontrast versehentlich nq statt n einsetzt, erhält eine q-fach zu große Quadratsumme.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Gewicht in der QS: nq oder n?</div>
+    <div class="corr-item" id="ga">Treatmentkontrast QS_D(A)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ga',this,'nq')">nq</button>
+        <button class="corr-btn" onclick="checkCorr('ga',this,'n')">n</button>
+      </div><div class="corr-fb" id="ga-fb"></div>
+    </div>
+    <div class="corr-item" id="gb">Einfacher Haupteffekt QS_{A|bj}
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gb',this,'nq')">nq</button>
+        <button class="corr-btn" onclick="checkCorr('gb',this,'n')">n</button>
+      </div><div class="corr-fb" id="gb-fb"></div>
+    </div>
+    <div class="corr-item" id="gc">Interaktionskontrast QS_D
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gc',this,'nq')">nq</button>
+        <button class="corr-btn" onclick="checkCorr('gc',this,'n')">n</button>
+      </div><div class="corr-fb" id="gc-fb"></div>
+    </div>
+    <div class="corr-item" id="gd">Einfacher Treatmentkontrast QS_D(A|bj)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('gd',this,'nq')">nq</button>
+        <button class="corr-btn" onclick="checkCorr('gd',this,'n')">n</button>
+      </div><div class="corr-fb" id="gd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ A-posteriori ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">A-posteriori-Korrekturen (Scheffé-artig)</div>
+    <div class="sec-lz">S-Werte je Kontrastart: Interaktionskontrast (p−1)(q−1)·F; einfacher Treatmentkontrast (df_A+df_AB)·F.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Hat man die Kontraste erst nach dem Datenblick gewählt (a posteriori) — wie sichert man das Signifikanzniveau ab?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Über einen <strong>Scheffé-artigen kritischen S-Wert</strong>, der das Niveau über alle möglichen Kontraste hält. Für Interaktionskontraste: <strong>S = (p−1)(q−1)·F_krit</strong> (im Beispiel 6·3,12 = 18,72).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Warum korrigieren?</div>
+    A-posteriori-Vergleiche (nach dem Datenblick gewählt) müssen über alle möglichen Kontraste abgesichert werden — analog zum Scheffé-Verfahren der einfaktoriellen ANOVA. Der empirische F-Wert muss den kritischen S-Wert erreichen.
+  </div>
+  <div class="card">
+    <div class="card-title">S-Wert für Interaktionskontraste</div>
+    <strong>S = (p − 1)(q − 1) · F_{(p−1)(q−1), df_e; 1−α}</strong>. Beispiel: 6·F_{6,60;0,99} = 6·3,12 = 18,72.
+  </div>
+  <div class="card">
+    <div class="card-title">Andere Kontrastarten</div>
+    Einfacher Haupteffekt: S = (p−1)q·F/(p−1). Einfacher Treatmentkontrast: S = (df_A + df_AB)·F = (2+6)·2,82 = 22,56. Treatmentkontrast (Haupteffekt): S = (p−1)·F.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg Scheffé-S für einen Interaktionskontrast (3×4-Plan)</div>
+    <div id="step7">
+      <div class="step-item"><strong>Schritt 1:</strong> Freiheitsgrade der Interaktion: df_AB = (p−1)(q−1) = 2·3 = 6.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> kritischer F-Wert: F_{6,60;0,99} = 3,12.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> S = df_AB·F = 6·3,12 = <strong>18,72</strong>.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Der Interaktionskontrast ist signifikant, wenn sein empirischer F-Wert &gt; 18,72.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step7')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Treatmentkontrast</h4>
+      <p>über die Randmittel EINES Faktors</p>
+      <p>ignoriert die anderen Faktoren</p>
+      <p>QS = nq·D²/Σc²</p>
+      <p>1 df — für Haupteffekte</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Interaktionskontrast</h4>
+      <p>2×2-Interaktion über Zellmittel</p>
+      <p>D = ΣΣc_ij·ĀB_ij</p>
+      <p>QS = n·D²/ΣΣc²</p>
+      <p>1 df — für Interaktionen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Treatmentkontrast prüft eine 2×2-Interaktion über die Zellmittelwerte beider Faktoren.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einfacher Haupteffekt</h4>
+      <p>A-Stufen unter einer B-Stufe</p>
+      <p>QS = n·Σ_i(ĀB_ij − B̄_j)²</p>
+      <p>df = p − 1</p>
+      <p>wie eine einfaktorielle ANOVA innerhalb b_j</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Einfacher Treatmentkontrast</h4>
+      <p>gerichteter Kontrast der A-Zellmittel unter b_j</p>
+      <p>D(A|bj) = Σc_i·ĀB_ij</p>
+      <p>df = 1</p>
+      <p>ein Einzelvergleich daraus</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der einfache Treatmentkontrast und der einfache Haupteffekt haben beide p − 1 Freiheitsgrade.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Gewicht nq (Randmittel)</h4>
+      <p>Treatmentkontrast</p>
+      <p>Randmittel beruht auf q·n Personen</p>
+      <p>QS = nq·D²/Σc²</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gewicht n (Zellmittel)</h4>
+      <p>einfacher Haupteffekt, Interaktions- & einfacher Treatmentkontrast</p>
+      <p>Zellmittel beruht auf n Personen</p>
+      <p>QS mit Faktor n</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Auch der Interaktionskontrast nutzt in seiner Quadratsumme den Gewichtungsfaktor nq.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kontraste für Haupteffekte</h4>
+      <p>Treatmentkontraste</p>
+      <p>einfache Haupteffekte</p>
+      <p>betreffen die Stufen eines Faktors</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kontraste für Interaktionen</h4>
+      <p>Interaktionskontraste</p>
+      <p>einfache Treatmentkontraste</p>
+      <p>betreffen das Zusammenspiel der Faktoren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Interaktionskontraste und Treatmentkontraste dienen beide der genaueren Analyse der Interaktion.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einzelkontrast (1 df)</h4>
+      <p>Treatment-, Interaktions-, einfacher Treatmentkontrast</p>
+      <p>ein gerichteter Vergleich</p>
+      <p>F = QS/MQ_e</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Einfacher Haupteffekt (p−1 df)</h4>
+      <p>vergleicht p Gruppen unter b_j</p>
+      <p>keine gerichtete Einzelaussage</p>
+      <p>F = [QS/(p−1)]/MQ_e</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der einfache Haupteffekt besitzt wie die übrigen Kontraste genau einen Freiheitsgrad.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m14b-vl06</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m14b-vl06';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Wofür dienen die vier Kontrastarten der zweifaktoriellen Varianzanalyse?",
+      "opts": [
+        "Zwei dienen der genaueren Analyse von Haupteffekten, zwei der genaueren Analyse von Interaktionen.",
+        "Alle vier prüfen ausschließlich die Haupteffekte.",
+        "Alle vier ersetzen den Omnibustest vollständig.",
+        "Sie dienen sämtlich dazu, die abhängige Variable so zu transformieren, dass die Voraussetzungen der Varianzanalyse in jeder einzelnen Zelle des Versuchsplans erfüllt sind."
+      ],
+      "c": 0,
+      "e": "Treatmentkontraste + einfache Haupteffekte → Haupteffekte; Interaktionskontraste + einfache Treatmentkontraste → Interaktionen."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche zwei Kontrastarten analysieren genauer die INTERAKTION?",
+      "opts": [
+        "Treatmentkontraste und einfache Haupteffekte.",
+        "Interaktionskontraste und einfache Treatmentkontraste.",
+        "Treatmentkontraste und Interaktionskontraste.",
+        "Einfache Haupteffekte und einfache Treatmentkontraste, da beide das Wort ‚einfach‘ tragen und sich ausschließlich auf einzelne, herausgegriffene Faktorstufen beziehen."
+      ],
+      "c": 1,
+      "e": "Interaktion: Interaktionskontraste + einfache Treatmentkontraste. Haupteffekte: Treatmentkontraste + einfache Haupteffekte."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was ist ein Treatmentkontrast im zweifaktoriellen Plan?",
+      "opts": [
+        "Ein Kontrast über die Zellmittelwerte einer einzelnen Stufe von B.",
+        "Eine 2×2-Interaktion zweier Faktoren.",
+        "Ein Kontrast spezifischer Stufen EINES Faktors (über dessen Randmittel), der die anderen Faktoren ignoriert — analog zum einfaktoriellen Kontrast.",
+        "Ein Vergleich, bei dem für jede Faktorstufenkombination ein eigener Kontrastkoeffizient festgelegt wird, sodass alle Zellen des Versuchsplans gleichzeitig in den Vergleich eingehen."
+      ],
+      "c": 2,
+      "e": "Treatmentkontrast = Kontrast eines Haupteffekts (Randmittel eines Faktors), identisch zum einfaktoriellen Kontrast."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wie berechnet sich die Quadratsumme eines Treatmentkontrasts D(A) im balancierten 3×4-Plan?",
+      "opts": [
+        "QS = n·D(A)²/Σc_i².",
+        "QS = D(A)²/Σc_i².",
+        "QS = np·D(A)²/Σc_i², also gewichtet mit der Personenzahl pro Zelle und der Stufenzahl p des Faktors A selbst.",
+        "QS = nq·D(A)²/Σc_i² (jedes Randmittel Ā_i beruht auf q·n Personen)."
+      ],
+      "c": 3,
+      "e": "QS_D(A) = nq·D(A)²/Σc_i² — wegen der q·n Personen pro Randmittel. (a) gilt für Kontraste über Zellmittel."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was prüft ein einfacher Haupteffekt (simple main effect)?",
+      "opts": [
+        "Die Unterschiedlichkeit der Stufen von A unter einer einzelnen Stufe von B.",
+        "Die Gleichheit aller Zellmittelwerte gleichzeitig.",
+        "Die Interaktion zweier mehrstufiger Faktoren.",
+        "Den über alle Stufen von B gemittelten Haupteffekt von Faktor A, also exakt dieselbe Größe, die bereits der Omnibustest des Faktors A in der Gesamttabelle ausweist."
+      ],
+      "c": 0,
+      "e": "Einfacher Haupteffekt A|b_j: wie eine einfaktorielle ANOVA für A, aber nur für die Beobachtungen einer Stufe von B."
+    },
+    {
+      "id": "s2q2",
+      "q": "Wie viele Freiheitsgrade hat ein einfacher Haupteffekt A|b_j (p Stufen von A)?",
+      "opts": [
+        "1 (wie ein Kontrast).",
+        "p − 1.",
+        "(p − 1)(q − 1).",
+        "pq − 1, da in den einfachen Haupteffekt alle Faktorstufenkombinationen des gesamten Versuchsplans gemeinsam eingehen und gegeneinander geprüft werden."
+      ],
+      "c": 1,
+      "e": "df_{A|bj} = p − 1 (es werden p Gruppenmittel unter einer B-Stufe verglichen). QS = n·Σ_i(ĀB_ij − B̄_j)²."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist ein Interaktionskontrast?",
+      "opts": [
+        "Ein Kontrast über die Randmittel eines Faktors.",
+        "Ein einfacher Haupteffekt unter einer Stufe von B.",
+        "Eine spezifische 2×2-Interaktion, mit der man die Interaktion mehrstufiger Faktoren genauer untersucht.",
+        "Ein Kontrast, bei dem ausschließlich die Zellmittelwerte einer einzigen Stufe des Faktors B miteinander verglichen werden, während die übrigen Stufen unberücksichtigt bleiben."
+      ],
+      "c": 2,
+      "e": "Interaktionskontrast: spezifische 2×2-Interaktion (z. B. (a2−a3)×(b1−b4)). (d) beschreibt den einfachen Treatmentkontrast."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wie ist der Wert eines Interaktionskontrasts D definiert?",
+      "opts": [
+        "D = Σc_i·Ā_i (über die Randmittel).",
+        "D = Σc_i·ĀB_ij (innerhalb einer Stufe von B).",
+        "D = MQ_AB/MQ_e, also unmittelbar das Verhältnis der mittleren Interaktionsquadratsumme zur mittleren Fehlerquadratsumme des Gesamtmodells.",
+        "D = ΣΣc_ij·ĀB_ij (Doppelsumme über alle Zellmittel, mit 2×2-Koeffizienten)."
+      ],
+      "c": 3,
+      "e": "Interaktionskontrast: D = ΣΣc_ij·ĀB_ij; QS = n·D²/ΣΣc_ij²; 1 df; F = QS/MQ_e."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was ist ein einfacher Treatmentkontrast?",
+      "opts": [
+        "Ein Kontrast von Zellmittelwerten, die alle zur GLEICHEN Stufe von B gehören.",
+        "Ein Kontrast über die Randmittel beider Faktoren gleichzeitig.",
+        "Eine 2×2-Interaktion.",
+        "Ein Vergleich der Gesamtmittelwerte beider Faktoren, der die einzelnen Faktorstufenkombinationen ausdrücklich nicht berücksichtigt und nur auf den Randmitteln beruht."
+      ],
+      "c": 0,
+      "e": "Einfacher Treatmentkontrast D(A|b_j) = Σc_i·ĀB_ij — ein gerichteter Vergleich der A-Stufen innerhalb EINER Stufe von B."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie viele Freiheitsgrade hat ein einfacher Treatmentkontrast?",
+      "opts": [
+        "p − 1, wie der einfache Haupteffekt.",
+        "Genau einen (wie jeder gerichtete Kontrast).",
+        "(p − 1)(q − 1).",
+        "So viele, wie es Stufen des Faktors B gibt, da der Kontrast für jede einzelne Stufe von B separat aufgestellt und anschließend zu einem Gesamtwert zusammengefasst wird."
+      ],
+      "c": 1,
+      "e": "Ein einfacher Treatmentkontrast ist ein gerichteter Einzelvergleich → df = 1 (anders als der einfache Haupteffekt mit p−1)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wogegen werden alle vier Kontrastarten auf Signifikanz geprüft?",
+      "opts": [
+        "Gegen MQ_AB.",
+        "Gegen die jeweilige Kontrast-Quadratsumme selbst.",
+        "Gegen die Fehlervarianz MQ_e (F = QS/MQ_e bzw. [QS/df]/MQ_e).",
+        "Gegen jeweils unterschiedliche mittlere Quadrate, die sich danach richten, ob der Kontrast einen Haupteffekt oder eine Interaktion betrifft, und für jeden Typ einzeln bestimmt werden müssen."
+      ],
+      "c": 2,
+      "e": "Alle Kontraste werden an MQ_e relativiert. Einzelkontraste haben 1 df (F=QS/MQ_e); der einfache Haupteffekt p−1 df."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welcher der vier ‚Kontraste‘ hat NICHT genau einen Freiheitsgrad?",
+      "opts": [
+        "Der Treatmentkontrast, der als gerichteter Vergleich der Randmittel eines Faktors stets genau eine einzige Differenz zwischen Gruppen abbildet.",
+        "Der Interaktionskontrast.",
+        "Der einfache Treatmentkontrast.",
+        "Der einfache Haupteffekt (df = p − 1)."
+      ],
+      "c": 3,
+      "e": "Drei sind gerichtete Einzelvergleiche (1 df); der einfache Haupteffekt vergleicht p Gruppen → df = p − 1."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Beispiel (a2−a3)×(b1−b4): D = ĀB_21 − ĀB_31 − ĀB_24 + ĀB_34 = 17,9; n=6; ΣΣc²=4; MQ_e=19,15. Wie groß ist F?",
+      "opts": [
+        "≈ 25,1 — denn QS = 6·17,9²/4 ≈ 480,6 und F = 480,6/19,15.",
+        "≈ 17,9, also der Kontrastwert D selbst.",
+        "≈ 480,6, also die Quadratsumme QS_D.",
+        "≈ 1,3, weil die Quadratsumme des Interaktionskontrasts vor der Relativierung an der Fehlervarianz zusätzlich durch die Zahl der Freiheitsgrade der gesamten Interaktion geteilt werden muss."
+      ],
+      "c": 0,
+      "e": "QS = n·D²/ΣΣc² = 6·17,9²/4 ≈ 480,6; F = 480,6/19,15 ≈ 25,1 (1 df)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Warum steht in der QS eines Treatmentkontrasts der Faktor nq, bei den anderen Kontrastarten aber nur n?",
+      "opts": [
+        "Weil Treatmentkontraste grundsätzlich mehr Koeffizienten haben als die übrigen Kontrastarten.",
+        "Weil ein Randmittel Ā_i auf q·n Personen beruht, ein Zellmittel ĀB_ij aber nur auf n.",
+        "Weil nur Treatmentkontraste an MQ_e relativiert werden.",
+        "Weil Treatmentkontraste im Gegensatz zu den übrigen Kontrastarten p−1 Freiheitsgrade besitzen und die Gewichtung diesen erhöhten Freiheitsgraden Rechnung tragen muss."
+      ],
+      "c": 1,
+      "e": "Treatmentkontrast nutzt Randmittel (q·n Personen) → Gewicht nq. Kontraste über Zellmittel (n Personen) → Gewicht n."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wofür braucht man bei Kontrasten eine Scheffé-artige Korrektur (S-Wert)?",
+      "opts": [
+        "Für jeden vorab geplanten orthogonalen Kontrast.",
+        "Nur für den Omnibustest.",
+        "Für a-posteriori-Vergleiche, um das Signifikanzniveau über die vielen möglichen Kontraste hinweg einzuhalten.",
+        "Ausschließlich für Treatmentkontraste, da nur diese sich auf die Randmittel beziehen und deshalb als einzige Kontrastart einer nachträglichen Korrektur des Signifikanzniveaus bedürfen."
+      ],
+      "c": 2,
+      "e": "A-posteriori-Vergleiche brauchen eine Korrektur (Scheffé-artiger S-Wert), damit der Fehler 1. Art über alle möglichen Kontraste ≤ α bleibt."
+    },
+    {
+      "id": "s7q2",
+      "q": "Der kritische S-Wert für a-posteriori-Interaktionskontraste lautet S = ? · F_krit. Welcher Faktor steht vor F?",
+      "opts": [
+        "Die Fehlerfreiheitsgrade pq(n−1), also dieselbe Zahl an Freiheitsgraden, die auch der Nenner des Overall-F-Tests der zweifaktoriellen Varianzanalyse aufweist.",
+        "Die Zahl der Faktorstufen p·q.",
+        "Nur (p − 1).",
+        "Die Freiheitsgrade der gesamten Interaktion: (p − 1)(q − 1)."
+      ],
+      "c": 3,
+      "e": "Scheffé für Interaktionskontraste: S = df_AB·F_{df_AB,df_e;1−α} = (p−1)(q−1)·F_krit (im Beispiel 6·3,12 = 18,72)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Kontrastart entspricht exakt dem Kontrast der einfaktoriellen Varianzanalyse?",
+    "opts": [
+      "Der Treatmentkontrast.",
+      "Der Interaktionskontrast.",
+      "Der einfache Treatmentkontrast.",
+      "Der einfache Haupteffekt, weil er wie eine vollständige einfaktorielle Varianzanalyse alle Stufen eines Faktors gleichzeitig gegeneinander prüft."
+    ],
+    "c": 0,
+    "e": "Der Treatmentkontrast ist identisch zum einfaktoriellen Kontrast (Vergleich von Randmitteln eines Faktors)."
+  },
+  {
+    "id": "bq2",
+    "q": "Ein einfacher Haupteffekt A|b1 ergibt QS = 75,96 (p=3), MQ_e=19,15. Wie groß ist F?",
+    "opts": [
+      "≈ 75,96.",
+      "≈ 1,98 — denn MQ = 75,96/(p−1) = 37,98 und F = 37,98/19,15.",
+      "≈ 3,97, also QS/MQ_e ohne Division durch p−1.",
+      "≈ 0,5, weil die Quadratsumme des einfachen Haupteffekts zunächst durch die Gesamtzahl der untersuchten Personen und erst danach durch die Fehlervarianz geteilt werden muss."
+    ],
+    "c": 1,
+    "e": "Einfacher Haupteffekt: F = [QS/(p−1)]/MQ_e = (75,96/2)/19,15 = 37,98/19,15 ≈ 1,98."
+  },
+  {
+    "id": "bq3",
+    "q": "Die Koeffizienten (a2−a3)×(b1−b4) ergeben für den Interaktionskontrast welche Zell-Vorzeichen?",
+    "opts": [
+      "Alle vier beteiligten Zellen positiv.",
+      "ĀB_21 und ĀB_31 positiv, ĀB_24 und ĀB_34 negativ.",
+      "ĀB_21 (+), ĀB_31 (−), ĀB_24 (−), ĀB_34 (+) — das Produkt der Vorzeichen der beiden Einzelkontraste.",
+      "Die Vorzeichen ergeben sich allein aus dem ersten Faktor, sodass alle Zellen der Stufe a2 positiv und alle Zellen der Stufe a3 negativ gewichtet werden, unabhängig von der Stufe des Faktors B."
+    ],
+    "c": 2,
+    "e": "Interaktionskontrast = Produkt der Einzelkontraste: (a2−a3) → +/− für a2/a3, (b1−b4) → +/− für b1/b4 → ĀB_21(+), ĀB_31(−), ĀB_24(−), ĀB_34(+)."
+  },
+  {
+    "id": "bq4",
+    "q": "Ein einfacher Treatmentkontrast D_1(A|b1) = 2·ĀB_11 − ĀB_21 − ĀB_31. Worauf bezieht er sich?",
+    "opts": [
+      "Auf die Randmittel des Faktors A, die jeweils über alle vier Stufen des Faktors B hinweg gemittelt in den Vergleich eingehen.",
+      "Auf eine 2×2-Interaktion zweier Faktoren.",
+      "Auf den Gesamtmittelwert der Untersuchung.",
+      "Auf die Zellmittelwerte der drei A-Stufen — alle innerhalb der Stufe b1."
+    ],
+    "c": 3,
+    "e": "Einfacher Treatmentkontrast: Vergleich der A-Zellmittel innerhalb EINER B-Stufe (hier b1): D = Σc_i·ĀB_i1."
+  },
+  {
+    "id": "bq5",
+    "q": "Was unterscheidet einen einfachen Haupteffekt von einem einfachen Treatmentkontrast?",
+    "opts": [
+      "Der einfache Haupteffekt vergleicht alle p A-Stufen unter b_j (df = p−1); der einfache Treatmentkontrast ist ein gerichteter Einzelvergleich daraus (df = 1).",
+      "Beide sind exakt identisch.",
+      "Der einfache Haupteffekt bezieht sich auf Randmittel, der einfache Treatmentkontrast auf den Gesamtmittelwert.",
+      "Der einfache Haupteffekt prüft eine Interaktion, während der einfache Treatmentkontrast ausschließlich für die Analyse von Haupteffekten über beide Faktoren hinweg eingesetzt wird."
+    ],
+    "c": 0,
+    "e": "Beide arbeiten innerhalb einer B-Stufe; der einfache Haupteffekt ist die ‚ganze ANOVA‘ (p−1 df), der einfache Treatmentkontrast ein einzelner Kontrast daraus (1 df)."
+  },
+  {
+    "id": "bq6",
+    "q": "Alle Kontrast-Prüfgrößen dieser VL haben gemeinsam, dass sie …",
+    "opts": [
+      "… gegen MQ_AB relativiert werden.",
+      "… an der Fehlervarianz MQ_e relativiert werden.",
+      "… ohne jede Quadratsumme auskommen.",
+      "… stets gegen die mittlere Quadratsumme desjenigen Haupteffekts geprüft werden, auf den sich der jeweilige Kontrast inhaltlich bezieht."
+    ],
+    "c": 1,
+    "e": "Alle vier Kontrastarten werden gegen MQ_e geprüft (die Fehlervarianz aus dem vollen Modell)."
+  },
+  {
+    "id": "bq7",
+    "q": "Der A-posteriori-S-Wert für einfache Haupteffekte ist S = df1·F/df3 mit df1 = (p−1)q. Woraus setzt sich df1 zusammen?",
+    "opts": [
+      "Aus den Fehlerfreiheitsgraden allein.",
+      "Aus p − 1 allein.",
+      "Aus den Zähler-df des Haupteffekts plus denen der Interaktion: (p−1) + (p−1)(q−1) = (p−1)q.",
+      "Aus der Gesamtzahl aller Faktorstufenkombinationen abzüglich eins, also der Zahl der Freiheitsgrade, die der gesamten Varianzanalyse insgesamt zur Verfügung stehen."
+    ],
+    "c": 2,
+    "e": "df1 = (p−1) + (p−1)(q−1) = (p−1)q — Haupteffekt + Interaktion zusammen (Scheffé für einfache Haupteffekte)."
+  },
+  {
+    "id": "bq8",
+    "q": "Welche Kontrastart nutzt in ihrer Quadratsumme den Gewichtungsfaktor nq (statt n)?",
+    "opts": [
+      "Der Interaktionskontrast, da er als Doppelsumme über alle Zellmittelwerte gebildet wird und deshalb mit der größten Personenzahl des gesamten Versuchsplans gewichtet werden muss.",
+      "Der einfache Treatmentkontrast.",
+      "Der einfache Haupteffekt.",
+      "Der Treatmentkontrast — weil er auf Randmitteln beruht (q·n Personen je Randmittel)."
+    ],
+    "c": 3,
+    "e": "Nur der Treatmentkontrast nutzt nq (Randmittel = q·n Personen). Die zellmittel-basierten Kontraste nutzen n."
+  }
+];
+
+var corrCorrect = {
+  "ka": "haupteffekt",
+  "kb": "haupteffekt",
+  "kc": "interaktion",
+  "kd": "interaktion",
+  "qa": "1",
+  "qb": "p1",
+  "qc": "1",
+  "qd": "1",
+  "ga": "nq",
+  "gb": "n",
+  "gc": "n",
+  "gd": "n"
+};
+var corrExpl = {
+  "ka": "Treatmentkontraste analysieren genauer die Haupteffekte (Randmittel eines Faktors).",
+  "kb": "Einfache Haupteffekte gehören zur Haupteffekt-Analyse (A unter einer Stufe von B).",
+  "kc": "Interaktionskontraste analysieren genauer die Interaktion (2×2).",
+  "kd": "Einfache Treatmentkontraste dienen der genaueren Analyse von Interaktionen.",
+  "qa": "Der Treatmentkontrast ist ein gerichteter Einzelvergleich → 1 df.",
+  "qb": "Der einfache Haupteffekt vergleicht p Gruppen unter einer B-Stufe → df = p − 1.",
+  "qc": "Der Interaktionskontrast (2×2) ist ein Einzelvergleich → 1 df.",
+  "qd": "Der einfache Treatmentkontrast ist ein gerichteter Einzelvergleich → 1 df.",
+  "ga": "Treatmentkontrast über Randmittel (q·n Personen) → Gewicht nq.",
+  "gb": "Einfacher Haupteffekt über Zellmittel (n Personen) → Gewicht n.",
+  "gc": "Interaktionskontrast über Zellmittel (n Personen) → Gewicht n.",
+  "gd": "Einfacher Treatmentkontrast über Zellmittel (n Personen) → Gewicht n."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Kontrastarten-Simulator (vl06): vier Arten zweifaktorieller Kontraste */
+var kzData = {
+  tk: {t:'Treatmentkontrast', d:'Kontrast über die Stufen EINES Faktors, gemittelt über die Stufen des anderen — quasi ein Kontrast auf dem Haupteffekt.'},
+  she:{t:'Einfacher Haupteffekt (simple main effect)', d:'Die Wirkung eines Faktors innerhalb EINER festen Stufe des anderen Faktors (nicht gemittelt).'},
+  ik: {t:'Interaktionskontrast', d:'Vergleicht, ob sich ein Treatmentkontrast über die Stufen des anderen Faktors UNTERSCHEIDET — ein gezielter Test der Interaktion.'},
+  etk:{t:'Einfacher Treatmentkontrast', d:'Ein Treatmentkontrast, angewandt innerhalb einer festen Stufe des anderen Faktors (Kombination aus simple main effect und Kontrast).'}
+};
+function kzSet(k){
+  ['tk','she','ik','etk'].forEach(function(x){ var b=document.getElementById('kz-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('kz-out'); if(!o) return;
+  var d=kzData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  kzSet('tk');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

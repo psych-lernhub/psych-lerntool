@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M5 · VL12 Beziehungen & Kultur</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m5-vl12
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Sternberg-Dreieck-Simulator (VL12) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-lbl{font-size:.78rem;color:var(--text2);margin:2px 0 6px;font-weight:600}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M5 · VL12 Beziehungen & Kultur</h1>
+<p class="page-sub">Sozialpsychologie · Dr. Samia C. Akhter-Khan · Prüfung 14.07.2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Was ist Cyberball, und was zeigt die Forschung mit diesem Paradigma? · 2. Welche Bindungsstile gibt es, und was zeichnet sie jeweils aus? · 3. Die sozialpsychologische Forschung ist „WEIRD“ — was bedeutet das, und welche Probleme ergeben sich daraus?
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Warum Beziehungen?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② WEIRD-Problem</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Partizipative Methoden</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Einsamkeit</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Armut & Struktur</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Nähe, Unterstützung, Spaß</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Intimität & Bindung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Generativität</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">⑨ Respekt & Cyberball</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(10)" id="nb10">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Warum Beziehungen? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Warum soziale Beziehungen? + Grundbegriffe</div>
+    <div class="sec-lz">Überleben & Gesundheit; Isolation/Einsamkeit/Verbundenheit/soziales Kapital</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Sind soziale Beziehungen nur ein nettes Extra — oder überlebenswichtig?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Überlebenswichtig. Soziale Isolation ist ein Sterblichkeitsrisiko in der Größenordnung von starkem Rauchen, und die WHO zählt <strong>soziales</strong> Wohlbefinden ausdrücklich zur Gesundheit. Vier Grundbegriffe muss man dabei sauber trennen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vier Grundbegriffe</div>
+    <strong>Soziale Isolation</strong> = objektiv wenige Kontakte. <strong>Einsamkeit</strong> = subjektives Gefühl mangelnder Beziehungen. <strong>Soziale Verbundenheit</strong> = objektive Kontakte + subjektives Erleben. <strong>Soziales Kapital</strong> = Ressourcen, auf die man über Beziehungen zugreifen kann.
+  </div>
+  <div class="card">
+    <div class="card-title">Soziales Kapital: drei Typen (Putnam)</div>
+    <strong>Bonding</strong> — Beziehungen zwischen <em>ähnlichen</em> Menschen. <strong>Bridging</strong> — Beziehungen zwischen <em>unterschiedlichen</em> Menschen. <strong>Linking</strong> — Beziehungen <em>über soziale Hierarchien</em> hinweg.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum lebenswichtig</div>
+    Beziehungen sichern <strong>Überleben</strong> (auch im Tierreich), fördern <strong>physische und mentale Gesundheit</strong> und stärken <strong>gesellschaftliche Resilienz</strong>. Netzwerkeffekte zeigen: Sogar Einsamkeit kann sich „ansteckend" über Netzwerke ausbreiten. Die Kernzahlen: Soziale Isolation ist ein Sterblichkeitsrisiko vergleichbar mit <strong>15 Zigaretten am Tag</strong>; sozial Eingebundene hatten in der klassischen Längsschnittstudie nach 9 Jahren eine <strong>2–3-mal höhere Überlebenswahrscheinlichkeit</strong>. Beziehungsmangel sagt zudem Schlaganfall/Herzinfarkt vorher, und anhaltende Einsamkeit <strong>verdoppelt</strong> das Demenzrisiko.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher Typ sozialen Kapitals?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Beziehung dem richtigen Typ zu</div>
+    <div class="corr-item" id="sk0">Enge Freunde mit gleicher Herkunft und ähnlichem Status.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sk0',this,'bonding')">Bonding</button>
+        <button class="corr-btn" onclick="checkCorr('sk0',this,'bridging')">Bridging</button>
+        <button class="corr-btn" onclick="checkCorr('sk0',this,'linking')">Linking</button>
+      </div><div class="corr-fb" id="sk0-fb"></div>
+    </div>
+    <div class="corr-item" id="sk1">Kontakte zu Menschen aus ganz anderen Milieus.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sk1',this,'bonding')">Bonding</button>
+        <button class="corr-btn" onclick="checkCorr('sk1',this,'bridging')">Bridging</button>
+        <button class="corr-btn" onclick="checkCorr('sk1',this,'linking')">Linking</button>
+      </div><div class="corr-fb" id="sk1-fb"></div>
+    </div>
+    <div class="corr-item" id="sk2">Eine Verbindung zu einer einflussreichen Behörde, über Hierarchien hinweg.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sk2',this,'bonding')">Bonding</button>
+        <button class="corr-btn" onclick="checkCorr('sk2',this,'bridging')">Bridging</button>
+        <button class="corr-btn" onclick="checkCorr('sk2',this,'linking')">Linking</button>
+      </div><div class="corr-fb" id="sk2-fb"></div>
+    </div>
+    <div class="corr-item" id="sk3">Eine Selbsthilfegruppe von Menschen mit derselben Erkrankung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('sk3',this,'bonding')">Bonding</button>
+        <button class="corr-btn" onclick="checkCorr('sk3',this,'bridging')">Bridging</button>
+        <button class="corr-btn" onclick="checkCorr('sk3',this,'linking')">Linking</button>
+      </div><div class="corr-fb" id="sk3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② WEIRD-Problem ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Kulturvergleich & das WEIRD-Problem</div>
+    <div class="sec-lz">Lernfrage 3: WEIRD; Kultur ≠ Land; Individualismus/Kollektivismus</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gilt, was die Psychologie über „den Menschen" weiß, wirklich für alle Menschen weltweit?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Nur eingeschränkt. Rund 96 % der Forschung stammt aus <strong>WEIRD</strong>-Ländern (Western, Educated, Industrialized, Rich, Democratic), in denen nur etwa 12 % der Menschheit leben. Zudem ist <strong>Kultur ≠ Land</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das WEIRD-Problem</div>
+    <strong>WEIRD</strong> = Western, Educated, Industrialized, Rich, Democratic. ~96 % der psychologischen Forschung stammt aus solchen Ländern, in denen nur ~12 % der Weltbevölkerung leben → Befunde gelten oft fälschlich als universell.
+  </div>
+  <div class="card">
+    <div class="card-title">Kultur ≠ Land</div>
+    Ein Land kann viele Kulturen und ethnische Gruppen umfassen (z. B. Nachkriegsdeutschland mit vier Besatzungszonen, Myanmar mit zahlreichen Ethnien). Auch die grobe Einteilung „WEIRD vs. non-WEIRD" wird der Vielfalt nicht gerecht.
+  </div>
+  <div class="card">
+    <div class="card-title">Konstrukte verschieben sich zwischen Kulturen</div>
+    Messinstrumente lassen sich nicht einfach 1:1 übersetzen: „<strong>Wahre Freundschaft</strong>" meint in Japan <em>Zugehörigkeit</em>, in Deutschland <em>emotionale Nähe</em>. <strong>Depression</strong> zeigt in nicht-westlichen Stichproben ein anderes Symptomprofil — <em>somatische</em> Beschwerden (Kopf-/Körperschmerzen, „Herzprobleme") ranken höher, die Rangfolge weicht von den DSM-Kriterien ab. Und <strong>Einsamkeit</strong> wird in manchen asiatischen Regionen eher mit <em>Alleinsein</em> gleichgesetzt, in afrikanischen Ländern oft als davon <em>distinkt</em> verstanden. Faustregel: Bei unbekanntem Kontext zuerst <strong>qualitativ</strong> forschen — dann adaptiert und validiert messen.
+  </div>
+  <div class="card">
+    <div class="card-title">Individualismus vs. Kollektivismus</div>
+    <strong>Individualismus</strong> betont Autonomie und Selbstverwirklichung, <strong>Kollektivismus</strong> Gruppenharmonie und kollektive Verpflichtungen — beides sind Dimensionen, keine starren Typen. Westliche Werte sind nicht automatisch universell oder exklusiv westlich.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das WEIRD-Problem Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Warum WEIRD-Stichproben ein Problem sind</div>
+    <div id="weird">
+      <div class="step-item"><strong>Schritt 1:</strong> WEIRD steht für Western, Educated, Industrialized, Rich, Democratic.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Rund 96 % der psychologischen Forschung stammt aus solchen Ländern …</div>
+      <div class="step-item"><strong>Schritt 3:</strong> … obwohl dort nur etwa 12 % der Weltbevölkerung leben.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Problem: Befunde aus WEIRD-Stichproben gelten oft fälschlich als universell.</div>
+      <div class="step-item"><strong>Schritt 5:</strong> Zudem ist „Kultur" nicht gleich „Land" — auch die Einteilung WEIRD/non-WEIRD ist zu grob.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'weird')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Partizipative Methoden ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Partizipative Methoden</div>
+    <div class="sec-lz">Reflexivität & Positionality; PAR & Photovoice (Amanane)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie gewinnt man faire, gültige Erkenntnisse über andere Kulturen, ohne ihnen die eigene Brille überzustülpen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Durch <strong>Reflexivität</strong> und <strong>Positionality</strong> plus <strong>partizipative Methoden</strong> (PAR, Photovoice), die Betroffene als Co-Forschende einbeziehen, statt nur über sie zu forschen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Reflexivität &amp; Positionality</div>
+    <strong>Reflexivität</strong> = das fortlaufende Hinterfragen der eigenen Vorannahmen und ihres Einflusses auf die Forschung. <strong>Positionality</strong> = die eigene soziale Position (Herkunft, Geschlecht, Macht) und wie sie den Forschungsprozess prägt. Beide sind methodische Pflichten, keine Optionen.
+  </div>
+  <div class="card">
+    <div class="card-title">PAR &amp; Photovoice</div>
+    <strong>Participatory Action Research (PAR)</strong> bezieht gewöhnliche Menschen als <em>Co-Forschende</em> in alle Phasen ein und verschiebt so Machtdynamiken. <strong>Photovoice</strong> kombiniert Fotos und Narrative, damit Betroffene ihre Lebenswelt selbst sichtbar machen.
+  </div>
+  <div class="card">
+    <div class="card-title">Beispiel: Amanane</div>
+    Eine Photovoice-Studie mit älteren Myanmar-Migrant*innen reduzierte Einsamkeit: Das gemeinsame Fotografieren erleichterte das Öffnen und Kennenlernen — „Ohne Kamera ist es schwer, ins Gespräch zu kommen."
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Welcher methodische Begriff?</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Beschreibung dem richtigen Begriff zu</div>
+    <div class="corr-item" id="pm0">Das fortlaufende Hinterfragen der eigenen Vorannahmen und ihres Einflusses.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('pm0',this,'reflexivitaet')">Reflexivität</button>
+        <button class="corr-btn" onclick="checkCorr('pm0',this,'positionality')">Positionality</button>
+        <button class="corr-btn" onclick="checkCorr('pm0',this,'par')">PAR</button>
+        <button class="corr-btn" onclick="checkCorr('pm0',this,'photovoice')">Photovoice</button>
+      </div><div class="corr-fb" id="pm0-fb"></div>
+    </div>
+    <div class="corr-item" id="pm1">Die eigene soziale Position (Herkunft, Geschlecht, Macht) und ihr Einfluss.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('pm1',this,'reflexivitaet')">Reflexivität</button>
+        <button class="corr-btn" onclick="checkCorr('pm1',this,'positionality')">Positionality</button>
+        <button class="corr-btn" onclick="checkCorr('pm1',this,'par')">PAR</button>
+        <button class="corr-btn" onclick="checkCorr('pm1',this,'photovoice')">Photovoice</button>
+      </div><div class="corr-fb" id="pm1-fb"></div>
+    </div>
+    <div class="corr-item" id="pm2">Gewöhnliche Menschen als Co-Forschende in allen Phasen einbeziehen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('pm2',this,'reflexivitaet')">Reflexivität</button>
+        <button class="corr-btn" onclick="checkCorr('pm2',this,'positionality')">Positionality</button>
+        <button class="corr-btn" onclick="checkCorr('pm2',this,'par')">PAR</button>
+        <button class="corr-btn" onclick="checkCorr('pm2',this,'photovoice')">Photovoice</button>
+      </div><div class="corr-fb" id="pm2-fb"></div>
+    </div>
+    <div class="corr-item" id="pm3">Fotos und Narrative kombinieren, um die Lebenserfahrung sichtbar zu machen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('pm3',this,'reflexivitaet')">Reflexivität</button>
+        <button class="corr-btn" onclick="checkCorr('pm3',this,'positionality')">Positionality</button>
+        <button class="corr-btn" onclick="checkCorr('pm3',this,'par')">PAR</button>
+        <button class="corr-btn" onclick="checkCorr('pm3',this,'photovoice')">Photovoice</button>
+      </div><div class="corr-fb" id="pm3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Einsamkeit ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Einsamkeit — Definition & Kernmechanismus</div>
+    <div class="sec-lz">Einsamkeit ≠ Alleinsein; emotionale/soziale Einsamkeit; Diskrepanz-Mechanismus</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Kann man mitten unter Menschen einsam sein — und ganz allein, ohne sich einsam zu fühlen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Ja, beides. Einsamkeit ist das <strong>subjektive</strong> Gefühl mangelnder Beziehungsqualität/-quantität — nicht objektives Alleinsein. Sie entsteht aus der <strong>Diskrepanz</strong> zwischen gewünschten und tatsächlichen Beziehungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Einsamkeit ≠ Alleinsein</div>
+    Einsamkeit ist <strong>subjektiv</strong>, kein klinisches Syndrom, nicht auf alte Menschen beschränkt und kein rein westliches Phänomen — sie ist <strong>global</strong>. Alleinsein dagegen ist ein objektiver Zustand.
+  </div>
+  <div class="card">
+    <div class="card-title">Emotionale vs. soziale Einsamkeit</div>
+    Mangelnde <strong>Qualität</strong> der Beziehungen → <em>emotionale</em> Einsamkeit. Mangelnde <strong>Quantität</strong> → <em>soziale</em> Einsamkeit.
+  </div>
+  <div class="card">
+    <div class="card-title">Kernmechanismus</div>
+    Erwartung + tatsächliche Beziehungen → <strong>Bewertung</strong> → Einsamkeit. Einsamkeit ist ein <strong>normales Signal</strong> (vergleichbar mit Hunger oder Durst), das uns motivieren kann, an unseren Beziehungen zu arbeiten.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Einsamkeit oder Alleinsein?</div>
+  <div class="card">
+    <div class="card-title">Ordne jedes Szenario richtig zu</div>
+    <div class="corr-item" id="eins0">Eine Person ist von vielen umgeben, fühlt sich aber unverstanden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('eins0',this,'einsamkeit')">Einsamkeit (subjektiv)</button>
+        <button class="corr-btn" onclick="checkCorr('eins0',this,'alleinsein')">Alleinsein (ohne Einsamkeit)</button>
+      </div><div class="corr-fb" id="eins0-fb"></div>
+    </div>
+    <div class="corr-item" id="eins1">Jemand verbringt gern einen Abend allein und genießt es.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('eins1',this,'einsamkeit')">Einsamkeit (subjektiv)</button>
+        <button class="corr-btn" onclick="checkCorr('eins1',this,'alleinsein')">Alleinsein (ohne Einsamkeit)</button>
+      </div><div class="corr-fb" id="eins1-fb"></div>
+    </div>
+    <div class="corr-item" id="eins2">Eine Witwe vermisst schmerzlich die eine enge Vertraute.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('eins2',this,'einsamkeit')">Einsamkeit (subjektiv)</button>
+        <button class="corr-btn" onclick="checkCorr('eins2',this,'alleinsein')">Alleinsein (ohne Einsamkeit)</button>
+      </div><div class="corr-fb" id="eins2-fb"></div>
+    </div>
+    <div class="corr-item" id="eins3">Ein Mönch lebt zurückgezogen, fühlt sich aber tief verbunden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('eins3',this,'einsamkeit')">Einsamkeit (subjektiv)</button>
+        <button class="corr-btn" onclick="checkCorr('eins3',this,'alleinsein')">Alleinsein (ohne Einsamkeit)</button>
+      </div><div class="corr-fb" id="eins3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Armut & Struktur ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Einsamkeit, Armut & Struktur</div>
+    <div class="sec-lz">LMICs; Teufelskreis (Social Causation/Drift); Interventionen</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ist Einsamkeit reine Privatsache — oder hängt sie auch an Geld und gesellschaftlicher Struktur?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Stark strukturell: In einkommensschwachen Ländern ist Einsamkeit häufiger. Armut und Einsamkeit bilden einen <strong>Teufelskreis</strong> — <strong>Social Causation</strong> (Armut → Einsamkeit) und <strong>Social Drift</strong> (Einsamkeit → Armut) verstärken sich.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Einsamkeit &amp; Einkommen</div>
+    Je geringer das Einkommensniveau eines Landes, desto höher die Einsamkeit. Gründe in einkommensschwachen Ländern (LMICs): Armut, Stigma, politischer Konflikt, Klimawandel und Migration — die „sozialen Determinanten" psychischer Gesundheit.
+  </div>
+  <div class="card">
+    <div class="card-title">Der Teufelskreis</div>
+    <strong>Social Causation:</strong> Armut führt zu Einsamkeit (eingeschränkte Teilhabe, Ausgrenzung, Migration). <strong>Social Drift:</strong> Einsamkeit führt über Rückzug, Stigma und psychische Belastung zurück in die Armut. Beides verstärkt sich gegenseitig.
+  </div>
+  <div class="card">
+    <div class="card-title">Interventionen</div>
+    Der Kreis lässt sich an mehreren Stellen unterbrechen: gegen Armut (z. B. Geldtransfers, Kredite, Asset-Förderung) und gegen psychische Belastung (z. B. Psychoedukation, Psychotherapie) — strukturelle <em>und</em> individuelle Ebene.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Der Teufelskreis Schritt für Schritt</div>
+  <div class="card">
+    <div class="card-title">Wie Armut und Einsamkeit sich verstärken</div>
+    <div id="kreis">
+      <div class="step-item"><strong>Schritt 1:</strong> Armut schränkt die soziale Teilhabe ein (Geld, Infrastruktur, Stigma).</div>
+      <div class="step-item"><strong>Schritt 2 — Social Causation:</strong> Diese Einschränkung führt zu Einsamkeit.</div>
+      <div class="step-item"><strong>Schritt 3 — Social Drift:</strong> Einsamkeit führt über Rückzug und psychische Belastung zurück in die Armut.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Beides verstärkt sich — Interventionen können an mehreren Stellen ansetzen (Geldtransfers, psychische Hilfe).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'kreis')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Nähe, Unterstützung, Spaß ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Beziehungserwartungen: Nähe, Unterstützung, Spaß</div>
+    <div class="sec-lz">SRE-Framework; Mere Exposure, Similarity; austausch- vs. gemeinschaftsorientiert</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum werden wir oft ausgerechnet mit den Menschen Freunde, die zufällig neben uns sitzen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Wegen <strong>Nähe</strong> (Mere-Exposure-Effekt: wir mögen, was wir öfter sehen) und <strong>Ähnlichkeit</strong>. Das SRE-Framework nennt sechs Beziehungserwartungen — hier: Nähe, Unterstützung und Spaß.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">SRE-Framework — sechs Erwartungen</div>
+    Menschen stellen sechs Erwartungen an ihre Beziehungen: <strong>Nähe, Unterstützung, Intimität, Spaß, Generativität, Respekt</strong>. Werden sie nicht erfüllt, kann Einsamkeit entstehen.
+  </div>
+  <div class="card">
+    <div class="card-title">Nähe: Mere Exposure &amp; Ähnlichkeit</div>
+    <strong>Mere-Exposure-Effekt:</strong> Nähe erhöht Vertrautheit und damit Zuneigung (Sitznachbarn werden Freunde). <strong>Similarity-Attraction:</strong> Wir mögen Ähnliche — dafür gibt es mehr Evidenz als für „Gegensätze ziehen sich an".
+  </div>
+  <div class="card">
+    <div class="card-title">Unterstützung &amp; Spaß</div>
+    <strong>Unterstützung:</strong> emotional vs. instrumentell; austausch- vs. gemeinschaftsorientierte Beziehungen. <strong>Spaß:</strong> Theorie der Selbsterweiterung — neue Erlebnisse halten Beziehungen lebendig, Langeweile vermeiden.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Zwei Beziehungstypen im Vergleich</div>
+  <div class="card">
+    <div class="card-title">Austausch- vs. gemeinschaftsorientiert — umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="austausch" onclick="switchTab(this,'bezieh')">Austauschorientiert</button>
+      <button class="tab-btn" data-tab="gemein" onclick="switchTab(this,'bezieh')">Gemeinschaftsorientiert</button>
+    </div>
+    <div class="tab-group" data-group="bezieh">
+      <div class="tab-content active" data-tab="austausch">
+        <strong>Prinzip:</strong> Geben und Nehmen werden aufgerechnet.<br>
+        <strong>Ziel:</strong> eine ausgeglichene Bilanz.<br>
+        <strong>Typisch:</strong> eher formelle oder neue Beziehungen.
+      </div>
+      <div class="tab-content" data-tab="gemein">
+        <strong>Prinzip:</strong> man richtet sich nach den Bedürfnissen des anderen.<br>
+        <strong>Ziel:</strong> dem anderen gerecht werden, nicht die Bilanz.<br>
+        <strong>Typisch:</strong> enge, vertraute Beziehungen.
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Intimität & Bindung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Intimität: Bindung, Liebe & Dating</div>
+    <div class="sec-lz">Lernfrage 2: Bindungsstile; Dreieckstheorie; Selbstenthüllung; Online-Dating</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum gehen manche Menschen leicht Nähe ein, andere klammern ängstlich und wieder andere halten lieber Abstand?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Wegen unterschiedlicher <strong>Bindungsstile</strong>: <strong>sicher</strong>, <strong>ängstlich/ambivalent</strong> und <strong>vermeidend</strong>. Sie werden früh erlernt und prägen vor allem unsere romantischen Beziehungen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bindungstheorie &amp; die drei Stile</div>
+    Wir erlernen Bindung von klein auf. <strong>Sicher:</strong> Nähe fällt leicht, wenig Verlustangst. <strong>Ängstlich/ambivalent:</strong> starker Wunsch nach Nähe, aber Angst, nicht genug geliebt/verlassen zu werden. <strong>Vermeidend:</strong> Wunsch nach Distanz, Unbehagen bei zu viel Nähe.
+  </div>
+  <div class="card">
+    <div class="card-title">Dreieckstheorie der Liebe</div>
+    Drei Komponenten: <strong>emotionale Nähe (Intimität)</strong>, <strong>Leidenschaft</strong> und <strong>Festlegung (Commitment)</strong>. Ihre Kombinationen ergeben Liebesformen: <strong>Mögen</strong> (nur Nähe) · <strong>Vernarrtheit</strong> (nur Leidenschaft) · <strong>leere Liebe</strong> (nur Festlegung) · <strong>romantische Liebe</strong> (Nähe + Leidenschaft) · <strong>kameradschaftliche Liebe</strong> (Nähe + Festlegung) · <strong>alberne Liebe</strong> (Leidenschaft + Festlegung) — und alle drei zusammen die <strong>vollkommene Liebe</strong>. (Probier alle Kombinationen im Simulator unten.)
+  </div>
+  <div class="card">
+    <div class="card-title">Selbstenthüllung &amp; Online-Dating</div>
+    <strong>Selbstenthüllung</strong> (sich öffnen, reziprok) baut Intimität auf. <strong>Online-Dating</strong> überspringt dynamische Prozesse; Algorithmen können sexuellen Rassismus reproduzieren — ein guter Match garantiert keine gute Langzeitbeziehung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Die drei Bindungsstile</div>
+  <div class="card">
+    <div class="card-title">Umschalten und vergleichen</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="sicher" onclick="switchTab(this,'bindung')">Sicher</button>
+      <button class="tab-btn" data-tab="aengstlich" onclick="switchTab(this,'bindung')">Ängstlich/ambivalent</button>
+      <button class="tab-btn" data-tab="vermeidend" onclick="switchTab(this,'bindung')">Vermeidend</button>
+    </div>
+    <div class="tab-group" data-group="bindung">
+      <div class="tab-content active" data-tab="sicher">
+        <strong>Erleben:</strong> Nähe fällt leicht, wird als angenehm erlebt.<br>
+        <strong>Angst:</strong> wenig Angst, verlassen zu werden.<br>
+        <strong>Folge:</strong> günstigster Stil für intime, stabile Beziehungen.
+      </div>
+      <div class="tab-content" data-tab="aengstlich">
+        <strong>Erleben:</strong> starker Wunsch nach enger Bindung.<br>
+        <strong>Angst:</strong> große Furcht, nicht genug geliebt oder verlassen zu werden.<br>
+        <strong>Folge:</strong> Klammern, ständige Rückversicherung.
+      </div>
+      <div class="tab-content" data-tab="vermeidend">
+        <strong>Erleben:</strong> Wunsch nach Distanz.<br>
+        <strong>Angst:</strong> Unbehagen/Nervosität bei zu viel Nähe und Vertrauen.<br>
+        <strong>Folge:</strong> Rückzug, Vermeiden von Abhängigkeit.
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎛️ Simulator: Das Liebes-Dreieck</div>
+    <div class="sim-box">
+      <div class="sim-lbl">Schalte die drei Komponenten an oder aus</div>
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="lv-n" onclick="lvSet('n')">emotionale Nähe</button>
+        <button class="sim-tbtn" id="lv-l" onclick="lvSet('l')">Leidenschaft</button>
+        <button class="sim-tbtn" id="lv-f" onclick="lvSet('f')">Festlegung</button>
+      </div>
+      <div class="sim-verdict" id="lv-out"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Generativität ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Generativität</div>
+    <div class="sec-lz">SST, Ageism, Ibasho-Programm; prosoziales Verhalten im Kulturvergleich</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was treibt Menschen — gerade im Alter — dazu, etwas für andere und für künftige Generationen zu tun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Generativität</strong> — der Wunsch, beizutragen und weiterzugeben. Sie hängt konsistent mit geringerer Einsamkeit zusammen und lässt sich gezielt fördern (z. B. Ibasho-Programm).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Generativität &amp; sozioemotionale Selektivität</div>
+    <strong>Generativität</strong> ist der Wunsch, etwas für andere und kommende Generationen beizutragen. Je näher man das Lebensende wahrnimmt, desto mehr investiert man in bedeutsame Beziehungen und prosoziales Handeln (sozioemotionale Selektivität).
+  </div>
+  <div class="card">
+    <div class="card-title">Ageism als Hürde</div>
+    <strong>Ageism</strong> (Altersdiskriminierung) und das „Defizit-Modell" des demografischen Wandels behindern Generativität im Alter. Gegenentwurf: ein „Stärken-basiertes" Modell, das Beitragsmöglichkeiten schafft.
+  </div>
+  <div class="card">
+    <div class="card-title">Ibasho-Programm</div>
+    Ein von älteren Menschen <strong>selbst gestalteter</strong> Gemeinschaftsort. Teilnehmende zeigen mehr Selbstwirksamkeit, mehr Freundschaften und ein stärkeres Zugehörigkeitsgefühl — auf den Philippinen zeigte sich Stärkung von Bonding-, in Nepal von Bridging-Sozialkapital.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Generativität zuordnen</div>
+  <div class="card">
+    <div class="card-title">Ordne jede Aussage dem passenden Begriff zu</div>
+    <div class="corr-item" id="gen0">Der Wunsch, Wissen und Fürsorge an Jüngere weiterzugeben.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('gen0',this,'generativitaet')">Generativität</button>
+        <button class="corr-btn" onclick="checkCorr('gen0',this,'ageism')">Ageism</button>
+        <button class="corr-btn" onclick="checkCorr('gen0',this,'ibasho')">Ibasho-Programm</button>
+      </div><div class="corr-fb" id="gen0-fb"></div>
+    </div>
+    <div class="corr-item" id="gen1">Altersdiskriminierung als Hürde für Beiträge im Alter.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('gen1',this,'generativitaet')">Generativität</button>
+        <button class="corr-btn" onclick="checkCorr('gen1',this,'ageism')">Ageism</button>
+        <button class="corr-btn" onclick="checkCorr('gen1',this,'ibasho')">Ibasho-Programm</button>
+      </div><div class="corr-fb" id="gen1-fb"></div>
+    </div>
+    <div class="corr-item" id="gen2">Ein Gemeinschaftsort, den Ältere selbst gestalten und betreiben.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('gen2',this,'generativitaet')">Generativität</button>
+        <button class="corr-btn" onclick="checkCorr('gen2',this,'ageism')">Ageism</button>
+        <button class="corr-btn" onclick="checkCorr('gen2',this,'ibasho')">Ibasho-Programm</button>
+      </div><div class="corr-fb" id="gen2-fb"></div>
+    </div>
+    <div class="corr-item" id="gen3">Ehrenamt und Enkelbetreuung, verbunden mit weniger Einsamkeit.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('gen3',this,'generativitaet')">Generativität</button>
+        <button class="corr-btn" onclick="checkCorr('gen3',this,'ageism')">Ageism</button>
+        <button class="corr-btn" onclick="checkCorr('gen3',this,'ibasho')">Ibasho-Programm</button>
+      </div><div class="corr-fb" id="gen3-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — ⑨ Respekt & Cyberball ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">⑨ Respekt, Ausschluss & Cyberball</div>
+    <div class="sec-lz">Lernfrage 1: Cyberball & sozialer Ausschluss; Respekt kulturabhängig</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum tut es so weh, beim Ballspiel plötzlich übergangen zu werden — selbst am Computer und mit Fremden?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq8')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq8">Weil sozialer <strong>Ausschluss</strong> das Grundbedürfnis nach <strong>Respekt und Zugehörigkeit</strong> verletzt. Das <strong>Cyberball</strong>-Paradigma macht das messbar: Schon minimaler Ausschluss aktiviert soziale Hirnregionen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Respekt — kulturabhängig</div>
+    Respekt umfasst Anerkennung, Würde und das <strong>aktive Einbeziehen</strong>. In Korea gibt es viele Formen (fürsorglicher, beratender, sprachlicher Respekt); in Ghana fühlen sich Ältere trotz Höflichkeit einsam, wenn man sie nicht um Rat fragt.
+  </div>
+  <div class="card">
+    <div class="card-title">Diskriminierung &amp; sozialer Ausschluss</div>
+    Diskriminierung (z. B. nach Alter, Geschlecht, Herkunft) und sozialer Ausschluss verletzen die Respekt-Dimension — sie erhöhen das Einsamkeitsrisiko und beeinträchtigen die psychische Gesundheit.
+  </div>
+  <div class="card">
+    <div class="card-title">Cyberball (Lernfrage 1)</div>
+    <strong>Cyberball</strong> ist ein computerbasiertes Ballwurfspiel: Einer Person wird der Ball nicht mehr zugeworfen, um sozialen Ausschluss zu simulieren. <strong>Befund:</strong> Schon dieser minimale Ausschluss aktiviert Hirnregionen sozialer und autobiographischer Verarbeitung — Ausschluss „tut weh".
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv: Das Cyberball-Experiment</div>
+  <div class="card">
+    <div class="card-title">Schritt für Schritt</div>
+    <div id="cyber">
+      <div class="step-item"><strong>Setup:</strong> Eine Person spielt am Computer mit zwei anderen ein Ballwurfspiel.</div>
+      <div class="step-item"><strong>Manipulation:</strong> Ab einem Punkt wird ihr der Ball nicht mehr zugeworfen (Ausschluss).</div>
+      <div class="step-item"><strong>Befund:</strong> Schon dieser minimale Ausschluss aktiviert Hirnregionen der sozialen Verarbeitung.</div>
+      <div class="step-item"><strong>Kernaussage:</strong> Sozialer Ausschluss „tut weh" — er verletzt das Grundbedürfnis nach Respekt und Zugehörigkeit.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'cyber')">Nächster Schritt ▸</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq8"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s9">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 10 häufigsten Verwechslungen aus VL12</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einsamkeit</h4>
+      <p>Subjektives Gefühl</p>
+      <p>Wahrgenommene Diskrepanz: gewünscht vs. tatsächlich</p>
+      <p>Kann auch in Gesellschaft auftreten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Soziale Isolation</h4>
+      <p>Objektiver Zustand</p>
+      <p>Wenige soziale Kontakte (messbar)</p>
+      <p>Möglich, ohne sich einsam zu fühlen</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Wer allein lebt oder wenig Kontakte hat, ist automatisch einsam.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bonding Social Capital</h4>
+      <p>Beziehungen zwischen ähnlichen Menschen</p>
+      <p>Verstärkt bestehende, enge Bindungen</p>
+      <p>Stärkt den inneren Zusammenhalt</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bridging Social Capital</h4>
+      <p>Beziehungen zwischen unterschiedlichen Menschen</p>
+      <p>Zugang zu neuen Ressourcen/Informationen</p>
+      <p>Linking ergänzt: über Hierarchien hinweg</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Soziales Kapital ist ein einheitliches Konzept ohne interne Differenzierung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kultur</h4>
+      <p>Geteilte Bedeutungen, die Mitglieder Personen und Ereignissen zuschreiben</p>
+      <p>Nicht an Ländergrenzen gebunden</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Nation / Land</h4>
+      <p>Politisch-geografische Einheit</p>
+      <p>Kann viele Kulturen enthalten</p>
+      <p>Kein sauberer Proxy für Kultur</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Studien, die Länder vergleichen, vergleichen damit automatisch Kulturen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Individualismus</h4>
+      <p>Betont persönliche Autonomie</p>
+      <p>Eine Dimension, kein fester Typ</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Kollektivismus</h4>
+      <p>Betont Verbindungen zu anderen</p>
+      <p>Eine Dimension, kein fester Typ</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kollektivistische Kulturen haben automatisch weniger Einsamkeit, weil mehr Gemeinschaft da ist.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Einsamkeit</h4>
+      <p>Spezifisches Gefühl sozialer Diskrepanz</p>
+      <p>Kein klinisches Syndrom</p>
+      <p>Kann Risikofaktor für Depression sein</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Depression</h4>
+      <p>Psychische Störung mit breitem Symptomspektrum</p>
+      <p>Klinisch diagnostizierbar</p>
+      <p>Nicht dasselbe wie Einsamkeit</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Einsamkeit und Depression sind dasselbe und können synonym verwendet werden.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Soziale Verbundenheit</h4>
+      <p>Individuumszentriert</p>
+      <p>Objektive Kontakte + subjektives Erleben</p>
+      <p>Zugehörigkeit, Reziprozität, Vertrauen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Soziales Kapital</h4>
+      <p>Ressourcenorientiert</p>
+      <p>Beziehungen, Normen, Vertrauen als Ressource</p>
+      <p>Kollektive Perspektive</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Soziale Verbundenheit und soziales Kapital sind austauschbare Begriffe für dasselbe.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Reflexivität</h4>
+      <p>Prozess des Hinterfragens</p>
+      <p>Eigene Vorannahmen und ihr Einfluss</p>
+      <p>Eine fortlaufende Tätigkeit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Positionality</h4>
+      <p>Die soziale Position der Forschenden</p>
+      <p>Herkunft, Geschlecht, Macht</p>
+      <p>Ein Merkmal/Standpunkt</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Reflexivität und Positionality sind dasselbe und beliebig austauschbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Generativität</h4>
+      <p>Breite motivationale Orientierung</p>
+      <p>Etwas für andere/künftige Generationen hinterlassen</p>
+      <p>Kann prosoziales Verhalten motivieren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Prosoziales Verhalten</h4>
+      <p>Konkrete Handlungen zum Wohl anderer</p>
+      <p>Enger gefasst</p>
+      <p>Eine mögliche Folge von Generativität</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Generativität und prosoziales Verhalten bezeichnen dasselbe Konstrukt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Social Causation</h4>
+      <p>ARMUT führt zu EINSAMKEIT</p>
+      <p>Wege: fehlende Ressourcen für Aktivitäten, sozialer Ausschluss, Arbeitsmigration, keine Heimreisen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Social Drift</h4>
+      <p>EINSAMKEIT/psychische Belastung führt (zurück) in die ARMUT</p>
+      <p>Wege: Stigma, Rückzug, kleinere Netzwerke, geringere Produktivität</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Social Drift beschreibt, wie Armut Einsamkeit verursacht, und Social Causation, wie Einsamkeit in Armut mündet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Emotionale Einsamkeit</h4>
+      <p>Mangelnde QUALITÄT der Beziehungen</p>
+      <p>Es fehlt die enge Vertrauensperson — trotz vieler Kontakte möglich</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Soziale Einsamkeit</h4>
+      <p>Mangelnde QUANTITÄT/Einbindung</p>
+      <p>Es fehlt das breitere Netzwerk — trotz enger Vertrauter möglich</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Emotionale Einsamkeit entsteht durch eine zu geringe Anzahl an Kontakten, soziale Einsamkeit durch fehlende enge Vertrauenspersonen.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(8)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(10)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 11 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s10" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m5-vl12</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m5-vl12';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Worin unterscheiden sich soziale Isolation und Einsamkeit?",
+      "opts": [
+        "Isolation ist ein objektiver Zustand mit wenigen Kontakten, Einsamkeit ist subjektiv",
+        "Isolation wird subjektiv empfunden, während Einsamkeit objektiv gut messbar ist",
+        "Beide Begriffe bezeichnen exakt denselben, objektiv gut messbaren Zustand",
+        "Einsamkeit betrifft nur ältere, soziale Isolation nur jüngere Menschen"
+      ],
+      "c": 0,
+      "e": "Soziale Isolation ist ein objektiver Zustand (wenige Kontakte), Einsamkeit ist das subjektive Gefühl mangelnder Beziehungsqualität/-quantität. Beide können unabhängig voneinander auftreten."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie stark wirkt sich soziale Isolation auf die Gesundheit aus?",
+      "opts": [
+        "Sie hat nachweislich keinerlei Einfluss auf die körperliche oder mentale Gesundheit",
+        "Ihr Sterblichkeitsrisiko ist vergleichbar mit dem Rauchen vieler Zigaretten am Tag",
+        "Sie wirkt sich ausschließlich auf die Stimmung aus, nie auf den Körper",
+        "Sie verbessert langfristig sogar die Lebenserwartung der Betroffenen deutlich"
+      ],
+      "c": 1,
+      "e": "Soziale Isolation ist ein Risikofaktor für Sterblichkeit, dessen Größenordnung mit starkem Rauchen verglichen wird — und ein Prädiktor für Herzinfarkt, Schlaganfall und Depression. Für Demenz ist dagegen v.a. die anhaltende EINSAMKEIT (die subjektive Seite) der belegte Risikofaktor — Isolation und Einsamkeit sind auseinanderzuhalten."
+    },
+    {
+      "id": "s0q3",
+      "q": "In einer Diskussion behauptet jemand: „Einsamkeit ist unangenehm, aber gesundheitlich harmlos.“ Was entgegnet die Forschung?",
+      "opts": [
+        "Isolation ist ein Sterblichkeitsrisiko ähnlich starkem Rauchen im Alltag",
+        "Einsamkeit wirkt nur auf die Stimmung, nie auf den Körper — Beweise dafür fehlen",
+        "Gesundheitseffekte zeigen sich ausschließlich bei sehr alten, kranken Menschen",
+        "Die Datenlage ist insgesamt noch viel zu dünn für eine klare Aussage"
+      ],
+      "c": 0,
+      "e": "Soziale Isolation ist ein Sterblichkeits-Risikofaktor in der Größenordnung von 15 Zigaretten am Tag; die klassische 9-Jahres-Längsschnittstudie fand für sozial Eingebundene eine 2–3-mal höhere Überlebenswahrscheinlichkeit. Dazu: Prädiktor für Schlaganfall/Herzinfarkt, anhaltende Einsamkeit verdoppelt das Demenzrisiko."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wofür steht das Akronym WEIRD in der kulturvergleichenden Forschung?",
+      "opts": [
+        "Wealthy, Educated, Industrial, Rural, Diverse",
+        "Western, Emotional, Intelligent, Rational, Diverse",
+        "Western, Educated, Industrialized, Rich, and Democratic",
+        "Worldwide, Equal, Inclusive, Representative, Diverse"
+      ],
+      "c": 2,
+      "e": "WEIRD steht für Western, Educated, Industrialized, Rich, Democratic — und beschreibt die Herkunft der allermeisten psychologischen Forschungsstichproben."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was ist das zentrale Problem an WEIRD-Stichproben in der Psychologie?",
+      "opts": [
+        "Sie sind grundsätzlich viel zu klein für echte statistische Signifikanz",
+        "Sie umfassen ausschließlich ältere Menschen über 65 Jahren",
+        "Sie sind in der Durchführung viel zu teuer und zu aufwändig",
+        "Sie repräsentieren nur einen kleinen, untypischen Teil der Menschheit"
+      ],
+      "c": 3,
+      "e": "Rund 96 % der psychologischen Forschung stammt aus WEIRD-Ländern, in denen nur etwa 12 % der Weltbevölkerung leben. Befunde gelten dadurch oft fälschlich als universell."
+    },
+    {
+      "id": "s1q3",
+      "q": "Warum sollte man Länder nicht unreflektiert mit Kulturen gleichsetzen?",
+      "opts": [
+        "Ein Land kann viele Kulturen und ethnische Gruppen umfassen",
+        "Kulturen und Länder sind grundsätzlich immer exakt deckungsgleich",
+        "Länder haben per Definition nie mehr als eine einzige Kultur",
+        "Kulturen existieren ausschließlich innerhalb fester Staatsgrenzen"
+      ],
+      "c": 0,
+      "e": "Kulturen sind nicht deckungsgleich mit Ländergrenzen: Ein Land kann viele Kulturen und ethnische Gruppen umfassen, und eine Kultur kann sich über mehrere Länder erstrecken."
+    },
+    {
+      "id": "s1q4",
+      "q": "Ein Team will einen deutschen Einsamkeits-Fragebogen wortgleich übersetzt in mehreren Ländern einsetzen. Warum ist das problematisch — und was wäre der richtige erste Schritt?",
+      "opts": [
+        "Unproblematisch: Konstrukte sind sprachunabhängig, eine Übersetzung reicht völlig aus",
+        "Konstrukte verschieben sich zwischen Kulturen — bei unbekanntem Kontext zuerst qualitativ forschen",
+        "Problematisch ist es nur wegen unterschiedlicher Schriftsysteme zwischen den beteiligten Ländern",
+        "Man sollte stattdessen ausschließlich objektive Verhaltensdaten erheben, ganz ohne jede Befragung"
+      ],
+      "c": 1,
+      "e": "Beispiele der Vorlesung: „wahre Freundschaft“ = Zugehörigkeit (Japan) vs. emotionale Nähe (Deutschland); Depressionssymptome ranken in nicht-westlichen Stichproben anders (somatische Beschwerden höher, Abweichung von DSM-Kriterien); Einsamkeit wird regional unterschiedlich verstanden. Faustregel: erst qualitativ verstehen, dann adaptiert und validiert messen."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Eine Forscherin reflektiert, wie ihre eigene Herkunft und Position den Forschungsprozess beeinflussen. Was ist das?",
+      "opts": [
+        "Eine rein statistische Kontrolle für Störvariablen im Datensatz",
+        "Reflexivität und Positionality — methodische Grundanforderungen",
+        "Ein Verstoß gegen die Objektivität, der unbedingt vermieden werden sollte",
+        "Die bloße Vergrößerung der Stichprobe auf möglichst viele Länder"
+      ],
+      "c": 1,
+      "e": "Reflexivität (das eigene Vorannehmen hinterfragen) und Positionality (die eigene soziale Position) sind methodische Pflichten kultursensibler Forschung — keine Störung der Objektivität."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was kennzeichnet Photovoice als partizipative Methode (PAR)?",
+      "opts": [
+        "Forschende beobachten die Teilnehmenden heimlich aus sicherer Distanz",
+        "Nur standardisierte quantitative Fragebögen werden online verteilt und ausgewertet",
+        "Teilnehmende werden als Co-Forschende einbezogen, mit Fotos und Narrativen",
+        "Die Daten werden ausschließlich von Algorithmen automatisch erhoben"
+      ],
+      "c": 2,
+      "e": "Photovoice (eine PAR-Methode) bezieht die Betroffenen als Co-Forschende ein: Sie fotografieren ihren Alltag und erzählen dazu — visuelle und narrative Information statt einseitiger Beobachtung."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Aussage über Einsamkeit ist korrekt?",
+      "opts": [
+        "Wer allein ist, ist zwangsläufig und immer auch wirklich einsam",
+        "Einsamkeit ist objektiv messbar wie die bloße Zahl der Kontakte",
+        "Einsamkeit betrifft ausschließlich sehr alte und kranke Menschen",
+        "Man kann in Gesellschaft einsam und allein ohne Einsamkeit sein"
+      ],
+      "c": 3,
+      "e": "Einsamkeit ist subjektiv und nicht gleich Alleinsein: Man kann mitten unter Menschen einsam sein und allein sein, ohne sich einsam zu fühlen."
+    },
+    {
+      "id": "s3q2",
+      "q": "Wodurch entsteht Einsamkeit laut dem Kernmechanismus?",
+      "opts": [
+        "Durch die Diskrepanz zwischen gewünschten und tatsächlichen Beziehungen",
+        "Allein durch die rein objektive Anzahl der vorhandenen sozialen Kontakte",
+        "Ausschließlich durch eine angeborene genetische Veranlagung zur Einsamkeit",
+        "Durch das bloße Alleinsein ganz ohne jede subjektive Bewertung der Lage"
+      ],
+      "c": 0,
+      "e": "Einsamkeit entsteht aus der subjektiven Bewertung: der wahrgenommenen Diskrepanz zwischen den gewünschten/erwarteten und den tatsächlichen Beziehungen — nicht aus objektiver Isolation allein."
+    },
+    {
+      "id": "s3q3",
+      "q": "Herr B. hat täglich freundlichen Kontakt zu Kollegen und Nachbarn — aber niemanden, dem er sich wirklich anvertrauen kann. Frau K. hat eine enge Vertraute, kennt aber sonst kaum jemanden. Wer erlebt welche Einsamkeitsform?",
+      "opts": [
+        "Herr B.: soziale Einsamkeit, ihm fehlt ein Netzwerk — Frau K.: emotionale Einsamkeit, ihr fehlt eine Vertraute",
+        "Beide erleben exakt dieselbe Form der Einsamkeit, weil sie sich grundsätzlich nicht unterteilen lässt",
+        "Keiner von beiden ist wirklich einsam, weil beide regelmäßig Kontakte zu anderen Menschen haben",
+        "Herr B.: emotionale Einsamkeit, es fehlt die enge Vertraute — Frau K.: soziale Einsamkeit, es fehlt das Netzwerk"
+      ],
+      "c": 3,
+      "e": "Emotionale Einsamkeit = mangelnde QUALITÄT (keine enge Vertrauensperson — Herr B. trotz vieler Kontakte); soziale Einsamkeit = mangelnde QUANTITÄT/Einbindung (kein breiteres Netzwerk — Frau K. trotz enger Vertrauter). Die Diskrepanz zwischen erwünschten und tatsächlichen Beziehungen entscheidet."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Welcher Zusammenhang besteht zwischen dem Einkommensniveau eines Landes und Einsamkeit?",
+      "opts": [
+        "Je reicher das Land, desto höher ist die Einsamkeit der Bevölkerung",
+        "Je geringer das Einkommensniveau, desto höher ist die Einsamkeit",
+        "Es besteht überhaupt kein erkennbarer Zusammenhang zwischen beiden",
+        "Einsamkeit kommt nur in den sehr reichen Ländern überhaupt vor"
+      ],
+      "c": 1,
+      "e": "Einsamkeit ist in einkommensschwächeren Ländern (LMICs) häufiger — Gründe sind u. a. Armut, Stigma, politischer Konflikt, Klimawandel und Migration."
+    },
+    {
+      "id": "s4q2",
+      "q": "Armut und Einsamkeit verstärken sich gegenseitig. Wie heißt der Weg von Armut zu Einsamkeit?",
+      "opts": [
+        "Social Drift — die Einsamkeit selbst führt umgekehrt zurück in die Armut",
+        "Mere Exposure — schon bloße Vertrautheit erhöht die gegenseitige Zuneigung",
+        "Social Causation — Armut verursacht unmittelbar die Einsamkeit",
+        "Bridging — der gezielte Aufbau von Brücken zwischen sozialen Gruppen"
+      ],
+      "c": 2,
+      "e": "Social Causation: Armut führt zu Einsamkeit (eingeschränkte Teilhabe, Ausgrenzung, Migration). Der Rückweg — Einsamkeit verstärkt Armut — heißt Social Drift; zusammen ein Teufelskreis."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Studierende waren enger mit denen befreundet, die zufällig neben ihnen saßen. Welcher Effekt erklärt das?",
+      "opts": [
+        "Selbstenthüllung — sie teilten sofort sehr viele private Geheimnisse",
+        "Generativität — sie wollten unbedingt etwas an andere weitergeben",
+        "Similarity-Attraction — sie waren einander von Anfang an sehr ähnlich",
+        "Mere-Exposure-Effekt — Nähe und häufiges Sehen erhöhen die Zuneigung"
+      ],
+      "c": 3,
+      "e": "Räumliche Nähe erhöht die Vertrautheit und damit die Zuneigung (Mere-Exposure-Effekt): Wir mögen, was wir häufiger sehen — daher entstehen Freundschaften oft mit Sitznachbarn."
+    },
+    {
+      "id": "s5q2",
+      "q": "In einer Beziehung achtet jemand genau darauf, dass Geben und Nehmen ausgeglichen bleiben. Welcher Beziehungstyp ist das?",
+      "opts": [
+        "Austauschorientierte Beziehung — die Bilanz von Geben und Nehmen zählt",
+        "Gemeinschaftsorientierte Beziehung — die Bedürfnisse zählen mehr als Bilanz",
+        "Vermeidende Bindung — Distanz wird klar gegenüber Nähe bevorzugt",
+        "Generative Beziehung — der Beitrag für andere steht im Mittelpunkt"
+      ],
+      "c": 0,
+      "e": "In austauschorientierten Beziehungen wird auf eine ausgeglichene Bilanz geachtet. In gemeinschaftsorientierten Beziehungen zählt eher das Eingehen auf die Bedürfnisse des anderen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Eine Person fühlt leicht Nähe und hat wenig Angst, verlassen zu werden. Welcher Bindungsstil ist das?",
+      "opts": [
+        "Ängstlich/ambivalente Bindung — Wunsch nach Nähe, aber starke Verlustangst",
+        "Sichere Bindung — Nähe fällt hier leicht, wenig Angst vor dem Verlassenwerden",
+        "Vermeidende Bindung — Wunsch nach Distanz, Nervosität bei zu viel Nähe",
+        "Austauschorientierung — Geben und Nehmen müssen genau ausgeglichen sein"
+      ],
+      "c": 1,
+      "e": "Sichere Bindung: Nähe fällt leicht und es besteht wenig Angst vor dem Verlassenwerden. Sie gilt als günstigster Stil für intime, vor allem romantische Beziehungen."
+    },
+    {
+      "id": "s6q2",
+      "q": "Jemand sehnt sich nach enger Bindung, fürchtet aber ständig, nicht genug geliebt oder verlassen zu werden. Welcher Stil ist das?",
+      "opts": [
+        "Sichere Bindung — Nähe ist hier völlig unkompliziert und weitgehend angstfrei",
+        "Vermeidende Bindung — Nähe wird gemieden und meist als bedrohlich erlebt",
+        "Ängstlich/ambivalente Bindung — Wunsch nach Nähe plus große Verlustangst",
+        "Austauschorientierung — Geben und Nehmen sollen ausgeglichen sein"
+      ],
+      "c": 2,
+      "e": "Der ängstlich/ambivalente Stil verbindet den starken Wunsch nach Nähe mit der Angst, nicht richtig geliebt oder verlassen zu werden — anders als der vermeidende Stil, der Distanz sucht."
+    },
+    {
+      "id": "s6q3",
+      "q": "Sternbergs Dreieckstheorie nennt drei Komponenten der Liebe. Welche sind das?",
+      "opts": [
+        "Nähe, Vertrautheit und ein gegenseitiger materieller Austausch",
+        "Leidenschaft, Eifersucht und eine langfristige emotionale Abhängigkeit",
+        "Sicherheit, Vermeidung und eine ambivalente, schwankende Zuwendung",
+        "Emotionale Nähe, Leidenschaft und die Festlegung aufeinander"
+      ],
+      "c": 3,
+      "e": "Sternbergs Dreieckstheorie unterscheidet emotionale Nähe (Intimität), Leidenschaft und Festlegung (Commitment). Ihre Kombinationen ergeben Liebesformen wie romantische oder vollkommene Liebe."
+    },
+    {
+      "id": "s6q4",
+      "q": "Ein Paar ist seit 40 Jahren zusammen: tiefes Vertrauen, feste Bindung — aber die Leidenschaft ist längst verflogen. Welche Liebesform nach der Dreieckstheorie?",
+      "opts": [
+        "Vernarrtheit — ausschließlich Leidenschaft, ganz ohne Nähe und ohne Festlegung",
+        "Leere Liebe — nur Festlegung, ohne Nähe und ohne jede Leidenschaft",
+        "Kameradschaftliche Liebe — emotionale Nähe und Festlegung, ohne Leidenschaft",
+        "Romantische Liebe — Nähe und Leidenschaft, aber ganz ohne Festlegung"
+      ],
+      "c": 2,
+      "e": "Kameradschaftliche Liebe = emotionale Nähe + Festlegung ohne Leidenschaft (typisch für sehr lange Partnerschaften und tiefe Freundschaften). Leere Liebe hätte NUR Festlegung, Vernarrtheit NUR Leidenschaft, romantische Liebe Nähe + Leidenschaft ohne Festlegung."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Ältere Menschen investieren oft verstärkt in sinnvolle Beiträge für andere und kommende Generationen. Wie heißt diese Dimension?",
+      "opts": [
+        "Generativität — der Wunsch, etwas beizutragen und weiterzugeben",
+        "Proximity — die räumliche und zeitliche Nähe zu anderen Menschen",
+        "Reflexivität — das kritische Hinterfragen der eigenen sozialen Position",
+        "Soziale Isolation — der rein objektive Mangel an sozialen Kontakten"
+      ],
+      "c": 0,
+      "e": "Generativität ist der Wunsch, etwas für andere und künftige Generationen beizutragen und weiterzugeben. Freiwilligenarbeit und Enkelbetreuung hängen konsistent mit weniger Einsamkeit zusammen."
+    },
+    {
+      "id": "s7q2",
+      "q": "Das Ibasho-Programm lässt ältere Menschen einen Gemeinschaftsort selbst gestalten. Was bewirkt das vor allem?",
+      "opts": [
+        "Es erhöht die soziale Isolation durch zu viel ungewohnte Verantwortung",
+        "Mehr Selbstwirksamkeit, mehr Freundschaften und mehr Zugehörigkeit",
+        "Es ersetzt jede Form der professionellen medizinischen Versorgung",
+        "Es senkt nachweislich das prosoziale Verhalten der älteren Menschen"
+      ],
+      "c": 1,
+      "e": "Teilnehmende am Ibasho-Programm (Bottom-up, von Älteren selbst gestaltet) zeigen mehr Selbstwirksamkeit, mehr Freundschaften und ein stärkeres Zugehörigkeitsgefühl — gelebte Generativität."
+    }
+  ],
+  "8": [
+    {
+      "id": "s8q1",
+      "q": "Was ist Cyberball, das in der Forschung eingesetzt wird?",
+      "opts": [
+        "Ein Fragebogen zur Messung der Bindungsstile in romantischen Beziehungen",
+        "Eine Dating-App, die mögliche Partner rein per Algorithmus vorschlägt",
+        "Ein Ballspiel, das sozialen Ausschluss am Computer simuliert",
+        "Ein Programm zur gezielten Förderung von Generativität im Alter"
+      ],
+      "c": 2,
+      "e": "Cyberball ist ein computerbasiertes Ballwurfspiel: Einer Person wird der Ball nicht mehr zugeworfen, um sozialen Ausschluss kontrolliert zu simulieren."
+    },
+    {
+      "id": "s8q2",
+      "q": "Was zeigt die Forschung mit dem Cyberball-Paradigma?",
+      "opts": [
+        "Sozialer Ausschluss hat keinerlei messbare Wirkung im Gehirn",
+        "Ausschluss wird nur von besonders sensiblen Personen überhaupt bemerkt",
+        "Ausgeschlossene reagieren durchweg mit Gleichgültigkeit und Ruhe",
+        "Schon kurzer Ausschluss aktiviert Hirnregionen sozialer Verarbeitung"
+      ],
+      "c": 3,
+      "e": "Schon der minimale, anonyme Ausschluss im Cyberball aktiviert Hirnregionen, die mit sozialer und autobiographischer Verarbeitung (Default-Netzwerk, Theory of Mind) verknüpft sind — Ausschluss „tut weh“."
+    },
+    {
+      "id": "s8q3",
+      "q": "Ältere Menschen in Ghana werden höflich behandelt, fühlen sich aber einsam, wenn man sie nicht um Rat fragt. Welche Beziehungsdimension ist verletzt?",
+      "opts": [
+        "Respekt — Anerkennung und aktives Einbeziehen ihres Lebenswissens",
+        "Proximity — allein die räumliche Nähe zu anderen Menschen",
+        "Fun — gemeinsame unterhaltsame und anregende Erlebnisse",
+        "Soziales Kapital — die Ressourcen aus dem sozialen Netzwerk"
+      ],
+      "c": 0,
+      "e": "Respekt umfasst mehr als Höflichkeit: Anerkennung, Würde und das aktive Einbeziehen (z. B. nach Rat fragen). Bleibt das aus, kann trotz freundlicher Behandlung Einsamkeit entstehen."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Beziehungen zwischen Menschen aus unterschiedlichen Gruppen bezeichnet man als …?",
+    "opts": [
+      "Bonding Social Capital — die enge Bindung zwischen sehr ähnlichen Menschen",
+      "Bridging Social Capital — Brücken zwischen verschiedenen Menschen",
+      "Linking Social Capital — Beziehungen über soziale Hierarchien hinweg",
+      "Mere Exposure — die Zuneigung allein durch häufiges Wiedersehen"
+    ],
+    "c": 1,
+    "e": "Bridging Social Capital verbindet unterschiedliche Menschen. Bonding meint Beziehungen zwischen Ähnlichen, Linking solche über Hierarchieebenen hinweg (nach Putnam)."
+  },
+  {
+    "id": "bq2",
+    "q": "Was kennzeichnet eine kollektivistische kulturelle Orientierung?",
+    "opts": [
+      "Die starke Betonung persönlicher Autonomie und Selbstverwirklichung",
+      "Die feste Überzeugung, dass am Ende nur die Einzelleistung zählt",
+      "Die Betonung von Gruppenharmonie und kollektiven Verpflichtungen",
+      "Das vollständige Fehlen jeglicher sozialer Bindungen und Pflichten"
+    ],
+    "c": 2,
+    "e": "Kollektivismus betont Verbindungen zu anderen, Gruppenharmonie und kollektive Verpflichtungen. Individualismus betont dagegen persönliche Autonomie. Beide sind Dimensionen, keine starren Kategorien."
+  },
+  {
+    "id": "bq3",
+    "q": "Was gilt für Einsamkeit im weltweiten Vergleich?",
+    "opts": [
+      "Sie kommt ausschließlich in stark individualistischen Kulturen vor",
+      "Sie ist ein rein westliches und insgesamt sehr modernes Phänomen",
+      "Sie betrifft nachweislich nur Menschen jenseits der 80 Jahre",
+      "Sie ist ein globales Phänomen in allen Kulturen und Altersgruppen"
+    ],
+    "c": 3,
+    "e": "Einsamkeit ist ein globales Phänomen: Sie tritt in allen Kulturen und Altersgruppen auf — nicht nur in individualistischen Ländern und nicht nur bei alten Menschen."
+  }
+];
+
+var corrCorrect = {
+  "sk0": "bonding",
+  "sk1": "bridging",
+  "sk2": "linking",
+  "sk3": "bonding",
+  "pm0": "reflexivitaet",
+  "pm1": "positionality",
+  "pm2": "par",
+  "pm3": "photovoice",
+  "eins0": "einsamkeit",
+  "eins1": "alleinsein",
+  "eins2": "einsamkeit",
+  "eins3": "alleinsein",
+  "gen0": "generativitaet",
+  "gen1": "ageism",
+  "gen2": "ibasho",
+  "gen3": "generativitaet"
+};
+var corrExpl = {
+  "sk0": "Enge Beziehungen zwischen ähnlichen Menschen — Bonding Social Capital.",
+  "sk1": "Kontakte zu Menschen aus anderen Milieus — Bridging Social Capital (Brücken zwischen Unterschiedlichen).",
+  "sk2": "Verbindung über soziale Hierarchien hinweg (z. B. zu einer Behörde) — Linking Social Capital.",
+  "sk3": "Selbsthilfegruppe mit derselben Erkrankung = ähnliche Menschen — Bonding Social Capital.",
+  "pm0": "Das fortlaufende Hinterfragen der eigenen Vorannahmen und ihres Einflusses — Reflexivität.",
+  "pm1": "Die eigene soziale Position (Herkunft, Geschlecht, Macht) und ihr Einfluss — Positionality.",
+  "pm2": "Gewöhnliche Menschen als Co-Forschende in allen Phasen einbeziehen — Participatory Action Research.",
+  "pm3": "Fotos + Narrative kombinieren, um Lebenserfahrung sichtbar zu machen — Photovoice.",
+  "eins0": "Von vielen umgeben, aber unverstanden — subjektive Einsamkeit trotz Gesellschaft.",
+  "eins1": "Den Abend allein genießen — Alleinsein ohne Einsamkeit.",
+  "eins2": "Eine enge Vertraute schmerzlich vermissen — (emotionale) Einsamkeit.",
+  "eins3": "Zurückgezogen, aber tief verbunden — Alleinsein, aber nicht einsam.",
+  "gen0": "Wissen und Fürsorge an Jüngere weitergeben wollen — Generativität.",
+  "gen1": "Altersdiskriminierung als Hürde für Beiträge im Alter — Ageism.",
+  "gen2": "Ein Gemeinschaftsort, den Ältere selbst gestalten und betreiben — das Ibasho-Programm.",
+  "gen3": "Ehrenamt und Enkelbetreuung, verbunden mit weniger Einsamkeit — gelebte Generativität."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Sternberg-Dreieck-Simulator (Sektion ⑦): Nähe/Leidenschaft/Festlegung → Liebesform */
+var lvState = {n:true, l:false, f:false};
+function lvSet(k){
+  lvState[k] = !lvState[k];
+  ['n','l','f'].forEach(function(x){
+    var b = document.getElementById('lv-'+x);
+    if(b) b.classList.toggle('on', lvState[x]);
+  });
+  lvRender();
+}
+function lvRender(){
+  var o = document.getElementById('lv-out');
+  if(!o) return;
+  var key = (lvState.n?'N':'') + (lvState.l?'L':'') + (lvState.f?'F':'');
+  var m = {
+    '':   '<strong>Keine der Liebesformen.</strong> Ohne alle drei Komponenten bleibt es bei einer bloßen Bekanntschaft — das Dreieck ist leer.',
+    'N':  '<strong>Mögen.</strong> Nur emotionale Nähe: Gefühle enger Verbundenheit ohne Leidenschaft und ohne langfristige Festlegung.',
+    'L':  '<strong>Vernarrtheit.</strong> Nur Leidenschaft: Romantik, körperliche Anziehung und Sex — aber ohne echte Nähe und ohne Festlegung.',
+    'F':  '<strong>Leere Liebe.</strong> Nur Festlegung: Man bleibt zusammen, aber Nähe und Leidenschaft fehlen.',
+    'NL': '<strong>Romantische Liebe.</strong> Nähe + Leidenschaft, ohne (noch) langfristige Festlegung — intensiv verbunden, aber die Zukunftsentscheidung steht aus.',
+    'NF': '<strong>Kameradschaftliche Liebe.</strong> Nähe + Festlegung ohne Leidenschaft.',
+    'LF': '<strong>Alberne Liebe.</strong> Leidenschaft + Festlegung ohne emotionale Nähe.',
+    'NLF':'<strong>Vollkommene Liebe.</strong> Alle drei Komponenten zusammen: emotionale Nähe, Leidenschaft und Festlegung — das Ideal im Zentrum des Dreiecks.'
+  };
+  o.innerHTML = m[key];
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  lvRender();
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

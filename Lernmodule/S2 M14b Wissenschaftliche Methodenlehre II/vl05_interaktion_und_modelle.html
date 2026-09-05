@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M14b · VL05 Interaktion und Modelle</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m14b-vl05
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Simulator (M14b) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-axis{font-size:.78rem;color:var(--text2);margin:8px 0 4px}
+.sim-row{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:.82rem}
+.sim-row > span.lab{flex:0 0 160px;color:var(--text2)}
+.sim-row input[type=range]{flex:1}
+.sim-row > span.val{flex:0 0 76px;text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M14b · VL05 Interaktion und Modelle</h1>
+<p class="page-sub">Wissenschaftliche Methodenlehre II (Statistik 2) · Dirk Lubbe · Klausur Sept 2026 (WH) · Freitext/Rechnen</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Nullhypothese der Interaktion · 2. Klassifikation: zwei Diagramme · 3. Keine & ordinale Interaktion · 4. Disordinale & hybride Interaktion · 5. Feste vs. zufällige Effekte · 6. F-Test & Intraklassenkorrelation · 7. Die drei Modelle · 8. Signifikanzprüfung (F-Nenner)
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① H0 Interaktion</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Klassifikation</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ keine & ordinal</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ disordinal & hybrid</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ fest / zufällig</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ F-Test & IKK</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Drei Modelle</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ F-Nenner</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① H0 Interaktion ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Nullhypothese der Interaktion</div>
+    <div class="sec-lz">μ_ij − μ_i. − μ_.j + μ.. = 0; die Differenzen zwischen Stufen eines Faktors sind über die Stufen des anderen konstant.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was genau behauptet die Nullhypothese „keine Interaktion“ über die Zellmittelwerte?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Dass jeder Zellmittelwert sich rein <strong>additiv</strong> aus Gesamtmittel und den beiden Randmitteln ergibt: <strong>μ_ij − μ_i. − μ_.j + μ.. = 0</strong>. Anders gesagt: die Differenzen zwischen den Stufen eines Faktors sind über alle Stufen des anderen <strong>konstant</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Formale Nullhypothese</div>
+    <strong>H0: μ_ij − μ_i. − μ_.j + μ.. = 0</strong> — der Zellmittelwert μ_ij setzt sich nur aus dem Gesamtmittel μ.. und den Randmitteln μ_i. und μ_.j zusammen.
+  </div>
+  <div class="card">
+    <div class="card-title">Inhaltliche Bedeutung</div>
+    Keine Interaktion bedeutet: der Effekt eines Faktors ist <strong>über alle Stufen des anderen Faktors gleich</strong> (additive Effekte). Eine Interaktion ist die <em>Abweichung</em> von dieser Additivität.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Vom Zellmittel zur Interaktionskomponente</div>
+    <div id="step0">
+      <div class="step-item"><strong>Schritt 1:</strong> Ohne Interaktion ist das erwartete Zellmittel μ_i. + μ_.j − μ.. (additiv).</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Die Interaktionskomponente ist die Abweichung davon: μ_ij − (μ_i. + μ_.j − μ..).</div>
+      <div class="step-item"><strong>Schritt 3:</strong> H0 „keine Interaktion“: μ_ij − μ_i. − μ_.j + μ.. = 0 für alle Zellen.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Klassifikation ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Interaktion klassifizieren — zwei Diagramme</div>
+    <div class="sec-lz">Zwei Interaktionsdiagramme (Faktor A bzw. B auf der Abszisse) zeigen, ob/wo sich die Linien kreuzen.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie viele Diagramme braucht man, um eine Interaktion zu klassifizieren — und was unterscheidet sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1"><strong>Zwei</strong> Interaktionsdiagramme: im ersten stehen die Stufen des <strong>Faktors A</strong> auf der Abszisse, im zweiten die Stufen des <strong>Faktors B</strong>. Aus dem Kreuzungsmuster beider Diagramme liest man den Typ ab.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Zwei Perspektiven</div>
+    Für die Klassifikation fertigt man <strong>zwei Interaktionsdiagramme</strong> an. Diagramm 1: Stufen von A auf der x-Achse (Linien = Stufen von B). Diagramm 2: Stufen von B auf der x-Achse (Linien = Stufen von A).
+  </div>
+  <div class="card">
+    <div class="card-title">Worauf man achtet</div>
+    Entscheidend ist, <strong>in welchem (bzw. wie vielen) der beiden Diagramme sich die Linien kreuzen</strong>. Daraus ergeben sich die vier Typen: keine, ordinale, disordinale, hybride Interaktion.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Das Kreuzungsmuster lesen</div>
+    <div id="step1">
+      <div class="step-item"><strong>Keine Kreuzung, parallel:</strong> keine Interaktion.</div>
+      <div class="step-item"><strong>Keine Kreuzung, aber unterschiedliche Steigungen:</strong> ordinale Interaktion.</div>
+      <div class="step-item"><strong>Kreuzung in genau einem Diagramm:</strong> hybride Interaktion.</div>
+      <div class="step-item"><strong>Kreuzung in beiden Diagrammen:</strong> disordinale Interaktion.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Interaktions-Simulator — Linien im Diagramm</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="ia-keine" onclick="iaSet('keine')">Keine Interaktion</button>
+        <button class="sim-tbtn" id="ia-ordinal" onclick="iaSet('ordinal')">Ordinal</button>
+        <button class="sim-tbtn" id="ia-disordinal" onclick="iaSet('disordinal')">Disordinal</button>
+      </div>
+      <div class="sim-verdict" id="ia-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Im Liniendiagramm (eine Linie je Stufe von B): <strong>parallel</strong> = keine Interaktion; <strong>nicht parallel, ohne Kreuzung</strong> = ordinal; <strong>mit Kreuzung</strong> = disordinal.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ keine & ordinal ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Keine & ordinale Interaktion</div>
+    <div class="sec-lz">Keine = parallele Linien; ordinal = gleichsinnig, keine Kreuzung → beide Haupteffekte interpretierbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Worin unterscheiden sich „keine Interaktion“ und „ordinale Interaktion“ — wenn in beiden Fällen keine Linie kreuzt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Bei <strong>keiner</strong> Interaktion sind die Linien <strong>parallel</strong> (gleiche Steigung). Bei der <strong>ordinalen</strong> Interaktion verlaufen sie zwar gleichsinnig und kreuzen nicht, haben aber <strong>unterschiedliche Steigungen</strong> — eine Interaktion liegt also vor, beide Haupteffekte bleiben aber eindeutig interpretierbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Keine Interaktion</div>
+    In <strong>beiden</strong> Diagrammen verlaufen die Linien <strong>parallel</strong>. Die Effekte sind rein additiv (μ_ij = μ_i. + μ_.j − μ..).
+  </div>
+  <div class="card">
+    <div class="card-title">Ordinale Interaktion</div>
+    Beide Diagramme zeigen einen <strong>gleichsinnigen Trend</strong>, in <strong>keinem</strong> kreuzen sich die Linien: die Rangfolge der Mittelwerte von A gilt für beide Stufen von B (und umgekehrt).
+  </div>
+  <div class="card">
+    <div class="card-title">Folge für die Haupteffekte</div>
+    Weil keine Rangfolge umkippt, sind bei der ordinalen Interaktion <strong>beide Haupteffekte eindeutig interpretierbar</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Parallel oder nur gleichsinnig?</div>
+    <div id="step2">
+      <div class="step-item"><strong>Schritt 1:</strong> Kreuzt eine Linie in einem der Diagramme? Wenn nein → keine oder ordinale Interaktion.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> Sind die Linien exakt parallel (gleiche Steigung)? → keine Interaktion.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> Gleichsinnig, aber unterschiedliche Steigung (ohne Kreuzung)? → ordinale Interaktion.</div>
+      <div class="step-item"><strong>Schritt 4:</strong> Bei der ordinalen Interaktion bleiben beide Haupteffekte eindeutig interpretierbar.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step2')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ disordinal & hybrid ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Disordinale & hybride Interaktion</div>
+    <div class="sec-lz">Disordinal = Kreuzung in beiden Diagrammen (kein Haupteffekt); hybrid = Kreuzung in einem (ein Haupteffekt eindeutig).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Bei einer disordinalen und einer hybriden Interaktion kreuzen Linien — wie unterscheidet man die beiden, und welche Haupteffekte darf man jeweils interpretieren?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Disordinal:</strong> Kreuzung in BEIDEN Diagrammen → KEIN Haupteffekt eindeutig. <strong>Hybrid:</strong> Kreuzung in nur EINEM Diagramm → der andere Haupteffekt bleibt eindeutig interpretierbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Disordinale Interaktion</div>
+    In <strong>beiden</strong> Diagrammen kreuzen sich die Linien. Unterschiede zwischen a1/a2 sind nur in Verbindung mit den Stufen von B deutbar (und b1/b2 nur mit A). → <strong>Kein Haupteffekt</strong> ist eindeutig interpretierbar.
+  </div>
+  <div class="card">
+    <div class="card-title">Hybride (semidisordinale) Interaktion</div>
+    In <strong>einem</strong> Diagramm kreuzen die Linien (die Rangfolge eines Faktors wechselt das Vorzeichen), im anderen nicht. → Der Haupteffekt des Faktors, dessen Rangfolge stabil bleibt, ist <strong>eindeutig interpretierbar</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merkschema</div>
+    Kreuzungen zählen: <strong>0 → keine/ordinal</strong> (parallel vs. gleichsinnig), <strong>1 → hybrid</strong>, <strong>2 → disordinal</strong>.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ordne den Interaktionstyp zu</div>
+    <div class="corr-item" id="ta">Beide Interaktionsdiagramme zeigen exakt parallele Linien
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('ta',this,'keine')">Keine</button>
+        <button class="corr-btn" onclick="checkCorr('ta',this,'ordinal')">Ordinal</button>
+        <button class="corr-btn" onclick="checkCorr('ta',this,'disordinal')">Disordinal</button>
+        <button class="corr-btn" onclick="checkCorr('ta',this,'hybrid')">Hybrid</button>
+      </div><div class="corr-fb" id="ta-fb"></div>
+    </div>
+    <div class="corr-item" id="tb">Gleichsinniger Trend, keine Linie kreuzt; die Rangfolge gilt in beiden Diagrammen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('tb',this,'keine')">Keine</button>
+        <button class="corr-btn" onclick="checkCorr('tb',this,'ordinal')">Ordinal</button>
+        <button class="corr-btn" onclick="checkCorr('tb',this,'disordinal')">Disordinal</button>
+        <button class="corr-btn" onclick="checkCorr('tb',this,'hybrid')">Hybrid</button>
+      </div><div class="corr-fb" id="tb-fb"></div>
+    </div>
+    <div class="corr-item" id="tc">In beiden Diagrammen kreuzen sich die Linien
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('tc',this,'keine')">Keine</button>
+        <button class="corr-btn" onclick="checkCorr('tc',this,'ordinal')">Ordinal</button>
+        <button class="corr-btn" onclick="checkCorr('tc',this,'disordinal')">Disordinal</button>
+        <button class="corr-btn" onclick="checkCorr('tc',this,'hybrid')">Hybrid</button>
+      </div><div class="corr-fb" id="tc-fb"></div>
+    </div>
+    <div class="corr-item" id="td">Im einen Diagramm kreuzen die Linien, im anderen nicht
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('td',this,'keine')">Keine</button>
+        <button class="corr-btn" onclick="checkCorr('td',this,'ordinal')">Ordinal</button>
+        <button class="corr-btn" onclick="checkCorr('td',this,'disordinal')">Disordinal</button>
+        <button class="corr-btn" onclick="checkCorr('td',this,'hybrid')">Hybrid</button>
+      </div><div class="corr-fb" id="td-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ fest / zufällig ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Feste vs. zufällige Effekte</div>
+    <div class="sec-lz">Auswahl der Stufen entscheidet; Zufallsfaktor H0: σ²_A = 0; Generalisierbarkeit.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Faktor „Therapierende“ besteht aus 6 zufällig gezogenen Personen. Fest oder zufällig — und was prüft man dann?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Ein <strong>Zufallsfaktor</strong>: die Stufen sind nur eine zufällige Auswahl aus der Population. Man interessiert sich nicht für die einzelnen Mittelwerte, sondern für die Varianzkomponente → <strong>H0: σ²_A = 0</strong>. Ergebnisse sind auf die Population generalisierbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Fester Effekt</div>
+    Man wählt <strong>systematisch nur die interessierenden Stufen</strong> (begrenzt viele, definierte Ausprägungen, vollständig betrachtet). H0: alle α_i = 0. Aussagen gelten nur über die untersuchten Stufen.
+  </div>
+  <div class="card">
+    <div class="card-title">Zufälliger Effekt</div>
+    Die Stufen werden <strong>zufällig aus der Population</strong> möglicher Stufen gezogen („unendlich“ viele Ausprägungen). H0: <strong>σ²_A = 0</strong>. Die Ergebnisse lassen sich auf die Population generalisieren.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verwechslung</div>
+    Beim Zufallsfaktor prüft man <strong>nicht</strong> die Gleichheit einzelner Stufenmittel (μ_1 = … = μ_p), sondern ob der Faktor überhaupt Varianz erzeugt (σ²_A = 0).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Fester oder zufälliger Faktor?</div>
+    <div class="corr-item" id="fa">Genau die drei interessierenden Therapieformen werden untersucht
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('fa',this,'fest')">Fest</button>
+        <button class="corr-btn" onclick="checkCorr('fa',this,'zufaellig')">Zufällig</button>
+      </div><div class="corr-fb" id="fa-fb"></div>
+    </div>
+    <div class="corr-item" id="fb">6 Therapierende werden zufällig aus allen Therapierenden gezogen
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('fb',this,'fest')">Fest</button>
+        <button class="corr-btn" onclick="checkCorr('fb',this,'zufaellig')">Zufällig</button>
+      </div><div class="corr-fb" id="fb-fb"></div>
+    </div>
+    <div class="corr-item" id="fc">Die beiden Geschlechter männlich und weiblich
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('fc',this,'fest')">Fest</button>
+        <button class="corr-btn" onclick="checkCorr('fc',this,'zufaellig')">Zufällig</button>
+      </div><div class="corr-fb" id="fc-fb"></div>
+    </div>
+    <div class="corr-item" id="fd">8 zufällig ausgewählte Testleiter
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('fd',this,'fest')">Fest</button>
+        <button class="corr-btn" onclick="checkCorr('fd',this,'zufaellig')">Zufällig</button>
+      </div><div class="corr-fb" id="fd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ F-Test & IKK ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">F-Test & Intraklassenkorrelation</div>
+    <div class="sec-lz">E(MQ_A) = σ²_e + n·σ²_A; IKK = σ̂²_A/(σ̂²_A+σ̂²_e) mit σ̂²_A = (MQ_A − MQ_e)/n.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Gegeben MQ_A = 21,41, MQ_e = 2,32, n = 5. Wie stark ist der Zufallsfaktor (Intraklassenkorrelation)?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Erst die Varianzkomponente: <strong>σ̂²_A = (MQ_A − MQ_e)/n = (21,41 − 2,32)/5 ≈ 3,82</strong>; σ̂²_e = MQ_e = 2,32. Dann <strong>IKK = σ̂²_A/(σ̂²_A + σ̂²_e) = 3,82/(3,82 + 2,32) ≈ 0,62</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Erwartungswert & F-Test</div>
+    Beim Zufallsfaktor gilt <strong>E(MQ_A) = σ²_e + n·σ²_A</strong> (fest: σ²_e + Q_A). Im <strong>einfaktoriellen</strong> Fall ist der F-Bruch identisch: F = MQ_A/MQ_e.
+  </div>
+  <div class="card">
+    <div class="card-title">Varianzkomponente schätzen</div>
+    Aus E(MQ_A) = σ²_e + n·σ²_A folgt <strong>σ̂²_A = (MQ_A − MQ_e)/n</strong> und σ̂²_e = MQ_e.
+  </div>
+  <div class="card">
+    <div class="card-title">Effektmaß Intraklassenkorrelation</div>
+    <strong>IKK = σ̂²_A/(σ̂²_A + σ̂²_e)</strong> — die relative Stärke des Zufallsfaktors auf die AV (konzeptuell wie η²).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Rechenweg IKK (MQ_A = 21,41; MQ_e = 2,32; n = 5)</div>
+    <div id="step5">
+      <div class="step-item"><strong>Schritt 1:</strong> σ̂²_A = (MQ_A − MQ_e)/n = (21,41 − 2,32)/5 ≈ <strong>3,82</strong>.</div>
+      <div class="step-item"><strong>Schritt 2:</strong> σ̂²_e = MQ_e = <strong>2,32</strong>.</div>
+      <div class="step-item"><strong>Schritt 3:</strong> IKK = σ̂²_A/(σ̂²_A + σ̂²_e) = 3,82/(3,82 + 2,32) ≈ <strong>0,62</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Drei Modelle ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Die drei Modelle (I/II/III)</div>
+    <div class="sec-lz">I fest, II zufällig, III gemischt; Interaktionen mit Zufallsfaktor sind selbst zufällig.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche drei varianzanalytischen Modelle unterscheidet man — und was passiert mit einer Interaktion, die einen Zufallsfaktor enthält?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Modell I</strong> = nur feste Effekte, <strong>Modell II</strong> = nur zufällige, <strong>Modell III</strong> = gemischt (z. B. A fest, B zufällig). Eine <strong>Interaktion mit einem Zufallsfaktor ist selbst zufällig</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die drei Modelle</div>
+    <strong>Modell I:</strong> alle Faktoren fest. <strong>Modell II:</strong> alle Faktoren zufällig. <strong>Modell III (gemischt):</strong> feste und zufällige Faktoren zusammen (z. B. Instruktion fest, Testleiter zufällig).
+  </div>
+  <div class="card">
+    <div class="card-title">Hypothesen</div>
+    Feste Effekte: H0 über die Mittel (α_i = 0). Zufällige Effekte: H0 über die Varianzkomponente (σ² = 0). Im gemischten Modell entsprechend gemischt.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wichtig</div>
+    <strong>Interaktionen, die einen Zufallsfaktor enthalten, sind ebenfalls zufällig</strong> — das wirkt sich darauf aus, gegen welche MQ die Haupteffekte geprüft werden.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Modell bestimmen</div>
+    <div id="step6">
+      <div class="step-item"><strong>Beide Faktoren systematisch gewählt</strong> → Modell I (nur feste Effekte).</div>
+      <div class="step-item"><strong>Beide Faktoren zufällig gezogen</strong> → Modell II (nur zufällige Effekte).</div>
+      <div class="step-item"><strong>Einer fest, einer zufällig</strong> → Modell III (gemischt).</div>
+      <div class="step-item"><strong>Folge:</strong> Eine Interaktion mit Zufallsfaktor ist selbst zufällig → ändert den F-Nenner der Haupteffekte.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ F-Nenner ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Signifikanzprüfung: welcher Nenner?</div>
+    <div class="sec-lz">Modell I alle gegen MQ_e; Modell II Haupteffekte gegen MQ_AB; die zweifache Interaktion stets gegen MQ_e.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im Modell mit festen Effekten teilt man jeden Effekt durch MQ_e. Gilt das auch, sobald ein Zufallsfaktor im Spiel ist?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Nein. Im <strong>Modell I</strong> werden alle Effekte gegen <strong>MQ_e</strong> geprüft. Im <strong>Modell II</strong> werden die <strong>Haupteffekte gegen MQ_AB</strong> geprüft (weil deren Erwartungswert den Interaktionsterm enthält). Die <strong>zweifache Interaktion</strong> wird in allen Modellen gegen <strong>MQ_e</strong> geprüft.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Modell I (alles fest)</div>
+    Haupteffekte und Interaktion werden <strong>alle gegen MQ_e</strong> geprüft (F = MQ_Effekt/MQ_e).
+  </div>
+  <div class="card">
+    <div class="card-title">Modell II (alles zufällig)</div>
+    Die <strong>Haupteffekte gegen MQ_AB</strong> (z. B. F = MQ_A/MQ_AB), weil E(MQ_A) den Term n·σ²_AB enthält. Die Interaktion gegen MQ_e.
+  </div>
+  <div class="card">
+    <div class="card-title">Regel & Modell III</div>
+    Die <strong>zweifache Interaktion</strong> wird <strong>immer gegen MQ_e</strong> geprüft. Im gemischten Modell III wird der feste Haupteffekt (z. B. A) gegen MQ_AB geprüft.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche MQ steht im Nenner des F-Bruchs?</div>
+    <div class="corr-item" id="na">Modell I (beide Faktoren fest), Haupteffekt A
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('na',this,'MQe')">MQ_e</button>
+        <button class="corr-btn" onclick="checkCorr('na',this,'MQab')">MQ_AB</button>
+      </div><div class="corr-fb" id="na-fb"></div>
+    </div>
+    <div class="corr-item" id="nb">Modell II (beide Faktoren zufällig), Haupteffekt A
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nb',this,'MQe')">MQ_e</button>
+        <button class="corr-btn" onclick="checkCorr('nb',this,'MQab')">MQ_AB</button>
+      </div><div class="corr-fb" id="nb-fb"></div>
+    </div>
+    <div class="corr-item" id="nc">Modell II (beide zufällig), Interaktion A×B
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nc',this,'MQe')">MQ_e</button>
+        <button class="corr-btn" onclick="checkCorr('nc',this,'MQab')">MQ_AB</button>
+      </div><div class="corr-fb" id="nc-fb"></div>
+    </div>
+    <div class="corr-item" id="nd">Die zweifache Interaktion A×B (egal welches Modell)
+      <div class="corr-opts">
+        <button class="corr-btn" onclick="checkCorr('nd',this,'MQe')">MQ_e</button>
+        <button class="corr-btn" onclick="checkCorr('nd',this,'MQab')">MQ_AB</button>
+      </div><div class="corr-fb" id="nd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Ordinale Interaktion</h4>
+      <p>keine Kreuzung in BEIDEN Diagrammen</p>
+      <p>gleichsinniger Trend</p>
+      <p>Rangfolge bleibt erhalten</p>
+      <p>beide Haupteffekte eindeutig interpretierbar</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Disordinale Interaktion</h4>
+      <p>Kreuzung in BEIDEN Diagrammen</p>
+      <p>Rangfolge kehrt sich um</p>
+      <p>kein Haupteffekt eindeutig interpretierbar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei einer disordinalen Interaktion sind beide Haupteffekte uneingeschränkt interpretierbar.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Disordinale Interaktion</h4>
+      <p>Kreuzung in BEIDEN Diagrammen</p>
+      <p>kein Haupteffekt eindeutig</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Hybride Interaktion</h4>
+      <p>Kreuzung in nur EINEM Diagramm</p>
+      <p>ein Haupteffekt bleibt eindeutig interpretierbar</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine hybride Interaktion liegt vor, wenn sich die Linien in beiden Interaktionsdiagrammen kreuzen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Fester Effekt</h4>
+      <p>Stufen systematisch ausgewählt</p>
+      <p>begrenzt viele, definierte Stufen</p>
+      <p>H0: α_i = 0 (Mittel gleich)</p>
+      <p>Aussage nur über die untersuchten Stufen</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zufälliger Effekt</h4>
+      <p>Stufen zufällig aus Population gezogen</p>
+      <p>‚unendlich‘ viele mögliche Stufen</p>
+      <p>H0: σ²_A = 0 (Varianzkomponente)</p>
+      <p>generalisierbar auf die Population</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Bei einem Zufallsfaktor prüft man die Gleichheit der einzelnen Stufenmittelwerte (H0: μ_1 = … = μ_p).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eta-Quadrat (fester Effekt)</h4>
+      <p>η² = QS_A/QS_tot</p>
+      <p>aufgeklärter Varianzanteil</p>
+      <p>für feste Faktoren</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Intraklassenkorrelation (Zufallsfaktor)</h4>
+      <p>IKK = σ̂²_A/(σ̂²_A+σ̂²_e)</p>
+      <p>relative Stärke des Zufallsfaktors</p>
+      <p>σ̂²_A = (MQ_A−MQ_e)/n</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Intraklassenkorrelation ist das Effektmaß für feste Faktoren und wird als QS_A/QS_tot berechnet.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>F-Nenner: feste Effekte</h4>
+      <p>Modell I: alle Effekte gegen MQ_e</p>
+      <p>Haupteffekte und Interaktion gleich</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>F-Nenner: zufällige Effekte</h4>
+      <p>Modell II: Haupteffekte gegen MQ_AB</p>
+      <p>Interaktion weiterhin gegen MQ_e</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im Modell mit zufälligen Effekten werden auch die Haupteffekte weiterhin gegen MQ_e geprüft.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m14b-vl05</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m14b-vl05';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was besagt die Nullhypothese der Interaktion inhaltlich?",
+      "opts": [
+        "Die Differenzen zwischen den Stufen eines Faktors sind über alle Stufen des anderen Faktors identisch.",
+        "Alle Zellmittelwerte sind exakt gleich groß.",
+        "Weder Faktor A noch Faktor B haben einen Haupteffekt.",
+        "Die abhängige Variable ist in jeder einzelnen Faktorstufenkombination normalverteilt und besitzt dort jeweils dieselbe, über alle Zellen hinweg konstante Fehlervarianz."
+      ],
+      "c": 0,
+      "e": "Keine Interaktion = der Effekt eines Faktors ist über die Stufen des anderen konstant. (d) ist eine Modellannahme, keine Interaktionshypothese."
+    },
+    {
+      "id": "s0q2",
+      "q": "Wie lautet die Nullhypothese der Interaktion formal (über die Zellmittel)?",
+      "opts": [
+        "μ_ij = 0.",
+        "μ_ij − μ_i. − μ_.j + μ.. = 0.",
+        "μ_i. = μ_.j.",
+        "μ_ij = μ.. , das heißt, jeder einzelne Zellmittelwert stimmt exakt mit dem Gesamtmittelwert überein und weicht von diesem in keiner Faktorstufenkombination ab."
+      ],
+      "c": 1,
+      "e": "Keine Interaktion: das Zellmittel ergibt sich additiv aus Gesamt- und Randmitteln → μ_ij − μ_i. − μ_.j + μ.. = 0."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie geht man bei der Klassifikation einer Interaktion vor?",
+      "opts": [
+        "Man berechnet die Produktsumme der Kontrastkoeffizienten.",
+        "Man prüft, ob beide Haupteffekte signifikant sind.",
+        "Man fertigt zwei Interaktionsdiagramme an — einmal Faktor A, einmal Faktor B auf der Abszisse.",
+        "Man bestimmt für jede einzelne Zelle das partielle Eta-Quadrat und ordnet die Interaktion derjenigen Kategorie zu, deren aufgeklärter Varianzanteil am größten ausfällt."
+      ],
+      "c": 2,
+      "e": "Zwei Diagramme (A bzw. B auf der x-Achse) zeigen, ob/wie die Linien sich kreuzen → Klassifikation des Interaktionstyps."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was trägt man im zweiten Interaktionsdiagramm auf der Abszisse ab?",
+      "opts": [
+        "Die abhängige Variable.",
+        "Die einzelnen Zellmittelwerte.",
+        "Wieder die Stufen des Faktors A, da beide Interaktionsdiagramme dieselbe Achsenbelegung verwenden und sich nur in der dargestellten abhängigen Variablen unterscheiden.",
+        "Die Stufen des Faktors B (statt A wie im ersten Diagramm)."
+      ],
+      "c": 3,
+      "e": "Erstes Diagramm: Stufen von A auf der Abszisse; zweites Diagramm: Stufen von B. So sieht man beide Perspektiven."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Woran erkennt man eine ORDINALE Interaktion in den beiden Diagrammen?",
+      "opts": [
+        "Beide Diagramme zeigen einen gleichsinnigen Trend, in keinem kreuzen sich die Linien.",
+        "In beiden Diagrammen kreuzen sich die Linien.",
+        "Die Linien sind in beiden Diagrammen exakt parallel.",
+        "Im ersten Diagramm verlaufen die Linien parallel, während sie im zweiten so steil auseinanderlaufen, dass sich ihre Rangfolge in jeder einzelnen Faktorstufe umkehrt."
+      ],
+      "c": 0,
+      "e": "Ordinal: gleichsinniger Trend, keine Kreuzung in beiden Diagrammen → die Rangfolge beider Faktoren bleibt erhalten. Exakt parallel (c) wäre KEINE Interaktion."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was gilt bei einer ordinalen Interaktion für die Haupteffekte?",
+      "opts": [
+        "Kein Haupteffekt ist eindeutig interpretierbar.",
+        "Beide Haupteffekte sind eindeutig interpretierbar (die Rangfolge gilt jeweils für beide Stufen des anderen Faktors).",
+        "Nur der Haupteffekt von Faktor B ist interpretierbar.",
+        "Die Haupteffekte dürfen grundsätzlich nicht interpretiert werden, weil bei jeder vorliegenden Interaktion ausschließlich die einzelnen Zellmittelwerte eine sinnvolle inhaltliche Aussage erlauben."
+      ],
+      "c": 1,
+      "e": "Ordinal: Rangfolge beider Faktoren bleibt in beiden Diagrammen erhalten → beide Haupteffekte eindeutig interpretierbar."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was kennzeichnet eine DISORDINALE Interaktion?",
+      "opts": [
+        "Die Linien verlaufen in beiden Diagrammen parallel.",
+        "In genau einem der beiden Diagramme kreuzen sich die Linien.",
+        "In BEIDEN Diagrammen kreuzen sich die Linien — kein Haupteffekt ist eindeutig interpretierbar.",
+        "Die Linien beider Diagramme zeigen einen vollständig gleichsinnigen Trend, sodass sich sowohl der Haupteffekt von A als auch der von B ohne jede Einschränkung interpretieren lässt."
+      ],
+      "c": 2,
+      "e": "Disordinal: Kreuzung in BEIDEN Diagrammen → Unterschiede nur in Verbindung mit dem anderen Faktor deutbar; kein Haupteffekt eindeutig."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was kennzeichnet eine HYBRIDE (semidisordinale) Interaktion?",
+      "opts": [
+        "In beiden Interaktionsdiagrammen kreuzen sich die Linien deutlich, sodass die Rangfolge beider Faktoren über die Stufen des jeweils anderen Faktors hinweg vollständig erhalten bleibt.",
+        "In keinem der beiden Diagramme kreuzen sich die Linien.",
+        "Beide Haupteffekte sind uneingeschränkt interpretierbar.",
+        "In einem Diagramm kreuzen die Linien, im anderen nicht — ein Haupteffekt bleibt eindeutig interpretierbar."
+      ],
+      "c": 3,
+      "e": "Hybrid: Kreuzung in EINEM Diagramm (Rangfolge eines Faktors wechselt das Vorzeichen), im anderen nicht → genau ein Haupteffekt eindeutig interpretierbar."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Wodurch wird entschieden, ob ein Faktor fest oder zufällig ist?",
+      "opts": [
+        "Durch die Auswahl der Faktorstufen (systematisch ausgewählt vs. zufällig aus der Population gezogen).",
+        "Durch die Skalierung der abhängigen Variablen.",
+        "Durch die Stichprobengröße pro Zelle.",
+        "Durch die Höhe des Signifikanzniveaus: Faktoren, die auf dem 1-%-Niveau getestet werden, gelten als fest, solche auf dem 5-%-Niveau als zufällig."
+      ],
+      "c": 0,
+      "e": "Die Auswahl der Stufen entscheidet: systematisch nur die interessierenden Stufen = fest; zufällige Auswahl aus vielen möglichen = zufällig."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie lautet die Nullhypothese bei einem ZUFÄLLIGEN Faktor A?",
+      "opts": [
+        "H0: μ_1 = μ_2 = … = μ_p.",
+        "H0: σ²_A = 0 (die Varianzkomponente des Faktors ist null).",
+        "H0: alle α_i sind gleich groß, aber ungleich null.",
+        "H0: der Mittelwert des Faktors stimmt mit dem Gesamtmittelwert überein, während seine Varianz einen beliebigen, von null verschiedenen Wert annehmen darf."
+      ],
+      "c": 1,
+      "e": "Zufälliger Faktor: man interessiert sich für die Varianzkomponente → H0: σ²_A = 0 (statt Gleichheit einzelner Mittel)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Wie lautet das Effektmaß für einen Zufallsfaktor (Intraklassenkorrelation)?",
+      "opts": [
+        "IKK = QS_A / QS_tot.",
+        "IKK = MQ_A / MQ_e.",
+        "IKK = σ̂²_A / (σ̂²_A + σ̂²_e).",
+        "IKK = die Differenz aus der mittleren Treatment- und der mittleren Fehlerquadratsumme, geteilt durch die Gesamtzahl der untersuchten Personen abzüglich der Zahl der Faktorstufen."
+      ],
+      "c": 2,
+      "e": "IKK = σ̂²_A/(σ̂²_A+σ̂²_e) — Anteil der durch den Zufallsfaktor erklärten Varianz (konzeptuell wie η²)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Im einfaktoriellen Fall mit Zufallsfaktor gilt E(MQ_A) = σ²_e + n·σ²_A. Wie schätzt man σ̂²_A?",
+      "opts": [
+        "σ̂²_A = MQ_A.",
+        "σ̂²_A = MQ_A − MQ_e, also unmittelbar die Differenz der beiden mittleren Quadratsummen, ohne dass diese noch durch die Zahl der Personen pro Faktorstufe geteilt werden müsste.",
+        "σ̂²_A = MQ_e / n.",
+        "σ̂²_A = (MQ_A − MQ_e) / n."
+      ],
+      "c": 3,
+      "e": "Aus E(MQ_A) = σ²_e + n·σ²_A und σ̂²_e = MQ_e folgt σ̂²_A = (MQ_A − MQ_e)/n. Beispiel: (21,41−2,32)/5 ≈ 3,82."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was unterscheidet die Modelle I, II und III der Varianzanalyse?",
+      "opts": [
+        "Modell I = nur feste Effekte, Modell II = nur zufällige Effekte, Modell III = gemischt (fest und zufällig).",
+        "Modell I = ein Faktor, Modell II = zwei Faktoren, Modell III = drei Faktoren.",
+        "Sie unterscheiden sich nur in der Zahl der Faktorstufen.",
+        "Modell I verwendet Typ-I-Quadratsummen, Modell II Typ-II-Quadratsummen und Modell III Typ-III-Quadratsummen, je nach Balanciertheit des Versuchsplans."
+      ],
+      "c": 0,
+      "e": "Modell I = feste Effekte, II = zufällige, III = gemischt (z. B. A fest, B zufällig)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Eine Interaktion enthält einen Zufallsfaktor. Wie ist sie zu behandeln?",
+      "opts": [
+        "Als fester Effekt, da Interaktionen immer fest sind.",
+        "Ebenfalls als zufälliger Effekt.",
+        "Sie entfällt vollständig aus dem Modell.",
+        "Als gemischter Effekt mit eigener Varianzkomponente, der jedoch ausschließlich dann geprüft wird, wenn zuvor beide zugehörigen Haupteffekte signifikant geworden sind."
+      ],
+      "c": 1,
+      "e": "Interaktionen, die einen Zufallsfaktor enthalten, sind selbst zufällig."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Wogegen werden im Modell I (beide Faktoren fest) alle Effekte geprüft?",
+      "opts": [
+        "Gegen MQ_AB.",
+        "Gegen MQ_A bzw. MQ_B.",
+        "Gegen MQ_e (alle drei Effekte).",
+        "Gegen jeweils unterschiedliche mittlere Quadrate, die sich nach der Zahl der Stufen des jeweils anderen Faktors richten und für jeden Effekt einzeln neu bestimmt werden müssen."
+      ],
+      "c": 2,
+      "e": "Modell I (alles fest): Haupteffekte und Interaktion alle gegen MQ_e."
+    },
+    {
+      "id": "s7q2",
+      "q": "Im Modell II (beide Faktoren zufällig): wogegen wird der Haupteffekt A geprüft?",
+      "opts": [
+        "Gegen MQ_e, also genau wie im Modell mit ausschließlich festen Effekten, da der Nenner der Prüfgröße unabhängig von der Art des Faktors stets die mittlere Fehlerquadratsumme ist.",
+        "Gegen MQ_B.",
+        "Gegen MQ_A selbst.",
+        "Gegen MQ_AB (die mittlere Quadratsumme der Interaktion)."
+      ],
+      "c": 3,
+      "e": "Modell II: die Haupteffekte werden gegen MQ_AB geprüft (nicht MQ_e); nur die Interaktion gegen MQ_e."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Im Interaktionsdiagramm verlaufen die Linien (in beiden Diagrammen) exakt parallel. Welcher Typ?",
+    "opts": [
+      "Keine Interaktion.",
+      "Ordinale Interaktion.",
+      "Disordinale Interaktion.",
+      "Eine hybride Interaktion, weil parallele Linien in einem der beiden Diagramme stets mit einer Kreuzung der Linien im jeweils anderen Diagramm einhergehen."
+    ],
+    "c": 0,
+    "e": "Parallele Linien (in beiden Diagrammen) = keine Interaktion. Die Effekte sind dann additiv."
+  },
+  {
+    "id": "bq2",
+    "q": "Bei welchem Interaktionstyp ist KEIN Haupteffekt eindeutig interpretierbar?",
+    "opts": [
+      "Bei der ordinalen Interaktion.",
+      "Bei der disordinalen Interaktion.",
+      "Bei der hybriden Interaktion.",
+      "Bei keinem Typ, da Haupteffekte unabhängig von der Form der Interaktion grundsätzlich immer ohne jede Einschränkung interpretiert werden dürfen."
+    ],
+    "c": 1,
+    "e": "Disordinal (Kreuzung in beiden Diagrammen): beide Haupteffekte nur in Verbindung mit dem anderen Faktor deutbar → keiner eindeutig."
+  },
+  {
+    "id": "bq3",
+    "q": "Ein Faktor ‚Therapierende‘ wird durch 6 zufällig gezogene Personen gebildet. Was folgt daraus?",
+    "opts": [
+      "Es ist ein fester Faktor mit genau 6 definierten Stufen.",
+      "Man interessiert sich für die einzelnen Treatmentstufenmittelwerte.",
+      "Es ist ein Zufallsfaktor; man prüft H0: σ²_A = 0 und generalisiert auf die Population.",
+      "Es handelt sich um einen festen Faktor, dessen sechs Stufen vollständig betrachtet werden und über den hinaus keinerlei Generalisierung auf weitere Personen zulässig ist."
+    ],
+    "c": 2,
+    "e": "Zufällige Auswahl → Zufallsfaktor; H0: σ²_A = 0; Ergebnisse generalisieren auf die Population aller Therapierenden."
+  },
+  {
+    "id": "bq4",
+    "q": "Gegeben MQ_A = 21,41, MQ_e = 2,32, n = 5. Wie groß ist die Intraklassenkorrelation (gerundet)?",
+    "opts": [
+      "≈ 0,89, also MQ_A/(MQ_A + MQ_e).",
+      "≈ 0,11, weil sich die Intraklassenkorrelation als Verhältnis der mittleren Fehlerquadratsumme zur mittleren Treatmentquadratsumme des Zufallsfaktors ergibt.",
+      "≈ 3,82, also die geschätzte Varianzkomponente σ̂²_A selbst.",
+      "≈ 0,62 — denn σ̂²_A = (21,41−2,32)/5 ≈ 3,82 und IKK = 3,82/(2,32+3,82)."
+    ],
+    "c": 3,
+    "e": "σ̂²_A = (MQ_A−MQ_e)/n ≈ 3,82; IKK = σ̂²_A/(σ̂²_A+σ̂²_e) = 3,82/(2,32+3,82) ≈ 0,62. (c) ist die Varianzkomponente, nicht die IKK."
+  },
+  {
+    "id": "bq5",
+    "q": "Wogegen wird die zweifache Interaktion A×B geprüft — in allen drei Modellen?",
+    "opts": [
+      "Gegen MQ_e.",
+      "Gegen MQ_A.",
+      "Gegen MQ_AB selbst.",
+      "Gegen je nach Modell unterschiedliche mittlere Quadrate, sodass die Interaktion im Modell mit festen Effekten gegen MQ_AB und im Modell mit zufälligen Effekten gegen MQ_A geprüft wird."
+    ],
+    "c": 0,
+    "e": "Die zweifache Interaktion wird in allen drei Modellen gegen MQ_e geprüft. Nur die Haupteffekte unterscheiden sich je nach Modell."
+  },
+  {
+    "id": "bq6",
+    "q": "Warum interessiert man sich bei einem Zufallsfaktor NICHT für die einzelnen Stufenmittelwerte?",
+    "opts": [
+      "Weil die Stufen gar keinen Mittelwert besitzen.",
+      "Weil die konkreten Stufen nur eine zufällige Auswahl sind — relevant ist die Streuung über die Population (σ²_A).",
+      "Weil zufällige Faktoren grundsätzlich keinen Effekt auf die abhängige Variable haben können.",
+      "Weil bei zufälligen Faktoren die einzelnen Stufenmittelwerte stets exakt identisch sind und daher grundsätzlich keine inhaltlich auswertbare Information liefern."
+    ],
+    "c": 1,
+    "e": "Die gezogenen Stufen sind beliebig/austauschbar; interessant ist, ob der Faktor Varianz erzeugt (σ²_A) — generalisierbar auf die Population."
+  },
+  {
+    "id": "bq7",
+    "q": "Was misst die Intraklassenkorrelation konzeptuell?",
+    "opts": [
+      "Die Korrelation zweier Prädiktoren miteinander.",
+      "Die Signifikanz des Zufallsfaktors.",
+      "Die relative Stärke des Zufallsfaktors auf die AV (vergleichbar mit η²).",
+      "Den Anteil der Personen innerhalb einer zufällig gezogenen Faktorstufe, deren Messwerte exakt mit dem Mittelwert ihrer jeweiligen Klasse übereinstimmen."
+    ],
+    "c": 2,
+    "e": "IKK = Anteil der durch den Zufallsfaktor erklärten Varianz an der Gesamtvarianz — ein Effektmaß analog zu η²."
+  },
+  {
+    "id": "bq8",
+    "q": "Modell III (A fest, B zufällig): wie wird der feste Haupteffekt A geprüft?",
+    "opts": [
+      "Gegen MQ_e, also dieselbe mittlere Fehlerquadratsumme, die auch im Modell mit ausschließlich festen Effekten als Nenner aller drei Prüfgrößen herangezogen wird.",
+      "Gegen MQ_B.",
+      "Gegen MQ_A selbst.",
+      "Gegen MQ_AB — denn die Interaktion mit dem Zufallsfaktor geht in den Erwartungswert von MQ_A ein."
+    ],
+    "c": 3,
+    "e": "Im gemischten Modell wird der feste Effekt A gegen MQ_AB geprüft (E(MQ_A) enthält den Term n·σ²_AB). Die Interaktion selbst gegen MQ_e."
+  }
+];
+
+var corrCorrect = {
+  "ta": "keine",
+  "tb": "ordinal",
+  "tc": "disordinal",
+  "td": "hybrid",
+  "fa": "fest",
+  "fb": "zufaellig",
+  "fc": "fest",
+  "fd": "zufaellig",
+  "na": "MQe",
+  "nb": "MQab",
+  "nc": "MQe",
+  "nd": "MQe"
+};
+var corrExpl = {
+  "ta": "Parallele Linien in BEIDEN Diagrammen → keine Interaktion (additive Effekte).",
+  "tb": "Gleichsinniger Trend, keine Kreuzung in beiden Diagrammen → ordinal; beide Haupteffekte interpretierbar.",
+  "tc": "Kreuzung in BEIDEN Diagrammen → disordinal; kein Haupteffekt eindeutig interpretierbar.",
+  "td": "Kreuzung in EINEM Diagramm, im anderen nicht → hybrid; ein Haupteffekt bleibt eindeutig.",
+  "fa": "Genau die interessierenden Stufen systematisch ausgewählt → fester Faktor.",
+  "fb": "Stufen zufällig aus der Population gezogen → Zufallsfaktor (generalisierbar).",
+  "fc": "Männlich/weiblich sind die vollständig betrachteten, definierten Stufen → fest.",
+  "fd": "Zufällig ausgewählte Testleiter → Zufallsfaktor.",
+  "na": "Modell I (beide fest): jeder Effekt wird gegen MQ_e geprüft.",
+  "nb": "Modell II (beide zufällig): die Haupteffekte werden gegen MQ_AB geprüft.",
+  "nc": "Die zweifache Interaktion wird auch im Modell II gegen MQ_e geprüft.",
+  "nd": "Die zweifache Interaktion A×B wird in ALLEN drei Modellen gegen MQ_e geprüft."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Interaktions-Simulator (vl05): Klassifikation der Interaktion */
+var iaData = {
+  keine:     {t:'Keine Interaktion', d:'Die Linien verlaufen parallel — die Wirkung von A ist auf jeder Stufe von B gleich. Nur (evtl.) Haupteffekte.'},
+  ordinal:   {t:'Ordinale Interaktion', d:'Die Linien sind nicht parallel, kreuzen sich aber nicht: die Rangordnung der A-Stufen bleibt über alle B-Stufen erhalten. Haupteffekte bleiben interpretierbar.'},
+  disordinal:{t:'Disordinale Interaktion', d:'Die Linien kreuzen sich: die Rangordnung kehrt sich um. Haupteffekte sind hier irreführend — die Interaktion muss interpretiert werden.'}
+};
+function iaSet(k){
+  ['keine','ordinal','disordinal'].forEach(function(x){ var b=document.getElementById('ia-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('ia-out'); if(!o) return;
+  var d=iaData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  iaSet('keine');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

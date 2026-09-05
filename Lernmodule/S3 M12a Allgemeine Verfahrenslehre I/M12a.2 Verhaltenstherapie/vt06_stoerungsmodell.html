@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.2 · VT06 Vermittlung eines Störungsmodells</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a2-vl06
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Störungsmodell-Simulator (vt06) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.2 · VT06 Vermittlung eines Störungsmodells</h1>
+<p class="page-sub">Verhaltenstherapie · Teil 2 (Lindenmeyer) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Kausal vs funktional & Behandlung · 2. Teufelskreis-Schemata · 3. Ziele & Schwierigkeiten · 4. Landkarte & Balance · 5. Motivationsblockaden & Psychoedukation · 6. Schmerz & Gate-Control · 7. Borderline & Depression · 8. Alkohol & Metaphern
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Kausal vs funktional</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Teufelskreis-Schemata</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Ziele & Schwierigkeiten</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Landkarte & Balance</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Blockaden & Psychoedukation</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Schmerz & Gate-Control</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Borderline & Depression</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Alkohol & Metaphern</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Kausal vs funktional ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Kausal vs. funktional & Behandlungsverständnis</div>
+    <div class="sec-lz">Kausal/medizinisch (Warum/Ursache) vs funktional (Wann/Wozu/Funktion); medizinisches Modell = Patient passiv, psychotherapeutisch = aktiv + Zuversicht</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Krankheitsverständnisse, zwei Behandlungslogiken: Was unterscheidet das kausale vom funktionalen Modell — und den passiven vom aktiven Patienten?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0"><strong>Kausal/medizinisch:</strong> „Warum? Ursache?" → Patient passiv (stillhalten, schlucken). <strong>Funktional/psychotherapeutisch:</strong> „Wann? Wozu? Funktion?" → Patient <strong>aktiv</strong> (reden, Aktivitäten, Zuversicht).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kausal vs. funktional (Da capo)</div>
+    <strong>Kausal/medizinisch:</strong> Leitfrage „Warum? Ursache?"; Fokus Ätiologie/Ursachensuche. <strong>Funktional:</strong> Leitfrage „Wann? Wozu? Funktion?"; Fokus Auslöser, Konsequenzen, Aufrechterhaltung.
+  </div>
+  <div class="card">
+    <div class="card-title">Behandlungsverständnis</div>
+    <strong>Medizinisch:</strong> Patient ist <strong>passiv</strong> (stillhalten, schlucken, auf Aktivitäten verzichten) → Beruhigung. <strong>Psychotherapeutisch:</strong> Reden + <strong>Aktivitäten</strong>, Entwicklung von <strong>Zuversicht/Verständnis</strong> → Patient aktiv einbezogen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ VT-Selbstverständnis (Hoyer & Brockmeier)</div>
+    Handlungs-, Ziel-, Alltagsorientierung, Transparenz. Ablauf: Diagnostik → <strong>kognitive Vorbereitung</strong> (Störungsmodell + Therapierational) → Interventionen → Selbsterprobung → Evaluation.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Störungsmodell-Simulator — medizinisch vs. psychotherapeutisch</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="sm-med" onclick="smSet('med')">Medizinisch</button>
+        <button class="sim-tbtn" id="sm-pt" onclick="smSet('pt')">Psychotherapeutisch</button>
+      </div>
+      <div class="sim-verdict" id="sm-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Das psychotherapeutische Störungsmodell macht aus dem <strong>passiven Patienten</strong> (Ursache beseitigen lassen) einen <strong>aktiven Mitgestalter</strong> (Funktion verstehen, etwas tun).</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Teufelskreis-Schemata ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Teufelskreis-Schemata</div>
+    <div class="sec-lz">VT-Ablauf (kognitive Vorbereitung als zentraler Schritt); innerpsychischer vs interaktioneller Teufelskreis; kurzfristig (+) hält aufrecht, langfristig (−)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Das psychologische Krankheitsmodell stellt Störungen als Teufelskreis dar. Welche zwei Typen gibt es — und warum hält sich der Kreislauf selbst?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1"><strong>Innerpsychisch</strong> (Prozesse in der Person: Bewertung, Angst, Vermeidung) vs. <strong>interaktionell</strong> (bezieht das soziale Umfeld ein). Selbsterhaltend, weil die Konsequenz <strong>kurzfristig positiv</strong> (+) und <strong>langfristig negativ</strong> (−) ist.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Innerpsychischer Teufelskreis (z. B. Angst)</div>
+    Situativer Auslöser → physiologische Reaktion wird als <strong>gefährlich bewertet</strong> → stärkere Angst + <strong>Vermeidung</strong> → kurzfristig klingt die Angst ab (+), langfristig festigt sich die Gefährlichkeitsüberzeugung (−).
+  </div>
+  <div class="card">
+    <div class="card-title">Interaktioneller Teufelskreis (z. B. PS)</div>
+    Kritische Rückmeldung → <strong>Angst vor Ablehnung</strong> → übertriebene <strong>Selbstdarstellung</strong> → kurzfristig Anerkennung (+), langfristig Ablehnung (−) → provoziert erneut kritische Rückmeldung. Bezieht das <strong>soziale Umfeld</strong> ein.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Konsequenzen</div>
+    <strong>Kurzfristig positiv</strong> (+, hält das Verhalten aufrecht), <strong>langfristig negativ</strong> (−, verstärkt die Störung) — das macht den Kreislauf zum Teufelskreis.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Innerpsychisch oder interaktionell?</div>
+    <div class="corr-item" id="c1a">Auslöser → Reaktion wird als gefährlich bewertet → Vermeidung (in der Person)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'inner')">Innerpsychisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1a',this,'interaktionell')">Interaktionell</button>
+      </div><div class="corr-fb" id="c1a-fb"></div>
+    </div>
+    <div class="corr-item" id="c1b">Kritische Rückmeldung → Selbstdarstellung → Reaktion der anderen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'inner')">Innerpsychisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1b',this,'interaktionell')">Interaktionell</button>
+      </div><div class="corr-fb" id="c1b-fb"></div>
+    </div>
+    <div class="corr-item" id="c1c">Erschöpfung der Bezugspersonen → Emotionsausbruch → kurzfristige Aufmerksamkeit
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'inner')">Innerpsychisch</button>
+        <button class="corr-btn" onclick="checkCorr('c1c',this,'interaktionell')">Interaktionell</button>
+      </div><div class="corr-fb" id="c1c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Ziele & Schwierigkeiten ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Ziele & Schwierigkeiten der Modellvermittlung</div>
+    <div class="sec-lz">Ziele: Entpathologisierung, Selbstwirksamkeit/Motivation ↑; Schwierigkeit: Störungsverständnis der Patient*innen ist oft selbst Teil der Störung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wozu vermittelt man überhaupt ein Störungsmodell — und warum ist das oft schwierig?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Ziele:</strong> Erklärungsbedürfnis befriedigen, <strong>Entpathologisierung</strong>, Selbstwirksamkeit/Therapieerwartung und Veränderungsmotivation ↑. <strong>Schwierigkeit:</strong> Das Störungsverständnis der Patient*innen ist <strong>oft selbst Teil der Störung</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ziele der Modellvermittlung</div>
+    Kausales <strong>Erklärungsbedürfnis</strong> befriedigen · medizinische Nichtbehandlung begründen · <strong>Entpathologisierung</strong> · Entfokussierung der Vergangenheit · Erhöhung von <strong>Selbstwirksamkeit/Therapieerwartung</strong> · Erhöhung von <strong>Veränderungsmotivation/Compliance</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Schwierigkeiten</div>
+    Das <strong>Störungsverständnis der Patient*innen ist oft selbst Teil der Störung</strong>: mangelnde Selbstreflexion (nicht bewusst), Erinnerungsverzerrung, feste Erklärungsmuster (Vorbehandler/Medien/Bezugspersonen), Demoralisierung, Scham.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Ziele der Modellvermittlung</div>
+    <div id="ziele">
+      <div class="step-item"><strong>Erklären:</strong> kausales Erklärungsbedürfnis befriedigen; medizinische Nichtbehandlung begründen.</div>
+      <div class="step-item"><strong>Entlasten:</strong> Entpathologisierung, Entfokussierung der Vergangenheit.</div>
+      <div class="step-item"><strong>Aktivieren:</strong> Selbstwirksamkeit und Therapieerwartung erhöhen.</div>
+      <div class="step-item"><strong>Motivieren:</strong> Veränderungsmotivation und Compliance steigern.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'ziele')">Ziele aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Landkarte & Balance ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Landkarte ≠ Landschaft & Balance</div>
+    <div class="sec-lz">Modell = Akzentuierung (nicht Wahrheit): plausibel, widerspruchsfrei, günstig perspektiviert; Balance Validation/Pacing vs Change/Leading</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Muss ein Störungsmodell „wahr" sein? Und wie hält man die Balance zwischen Verständnis und Veränderung?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">„Die Landkarte ist nicht die Landschaft": ein Modell ist eine <strong>Akzentuierung</strong> — Kriterien sind <strong>Plausibilität, Widerspruchsfreiheit, günstige Perspektivität</strong> (nicht Wahrheit). Balance: <strong>Validation/Pacing</strong> (mitgehen) ↔ <strong>Change/Leading</strong> (führen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die Landkarte ist nicht die Landschaft</div>
+    Ein Störungsmodell ist <strong>keine vollständige Abbildung</strong> der Realität, sondern eine <strong>Akzentuierung</strong> bestimmter Aspekte (unter Weglassung anderer). Gütekriterien: <strong>Plausibilität, Widerspruchsfreiheit, günstige Perspektivität</strong> — nicht „Wahrheit".
+  </div>
+  <div class="card">
+    <div class="card-title">Balance: Validation/Pacing ↔ Change/Leading</div>
+    <strong>Validation/Pacing:</strong> Verständnis für die bestehende Sichtweise (Überzeugungen/Erfahrungen ernst nehmen). <strong>Change/Leading:</strong> schrittweise eine neue, hilfreichere (funktionale) Sichtweise einführen. „Erst pacing (mitgehen), dann leading (führen)."
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Nicht ausschließlich die neue Sichtweise „durchdrücken" — ohne <strong>Validation</strong> entsteht Widerstand. Beide Pole gehören in Balance.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Validation/Pacing oder Change/Leading?</div>
+    <div class="corr-item" id="c3a">Die bestehende Sichtweise und Erfahrungen der Patient*in ernst nehmen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'validation')">Validation/Pacing</button>
+        <button class="corr-btn" onclick="checkCorr('c3a',this,'change')">Change/Leading</button>
+      </div><div class="corr-fb" id="c3a-fb"></div>
+    </div>
+    <div class="corr-item" id="c3b">Schrittweise ein neues, funktionales Erklärungsmodell einführen
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'validation')">Validation/Pacing</button>
+        <button class="corr-btn" onclick="checkCorr('c3b',this,'change')">Change/Leading</button>
+      </div><div class="corr-fb" id="c3b-fb"></div>
+    </div>
+    <div class="corr-item" id="c3c">„Ihre Schmerzen sind real, keine Einbildung.“
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'validation')">Validation/Pacing</button>
+        <button class="corr-btn" onclick="checkCorr('c3c',this,'change')">Change/Leading</button>
+      </div><div class="corr-fb" id="c3c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Blockaden & Psychoedukation ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Motivationsblockaden & Psychoedukation</div>
+    <div class="sec-lz">Blockaden schützen das Selbstkonzept; Motivierung = dosierte Informationsverarbeitung; 4 Schritte: Beschwerden → Diagnosen → Modell → Therapieansatz</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Ich vertrage eben mehr als andere" — solche Sätze schützen das Selbstbild und blockieren die Behandlung. Wie geht man damit um, und wie läuft Psychoedukation ab?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>Motivationsblockaden</strong> schützen das Selbstkonzept → Motivierung als <strong>dosierte Informationsverarbeitung</strong> (jeder Blockade ein Gegenargument). <strong>4 Schritte:</strong> Beschwerden aufzählen → Diagnosen → Erklärungsmodell → Therapieansatz.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Motivationsblockaden</div>
+    Patient*innen schützen ihr Selbstkonzept („Ich bin ein wertvoller Mensch") durch Blockaden, z. B. „Ich habe ganz normal getrunken", „Ich vertrage eben mehr", „Ich brauche keine Hilfe". <strong>Motivierung als dosierte Informationsverarbeitung</strong>: jeder Blockade ein gezieltes Gegenargument, das das Selbstkonzept <strong>nicht direkt angreift</strong> (z. B. „gerade erhöhte Toleranz ist ein Gefahrensignal").
+  </div>
+  <div class="card">
+    <div class="card-title">4 Schritte der Psychoedukation</div>
+    (1) <strong>Beschwerden aufzählen</strong> (zeigt: zugehört) → (2) <strong>zu Diagnosen zusammenfassen</strong> (Reduktion, „typisch") → (3) <strong>Erklärungsmodell vermitteln</strong> (Normalisierung, Entlastung, Entpathologisierung) → (4) <strong>Therapieansatz ableiten</strong> (Selbstwirksamkeit, positive Erwartung, Freiheitsgrade).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Das Selbstkonzept wird <strong>nicht frontal angegriffen</strong> — die Gegenargumente eröffnen schrittweise neue Perspektiven (dosiert).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 4 Schritte der Psychoedukation</div>
+    <div id="psychoedu">
+      <div class="step-item"><strong>1.</strong> Alle Beschwerden aufzählen — beweisen, dass man zugehört hat.</div>
+      <div class="step-item"><strong>2.</strong> Beschwerden zu Diagnosen zusammenfassen — „das ist bekannt und typisch".</div>
+      <div class="step-item"><strong>3.</strong> Erklärungsmodell vermitteln — Normalisierung, Entlastung, Entpathologisierung.</div>
+      <div class="step-item"><strong>4.</strong> Therapieansatz ableiten — Selbstwirksamkeit, positive Erwartung, Freiheitsgrade.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'psychoedu')">Schritte aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Schmerz & Gate-Control ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Schmerz & Gate-Control-Theorie</div>
+    <div class="sec-lz">Gate-Control (Melzack & Wall 1965): Schmerztore modulieren; keine 1:1-Beziehung Schmerz↔Ursache; Schmerzerleben beeinflussbar</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum tut ein Foulspiel mal weh und mal nicht? Die Gate-Control-Theorie erklärt, warum Schmerz nicht 1:1 von der Ursache abhängt.</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Gate-Control</strong> (Melzack & Wall 1965): zwischen Schmerzlokalisation und Schmerzzentrum liegen <strong>„Schmerztore"</strong> — das Erleben wird auf dem Weg zum Gehirn <strong>moduliert</strong>. Botschaft: Schmerzen sind real, aber <strong>keine 1:1-Beziehung</strong> zur Ursache → beeinflussbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Gate-Control-Theorie (Melzack & Wall 1965)</div>
+    Zwischen <strong>Schmerzlokalisation</strong> (periphere Schmerzzelle → 1./2. Neuron) und dem <strong>Schmerzzentrum</strong> (Lokalisation &amp; Bewertung im Gehirn) liegen <strong>„Schmerztore"</strong> entlang der Wirbelsäule. „Dazwischen kann eine Menge geschehen" — das Schmerzerleben wird <strong>moduliert</strong>, ist nicht 1:1 durch die periphere Ursache bestimmt.
+  </div>
+  <div class="card">
+    <div class="card-title">Schmerz-Psychoedukation</div>
+    Schmerzen sind <strong>real, keine Einbildung</strong> (Validierung) · jeder Moment ist anders · <strong>keine 1:1-Beziehung</strong> Schmerz↔Ursache · wir können das Schmerzerleben <strong>beeinflussen</strong> (Selbstwirksamkeit). Metaphern: Foul/Schwalbe, Zahnarzt, indische Fakire.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Abgeleiteter Therapieansatz</div>
+    <strong>Schmerz-Protokollierung</strong> (Schmerzerleben schwankt) · ausprobieren, wodurch das eigene Erleben positiv beeinflussbar ist · Erweiterung des Handlungsspielraums und der Selbstwirksamkeit gegenüber Schmerzen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Der Weg des Schmerzsignals (Gate-Control)</div>
+    <div id="gatecontrol">
+      <div class="step-item"><strong>1.</strong> Periphere Schmerzzelle → 1. Neuron der Schmerzbahn.</div>
+      <div class="step-item"><strong>2.</strong> → 2. Neuron der Schmerzbahn.</div>
+      <div class="step-item"><strong>3.</strong> → „Schmerztore" entlang der Wirbelsäule (hier wird moduliert!).</div>
+      <div class="step-item"><strong>4.</strong> → Schmerzzentrum im Gehirn (Lokalisation &amp; Bewertung). Keine 1:1-Beziehung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'gatecontrol')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Borderline & Depression ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Borderline & Depression</div>
+    <div class="sec-lz">BPS: Überlebensstrategie gegen Invalidierung, hoher Preis; Depression: Teufelskreis (Belohnungssystem) → zentraler Ansatz Aktivitätssteigerung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Zwei Beispiel-Störungsmodelle: Wie wird Borderline validierend erklärt — und was ist der zentrale Therapieansatz bei Depression?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Borderline:</strong> ursprünglich notwendige <strong>Überlebensstrategie</strong> gegen Invalidierung (Validierung), mit hohem Preis in der Gegenwart. <strong>Depression:</strong> Teufelskreis der mangelnden Belohnungssystem-Aktivierung → zentraler Ansatz <strong>Aktivitätssteigerung</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Borderline-Persönlichkeitsstörung</div>
+    Psychoedukation: Probleme haben einen Namen (Validierung); ursprünglich <strong>notwendige Überlebensstrategie</strong> gegenüber Invalidierung in der Kindheit (Validierung); aber <strong>hoher Preis</strong> in der Gegenwart (Motivierung); Alternativen möglich (Selbstwirksamkeit). Therapie: zeitkontingente Gespräche, strikte Struktur (1. selbstschädigend, 2. therapieschädigend, 3. andere Themen), Dialektik, Skills-Training.
+  </div>
+  <div class="card">
+    <div class="card-title">Teufelskreis der Depression</div>
+    Auslöser (Verluste, Lebensereignisse, Dunkelheit …) → depressive Verstimmung → depressive Kognitionen → <strong>verringerte Aktivitätsrate</strong> → <strong>Verstärkerverlust</strong> → <strong>mangelnde Aktivierung des Belohnungssystems</strong> (Zentrum) → zurück zum Auslöser.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Therapieansatz Depression</div>
+    Zentral: <strong>Aktivitätssteigerung</strong> (durchbricht den Teufelskreis); ergänzend Pharmakotherapie (in schweren Fällen), kognitive Umstrukturierung, Kompetenztraining, CBM.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Zwei Beispiel-Störungsmodelle</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="bps" onclick="switchTab(this,'beispiele')">Borderline</button>
+      <button class="tab-btn" data-tab="dep" onclick="switchTab(this,'beispiele')">Depression</button>
+    </div>
+    <div class="tab-group" data-group="beispiele">
+      <div class="tab-content active" data-tab="bps"><strong>Borderline:</strong> Überlebensstrategie gegen Invalidierung (Validierung), hoher Preis heute (Motivierung); Therapie: Struktur, Dialektik, Skills-Training.</div>
+      <div class="tab-content" data-tab="dep"><strong>Depression:</strong> Teufelskreis (verringerte Aktivität → Verstärkerverlust → Belohnungssystem); zentraler Ansatz: Aktivitätssteigerung.</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Alkohol & Metaphern ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Alkohol (Eisenbahnmodell) & Metaphern</div>
+    <div class="sec-lz">Eisenbahnmodell: keine Ursache nötig, Konsum wird automatisiert (≠ wirkungsorientiert), Abstinenz sicherstes Ziel; Metaphern = einprägsam/alltagsnah</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Das „Eisenbahnmodell" erklärt Alkoholabhängigkeit ohne Ursachensuche. Was besagt es — und warum sind Metaphern überhaupt so nützlich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Eisenbahnmodell:</strong> keine Ursache nötig; Konsum zunächst wirkungsorientiert, dann zunehmend <strong>automatisiert</strong> (unabhängig von der Wirkung); Abstinenz = sicherstes Ziel. <strong>Metaphern</strong> sind einprägsam, alltagsnah und gut an Angehörige vermittelbar.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Eisenbahnmodell (Alkoholabhängigkeit)</div>
+    Kernaussagen: Es braucht <strong>keine Ursachen</strong> für die Entstehung; Alkoholkonsum ist zunächst <strong>wirkungsorientiert</strong>, wird dann <strong>immer automatisierter und unabhängiger von der tatsächlichen Wirkung</strong>; <strong>Abstinenz ist das sicherste Therapieziel</strong> und „Übungssache".
+  </div>
+  <div class="card">
+    <div class="card-title">Nützlichkeit von Metaphern</div>
+    Neu und doch bekannt · Bilder leichter zu erinnern · leichter an <strong>Angehörige</strong> zu vermitteln · betonen <strong>Normalität</strong> · prestigeträchtig · greifen <strong>Werte/Welt der Patient*innen</strong> auf. Beispiele: Schmerz (Foul/Schwalbe), Alkohol (Eisenbahn).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Wirkungsorientiert ≠ automatisiert</div>
+    <strong>Wirkungsorientiert</strong> = bewusst auf die Wirkung gerichtet (anfangs). <strong>Automatisiert</strong> = habituell, unabhängig von der tatsächlichen Wirkung (später) — „wie ein Zug auf Schienen".
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Das Eisenbahnmodell — Kernaussagen</div>
+    <div id="eisenbahn">
+      <div class="step-item"><strong>1.</strong> Es braucht keine notwendigen Ursachen für die Entstehung.</div>
+      <div class="step-item"><strong>2.</strong> Konsum zunächst wirkungsorientiert (bewusste Wirkungssuche).</div>
+      <div class="step-item"><strong>3.</strong> Konsum wird zunehmend automatisiert, unabhängig von der tatsächlichen Wirkung.</div>
+      <div class="step-item"><strong>4.</strong> Abstinenz ist das sicherste Therapieziel und Übungssache.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'eisenbahn')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VT06 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kausales, medizinisches Verständnis</h4>
+      <p>Leitfrage: Warum? Ursache?</p>
+      <p>Fokus: Ätiologie / Ursachensuche</p>
+      <p>Vergangenheitsorientiert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Funktionales Verständnis</h4>
+      <p>Leitfrage: Wann? Wozu? Funktion?</p>
+      <p>Fokus: Auslöser, Konsequenzen, Aufrechterhaltung</p>
+      <p>Kontext-/gegenwartsorientiert</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Das funktionale Krankheitsverständnis sucht wie das medizinische Modell nach der Ursache einer Störung.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Innerpsychischer Teufelskreis</h4>
+      <p>Prozesse innerhalb der Person</p>
+      <p>Bewertung, Angst, Vermeidung</p>
+      <p>z. B. Angststörung</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Interaktioneller Teufelskreis</h4>
+      <p>Bezieht das soziale Umfeld ein</p>
+      <p>Bezugspersonen, Rückmeldungen, Reaktionen</p>
+      <p>z. B. Persönlichkeitsstörung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Der interaktionelle Teufelskreis bei Persönlichkeitsstörungen beschreibt ausschließlich innere kognitive Prozesse ohne Beteiligung des sozialen Umfelds.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kurzfristige Konsequenz</h4>
+      <p>Positiv (+)</p>
+      <p>z. B. Erleichterung, Anerkennung</p>
+      <p>Hält das Verhalten aufrecht</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Langfristige Konsequenz</h4>
+      <p>Negativ (−)</p>
+      <p>Verstärkt die Störung</p>
+      <p>Macht den Kreislauf zum Teufelskreis</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die langfristige Konsequenz im Teufelskreis-Modell ist positiv und erklärt die Aufrechterhaltung des Verhaltens.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Validation / Pacing</h4>
+      <p>Verständnis für die bestehende Sichtweise</p>
+      <p>Erfahrungen ernst nehmen</p>
+      <p>„Mitgehen“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Change / Leading</h4>
+      <p>Neue, hilfreichere Sichtweise vermitteln</p>
+      <p>Funktionales Modell schrittweise einführen</p>
+      <p>„Führen“</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> In der Psychoedukation soll ausschließlich die neue, therapeutisch günstige Sichtweise vermittelt werden, ohne die bisherige Sichtweise der Patient*innen zu berücksichtigen.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Wirkungsorientierter Alkoholkonsum</h4>
+      <p>Bewusst auf die Wirkung gerichtet</p>
+      <p>Zu Beginn der Abhängigkeit</p>
+      <p>Wirkungssuche</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Automatisierter Alkoholkonsum</h4>
+      <p>Habituell, läuft automatisch ab</p>
+      <p>Unabhängig von der tatsächlichen Wirkung</p>
+      <p>Im Verlauf der Abhängigkeit (Eisenbahnmodell)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Alkoholkonsum bleibt im Verlauf einer Abhängigkeit stets wirkungsorientiert.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a2-vl06</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a2-vl06';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was unterscheidet das funktionale vom kausalen Krankheitsverständnis?",
+      "opts": [
+        "Funktional fragt „Wann? Wozu? Funktion?“ (Auslöser/Konsequenzen); kausal fragt „Warum? Ursache?“ (Ätiologie).",
+        "Das funktionale Krankheitsverständnis sucht — genau wie das kausale, medizinische Modell — ausschließlich nach der einen zugrundeliegenden biologischen Ursache der Störung und blendet Auslöser und Konsequenzen vollständig aus.",
+        "Beide Modelle fragen ausschließlich nach der zugrundeliegenden biologischen Ursache.",
+        "Das funktionale Verständnis betrifft ausschließlich die Medikamentenwahl."
+      ],
+      "c": 0,
+      "e": "Kausal/medizinisch: „Warum? Ursache?“ (Ätiologie). Funktional: „Wann? Wozu? Funktion?“ (Auslöser, Konsequenzen, Aufrechterhaltung)."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was unterscheidet das psychotherapeutische vom medizinischen Behandlungsmodell?",
+      "opts": [
+        "Auch im psychotherapeutischen Behandlungsmodell bleibt die Patientin durchgehend vollkommen passiv, indem sie ausschließlich stillhält, schluckt und auf jegliche Aktivität verzichtet, während die Beschwerden von selbst verschwinden.",
+        "Im psychotherapeutischen Modell sind Aktivität und Zuversicht zentral; im medizinischen ist der Patient passiv (stillhalten, schlucken, verzichten).",
+        "Beide Modelle setzen auf die vollständige Passivität der Patient*in.",
+        "Im psychotherapeutischen Modell wird ausschließlich Medikation verabreicht."
+      ],
+      "c": 1,
+      "e": "Medizinisch: Patient passiv (stillhalten, schlucken, verzichten) → Beruhigung. Psychotherapeutisch: Reden + Aktivitäten, Entwicklung von Zuversicht/Verständnis → Patient aktiv einbezogen."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was unterscheidet den innerpsychischen vom interaktionellen Teufelskreis?",
+      "opts": [
+        "Beide Teufelskreise spielen sich ausschließlich innerhalb der Person ab und beziehen das soziale Umfeld grundsätzlich nicht ein.",
+        "Der innerpsychische Teufelskreis bezieht das soziale Umfeld ein, der interaktionelle läuft rein innerlich ab.",
+        "Innerpsychisch = Prozesse in der Person (Bewertung, Angst, Vermeidung); interaktionell = bezieht das soziale Umfeld ein (Rückmeldungen anderer).",
+        "Der interaktionelle Teufelskreis bei Persönlichkeitsstörungen beschreibt ausschließlich innere kognitive Bewertungsprozesse innerhalb der Person, völlig ohne Beteiligung von Bezugspersonen oder sozialen Reaktionen."
+      ],
+      "c": 2,
+      "e": "Innerpsychischer Teufelskreis: Prozesse innerhalb der Person (z. B. Angst: Auslöser → Gefährlichkeitsbewertung → Vermeidung). Interaktioneller: bezieht das soziale Umfeld ein (z. B. PS: kritische Rückmeldung → Selbstdarstellung → Reaktion anderer)."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was gilt für die Konsequenzen im Teufelskreis-Modell?",
+      "opts": [
+        "Die langfristige Konsequenz im Teufelskreis-Modell ist positiv und angenehm und erklärt damit, warum das dysfunktionale Verhalten dauerhaft beibehalten und immer wieder gezeigt wird.",
+        "Beide Konsequenzen sind langfristig negativ und schädlich.",
+        "Die kurzfristige Konsequenz ist negativ und aversiv.",
+        "Kurzfristig positiv (+, z. B. Erleichterung) → hält das Verhalten aufrecht; langfristig negativ (−) → verstärkt die Störung."
+      ],
+      "c": 3,
+      "e": "Teufelskreis: kurzfristige Konsequenz positiv (+, Erleichterung/Anerkennung) → hält das dysfunktionale Verhalten aufrecht; langfristige Konsequenz negativ (−) → verstärkt die Störung."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was ist ein Ziel der Modellvermittlung?",
+      "opts": [
+        "Entpathologisierung sowie die Erhöhung von Selbstwirksamkeit, Therapieerwartung und Veränderungsmotivation.",
+        "Das zentrale Ziel der Modellvermittlung besteht ausdrücklich darin, die Pathologisierung und die Demoralisierung der Patient*innen weiter zu verstärken und den Fokus dauerhaft auf die Vergangenheit zu richten.",
+        "Die dauerhafte Fokussierung auf die Vergangenheit der Patient*in.",
+        "Der vollständige Verzicht auf jede Erklärung der Störung."
+      ],
+      "c": 0,
+      "e": "Ziele der Modellvermittlung: kausales Erklärungsbedürfnis befriedigen, medizinische Nichtbehandlung begründen, Entpathologisierung, Entfokussierung der Vergangenheit, Erhöhung von Selbstwirksamkeit/Therapieerwartung und Veränderungsmotivation/Compliance."
+    },
+    {
+      "id": "s2q2",
+      "q": "Warum ist die Modellvermittlung oft erschwert?",
+      "opts": [
+        "Die Modellvermittlung ist deshalb erschwert, weil Patient*innen erwiesenermaßen stets das objektiv korrekte und vollständige Störungsmodell bereits von sich aus mitbringen und jede therapeutische Erklärung daher überflüssig ist.",
+        "Das Störungsverständnis der Patient*innen ist oft selbst Teil der Störung (feste Erklärungsmuster, Scham, Demoralisierung).",
+        "Weil Patient*innen grundsätzlich immer das korrekte Modell mitbringen.",
+        "Weil es für psychische Störungen überhaupt keine Modelle gibt."
+      ],
+      "c": 1,
+      "e": "Schwierigkeiten: Das Störungsverständnis der Patient*innen ist oft selbst Teil der Störung — mangelnde Selbstreflexion, Erinnerungsverzerrung, feste Erklärungsmuster (Vorbehandler/Medien), Demoralisierung, Scham."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Kriterien muss ein gutes Störungsmodell erfüllen?",
+      "opts": [
+        "Es muss die vollständige, objektive Wahrheit über die Störung lückenlos abbilden.",
+        "Es muss möglichst kompliziert und detailreich sein.",
+        "Plausibilität, Widerspruchsfreiheit und günstige Perspektivität (NICHT die vollständige Wahrheit).",
+        "Ein gutes Störungsmodell muss zwingend eine vollständige, lückenlose und objektiv überprüfbare Abbildung der gesamten Realität der Störung darstellen, vergleichbar mit einem eindeutigen Laborbefund."
+      ],
+      "c": 2,
+      "e": "„Die Landkarte ist nicht die Landschaft“: ein Störungsmodell ist eine Akzentuierung (nicht die ganze Wahrheit). Kriterien: Plausibilität, Widerspruchsfreiheit, günstige Perspektivität."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was bedeutet die Balance „Validation/Pacing vs. Change/Leading“?",
+      "opts": [
+        "In der Psychoedukation soll ausschließlich die neue, therapeutisch günstige Sichtweise vermittelt werden, ohne die bisherige Sichtweise und die Erfahrungen der Patient*innen in irgendeiner Form zu berücksichtigen.",
+        "Ausschließlich die bestehende Sichtweise der Patient*in bestätigen.",
+        "Beide Pole bezeichnen exakt dasselbe.",
+        "Validation/Pacing = bestehende Sichtweise ernst nehmen; Change/Leading = neue, hilfreichere Sichtweise einführen — beides in Balance."
+      ],
+      "c": 3,
+      "e": "Balance: Validation/Pacing (Verständnis für die bestehende Sichtweise) UND Change/Leading (schrittweise neue, funktionale Sichtweise einführen). „Erst pacing (mitgehen), dann leading (führen) — wie beim Tanz.“"
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was sind „Motivationsblockaden“ (z. B. bei Alkohol)?",
+      "opts": [
+        "Überzeugungen, die das Selbstkonzept schützen (z. B. „Ich vertrage eben mehr als andere“) und die Behandlung blockieren.",
+        "Motivationsblockaden sind objektive, apparativ messbare medizinische Befunde, die unabhängig vom Selbstkonzept der Patientin im Körper nachweisbar sind und die Behandlung biologisch verhindern.",
+        "Objektive medizinische Laborbefunde der Alkoholabhängigkeit.",
+        "Gezielte therapeutische Interventionen zur Motivationssteigerung."
+      ],
+      "c": 0,
+      "e": "Motivationsblockaden schützen das Selbstkonzept („Ich bin ein wertvoller Mensch“): z. B. „Ich habe ganz normal getrunken“, „Ich vertrage mehr als andere“, „Ich brauche keine Hilfe“. Motivierung = dosierte Informationsverarbeitung: jeder Blockade ein Gegenargument, ohne das Selbstkonzept direkt anzugreifen."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche sind die vier Schritte der Psychoedukation?",
+      "opts": [
+        "Die vier Schritte der Psychoedukation bestehen ausschließlich aus dem sofortigen Stellen der Diagnose, der Verordnung eines Medikaments, der Abrechnung mit der Krankenkasse und der raschen Entlassung der Patientin.",
+        "Beschwerden aufzählen → zu Diagnosen zusammenfassen → Erklärungsmodell vermitteln → Therapieansatz ableiten.",
+        "Diagnose, Medikament, Abrechnung, Entlassung.",
+        "Test, Operate, Test, Exit."
+      ],
+      "c": 1,
+      "e": "4 Schritte der Psychoedukation: (1) alle Beschwerden aufzählen (zeigt: zugehört), (2) zu Diagnosen zusammenfassen (Reduktion, „typisch“), (3) Erklärungsmodell vermitteln (Normalisierung, Entlastung, Entpathologisierung), (4) Therapieansatz ableiten (Selbstwirksamkeit, positive Erwartung)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was besagt die Gate-Control-Theorie (Melzack & Wall 1965)?",
+      "opts": [
+        "Das Schmerzerleben wird 1:1 und vollständig durch die periphere körperliche Ursache bestimmt.",
+        "Schmerz ist grundsätzlich reine Einbildung ohne reale körperliche Grundlage.",
+        "Zwischen Schmerzlokalisation und Schmerzzentrum gibt es „Schmerztore“ — das Schmerzerleben wird auf dem Weg zum Gehirn moduliert.",
+        "Die Gate-Control-Theorie besagt, dass das Schmerzerleben ausschließlich und unmittelbar an der peripheren Schmerzzelle entsteht und auf dem gesamten Weg zum Gehirn keinerlei Modulation oder Veränderung mehr unterliegt."
+      ],
+      "c": 2,
+      "e": "Gate-Control-Theorie (Melzack & Wall 1965): zwischen peripherer Schmerzlokalisation und dem Schmerzzentrum (Gehirn) liegen „Schmerztore“ — „dazwischen kann eine Menge geschehen“. Das Schmerzerleben ist NICHT 1:1 durch die periphere Ursache determiniert, sondern wird moduliert."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche Kernbotschaft vermittelt die Schmerz-Psychoedukation?",
+      "opts": [
+        "Die zentrale Botschaft der Schmerz-Psychoedukation lautet, dass die Schmerzen der Patientin reine Einbildung sind und in direkter, unveränderlicher 1:1-Beziehung zur körperlichen Ursache stehen, sodass sie sich nicht beeinflussen lassen.",
+        "Schmerz ist stets 1:1 durch die körperliche Ursache bestimmt.",
+        "Das Schmerzerleben lässt sich grundsätzlich nicht beeinflussen.",
+        "Schmerzen sind real (Validierung), aber es gibt keine 1:1-Beziehung zur Ursache — das Schmerzerleben ist beeinflussbar (Selbstwirksamkeit)."
+      ],
+      "c": 3,
+      "e": "Schmerz-Psychoedukation: Schmerzen sind real, keine Einbildung (Validierung); jeder Moment ist anders; keine 1:1-Beziehung Schmerz↔Ursache; wir können das Schmerzerleben beeinflussen (Selbstwirksamkeit). Therapieansatz: Schmerz-Protokollierung, Einflussfaktoren ausprobieren."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wie wird die Borderline-Störung in der Psychoedukation validierend eingeordnet?",
+      "opts": [
+        "Als ursprünglich notwendige Überlebensstrategie gegenüber Invalidierung in der Kindheit (mit hohem Preis in der Gegenwart).",
+        "Die Borderline-Störung wird in der Psychoedukation als angeborener, unveränderlicher und lebenslang feststehender Charakterdefekt der Patientin dargestellt, für den ausschließlich sie selbst die alleinige Verantwortung trägt.",
+        "Als bewusst gewählte böse Absicht der Patient*in.",
+        "Als rein körperliche, neurologische Erkrankung ohne psychosoziale Komponente."
+      ],
+      "c": 0,
+      "e": "Borderline-Psychoedukation: Probleme haben einen Namen (Validierung); ursprünglich notwendige Überlebensstrategie gegenüber Invalidierung in der Kindheit (Validierung); aber hoher Preis in der Gegenwart (Motivierung); Alternativen möglich (Selbstwirksamkeit). Therapie: zeitkontingente Gespräche, strikte Struktur, Dialektik, Skills-Training."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was ist der zentrale Therapieansatz bei Depression (Teufelskreis)?",
+      "opts": [
+        "Der zentrale Therapieansatz bei Depression besteht ausschließlich in vollständiger körperlicher Schonung und Passivität sowie der durchgehenden Vermeidung jeglicher Aktivität, um die erschöpften Ressourcen der Patientin zu schützen.",
+        "Aktivitätssteigerung — sie setzt direkt am Teufelskreis der mangelnden Belohnungssystem-Aktivierung an.",
+        "Ausschließlich die Gabe von Medikamenten.",
+        "Die dauerhafte Fokussierung auf die Verlusterlebnisse der Vergangenheit."
+      ],
+      "c": 1,
+      "e": "Teufelskreis der Depression: Auslöser → depressive Verstimmung/Kognitionen → verringerte Aktivitätsrate → Verstärkerverlust → mangelnde Aktivierung des Belohnungssystems (Zentrum). Zentraler Therapieansatz: Aktivitätssteigerung; Medikamente in schweren Fällen unterstützend."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was besagt das Eisenbahnmodell zur Alkoholabhängigkeit?",
+      "opts": [
+        "Dass für die Entstehung einer Alkoholabhängigkeit zwingend eine spezifische, klar identifizierbare Ursache vorliegen muss.",
+        "Dass der Alkoholkonsum auch im Verlauf der Abhängigkeit dauerhaft und unverändert wirkungsorientiert bleibt.",
+        "Es braucht keine Ursachen; der Konsum wird zunehmend automatisiert (unabhängig von der Wirkung); Abstinenz ist das sicherste Ziel.",
+        "Das Eisenbahnmodell besagt, dass eine Alkoholabhängigkeit ausschließlich durch eine einzige, eindeutig benennbare biologische Ursache entsteht und der Konsum bis zuletzt vollständig bewusst und wirkungsorientiert gesteuert bleibt."
+      ],
+      "c": 2,
+      "e": "Eisenbahnmodell (Lindenmeyer): es braucht keine notwendigen Ursachen; Konsum zunächst wirkungsorientiert, dann zunehmend automatisiert (unabhängig von der tatsächlichen Wirkung); Abstinenz = sicherstes Ziel, „Übungssache“."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wozu dienen Metaphern in der Psychoedukation?",
+      "opts": [
+        "Metaphern dienen in der Psychoedukation ausschließlich dazu, das Störungsmodell möglichst kompliziert, abstrakt und fachsprachlich zu formulieren, sodass es nur für ein Fachpublikum und keinesfalls für Patient*innen oder Angehörige verständlich ist.",
+        "Um das Störungsmodell möglichst kompliziert und unverständlich zu machen.",
+        "Ausschließlich zur Unterhaltung der Patient*innen ohne inhaltlichen Zweck.",
+        "Sie machen Modelle verständlich, einprägsam (Bilder), alltagsnah und gut an Angehörige vermittelbar; greifen Werte/Welt der Patient*innen auf."
+      ],
+      "c": 3,
+      "e": "Metaphern: neu und doch bekannt, Bilder leichter zu erinnern, leichter an Angehörige zu vermitteln, betonen Normalität, prestigeträchtig, greifen Werte/Welt der Patient*innen auf. Beispiele: Schmerz (Foul/Schwalbe), Alkohol (Eisenbahn)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Leitfrage kennzeichnet das funktionale Krankheitsverständnis?",
+    "opts": [
+      "„Wann? Wozu? Welche Funktion?“",
+      "Die Leitfrage des funktionalen Krankheitsverständnisses lautet ausdrücklich „Warum? Welche eine zugrundeliegende biologische Ursache?“ und entspricht damit vollständig dem kausalen, medizinischen Modell.",
+      "„Welches Medikament wirkt am schnellsten?“",
+      "„Wie hoch ist die zu erwartende Therapiegebühr?“"
+    ],
+    "c": 0,
+    "e": "Funktionales Krankheitsverständnis: „Wann? Wozu? Welche Funktion?“ (Fokus: Auslöser, Konsequenzen, Aufrechterhaltung). Kausal/medizinisch: „Warum? Ursache?“"
+  },
+  {
+    "id": "bq2",
+    "q": "Welche Rolle hat die „kognitive Vorbereitung“ im VT-Ablauf (Hoyer & Brockmeier)?",
+    "opts": [
+      "Die kognitive Vorbereitung ist im Ablauf der Verhaltenstherapie lediglich ein optionaler, nebensächlicher Zusatzschritt ohne eigenständige Bedeutung, der jederzeit vollständig entfallen kann, ohne den Therapieerfolg zu beeinträchtigen.",
+      "Sie ist ein eigenständiger, zentraler Schritt: Erarbeitung eines Störungsmodells + Ableitung des Therapierationals.",
+      "Sie ist ein rein optionaler Zusatz ganz ohne Bedeutung.",
+      "Sie ersetzt die multidimensionale Diagnostik vollständig."
+    ],
+    "c": 1,
+    "e": "VT-Ablauf (Hoyer & Brockmeier 2021): multidimensionale Diagnostik → kognitive Vorbereitung (Störungsmodell + Therapierational) → Interventionen → Selbsterprobung → Evaluation. Die kognitive Vorbereitung ist ein eigenständiger, zentraler Schritt."
+  },
+  {
+    "id": "bq3",
+    "q": "Was bedeutet „Die Landkarte ist nicht die Landschaft“?",
+    "opts": [
+      "Dass ein Störungsmodell die vollständige Realität der Störung lückenlos abbilden muss.",
+      "Dass Störungsmodelle objektiv eindeutig wahr oder falsch sind.",
+      "Ein Störungsmodell ist eine Akzentuierung (Auswahl) der Realität — nicht ihre vollständige Abbildung.",
+      "„Die Landkarte ist nicht die Landschaft“ bedeutet, dass ein Störungsmodell die objektive Realität der Störung in jedem Detail vollständig, lückenlos und unverfälscht wiedergeben muss, um therapeutisch verwendbar zu sein."
+    ],
+    "c": 2,
+    "e": "„Die Landkarte ist nicht die Landschaft“: ein Störungsmodell akzentuiert bestimmte Aspekte und lässt andere weg. Gütekriterien: Plausibilität, Widerspruchsfreiheit, günstige Perspektivität — nicht „Wahrheit“."
+  },
+  {
+    "id": "bq4",
+    "q": "Welcher Therapieansatz folgt aus dem Depressions-Teufelskreis?",
+    "opts": [
+      "Aus dem Depressions-Teufelskreis folgt als zentraler Therapieansatz ausschließlich die vollständige körperliche Schonung und die durchgehende Vermeidung jeglicher Aktivität zum Schutz der erschöpften Patientin.",
+      "Ausschließlich die intensive Bearbeitung der Verlusterlebnisse der Vergangenheit.",
+      "Reine Passivität und konsequente Schonung der Patient*in.",
+      "Aktivitätssteigerung (zentral) — am Teufelskreis der mangelnden Belohnungssystem-Aktivierung; Medikamente unterstützend."
+    ],
+    "c": 3,
+    "e": "Depressions-Teufelskreis → zentraler Ansatz: Aktivitätssteigerung (durchbricht verringerte Aktivitätsrate/Verstärkerverlust/mangelnde Belohnungssystem-Aktivierung); ergänzend Pharmakotherapie, kognitive Umstrukturierung, Kompetenztraining."
+  },
+  {
+    "id": "bq5",
+    "q": "Was unterscheidet wirkungsorientierten von automatisiertem Alkoholkonsum?",
+    "opts": [
+      "Wirkungsorientiert = bewusst auf die Wirkung ausgerichtet (anfangs); automatisiert = habituell, unabhängig von der tatsächlichen Wirkung (später).",
+      "Wirkungsorientierter und automatisierter Alkoholkonsum bezeichnen exakt dasselbe und unterscheiden sich in keiner Weise im zugrundeliegenden Mechanismus oder im zeitlichen Verlauf der Abhängigkeit.",
+      "Beide sind vollkommen identisch.",
+      "Automatisierter Konsum ist der Anfangszustand, wirkungsorientierter Konsum der Endzustand der Abhängigkeit."
+    ],
+    "c": 0,
+    "e": "Wirkungsorientierter Konsum: bewusst auf die Alkoholwirkung gerichtet (zu Beginn). Automatisierter Konsum: habituell, unabhängig von der tatsächlichen Wirkung (im Verlauf der Abhängigkeit) — „wie ein Zug auf Schienen“ (Eisenbahnmodell)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was ist der erste Schritt der Psychoedukation?",
+    "opts": [
+      "Der erste Schritt der Psychoedukation besteht darin, der Patientin ohne jede Bestandsaufnahme ihrer Beschwerden sofort das fertige, vollständige Erklärungsmodell sowie den abgeschlossenen Behandlungsplan vorzugeben.",
+      "Alle Beschwerden der Patient*in aufzählen (zeigt, dass man zugehört hat).",
+      "Sofort das fertige Erklärungsmodell vorgeben, ohne die Beschwerden zu erfassen.",
+      "Die zu erwartende Therapiegebühr erläutern."
+    ],
+    "c": 1,
+    "e": "4 Schritte: (1) alle Beschwerden aufzählen (zeigt zugehört) → (2) zu Diagnosen zusammenfassen → (3) Erklärungsmodell vermitteln → (4) Therapieansatz ableiten."
+  },
+  {
+    "id": "bq7",
+    "q": "Welche Funktion hat „Validation/Pacing“ in der Modellvermittlung?",
+    "opts": [
+      "Validation/Pacing dient ausschließlich dazu, die neue, therapeutisch günstige Sichtweise möglichst schnell, einseitig und kompromisslos gegen den Widerstand der Patientin durchzusetzen.",
+      "Die bestehende Sichtweise der Patient*in vollständig zu ignorieren.",
+      "Die bestehende Sichtweise/Erfahrungen der Patient*in ernst nehmen (Voraussetzung, bevor man neue Perspektiven einführt).",
+      "Validation/Pacing besteht ausdrücklich darin, der Patientin von Beginn an ausschließlich die neue, funktionale Sichtweise aufzuzwingen und ihre bisherigen Erfahrungen vollständig zu verwerfen."
+    ],
+    "c": 2,
+    "e": "Validation/Pacing: die bestehenden Überzeugungen/Erfahrungen ernst nehmen. Change/Leading: schrittweise eine neue, funktionale Sichtweise einführen. Beide in Balance: erst pacing, dann leading."
+  },
+  {
+    "id": "bq8",
+    "q": "Was ist ein Vorteil von Metaphern in der Psychoedukation?",
+    "opts": [
+      "Der zentrale Vorteil von Metaphern in der Psychoedukation besteht darin, dass sie das Störungsmodell für die Patient*innen bewusst komplizierter, abstrakter und schwerer verständlich machen und dadurch deren Respekt vor der Fachkompetenz erhöhen.",
+      "Dass sie das Modell deutlich komplizierter und unverständlicher machen.",
+      "Dass sie ausschließlich für ein Fachpublikum geeignet sind.",
+      "Sie sind einprägsam (Bilder), alltagsnah, gut an Angehörige vermittelbar und greifen die Werte/Welt der Patient*innen auf."
+    ],
+    "c": 3,
+    "e": "Metaphern-Vorteile: neu und doch bekannt, leichter zu erinnern, leichter an Angehörige zu vermitteln, betonen Normalität, prestigeträchtig, greifen die Werte/Welt der Patient*innen auf."
+  }
+];
+
+var corrCorrect = {
+  "c1a": "inner",
+  "c1b": "interaktionell",
+  "c1c": "interaktionell",
+  "c3a": "validation",
+  "c3b": "change",
+  "c3c": "validation"
+};
+var corrExpl = {
+  "c1a": "Auslöser → Gefährlichkeitsbewertung → Vermeidung läuft innerhalb der Person ab → innerpsychischer Teufelskreis.",
+  "c1b": "Kritische Rückmeldung → Selbstdarstellung → Reaktion anderer bezieht das soziale Umfeld ein → interaktioneller Teufelskreis.",
+  "c1c": "Erschöpfung der Bezugspersonen → Emotionsausbruch → Aufmerksamkeit der anderen → interaktioneller Teufelskreis (z. B. Borderline).",
+  "c3a": "Die bestehende Sichtweise und Erfahrungen ernst nehmen = Validation/Pacing.",
+  "c3b": "Schrittweise ein neues, funktionales Erklärungsmodell einführen = Change/Leading.",
+  "c3c": "„Ihre Schmerzen sind real, keine Einbildung“ nimmt die Erfahrung ernst = Validation/Pacing."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Störungsmodell-Simulator (Sektion ①) */
+var smData = {
+  med:{t:'Medizinisches Modell', d:'„Warum/Ursache?"; Patient passiv (stillhalten, schlucken, verzichten) → Beruhigung/Erleichterung.'},
+  pt: {t:'Psychotherapeutisches Modell', d:'„Wann/Wozu/Funktion?"; Patient aktiv (reden, Aktivitäten); Zuwendung, Verständnis, Zuversicht.'}
+};
+function smSet(k){
+  ['med','pt'].forEach(function(x){ var b=document.getElementById('sm-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('sm-out'); if(!o) return;
+  var d=smData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  smSet('med');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

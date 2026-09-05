@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.2 · VT08 Kognitive Umstrukturierung</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a2-vl08
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Triaden-Simulator (vt08) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.2 · VT08 Kognitive Umstrukturierung</h1>
+<p class="page-sub">Verhaltenstherapie · Teil 2 (Lindenmeyer) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Philosophie & ABC-Modell · 2. Ellis: Überzeugungen & Musturbation · 3. Beck: Gedanken & Triade · 4. Selbstinstruktion & 5 Phasen · 5. Aufdecken & Arten dysfunktionaler Gedanken · 6. Sokratischer Dialog · 7. Disputation & funktionale Kognitionen · 8. Spalten-Technik, Probleme & Evidenz
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Philosophie & ABC</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Ellis</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Beck</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Selbstinstruktion & Phasen</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Aufdecken & Arten</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Sokratischer Dialog</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Disputation & funktional</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Spalten-Technik & Evidenz</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Philosophie & ABC ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Philosophie & ABC-Modell (RET)</div>
+    <div class="sec-lz">Epiktet: nicht die Dinge, sondern die Vorstellungen; 3 Ansätze (Ellis/Beck/Meichenbaum); ABC: A→B→C, die Annahme (B) bestimmt die Reaktion</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Nicht die Dinge selbst beunruhigen die Menschen …" — wie geht dieser Satz weiter, und was hat er mit dem ABC-Modell zu tun?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">„… sondern die <strong>Vorstellungen</strong> von den Dingen" (Epiktet). Im <strong>ABC-Modell</strong> (Ellis): A = Auslöser, B = Annahme, C = Auswirkung — nicht A, sondern die <strong>Annahme (B)</strong> bestimmt die emotionale Reaktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Philosophischer Hintergrund (Epiktet)</div>
+    „Nicht die Dinge selbst beunruhigen die Menschen, sondern die Vorstellungen von den Dingen." → nicht die äußere Realität, sondern unsere <strong>Interpretationen</strong> bestimmen die emotionalen Reaktionen. Kognitive Umstrukturierung ist Bestandteil von <strong>RET (Ellis)</strong>, <strong>KVT (Beck)</strong> und <strong>Stressimpfungstraining (Meichenbaum)</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">ABC-Modell (Ellis 1978)</div>
+    <strong>A</strong> = Auslöser (antecedent) · <strong>B</strong> = Annahme (belief) · <strong>C</strong> = Auswirkung (consequence). Nicht A führt direkt zu C, sondern die dazwischenliegende (irrationale) <strong>Annahme B</strong> bestimmt die Reaktion.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Die Reaktion hängt von der <strong>Interpretation (B)</strong> ab, nicht vom Ereignis (A) selbst. Kognitionen gelten als „größter Hebel" der Therapie (Beck & Haig 2014).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">A, B oder C? — Komponente zuordnen</div>
+    <div class="corr-item" id="c0a">„Eine wichtige Prüfung steht an.“ (das Ereignis)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'a')">A (Auslöser)</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'b')">B (Annahme)</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'c')">C (Auswirkung)</button>
+      </div><div class="corr-fb" id="c0a-fb"></div>
+    </div>
+    <div class="corr-item" id="c0b">„Ich muss perfekt sein, sonst bin ich wertlos.“ (die Bewertung)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'a')">A (Auslöser)</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'b')">B (Annahme)</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'c')">C (Auswirkung)</button>
+      </div><div class="corr-fb" id="c0b-fb"></div>
+    </div>
+    <div class="corr-item" id="c0c">Starke Prüfungsangst und Vermeidung (die Reaktion)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'a')">A (Auslöser)</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'b')">B (Annahme)</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'c')">C (Auswirkung)</button>
+      </div><div class="corr-fb" id="c0c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Ellis ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Ellis: Irrationale Überzeugungen & Musturbation</div>
+    <div class="sec-lz">11 irrationale Überzeugungen; 3 kognitive Demands (Ellis 2004): perfekt sein / Welt gerecht / zuvorkommend behandelt; „Musturbation“ = rigides Muss-Denken</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ellis verdichtete 11 irrationale Überzeugungen auf drei Kernforderungen. Welche — und wie nennt er das rigide Muss-Denken?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">3 kognitive Demands (Ellis 2004): <strong>„Ich muss perfekt sein"</strong>, <strong>„Die Welt muss gerecht sein"</strong>, <strong>„Man muss mich zuvorkommend behandeln"</strong>. Das rigide Muss-Denken nennt Ellis <strong>„Musturbation"</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">11 irrationale Überzeugungen (Ellis 1977)</div>
+    Z. B.: „Ich muss von jeder wichtigen Bezugsperson geliebt werden"; „Ich bin nur wertvoll, wenn ich in jeder Hinsicht kompetent bin"; „Es ist katastrophal, wenn die Dinge nicht so sind, wie ich sie gern hätte"; „Die eigene Vergangenheit bestimmt das gegenwärtige Verhalten". → automatisierte, irrationale Annahmen, die nicht mehr an der Realität geprüft werden.
+  </div>
+  <div class="card">
+    <div class="card-title">3 kognitive Demands (Ellis 2004)</div>
+    Verdichtung auf drei Kern-Forderungen („Musturbation"): <strong>„Ich muss perfekt sein"</strong> · <strong>„Die Welt muss immer gerecht sein"</strong> · <strong>„Man muss mich immer zuvorkommend behandeln"</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Musturbation</div>
+    Ellis-Begriff für das <strong>zwanghafte, rigide Denken in absoluten Forderungen</strong> („muss", „sollte", „darf nicht"). Die drei Demands sind die Kernformen dieser Muss-Haltung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei kognitiven Demands (Musturbation)</div>
+    <div id="demands">
+      <div class="step-item"><strong>1.</strong> „Ich muss perfekt sein." (Perfektion)</div>
+      <div class="step-item"><strong>2.</strong> „Die Welt muss immer gerecht sein." (Gerechtigkeit)</div>
+      <div class="step-item"><strong>3.</strong> „Man muss mich immer zuvorkommend behandeln." (Zuvorkommenheit)</div>
+      <div class="step-item"><strong>Kern:</strong> rigides „Muss"-Denken (Musturbation) — absolute Forderungen statt Wünsche.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'demands')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Beck ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Beck: Dysfunktionale Gedanken & kognitive Triade</div>
+    <div class="sec-lz">Dysfunktionaler Gedanke = nicht nützlich; Verzerrungen (Übergeneralisieren, Katastrophisieren …); kognitive Triade: Person/Umwelt/Zukunft</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Beck spricht von „dysfunktionalen Gedanken" und der „kognitiven Triade". Was bedeuten diese Begriffe?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Dysfunktionale Gedanken:</strong> jeder für die Person nicht nützliche Gedanke; durch Verzerrungen (Übergeneralisieren, Katastrophisieren …). <strong>Kognitive Triade der Depression:</strong> negative Sicht auf <strong>eigene Person, Umwelt und Zukunft</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Dysfunktionale Gedanken (Beck 1980)</div>
+    <strong>Jeder für die Person nicht nützliche Gedanke.</strong> Entstehen durch kognitive Verzerrungen: <strong>Übergeneralisieren, Katastrophisieren, willkürliche Attribution, absolute Forderungen</strong> (darf nicht/sollte), einseitige Wahrnehmung. Wilken (2015) ergänzt: dichotomes Denken, Maximieren/Minimieren, Personalisieren.
+  </div>
+  <div class="card">
+    <div class="card-title">Kognitive Triade der Depression (Beck 1980)</div>
+    Drei Bereiche negativ verzerrter Kognitionen: <strong>(1) negative Sicht der eigenen Person</strong> (wertlos), <strong>(2) negative Sicht der Umwelt</strong> (Quelle von Enttäuschung/Ablehnung), <strong>(3) eingeengte Sicht der Zukunft</strong> (hoffnungslos, Misserfolg sicher).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Auch bei weiteren Störungen gibt es störungsspezifische Kognitionen (Beck et al. 1995, z. B. Sucht: „nur mit Alkohol kann ich glücklich sein"; Zwang: „ich könnte mich anstecken").
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Triaden-Simulator (Beck) — die drei Pole der Depression</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="tr-person" onclick="trSet('person')">Eigene Person</button>
+        <button class="sim-tbtn" id="tr-umwelt" onclick="trSet('umwelt')">Umwelt</button>
+        <button class="sim-tbtn" id="tr-zukunft" onclick="trSet('zukunft')">Zukunft</button>
+      </div>
+      <div class="sim-verdict" id="tr-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Becks kognitive Triade: Die Depression verzerrt die Sicht auf <strong>sich selbst</strong>, die <strong>Welt</strong> und die <strong>Zukunft</strong> systematisch negativ.</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Selbstinstruktion & Phasen ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Selbstinstruktion & 5 Phasen</div>
+    <div class="sec-lz">Meichenbaum: positive Selbstverbalisationen; 5 Phasen (Modell → Aufdecken → Disputation → funktionale Kognitionen → Einübung); KU ≠ positives Denken</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was ist die Selbstinstruktion nach Meichenbaum — und ist kognitive Umstrukturierung dasselbe wie „positiv denken"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Selbstinstruktion</strong> (Meichenbaum): positive Selbstverbalisationen zur Bewältigung (Orientierung, Bewältigung, Aushalten, Bewertung). <strong>Nein</strong> — KU betrachtet unvoreingenommen ALLE Informationen; positives Denken ignoriert die negativen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Selbstinstruktion (Meichenbaum)</div>
+    Positive Selbstverbalisationen zur Bewältigung aversiver Situationen (Schmerz, Stress, Ärger): zur <strong>Orientierung/Planung</strong> („Was ist als nächstes zu tun?"), <strong>Aktivierung von Bewältigung</strong> („Tue eins nach dem anderen"), <strong>Ermutigung zum Aushalten</strong> („Es wird gleich weniger"), <strong>Bewertung/Verstärkung</strong> („Ich habe durchgehalten").
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Kognitive Umstrukturierung ≠ positives Denken</div>
+    KU betrachtet zunächst <strong>unvoreingenommen ALLE</strong> zugänglichen Informationen und verändert dann in eine <strong>persönlich hilfreiche</strong> Richtung. Positives Denken <strong>ignoriert negative Informationen</strong>. Aufgaben zwischen den Sitzungen sind wesentlicher Bestandteil.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die 5 Phasen der kognitiven Umstrukturierung</div>
+    <div id="phasen5">
+      <div class="step-item"><strong>1.</strong> Vermittlung des kognitiven Modells.</div>
+      <div class="step-item"><strong>2.</strong> Aufdecken der dysfunktionalen Kognitionen.</div>
+      <div class="step-item"><strong>3.</strong> Disputation der dysfunktionalen Kognitionen (z. B. sokratischer Dialog).</div>
+      <div class="step-item"><strong>4.</strong> Erarbeitung funktionaler Kognitionen.</div>
+      <div class="step-item"><strong>5.</strong> Einübung in kritischen Situationen (z. B. Spalten-Technik).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'phasen5')">Phasen aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Aufdecken & Arten ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Aufdecken & Arten dysfunktionaler Gedanken</div>
+    <div class="sec-lz">Hot cognitions; 3 Arten: verzerrt / zutreffend aber falsche Schlussfolgerung / zutreffend aber dysfunktional</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In Phase 2 deckt man dysfunktionale Gedanken auf. Welche sind besonders relevant — und ist ein dysfunktionaler Gedanke immer „falsch"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">Besonders relevant sind <strong>„hot cognitions"</strong> (mit Gefühlen verbunden). <strong>Nein</strong> — drei Arten: (1) verzerrt, (2) zutreffend, aber falsche Schlussfolgerung, (3) zutreffend, aber nicht nützlich.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Phase 2: Aufdecken</div>
+    Identifikation dysfunktionaler Kognitionen — besonders <strong>„hot cognitions"</strong> (mit Gefühlen verbunden). Methoden: direkte Befragung, Vorstellungsübung, <strong>Gedankenprotokoll</strong>, Fragebogen. Arten der Verzerrung: Alles-oder-Nichts, Übergeneralisieren, Katastrophisieren, Personalisieren, Maximieren/Minimieren …
+  </div>
+  <div class="card">
+    <div class="card-title">Drei Arten dysfunktionaler Gedanken</div>
+    <strong>(1) verzerrt</strong> (inhaltlich falsch) · <strong>(2) zutreffend, aber falsche Schlussfolgerung</strong> · <strong>(3) zutreffend, aber nicht nützlich</strong> (dysfunktional). Die Intervention muss auf den jeweiligen Typ abgestimmt sein.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    <strong>Nicht jeder dysfunktionale Gedanke ist inhaltlich falsch.</strong> Ein Gedanke kann sachlich zutreffen und dennoch dysfunktional wirken (falsche Schlussfolgerung oder einfach nicht nützlich).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Art von dysfunktionalem Gedanken?</div>
+    <div class="corr-item" id="c4a">„Ich falle immer durch jede Prüfung“ — obwohl schon viele bestanden wurden
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'verzerrt')">Verzerrt</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'schluss')">Zutreffend, falsche Schlussfolgerung</button>
+        <button class="corr-btn" onclick="checkCorr('c4a',this,'zutreffend')">Zutreffend, aber dysfunktional</button>
+      </div><div class="corr-fb" id="c4a-fb"></div>
+    </div>
+    <div class="corr-item" id="c4b">„Ich habe diese Prüfung nicht bestanden, also bin ich völlig wertlos.“
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'verzerrt')">Verzerrt</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'schluss')">Zutreffend, falsche Schlussfolgerung</button>
+        <button class="corr-btn" onclick="checkCorr('c4b',this,'zutreffend')">Zutreffend, aber dysfunktional</button>
+      </div><div class="corr-fb" id="c4b-fb"></div>
+    </div>
+    <div class="corr-item" id="c4c">„Ich habe eine schwere Erkrankung“ — es stimmt, hilft aber im Moment nicht weiter
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'verzerrt')">Verzerrt</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'schluss')">Zutreffend, falsche Schlussfolgerung</button>
+        <button class="corr-btn" onclick="checkCorr('c4c',this,'zutreffend')">Zutreffend, aber dysfunktional</button>
+      </div><div class="corr-fb" id="c4c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Sokratischer Dialog ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Sokratischer Dialog</div>
+    <div class="sec-lz">Mäeutik (Hebammenkunst): durch insistierendes Fragen zur eigenständigen Erkenntnis führen; Fragetechniken je nach Verzerrung (Hautzinger)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Der sokratische Dialog ist die zentrale Disputationsmethode. Gibt die Therapeut*in dabei die richtige Sichtweise vor?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Nein</strong> — Mäeutik („Hebammenkunst"): durch gezieltes, insistierendes <strong>Fragen</strong> führt die Therapeut*in die Patient*in zur <strong>eigenständigen</strong> Erkenntnis. Fragetechniken je nach Verzerrung (z. B. Katastrophisierung → „Wie wahrscheinlich ist X?").</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Sokratischer Dialog (Mäeutik)</div>
+    Durch <strong>gezieltes, insistierendes Fragen</strong> („Hebammenkunst") bringt die Therapeut*in die Patient*in dazu, dysfunktionale Gedanken <strong>eigenständig zu hinterfragen</strong> und neue Erkenntnisse selbst zu gewinnen. Die Antwort wird <strong>nicht vorgegeben</strong>; die Patient*in soll erkennen, dass es mehrere, unterschiedlich funktionale Sichtweisen gibt.
+  </div>
+  <div class="card">
+    <div class="card-title">Fragetechniken je nach Verzerrung (Hautzinger)</div>
+    <strong>Katastrophisierung</strong> → „Wie wahrscheinlich ist X?" · <strong>Alles-oder-Nichts</strong> → „Gibt es Ausnahmen?" · <strong>selektive Wahrnehmung</strong> → „Hat X sonst noch etwas gesagt?" · <strong>ungünstige Attribuierung</strong> → „Wie würde das X sehen?".
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Mäeutik</div>
+    Die Therapeut*in <strong>„entbindet"</strong> die Erkenntnis bei der Patient*in — sie gibt die Antwort nicht vor, sondern führt zur eigenständigen Erkenntnis (Ziel: künftig automatische Gedanken selbst hinterfragen).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Sokratische Frage → passende Verzerrung</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="kata" onclick="switchTab(this,'sokratisch')">Katastrophisierung</button>
+      <button class="tab-btn" data-tab="aon" onclick="switchTab(this,'sokratisch')">Alles-oder-Nichts</button>
+      <button class="tab-btn" data-tab="selektiv" onclick="switchTab(this,'sokratisch')">Selektive Wahrnehmung</button>
+    </div>
+    <div class="tab-group" data-group="sokratisch">
+      <div class="tab-content active" data-tab="kata"><strong>Katastrophisierung →</strong> „Wie wahrscheinlich ist X?" (tatsächliche Wahrscheinlichkeit/Bedrohlichkeit prüfen).</div>
+      <div class="tab-content" data-tab="aon"><strong>Alles-oder-Nichts-Denken →</strong> „Gibt es Ausnahmen?"</div>
+      <div class="tab-content" data-tab="selektiv"><strong>Selektive Wahrnehmung →</strong> „Hat X sonst noch etwas gesagt?" (übersehene Einzelheiten).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Disputation & funktional ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Disputation & funktionale Kognitionen</div>
+    <div class="sec-lz">Was-wäre-wenn-Technik (Entkatastrophisieren), Evidenz/Gegenevidenz, Rollentausch; funktionale Kognition = nützlich/glaubwürdig, nicht zwingend positiv</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Katastrophisieren" ist eine Verzerrung — aber auch eine Technik? Und muss eine funktionale Kognition positiv sein?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>Beides:</strong> als Verzerrung (Phase 2) UND als Technik (Phase 3, „Was-wäre-wenn" → Entkatastrophisieren). Eine <strong>funktionale Kognition</strong> muss <strong>nicht positiv</strong> sein — sondern verzerrungsfrei, nützlich, hilfreich, glaubwürdig.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Techniken der Disputation (Phase 3)</div>
+    Perspektive eines „objektiven Dritten" · Gedanken als <strong>Hypothese</strong> sehen (nicht Tatsache) · <strong>Evidenz und Gegenevidenz</strong> abwägen · <strong>„Was-wäre-wenn"</strong> (befürchtete Konsequenzen zu Ende denken → Entkatastrophisieren) · Konkretisierung („Wann zuletzt?") · Kuchendiagramme · Rollentausch („Was würden Sie als Therapeut*in sagen?").
+  </div>
+  <div class="card">
+    <div class="card-title">Funktionale Kognitionen (Phase 4)</div>
+    Müssen sein: <strong>verzerrungsfrei, nützlich, hilfreich, glaubwürdig, kurz/einprägsam</strong> — NICHT notwendigerweise positiv. Eine unrealistisch positive Kognition wäre ebenfalls dysfunktional (nicht glaubwürdig).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Katastrophisieren: Verzerrung vs. Technik</div>
+    Als <strong>Verzerrung</strong>: dysfunktionales Übertreiben (Phase 2, Identifikation). Als <strong>Technik</strong>: „Was-wäre-wenn" — befürchtete Konsequenzen bewusst zu Ende denken, um die Bedrohlichkeit zu prüfen (Phase 3, Disputation).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Funktionale Kognition — Kriterien</div>
+    <div id="funktional">
+      <div class="step-item"><strong>Verzerrungsfrei</strong> — keine kognitive Verzerrung.</div>
+      <div class="step-item"><strong>Nützlich &amp; hilfreich</strong> — bringt die Person weiter.</div>
+      <div class="step-item"><strong>Glaubwürdig</strong> — realistisch (nicht unrealistisch positiv!).</div>
+      <div class="step-item"><strong>Kurz und einprägsam</strong> — im Alltag abrufbar.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'funktional')">Kriterien aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Spalten-Technik & Evidenz ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Spalten-Technik, Probleme & Evidenz</div>
+    <div class="sec-lz">Spalten-Technik (Situation/Gefühl/Gedanke/Alternative/Wirkung); Probleme (Ungeduld, Akzeptanz statt Veränderung); störungsübergreifend 1a, erste Wahl</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die Spalten-Technik (Phase 5: Einübung) hält den Prozess schriftlich fest. Wie gut ist die Wirksamkeit der KU belegt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Die Spalten-Technik dokumentiert <strong>Situation → Gefühl (0–10) → automatischer Gedanke → Alternativgedanke → Wirkung</strong>. Die KU ist <strong>störungsübergreifend mit Evidenzgrad 1a</strong> belegt und gilt als <strong>Methode der ersten Wahl</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Spalten-Technik (Phase 5: Einübung)</div>
+    Schriftliches Protokoll als Hausaufgabe: <strong>Situation</strong> → <strong>Gefühl</strong> (Intensität 0–10) → <strong>automatischer Gedanke</strong> → <strong>Alternativgedanke</strong> (funktionale Kognition) → <strong>Wirkung</strong> (erneute Gefühlseinschätzung 0–10). Ziel: die neue Sichtweise im Alltag verankern.
+  </div>
+  <div class="card">
+    <div class="card-title">Typische Probleme</div>
+    <strong>Ungeduld</strong> (KU braucht Zeit/Übung) · Verwechslung mit <strong>positivem Denken</strong> · Fälle, in denen <strong>Akzeptanz statt Veränderung</strong> angezeigt ist (z. B. reale, nicht änderbare Belastungen → eher Akzeptanz-/Achtsamkeitsansätze).
+  </div>
+  <div class="card">
+    <div class="card-title">Evidenz</div>
+    KU ist <strong>störungsübergreifend</strong> wirksam (Depression, Angst, Zwang u. a.), <strong>Evidenzgrad 1a</strong>, gilt als <strong>Methode der ersten Wahl</strong> und Kernbestandteil der KVT.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Spalten-Technik — Ablauf aufdecken</div>
+    <div id="spalten">
+      <div class="step-item"><strong>1. Situation</strong> — auslösende Situation beschreiben.</div>
+      <div class="step-item"><strong>2. Gefühl (0–10)</strong> — Emotion und Intensität einschätzen.</div>
+      <div class="step-item"><strong>3. Automatischer Gedanke</strong> — den „hot" cognition identifizieren.</div>
+      <div class="step-item"><strong>4. Alternativgedanke</strong> — funktionale Kognition formulieren.</div>
+      <div class="step-item"><strong>5. Wirkung</strong> — Gefühl erneut einschätzen (0–10).</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'spalten')">Spalten aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VT08 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Auslöser (A) im ABC-Modell</h4>
+      <p>Das Ereignis / die Situation</p>
+      <p>antecedent</p>
+      <p>Führt NICHT direkt zu C</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Annahme (B) im ABC-Modell</h4>
+      <p>Die (irrationale) Bewertung</p>
+      <p>belief</p>
+      <p>Entscheidendes Bindeglied → bestimmt C</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im RET-Modell führt der Auslöser (A) direkt zur emotionalen Auswirkung (C).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kognitive Umstrukturierung</h4>
+      <p>Unvoreingenommene Betrachtung ALLER Informationen</p>
+      <p>Veränderung in eine hilfreiche Richtung</p>
+      <p>Nützlich + verzerrungsfrei</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Positives Denken</h4>
+      <p>Ignoriert negative Informationen</p>
+      <p>Ersetzt sie unreflektiert durch Positives</p>
+      <p>Nicht das Ziel der KVT</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kognitive Umstrukturierung bedeutet, negative Gedanken durch positive zu ersetzen (positives Denken).</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verzerrter dysfunktionaler Gedanke</h4>
+      <p>Inhaltlich falsch/verzerrt</p>
+      <p>Typ 1</p>
+      <p>z. B. „Ich falle immer durch“</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Zutreffender, aber dysfunktionaler Gedanke</h4>
+      <p>Inhaltlich korrekt, aber nicht nützlich (Typ 3)</p>
+      <p>Oder: zutreffend, falsche Schlussfolgerung (Typ 2)</p>
+      <p>Intervention je nach Typ</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Dysfunktionale Gedanken sind immer inhaltlich falsch oder verzerrt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Katastrophisieren als kognitive Verzerrung</h4>
+      <p>Dysfunktionales Übertreiben negativer Folgen</p>
+      <p>Phase 2: Identifikation</p>
+      <p>Ein zu identifizierender Denkfehler</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Katastrophisieren als Technik (Was-wäre-wenn)</h4>
+      <p>Befürchtungen bewusst zu Ende denken</p>
+      <p>Phase 3: Disputation</p>
+      <p>Ziel: Entkatastrophisierung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Katastrophisieren ist ausschließlich eine dysfunktionale Denkweise und wird nie therapeutisch eingesetzt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kognitive Umstrukturierung (Veränderung)</h4>
+      <p>Ziel: dysfunktionale Gedanken verändern</p>
+      <p>Standardfall</p>
+      <p>Veränderungsorientiert</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Akzeptanz negativer Gefühle</h4>
+      <p>In manchen Fällen indiziert</p>
+      <p>Gefühle annehmen statt verändern</p>
+      <p>Dann: Gedanken ÜBER die Gefühle umstrukturieren</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Kognitive Umstrukturierung ist bei allen Patient*innen immer der richtige Ansatz.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a2-vl08</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a2-vl08';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was ist die philosophische Grundidee der kognitiven Umstrukturierung (Epiktet)?",
+      "opts": [
+        "Nicht die Dinge selbst, sondern unsere Vorstellungen/Interpretationen von ihnen bestimmen unsere emotionalen Reaktionen.",
+        "Die emotionalen Reaktionen der Menschen werden ausschließlich und unmittelbar durch die äußere Realität und die objektiven Ereignisse selbst bestimmt, vollkommen unabhängig von jeder inneren Bewertung oder Interpretation.",
+        "Dass Gefühle rein biologisch-hormonell determiniert sind.",
+        "Dass die Vergangenheit das gegenwärtige Verhalten zwingend bestimmt."
+      ],
+      "c": 0,
+      "e": "Epiktet: „Nicht die Dinge selbst beunruhigen die Menschen, sondern die Vorstellungen von den Dingen.“ Grundidee der kognitiven Therapie: unsere Interpretationen (nicht die äußere Realität) bestimmen die emotionalen Reaktionen."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was besagt das ABC-Modell der RET (Ellis)?",
+      "opts": [
+        "Im ABC-Modell führt der Auslöser (A) stets direkt und unmittelbar zur emotionalen Konsequenz (C), ohne dass eine dazwischenliegende Annahme oder Bewertung dabei irgendeine Rolle spielen würde.",
+        "Nicht der Auslöser (A), sondern die dazwischenliegende (irrationale) Annahme (B) bestimmt die Auswirkung (C).",
+        "Die emotionale Auswirkung (C) verursacht rückwirkend den Auslöser (A).",
+        "Auslöser (A) und Auswirkung (C) sind identisch."
+      ],
+      "c": 1,
+      "e": "ABC-Modell (Ellis 1978): A = Auslöser (antecedent), B = Annahme (belief), C = Auswirkung (consequence). NICHT A führt direkt zu C, sondern die dazwischenliegende (irrationale) Annahme B bestimmt die emotionale Reaktion."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was sind die drei „kognitiven Demands“ (Musturbation, Ellis 2004)?",
+      "opts": [
+        "Stimulus, Reaktion und Konsequenz.",
+        "Empathie, Akzeptanz und Kongruenz.",
+        "„Ich muss perfekt sein“, „Die Welt muss gerecht sein“, „Man muss mich zuvorkommend behandeln“.",
+        "Die drei kognitiven Demands nach Ellis sind ausschließlich die manualgetreue Protokolltreue, die lückenlose Dokumentation und die standardisierte Diagnostik im Verlauf der kognitiven Therapie."
+      ],
+      "c": 2,
+      "e": "3 kognitive Demands (Ellis 2004, „musturbation“ = rigides Muss-Denken): „Ich muss perfekt sein“, „Die Welt muss immer gerecht sein“, „Man muss mich immer zuvorkommend behandeln“. Verdichtung der 11 irrationalen Überzeugungen."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was bezeichnet Ellis als „Musturbation“?",
+      "opts": [
+        "„Musturbation“ bezeichnet bei Ellis eine besonders wirksame, gezielt eingesetzte therapeutische Disputationstechnik, mit der irrationale Überzeugungen Schritt für Schritt systematisch widerlegt und aufgelöst werden.",
+        "Eine wirksame Disputationstechnik zur Widerlegung irrationaler Gedanken.",
+        "Die unvoreingenommene Betrachtung aller verfügbaren Informationen.",
+        "Das zwanghafte, rigide Denken in absoluten Forderungen („muss“, „sollte“, „darf nicht“)."
+      ],
+      "c": 3,
+      "e": "Musturbation (Ellis): das zwanghafte, rigide Denken in absoluten Forderungen („muss“, „sollte“, „darf nicht“). Kernformen: die drei kognitiven Demands (Perfektion, Gerechtigkeit, Zuvorkommenheit)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Was sind „dysfunktionale Gedanken“ (Beck 1980)?",
+      "opts": [
+        "Jeder für die Person nicht nützliche Gedanke; sie entstehen durch kognitive Verzerrungen (Übergeneralisieren, Katastrophisieren …).",
+        "Dysfunktionale Gedanken sind ausschließlich solche Gedanken, die inhaltlich objektiv falsch und nachweislich verzerrt sind; ein sachlich zutreffender Gedanke kann definitionsgemäß niemals dysfunktional sein.",
+        "Ausschließlich positive, optimistische Gedanken über die Zukunft.",
+        "Reine Körperreaktionen ohne jeden kognitiven Anteil."
+      ],
+      "c": 0,
+      "e": "Dysfunktionale Gedanken (Beck 1980): jeder für die Person nicht nützliche Gedanke; entstehen durch kognitive Verzerrungen — Übergeneralisieren, Katastrophisieren, willkürliche Attribution, absolute Forderungen (darf nicht/sollte), einseitige Wahrnehmung."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was umfasst die „kognitive Triade der Depression“ (Beck)?",
+      "opts": [
+        "Die kognitive Triade der Depression umfasst ausschließlich die drei körperlichen Kernsymptome Schlafstörung, Appetitverlust und Antriebsmangel, die in jeder depressiven Episode gemeinsam auftreten müssen.",
+        "Negative Sicht der eigenen Person, der Umwelt und (eingeengt) der Zukunft.",
+        "Es, Ich und Über-Ich.",
+        "Stimulus, Organismus und Reaktion."
+      ],
+      "c": 1,
+      "e": "Kognitive Triade der Depression (Beck 1980): (1) negative Sicht der eigenen Person (wertlos), (2) negative Sicht der Umwelt (Quelle von Enttäuschung/Ablehnung), (3) eingeengte/negative Sicht der Zukunft (hoffnungslos, Misserfolg sicher)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was ist die Selbstinstruktion (Meichenbaum)?",
+      "opts": [
+        "Die rein medikamentöse Behandlung von Stress und Schmerz.",
+        "Die wiederholte Konfrontation mit angstauslösenden Reizen bis zur Habituation.",
+        "Positive Selbstverbalisationen zur Bewältigung aversiver Situationen (Orientierung, Bewältigung, Aushalten, Bewertung).",
+        "Die Selbstinstruktion nach Meichenbaum besteht ausschließlich darin, dass die Therapeut*in der Patientin sämtliche Bewältigungsschritte wortgetreu vorgibt und diese sie passiv und ohne eigene Beteiligung lediglich befolgt."
+      ],
+      "c": 2,
+      "e": "Selbstinstruktion (Meichenbaum, Stressimpfungstraining): positive Selbstverbalisationen zur Bewältigung aversiver Situationen (Schmerz, Stress, Ärger) — zur Orientierung/Planung, Aktivierung von Bewältigung, Ermutigung zum Aushalten, Bewertung/Verstärkung der eigenen Leistung."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was unterscheidet die kognitive Umstrukturierung vom „positiven Denken“?",
+      "opts": [
+        "Die kognitive Umstrukturierung besteht — genau wie das positive Denken — ausschließlich darin, negative Gedanken möglichst rasch und unreflektiert durch betont positive und optimistische Gedanken zu ersetzen.",
+        "Es gibt zwischen beiden keinen Unterschied.",
+        "Positives Denken berücksichtigt alle Informationen, die kognitive Umstrukturierung dagegen nur die positiven.",
+        "Kognitive Umstrukturierung betrachtet unvoreingenommen ALLE Informationen; positives Denken ignoriert negative Informationen."
+      ],
+      "c": 3,
+      "e": "Kognitive Umstrukturierung ≠ positives Denken: sie betrachtet unvoreingenommen ALLE verfügbaren Informationen und verändert dann in eine persönlich hilfreiche Richtung. Positives Denken ignoriert negative Informationen. (5 Phasen: Modell → Aufdecken → Disputation → funktionale Kognitionen → Einübung.)"
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was sind „hot cognitions“ (Phase 2)?",
+      "opts": [
+        "Mit Gefühlen verbundene Kognitionen — beim Aufdecken dysfunktionaler Gedanken besonders relevant.",
+        "„Hot cognitions“ bezeichnen ausschließlich rein rationale, vollständig emotionsfreie und nüchterne Gedanken, die ohne jede Beteiligung von Gefühlen ablaufen und daher therapeutisch unbedeutend sind.",
+        "Rein rationale, emotionsfreie Gedanken ohne therapeutische Relevanz.",
+        "Körperliche Reaktionen ohne jeden kognitiven Inhalt."
+      ],
+      "c": 0,
+      "e": "Hot cognitions: mit Gefühlen verbundene Kognitionen — beim Aufdecken (Phase 2) besonders relevant. Methoden: direkte Befragung, Vorstellungsübung, Gedankenprotokoll, Fragebogen."
+    },
+    {
+      "id": "s4q2",
+      "q": "Welche drei Arten dysfunktionaler Gedanken werden unterschieden?",
+      "opts": [
+        "Alle dysfunktionalen Gedanken sind ausnahmslos inhaltlich falsch und verzerrt; ein zutreffender Gedanke kann grundsätzlich niemals dysfunktional sein, weshalb es nur einen einzigen Typ dysfunktionaler Gedanken gibt.",
+        "(1) verzerrt, (2) zutreffend aber falsche Schlussfolgerung, (3) zutreffend aber nicht nützlich (dysfunktional).",
+        "Positiv, negativ und neutral.",
+        "Bewusst, vorbewusst und unbewusst."
+      ],
+      "c": 1,
+      "e": "Drei Arten dysfunktionaler Gedanken: (1) Gedanke verzerrt/falsch, (2) Gedanke zutreffend, aber falsche Schlussfolgerung, (3) Gedanke zutreffend, aber nicht nützlich. Nicht jeder dysfunktionale Gedanke ist inhaltlich falsch → Intervention je nach Typ."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was ist der „sokratische Dialog“ in der kognitiven Therapie?",
+      "opts": [
+        "Der Therapeut gibt der Patient*in die richtige, funktionale Sichtweise direkt und fertig vor.",
+        "Eine reine Entspannungs- und Atemtechnik zur Beruhigung.",
+        "Durch gezieltes, insistierendes Fragen (Mäeutik) die Patient*in zur eigenständigen Hinterfragung dysfunktionaler Gedanken führen.",
+        "Der sokratische Dialog besteht ausschließlich darin, dass die Therapeut*in der Patientin in einem ausführlichen Fachvortrag das vollständige kognitive Modell sowie die korrekten Schlussfolgerungen mitteilt."
+      ],
+      "c": 2,
+      "e": "Sokratischer Dialog (Mäeutik / „Hebammenkunst“): durch gezieltes, insistierendes Fragen bringt die Therapeut*in die Patient*in dazu, dysfunktionale Gedanken EIGENSTÄNDIG zu hinterfragen und neue Erkenntnisse selbst zu gewinnen — die Antwort wird NICHT vorgegeben."
+    },
+    {
+      "id": "s5q2",
+      "q": "Welche sokratische Frage passt zur „Katastrophisierung“?",
+      "opts": [
+        "Die zur Katastrophisierung passende sokratische Frage lautet ausschließlich „Gibt es Ausnahmen?“, da sie die absolute Allgemeingültigkeit der Aussage gezielt infrage stellt.",
+        "„Gibt es Ausnahmen?“ (passend zum Alles-oder-Nichts-Denken).",
+        "„Wie würde das X sehen?“ (passend zur ungünstigen Attribuierung).",
+        "„Wie wahrscheinlich ist X?“ — die tatsächliche Wahrscheinlichkeit/Bedrohlichkeit prüfen."
+      ],
+      "c": 3,
+      "e": "Sokratische Fragen je nach Verzerrung: Katastrophisierung → „Wie wahrscheinlich ist X?“; Alles-oder-Nichts → „Gibt es Ausnahmen?“; selektive Wahrnehmung → „Hat X sonst noch etwas gesagt?“; ungünstige Attribuierung → „Wie würde das X sehen?“ (Hautzinger 2013)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was ist die „Was-wäre-wenn“-Technik (Katastrophisieren als Technik)?",
+      "opts": [
+        "Befürchtete Konsequenzen bewusst bis zu Ende denken, um ihre tatsächliche Bedrohlichkeit zu prüfen (Entkatastrophisierung).",
+        "Die „Was-wäre-wenn“-Technik besteht darin, dass die Therapeut*in der Patientin nachdrücklich versichert, dass die befürchteten Katastrophen mit absoluter Sicherheit niemals eintreten werden, damit jede negative Vorstellung sofort vermieden wird.",
+        "Die konsequente Vermeidung jeder negativen Vorstellung und Befürchtung.",
+        "Das rasche Ersetzen negativer durch betont positive Gedanken."
+      ],
+      "c": 0,
+      "e": "Katastrophisieren ist einerseits eine kognitive VERZERRUNG (Phase 2), andererseits eine therapeutische TECHNIK (Phase 3, „Was-wäre-wenn“): befürchtete Konsequenzen bewusst bis zu Ende denken, um ihre tatsächliche Bedrohlichkeit zu prüfen (Entkatastrophisierung)."
+    },
+    {
+      "id": "s6q2",
+      "q": "Was kennzeichnet eine „funktionale Kognition“ (Phase 4)?",
+      "opts": [
+        "Eine funktionale Kognition muss in jedem Fall möglichst betont positiv, optimistisch und zuversichtlich formuliert sein, auch wenn sie dabei unrealistisch ist und die tatsächliche Sachlage nicht zutreffend abbildet.",
+        "Verzerrungsfrei, nützlich, hilfreich, glaubwürdig, kurz/einprägsam — NICHT notwendigerweise positiv.",
+        "Möglichst positiv und optimistisch, auch wenn sie unrealistisch ist.",
+        "Möglichst lang, ausführlich und detailreich formuliert."
+      ],
+      "c": 1,
+      "e": "Funktionale Kognitionen: verzerrungsfrei, nützlich, hilfreich, glaubwürdig, kurz/einprägsam — NICHT notwendigerweise positiv. Eine unrealistisch positive Kognition wäre ebenfalls dysfunktional (nicht glaubwürdig)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was ist die „Spalten-Technik“ (Phase 5)?",
+      "opts": [
+        "Eine Expositionstechnik zur stufenweisen Konfrontation bei Phobien.",
+        "Ein Verfahren zur Berechnung der optimalen Medikamentendosis.",
+        "Ein Protokoll (Situation, Gefühl 0–10, depressiver Gedanke, hilfreicher Alternativgedanke, Wirkung) zur Einübung funktionaler Kognitionen.",
+        "Die Spalten-Technik ist ein rein diagnostisches Persönlichkeitsinventar, das einmalig zu Behandlungsbeginn ausgefüllt wird und ausschließlich den objektiven Schweregrad der Störung auf einer Normskala erfasst."
+      ],
+      "c": 2,
+      "e": "Spalten-Technik (Phase 5, Einübung/Realitätstest): Protokoll mit Spalten — Auslösesituation, unangenehmes Gefühl (0–10), depressiver/automatischer Gedanke, hilfreicher Alternativgedanke, Wirkung (Gefühl danach 0–10)."
+    },
+    {
+      "id": "s7q2",
+      "q": "Welchen Evidenzgrad/Stellenwert hat die kognitive Umstrukturierung?",
+      "opts": [
+        "Die kognitive Umstrukturierung gilt als empirisch weitgehend unbelegtes und veraltetes Verfahren, das in den aktuellen Leitlinien ausdrücklich nur als nachrangige Reservemaßnahme bei Therapieversagen empfohlen wird.",
+        "Sie ist ausschließlich bei der Depression wirksam, bei allen anderen Störungen wirkungslos.",
+        "Sie ist empirisch bislang unbelegt.",
+        "Störungsübergreifend wirksam; in vielen Leitlinien Behandlung der ersten Wahl (1a-Evidenz, Soll-Empfehlung)."
+      ],
+      "c": 3,
+      "e": "Kognitive Umstrukturierung (Tolin 2010; Hofmann et al. 2012): störungsübergreifend wirksam, als Einzelintervention und modular; in vielen Leitlinien Behandlung der ersten Wahl (höchster Evidenzgrad 1a, Soll-Empfehlung)."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "In welchen drei Ansätzen ist die kognitive Umstrukturierung Bestandteil?",
+    "opts": [
+      "RET (Ellis), kognitive Verhaltenstherapie (Beck) und Stressimpfungstraining (Meichenbaum).",
+      "Die kognitive Umstrukturierung ist ausschließlich Bestandteil der klassischen Psychoanalyse, der systemischen Familientherapie und der klientenzentrierten Gesprächspsychotherapie.",
+      "Ausschließlich in der reinen Verhaltenstherapie der 1. Welle.",
+      "Ausschließlich in der psychoanalytischen Trieblehre nach Freud."
+    ],
+    "c": 0,
+    "e": "Kognitive Umstrukturierung ist Bestandteil von: RET (Ellis), kognitiver Verhaltenstherapie (Beck), Stressimpfungstraining (Meichenbaum)."
+  },
+  {
+    "id": "bq2",
+    "q": "Wofür steht „B“ im ABC-Modell?",
+    "opts": [
+      "„B“ steht im ABC-Modell für das beobachtbare äußere Verhalten (behaviour) der Patientin, das unmittelbar und ohne jede vermittelnde Bewertung auf den Auslöser folgt.",
+      "Belief — die (irrationale) Annahme/Bewertung, die zwischen Auslöser und Auswirkung vermittelt.",
+      "Behaviour — das beobachtbare Verhalten.",
+      "Den Auslöser (antecedent)."
+    ],
+    "c": 1,
+    "e": "ABC: A = Auslöser (antecedent), B = Annahme/belief (irrationale Bewertung), C = Auswirkung (consequence). B ist das entscheidende Bindeglied — die Reaktion hängt von der Interpretation ab, nicht vom Ereignis."
+  },
+  {
+    "id": "bq3",
+    "q": "Was ist die „Mäeutik“ im sokratischen Dialog?",
+    "opts": [
+      "Das direkte Vorgeben der einen richtigen Antwort durch die Therapeut*in.",
+      "Eine reine Wissensvermittlung per Vortrag durch die Therapeut*in.",
+      "Die „Hebammenkunst“ — durch insistierendes Fragen die Erkenntnis bei der Patient*in „entbinden“.",
+      "Die Mäeutik bezeichnet ein streng standardisiertes diagnostisches Frageverfahren, mit dem die Therapeut*in ausschließlich objektive Symptomdaten erhebt, ohne die Patientin zu eigenen Erkenntnissen zu führen."
+    ],
+    "c": 2,
+    "e": "Mäeutik („Hebammenkunst“): die Therapeut*in „entbindet“ die Erkenntnis bei der Patient*in durch insistierendes Fragen — sie gibt die Antwort NICHT vor, sondern führt zur eigenständigen Erkenntnis (Sokratischer Dialog)."
+  },
+  {
+    "id": "bq4",
+    "q": "Welche Aussage zu dysfunktionalen Gedanken ist korrekt?",
+    "opts": [
+      "Dysfunktionale Gedanken sind ausnahmslos und definitionsgemäß stets inhaltlich falsch oder verzerrt; ein sachlich zutreffender Gedanke kann unter keinen Umständen als dysfunktional gelten.",
+      "Sie sind immer inhaltlich falsch.",
+      "Sie sind grundsätzlich immer positiv verzerrt.",
+      "Ein Gedanke kann sachlich zutreffend, aber dennoch dysfunktional (nicht nützlich) sein."
+    ],
+    "c": 3,
+    "e": "Nicht jeder dysfunktionale Gedanke ist inhaltlich falsch: er kann verzerrt sein, ODER zutreffend mit falscher Schlussfolgerung, ODER zutreffend, aber nicht nützlich. Die Intervention richtet sich nach dem Typ."
+  },
+  {
+    "id": "bq5",
+    "q": "Was kennzeichnet eine funktionale Kognition?",
+    "opts": [
+      "Nützlich, hilfreich, verzerrungsfrei und glaubwürdig — nicht zwingend positiv.",
+      "Eine funktionale Kognition muss in jedem Fall maximal positiv, optimistisch und zuversichtlich sein, unabhängig davon, ob sie realistisch und glaubwürdig ist oder nicht.",
+      "Sie muss immer optimistisch und positiv sein.",
+      "Sie ignoriert bewusst alle negativen Informationen."
+    ],
+    "c": 0,
+    "e": "Funktionale Kognition: verzerrungsfrei, nützlich, hilfreich, glaubwürdig, kurz/einprägsam — NICHT notwendigerweise positiv. Unrealistisch positive Kognitionen wären ebenfalls dysfunktional (nicht glaubwürdig)."
+  },
+  {
+    "id": "bq6",
+    "q": "Was besagt die kognitive Triade der Depression?",
+    "opts": [
+      "Die kognitive Triade beschreibt die drei aufeinanderfolgenden Behandlungsphasen, in denen die Therapeut*in nacheinander die Vergangenheit, die Gegenwart und die Zukunft der Patientin systematisch aufarbeitet.",
+      "Negativ verzerrte Sicht auf die eigene Person, die Umwelt und die Zukunft.",
+      "Drei aufeinanderfolgende Phasen der Disputation.",
+      "Die drei kognitiven Demands (Musturbation) nach Ellis."
+    ],
+    "c": 1,
+    "e": "Kognitive Triade der Depression (Beck): negativ verzerrte Sicht auf (1) die eigene Person, (2) die Umwelt, (3) die Zukunft (eingeengt/hoffnungslos)."
+  },
+  {
+    "id": "bq7",
+    "q": "Wann ist statt Veränderung eher die Akzeptanz negativer Gefühle indiziert?",
+    "opts": [
+      "Niemals — die Veränderung dysfunktionaler Gedanken ist bei allen Patient*innen und in allen Fällen ausnahmslos das einzig richtige und alleinige therapeutische Ziel.",
+      "Immer und ausschließlich bei der Depression.",
+      "In manchen Fällen; dann kann die kognitive Umstrukturierung auf dysfunktionale Gedanken ÜBER die Gefühle angewendet werden (z. B. „Ich darf keine Angst haben“).",
+      "Die Akzeptanz negativer Gefühle ist grundsätzlich nur dann indiziert, wenn die Patientin die kognitive Umstrukturierung ausdrücklich und vollständig verweigert und keinerlei Mitarbeit zeigt."
+    ],
+    "c": 2,
+    "e": "In manchen Fällen ist Akzeptanz negativer Gefühle indiziert (statt Veränderung). Kognitive Umstrukturierung kann dann auf dysfunktionale Gedanken ÜBER die negativen Gefühle angewendet werden (z. B. „Ich darf keine Angst haben“)."
+  },
+  {
+    "id": "bq8",
+    "q": "Was ist ein häufiges Problem bei der kognitiven Umstrukturierung?",
+    "opts": [
+      "Ein typisches Problem besteht darin, dass die Therapeut*in zu geduldig vorgeht, die Sprache der Patient*in zu genau trifft und den funktionalen Zusammenhang viel zu gründlich berücksichtigt.",
+      "Dass die Therapeut*in grundsätzlich zu geduldig ist.",
+      "Dass die funktionalen Zusammenhänge systematisch überbetont werden.",
+      "Therapeut*in ist zu ungeduldig, spricht nicht die Sprache der Patient*in, übersieht funktionale Zusammenhänge."
+    ],
+    "c": 3,
+    "e": "Probleme bei der kognitiven Umstrukturierung: Therapeut*in zu ungeduldig, spricht nicht die Sprache der Patient*in, übersieht den funktionalen Zusammenhang; manchmal ist Akzeptanz statt Veränderung indiziert."
+  }
+];
+
+var corrCorrect = {
+  "c0a": "a",
+  "c0b": "b",
+  "c0c": "c",
+  "c4a": "verzerrt",
+  "c4b": "schluss",
+  "c4c": "zutreffend"
+};
+var corrExpl = {
+  "c0a": "„Eine wichtige Prüfung steht an“ = das Ereignis → Auslöser (A).",
+  "c0b": "„Ich muss perfekt sein, sonst bin ich wertlos“ = die (irrationale) Bewertung → Annahme (B).",
+  "c0c": "Starke Prüfungsangst und Vermeidung = die emotionale/Verhaltens-Reaktion → Auswirkung (C).",
+  "c4a": "„Ich falle immer durch jede Prüfung“ (obwohl schon viele bestanden) = inhaltlich verzerrt/falsch.",
+  "c4b": "„Nicht bestanden → also völlig wertlos“ = zutreffende Tatsache, aber falsche Schlussfolgerung.",
+  "c4c": "Ein zutreffender, aber nicht nützlicher Gedanke = zutreffend, aber dysfunktional."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Triaden-Simulator (Sektion ③, Beck) */
+var trData = {
+  person: {t:'Eigene Person', d:'Negativ verzerrte Selbstwahrnehmung; die Person hält sich für wertlos und unfähig, Ziele zu erreichen.'},
+  umwelt: {t:'Umwelt', d:'Wird als Quelle von Enttäuschung/Ablehnung interpretiert; neutrale Situationen werden negativ und auf sich bezogen.'},
+  zukunft:{t:'Zukunft', d:'Hoffnungslose Situation wird als dauerhaft gesehen; künftige Misserfolge gelten als sicher.'}
+};
+function trSet(k){
+  ['person','umwelt','zukunft'].forEach(function(x){ var b=document.getElementById('tr-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('tr-out'); if(!o) return;
+  var d=trData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  trSet('person');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M12a.2 · VT02 Verhaltensanalyse (SORKC)</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m12a2-vl02
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* ── bespoke Analyse-Ebenen-Simulator (vt02) ── */
+.sim-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin:6px 0}
+.sim-toggle{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sim-tbtn{border:1px solid var(--border);background:var(--surface);color:var(--text2);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:.82rem}
+.sim-tbtn.on{background:var(--accent);color:#0f172a;border-color:var(--accent);font-weight:700}
+.sim-verdict{font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:4px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M12a.2 · VT02 Verhaltensanalyse (SORKC)</h1>
+<p class="page-sub">Verhaltenstherapie · Teil 2 (Lindenmeyer) · Klausur 22.07.2026 (Single Choice)</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Beschwerden vs Targets · 2. Informationsgrundlagen der VA · 3. Informationsinhalte · 4. Modellentwicklung & Teufelskreise · 5. Doppelfunktion & Störungsverständnis · 6. Mikro- & Makroanalyse · 7. Das SORKC-Schema · 8. Fallbeispiel & Cave
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Beschwerden vs Targets</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Informationsgrundlagen</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Informationsinhalte</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Teufelskreise</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Doppelfunktion</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Mikro-/Makroanalyse</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ SORKC-Schema</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Fallbeispiel & Cave</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Beschwerden vs Targets ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Beschwerden vs. Targets</div>
+    <div class="sec-lz">Beschwerden = subjektive (verzerrte) Schilderung; Targets = therapeutische Ansatzpunkte (Defizit/Exzess/Kompetenzdefizit …); VA als Bindeglied</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Patientin schildert ihr Problem — ist das schon der Therapieansatz? Was unterscheidet „Beschwerden" von „Targets"?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0"><strong>Beschwerden</strong> = subjektive, ggf. verzerrte Schilderung (Selbstwahrnehmung, Erklärungsmodell, Erwartung — können selbst Teil der Störung sein). <strong>Targets</strong> = therapeutisch geeignete Ansatzpunkte, erst durch die <strong>Verhaltensanalyse</strong> identifiziert.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Beschwerden (Patientensicht)</div>
+    Wie Patient*innen ihr Problem <strong>wahrnehmen und beschreiben</strong> — geprägt durch Selbstwahrnehmung (selektiv/verzerrt), subjektives Erklärungsmodell, Veränderungsmotivation und Therapieerwartung. Diese Aspekte <strong>können selbst Teil der Störung sein</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Targets (Therapeutensicht)</div>
+    Die therapeutisch geeigneten Ansatzpunkte, die sich aus der <strong>Verhaltensanalyse</strong> ergeben. Kategorien: <strong>Defizit</strong> (normales Verhalten zu selten), <strong>Exzess</strong> (zu oft), <strong>Kompetenzdefizit</strong>, inadäquates Verhalten, ungünstige Umstände.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ VA als Bindeglied</div>
+    Beschwerden → <strong>Verhaltensanalyse</strong> → Targets („was?") → therapeutische Strategie („wie?"). Die Beschwerdeschilderung darf <strong>nicht unreflektiert</strong> als Ausgangspunkt übernommen werden — Schwierigkeiten: mangelnde Selbstreflexion, nicht bewusste Prozesse, Erinnerungsverzerrungen, Normen/Scham.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Target-Kategorie?</div>
+    <div class="corr-item" id="c0a">Normales Verhalten tritt zu SELTEN auf
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'defizit')">Defizit</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'exzess')">Exzess</button>
+        <button class="corr-btn" onclick="checkCorr('c0a',this,'kompetenz')">Kompetenzdefizit</button>
+      </div><div class="corr-fb" id="c0a-fb"></div>
+    </div>
+    <div class="corr-item" id="c0b">Normales Verhalten tritt zu OFT auf
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'defizit')">Defizit</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'exzess')">Exzess</button>
+        <button class="corr-btn" onclick="checkCorr('c0b',this,'kompetenz')">Kompetenzdefizit</button>
+      </div><div class="corr-fb" id="c0b-fb"></div>
+    </div>
+    <div class="corr-item" id="c0c">Eine erforderliche Fertigkeit fehlt
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'defizit')">Defizit</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'exzess')">Exzess</button>
+        <button class="corr-btn" onclick="checkCorr('c0c',this,'kompetenz')">Kompetenzdefizit</button>
+      </div><div class="corr-fb" id="c0c-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Informationsgrundlagen ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Informationsgrundlagen der VA</div>
+    <div class="sec-lz">Befragung (Patient*in/Bezugspersonen), Beobachtung, Selbstbeobachtung, Fragebogen (Norm/Veränderung/Auslöser/Symptome), Cognitive-Bias-Messung</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine bloße Befragung reicht für die Verhaltensanalyse nicht aus. Worauf stützt sie sich stattdessen — und wozu dienen Fragebögen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Grundlagen: <strong>Befragung</strong> (Patient*in/Bezugspersonen), <strong>Beobachtung</strong>, <strong>Selbstbeobachtung</strong>, <strong>Fragebogen</strong>, experimentelle Verfahren/Bias-Messung. Fragebögen: <strong>Normvergleich, Veränderungsmessung, Auslöserbestimmung, Symptombeschreibung</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Fünf Informationsgrundlagen</div>
+    Direkte <strong>Befragung</strong> (Patient*in / Bezugspersonen), direkte <strong>Beobachtung</strong> (Sitzung, Klinikalltag), <strong>Selbstbeobachtung</strong> (Skala, Protokoll, Online-Tagebuch), <strong>Fragebogen</strong> sowie <strong>experimentelle Verfahren</strong>. Statt allgemeiner Fragen z. B. stundenweise Protokollierung (Trinktag, Schmerztagebuch).
+  </div>
+  <div class="card">
+    <div class="card-title">Vier Zwecke von Fragebögen</div>
+    (1) <strong>Normvergleich</strong>, (2) <strong>Veränderungsmessung</strong> (Eingang vs. Ausgang), (3) systematische <strong>Auslöserbestimmung</strong>, (4) vollständige <strong>Symptombeschreibung</strong>. Beispiel: BDI (21 Symptome; &lt;14 unauffällig … 29–63 schwer), IDTS (Trinksituationen).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Cognitive-Bias-Messung</div>
+    Erfasst <strong>implizite</strong> kognitive Tendenzen (durch direkte Befragung nicht zugänglich): <strong>Aufmerksamkeitstendenz</strong> (McLeod), <strong>Assoziationstendenz</strong> (Greenwald, IAT), <strong>Annäherungstendenz</strong> (Wiers); zudem Delay Discounting, Go-NoGo (kognitive Kontrolle).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die Informationsgrundlagen der VA</div>
+    <div id="grundlagen">
+      <div class="step-item"><strong>Befragung:</strong> Patient*in &amp; Bezugspersonen (Anamnese, strukturiertes Interview).</div>
+      <div class="step-item"><strong>Beobachtung:</strong> in Therapiesitzung und Klinikalltag.</div>
+      <div class="step-item"><strong>Selbstbeobachtung:</strong> Skala, Protokoll, Online-Tagebuch (stundenweise).</div>
+      <div class="step-item"><strong>Fragebogen:</strong> Norm, Veränderung, Auslöser, Symptome (BDI, IDTS).</div>
+      <div class="step-item"><strong>Experimentell:</strong> Rollenspiel, Symptomauslösung, Cognitive-Bias-Messung.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'grundlagen')">Aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Informationsinhalte ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">③ Informationsinhalte der VA</div>
+    <div class="sec-lz">Beschreibung & Erstauftreten, aktueller Kontext, Kontrollversuche/Rückfälle; Leitfrage „Was wurde gelernt?“</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Welche Inhalte erhebt die Verhaltensanalyse — und welche Leitfrage zieht sich durch?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Vier Inhaltsbereiche: <strong>Beschreibung</strong> des aktuellen Problemverhaltens, <strong>Erstauftreten</strong>, <strong>aktueller Kontext</strong>, <strong>Kontrollversuche/Rückfälle</strong>. Leitfrage bei Erstauftreten und Kontrollversuchen: <strong>„Was wurde gelernt?"</strong></div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Beschreibung &amp; Erstauftreten</div>
+    <strong>Beschreibung des aktuellen Problemverhaltens:</strong> Art (Verhalten, Emotionen, Kognitionen), Stärke/Häufigkeit, zeitliche Verteilung, Schwankungen. <strong>Erstmaliges Auftreten:</strong> psychosoziale Situation, Modellpersonen, initiale Erfahrung, Reaktion der Umwelt, eigene Interpretation. → <strong>Was wurde gelernt?</strong>
+  </div>
+  <div class="card">
+    <div class="card-title">Aktueller Kontext &amp; Kontrollversuche</div>
+    <strong>Aktueller Kontext:</strong> häufige Situationen, vorausgehende und nachfolgende Bedingungen, Auslöser für Steigerung bzw. Verringerung/Nichtauftreten. <strong>Kontrollversuche/Rückfälle/Behandlungen:</strong> Risikosituationen, Bewältigungskompetenzen, Behandlungserfahrungen. → <strong>Was wurde gelernt?</strong>
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Die Leitfrage <strong>„Was wurde gelernt?"</strong> zieht sich durch Erstauftreten UND Kontrollversuche — die VA sucht nach <strong>Lernprozessen</strong>, nicht nach einer biologischen Ursache.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die vier Inhaltsbereiche</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="beschr" onclick="switchTab(this,'inhalte')">Beschreibung</button>
+      <button class="tab-btn" data-tab="erst" onclick="switchTab(this,'inhalte')">Erstauftreten</button>
+      <button class="tab-btn" data-tab="kontext" onclick="switchTab(this,'inhalte')">Kontext</button>
+      <button class="tab-btn" data-tab="kontroll" onclick="switchTab(this,'inhalte')">Kontrollversuche</button>
+    </div>
+    <div class="tab-group" data-group="inhalte">
+      <div class="tab-content active" data-tab="beschr"><strong>Beschreibung:</strong> Art (Verhalten/Emotion/Kognition), Stärke, Häufigkeit, zeitliche Verteilung, Schwankungen.</div>
+      <div class="tab-content" data-tab="erst"><strong>Erstauftreten:</strong> psychosoziale Situation, Modellpersonen, initiale Erfahrung, Reaktion der Umwelt → Was wurde gelernt?</div>
+      <div class="tab-content" data-tab="kontext"><strong>Aktueller Kontext:</strong> häufige Situationen, vorausgehende/nachfolgende Bedingungen, Auslöser für Steigerung/Verringerung.</div>
+      <div class="tab-content" data-tab="kontroll"><strong>Kontrollversuche/Rückfälle:</strong> Risikosituationen, Bewältigungskompetenzen, Behandlungserfahrungen → Was wurde gelernt?</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Teufelskreise ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">④ Modellentwicklung & Teufelskreise</div>
+    <div class="sec-lz">Lernprozesse, O-Variablen, Teufelskreise; physiologisch (Vermeidung: kurz Erleichterung, lang Angst↑) vs interaktionell (Selbstdarstellung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Aus den Informationen wird ein VT-Modell entwickelt. Was sind seine Bestandteile — und wie unterscheiden sich physiologischer und interaktioneller Teufelskreis?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Modell: <strong>Lernprozesse, O-Variablen, Teufelskreise</strong>. <strong>Physiologisch</strong> (z. B. Angst): Vermeidung → kurz Erleichterung, lang Angst↑. <strong>Interaktionell</strong> (z. B. PS): übertriebene Selbstdarstellung → kurz Anerkennung, lang Ablehnung.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">VT-Modellentwicklung</div>
+    Drei Bereiche: (1) <strong>Lernprozesse</strong> (Modell-/klassische/operante Konditionierung, kognitive Grundannahmen) → Hinweise für Technik &amp; Beziehung; (2) <strong>O-Variablen</strong> (körperliche Veränderungen, Informationsverarbeitungsbias, Toleranz) → Veränderbarkeit; (3) <strong>Teufelskreise</strong> → Erklärung für Patient*innen.
+  </div>
+  <div class="card">
+    <div class="card-title">Physiologischer Teufelskreis</div>
+    Z. B. bei Angststörungen: situativer Auslöser → Beschwerde/Bewertung → <strong>Vermeidungsverhalten</strong> → <strong>kurzfristig Erleichterung (+)</strong>, <strong>langfristig gesteigerte Ängstlichkeit (−)</strong> → zurück zum Auslöser.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Interaktioneller Teufelskreis</div>
+    Z. B. bei Persönlichkeitsstörungen: kritische Rückmeldung → Angst vor Ablehnung → <strong>übertriebene Selbstdarstellung</strong> → kurzfristig Anerkennung (+), langfristig Ablehnung (−). Analog: dysfunktionales Verhalten wird kurzfristig verstärkt, hält das Problem langfristig aufrecht.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Physiologisch vs. interaktionell</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="phys" onclick="switchTab(this,'teufel')">Physiologisch</button>
+      <button class="tab-btn" data-tab="inter" onclick="switchTab(this,'teufel')">Interaktionell</button>
+    </div>
+    <div class="tab-group" data-group="teufel">
+      <div class="tab-content active" data-tab="phys"><strong>Physiologisch (z. B. Angst):</strong> Auslöser → Beschwerde/Bewertung → Vermeidung → kurz Erleichterung (+), lang Ängstlichkeit↑ (−).</div>
+      <div class="tab-content" data-tab="inter"><strong>Interaktionell (z. B. PS):</strong> kritische Rückmeldung → Angst vor Ablehnung → übertriebene Selbstdarstellung → kurz Anerkennung (+), lang Ablehnung (−).</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Doppelfunktion ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">⑤ Doppelfunktion & Störungsverständnis</div>
+    <div class="sec-lz">Problemverhalten erfüllt intrapsychische UND interaktionelle Funktionen; VT-Störungsverständnis (erlerntes Reagieren, Funktion)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum trinkt jemand Alkohol — zur Beruhigung oder um Wünsche durchzusetzen? Was bedeutet „Doppelfunktion", und was sagt das VT-Störungsverständnis?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>Doppelfunktion:</strong> Problemverhalten kann gleichzeitig <strong>intrapsychische</strong> (z. B. Beruhigung) UND <strong>interaktionelle</strong> (z. B. Durchsetzung von Wünschen) Funktionen erfüllen. VT-Verständnis: Patient*innen „haben" keine Störung, sondern <strong>reagieren erlernt</strong>; jedes Verhalten hat eine Funktion.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Doppelfunktion von Problemverhalten</div>
+    Problemverhalten kann <strong>mehrere Funktionen gleichzeitig</strong> erfüllen. Beispiele: <strong>Alkoholkonsum</strong> — intrapsychisch: Beruhigung/Ablenkung; interaktionell: Durchsetzung von Wünschen. <strong>Chronische Schmerzstörung</strong> — Schonverhalten: Schmerzvermeidung; Wehklagen: Zuwendung.
+  </div>
+  <div class="card">
+    <div class="card-title">VT-Störungsverständnis (Hoyer & Brockmeier 2021)</div>
+    Patient*innen <strong>„haben" keine Störung</strong>, sondern reagieren erlernt auf Kontextfaktoren; <strong>jedes Verhalten hat (ursprünglich) eine sinnvolle Funktion</strong>; zu klären ist, wie in der Therapie ein <strong>Umlernen</strong> stattfinden kann.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Merke</div>
+    Eine rein <strong>intrapsychische</strong> Analyse (z. B. Alkohol als Beruhigung) übersieht möglicherweise die <strong>interaktionelle</strong> Funktion (z. B. Durchsetzung von Wünschen). Beide Ebenen gehören in die VA.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Doppelfunktion am Beispiel Alkohol</div>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="intra" onclick="switchTab(this,'doppel')">Intrapsychisch</button>
+      <button class="tab-btn" data-tab="interak" onclick="switchTab(this,'doppel')">Interaktionell</button>
+    </div>
+    <div class="tab-group" data-group="doppel">
+      <div class="tab-content active" data-tab="intra"><strong>Intrapsychisch:</strong> Beruhigung, Ablenkung, Emotionsregulation — die innere Funktion des Verhaltens.</div>
+      <div class="tab-content" data-tab="interak"><strong>Interaktionell:</strong> Durchsetzung von Wünschen, Zuwendung, soziale Wirkung — die zwischenmenschliche Funktion. Beide können gleichzeitig bestehen!</div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Mikro-/Makroanalyse ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">⑥ Mikro- & Makroanalyse</div>
+    <div class="sec-lz">Mikroanalyse (SORKC) = situationsspezifische Episode; Makroanalyse = Längsschnitt (Prädisposition, Erwerb, Aufrechterhaltung)</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Die Verhaltensanalyse hat zwei Brennweiten: eine für die einzelne Situation, eine für die ganze Lebensgeschichte. Wie heißen sie?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5"><strong>Mikroanalyse</strong> (SORKC-Schema) = situationsspezifische Analyse einer einzelnen Episode. <strong>Makroanalyse</strong> = längsschnittliche Entwicklung (Prädisposition, Erwerb, Aufrechterhaltung).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Mikroanalyse</div>
+    Situationsspezifische Analyse <strong>einzelner Verhaltensepisoden</strong> mit dem <strong>SORKC-Schema</strong> — die „Nahaufnahme" einer konkreten Situation (was geschieht hier und jetzt?).
+  </div>
+  <div class="card">
+    <div class="card-title">Makroanalyse</div>
+    <strong>Längsschnittliche</strong> Betrachtung der Entwicklung des Problemverhaltens: <strong>Prädisposition, Erwerb, Aufrechterhaltung</strong> — die „Totale" über die Lebensgeschichte.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Transformation</div>
+    Die VA transformiert den <strong>chronologischen Bericht</strong> der Patient*in („und dann und dann…") + die Diagnostik in beide Analyseformen. Mikro = Episode, Makro = Längsschnitt.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Analyse-Ebenen-Simulator — Mikro vs. Makro</div>
+    <div class="sim-box">
+      <div class="sim-toggle">
+        <button class="sim-tbtn on" id="an-mikro" onclick="anSet('mikro')">Mikroanalyse</button>
+        <button class="sim-tbtn" id="an-makro" onclick="anSet('makro')">Makroanalyse</button>
+      </div>
+      <div class="sim-verdict" id="an-out"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-top:8px">Zoom-Metapher: Die <strong>Mikroanalyse (SORKC)</strong> ist die Nahaufnahme einer Episode, die <strong>Makroanalyse</strong> die längsschnittliche Totale (Erwerb &amp; Aufrechterhaltung).</p>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ SORKC-Schema ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">⑦ Das SORKC-Schema (Kanfer & Saslow)</div>
+    <div class="sec-lz">S Stimulus · O Organismus · R Reaktion · K Kontingenz · C Konsequenz; Analysereihenfolge R→S→C→O→K ≠ Buchstabenreihenfolge</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>S-O-R-K-C: fünf Buchstaben, fünf Bausteine. Wofür stehen sie — und in welcher Reihenfolge analysiert man wirklich?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6"><strong>S</strong> Stimulus · <strong>O</strong> Organismus · <strong>R</strong> Reaktion · <strong>K</strong> Kontingenz · <strong>C</strong> Konsequenz (Kanfer & Saslow 1965). Analysiert wird aber <strong>R → S → C → O → K</strong> — die Buchstabenreihenfolge ≠ Analysereihenfolge!</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Die fünf Komponenten (Kanfer & Saslow 1965)</div>
+    <strong>S — Stimulus:</strong> auslösende Situation (Wann tritt R auf?). <strong>O — Organismus:</strong> überdauernde Bedingungen der Person (biologisch/psychologisch). <strong>R — Reaktion:</strong> das Problemverhalten (Verhalten, Emotion, Kognition). <strong>K — Kontingenz:</strong> Art des Zusammenhangs zwischen R und C. <strong>C — Konsequenz:</strong> aufrechterhaltende Folge von R.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Analysereihenfolge ≠ Buchstabenreihenfolge</div>
+    Analysiert wird: zuerst <strong>R</strong> (was ist das Problemverhalten?), dann <strong>S</strong> (wann?), dann <strong>C</strong> (aufrechterhaltende Folge?), dann <strong>O</strong> (Person?), dann <strong>K</strong> (Zusammenhang R–C?). Die Schreibweise S-O-R-K-C ist nur die Merkform!
+  </div>
+  <div class="card">
+    <div class="card-title">Ergebnis</div>
+    Aus der VT-Schlussfolgerung ergeben sich <strong>Targets</strong> („was?") und <strong>therapeutische Strategie</strong> („wie?"). Leitfragen: Was wurde gelernt? Welche Vorhersagen lassen sich machen?
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">SORKC: Buchstabe → Bedeutung</div>
+    <div class="corr-item" id="c6a">S
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'stimulus')">Stimulus</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'organismus')">Organismus</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'reaktion')">Reaktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'kontingenz')">Kontingenz</button>
+        <button class="corr-btn" onclick="checkCorr('c6a',this,'konsequenz')">Konsequenz</button>
+      </div><div class="corr-fb" id="c6a-fb"></div>
+    </div>
+    <div class="corr-item" id="c6b">O
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'stimulus')">Stimulus</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'organismus')">Organismus</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'reaktion')">Reaktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'kontingenz')">Kontingenz</button>
+        <button class="corr-btn" onclick="checkCorr('c6b',this,'konsequenz')">Konsequenz</button>
+      </div><div class="corr-fb" id="c6b-fb"></div>
+    </div>
+    <div class="corr-item" id="c6c">R
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'stimulus')">Stimulus</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'organismus')">Organismus</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'reaktion')">Reaktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'kontingenz')">Kontingenz</button>
+        <button class="corr-btn" onclick="checkCorr('c6c',this,'konsequenz')">Konsequenz</button>
+      </div><div class="corr-fb" id="c6c-fb"></div>
+    </div>
+    <div class="corr-item" id="c6d">K
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'stimulus')">Stimulus</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'organismus')">Organismus</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'reaktion')">Reaktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'kontingenz')">Kontingenz</button>
+        <button class="corr-btn" onclick="checkCorr('c6d',this,'konsequenz')">Konsequenz</button>
+      </div><div class="corr-fb" id="c6d-fb"></div>
+    </div>
+    <div class="corr-item" id="c6e">C
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'stimulus')">Stimulus</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'organismus')">Organismus</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'reaktion')">Reaktion</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'kontingenz')">Kontingenz</button>
+        <button class="corr-btn" onclick="checkCorr('c6e',this,'konsequenz')">Konsequenz</button>
+      </div><div class="corr-fb" id="c6e-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Fallbeispiel & Cave ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">⑧ Fallbeispiel Drachenflieger & Cave</div>
+    <div class="sec-lz">Herr D.: keine hirnorganische Ursache, depressives Verhalten durch Zuwendung verstärkt; Gütekriterium der VA = therapeutischer Nutzen, nicht Wahrheit</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Herr D. glaubt, seine Depression sei eine hirnorganische Unfallfolge. Was zeigte die Verhaltensanalyse — und woran misst man, ob eine VA „gut" ist?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Keine</strong> hirnorganische Schädigung: depressives Verhalten (Jammern/Rückzug) wird durch <strong>Zuwendung/Nachgeben verstärkt</strong> (↑), Anstrengung durch Misserfolg bestraft (↓). Gütekriterium der VA = <strong>therapeutischer Nutzen</strong>, nicht Wahrheit.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Fallbeispiel „Der Drachenflieger" (Herr D.)</div>
+    Herr D. führt seine Depression auf hirnorganische Folgen eines Drachenflieger-Unfalls zurück. Die VA ergab <strong>keine hirnorganische Schädigung</strong>, sondern einen schleichenden Verlauf seit ~15 Jahren: depressives Verhalten brachte <strong>Entlastung und Zuwendung</strong> (Frau umsorgte ihn, Klinikpersonal gab nach).
+  </div>
+  <div class="card">
+    <div class="card-title">SORKC-Mikroanalyse (zwei Muster)</div>
+    <strong>R1 Anstrengung → Misserfolg/Zweifel der Ehefrau → nimmt ab (↓).</strong> <strong>R2 Jammern/Rückzug/Drohung/Suizidalität → Nachgeben/Zuwendung → nimmt zu (↑).</strong> Targets u. a.: depressives Verhalten reduzieren, kognitive Umstrukturierung der biologischen Attribution, Aktivitätsaufbau, Paartherapie.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Cave: Gütekriterium</div>
+    Verhaltensanalysen sind <strong>hypothetische, therapeutisch geleitete Interpretationen</strong> — nicht „wahr/falsch". Gütekriterium = <strong>therapeutischer Nutzen</strong>: Erweisen sich die abgeleiteten Maßnahmen im Einzelfall als effektiv?
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">SORKC-Analyse beim Drachenflieger — Schritt für Schritt</div>
+    <div id="drache">
+      <div class="step-item"><strong>S:</strong> berufliche Herausforderung / Therapie / Ehestreit.</div>
+      <div class="step-item"><strong>R1 (Anstrengung):</strong> → Misserfolg, Zweifel der Ehefrau (C1) → nimmt ab (↓, bestraft).</div>
+      <div class="step-item"><strong>R2 (Jammern/Rückzug/Drohung):</strong> → Nachgeben, Zuwendung (C2) → nimmt zu (↑, verstärkt).</div>
+      <div class="step-item"><strong>Schluss:</strong> keine hirnorganische Ursache; operante Aufrechterhaltung des depressiven Verhaltens.</div>
+      <button class="btn btn-ghost" onclick="revealStep(this,'drache')">Analyse aufdecken</button>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">🔴 Verwechslungs-Duelle</div>
+    <div class="sec-lz">Die 5 häufigsten Verwechslungen aus VT02 — typische Distraktoren der Single-Choice-Klausur</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Beschwerden (Patientensicht)</h4>
+      <p>Subjektive, ggf. verzerrte Schilderung</p>
+      <p>Selbstwahrnehmung, Erklärungsmodell, Erwartung</p>
+      <p>Können selbst Teil der Störung sein</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Targets (Therapeutensicht)</h4>
+      <p>Therapeutisch geeignete Ansatzpunkte</p>
+      <p>Erst durch Verhaltensanalyse identifiziert</p>
+      <p>Defizit/Exzess/Kompetenzdefizit …</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Beschwerden, die Patient*innen schildern, sind direkt die therapeutischen Targets.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Kurzfristige Konsequenz von Vermeidung</h4>
+      <p>Erleichterung</p>
+      <p>Positive Verstärkung</p>
+      <p>Hält das Verhalten aufrecht</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Langfristige Konsequenz von Vermeidung</h4>
+      <p>Gesteigerte Ängstlichkeit</p>
+      <p>Negative Folge</p>
+      <p>Verfestigt die Störung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Vermeidungsverhalten ist therapeutisch sinnvoll, weil es Erleichterung bringt.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Intrapsychische Funktion</h4>
+      <p>Innen wirksam</p>
+      <p>z. B. Alkohol = Beruhigung/Ablenkung</p>
+      <p>Emotion/Kognition</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Interaktionelle Funktion</h4>
+      <p>Sozial wirksam</p>
+      <p>z. B. Alkohol = Durchsetzung von Wünschen</p>
+      <p>Doppelfunktion: beide Ebenen beachten</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Problemverhalten hat immer nur eine einzige Funktion, die in der Verhaltensanalyse identifiziert werden muss.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Analysereihenfolge im SORKC</h4>
+      <p>Zuerst R (was?), dann S (wann?)</p>
+      <p>Dann C (Folge?), dann O (Person?)</p>
+      <p>Zuletzt K (Zusammenhang?)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Buchstabenreihenfolge im SORKC</h4>
+      <p>S – O – R – K – C</p>
+      <p>Nur die Schreibweise/Merkform</p>
+      <p>Entspricht NICHT der Analysereihenfolge</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Im SORKC-Schema wird zuerst der Stimulus S analysiert, dann der Organismus O, dann die Reaktion R.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Verhaltensanalyse als Wahrheitsaussage</h4>
+      <p>„Richtig oder falsch“</p>
+      <p>Objektive Abbildung der Realität</p>
+      <p>Wie ein Laborbefund — FALSCH</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Verhaltensanalyse als therapeutisches Instrument</h4>
+      <p>Hypothetischer Interpretationsprozess</p>
+      <p>Gütekriterium: therapeutischer Nutzen</p>
+      <p>Hilft sie im konkreten Einzelfall?</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Eine Verhaltensanalyse ist entweder richtig oder falsch, je nachdem ob sie die objektive Realität des Patienten korrekt abbildet.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m12a2-vl02</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m12a2-vl02';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was unterscheidet „Beschwerden“ von „Targets“?",
+      "opts": [
+        "Beschwerden = subjektive (ggf. verzerrte) Problemschilderung; Targets = therapeutisch geeignete Ansatzpunkte (erst durch die Verhaltensanalyse identifiziert).",
+        "Beschwerden und Targets sind vollkommen identisch: Die subjektive Problemschilderung der Patient*innen kann ohne jede weitere Analyse unmittelbar und unverändert als der therapeutische Ansatzpunkt der Behandlung übernommen werden.",
+        "Targets sind die Symptome, Beschwerden die fertige Diagnose.",
+        "Beschwerden sind objektiv messbar, Targets grundsätzlich nicht."
+      ],
+      "c": 0,
+      "e": "Beschwerden = subjektive, ggf. verzerrte Problemschilderung (Selbstwahrnehmung, Erklärungsmodell, Erwartung — können selbst Teil der Störung sein). Targets = therapeutisch geeignete Ansatzpunkte, erst durch die Verhaltensanalyse identifiziert. Die VA ist das Bindeglied."
+    },
+    {
+      "id": "s0q2",
+      "q": "Welche Schwierigkeit erschwert die direkte Übernahme der Patientenschilderung?",
+      "opts": [
+        "Die Patientenschilderung kann grundsätzlich immer eins zu eins übernommen werden, da Selbstreflexion, Erinnerung und Bewertung der Patient*innen erwiesenermaßen vollkommen objektiv, vollständig und frei von jeder Verzerrung sind.",
+        "Mangelnde Selbstreflexion, teils nicht bewusste Prozesse, Erinnerungsverzerrungen sowie Normen/Scham.",
+        "Dass Patient*innen stets von selbst die korrekten therapeutischen Targets benennen.",
+        "Dass es überhaupt keine Fragebögen zur Erhebung gibt."
+      ],
+      "c": 1,
+      "e": "Schwierigkeiten in Anamnese/Diagnostik: mangelnde Selbstreflexion, teils nicht bewusste Prozesse, Erinnerungsverzerrungen, Normen/Scham → therapeutische Kompensation durch spezifische VA-Verfahren nötig (bloße Befragung reicht nicht)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Welche Informationsgrundlagen nutzt die Verhaltensanalyse?",
+      "opts": [
+        "Ausschließlich die freie, unstrukturierte Schilderung der Patient*in.",
+        "Nur die fertige ärztliche Diagnose.",
+        "Direkte Befragung, Befragung von Bezugspersonen, direkte Beobachtung, Selbstbeobachtung, Fragebogen (sowie experimentelle Verfahren).",
+        "Die Verhaltensanalyse stützt sich ausschließlich auf eine einzige Informationsquelle, nämlich die einmalige, völlig unstrukturierte und frei erzählte subjektive Schilderung der Patientin im allerersten Erstgespräch."
+      ],
+      "c": 2,
+      "e": "Informationsgrundlagen: direkte Befragung (Patient*in/Bezugspersonen), direkte Beobachtung, Selbstbeobachtung (Protokolle/Tagebuch), Fragebogen sowie experimentelle Verfahren / Cognitive-Bias-Messung."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wozu dienen Fragebögen in der Verhaltensanalyse?",
+      "opts": [
+        "Fragebögen dienen in der Verhaltensanalyse ausschließlich dazu, der Patientin am Ende der Behandlung eine schriftliche Rechnung über alle erbrachten Therapieleistungen auszustellen.",
+        "Ausschließlich der Unterhaltung der Patient*in im Wartezimmer.",
+        "Ausschließlich dem vollständigen Ersetzen jeder klinischen Diagnostik.",
+        "Normvergleich, Veränderungsmessung, systematische Auslöserbestimmung und vollständige Symptombeschreibung."
+      ],
+      "c": 3,
+      "e": "Fragebögen: (1) Normvergleich, (2) Veränderungsmessung (Eingang vs. Ausgang), (3) systematische Auslöserbestimmung, (4) vollständige Symptombeschreibung. Beispiele: BDI (Depression), IDTS (Trinksituationen)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Welche Leitfrage steht hinter dem Erheben von Erstauftreten und Kontrollversuchen?",
+      "opts": [
+        "„Was wurde gelernt?“",
+        "Die zentrale Leitfrage hinter dem Erheben von Erstauftreten und Kontrollversuchen lautet ausschließlich, welche genaue biologisch-organische Ursache im Gehirn der Patientin für die Beschwerden objektiv verantwortlich ist.",
+        "„Welches Medikament hilft am schnellsten?“",
+        "„Wie hoch ist die zu erwartende Therapiegebühr?“"
+      ],
+      "c": 0,
+      "e": "Leitfrage bei Erstauftreten und Kontrollversuchen/Rückfällen: „Was wurde gelernt?“ — die VA erfasst Modellpersonen, initiale Erfahrung, Reaktion der Umwelt, eigene Interpretation, Risikosituationen, Bewältigungskompetenzen."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was erhebt die VA zum „aktuellen Kontext“ des Problemverhaltens?",
+      "opts": [
+        "Zum aktuellen Kontext erhebt die Verhaltensanalyse ausschließlich die genaue genetische Veranlagung sowie die vollständige neurobiologische Hirnstruktur der betroffenen Person ohne jeden Bezug zu Situationen.",
+        "Häufige Situationen, vorausgehende und nachfolgende Bedingungen, Auslöser für Steigerung und Verringerung des Verhaltens.",
+        "Ausschließlich die frühesten Kindheitserinnerungen der Person.",
+        "Nur die aktuell verordnete Medikation."
+      ],
+      "c": 1,
+      "e": "Aktueller Kontext: häufige Situationen, vorausgehende und nachfolgende Bedingungen, Auslöser für Steigerung bzw. Verringerung/Nichtauftreten des Problemverhaltens (Erfragen, induktives Entdecken)."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was passiert beim physiologischen Teufelskreis (z. B. Angststörung) durch Vermeidungsverhalten?",
+      "opts": [
+        "Es führt langfristig zur vollständigen Heilung der Angst.",
+        "Es hat weder kurzfristig noch langfristig irgendeine Konsequenz.",
+        "Kurzfristig Erleichterung (positive Verstärkung), langfristig gesteigerte Ängstlichkeit → Aufrechterhaltung.",
+        "Vermeidungsverhalten führt sowohl kurzfristig als auch dauerhaft langfristig zu einer nachhaltigen und vollständigen Reduktion der Angst und ist daher die therapeutisch sinnvollste und empfohlene Bewältigungsstrategie."
+      ],
+      "c": 2,
+      "e": "Physiologischer Teufelskreis: Auslöser → Beschwerde/Bewertung → Vermeidungsverhalten → kurzfristig Erleichterung (positive Verstärkung), langfristig gesteigerte Ängstlichkeit → erklärt die Aufrechterhaltung. Zentraler Ansatzpunkt der VT (Exposition)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was kennzeichnet den interaktionellen Teufelskreis (z. B. bei Persönlichkeitsstörungen)?",
+      "opts": [
+        "Der interaktionelle Teufelskreis beschreibt einen rein körperlichen, sozial vollkommen isolierten physiologischen Reflexbogen, an dem ausschließlich innere biologische Prozesse und keinerlei andere Personen oder soziale Rückmeldungen beteiligt sind.",
+        "Dass eine kritische Rückmeldung sofort und dauerhaft zur Heilung führt.",
+        "Dass soziale Reaktionen für die Aufrechterhaltung keine Rolle spielen.",
+        "Ein sozialer Kreislauf: kritische Rückmeldung → Angst vor Ablehnung → übertriebene Selbstdarstellung → kurzfristig Anerkennung, langfristig Ablehnung."
+      ],
+      "c": 3,
+      "e": "Interaktioneller Teufelskreis: kritische Rückmeldung → Angst vor Ablehnung → übertriebene Selbstdarstellung → kurzfristig Anerkennung (+), langfristig Ablehnung (−) → hält die Angst vor Ablehnung aufrecht."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was bedeutet die „Doppelfunktion“ von Problemverhalten?",
+      "opts": [
+        "Problemverhalten kann gleichzeitig intrapsychische UND interaktionelle Funktionen erfüllen.",
+        "Die Doppelfunktion bedeutet, dass jedes Problemverhalten ausschließlich genau eine einzige, rein intrapsychische Funktion erfüllt und soziale, interaktionelle Funktionen dabei grundsätzlich und vollständig ausgeschlossen sind.",
+        "Dass Problemverhalten grundsätzlich immer doppelt so häufig auftritt wie normales Verhalten.",
+        "Dass für die Behandlung zwingend zwei Therapeut*innen gleichzeitig nötig sind."
+      ],
+      "c": 0,
+      "e": "Doppelfunktion: Problemverhalten kann gleichzeitig intrapsychische (z. B. Alkohol = Beruhigung) UND interaktionelle Funktionen (z. B. Durchsetzung von Wünschen) erfüllen. Beide Ebenen müssen in der VA berücksichtigt werden."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was besagt das VT-Störungsverständnis (Hoyer & Brockmeier 2021)?",
+      "opts": [
+        "Das verhaltenstherapeutische Störungsverständnis besagt, dass Patient*innen ihre psychische Störung als feste, angeborene und vollkommen kontextunabhängige Eigenschaft besitzen, die unabhängig von jeder erlernten Reaktion existiert.",
+        "Patient*innen „haben“ keine Störung, sondern reagieren erlernt auf Kontextfaktoren; jedes Verhalten hat (ursprünglich) eine Funktion.",
+        "Dass psychische Störungen rein zufällig und ohne jeden Bezug zu Kontextfaktoren entstehen.",
+        "Dass jedes gezeigte Verhalten grundsätzlich völlig sinnlos ist."
+      ],
+      "c": 1,
+      "e": "VT-Störungsverständnis (Hoyer & Brockmeier 2021): Patient*innen „haben“ keine Störung, sondern reagieren erlernt auf Kontextfaktoren; jedes Verhalten hat (ursprünglich) eine sinnvolle Funktion; zu klären ist das Umlernen."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Was unterscheidet Mikro- von Makroanalyse?",
+      "opts": [
+        "Die Mikroanalyse betrifft die Längsschnittentwicklung, die Makroanalyse einzelne Situationsepisoden.",
+        "Beide sind vollkommen identische Analyseformen.",
+        "Mikroanalyse (SORKC) = situationsspezifische Einzelepisode; Makroanalyse = längsschnittliche Entwicklung (Prädisposition, Erwerb, Aufrechterhaltung).",
+        "Die Mikroanalyse erfasst ausschließlich die genetische Veranlagung über mehrere Generationen hinweg, während die Makroanalyse sich allein auf eine einzige Sekunde des aktuellen Verhaltens in einer Einzelsituation beschränkt."
+      ],
+      "c": 2,
+      "e": "Mikroanalyse: situationsspezifische Analyse einzelner Verhaltensepisoden (SORKC-Schema). Makroanalyse: längsschnittliche Entwicklung des Problemverhaltens (Prädisposition, Erwerb, Aufrechterhaltung)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Was transformiert die Verhaltensanalyse?",
+      "opts": [
+        "Die Verhaltensanalyse transformiert ausschließlich die genauen Laborwerte und bildgebenden Befunde der Patientin in eine einzige numerische Gesamtdiagnose ohne jeden Bezug zu Situationen oder zur Lebensgeschichte.",
+        "Ausschließlich die optimale Medikamentendosis.",
+        "Ausschließlich die abzurechnende Therapiegebühr.",
+        "Den chronologischen Bericht der Patient*in („und dann und dann …“) sowie die Diagnostikergebnisse in Mikro- und Makroanalyse."
+      ],
+      "c": 3,
+      "e": "Die VA transformiert den chronologischen Bericht der Patient*in („und dann und dann …“) und die Diagnostikergebnisse in zwei Analyseformen: Mikroanalyse (SORKC) und Makroanalyse (Längsschnitt)."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Wer entwickelte das SORKC-Schema?",
+      "opts": [
+        "Kanfer & Saslow (1965).",
+        "Das SORKC-Schema zur mikroanalytischen Verhaltensanalyse wurde von Sigmund Freud Ende des 19. Jahrhunderts im Rahmen seiner psychoanalytischen Trieblehre als Instrument zur Deutung unbewusster Konflikte entwickelt.",
+        "Aaron Beck (1980).",
+        "Bruce Wampold (1997)."
+      ],
+      "c": 0,
+      "e": "SORKC-Schema: mikroanalytisches Schema zur Verhaltensanalyse, entwickelt von Kanfer & Saslow (1965)."
+    },
+    {
+      "id": "s6q2",
+      "q": "In welcher Reihenfolge wird im SORKC tatsächlich analysiert (≠ Buchstabenreihenfolge)?",
+      "opts": [
+        "Im SORKC-Schema wird stets exakt in der Buchstabenreihenfolge analysiert: zuerst der Stimulus S, dann der Organismus O, anschließend die Reaktion R, danach die Kontingenz K und zuletzt die Konsequenz C.",
+        "Zuerst R (was?), dann S (wann?), dann C (Folge?), dann O (Person?), dann K (Zusammenhang?).",
+        "Streng alphabetisch: zuerst C, dann K, dann O, dann R, dann S.",
+        "Die Reihenfolge der Analyse ist vollkommen beliebig und ohne jede klinische Systematik."
+      ],
+      "c": 1,
+      "e": "Die Buchstabenreihenfolge S-O-R-K-C entspricht NICHT der Analysereihenfolge. Analysiert wird: zuerst R (was ist das Problemverhalten?), dann S (wann?), dann C (aufrechterhaltende Folge?), dann O (Person?), dann K (Zusammenhang R–C?)."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was zeigte die Verhaltensanalyse beim „Drachenflieger“ (Herr D.)?",
+      "opts": [
+        "Eine eindeutige, schwere hirnorganische Schädigung als alleinige Ursache der Beschwerden.",
+        "Dass an der Entstehung der Symptomatik keinerlei Lernprozesse beteiligt waren.",
+        "Keine hirnorganische Schädigung; depressives Verhalten wird durch Zuwendung/Nachgeben verstärkt, Anstrengung durch Misserfolg bestraft.",
+        "Die Verhaltensanalyse beim Drachenflieger ergab eine eindeutige, schwere und fortschreitende hirnorganische Schädigung infolge des Unfalls, die als alleinige biologische Ursache sämtliche depressiven Symptome vollständig und abschließend erklärte."
+      ],
+      "c": 2,
+      "e": "Drachenflieger: keine hirnorganische Schädigung; SORKC zeigt zwei gegenläufige Muster — Anstrengung (R1) wird durch Misserfolg bestraft (↓), depressives Verhalten/Jammern (R2) durch Nachgeben/Zuwendung verstärkt (↑). Targets u. a.: depressives Verhalten reduzieren, kognitive Umstrukturierung der biologischen Attribution."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was ist das Gütekriterium einer Verhaltensanalyse?",
+      "opts": [
+        "Das entscheidende Gütekriterium einer Verhaltensanalyse besteht darin, ob sie die eine objektive, absolute und unveränderliche Wahrheit über die Patientin vollständig korrekt und endgültig abbildet, vergleichbar mit einem eindeutigen Laborbefund.",
+        "Ob sie genau die subjektive Schilderung der Patient*in unverändert wiedergibt.",
+        "Ob sie möglichst lang und ausführlich formuliert ist.",
+        "Nicht Wahrheit, sondern therapeutischer Nutzen — führen die abgeleiteten Maßnahmen im Einzelfall zu effektiver Veränderung?"
+      ],
+      "c": 3,
+      "e": "Cave: Verhaltensanalysen sind hypothetische, therapeutisch geleitete Interpretationen — nicht „wahr/falsch“. Gütekriterium = therapeutischer Nutzen: Erweisen sich die abgeleiteten Maßnahmen im Einzelfall als effektiv?"
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Was ist die Rolle der Verhaltensanalyse im Therapieprozess?",
+    "opts": [
+      "Bindeglied: Beschwerden → Verhaltensanalyse → Targets („was?“) → therapeutische Strategie („wie?“).",
+      "Die Verhaltensanalyse hat im Therapieprozess ausschließlich die Funktion, die subjektive Beschwerdeschilderung der Patientin völlig unverändert und ohne jede Interpretation wortgetreu zu protokollieren und an die Krankenkasse weiterzuleiten.",
+      "Sie ersetzt jede weitere Behandlung vollständig.",
+      "Sie dient ausschließlich der Abrechnung gegenüber der Krankenkasse."
+    ],
+    "c": 0,
+    "e": "Die VA ist das Bindeglied: Beschwerden der Patient*innen → Verhaltensanalyse → Targets („was?“) → therapeutische Strategie („wie?“)."
+  },
+  {
+    "id": "bq2",
+    "q": "Wozu dient eine stundenweise Protokollierung (z. B. Trinktag, Schmerztagebuch)?",
+    "opts": [
+      "Die stundenweise Protokollierung dient ausschließlich dazu, der Patientin durch möglichst aufwändige bürokratische Aufgaben den Therapiezugang zu erschweren und ihre Motivation vor Behandlungsbeginn zu prüfen.",
+      "Realistische Gesamtmenge, situative Schwankungen, Zeiten/Orte und unterschiedliche Wirkung erfassen.",
+      "Ausschließlich das Stellen einer ICD-Diagnose.",
+      "Nur die Berechnung der Therapiegebühr."
+    ],
+    "c": 1,
+    "e": "Stundenweise Protokollierung (statt allgemeiner Fragen): realistische Gesamtmenge, situative Schwankungen, bestimmte Zeiten/Orte, unterschiedliche Wirkung (internal vs. interaktionell) — z. B. Trinktag-Analyse, Schmerztagebuch."
+  },
+  {
+    "id": "bq3",
+    "q": "Was misst die „Cognitive-Bias-Messung“?",
+    "opts": [
+      "Den objektiven allgemeinen Intelligenzquotienten der Person.",
+      "Die genaue optimale Medikamentendosis.",
+      "Implizite kognitive Tendenzen (z. B. Aufmerksamkeits-, Assoziations-, Annäherungstendenz), die durch direkte Befragung nicht zugänglich sind.",
+      "Die Cognitive-Bias-Messung erfasst ausschließlich die bewussten, klar verbalisierbaren und der Patientin jederzeit vollständig zugänglichen expliziten Einstellungen, die sich problemlos durch eine einfache direkte Befragung erheben lassen."
+    ],
+    "c": 2,
+    "e": "Cognitive-Bias-Messung: erfasst IMPLIZITE kognitive Tendenzen (durch direkte Befragung nicht zugänglich) — Aufmerksamkeitstendenz (McLeod), Assoziationstendenz (Greenwald, IAT), Annäherungstendenz (Wiers)."
+  },
+  {
+    "id": "bq4",
+    "q": "Wofür steht das „O“ im SORKC-Schema?",
+    "opts": [
+      "Das „O“ im SORKC-Schema steht für die nachfolgende, aufrechterhaltende Konsequenz des gezeigten Problemverhaltens und beschreibt damit, welche unmittelbare Folge die Reaktion R für die Person hat.",
+      "Für den auslösenden Stimulus / die auslösende Situation.",
+      "Für die Kontingenz, also die Art des Zusammenhangs zwischen R und C.",
+      "Für den Organismus — überdauernde (biologische/psychologische) Bedingungen der Person."
+    ],
+    "c": 3,
+    "e": "SORKC: S = Stimulus (Auslöser), O = Organismus (überdauernde Bedingungen der Person), R = Reaktion (Problemverhalten), K = Kontingenz (Art des R–C-Zusammenhangs), C = Konsequenz (aufrechterhaltende Folge)."
+  },
+  {
+    "id": "bq5",
+    "q": "Was zählt zu den Target-Kategorien (therapeutische Ansatzpunkte)?",
+    "opts": [
+      "Defizit, Exzess, Kompetenzdefizit, inadäquates Verhalten und ungünstige Umstände.",
+      "Zu den Target-Kategorien zählen ausschließlich die genaue genetische Veranlagung, die vollständige neurobiologische Hirnstruktur sowie die objektiv messbaren Laborwerte der betroffenen Person.",
+      "Ausschließlich die subjektive Beschwerde der Patient*in im Erstgespräch.",
+      "Ausschließlich die gestellte ICD-Diagnose."
+    ],
+    "c": 0,
+    "e": "Target-Kategorien: Defizit (normales Verhalten zu selten), Exzess (zu oft), Kompetenzdefizit, inadäquates Verhalten, ungünstige Umstände."
+  },
+  {
+    "id": "bq6",
+    "q": "Was kennzeichnet das Vermeidungsverhalten im physiologischen Teufelskreis?",
+    "opts": [
+      "Vermeidungsverhalten ist im physiologischen Teufelskreis sowohl kurzfristig als auch dauerhaft langfristig heilsam und stellt deshalb die wirksamste und ausdrücklich empfohlene Methode zur endgültigen Überwindung jeder Angststörung dar.",
+      "Es wird kurzfristig positiv verstärkt (Erleichterung), hält die Angst aber langfristig aufrecht.",
+      "Es hat ausschließlich langfristig positive Effekte und keinerlei kurzfristige Wirkung.",
+      "Es hat weder kurzfristig noch langfristig irgendeine Konsequenz."
+    ],
+    "c": 1,
+    "e": "Vermeidungsverhalten wird kurzfristig positiv verstärkt (Erleichterung), hat aber langfristig negative Konsequenzen (gesteigerte Ängstlichkeit) → erklärt die Aufrechterhaltung der Störung."
+  },
+  {
+    "id": "bq7",
+    "q": "Was ist die Makroanalyse?",
+    "opts": [
+      "Die situationsspezifische SORKC-Analyse einer einzelnen Verhaltensepisode.",
+      "Die Messung impliziter kognitiver Biases mit Reaktionszeit-Paradigmen.",
+      "Die längsschnittliche Analyse der Entwicklung des Problemverhaltens (Prädisposition, Erwerb, Aufrechterhaltung).",
+      "Die Makroanalyse ist ein rein mikroanalytisches Schema, das ausschließlich eine einzige, sekundengenaue Verhaltensepisode in einer konkreten Einzelsituation mithilfe des SORKC-Schemas abbildet."
+    ],
+    "c": 2,
+    "e": "Makroanalyse: längsschnittliche Entwicklung des Problemverhaltens (Prädisposition, Erwerb, Aufrechterhaltung). Mikroanalyse: situationsspezifische Einzelepisode (SORKC)."
+  },
+  {
+    "id": "bq8",
+    "q": "Warum ist die Beschwerdeschilderung nicht direkt der Therapieansatz?",
+    "opts": [
+      "Die Beschwerdeschilderung ist deshalb der direkte Therapieansatz, weil die Selbstwahrnehmung, das Erklärungsmodell und die Therapieerwartung der Patient*innen erwiesenermaßen stets vollkommen objektiv, vollständig und frei von jeder Verzerrung sind.",
+      "Weil Patient*innen grundsätzlich niemals Beschwerden schildern.",
+      "Weil Beschwerden stets eindeutig objektiv messbar sind.",
+      "Weil Selbstwahrnehmung, Erklärungsmodell und Erwartung verzerrt und selbst Teil der Störung sein können."
+    ],
+    "c": 3,
+    "e": "Die Beschwerdeschilderung ist nicht identisch mit den Targets: Selbstwahrnehmung (selektiv/verzerrt), subjektives Erklärungsmodell und Therapieerwartung können selbst Teil der Störung sein → erst die Verhaltensanalyse liefert die Targets."
+  }
+];
+
+var corrCorrect = {
+  "c0a": "defizit",
+  "c0b": "exzess",
+  "c0c": "kompetenz",
+  "c6a": "stimulus",
+  "c6b": "organismus",
+  "c6c": "reaktion",
+  "c6d": "kontingenz",
+  "c6e": "konsequenz"
+};
+var corrExpl = {
+  "c0a": "Normales Verhalten tritt zu SELTEN auf → Defizit.",
+  "c0b": "Normales Verhalten tritt zu OFT auf → Exzess.",
+  "c0c": "Eine erforderliche Fertigkeit fehlt → Kompetenzdefizit.",
+  "c6a": "S = Stimulus: auslösende Situation/Reiz (Wann tritt R auf?).",
+  "c6b": "O = Organismus: überdauernde (biologische/psychologische) Bedingungen der Person.",
+  "c6c": "R = Reaktion: das Problemverhalten (Verhalten, Emotion, Kognition).",
+  "c6d": "K = Kontingenz: Art des Zusammenhangs zwischen R und C (z. B. kontinuierlich, intermittierend).",
+  "c6e": "C = Konsequenz: aufrechterhaltende Folge von R."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* Analyse-Ebenen-Simulator (Sektion ⑥) */
+var anData = {
+  mikro:{t:'Mikroanalyse', d:'SORKC-Schema; situationsspezifisch; einzelne Verhaltensepisode (Nahaufnahme).'},
+  makro:{t:'Makroanalyse', d:'Prädisposition, Erwerb, Aufrechterhaltung; längsschnittliche Entwicklung (Totale).'}
+};
+function anSet(k){
+  ['mikro','makro'].forEach(function(x){ var b=document.getElementById('an-'+x); if(b) b.classList.toggle('on', x===k); });
+  var o=document.getElementById('an-out'); if(!o) return;
+  var d=anData[k];
+  o.innerHTML='<strong>'+d.t+':</strong> '+d.d;
+}
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  anSet('mikro');
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

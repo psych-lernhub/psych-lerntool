@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11b · VL05 Anamnese-Grundlagen & Symptomanamnese</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11b-vl05
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11b · VL05 Anamnese-Grundlagen & Symptomanamnese</h1>
+<p class="page-sub">Psychologische Diagnostik II · 11b.2 Anamneseerhebung (Zietlow) · OSCE Sept 2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Was ist Anamnese? · 2. Anamnese im diagnostischen Prozess · 3. Formen der Anamnese · 4. Gesprächs-Basiskompetenzen · 5. Ablauf des Erstgesprächs · 6. Symptomanamnese — Struktur (3 Ebenen) · 7. Faktoren/Krankheitsmodell/Bewältigung · 8. Erfasste Infos im Erstkontakt
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Was ist Anamnese?</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② Diagnostischer Prozess</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Formen</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Gesprächs-Basics</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Erstgespräch</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Symptomanamnese</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Modell/Bewältigung</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Erstkontakt-Infos</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Was ist Anamnese? ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Was ist Anamnese?</div>
+    <div class="sec-lz">'anamnesis' = Erinnerung; Erfragung relevanter Infos; Eigen- vs. Fremdanamnese.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In der OSCE kann statt eines AMDP-Befundes auch eine Anamnese drankommen. Was genau ist eine Anamnese — und woher stammen die Informationen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Anamnese (griech. <em>anamnesis</em> = Erinnerung) = <strong>Erfragung relevanter Informationen</strong> als Grundlage für Diagnose und Prognose. Quellen: <strong>Eigenanamnese</strong> (der Patient selbst) und <strong>Fremdanamnese</strong> (andere Personen).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Anamnese</div>
+    Altgriechisch <em>anamnesis</em> = Erinnerung. <strong>Erfragung relevanter Informationen</strong>; Grundlage zur Diagnoseerstellung und Prognose.
+  </div>
+  <div class="card">
+    <div class="card-title">Eigen- vs. Fremdanamnese</div>
+    <strong>Eigenanamnese:</strong> umfassende Befragung des Patienten selbst. <strong>Fremdanamnese:</strong> zusätzliche Informationen von anderen Personen (z. B. Angehörige), die der Patient nicht selbst geben kann.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Anamnese ≠ Befund</div>
+    Die <strong>Anamnese</strong> erfragt (v. a. die Vorgeschichte/Angaben); der <strong>psychopathologische Befund</strong> ist der aktuelle Querschnitt aus Angaben + Beobachtungen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Eigen- oder Fremdanamnese? — aufdecken</div>
+    <div id="step0">
+      <div class="step-item">Sie befragen den Patienten selbst ausführlich zu seinen Beschwerden. → <strong>Eigenanamnese</strong>.</div>
+      <div class="step-item">Die Ehefrau berichtet, was ihr Mann zu Hause verändert zeigt. → <strong>Fremdanamnese</strong>.</div>
+      <div class="step-item">Ein verwirrter Patient kann sich nicht erinnern — Angaben der Tochter ergänzen. → <strong>Fremdanamnese</strong>.</div>
+      <div class="step-item">→ Eigen = Patient selbst · Fremd = andere Personen (ergänzend).</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② Diagnostischer Prozess ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Anamnese im diagnostischen Prozess</div>
+    <div class="sec-lz">Anamnese/Exploration/Beobachtung → Symptome → Syndrom → (Verdachts-)Diagnose → Therapieplanung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wo steht die Anamnese im diagnostischen Prozess — am Anfang, in der Mitte oder am Ende?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Am <strong>Anfang</strong>: Anamnese/Exploration/Beobachtung → <strong>Symptome</strong> → <strong>Syndrom</strong> → <strong>(Verdachts-)Diagnose</strong> → <strong>Therapieplanung</strong> (ergänzt durch körperliche Untersuchung, Labor, Bildgebung, Psychometrie, Vorbefunde).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Patientenaufnahme — Ablauf</div>
+    Anamnese, Exploration und (Verhaltens-)Beobachtung (+ Fremdanamnese) → <strong>Symptome</strong> → <strong>Syndrom</strong> → <strong>(Verdachts-)Diagnose</strong> → <strong>Therapieplanung</strong>. Ergänzend: körperliche Untersuchung, Labor, EEG, CCT/MRT, neuropsychologische Testung, Psychometrie, Vor-/Konsiliarbefunde.
+  </div>
+  <div class="card">
+    <div class="card-title">Diagnosestellung (3 Stufen)</div>
+    <strong>Symptome</strong> (einzelne Phänomene) → <strong>Syndrome</strong> (typische Kombinationen) → <strong>Störungsbild/Diagnose</strong> (Zuordnung zu einer Krankheitskategorie).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Reihenfolge</div>
+    Die Anamnese steht <strong>am Anfang</strong> und liefert die Rohinformation — nicht am Ende nach der Therapie.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Symptom → Syndrom → Diagnose — aufdecken</div>
+    <div id="step1">
+      <div class="step-item">„deprimiert" — ein einzelnes Phänomen. → <strong>Symptom</strong>.</div>
+      <div class="step-item">deprimiert + antriebsarm + Schuldgefühle — eine typische Kombination. → <strong>Syndrom</strong> (depressives Syndrom).</div>
+      <div class="step-item">Zuordnung zu „depressive Episode" nach ICD-10. → <strong>Diagnose</strong>.</div>
+      <div class="step-item">→ Vom Einzelmerkmal über das Muster zur Krankheitskategorie.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Formen ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Formen der Anamnese</div>
+    <div class="sec-lz">Vier Hauptformen: Symptom-, Biografische, Sozial- und Suchtanamnese (+ Familien-/Medikamenten-/Sexual-/Ernährungsanamnese).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Es gibt nicht „die eine" Anamnese, sondern mehrere Formen. Welche vier sind im Modul die Hauptformen?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2"><strong>Symptomanamnese</strong> (Beschwerden), <strong>Sozialanamnese</strong> (aktuelles soziales Leben), <strong>Biografische Anamnese</strong> (Lebensgeschichte) und <strong>Suchtanamnese</strong> (Konsum). Dazu u. a. Familien-, Medikamenten-, Sexual-, Ernährungsanamnese.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Vier Hauptformen</div>
+    <strong>Symptomanamnese/Störungsanamnese</strong> · <strong>Biografische Anamnese</strong> · <strong>Sozialanamnese</strong> · <strong>Suchtanamnese</strong>. Diese vier prägen das Seminar (mit Störungsbildern Depression, Angst, Schmerz, Alkohol).
+  </div>
+  <div class="card">
+    <div class="card-title">Weitere Formen</div>
+    Familienanamnese · Medikamentenanamnese · Sexualanamnese · Ernährungsanamnese (je nach Fragestellung ergänzend).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Trennschärfe</div>
+    <strong>Sozial</strong> = aktuelle soziale Situation (Familie/Beruf/Wohnen) · <strong>Biografisch</strong> = lebensgeschichtliche Entwicklung (Kindheit/Schule) — leicht zu verwechseln.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Anamneseform?</div>
+    <div class="corr-item" id="aa">Aktuelle Symptome, Beginn und Verlauf der Erkrankung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'symptom')">Symptomanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'sozial')">Sozialanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'biografisch')">Biografische Anamnese</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'sucht')">Suchtanamnese</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Familie, Partnerschaft, Wohnsituation, Beruf, Finanzen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'symptom')">Symptomanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'sozial')">Sozialanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'biografisch')">Biografische Anamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'sucht')">Suchtanamnese</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">Ursprungsfamilie, frühe Kindheit, schulische Entwicklung.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'symptom')">Symptomanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'sozial')">Sozialanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'biografisch')">Biografische Anamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'sucht')">Suchtanamnese</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Aktueller Konsum, Konsumbeginn, Reduktionsversuche.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'symptom')">Symptomanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'sozial')">Sozialanamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'biografisch')">Biografische Anamnese</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'sucht')">Suchtanamnese</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Gesprächs-Basics ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Gesprächs-Basiskompetenzen</div>
+    <div class="sec-lz">aktives Zuhören, nonverbale Kommunikation, offene Fragen, Feedback-Regeln (geben/empfangen).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Im OSCE wird zur Hälfte die Gesprächsführung bewertet (Berlin Global Rating). Welche Basiskompetenzen entscheiden über ein gutes Gespräch?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3"><strong>Aktives Zuhören</strong> (ausreden lassen, Bezug nehmen), <strong>nonverbale Kommunikation</strong> (Mimik/Blick/Haltung), <strong>offene Fragen</strong> (W-Fragen) und respektvolles, ressourcenorientiertes <strong>Feedback</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Kommunikation</div>
+    <strong>Aktives Zuhören:</strong> zuhören, ausreden lassen, Bezug nehmen. <strong>Nonverbal:</strong> Interesse durch Mimik, Blickkontakt, Körperhaltung. <strong>Offene Fragen:</strong> W-Fragen, nicht mit Ja/Nein beantwortbar. Ich-Botschaften statt Bewertungen.
+  </div>
+  <div class="card">
+    <div class="card-title">Feedback geben</div>
+    Einverständnis einholen · Ich-Botschaften · konkrete Situationen · verhaltensbezogen · wertschätzend/respektvoll · auf Ressourcen fokussieren · konstruktive Verbesserungsvorschläge.
+  </div>
+  <div class="card">
+    <div class="card-title">Feedback empfangen</div>
+    Eigenes Erleben schildern · zuhören · wirken lassen (Rechtfertigung vermeiden) · ggf. konkret nachfragen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Gesprächstechnik?</div>
+    <div class="corr-item" id="ca">Aufmerksam und zugewandt folgen, ausreden lassen, Bezug nehmen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'zuhoeren')">aktives Zuhören</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'offen')">offene Fragen</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'nonverbal')">nonverbale Kommunikation</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'feedback')">Feedback</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">Fragen, die nicht mit Ja/Nein zu beantworten sind (W-Fragen).
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'zuhoeren')">aktives Zuhören</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'offen')">offene Fragen</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'nonverbal')">nonverbale Kommunikation</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'feedback')">Feedback</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">Interesse durch Mimik, Blickkontakt und Körperhaltung signalisieren.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'zuhoeren')">aktives Zuhören</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'offen')">offene Fragen</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'nonverbal')">nonverbale Kommunikation</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'feedback')">Feedback</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">Wertschätzend, konkret, verhaltensbezogen und ressourcenorientiert rückmelden.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'zuhoeren')">aktives Zuhören</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'offen')">offene Fragen</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'nonverbal')">nonverbale Kommunikation</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'feedback')">Feedback</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Erstgespräch ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">Ablauf des Erstgesprächs</div>
+    <div class="sec-lz">Begrüßung → aktueller Anlass → Störungsanalyse/Vorbehandlungen → Biographie → Erwartungen → Abschluss.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Ein Erstgespräch hat eine klare Dramaturgie. In welcher Reihenfolge gehst du vor — von der Begrüßung bis zum Abschluss?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4">1. <strong>Begrüßung</strong> → 2. <strong>aktueller Anlass</strong> → 3. <strong>Störungsanalyse & Vorbehandlungen</strong> → 4. <strong>Biographie</strong> → 5. <strong>Erwartungen</strong> → 6. <strong>Abschlusssituation</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Ablaufschema Erstgespräch (1–3)</div>
+    <strong>1. Begrüßung:</strong> eigene Person/Einrichtung/Ziele vorstellen, erste Aufklärung. <strong>2. Aktueller Anlass:</strong> Behandlungswunsch erfragen, Zuweisungskontext klären. <strong>3. Störungsanalyse & Vorbehandlungen:</strong> Ausprägung & Verlauf der Symptome, Erklärungskonzept, bisherige Veränderungsversuche.
+  </div>
+  <div class="card">
+    <div class="card-title">Ablaufschema Erstgespräch (4–6)</div>
+    <strong>4. Biographie:</strong> Bezug zur aktuellen Lebenssituation, Verhaltensaktiva/-passiva. <strong>5. Erwartungen:</strong> erste Erwartungsklärung an die Psychotherapie. <strong>6. Abschlusssituation:</strong> zu offenen Fragen ermuntern, weiteres Vorgehen besprechen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Struktur gibt Sicherheit</div>
+    Die feste Reihenfolge hilft, in 10 Minuten <strong>strukturiert</strong> zu bleiben — ein zentraler Bewertungspunkt der Berlin Global Rating Scale (Struktur).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Erstgesprächs-Schritt?</div>
+    <div class="corr-item" id="ba">Vorstellen der eigenen Person, der Einrichtung und der Ziele des Gesprächs.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'begruessung')">Begrüßung</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'anlass')">Aktueller Anlass</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'stoerungsanalyse')">Störungsanalyse</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'abschluss')">Abschlusssituation</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Den aktuellen Anlass für den Behandlungswunsch erfragen, Zuweisungskontext klären.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'begruessung')">Begrüßung</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'anlass')">Aktueller Anlass</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'stoerungsanalyse')">Störungsanalyse</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'abschluss')">Abschlusssituation</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">Aktuelle Ausprägung & Verlauf der Symptome, Erklärungskonzept, Vorbehandlungen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'begruessung')">Begrüßung</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'anlass')">Aktueller Anlass</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'stoerungsanalyse')">Störungsanalyse</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'abschluss')">Abschlusssituation</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Zu noch offenen Fragen ermuntern und das weitere Vorgehen besprechen.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'begruessung')">Begrüßung</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'anlass')">Aktueller Anlass</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'stoerungsanalyse')">Störungsanalyse</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'abschluss')">Abschlusssituation</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Symptomanamnese ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">Symptomanamnese — Struktur</div>
+    <div class="sec-lz">Offener Einstieg; Symptombeschreibung auf 3 Ebenen (Gefühle/Gedanken/Verhalten); Beginn/Verlauf.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Wie strukturierst du die Symptomschilderung, damit sie vollständig wird? Die Checkliste gibt ein klares Raster vor.</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Offene Einstiegsfrage → Symptombeschreibung auf <strong>drei Ebenen: Gefühle, Gedanken, Verhalten</strong> → <strong>Beginn</strong> der Erkrankung → <strong>Verlauf</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Aufbau der Symptomanamnese (Checkliste)</div>
+    Offene Einstiegsfrage · Symptombeschreibung auf <strong>3 Ebenen</strong> (Gefühle/Gedanken/Verhalten) · Beginn der Erkrankung · Verlauf · beeinflussende Faktoren · individuelles Krankheitsmodell · Bewältigungsversuche.
+  </div>
+  <div class="card">
+    <div class="card-title">Die drei Ebenen am Beispiel Depression</div>
+    <strong>Gefühle:</strong> Niedergeschlagenheit, Freudlosigkeit. <strong>Gedanken:</strong> Hoffnungslosigkeit, Selbstvorwürfe. <strong>Verhalten:</strong> Rückzug, Antriebsmangel. → systematisch alle drei Ebenen abdecken.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Beginn ≠ Verlauf</div>
+    <strong>Beginn:</strong> wann/wie es anfing (akut vs. schleichend). <strong>Verlauf:</strong> wie es sich seither entwickelt hat (konstant, schwankend, zunehmend).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Auf welcher Ebene? — aufdecken</div>
+    <div id="step5">
+      <div class="step-item">„Ich fühle mich ständig niedergeschlagen und freue mich über nichts mehr." → <strong>Gefühle</strong>.</div>
+      <div class="step-item">„Ich denke ständig, dass ich versagt habe und alles sinnlos ist." → <strong>Gedanken</strong>.</div>
+      <div class="step-item">„Ich gehe kaum noch raus und treffe niemanden mehr." → <strong>Verhalten</strong>.</div>
+      <div class="step-item">→ Vollständige Symptomanamnese deckt alle drei Ebenen systematisch ab.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Modell/Bewältigung ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Symptomanamnese — Faktoren, Modell, Bewältigung</div>
+    <div class="sec-lz">beeinflussende Faktoren/Auslöser · individuelles Krankheitsmodell · Bewältigungsversuche.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Über die reine Symptomliste hinaus: Warum sind die Sicht des Patienten auf seine Erkrankung und seine bisherigen Bewältigungsversuche so wichtig?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Das <strong>individuelle Krankheitsmodell</strong> (subjektives Erklärungskonzept) und die <strong>Bewältigungsversuche</strong> zeigen Ressourcen, Motivation und Veränderungserfahrung — wichtig für Diagnose <em>und</em> Therapieplanung. Dazu: <strong>beeinflussende Faktoren / Auslöser</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Beeinflussende Faktoren / Auslöser</div>
+    Subjektive Auslöser und Faktoren, die die Symptomatik verbessern oder verschlechtern — geben Hinweise auf aufrechterhaltende Bedingungen.
+  </div>
+  <div class="card">
+    <div class="card-title">Individuelles Krankheitsmodell</div>
+    Das <strong>subjektive Erklärungskonzept</strong> des Patienten für seine Beschwerden — nicht die ICD-Diagnose des Behandlers. Bedeutsam für Verständnis und Bündnis.
+  </div>
+  <div class="card">
+    <div class="card-title">Bewältigungsversuche</div>
+    Bisherige Selbsthilfe/Veränderungsversuche und ihr Erfolg → zeigen <strong>Ressourcen und Motivation</strong> (diagnostisch + therapieplanerisch wertvoll).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Punkt der Symptomanamnese? — aufdecken</div>
+    <div id="step6">
+      <div class="step-item">„Was glauben Sie selbst, woher Ihre Beschwerden kommen?" → <strong>individuelles Krankheitsmodell</strong>.</div>
+      <div class="step-item">„Was haben Sie bisher selbst versucht, und hat es geholfen?" → <strong>Bewältigungsversuche</strong>.</div>
+      <div class="step-item">„Gibt es Situationen, in denen es besser oder schlechter wird?" → <strong>beeinflussende Faktoren</strong>.</div>
+      <div class="step-item">→ Diese Punkte erschließen die subjektive Sicht und die Ressourcen des Patienten.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Erstkontakt-Infos ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Erfasste Informationen im Erstkontakt</div>
+    <div class="sec-lz">Aktuelle Situation, Anliegen, Ressourcen, soziale Einbettung, Familien-/Vorgeschichte.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Was sollte man idealerweise schon im Erstkontakt mitnehmen — über die Symptome hinaus?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7"><strong>Aktuelle Situation</strong> (Leidensdruck, Motivation), <strong>Anliegen</strong> (Ziele/Wünsche/Grenzen), <strong>Ressourcen</strong> (Selbsthilfeversuche, stabilisierende Faktoren), <strong>soziale Einbettung</strong> und <strong>Familien-/Vorgeschichte</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Idealerweise im Erstkontakt erfasst</div>
+    <strong>Aktuelle Situation</strong> (Leidensdruck, Erklärungsansätze, Motivation) · <strong>Anliegen</strong> (Ziele, Hoffnungen, Wünsche, Grenzen) · <strong>Selbsthilfeversuche/Ressourcen</strong> (Vorbehandlungen, stabilisierende Faktoren) · <strong>soziale Einbettung/Biografie</strong> · <strong>Familien-/Vorgeschichte</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Warum so breit?</div>
+    Eine gute Anamnese liefert nicht nur die Symptome, sondern auch <strong>Motivation, Ressourcen und Kontext</strong> — die Grundlage für eine tragfähige Diagnose und Therapieplanung.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Im OSCE</div>
+    Welcher Anamnese-Bereich drankommt, ist <strong>nicht vorab bekannt</strong> — alle Formen (Symptom/Sozial/Biografisch/Sucht) und die Gesprächsstruktur sicher beherrschen.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Erstkontakt-Infos zuordnen — aufdecken</div>
+    <div id="step7">
+      <div class="step-item">„Wie stark leiden Sie aktuell, und was möchten Sie erreichen?" → <strong>aktuelle Situation + Anliegen</strong>.</div>
+      <div class="step-item">„Was hat Ihnen in schwierigen Phasen schon einmal geholfen?" → <strong>Ressourcen</strong>.</div>
+      <div class="step-item">„Wie sieht Ihr soziales Umfeld aus, gibt es Vorerkrankungen in der Familie?" → <strong>soziale Einbettung / Familienanamnese</strong>.</div>
+      <div class="step-item">→ Breite Erfassung = Basis für Diagnose und Therapieplanung.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step7')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Eigenanamnese</h4>
+      <p>Befragung des Patienten selbst</p>
+      <p>umfassende Selbstauskunft</p>
+      <p>primäre Quelle</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Fremdanamnese</h4>
+      <p>Informationen von anderen Personen</p>
+      <p>z. B. Angehörige</p>
+      <p>ergänzt, wenn Patient nicht selbst auskunftsfähig</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Eigenanamnese wird von Angehörigen erhoben, die Fremdanamnese ist die Selbstauskunft des Patienten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Symptom</h4>
+      <p>einzelnes Phänomen</p>
+      <p>kleinste Beschreibungseinheit</p>
+      <p>z. B. Niedergeschlagenheit</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Syndrom</h4>
+      <p>typische Kombination von Symptomen</p>
+      <p>Symptommuster</p>
+      <p>z. B. depressives Syndrom</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Ein Symptom ist eine typische Kombination mehrerer Phänomene, ein Syndrom ein einzelnes Merkmal.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Offene Frage</h4>
+      <p>nicht mit Ja/Nein beantwortbar</p>
+      <p>W-Frage</p>
+      <p>lädt zum Erzählen ein</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Geschlossene Frage</h4>
+      <p>mit Ja/Nein beantwortbar</p>
+      <p>eng eingrenzend</p>
+      <p>für gezielte Detailklärung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Offene Fragen sind mit Ja/Nein zu beantworten, geschlossene Fragen laden zum freien Erzählen ein.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Sozialanamnese</h4>
+      <p>aktuelle soziale Situation</p>
+      <p>Familie/Beruf/Wohnen/Finanzen</p>
+      <p>soziales Netz heute</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Biografische Anamnese</h4>
+      <p>lebensgeschichtliche Entwicklung</p>
+      <p>Ursprungsfamilie/Kindheit/Schule</p>
+      <p>Werdegang über die Zeit</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Sozialanamnese erhebt die frühe Kindheit und Schulzeit, die biografische Anamnese die aktuelle Wohn- und Finanzsituation.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Symptomanamnese</h4>
+      <p>aktuelle Beschwerden</p>
+      <p>3 Ebenen: Gefühle/Gedanken/Verhalten</p>
+      <p>Beginn/Verlauf/Auslöser</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Suchtanamnese</h4>
+      <p>Substanzkonsum</p>
+      <p>Konsumbeginn/-entwicklung</p>
+      <p>Komplikationen/Reduktionsversuche</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Symptomanamnese erfasst den Substanzkonsum, die Suchtanamnese die Beschreibung der Symptome auf drei Ebenen.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11b-vl05</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11b-vl05';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was bedeutet 'Anamnese'?",
+      "opts": [
+        "Erfragung relevanter Informationen (von 'anamnesis' = Erinnerung) als Grundlage für Diagnose und Prognose.",
+        "Die rein körperliche Untersuchung.",
+        "Ein bildgebendes Verfahren.",
+        "Die abschließende, anhand operationalisierter ICD-10-Kriterien gestellte nosologische Diagnose einschließlich der vollständigen Therapieplanung und der Prognoseabschätzung."
+      ],
+      "c": 0,
+      "e": "Anamnese (griech. 'anamnesis' = Erinnerung) = Erfragung relevanter Informationen; Grundlage für Diagnoseerstellung und Prognose."
+    },
+    {
+      "id": "s0q2",
+      "q": "Was unterscheidet Eigen- von Fremdanamnese?",
+      "opts": [
+        "Es gibt keinen Unterschied.",
+        "Eigenanamnese = Befragung des Patienten selbst; Fremdanamnese = Informationen von anderen Personen.",
+        "Eigenanamnese erfolgt nur per Fragebogen.",
+        "Die Eigenanamnese wird ausschließlich von Angehörigen erhoben, während die Fremdanamnese die direkte und umfassende Befragung des Patienten zu seiner eigenen Lebensgeschichte meint."
+      ],
+      "c": 1,
+      "e": "Eigenanamnese = Befragung des Patienten. Fremdanamnese = Informationen von anderen Personen, die der Patient nicht selbst geben kann (Option 4 vertauscht die Begriffe)."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Wie ordnet sich die Anamnese in den diagnostischen Prozess ein?",
+      "opts": [
+        "Sie ersetzt die Diagnose vollständig.",
+        "Sie steht ganz am Ende, nach der Therapie.",
+        "Anamnese/Exploration/Beobachtung → Symptome → Syndrom → (Verdachts-)Diagnose → Therapieplanung.",
+        "Sie wird grundsätzlich erst nach Vorliegen sämtlicher apparativer Befunde, der Laborwerte und der bildgebenden Verfahren als allerletzter Schritt vor der Entlassung durchgeführt."
+      ],
+      "c": 2,
+      "e": "Anamnese/Exploration/Beobachtung stehen am Anfang → daraus Symptome → Syndrom → (Verdachts-)Diagnose → Therapieplanung."
+    },
+    {
+      "id": "s1q2",
+      "q": "Was ist ein Syndrom?",
+      "opts": [
+        "Ein einzelnes, für sich allein stehendes psychopathologisches Phänomen, das noch keiner übergeordneten Kombination oder Krankheitskategorie zugeordnet worden ist.",
+        "Die endgültige Krankheitsdiagnose.",
+        "Ein bildgebendes Verfahren.",
+        "Eine typische Kombination verschiedener Symptome."
+      ],
+      "c": 3,
+      "e": "Syndrom = typische Kombination verschiedener Symptome (Zwischenebene zwischen Einzelsymptom und nosologischer Diagnose)."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "Welche sind die vier Hauptformen der Anamnese?",
+      "opts": [
+        "Symptom-, Biografische, Sozial- und Suchtanamnese.",
+        "Labor-, EEG-, MRT- und Blutanamnese.",
+        "Nur die Eigenanamnese.",
+        "Ausschließlich die körperliche Untersuchung, die neuropsychologische Testung, die Psychometrie sowie die Auswertung sämtlicher vorliegender Konsiliarbefunde."
+      ],
+      "c": 0,
+      "e": "Die vier Hauptformen: Symptom-/Störungsanamnese, Biografische Anamnese, Sozialanamnese, Suchtanamnese."
+    },
+    {
+      "id": "s2q2",
+      "q": "Womit beschäftigt sich die Sozialanamnese?",
+      "opts": [
+        "Mit dem aktuellen Substanzkonsum.",
+        "Mit Familie/Partnerschaft, sozialen Kontakten, Wohnsituation, Finanzen, Beruf.",
+        "Mit Schwangerschaft und früher Kindheit.",
+        "Ausschließlich mit der aktuellen Ausprägung, dem Beginn und dem bisherigen Verlauf der psychopathologischen Symptome sowie dem individuellen Krankheitsmodell des Patienten."
+      ],
+      "c": 1,
+      "e": "Sozialanamnese: Familie/Partnerschaft, soziale Kontakte, Freizeit, Religion, Migration, Wohnsituation, Finanzen, Beruf. Substanzkonsum = Sucht-, Kindheit = biografische Anamnese."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Was kennzeichnet eine 'offene Frage'?",
+      "opts": [
+        "Sie ist mit Ja oder Nein zu beantworten.",
+        "Sie suggeriert bereits die Antwort.",
+        "Sie lässt sich nicht mit Ja/Nein beantworten (W-Frage) und lädt zum Erzählen ein.",
+        "Sie gibt dem Patienten eine feste Auswahl mehrerer vorformulierter Antwortmöglichkeiten vor, aus denen er die für ihn am ehesten zutreffende auswählen soll."
+      ],
+      "c": 2,
+      "e": "Offene Frage = nicht mit Ja/Nein beantwortbar (W-Frage), lädt zum Erzählen ein. Option 1 = geschlossen, Option 2 = Suggestivfrage, Option 4 = Auswahlfrage."
+    },
+    {
+      "id": "s3q2",
+      "q": "Welche Regel gilt beim FEEDBACK-GEBEN?",
+      "opts": [
+        "Möglichst pauschal und bewertend bleiben.",
+        "Nur Defizite benennen, keine Ressourcen.",
+        "Grundsätzlich ohne vorheriges Einverständnis, möglichst allgemein gehalten und in Form pauschaler Werturteile über die gesamte Person des Gegenübers formuliert.",
+        "Konkret, verhaltensbezogen, wertschätzend und ressourcenorientiert (mit Ich-Botschaften)."
+      ],
+      "c": 3,
+      "e": "Feedback geben: Einverständnis einholen, Ich-Botschaften, konkrete Situationen, verhaltensbezogen, wertschätzend, ressourcenorientiert, konstruktive Verbesserungsvorschläge."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Womit beginnt das Erstgespräch (Schritt 1)?",
+      "opts": [
+        "Mit der Begrüßung: eigene Person, Einrichtung und Ziele vorstellen, erste Aufklärung.",
+        "Mit der biografischen Anamnese der frühen Kindheit.",
+        "Mit der Mitteilung der endgültigen Diagnose.",
+        "Mit einer ausführlichen, lückenlosen Erhebung des aktuellen und früheren Substanzkonsums einschließlich aller bisherigen Reduktions- und Entzugsversuche des Patienten."
+      ],
+      "c": 0,
+      "e": "Schritt 1 = Begrüßung: eigene Person/Einrichtung/Ziele vorstellen, erste Aufklärung, zu ersten Fragen auffordern."
+    },
+    {
+      "id": "s4q2",
+      "q": "Was gehört zur 'Störungsanalyse und Vorbehandlungen' (Schritt 3)?",
+      "opts": [
+        "Die Verabschiedung des Patienten.",
+        "Aktuelle Ausprägung & Verlauf der Symptome, Erklärungskonzept, bisherige Veränderungsversuche.",
+        "Das Vorstellen der eigenen Person.",
+        "Ausschließlich die abschließende Ermunterung des Patienten, noch offene Fragen zu stellen, sowie die gemeinsame Besprechung des weiteren therapeutischen Vorgehens."
+      ],
+      "c": 1,
+      "e": "Störungsanalyse/Vorbehandlungen (Schritt 3): aktuelle Ausprägung & Verlauf der Symptome, Erklärungskonzept des Patienten, bisherige Veränderungsversuche und ihr Erfolg."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Auf welchen drei Ebenen beschreibt man Symptome in der Symptomanamnese?",
+      "opts": [
+        "Vergangenheit, Gegenwart, Zukunft.",
+        "Labor, Bildgebung, Psychometrie.",
+        "Gefühle, Gedanken und Verhalten.",
+        "Auf der Ebene der körperlichen Untersuchung, der apparativen Diagnostik sowie der standardisierten neuropsychologischen Leistungstestung des Patienten."
+      ],
+      "c": 2,
+      "e": "Die drei Ebenen der Symptombeschreibung: Gefühle, Gedanken und Verhalten (z. B. bei Depression: Niedergeschlagenheit / Selbstvorwürfe / Rückzug)."
+    },
+    {
+      "id": "s5q2",
+      "q": "Wie startet man die Symptomanamnese idealerweise?",
+      "opts": [
+        "Mit einer geschlossenen Ja/Nein-Frage.",
+        "Mit der Mitteilung der Verdachtsdiagnose.",
+        "Mit einer detaillierten, chronologisch geordneten Erhebung der gesamten frühen Kindheit, der Schwangerschaft und Geburt sowie der schulischen Entwicklung des Patienten.",
+        "Mit einer offenen Einstiegsfrage, die zum Erzählen einlädt."
+      ],
+      "c": 3,
+      "e": "Die Symptomanamnese beginnt mit einer offenen Einstiegsfrage (laut Checkliste), die den Patienten zum freien Erzählen einlädt."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was meint das 'individuelle Krankheitsmodell' des Patienten?",
+      "opts": [
+        "Das subjektive Erklärungskonzept des Patienten für seine Beschwerden.",
+        "Die ICD-10-Diagnose des Behandlers.",
+        "Den Laborbefund.",
+        "Die vollständige, anhand operationalisierter Kriterien erstellte nosologische Klassifikation der Erkrankung einschließlich aller Ausschluss- und Zeitkriterien nach dem aktuellen Diagnosemanual."
+      ],
+      "c": 0,
+      "e": "Das individuelle Krankheitsmodell ist das subjektive Erklärungskonzept des Patienten — bedeutsam diagnostisch und für die Therapieplanung."
+    },
+    {
+      "id": "s6q2",
+      "q": "Warum erfragt man Bewältigungsversuche?",
+      "opts": [
+        "Nur aus Höflichkeit.",
+        "Sie sind diagnostisch (subjektive Sicht) und für die Therapieplanung (Ressourcen/Motivation) bedeutsam.",
+        "Um die Diagnose zu ersetzen.",
+        "Ausschließlich, um die genaue zeitliche Reihenfolge sämtlicher früher durchgeführter apparativer Untersuchungen und stationärer Aufenthalte lückenlos zu rekonstruieren."
+      ],
+      "c": 1,
+      "e": "Bewältigungsversuche zeigen Ressourcen, bisherige Veränderungsversuche und Motivation — diagnostisch und für die Therapieplanung wertvoll."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Welche Information wird im Erstkontakt idealerweise erfasst?",
+      "opts": [
+        "Ausschließlich der Laborbefund.",
+        "Nur das Geburtsdatum.",
+        "Aktuelle Situation (Leidensdruck, Motivation), Anliegen, Ressourcen, soziale Einbettung.",
+        "Ausschließlich die vollständige Liste aller jemals eingenommenen Medikamente mit exakten Dosierungen sowie sämtliche bildgebenden Befunde der letzten zehn Jahre."
+      ],
+      "c": 2,
+      "e": "Im Erstkontakt: aktuelle Situation (Leidensdruck/Motivation), Anliegen (Ziele/Wünsche), Selbsthilfeversuche/Ressourcen, soziale Einbettung, Familien-/Vorgeschichte."
+    },
+    {
+      "id": "s7q2",
+      "q": "Wann ist die Fremdanamnese besonders wertvoll?",
+      "opts": [
+        "Sie ersetzt die Befragung des Patienten vollständig und macht jede direkte Eigenanamnese überflüssig, da Angehörige die Situation grundsätzlich zuverlässiger einschätzen.",
+        "Sie ist nur bei Kindern erlaubt.",
+        "Sie liefert die endgültige Diagnose.",
+        "Wenn der Patient bestimmte Informationen nicht selbst geben kann (z. B. bei eingeschränkter Auskunftsfähigkeit)."
+      ],
+      "c": 3,
+      "e": "Die Fremdanamnese liefert zusätzliche Informationen, die der Patient nicht selbst geben kann — sie ergänzt die Eigenanamnese, ersetzt sie aber nicht."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Eine Patientin schildert Niedergeschlagenheit, Selbstvorwürfe und sozialen Rückzug. Welcher Anamneseform ordnet sich das zu?",
+    "opts": [
+      "Symptomanamnese (Symptombeschreibung auf den 3 Ebenen).",
+      "Suchtanamnese.",
+      "Sozialanamnese.",
+      "Der biografischen Anamnese, da die Schilderung sich ausschließlich auf die Ursprungsfamilie, die Schwangerschaft, die frühe Kindheit und die schulische Entwicklung der Patientin bezieht."
+    ],
+    "c": 0,
+    "e": "Gefühle (Niedergeschlagenheit) + Gedanken (Selbstvorwürfe) + Verhalten (Rückzug) = Symptombeschreibung auf den 3 Ebenen → Symptomanamnese."
+  },
+  {
+    "id": "bq2",
+    "q": "Welche Frage ist eine offene Frage?",
+    "opts": [
+      "'Schlafen Sie schlecht?'",
+      "'Wie geht es Ihnen zurzeit mit dem Schlaf?'",
+      "'Nehmen Sie Medikamente — ja oder nein?'",
+      "'Würden Sie sagen, dass Sie eher gut oder eher schlecht schlafen, oder fühlen Sie sich morgens unausgeruht und tagsüber durchgehend erschöpft?'"
+    ],
+    "c": 1,
+    "e": "Offene Frage (W-Frage): 'Wie geht es Ihnen mit dem Schlaf?' Die anderen sind geschlossen bzw. bieten feste Antwortalternativen."
+  },
+  {
+    "id": "bq3",
+    "q": "Was gehört NICHT zu den vier Hauptformen der Anamnese?",
+    "opts": [
+      "Symptomanamnese.",
+      "Suchtanamnese.",
+      "Laboranamnese.",
+      "Die Sozialanamnese, in der Familie, Partnerschaft, soziale Kontakte, Wohnsituation, Finanzen und beruflicher Werdegang systematisch erfragt werden."
+    ],
+    "c": 2,
+    "e": "Die vier Hauptformen sind Symptom-, Biografische, Sozial- und Suchtanamnese. Eine 'Laboranamnese' gibt es in dieser Systematik nicht."
+  },
+  {
+    "id": "bq4",
+    "q": "Ein Patient kann krankheitsbedingt keine Auskunft geben. Was ist sinnvoll?",
+    "opts": [
+      "Die Anamneseerhebung in diesem Fall vollständig weglassen, da ohne die direkte und umfassende Selbstauskunft des Patienten keinerlei verwertbare diagnostische Informationen zu gewinnen sind.",
+      "Sofort eine Diagnose stellen.",
+      "Nur den Laborwert nutzen.",
+      "Eine Fremdanamnese (Informationen von Angehörigen/Bezugspersonen) erheben."
+    ],
+    "c": 3,
+    "e": "Kann der Patient keine Auskunft geben, ist die Fremdanamnese (Angehörige/Bezugspersonen) der richtige Weg, um zusätzliche Informationen zu gewinnen."
+  },
+  {
+    "id": "bq5",
+    "q": "Was unterscheidet ein Symptom von einem Syndrom?",
+    "opts": [
+      "Symptom = einzelnes Phänomen; Syndrom = typische Kombination mehrerer Symptome.",
+      "Beide sind identisch.",
+      "Ein Symptom ist die endgültige Diagnose.",
+      "Ein Symptom bezeichnet die vollständige Zuordnung mehrerer Phänomene zu einer Krankheitskategorie, während ein Syndrom ein isoliertes Einzelmerkmal ohne weiteren Zusammenhang meint."
+    ],
+    "c": 0,
+    "e": "Symptom = einzelnes Phänomen; Syndrom = typische Kombination mehrerer Symptome; Diagnose = Zuordnung zu einer Krankheitskategorie (Option 4 vertauscht Symptom/Diagnose)."
+  },
+  {
+    "id": "bq6",
+    "q": "Welche Regel gilt beim FEEDBACK-EMPFANGEN?",
+    "opts": [
+      "Sofort jede Rückmeldung zurückweisen.",
+      "Zuhören, wirken lassen, Rechtfertigung vermeiden, ggf. konkret nachfragen.",
+      "Die Rückmeldung ignorieren.",
+      "Jede einzelne Rückmeldung umgehend und ausführlich rechtfertigen, um dem Gegenüber zu erklären, warum das beobachtete Verhalten in der konkreten Situation vollkommen angemessen war."
+    ],
+    "c": 1,
+    "e": "Feedback empfangen: eigenes Erleben schildern, zuhören, wirken lassen (Rechtfertigung vermeiden), ggf. konkret nachfragen."
+  },
+  {
+    "id": "bq7",
+    "q": "Welcher Schritt des Erstgesprächs dient der Erwartungsklärung an die Psychotherapie?",
+    "opts": [
+      "Schritt 1 (Begrüßung).",
+      "Schritt 3 (Störungsanalyse).",
+      "Schritt 5 (Erwartungen).",
+      "Schritt 2 (aktueller Anlass), in dem zunächst ausschließlich der konkrete Behandlungswunsch und der genaue Zuweisungskontext des Patienten geklärt werden."
+    ],
+    "c": 2,
+    "e": "Schritt 5 = Erwartungen: erste Erwartungsklärung an die Psychotherapie."
+  },
+  {
+    "id": "bq8",
+    "q": "Womit endet das Erstgespräch (Schritt 6)?",
+    "opts": [
+      "Mit der Begrüßung.",
+      "Mit einer ausführlichen, chronologisch geordneten Erhebung der gesamten frühen Kindheit und der schulischen Entwicklung, die den eigentlichen Kern jedes psychologischen Erstgesprächs bildet.",
+      "Mit der Mitteilung der Therapierechnung.",
+      "Mit der Abschlusssituation: zu offenen Fragen ermuntern, weiteres Vorgehen besprechen."
+    ],
+    "c": 3,
+    "e": "Schritt 6 = Abschlusssituation: zu offenen Fragen/Ergänzungen ermuntern, weiteres Vorgehen besprechen, ggf. erweiterte Aufklärung."
+  }
+];
+
+var corrCorrect = {
+  "aa": "symptom",
+  "ab": "sozial",
+  "ac": "biografisch",
+  "ad": "sucht",
+  "ba": "begruessung",
+  "bb": "anlass",
+  "bc": "stoerungsanalyse",
+  "bd": "abschluss",
+  "ca": "zuhoeren",
+  "cb": "offen",
+  "cc": "nonverbal",
+  "cd": "feedback"
+};
+var corrExpl = {
+  "aa": "Aktuelle Symptome, Beginn, Verlauf der Erkrankung → Symptomanamnese.",
+  "ab": "Familie, Partnerschaft, Wohnsituation, Beruf, Finanzen → Sozialanamnese.",
+  "ac": "Ursprungsfamilie, Kindheit, schulische Entwicklung → Biografische Anamnese.",
+  "ad": "Aktueller Konsum, Konsumbeginn, Reduktionsversuche → Suchtanamnese.",
+  "ba": "Vorstellen der eigenen Person, der Einrichtung und der Ziele → Begrüßung (Schritt 1).",
+  "bb": "Aktuellen Anlass für den Behandlungswunsch erfragen → aktueller Anlass (Schritt 2).",
+  "bc": "Aktuelle Ausprägung & Verlauf der Symptome, Erklärungskonzept, Vorbehandlungen → Störungsanalyse (Schritt 3).",
+  "bd": "Ermunterung zu offenen Fragen, weiteres Vorgehen besprechen → Abschlusssituation (Schritt 6).",
+  "ca": "Aufmerksam folgen, ausreden lassen, Bezug nehmen → aktives Zuhören.",
+  "cb": "Fragen, die nicht mit Ja/Nein zu beantworten sind (W-Fragen) → offene Fragen.",
+  "cc": "Interesse durch Mimik, Blickkontakt, Körperhaltung signalisieren → nonverbale Kommunikation.",
+  "cd": "Wertschätzend, konkret, verhaltensbezogen, ressourcenorientiert rückmelden → Feedback-Regeln."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

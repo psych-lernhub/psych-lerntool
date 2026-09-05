@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4b · 🧩 Modell-Trainer — Strukturen aktiv abrufen</title>
+<!--
+  Modell-Trainer von build_struktur.py erzeugt (CSS = scaffold_lernmodul.py).
+  Zwei Modi: ① Recall (aufdecken) ② Test (eintippen + Lösung anzeigen) — beide mit SRS.
+  Storage-Key: lm-m4b-vl90
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+/* Modell-/Struktur-Trainer */
+.st-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.st-thema{font-size:.72rem;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.st-modell{font-size:1.35rem;font-weight:800;color:var(--accent);line-height:1.3;margin-bottom:8px}
+.st-q{font-size:1rem;color:var(--text);font-weight:600;line-height:1.45;margin-bottom:12px}
+.st-anchor{background:var(--bg);border:1px dashed var(--border);border-radius:9px;padding:8px 12px;font-size:.9rem;color:var(--text2);margin-bottom:10px}
+.st-anchor strong{color:var(--text)}
+.st-row{display:flex;align-items:center;gap:8px;margin:6px 0}
+.st-in{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-size:.9rem}
+.st-in:focus{outline:none;border-color:var(--accent)}
+.st-ok{flex:0 0 22px;text-align:center;color:var(--text3);font-weight:700}
+.st-ok.hit{color:#34d399}
+.st-sum{font-size:.78rem;color:var(--text3);margin:6px 0 2px}
+.st-reveal{display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--text2);line-height:1.5;margin-top:10px}
+.st-reveal.shown{display:block}
+.st-list{margin:0;padding-left:20px}
+.st-list>li{margin:3px 0}
+.st-list ul{margin:3px 0;padding-left:18px}
+.st-list strong{color:var(--text)}
+.st-mnemo{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);color:var(--text2)}
+.st-rate{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+.st-rate.shown{display:flex}
+.st-rbtn{flex:1;min-width:120px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:9px 10px;cursor:pointer;font-size:.82rem}
+.st-rbtn.good:hover{border-color:#34d399}.st-rbtn.part:hover{border-color:#fbbf24}.st-rbtn.bad:hover{border-color:#f87171}
+.st-state{font-size:.72rem;color:var(--text3);margin-top:8px}
+.qr-modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.qr-ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.qr-stat{font-size:.85rem;color:var(--text2);margin:6px 0 2px}
+.qr-prog{height:6px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0}
+.qr-prog>div{height:100%;background:var(--accent);width:0;transition:width .2s}
+.st-chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.02em;margin-bottom:11px;border:1px solid}
+.st-filter{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.st-flabel{font-size:.74rem;color:var(--text3);width:100%;margin-bottom:2px}
+.st-fbtn{border:1px solid var(--border);background:var(--bg);color:var(--text2);border-radius:999px;padding:4px 11px;cursor:pointer;font-size:.74rem}
+.st-fbtn.on{font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M4b · 🧩 Modell-Trainer — Strukturen aktiv abrufen</h1>
+<p class="page-sub">Entwicklungspsychologie B · 76 gegliederte Modelle (Grundlagen, Kognitives Altern, Neurobiologie, Demenz, Training, Lebensstil, Weisheit, Altersbilder, Entwicklungsaufgaben, Erfolgreiche Entwicklung, Lebenszufriedenheit, Persönlichkeit, Tod & Sterben) · ① Lernen (Recall) + ② Test (eintippen) mit Spaced-Repetition</p>
+<div class="lf-bar">
+  <strong>🧩 Modell-Trainer — Strukturen aktiv abrufen.</strong> 76 prüfungsrelevante Modelle aus allen M4b-Lernmodulen (VL01–14), faktentreu aus der Wissensbasis. Themenbereich-Chip + Filter (Grundlagen / Kognitives Altern / Neurobiologie / Demenz / Training / Lebensstil / Weisheit / Altersbilder / Entwicklungsaufgaben / Erfolgreiche Entwicklung / Lebenszufriedenheit / Persönlichkeit / Tod & Sterben). ① Lernen: ganze Struktur frei abrufen → aufdecken → einschätzen. ② Test: ein Punkt vorgegeben, die übrigen selbst eintippen (✓ bei Treffer, „Lösung anzeigen“ als Hilfe). Die Selbsteinschätzung steuert die Spaced-Repetition.
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" data-sec="0" onclick="goToST(0)">① Lernen (Recall)</button>
+  <button class="nav-btn" data-sec="1" onclick="goToST(1)">② Test (eintippen)</button>
+</nav>
+
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">① Lernen — Struktur frei abrufen (76 Modelle)</div>
+    <div class="sec-lz">Modellname lesen, die ganze Gliederung im Kopf abrufen, dann aufdecken und ehrlich einschätzen.</div>
+  </div>
+  <div id="stRunnerRC"></div>
+</section>
+
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">② Test — Punkte selbst eintippen (76 Modelle)</div>
+    <div class="sec-lz">Ein Punkt ist vorgegeben — tippe die übrigen ein (✓ erscheint bei Treffer). „Lösung anzeigen", wenn du nicht weiterweißt.</div>
+  </div>
+  <div id="stRunnerTS"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m4b-vl90';
+var ST = [{"id": "st1", "thema": "VL01 · Intelligenz", "bereich": "Grundlagen", "modell": "Zwei-Komponenten-Modell der Intelligenz (Baltes)", "anker": 0, "mnemo": "Mechanik (Hardware) ↓ vs. Pragmatik (Software) →", "punkte": [{"ober": "Mechanik (fluide Intelligenz)", "unter": ["biologisch, Verarbeitungsgeschwindigkeit/Arbeitsgedächtnis; nimmt im Alter ab"], "syn": ["mechanik", "fluide", "fluid"]}, {"ober": "Pragmatik (kristalline Intelligenz)", "unter": ["kulturell/erfahrungsbasiert, Wissen/Wortschatz; bleibt stabil oder steigt"], "syn": ["pragmatik", "kristalline", "kristallin"]}]}, {"id": "st2", "thema": "VL01 · Lebensspanne", "bereich": "Grundlagen", "modell": "SOK-Modell erfolgreichen Alterns (Baltes)", "anker": 0, "mnemo": "Selektion · Optimierung · Kompensation", "punkte": [{"ober": "Selektion", "unter": ["Ziele auswählen/einschränken (elektiv oder verlustbasiert)"], "syn": ["selektion", "auswahl"]}, {"ober": "Optimierung", "unter": ["Mittel/Ressourcen zur Zielerreichung verbessern"], "syn": ["optimierung"]}, {"ober": "Kompensation", "unter": ["Verluste durch alternative Mittel ausgleichen"], "syn": ["kompensation", "ausgleich"]}]}, {"id": "st3", "thema": "VL01 · Lebensspanne", "bereich": "Grundlagen", "modell": "Multidimensionalität vs. Multidirektionalität", "anker": 0, "mnemo": "viele Bereiche vs. viele Richtungen", "punkte": [{"ober": "Multidimensionalität", "unter": ["Entwicklung verläuft in mehreren Funktionsbereichen gleichzeitig"], "syn": ["multidimensionalitaet", "mehrere bereiche"]}, {"ober": "Multidirektionalität", "unter": ["Entwicklung kann zeitgleich in verschiedene Richtungen gehen (Gewinne UND Verluste)"], "syn": ["multidirektionalitaet", "mehrere richtungen", "gewinn verlust"]}]}, {"id": "st4", "thema": "VL01 · Methodik", "bereich": "Grundlagen", "modell": "Entwicklungsbezogene Forschungspläne", "anker": 0, "mnemo": "verschiedene Alter (quer) · gleiche Personen (längs) · Kombination (Sequenz)", "punkte": [{"ober": "Querschnittdesign", "unter": ["verschiedene Altersgruppen zu EINEM Zeitpunkt; Problem: Kohorteneffekte"], "syn": ["querschnitt", "querschnittdesign"]}, {"ober": "Längsschnittdesign", "unter": ["DIESELBEN Personen über die Zeit; Problem: Test-/Drop-out-Effekte"], "syn": ["laengsschnitt", "laengsschnittdesign"]}, {"ober": "Sequenzdesign", "unter": ["Kombination aus Quer- und Längsschnitt; trennt Alter und Kohorte"], "syn": ["sequenzdesign", "sequenz"]}]}, {"id": "st5", "thema": "VL03 · Bildgebung", "bereich": "Neurobiologie", "modell": "Bildgebungsverfahren in der Alternsforschung", "anker": 0, "mnemo": "Struktur (VBM/DTI) vs. Funktion (fMRT) vs. Biochemie (PET)", "punkte": [{"ober": "Morphometrie / VBM", "unter": ["Volumen neuroanatomischer Strukturen (strukturelles MRT)"], "syn": ["morphometrie", "vbm", "volumetrie"]}, {"ober": "Diffusion Tensor Imaging (DTI)", "unter": ["Integrität der weißen Substanz / Faserbahnen"], "syn": ["dti", "diffusion tensor", "faserbahnen"]}, {"ober": "Funktionelle Bildgebung (fMRT)", "unter": ["Hirnaktivität über den BOLD-Effekt"], "syn": ["fmrt", "funktionelle bildgebung", "bold"]}, {"ober": "PET / SPECT", "unter": ["biochemische Prozesse, Stoffwechsel, Rezeptoren"], "syn": ["pet", "spect", "biochemisch"]}]}, {"id": "st6", "thema": "VL04 · Demenzformen", "bereich": "Demenz", "modell": "Formen der Demenz (nach Häufigkeit)", "anker": 0, "mnemo": "Alzheimer dominiert (~62 %)", "punkte": [{"ober": "Alzheimer-Demenz", "unter": ["häufigste Form (~62 %)"], "syn": ["alzheimer"]}, {"ober": "Vaskuläre Demenz", "unter": ["~17 %"], "syn": ["vaskulaer", "vaskulaere demenz"]}, {"ober": "Gemischte Demenz", "unter": ["~10 %"], "syn": ["gemischte demenz", "gemischt"]}, {"ober": "Lewy-Körper-Demenz", "unter": ["~4 %"], "syn": ["lewy", "lewy koerper"]}, {"ober": "Frontotemporale Demenz", "unter": ["~2 %"], "syn": ["frontotemporal"]}, {"ober": "Parkinson-Demenz", "unter": ["~2 %"], "syn": ["parkinson"]}]}, {"id": "st7", "thema": "VL04 · Demenz", "bereich": "Demenz", "modell": "Primäre vs. sekundäre Demenz", "anker": 0, "mnemo": "im Gehirn selbst vs. Folge anderer Ursache", "punkte": [{"ober": "Primäre Demenz", "unter": ["hat ihre Ursache direkt im Gehirn (z. B. Alzheimer, vaskulär); meist irreversibel"], "syn": ["primaere demenz", "primaer"]}, {"ober": "Sekundäre Demenz", "unter": ["Folge einer anderen Erkrankung (z. B. Stoffwechsel, Medikamente); oft (teil-)reversibel"], "syn": ["sekundaere demenz", "sekundaer"]}]}, {"id": "st8", "thema": "VL04 · Kontinuum", "bereich": "Demenz", "modell": "Kontinuum SCD → MCI → Demenz", "anker": 0, "mnemo": "subjektiv → messbar → Alltag betroffen", "punkte": [{"ober": "Subjective Cognitive Decline (SCD)", "unter": ["subjektiv erlebte Verschlechterung, objektiv (noch) unauffällig"], "syn": ["scd", "subjective cognitive decline", "subjektiv"]}, {"ober": "Mild Cognitive Impairment (MCI)", "unter": ["objektiv messbare Einbußen, Alltag aber weitgehend erhalten"], "syn": ["mci", "mild cognitive impairment", "leichte kognitive"]}, {"ober": "Demenz", "unter": ["kognitive Defizite beeinträchtigen die Alltagsfunktionen (ADL) deutlich"], "syn": ["demenz", "adl"]}]}, {"id": "st9", "thema": "VL04 · Differenzial", "bereich": "Demenz", "modell": "Alzheimer- vs. vaskuläre Demenz", "anker": 0, "mnemo": "schleichend/Gedächtnis vs. stufenweise/vaskulär", "punkte": [{"ober": "Alzheimer-Demenz", "unter": ["schleichender Beginn, langsam fortschreitend; Gedächtnis zuerst betroffen"], "syn": ["alzheimer", "schleichend"]}, {"ober": "Vaskuläre Demenz", "unter": ["oft plötzlicher/stufenweiser Verlauf; vaskuläre Risikofaktoren, fokale Ausfälle"], "syn": ["vaskulaer", "stufenweise", "stufenfoermig"]}]}, {"id": "st10", "thema": "VL04 · Diagnostik", "bereich": "Demenz", "modell": "Kognitive Screeningverfahren", "anker": 0, "mnemo": "MMSE · DemTect · MoCA (+ Uhrentest)", "punkte": [{"ober": "MMSE (Mini-Mental-Status-Test)", "unter": ["weit verbreitet; unsensibel im leichten/MCI-Bereich (Deckeneffekt)"], "syn": ["mmse", "mmst", "mini mental"]}, {"ober": "DemTect", "unter": ["sensibler für leichte Störungen, alterskorrigiert"], "syn": ["demtect"]}, {"ober": "MoCA (Montreal Cognitive Assessment)", "unter": ["sensibel für MCI, erfasst auch Exekutivfunktionen"], "syn": ["moca", "montreal"]}, {"ober": "Uhrentest", "unter": ["schnelles Screening (visuokonstruktiv/exekutiv), oft ergänzend"], "syn": ["uhrentest", "uhr"]}]}, {"id": "st11", "thema": "VL04 · Pathologie", "bereich": "Demenz", "modell": "Neuropathologische Merkmale der Alzheimer-Demenz", "anker": 0, "mnemo": "außen Plaques, innen Tangles", "punkte": [{"ober": "Amyloid-Plaques", "unter": ["extrazelluläre Ablagerungen von Beta-Amyloid"], "syn": ["amyloid", "plaques", "beta amyloid"]}, {"ober": "Neurofibrilläre Bündel (Tau)", "unter": ["intrazelluläre Tau-Fibrillen (Tangles)"], "syn": ["tau", "neurofibrillen", "tangles", "fibrillaere buendel"]}, {"ober": "Atrophie", "unter": ["Hirnvolumenverlust, beginnend im medialen Temporallappen/Hippocampus"], "syn": ["atrophie", "hippocampus", "volumenverlust"]}]}, {"id": "st12", "thema": "VL05 · Medikamente", "bereich": "Demenz", "modell": "Medikamentöse Therapie der Alzheimer-Demenz", "anker": 0, "mnemo": "symptomatisch (verlangsamen) vs. kausal (neu)", "punkte": [{"ober": "Cholinesterasehemmer", "unter": ["symptomatisch: erhöhen Acetylcholin (leicht-mittel)"], "syn": ["cholinesterasehemmer", "ache hemmer", "acetylcholin"]}, {"ober": "Memantin (NMDA-Blocker)", "unter": ["symptomatisch: moduliert Glutamat (mittel-schwer)"], "syn": ["memantin", "nmda"]}, {"ober": "Lecanemab (Amyloid-Antikörper)", "unter": ["neuer KAUSALer Ansatz: Antikörper gegen Beta-Amyloid"], "syn": ["lecanemab", "antikoerper", "kausal"]}]}, {"id": "st13", "thema": "VL04 · Methodik", "bereich": "Demenz", "modell": "Sensitivität vs. Spezifität (Testgüte)", "anker": 0, "mnemo": "Kranke erkennen vs. Gesunde ausschließen", "punkte": [{"ober": "Sensitivität", "unter": ["Anteil der Kranken, die der Test korrekt als krank erkennt (Richtig-Positiv-Rate)"], "syn": ["sensitivitaet", "richtig positiv"]}, {"ober": "Spezifität", "unter": ["Anteil der Gesunden, die der Test korrekt als gesund erkennt (Richtig-Negativ-Rate)"], "syn": ["spezifitaet", "richtig negativ"]}]}, {"id": "st14", "thema": "VL06 · Transfer", "bereich": "Training", "modell": "Near- vs. Far-Transfer (kognitives Training)", "anker": 0, "mnemo": "nah = ähnlich, fern = übergreifend", "punkte": [{"ober": "Near Transfer", "unter": ["Übertrag auf ähnliche, trainingsnahe Aufgaben (gut belegt)"], "syn": ["near transfer", "naher transfer", "nahtransfer"]}, {"ober": "Far Transfer", "unter": ["Übertrag auf untrainierte, alltagsrelevante Bereiche (kaum belegt)"], "syn": ["far transfer", "ferner transfer", "ferntransfer"]}]}, {"id": "st15", "thema": "VL07 · Lebensstil", "bereich": "Lebensstil", "modell": "Trivariate Beziehung Lebensstil – Gehirn – Kognition", "anker": 0, "mnemo": "Lebensstil → Gehirn → Kognition", "punkte": [{"ober": "Lebensstil", "unter": ["körperliche Aktivität, Ernährung u. a."], "syn": ["lebensstil"]}, {"ober": "Gehirn", "unter": ["Struktur/Funktion als Vermittler (Volumen, Vaskularisierung)"], "syn": ["gehirn", "hirn"]}, {"ober": "Kognition", "unter": ["kognitive Leistung als Outcome"], "syn": ["kognition", "kognitive leistung"]}]}, {"id": "st16", "thema": "VL07 · Mechanismen", "bereich": "Lebensstil", "modell": "Drei Ebenen der Wirkung von Sport auf Kognition", "anker": 0, "mnemo": "molekular → strukturell → funktionell", "punkte": [{"ober": "Molekular/zellulär", "unter": ["z. B. Neurotrophine (BDNF), Neurogenese"], "syn": ["molekular", "zellulaer", "bdnf", "neurotrophine"]}, {"ober": "Strukturell (Gehirn)", "unter": ["z. B. größeres Hirnvolumen (Hippocampus)"], "syn": ["strukturell", "volumen"]}, {"ober": "Funktionell (Kognition)", "unter": ["verbesserte kognitive Leistung"], "syn": ["funktionell", "kognition"]}]}, {"id": "st17", "thema": "VL07 · Ernährung", "bereich": "Lebensstil", "modell": "Untersuchte Ernährungsfaktoren", "anker": 0, "mnemo": "weniger essen · gute Fette · Mittelmeer · Flavanole", "punkte": [{"ober": "Energierestriktion", "unter": ["kalorische Restriktion verbessert Gedächtnis (Tier + erste Humanbefunde)"], "syn": ["energierestriktion", "kalorische restriktion", "caloric restriction"]}, {"ober": "Omega-3-Fettsäuren", "unter": ["mehrfach ungesättigte Fettsäuren (Fisch)"], "syn": ["omega 3", "omega-3", "fettsaeuren"]}, {"ober": "Mediterrane Diät", "unter": ["mit besseren kognitiven Funktionen im Alter assoziiert"], "syn": ["mediterrane diaet", "mittelmeer"]}, {"ober": "Flavanole", "unter": ["wirken auf den Gyrus dentatus / Kognition im Alter"], "syn": ["flavanole", "flavonole"]}]}, {"id": "st18", "thema": "VL08 · Weisheit", "bereich": "Weisheit", "modell": "Berliner Weisheitsparadigma — 5 Kriterien (Baltes)", "anker": 0, "mnemo": "2 Basis (Fakten/Strategie) + 3 Meta (Kontext/Relativismus/Ungewissheit)", "punkte": [{"ober": "Reichhaltiges Faktenwissen", "unter": ["über die fundamentalen Tatsachen des Lebens"], "syn": ["faktenwissen", "faktisches wissen"]}, {"ober": "Reichhaltiges strategisches Wissen", "unter": ["Wissen über Methoden der Lebensplanung/-gestaltung"], "syn": ["strategisches wissen", "prozedurales wissen"]}, {"ober": "Lebensspannen-Kontextualismus", "unter": ["Probleme im Kontext der Lebensspanne und ihrer Bereiche sehen"], "syn": ["kontextualismus", "lebensspannen kontextualismus"]}, {"ober": "Wertrelativismus", "unter": ["Werte und Lebensziele anderer anerkennen/tolerieren"], "syn": ["wertrelativismus", "relativismus"]}, {"ober": "Umgang mit Ungewissheit", "unter": ["Unsicherheit des Lebens erkennen und handhaben"], "syn": ["ungewissheit", "unsicherheit"]}]}, {"id": "st19", "thema": "VL08 · Weisheit", "bereich": "Weisheit", "modell": "Drei-Faktoren-Modell der Weisheit", "anker": 0, "mnemo": "fühlen · denken · wollen", "punkte": [{"ober": "Emotionale Faktoren", "unter": ["Selbstregulation, Umgang mit Gefühlen"], "syn": ["emotional", "selbstregulation"]}, {"ober": "Kognitive Faktoren", "unter": ["Einsicht in Selbst und Welt, komplexe Zusammenhänge verstehen"], "syn": ["kognitiv", "einsicht"]}, {"ober": "Motivationale Faktoren", "unter": ["Interesse am Wohlbefinden anderer"], "syn": ["motivational", "wohlbefinden anderer"]}]}, {"id": "st20", "thema": "VL08 · Weisheit", "bereich": "Weisheit", "modell": "Selbstbezogene vs. allgemeine Weisheit", "anker": 0, "mnemo": "über mich vs. über das Leben allgemein", "punkte": [{"ober": "Selbstbezogene (persönliche) Weisheit", "unter": ["Einsicht in das eigene Leben (oft per Self-report gemessen)"], "syn": ["selbstbezogen", "persoenliche weisheit", "personal"]}, {"ober": "Allgemeine Weisheit", "unter": ["Urteil über das Leben anderer/allgemein (Performance-Maße)"], "syn": ["allgemeine weisheit", "general"]}]}, {"id": "st21", "thema": "VL08 · Evolution", "bereich": "Weisheit", "modell": "Großmutter- vs. Nestor-Effekt", "anker": 0, "mnemo": "Fürsorge vs. Wissen weitergeben", "punkte": [{"ober": "Großmutter-Effekt", "unter": ["Ältere erhöhen den Fortpflanzungserfolg durch Fürsorge für Enkel"], "syn": ["grossmutter", "grossmutter effekt"]}, {"ober": "Nestor-Effekt", "unter": ["Ältere sichern das Überleben durch Weitergabe von Wissen/Kultur"], "syn": ["nestor", "nestor effekt"]}]}, {"id": "st22", "thema": "VL01 · Lebensspanne", "bereich": "Grundlagen", "modell": "Grundsätze der Lebensspannenpsychologie (Baltes)", "anker": 0, "mnemo": "lebenslang · multidimensional · multidirektional · plastisch · kontextuell", "punkte": [{"ober": "Lebenslange Entwicklung", "unter": ["Entwicklung endet nicht im frühen Erwachsenenalter"], "syn": ["lebenslang", "lifelong"]}, {"ober": "Multidimensionalität", "unter": ["Entwicklung in mehreren Funktionsbereichen"], "syn": ["multidimensionalitaet"]}, {"ober": "Multidirektionalität (Gewinn-Verlust)", "unter": ["zugleich Zuwächse und Verluste; Verluste teils kompensierbar"], "syn": ["multidirektionalitaet", "gewinn verlust"]}, {"ober": "Plastizität", "unter": ["Spielräume UND Grenzen der Veränderbarkeit"], "syn": ["plastizitaet"]}, {"ober": "Kontextualität / interindividuelle Variabilität", "unter": ["Entwicklung ist kontextabhängig und interindividuell verschieden"], "syn": ["kontextualitaet", "interindividuell", "kontext"]}]}, {"id": "st23", "thema": "VL01 · Stufen", "bereich": "Grundlagen", "modell": "Schaies kognitives Stufenmodell", "anker": 0, "mnemo": "Erwerb → Erreichen → Verantwortung → Reintegration", "punkte": [{"ober": "Erwerbsstadium", "unter": ["Kindheit/Adoleszenz: Wissen/Fertigkeiten erwerben (das „Was?\")"], "syn": ["erwerbsstadium", "erwerb", "acquisitive"]}, {"ober": "Ausführendes Stadium (Erreichensstadium)", "unter": ["frühes Erwachsenenalter: Wissen für Ziele anwenden (das „Wozu?\")"], "syn": ["erreichensstadium", "erreichen", "achieving", "ausfuehrend", "ausfuehrendes stadium"]}, {"ober": "Verantwortungs-/Exekutivstadium", "unter": ["mittleres Erwachsenenalter: Verantwortung für andere/Systeme"], "syn": ["verantwortungsstadium", "exekutivstadium", "responsibility"]}, {"ober": "Reintegrationsstadium", "unter": ["spätes Erwachsenenalter: selektiver Einsatz nach eigenen Interessen"], "syn": ["reintegrationsstadium", "reintegration"]}]}, {"id": "st24", "thema": "VL08 · Lebenslauf", "bereich": "Weisheit", "modell": "Eriksons psychosoziale Entwicklungsstufen (8)", "anker": 0, "mnemo": "Vertrauen → … → Integrität (8 Krisen)", "punkte": [{"ober": "Urvertrauen vs. Misstrauen", "unter": ["Säuglingsalter"], "syn": ["urvertrauen", "misstrauen"]}, {"ober": "Autonomie vs. Scham/Zweifel", "unter": ["Kleinkindalter"], "syn": ["autonomie", "scham"]}, {"ober": "Initiative vs. Schuldgefühl", "unter": ["Kindergartenalter"], "syn": ["initiative", "schuld"]}, {"ober": "Leistung vs. Minderwertigkeitsgefühl (Werksinn)", "unter": ["Grundschulzeit"], "syn": ["werksinn", "leistung", "minderwertigkeit", "minderwertigkeitsgefuehl"]}, {"ober": "Identität vs. Rollenkonfusion", "unter": ["Adoleszenz"], "syn": ["identitaet", "rollendiffusion", "rollenkonfusion"]}, {"ober": "Intimität vs. Isolation", "unter": ["junges Erwachsenenalter"], "syn": ["intimitaet", "isolation"]}, {"ober": "Generativität vs. Stagnation", "unter": ["mittleres Erwachsenenalter"], "syn": ["generativitaet", "stagnation"]}, {"ober": "Integrität vs. Verzweiflung", "unter": ["hohes Alter"], "syn": ["integritaet", "verzweiflung"]}]}, {"id": "st25", "thema": "VL04 · Diagnostik-Methodik", "bereich": "Demenz", "modell": "Signalentdeckungstheorie (4 Felder)", "anker": 0, "mnemo": "Signal da/nicht da × Antwort ja/nein", "punkte": [{"ober": "Hit (Treffer)", "unter": ["Kranke korrekt als krank erkannt"], "syn": ["hit", "treffer", "richtig positiv"]}, {"ober": "Miss (Verpasser)", "unter": ["Kranke fälschlich als gesund (falsch negativ)"], "syn": ["miss", "verpasser", "falsch negativ"]}, {"ober": "False Alarm (Fehlalarm)", "unter": ["Gesunde fälschlich als krank (falsch positiv)"], "syn": ["false alarm", "fehlalarm", "falsch positiv"]}, {"ober": "Correct Rejection (korrekte Zurückweisung)", "unter": ["Gesunde korrekt als gesund"], "syn": ["correct rejection", "korrekte zurueckweisung", "richtig negativ"]}]}, {"id": "st26", "thema": "VL04 · Pathologie", "bereich": "Demenz", "modell": "Braak-Stadien der Alzheimer-Pathologie", "anker": 0, "mnemo": "I–II (transentorhinal) → III–IV (limbisch) → V–VI (neokortikal)", "punkte": [{"ober": "Stadium I–II", "unter": ["transentorhinal; klinisch meist noch unauffällig"], "syn": ["stadium i ii", "transentorhinal", "1 2"]}, {"ober": "Stadium III–IV", "unter": ["limbisch (u. a. Hippocampus); beginnende Symptome (MCI)"], "syn": ["stadium iii iv", "limbisch", "3 4"]}, {"ober": "Stadium V–VI", "unter": ["neokortikal; manifeste Demenz"], "syn": ["stadium v vi", "neokortikal", "5 6"]}]}, {"id": "st27", "thema": "VL06 · Plastizität", "bereich": "Training", "modell": "Testing the Limits — Plastizitätsreserven", "anker": 0, "mnemo": "Ausgangsleistung · Ausgangsreserve · Entwicklungsreserve", "punkte": [{"ober": "Ausgangsleistung (Baseline)", "unter": ["aktuelle Leistung ohne Training"], "syn": ["ausgangsleistung", "baseline"]}, {"ober": "Ausgangs-Kapazitätsreserve", "unter": ["maximale Leistung unter optimalen Bedingungen JETZT"], "syn": ["ausgangsreserve", "baseline reserve", "kapazitaetsreserve"]}, {"ober": "Entwicklungs-Kapazitätsreserve", "unter": ["zusätzliches Potenzial nach intensivem Training"], "syn": ["entwicklungsreserve", "developmental reserve"]}]}, {"id": "st28", "thema": "VL05 · Verhaltenssymptome", "bereich": "Demenz", "modell": "Verhaltenssymptome bei Demenz (BPSD)", "anker": 0, "mnemo": "Psychose · Hyperaktivität · Affekt · Apathie", "punkte": [{"ober": "Psychose", "unter": ["Wahn, Halluzinationen"], "syn": ["psychose"]}, {"ober": "Hyperaktivität", "unter": ["Agitation, Aggression, Wandern, Irritabilität (Reizbarkeit)"], "syn": ["hyperaktivitaet", "agitation", "irritabilitaet", "reizbarkeit"]}, {"ober": "Affekt", "unter": ["Depression, Angst"], "syn": ["affekt", "depression"]}, {"ober": "Apathie", "unter": ["Antriebslosigkeit, Interessenverlust"], "syn": ["apathie"]}]}, {"id": "st29", "thema": "VL05 · Verlauf", "bereich": "Demenz", "modell": "Zeitlicher Verlauf der Demenz (Stadien)", "anker": 0, "mnemo": "Anfang → mittel → schwer", "punkte": [{"ober": "Anfangsstadium", "unter": ["leichte Gedächtnis-/Alltagseinbußen, noch selbstständig"], "syn": ["anfangsstadium", "leicht"]}, {"ober": "Mittlere Demenz", "unter": ["deutliche Defizite, Hilfe im Alltag nötig"], "syn": ["mittlere demenz", "mittel"]}, {"ober": "Schwere Demenz", "unter": ["umfassende Pflegebedürftigkeit"], "syn": ["schwere demenz", "schwer"]}]}, {"id": "st30", "thema": "VL07 · Mechanismen", "bereich": "Lebensstil", "modell": "Wirkungskette körperlicher Aktivität (Neurotrophine)", "anker": 0, "mnemo": "Aktivität → Neurotrophine → Neurogenese/LTP → Gedächtnis → Schutz", "punkte": [{"ober": "Körperliche Aktivität", "unter": ["Auslöser der Kette"], "syn": ["koerperliche aktivitaet", "aktivitaet", "sport"]}, {"ober": "Ausschüttung von Neurotrophinen", "unter": ["z. B. BDNF"], "syn": ["neurotrophine", "bdnf"]}, {"ober": "Neurogenese & LTP", "unter": ["neue Neurone, Langzeitpotenzierung"], "syn": ["neurogenese", "ltp", "langzeitpotenzierung"]}, {"ober": "Gedächtnisbildung", "unter": ["verbesserte Gedächtnisleistung"], "syn": ["gedaechtnisbildung", "gedaechtnis"]}, {"ober": "Schutz vor altersbedingtem Abbau", "unter": ["möglicher neuroprotektiver Effekt"], "syn": ["schutz", "neuroprotektiv"]}]}, {"id": "st31", "thema": "VL02 · Gedächtnis", "bereich": "Kognitives Altern", "modell": "Gedächtnissysteme (Taxonomie nach Squire)", "anker": 0, "mnemo": "deklarativ = „weiß DASS“ (Worte), non-deklarativ = „weiß WIE“ (Können)", "punkte": [{"ober": "Deklarativ (explizit)", "unter": ["episodisch: Erinnerungen in Zeit/Raum", "semantisch: Welt-/Faktenwissen"], "syn": ["deklarativ", "explizit", "episodisch", "semantisch"]}, {"ober": "Non-deklarativ (implizit)", "unter": ["prozedural: Fertigkeiten/Gewohnheiten", "Priming / perzeptuelles Lernen"], "syn": ["non-deklarativ", "implizit", "prozedural", "priming"]}, {"ober": "Arbeitsgedächtnis", "unter": ["kurzzeitige Manipulation, steht neben dem Langzeitgedächtnis"], "syn": ["arbeitsgedächtnis", "kurzzeit"]}]}, {"id": "st32", "thema": "VL02 · Gedächtnis", "bereich": "Kognitives Altern", "modell": "Gedächtnis im Alter — Veränderungsprofil (Multidirektionalität)", "anker": 0, "mnemo": "Können & Wissen bleiben, Episoden & Arbeitsspeicher gehen", "punkte": [{"ober": "Bleibt stabil (kaum Abbau)", "unter": ["prozedurales Gedächtnis", "semantisches Gedächtnis"], "syn": ["stabil", "prozedural", "semantisch", "erhalten"]}, {"ober": "Verschlechtert sich", "unter": ["Arbeitsgedächtnis", "episodisches Gedächtnis", "Quellengedächtnis", "räumliches Gedächtnis", "prospektives Gedächtnis"], "syn": ["abbau", "arbeitsgedächtnis", "episodisch", "quellen", "prospektiv", "räumlich"]}]}, {"id": "st33", "thema": "VL02 · Inhibition", "bereich": "Kognitives Altern", "modell": "Inhibitionsdefizit-Theorie — 3 Funktionen (Hasher & Zacks, 1988)", "anker": 0, "mnemo": "Türsteher (access) – Aufräumer (deletion) – Bremse (restraint)", "punkte": [{"ober": "Zugangsfunktion (access)", "unter": ["begrenzt den Zugang irrelevanter Information zum Arbeitsgedächtnis"], "syn": ["access", "zugang", "türsteher"]}, {"ober": "Löschfunktion (deletion)", "unter": ["löscht Information, die nicht mehr relevant ist"], "syn": ["deletion", "löschen", "lösch"]}, {"ober": "Unterdrückung (restraint)", "unter": ["verhindert, dass dominante Reize/Reaktionstendenzen Denken und Handeln bestimmen"], "syn": ["restraint", "unterdrückung", "bremse"]}]}, {"id": "st34", "thema": "VL02 · Processing Speed", "bereich": "Kognitives Altern", "modell": "Geschwindigkeitshypothese — 2 Mechanismen (Salthouse, 1996)", "anker": 0, "mnemo": "zu spät fertig (Zeit) + zu wenig gleichzeitig da (Gleichzeitigkeit)", "punkte": [{"ober": "Mechanismus der begrenzten Zeit (limited time)", "unter": ["Operationen werden zu langsam ausgeführt, um in der verfügbaren Zeit fertig zu werden"], "syn": ["begrenzte zeit", "limited time", "zeit"]}, {"ober": "Mechanismus der Gleichzeitigkeit (simultaneity)", "unter": ["Informationsverlust: weniger gleichzeitig verfügbare Information für komplexe Prozesse"], "syn": ["gleichzeitigkeit", "simultaneity", "simultan"]}]}, {"id": "st35", "thema": "VL02 · Sensorik", "bereich": "Kognitives Altern", "modell": "Sensorik & Intelligenz — 3 Erklärungen", "anker": 0, "mnemo": "Deprivation – Kompensation – Test(wahrnehmung)", "punkte": [{"ober": "Sensorische Deprivation", "unter": ["sensorische Einschränkungen halten von kognitiv stimulierenden Interaktionen ab"], "syn": ["deprivation", "stimulation"]}, {"ober": "Kompensation", "unter": ["kognitive Ressourcen müssen sensorische Defizite ausgleichen"], "syn": ["kompensation", "ressourcen"]}, {"ober": "Schlechtere Testleistung", "unter": ["Aufgaben werden sensorisch nicht richtig wahrgenommen (von Lindenberger et al. 2001 als alleinige Ursache widerlegt)"], "syn": ["testleistung", "wahrnehmung", "artefakt"]}]}, {"id": "st36", "thema": "VL02 · Erklärungsmodelle", "bereich": "Kognitives Altern", "modell": "Erklärungsmodelle des kognitiven Abbaus (Überblick)", "anker": 0, "mnemo": "Filter – Tempo – Sinne – Ressourcen – gemeinsame Ursache – Nichtgebrauch", "punkte": [{"ober": "Arbeitsgedächtnis / Inhibitionsdefizit", "unter": ["zu viel Irrelevantes im AG (Hasher & Zacks)"], "syn": ["inhibition", "arbeitsgedächtnis"]}, {"ober": "Processing Speed", "unter": ["verlangsamte Verarbeitung (Salthouse)"], "syn": ["speed", "geschwindigkeit", "tempo"]}, {"ober": "Sensorische Leistungsfähigkeit", "unter": ["Abnahme von Sehen/Hören"], "syn": ["sensorik", "sinne"]}, {"ober": "Veränderung der Ressourcen-Zuordnung", "unter": ["mehr Ressourcen für nichtkognitive Anforderungen"], "syn": ["ressourcen", "zuordnung", "dual"]}, {"ober": "Common-Cause-Hypothese", "unter": ["gemeinsame Ursache: genereller Hirnabbau"], "syn": ["common-cause", "gemeinsame ursache"]}, {"ober": "Nichtgebrauch (Disuse-Hypothese)", "unter": ["use it or lose it"], "syn": ["disuse", "nichtgebrauch"]}]}, {"id": "st37", "thema": "VL02 · Moderatoren", "bereich": "Kognitives Altern", "modell": "Moderatorvariablen des kognitiven Abbaus", "anker": 0, "mnemo": "Gene – Bildung – Gesundheit – soziale Anregung – Persönlichkeit", "punkte": [{"ober": "Genetische Faktoren", "unter": ["Allel mit erhöhtem Risiko (beschleunigter Abbau / Alzheimer)"], "syn": ["genetik", "allel", "gene"]}, {"ober": "Bildungsstand & Beruf", "unter": ["positive Korrelation von Bildung/Berufskomplexität mit Intelligenz"], "syn": ["bildung", "beruf"]}, {"ober": "Gesundheitszustand", "unter": ["Demenzen, Stoffwechsel-, Herz-Kreislauf-Erkrankungen beschleunigen den Abbau"], "syn": ["gesundheit", "krankheit"]}, {"ober": "Soziale Anregung", "unter": ["z.B. verheiratet sein (Gruber & Schaie 1986)"], "syn": ["sozial", "anregung"]}, {"ober": "Flexibler Persönlichkeitsstil", "unter": ["selbstberichtet im mittleren Lebensalter"], "syn": ["persönlichkeit", "flexibel"]}]}, {"id": "st38", "thema": "VL02 · Reserven", "bereich": "Kognitives Altern", "modell": "Kompensatorische Reserven — fördernde Einflüsse", "anker": 0, "mnemo": "Lebensstil – Bildung – Arbeit – Training – Orchestrierung", "punkte": [{"ober": "Lebensstil", "unter": ["use it or lose it; kognitiv anspruchsvolle Aktivitäten puffern den Abbau"], "syn": ["lebensstil", "use it"]}, {"ober": "Bildung", "unter": ["Prädiktor v.a. für kristalline Intelligenz und Gedächtnis"], "syn": ["bildung"]}, {"ober": "Arbeitsumfeld", "unter": ["anregungsarmes Umfeld → Verkümmerung intellektueller Fähigkeiten"], "syn": ["arbeitsumfeld", "arbeit"]}, {"ober": "Training", "unter": ["wirkt Abbau/mangelnder Übung entgegen; Frage des Transfers"], "syn": ["training"]}, {"ober": "Orchestrierung der Ressourcen", "unter": ["kontextadäquate aktive Nutzung (Lang et al. 2011) → Lebensqualität"], "syn": ["orchestrierung", "lang"]}]}, {"id": "st39", "thema": "VL09 · Altersbilder", "bereich": "Altersbilder", "modell": "Altersstereotyp vs. Alternsstereotyp", "anker": 0, "mnemo": "Alter*S*tereotyp = *S*tatus/Eigenschaft; Alter*NS*stereotyp = Proze*SS*", "punkte": [{"ober": "Altersstereotyp", "unter": ["zugeschriebene Eigenschaften älterer Menschen (Zustand)"], "syn": ["altersstereotyp", "eigenschaften", "zustand"]}, {"ober": "Alternsstereotyp", "unter": ["Überzeugungen zum Prozess des Älterwerdens"], "syn": ["alternsstereotyp", "prozess", "altern"]}]}, {"id": "st40", "thema": "VL09 · Altersbilder", "bereich": "Altersbilder", "modell": "Eigenschaften von Altersstereotypen", "anker": 0, "mnemo": "Mehr-Situations-Bereich", "punkte": [{"ober": "Mehrdimensional", "unter": ["mehrere Facetten, nicht nur Benachteiligung"], "syn": ["mehrdimensional", "facetten"]}, {"ober": "Situationsabhängig", "unter": ["nicht alle Inhalte gleichzeitig aktiviert (Casper et al. 2011, Priming)"], "syn": ["situationsabhängig", "casper", "priming", "kontext"]}, {"ober": "Bereichsspezifisch", "unter": ["neg. bei Gesundheit/Freizeit, pos. bei Familie/Religion (Kornadt & Rothermund 2011)"], "syn": ["bereichsspezifisch", "kornadt", "rothermund", "domäne"]}]}, {"id": "st41", "thema": "VL09 · Entwicklungsaufgaben", "bereich": "Altersbilder", "modell": "Peck (1956) — 3 Herausforderungen des Alters", "anker": 0, "mnemo": "Körper – Beruf/Interessen – Person (3× Transzendierung/Diversifizierung)", "punkte": [{"ober": "Transzendierung des Körpers", "unter": ["Überwindung der zu starken Beschäftigung mit dem eigenen Körper"], "syn": ["körper", "transzendierung körper"]}, {"ober": "Diversifizierung der Interessen", "unter": ["Überwindung der Fokussierung auf den Beruf"], "syn": ["interessen", "beruf", "diversifizierung"]}, {"ober": "Transzendierung der eigenen Person", "unter": ["Überwindung übermäßiger Beschäftigung mit sich selbst"], "syn": ["person", "transzendierung person", "selbst"]}]}, {"id": "st42", "thema": "VL09 · Produktivität", "bereich": "Altersbilder", "modell": "Produktivität im Alter — 3 Kriterienarten", "anker": 0, "mnemo": "Norm (absolut) – Bezugsgruppe (relativ) – Erleben (subjektiv)", "punkte": [{"ober": "Absolute Kriterien", "unter": ["Funktionstüchtigkeit, intellektuelle Leistung, Selbstständigkeit; gesellschaftl. Konsens/Idealnorm"], "syn": ["absolut", "norm", "funktionstüchtigkeit"]}, {"ober": "Relative Kriterien", "unter": ["Grundlage ist der Vergleich mit der Bezugsgruppe"], "syn": ["relativ", "bezugsgruppe", "vergleich"]}, {"ober": "Subjektiv-psychologische Kriterien", "unter": ["Lebenszufriedenheit, Lebenssinn, subjektiver Erkenntnisgewinn"], "syn": ["subjektiv", "lebenszufriedenheit", "sinn"]}]}, {"id": "st43", "thema": "VL09 · Produktivität", "bereich": "Altersbilder", "modell": "Psychologische Produktivität — 4 Wirkungsformen", "anker": 0, "mnemo": "Hand – Kopf – Herz – Antrieb (manuell/geistig/emotional/motivational)", "punkte": [{"ober": "Manuell", "unter": ["Herstellung von Dingen, manuelle Arbeiten"], "syn": ["manuell", "herstellung"]}, {"ober": "Geistig", "unter": ["Ideen entwickeln, Bücher verfassen, Ratschläge geben, Probleme lösen"], "syn": ["geistig", "ideen", "probleme lösen"]}, {"ober": "Emotional", "unter": ["positive Ausstrahlung durch eigene Zufriedenheit, Wirkung auf Denken/Wollen"], "syn": ["emotional", "zufriedenheit", "ausstrahlung"]}, {"ober": "Motivational", "unter": ["Vorbild sein für die Ziele und Werte anderer"], "syn": ["motivational", "vorbild"]}]}, {"id": "st44", "thema": "VL10 · Havighurst", "bereich": "Entwicklungsaufgaben", "modell": "Havighurst-Modell der Entwicklungsaufgaben", "anker": 0, "mnemo": "Aufgabe je Lebensphase → Gelingen baut auf, Misslingen blockiert", "punkte": [{"ober": "Definition", "unter": ["Aufgabe, die in einer Lebensperiode hervortritt (Havighurst 1972)"], "syn": ["definition", "havighurst", "lebensperiode"]}, {"ober": "Bei Gelingen", "unter": ["Wohlbefinden + Gelingen späterer Aufgaben"], "syn": ["gelingen", "wohlbefinden"]}, {"ober": "Bei Misslingen", "unter": ["Unzufriedenheit, gesellschaftliche Missbilligung, Schwierigkeiten später"], "syn": ["misslingen", "missbilligung"]}, {"ober": "Kritik", "unter": ["Normalbiografie US-Mittelschicht 1950er; normativ/starr (hierarchische Abfolge)"], "syn": ["kritik", "normativ", "starr"]}]}, {"id": "st45", "thema": "VL10 · Phasen", "bereich": "Entwicklungsaufgaben", "modell": "Phasen des Erwachsenenalters", "anker": 0, "mnemo": "Emerging → früh → mittel → spät (junge/alte Alte)", "punkte": [{"ober": "Emerging Adulthood", "unter": ["~18–25, verlängerter Übergang (Arnett)"], "syn": ["emerging", "arnett", "übergang"]}, {"ober": "Frühes Erwachsenenalter", "unter": ["~25–40, Aufbau (Beruf, Familie)"], "syn": ["früh", "aufbau"]}, {"ober": "Mittleres Erwachsenenalter", "unter": ["~40–60/65, Stabilisierung"], "syn": ["mittel", "stabilisierung"]}, {"ober": "Spätes Erwachsenenalter", "unter": ["ab ~60–65 „junge Alte“, ab ~80 „alte Alte“"], "syn": ["spät", "junge alte", "alte alte"]}]}, {"id": "st46", "thema": "VL10 · Social clock", "bereich": "Entwicklungsaufgaben", "modell": "Social clock — normativer Zeitplan (Neugarten 1972)", "anker": 0, "mnemo": "im Plan = Lob, aus dem Plan = Tadel", "punkte": [{"ober": "On time", "unter": ["im normativen Zeitplan → sozial unterstützt/verstärkt"], "syn": ["on time", "unterstützt"]}, {"ober": "Off time", "unter": ["außerhalb des Zeitplans → negative Sanktionen"], "syn": ["off time", "sanktionen"]}]}, {"id": "st47", "thema": "VL10 · Kontrolle", "bereich": "Entwicklungsaufgaben", "modell": "Primäre vs. sekundäre Kontrolle (Schulz & Heckhausen)", "anker": 0, "mnemo": "primär = Welt ändern, sekundär = Selbst ändern", "punkte": [{"ober": "Primäre Kontrolle", "unter": ["nach außen; Umwelt an eigene Bedürfnisse anpassen (Zielerreichung)"], "syn": ["primär", "umwelt", "außen"]}, {"ober": "Sekundäre Kontrolle", "unter": ["Veränderung des Selbst; eigene Ziele an Gegebenheiten anpassen"], "syn": ["sekundär", "selbst"]}, {"ober": "Verlauf", "unter": ["über die Lebensspanne Verschiebung primär → sekundär (primäres Streben bleibt Triebfeder)"], "syn": ["verschiebung", "lebensspanne"]}]}, {"id": "st48", "thema": "VL10 · Rubikon", "bereich": "Entwicklungsaufgaben", "modell": "Rubikon-Modell der Handlungsphasen (Heckhausen & Gollwitzer)", "anker": 0, "mnemo": "Wünschen → Wollen → Tun → Bewerten (Rubikon nach Phase 1)", "punkte": [{"ober": "I Wünschen/Abwägen", "unter": ["prädezisional; Abwägen von Bedürfnissen → Rubikon: Entscheiden"], "syn": ["wünschen", "abwägen", "prädezisional"]}, {"ober": "II Wollen/Planen", "unter": ["Absicht aufrechterhalten, Handlungsvorbereitung"], "syn": ["wollen", "planen"]}, {"ober": "III Tun/Ausführen", "unter": ["Absicht im Handeln ausführen, durchhalten"], "syn": ["tun", "ausführen"]}, {"ober": "IV Ergebnis/Bewerten", "unter": ["Ergebnis mit Ziel vergleichen, Absicht deaktivieren"], "syn": ["ergebnis", "bewerten"]}]}, {"id": "st49", "thema": "VL10 · Midlife-Crisis", "bereich": "Entwicklungsaufgaben", "modell": "Midlife-Crisis — 3 Konzeptualisierungen (Levinson)", "anker": 0, "mnemo": "streng (3 Merkmale) ⊃ moderat (2) ⊃ schwach (1)", "punkte": [{"ober": "Streng", "unter": ["Normativität + zeitlich gebunden + eigene strukturelle Marker"], "syn": ["streng", "strukturelle marker"]}, {"ober": "Moderat", "unter": ["Normativität + zeitlich gebunden"], "syn": ["moderat"]}, {"ober": "Schwach", "unter": ["nur zeitlich ans mittlere Erwachsenenalter gebunden"], "syn": ["schwach", "zeitlich gebunden"]}]}, {"id": "st50", "thema": "VL11 · SOK", "bereich": "Erfolgreiche Entwicklung", "modell": "Selektion im SOK-Modell — elektiv vs. verlustbasiert", "anker": 0, "mnemo": "elektiv = wählen (proaktiv), verlustbasiert = reagieren (reaktiv)", "punkte": [{"ober": "Elektive Selektion", "unter": ["Bildung/Auswahl von Zielen, Hierarchisierung von Zielen (proaktiv)"], "syn": ["elektiv", "auswahl", "hierarchisierung", "proaktiv"]}, {"ober": "Verlustbasierte Selektion", "unter": ["reaktiv: Fokus auf wichtigste Ziele, neue Ziele, Standards/Zielhierarchie anpassen"], "syn": ["verlustbasiert", "reaktiv", "standards anpassen"]}]}, {"id": "st51", "thema": "VL11 · Erfolgreiches Altern", "bereich": "Erfolgreiche Entwicklung", "modell": "Erfolgreiches Altern — Kriterien", "anker": 0, "mnemo": "außen messbar vs. innen erlebt", "punkte": [{"ober": "Objektive Indikatoren", "unter": ["Gesundheit, Langlebigkeit"], "syn": ["objektiv", "gesundheit", "langlebigkeit"]}, {"ober": "Subjektive Kriterien", "unter": ["Wohlbefinden, Lebenszufriedenheit (individuell, an Zielen/Werten orientiert)"], "syn": ["subjektiv", "wohlbefinden", "lebenszufriedenheit"]}]}, {"id": "st52", "thema": "VL11 · Zielkonzepte", "bereich": "Erfolgreiche Entwicklung", "modell": "Persönliche Zielkonzepte (Brunstein 2006)", "anker": 0, "mnemo": "Anliegen–Projekte–Bestrebungen–Lebensaufgaben–Entwicklungsziele–Identitätsziele", "punkte": [{"ober": "Persönliche Anliegen (Klinger)", "unter": ["Zielzustände mit starker affektiver Bindung (commitment)"], "syn": ["anliegen", "klinger", "commitment"]}, {"ober": "Persönliche Projekte (Little)", "unter": ["zeitlich strukturierte Handlungspläne"], "syn": ["projekte", "little"]}, {"ober": "Persönliche Bestrebungen (Emmons)", "unter": ["langfristige/wiederkehrende Anliegen auf übergeordneter Ebene"], "syn": ["bestrebungen", "emmons", "strivings"]}, {"ober": "Lebensaufgaben (Cantor & Kihlstrom)", "unter": ["Ziele + Strategien, lebensphasenspezifisch"], "syn": ["lebensaufgaben", "cantor", "kihlstrom"]}, {"ober": "Entwicklungsziele (Heckhausen)", "unter": ["an Lebensphasen/Übergänge gebunden, durch Entwicklungsfristen begrenzt"], "syn": ["entwicklungsziele", "heckhausen", "deadlines"]}, {"ober": "Identitätsziele (Markus & Nurius)", "unter": ["possible selves: Hoffnungen und Befürchtungen"], "syn": ["identitätsziele", "possible selves", "markus", "nurius"]}]}, {"id": "st53", "thema": "VL11 · Ziele im Verlauf", "bereich": "Erfolgreiche Entwicklung", "modell": "Ziele im Entwicklungsverlauf (Ebner, Freund & Baltes 2006)", "anker": 0, "mnemo": "jung = Gewinn, alt = Erhalt/Verlustvermeidung", "punkte": [{"ober": "Gewinn / Wachstum", "unter": ["jüngere Erwachsene; „fitter werden“"], "syn": ["gewinn", "wachstum", "jung"]}, {"ober": "Erhalt (Aufrechterhaltung)", "unter": ["Status quo halten"], "syn": ["erhalt", "aufrechterhaltung", "status quo"]}, {"ober": "Verlustvermeidung", "unter": ["ältere Erwachsene; „gesund bleiben“"], "syn": ["verlustvermeidung", "verlust", "alt"]}]}, {"id": "st54", "thema": "VL11 · Zielkonflikte", "bereich": "Erfolgreiche Entwicklung", "modell": "Want- vs. Should-Konflikte (Riediger & Freund 2008)", "anker": 0, "mnemo": "Want = wollen, Should = sollen", "punkte": [{"ober": "Want-Konflikt", "unter": ["„Ich hätte lieber etwas anderes tun WOLLEN“ (Wunsch nach Alternative)"], "syn": ["want", "wollen", "wunsch"]}, {"ober": "Should-Konflikt", "unter": ["„Ich hätte etwas anderes tun SOLLEN“ (Pflicht/Erwartung)"], "syn": ["should", "sollen", "pflicht"]}]}, {"id": "st55", "thema": "VL12 · SWB", "bereich": "Lebenszufriedenheit", "modell": "Subjektives Wohlbefinden — affektiv vs. kognitiv", "anker": 0, "mnemo": "Gefühl (schnell) vs. Bewertung (stabil)", "punkte": [{"ober": "Affektive Komponente", "unter": ["angenehme Gefühle / Abwesenheit unangenehmer; reagiert stark, adaptiert schnell"], "syn": ["affektiv", "gefühle", "awb"]}, {"ober": "Kognitive Komponente", "unter": ["kognitive Bewertung; allgemeine + bereichsspezifische Lebenszufriedenheit; längerfristig"], "syn": ["kognitiv", "bewertung", "lebenszufriedenheit", "cwb"]}]}, {"id": "st56", "thema": "VL12 · Adaptation", "bereich": "Lebenszufriedenheit", "modell": "Adaptation an Lebensereignisse (hedonic treadmill)", "anker": 0, "mnemo": "Laufband: zurück zum Ausgangsniveau", "punkte": [{"ober": "Hedonic treadmill", "unter": ["Adaptation; kein Ereignis verändert die LZ dauerhaft → Rückkehr zum Ausgangsniveau"], "syn": ["hedonic treadmill", "laufband", "adaptation"]}, {"ober": "Adaptation-level theory", "unter": ["Anpassung des Vergleichsniveaus"], "syn": ["adaptation-level"]}, {"ober": "Dynamic equilibrium theory", "unter": ["Rückkehr zu einem dynamischen Gleichgewicht"], "syn": ["dynamic equilibrium", "gleichgewicht"]}, {"ober": "Set-point theory", "unter": ["Rückkehr zu einem stabilen Sollwert (set point)"], "syn": ["set-point", "sollwert"]}]}, {"id": "st57", "thema": "VL12 · Affektbilanz", "bereich": "Lebenszufriedenheit", "modell": "Positive Affektbilanz im Alter", "anker": 0, "mnemo": "neg ↓ · ruhig-positiv ↑ · aktiv-positiv konstant", "punkte": [{"ober": "Negativer Affekt", "unter": ["nimmt ab (Angst, Ärger, Traurigkeit)"], "syn": ["negativer affekt", "na", "nimmt ab"]}, {"ober": "Positiver Affekt, geringe Aktiviertheit", "unter": ["nimmt zu (entspannt, zufrieden, ruhig)"], "syn": ["gering aktiviert", "entspannt", "zufrieden", "nimmt zu"]}, {"ober": "Positiver Affekt, hohe Aktiviertheit", "unter": ["bleibt konstant (begeistert, aufgeregt)"], "syn": ["hoch aktiviert", "begeistert", "konstant"]}]}, {"id": "st58", "thema": "VL12 · Paradox", "bereich": "Lebenszufriedenheit", "modell": "Paradox des subjektiven Wohlbefindens — Erklärungen", "anker": 0, "mnemo": "stabil trotz Verlusten: anpassen, positiv sehen, Bilanz", "punkte": [{"ober": "Sekundäre Kontrollstrategien", "unter": ["Ziele aufgeben, Anspruchsniveau/Vergleichsmaßstab ändern"], "syn": ["sekundäre kontrolle", "anspruchsniveau", "ziele aufgeben"]}, {"ober": "Positivity Bias", "unter": ["regulatorischer Mechanismus, positive Ausrichtung"], "syn": ["positivity bias"]}, {"ober": "Positive Affektbilanz", "unter": ["neg. Affekt ↓, ruhig-positiver Affekt ↑"], "syn": ["affektbilanz", "positive bilanz"]}]}, {"id": "st59", "thema": "VL12 · Einflussfaktoren", "bereich": "Lebenszufriedenheit", "modell": "Einflussfaktoren der Lebenszufriedenheit im Alter", "anker": 0, "mnemo": "Tod-Nähe, Gesundheit, Netzwerk, Kontrolle (+) · Depression (−)", "punkte": [{"ober": "Nähe zum Tod", "unter": ["terminaler Abfall der Zufriedenheit 3–5 J. vor dem Tod"], "syn": ["nähe zum tod", "terminal"]}, {"ober": "Körperliche/kognitive Gesundheit", "unter": ["Funktionsfähigkeit (von Verlustrisiken betroffen) — positiv"], "syn": ["gesundheit", "funktionsfähigkeit"]}, {"ober": "Qualität des sozialen Netzwerks", "unter": ["subjektiv wahrgenommene Qualität — positiv"], "syn": ["netzwerk", "sozial"]}, {"ober": "Wahrgenommene internale Kontrolle", "unter": ["positiv"], "syn": ["internale kontrolle", "kontrolle"]}, {"ober": "Depressive Symptomatik", "unter": ["negativer Prädiktor"], "syn": ["depressiv", "depression", "negativ"]}]}, {"id": "st60", "thema": "VL12 · Messung", "bereich": "Lebenszufriedenheit", "modell": "Messinstrumente der Lebenszufriedenheit", "anker": 0, "mnemo": "SWLS (5 Items/7) · L-1 (1 Item/11)", "punkte": [{"ober": "SWLS (Satisfaction with Life Scale)", "unter": ["5 Items, 7-stufiges Antwortformat"], "syn": ["swls", "satisfaction with life", "5 items"]}, {"ober": "Kurzskala L-1", "unter": ["1 Item, 11-stufige Ratingskala (0–10)"], "syn": ["l-1", "kurzskala", "1 item", "11-stufig"]}]}, {"id": "st61", "thema": "VL13 · Definitionen", "bereich": "Persönlichkeit", "modell": "Selbst vs. Persönlichkeit (Schneider & Lindenberger)", "anker": 0, "mnemo": "Persönlichkeit = stabile Eigenschaften · Selbst = Wissen über sich + Prozesse", "punkte": [{"ober": "Persönlichkeit", "unter": ["Gesamtheit der Eigenschaften/Verhaltensdispositionen", "zeitlich relativ stabil + situationsübergreifend"], "syn": ["persoenlichkeit", "eigenschaften", "stabil"]}, {"ober": "Selbst", "unter": ["Wissen/Annahmen über die eigene Person", "+ die kognitiven Prozesse, die es hervorbringen"], "syn": ["selbst", "selbstwissen", "annahmen"]}]}, {"id": "st62", "thema": "VL13 · Selbst", "bereich": "Persönlichkeit", "modell": "Inhalte des Selbst", "anker": 0, "mnemo": "Persönlichkeit · Gruppenzugehörigkeit · Biografie · Ziele · bewertende Aspekte", "punkte": [{"ober": "Persönlichkeit", "unter": [], "syn": ["persoenlichkeit"]}, {"ober": "Gruppenzugehörigkeit", "unter": [], "syn": ["gruppenzugehoerigkeit", "gruppe"]}, {"ober": "Biografie", "unter": [], "syn": ["biografie", "lebensgeschichte"]}, {"ober": "Ziele", "unter": [], "syn": ["ziele"]}, {"ober": "Bewertende Aspekte", "unter": ["Grundlage für Selbstbewertung & Zukunftsbilder"], "syn": ["bewertende aspekte", "bewertung", "selbstwert"]}]}, {"id": "st63", "thema": "VL13 · Big Five", "bereich": "Persönlichkeit", "modell": "Die Big Five (Costa & McCrae, 1987)", "anker": 0, "mnemo": "Neurotizismus · Extraversion · Offenheit · Gewissenhaftigkeit · Verträglichkeit", "punkte": [{"ober": "Neurotizismus", "unter": ["stabil/ruhig ↔ ängstlich/launisch"], "syn": ["neurotizismus", "emotionale stabilitaet", "neuroticism"]}, {"ober": "Extraversion", "unter": ["gesprächig/energiegeladen ↔ ruhig/zurückhaltend"], "syn": ["extraversion"]}, {"ober": "Offenheit für Erfahrungen", "unter": ["kreativ/intellektuell ↔ einfach/oberflächlich"], "syn": ["offenheit", "openness"]}, {"ober": "Gewissenhaftigkeit", "unter": ["organisiert/verantwortungsbewusst ↔ sorglos/leichtsinnig"], "syn": ["gewissenhaftigkeit", "conscientiousness"]}, {"ober": "Verträglichkeit", "unter": ["mitfühlend/freundlich ↔ kalt/streitsüchtig"], "syn": ["vertraeglichkeit", "agreeableness"]}]}, {"id": "st64", "thema": "VL13 · Forschungsparadigmen", "bereich": "Persönlichkeit", "modell": "Drei Paradigmen der Persönlichkeitsentwicklung", "anker": 0, "mnemo": "Trait (Stabilität) · Umwelt (Veränderbarkeit) · Wechselwirkung (Mittelposition)", "punkte": [{"ober": "Trait-Ansatz (Costa & McCrae)", "unter": ["fünf Faktoren, biologisch/genetisch determiniert", "betont Stabilität"], "syn": ["trait", "costa", "mccrae", "stabilitaet"]}, {"ober": "Formung durch die soziale Umwelt", "unter": ["betont Veränderbarkeit"], "syn": ["umwelt", "formung", "veraenderbarkeit"]}, {"ober": "Wechselwirkung von Person und Umwelt", "unter": ["Mittelposition, wechselseitige Beeinflussung"], "syn": ["wechselwirkung", "mittelposition", "interaktion"]}]}, {"id": "st65", "thema": "VL13 · Person-Umwelt", "bereich": "Persönlichkeit", "modell": "Person-Umwelt-Transaktionen", "anker": 0, "mnemo": "reaktiv · evokativ · proaktiv", "punkte": [{"ober": "Reaktiv", "unter": ["unterschiedliche Personen reagieren auf dieselbe Umwelt verschieden"], "syn": ["reaktiv"]}, {"ober": "Evokativ", "unter": ["eigenes Verhalten ruft bei anderen Reaktionen hervor"], "syn": ["evokativ"]}, {"ober": "Proaktiv", "unter": ["Person sucht sich Umwelten aus oder stellt sie her"], "syn": ["proaktiv"]}]}, {"id": "st66", "thema": "VL13 · Stabilität", "bereich": "Persönlichkeit", "modell": "Big-Five-Veränderungen über die Lebensspanne", "anker": 0, "mnemo": "Erwachsene: G+V ↑, O ↓ · Rangstabilität r ↑ (Roberts & DelVecchio)", "punkte": [{"ober": "Reifungsprinzip (Erwachsenenalter)", "unter": ["Gewissenhaftigkeit + Verträglichkeit ↑", "Offenheit ↓"], "syn": ["reifung", "gewissenhaftigkeit", "vertraeglichkeit"]}, {"ober": "Rangstabilität (r)", "unter": ["relative Position in der Gruppe", "nimmt über das Leben zu (Roberts & DelVecchio 2000)"], "syn": ["rangstabilitaet", "rangstabilität", "roberts"]}, {"ober": "Niveaustabilität", "unter": ["mittlere Ausprägung verändert sich im Alter immer weniger"], "syn": ["niveaustabilitaet", "niveau", "mittelwert"]}]}, {"id": "st67", "thema": "VL13 · Temperament", "bereich": "Persönlichkeit", "modell": "Frühkindliches Temperament (3 Komponenten)", "anker": 0, "mnemo": "Qualität/Intensität Emotionen · emot. Selbstregulation · Aktivierungsniveau Aufmerksamkeit", "punkte": [{"ober": "Qualität und Intensität emotionaler Reaktionen", "unter": [], "syn": ["qualitaet", "intensitaet", "emotionale reaktionen"]}, {"ober": "Emotionale Selbstregulation", "unter": [], "syn": ["selbstregulation", "emotionale selbstregulation"]}, {"ober": "Aktivierungsniveau der Aufmerksamkeit", "unter": [], "syn": ["aktivierungsniveau", "aufmerksamkeit"]}]}, {"id": "st68", "thema": "VL14 · Angst vor dem Tod", "bereich": "Tod & Sterben", "modell": "Drei Ängste vor Sterben und Tod", "anker": 0, "mnemo": "SCHMERZ · EINSAMKEIT · DANACH", "punkte": [{"ober": "Angst vor schmerzhaftem Sterben", "unter": [], "syn": ["schmerz", "schmerzhaft", "schmerzhaftes sterben"]}, {"ober": "Angst vor Sterben in Einsamkeit", "unter": [], "syn": ["einsamkeit", "einsam", "allein"]}, {"ober": "Angst vor dem Danach", "unter": [], "syn": ["danach", "jenseits", "nach dem tod"]}]}, {"id": "st69", "thema": "VL14 · Angst vor dem Tod", "bereich": "Tod & Sterben", "modell": "Prozessmodell der Todesangst (modifiziert nach Cicirelli, 2003)", "anker": 1, "mnemo": "3 Auslöser → begrenzte Lebenszeit → Angst ↑ → Bewältigung/Sinnsuche → Angst ↓/Akzeptanz ↑", "punkte": [{"ober": "Drei Auslöser", "unter": ["Annäherung an die durchschnittliche Lebenserwartung", "Verschlechterung der Gesundheit und Leistungsfähigkeit", "Konfrontation mit dem Tod anderer Menschen"], "syn": ["ausloeser", "triggerfaktoren"]}, {"ober": "Wahrnehmung der begrenzten verbleibenden Lebenszeit", "unter": ["mitbeeinflusst durch biologischen Überlebenstrieb", "mitbeeinflusst durch Verantwortung für Andere"], "syn": ["begrenzte lebenszeit", "verbleibende lebenszeit", "wahrnehmung"]}, {"ober": "Zunahme der Angst vor dem Tod", "unter": [], "syn": ["zunahme der angst", "angst steigt"]}, {"ober": "Bewältigung, Sinnsuche", "unter": [], "syn": ["bewaeltigung", "sinnsuche", "coping"]}, {"ober": "Abnahme der Angst, Zunahme der Akzeptanz", "unter": [], "syn": ["abnahme der angst", "akzeptanz"]}]}, {"id": "st70", "thema": "VL14 · Sterben", "bereich": "Tod & Sterben", "modell": "Stufenmodell des Sterbens (Kübler-Ross, 5 Stufen)", "anker": 0, "mnemo": "Nie Zu Viel Denken Zugestehen: Nichtwahrhaben · Zorn · Verhandeln · Depression · Zustimmung", "punkte": [{"ober": "1. Nichtwahrhabenwollen", "unter": ["Diagnose = vermeintlicher Irrtum", "gibt Zeit zur allmählichen Verarbeitung"], "syn": ["nichtwahrhabenwollen", "verleugnung", "unglaube"]}, {"ober": "2. Zorn", "unter": ["Erkrankung als ungerecht empfunden", "richtet sich auf Gesunde, Ärzte, Schicksal"], "syn": ["zorn", "wut", "aerger"]}, {"ober": "3. Verhandeln", "unter": ["Tod hinausschieben, bis etwas Bestimmtes erreicht ist"], "syn": ["verhandeln", "feilschen"]}, {"ober": "4. Depression", "unter": ["Verschlechterungen, Verhandeln hilft nicht"], "syn": ["depression", "depressive verstimmung"]}, {"ober": "5. Zustimmung", "unter": ["Zeit der letzten Ruhe vor dem Tod"], "syn": ["zustimmung", "akzeptanz", "annahme"]}]}, {"id": "st71", "thema": "VL14 · Sterben", "bereich": "Tod & Sterben", "modell": "Kritik am Stufenmodell von Kübler-Ross (4 Punkte)", "anker": 0, "mnemo": "Fallarbeit · Methode? · Kampfgeist fehlt · Universalität revidiert", "punkte": [{"ober": "Basis: Fallarbeit mit 200 terminal Erkrankten (überwiegend Krebs)", "unter": [], "syn": ["fallarbeit", "200 patienten", "krebspatienten"]}, {"ober": "Methodisches Vorgehen unzureichend dokumentiert", "unter": [], "syn": ["methode", "dokumentation", "methodisch"]}, {"ober": "Weitere Reaktionsweisen fehlen (z. B. Kampfgeist)", "unter": [], "syn": ["kampfgeist", "reaktionsweisen fehlen"]}, {"ober": "Abfolge als universell erachtet — musste revidiert werden", "unter": [], "syn": ["universell", "abfolge", "revidiert"]}]}, {"id": "st72", "thema": "VL14 · Sterben", "bereich": "Tod & Sterben", "modell": "Fünf Reaktionsweisen Sterbender (Kruse, 1995 — Längsschnitt)", "anker": 1, "mnemo": "Sinn 18 · Akzeptanz+Suche 24 · Nichtwahrhaben 16 · Resignation 20 · Depression→Hinnahme 22", "punkte": [{"ober": "a) Linderung durch neuen Lebenssinn / wichtige Aufgabe (18 %)", "unter": [], "syn": ["lebenssinn", "sinnfindung", "aufgabe"]}, {"ober": "b) Zunehmende Akzeptanz + Suche nach Möglichkeiten des Lebens (24 %)", "unter": [], "syn": ["akzeptanz", "suche nach moeglichkeiten"]}, {"ober": "c) Bedrohung nicht ins Zentrum treten lassen, Nichtwahrhabenwollen (16 %)", "unter": [], "syn": ["nichtwahrhabenwollen", "verdraengung"]}, {"ober": "d) Zunehmende Resignation und Verbitterung (20 %)", "unter": [], "syn": ["resignation", "verbitterung"]}, {"ober": "e) Phasen tiefer Depression bis zur Hinnahme (22 %)", "unter": ["vgl. Stufenmodell von Kübler-Ross"], "syn": ["depression", "hinnahme"]}]}, {"id": "st73", "thema": "VL14 · Todesangst", "bereich": "Tod & Sterben", "modell": "Korrelate der Todesangst bei Älteren (Fortner & Neimeyer, 1999)", "anker": 0, "mnemo": "positiv: Institution/Psyche/Körper · negativ: Wohlbefinden · ns: Alter/Geschlecht/Religion", "punkte": [{"ober": "Signifikant positiv", "unter": ["Institutionalisierung (≈ +.33, stärkstes Korrelat)", "psychische Probleme (≈ +.28)", "körperliche Einschränkung (≈ +.17)"], "syn": ["positiv", "positive korrelate"]}, {"ober": "Signifikant negativ", "unter": ["positives Befinden (≈ −.30)"], "syn": ["negativ", "negative korrelate"]}, {"ober": "Nicht signifikant", "unter": ["Alter", "weibliches Geschlecht", "Religiosität"], "syn": ["nicht signifikant", "null", "ns"]}]}, {"id": "st74", "thema": "VL14 · Verwitwung", "bereich": "Tod & Sterben", "modell": "Verwitwung: Belastungsfaktoren (4)", "anker": 0, "mnemo": "Person weg · Geld knapper · Aufgaben übernehmen · Risiko ungleich", "punkte": [{"ober": "Verlust der emotional nahestehenden Person und des wichtigsten Kommunikationspartners", "unter": [], "syn": ["kommunikationspartner", "verlust", "nahestehende person"]}, {"ober": "Einschränkungen im verfügbaren Einkommen", "unter": [], "syn": ["einkommen", "finanzen", "geld"]}, {"ober": "Übernahme der Aktivitäten, für die die Partner*in zuständig war", "unter": [], "syn": ["aufgaben", "aktivitaeten", "uebernahme"]}, {"ober": "Geschlechtsunterschiede im Verwitwungsrisiko", "unter": [], "syn": ["geschlechtsunterschiede", "risiko"]}]}, {"id": "st75", "thema": "VL14 · Suizid", "bereich": "Tod & Sterben", "modell": "Suizid über die Lebensspanne: Rate + Motive", "anker": 0, "mnemo": "Rate: Alter ↑ · Männer > Frauen · Männer ab 60 steil — Motive: unerträgliche Situation · Depression", "punkte": [{"ober": "Suizidrate", "unter": ["steigt mit dem Lebensalter", "bei Männern höher als bei Frauen", "bei Männern nach dem 60. Lebensjahr besonders starker Anstieg"], "syn": ["suizidrate", "rate"]}, {"ober": "Suizidmotive", "unter": ["unerträglich und unveränderlich erlebte Situation beenden (Einsamkeit, Schmerzen, Hilfsbedürftigkeit)", "Depression"], "syn": ["motive", "suizidmotive"]}]}, {"id": "st76", "thema": "VL14 · Sterbendes Gehirn", "bereich": "Tod & Sterben", "modell": "Das sterbende Gehirn (Vicente et al., 2022) — Kernbefunde", "anker": 0, "mnemo": "87-Jähriger, 30 s vor/nach · absolut ↓ · relativ Gamma ↑ · Gamma×Alpha/Theta-Kopplung", "punkte": [{"ober": "Setting: EEG eines 87-jährigen Patienten, Herzstillstand während der Ableitung (30 s vor/nach analysiert)", "unter": [], "syn": ["setting", "87", "eeg", "herzstillstand"]}, {"ober": "Absolute Power nach Herzstillstand reduziert (Delta, Beta, Alpha, Gamma)", "unter": [], "syn": ["absolute power", "reduziert"]}, {"ober": "Relativer Gamma-Anteil erhöht", "unter": [], "syn": ["relativer gammaanteil", "gamma erhoeht", "relative gamma power"]}, {"ober": "Gamma an Alpha-/Theta-Rhythmen gekoppelt — auch nach Sistieren des Blutflusses", "unter": ["Muster wie bei Träumen, Erinnern, Meditieren (life recall)"], "syn": ["kopplung", "cross frequency coupling", "alpha", "theta"]}]}];
+var DAY = 86400000;
+
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+/* SRS — identisches Karten-Format wie Lernmodule/Quiz-Runner; Store-Key = Karten-ID */
+function stSched(id, rating){
+  var p=load(), now=Date.now();
+  var c=p[id]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  if(rating==='good'){ c.stability=Math.max(1,c.stability*2.5); c.due=now+Math.max(DAY,c.stability*DAY); c.state='review'; }
+  else if(rating==='part'){ c.stability=Math.max(1,c.stability*1.2); c.due=now+DAY; c.state='review'; }
+  else { c.lapses++; c.stability=1; c.due=now+600000; c.state='learning'; }
+  c.reps++; p[id]=c; save(p);
+}
+function stStats(){
+  var p=load(), now=Date.now(), learned=0, due=0;
+  ST.forEach(function(card){ var c=p[card.id]; if(c&&c.state!=='new'){ learned++; if(c.due<=now) due++; } });
+  return {learned:learned, due:due, total:ST.length};
+}
+function stIsOpen(id){ var c=load()[id]; return (!c||c.state==='new'||c.due<=Date.now()); }
+function _shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function _norm(s){ return (s||'').toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss').replace(/[^a-z0-9]+/g,' ').trim(); }
+function _cardById(id){ for(var i=0;i<ST.length;i++){ if(ST[i].id===id) return ST[i]; } return null; }
+var _tsAnchor={};   // key ('ts'+Position) -> zufaellig gewaehlter Anker-Index dieser Anzeige (Test-Modus)
+function _stateLabel(id){
+  var c=load()[id];
+  if(!c||c.state==='new') return 'neu';
+  if(c.due<=Date.now()) return 'fällig';
+  var d=Math.round((c.due-Date.now())/DAY);
+  return 'gelernt · wieder in '+(d<1?'<1':d)+' T';
+}
+
+/* ── Themenbereich + Farbe (Feld card.bereich, sonst aus card.thema abgeleitet) ── */
+function stBereich(card){ if(card&&card.bereich) return card.bereich; var t=(card&&card.thema)||''; if(/^VT/i.test(t)) return 'Vertiefung'; var m=t.match(/^VL\d+/i); return m?m[0].toUpperCase():'Sonstige'; }
+function stChipLabel(thema){ return (thema||'').replace(/\s*\(.*$/,''); }
+var ST_BEREICHE=(function(){ var seen=[],o={}; ST.forEach(function(c){ var b=stBereich(c); if(!o[b]){o[b]=1;seen.push(b);} }); return seen; })();
+function stBereichColor(b){ var n=ST_BEREICHE.length||1; var i=ST_BEREICHE.indexOf(b); if(i<0)i=0; var h=Math.round(i*360/n); return {bg:'hsl('+h+',45%,20%)', fg:'hsl('+h+',75%,80%)', bd:'hsl('+h+',40%,40%)'}; }
+function stChip(card){ var c=stBereichColor(stBereich(card)); return '<span class="st-chip" style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'">'+stChipLabel(card.thema)+'</span>'; }
+function stCountBereich(b){ var n=0; ST.forEach(function(c){ if(stBereich(c)===b) n++; }); return n; }
+
+/* ── gemeinsame Bausteine ── */
+function stStructHTML(card){
+  var h='<ul class="st-list">';
+  card.punkte.forEach(function(p){
+    h+='<li><strong>'+p.ober+'</strong>';
+    if(p.unter&&p.unter.length){ h+='<ul>'+p.unter.map(function(u){return '<li>'+u+'</li>';}).join('')+'</ul>'; }
+    h+='</li>';
+  });
+  h+='</ul>';
+  if(card.mnemo) h+='<div class="st-mnemo">🧠 <strong>Merkhilfe:</strong> '+card.mnemo+'</div>';
+  return h;
+}
+function stRateRow(id, key, mode){
+  return '<div class="st-rate" id="rt'+key+'">'
+    + '<button class="st-rbtn good" onclick="stRate(\''+id+'\',\'good\',\''+key+'\',\''+mode+'\')">✅ sicher</button>'
+    + '<button class="st-rbtn part" onclick="stRate(\''+id+'\',\'part\',\''+key+'\',\''+mode+'\')">🟡 teilweise</button>'
+    + '<button class="st-rbtn bad" onclick="stRate(\''+id+'\',\'bad\',\''+key+'\',\''+mode+'\')">❌ nochmal</button>'
+  + '</div>';
+}
+function stReveal(btn,key){ var a=document.getElementById('rev'+key); var r=document.getElementById('rt'+key); if(a)a.classList.add('shown'); if(r)r.classList.add('shown'); btn.style.display='none'; }
+function stRate(id,rating,key,mode){
+  stSched(id,rating);
+  var s=document.getElementById('st'+key); if(s) s.textContent='Status: '+_stateLabel(id);
+  var R=RUN[mode];
+  if(R && R.active){
+    if(rating==='good'){ delete R.unsolved[id]; }   // gelöst → fliegt aus der Wiederholungsrunde
+    setTimeout(function(){ stNext(mode); }, 250);
+  }
+}
+
+/* ── Karten ── */
+function stCardRecall(card, idx){
+  var key='rc'+idx;
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-modell">'+card.modell+'</div>'
+    + '<div class="st-q">Rufe die Struktur ab — '+card.punkte.length+' Hauptpunkte. Nenne sie (mit Unterpunkten), dann aufdecken.</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Struktur aufdecken</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'rc')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCardTest(card, idx){
+  var key='ts'+idx;
+  var anchor = card.punkte.length>1 ? Math.floor(Math.random()*card.punkte.length) : 0;
+  _tsAnchor[key]=anchor;
+  var rows='', rn=0;
+  card.punkte.forEach(function(p,i){
+    if(i===anchor) return;
+    rows+='<div class="st-row"><input class="st-in" id="in'+key+'_'+rn+'" autocomplete="off" oninput="stCheck(\''+key+'\',\''+card.id+'\')" placeholder="Punkt eintippen …"><span class="st-ok" id="ok'+key+'_'+rn+'"></span></div>';
+    rn++;
+  });
+  return '<div class="st-card">'
+    + (card.thema?stChip(card):'')
+    + '<div class="st-modell">'+card.modell+'</div>'
+    + '<div class="st-q">Nenne die übrigen '+rn+' Punkte:</div>'
+    + '<div class="st-anchor">Vorgegeben: <strong>'+card.punkte[anchor].ober+'</strong></div>'
+    + rows
+    + '<div class="st-sum" id="sum'+key+'">0 / '+rn+' erkannt</div>'
+    + '<button class="btn btn-ghost" onclick="stReveal(this,\''+key+'\')">Lösung anzeigen</button>'
+    + '<div class="st-reveal" id="rev'+key+'">'+stStructHTML(card)+'</div>'
+    + stRateRow(card.id, key, 'ts')
+    + '<div class="st-state" id="st'+key+'">Status: '+_stateLabel(card.id)+'</div>'
+  + '</div>';
+}
+function stCheck(key, cardId){
+  var card=_cardById(cardId); if(!card) return;
+  var anchor=(key in _tsAnchor?_tsAnchor[key]:(card.anker!=null?card.anker:0)); if(anchor<0||anchor>=card.punkte.length) anchor=0;
+  var pool=[]; card.punkte.forEach(function(p,i){ if(i===anchor) return; pool.push({acc:[p.ober].concat(p.syn||[]).map(_norm), used:false}); });
+  var got=0;
+  for(var r=0;r<pool.length;r++){
+    var el=document.getElementById('in'+key+'_'+r); var mark=document.getElementById('ok'+key+'_'+r);
+    var v=el?_norm(el.value):''; var hit=false;
+    if(v.length>=3){
+      for(var j=0;j<pool.length;j++){ if(pool[j].used) continue;
+        if(pool[j].acc.some(function(a){ return a && (a===v || (a.length>=4 && v.indexOf(a)>=0) || (v.length>=4 && a.indexOf(v)>=0)); })){ pool[j].used=true; hit=true; break; }
+      }
+    }
+    if(mark){ mark.textContent=hit?'✓':''; mark.className='st-ok'+(hit?' hit':''); }
+    if(hit) got++;
+  }
+  var sum=document.getElementById('sum'+key); if(sum) sum.textContent=got+' / '+pool.length+' erkannt';
+}
+
+/* ── Runner (zwei Modi: rc = Recall, ts = Test) ──
+   Eine Sitzung wiederholt automatisch alle noch nicht mit „✅ sicher" bewerteten
+   Modelle in immer neuen Runden, bis entweder alle gelöst sind oder die Person
+   selbst auf „■ Beenden" drückt. */
+var RUN={ rc:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle',unsolved:{},round:1,justFinished:false}, ts:{order:[],pos:0,shuffle:false,dueOnly:false,active:false,bereich:'alle',unsolved:{},round:1,justFinished:false} };
+function stToggleShuffle(m){ RUN[m].shuffle=!RUN[m].shuffle; stStart(m); }
+function stToggleDue(m){ RUN[m].dueOnly=!RUN[m].dueOnly; stStart(m); }
+function stSetBereich(m,b){ RUN[m].bereich=b; if(RUN[m].active) stStart(m); else stRender(m); }
+function stResetAll(){ var p=load(); ST.forEach(function(c){delete p[c.id];}); save(p); RUN.rc.active=false; RUN.ts.active=false; stRender('rc'); stRender('ts'); }
+function _indexById(id){ for(var i=0;i<ST.length;i++){ if(ST[i].id===id) return i; } return -1; }
+function stStart(m){
+  var idx=ST.map(function(_,i){return i;});
+  if(RUN[m].bereich && RUN[m].bereich!=='alle') idx=idx.filter(function(i){return stBereich(ST[i])===RUN[m].bereich;});
+  if(RUN[m].dueOnly) idx=idx.filter(function(i){return stIsOpen(ST[i].id);});
+  var unsolved={}; idx.forEach(function(i){ unsolved[ST[i].id]=true; });
+  if(RUN[m].shuffle) idx=_shuffle(idx);
+  RUN[m].order=idx; RUN[m].pos=0; RUN[m].active=true; RUN[m].unsolved=unsolved; RUN[m].round=1; RUN[m].justFinished=false;
+  stRender(m);
+}
+function stNext(m){
+  var R=RUN[m];
+  if(R.pos<R.order.length-1){ R.pos++; stRender(m); return; }
+  // Rundenende erreicht → offene (nicht „✅ sicher" bewertete) Modelle erneut anzeigen
+  var offene=R.order.filter(function(i){ return R.unsolved[ST[i].id]; });
+  if(offene.length){
+    R.order = RUN[m].shuffle ? _shuffle(offene) : offene;
+    R.pos=0; R.round++;
+  } else {
+    R.active=false; R.justFinished=true;
+  }
+  stRender(m);
+}
+function stPrev(m){ var R=RUN[m]; if(R.pos>0){R.pos--; stRender(m);} }
+function stRender(m){
+  var el=document.getElementById(m==='rc'?'stRunnerRC':'stRunnerTS'); if(!el) return;
+  var R=RUN[m], st=stStats();
+  var title=(m==='rc'?'① Lernen — Struktur frei abrufen':'② Test — Punkte selbst eintippen');
+  if(!R.active){
+    el.innerHTML='<div class="st-card"><div class="st-q">'+title+'</div>'
+      +(R.justFinished?'<div class="qr-stat">🎉 Alle Modelle in dieser Sitzung sicher gewusst!</div>':'')
+      +'<div class="qr-stat">'+st.learned+'/'+st.total+' geübt · '+st.due+' offen/fällig'+((R.bereich&&R.bereich!=='alle')?' · Filter: '+R.bereich+' ('+stCountBereich(R.bereich)+' Modelle)':'')+'</div>'
+      +'<div class="st-filter"><span class="st-flabel">Themenbereich filtern:</span>'
+        +'<button class="st-fbtn'+(R.bereich==='alle'?' on':'')+'" onclick="stSetBereich(\''+m+'\',\'alle\')">Alle ('+ST.length+')</button>'
+        +ST_BEREICHE.map(function(b){var on=(R.bereich===b);var c=stBereichColor(b);return '<button class="st-fbtn'+(on?' on':'')+'"'+(on?' style="background:'+c.bg+';color:'+c.fg+';border-color:'+c.bd+'"':'')+' onclick="stSetBereich(\''+m+'\',\''+b+'\')">'+b+' ('+stCountBereich(b)+')</button>';}).join('')
+      +'</div>'
+      +'<div class="qr-modebar">'
+        +'<button class="nav-btn'+(R.shuffle?' active':'')+'" onclick="stToggleShuffle(\''+m+'\')">🔀 Mischen: '+(R.shuffle?'AN':'aus')+'</button>'
+        +'<button class="nav-btn'+(R.dueOnly?' active':'')+'" onclick="stToggleDue(\''+m+'\')">🔁 Nur offene & fällige: '+(R.dueOnly?'AN':'aus')+'</button>'
+      +'</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-accent" onclick="stStart(\''+m+'\')">▶ starten</button>'
+      +'<button class="btn btn-ghost" onclick="stResetAll()">↺ Fortschritt zurücksetzen</button></div></div>';
+    return;
+  }
+  if(!R.order.length){
+    el.innerHTML='<div class="st-card"><div class="st-q">🎉 Nichts offen!</div>'
+      +'<div class="qr-stat">Im Modus „nur offene & fällige" ist aktuell nichts fällig.</div>'
+      +'<div class="qr-ctrl"><button class="btn btn-ghost" onclick="stToggleDue(\''+m+'\')">Alle Modelle zeigen</button></div></div>';
+    return;
+  }
+  var i=R.order[R.pos], card=ST[i]; var pct=Math.round(R.pos/R.order.length*100);
+  var rundeLabel=(R.round>1?'Runde '+R.round+' · nur noch offene · ':'');
+  el.innerHTML='<div class="qr-stat">'+rundeLabel+'Modell '+(R.pos+1)+' / '+R.order.length+'</div>'
+    +'<div class="qr-prog"><div style="width:'+pct+'%"></div></div>'
+    + (m==='rc'?stCardRecall(card,R.pos):stCardTest(card,R.pos))
+    +'<div class="qr-ctrl">'
+      +(R.pos>0?'<button class="btn btn-ghost" onclick="stPrev(\''+m+'\')">← Zurück</button>':'')
+      +'<button class="btn btn-ghost" onclick="stNext(\''+m+'\')">Überspringen →</button>'
+      +'<button class="btn btn-ghost" onclick="RUN.'+m+'.active=false;RUN.'+m+'.justFinished=false;stRender(\''+m+'\')">■ Beenden</button>'
+    +'</div>';
+}
+
+(function(){ stRender('rc'); stRender('ts'); })();
+
+function goToST(idx){
+  var secs=document.querySelectorAll('.section'); var btns=document.querySelectorAll('.nav-btn[data-sec]');
+  secs.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  btns.forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+  window.scrollTo(0,0);
+}
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>

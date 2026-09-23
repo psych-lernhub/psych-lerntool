@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>M11a Anwendungstrainer 03 – Faktorenanzahl, Rotation und Itemselektion</title>
+<style>
+:root{--bg:#f4f7fb;--surface:#fff;--surface-2:#eef3f9;--text:#172033;--muted:#5b667a;--line:#cad4e2;--brand:#174ea6;--brand-2:#0b6b5b;--good:#146c43;--bad:#a32323;--warn:#8a5a00;--focus:#ffbf47;--shadow:0 10px 28px rgba(27,45,78,.10);--radius:16px}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1724;--surface:#172235;--surface-2:#202e45;--text:#eef4ff;--muted:#b7c2d3;--line:#3a4a63;--brand:#83b4ff;--brand-2:#70d7c2;--good:#72d69f;--bad:#ff9898;--warn:#ffd17d;--shadow:none}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--brand)}
+.skip{position:absolute;left:-9999px;top:0}.skip:focus{left:12px;top:12px;z-index:99;background:var(--surface);padding:10px;border:3px solid var(--focus)}
+.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-right:1px solid var(--line);padding:22px 18px}.brand{font-weight:800;font-size:1.08rem;margin-bottom:4px}.subtitle{color:var(--muted);font-size:.9rem;margin-bottom:18px}.progress-wrap{margin:14px 0 20px}.progress-label{display:flex;justify-content:space-between;font-size:.87rem;color:var(--muted);margin-bottom:6px}.progress{height:10px;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;overflow:hidden}.progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .25s ease}.nav{display:grid;gap:7px}.nav button{width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--text);padding:10px 11px;border-radius:10px}.nav button:hover,.nav button[aria-current="page"]{background:var(--surface-2);border-color:var(--line)}.nav small{display:block;color:var(--muted);margin-top:2px}.tools{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);display:grid;gap:8px}.btn{border:1px solid var(--line);border-radius:10px;padding:9px 13px;background:var(--surface);color:var(--text);font-weight:650}.btn:hover{background:var(--surface-2)}.btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}@media(prefers-color-scheme:dark){.btn-primary{color:#07111f}}.btn-danger{color:var(--bad)}
+main{min-width:0;padding:30px clamp(18px,4vw,58px) 70px}.page{display:none;max-width:1080px;margin:0 auto}.page.active{display:block}.hero{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:22px;padding:clamp(24px,4vw,46px);box-shadow:var(--shadow)}h1{font-size:clamp(2rem,4vw,3.4rem);line-height:1.08;margin:.15em 0 .35em}h2{font-size:clamp(1.55rem,2.6vw,2.2rem);margin:.2em 0 .5em}h3{margin:.2em 0 .45em}.eyebrow{font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--brand)}.lead{font-size:1.12rem;max-width:72ch;color:var(--muted)}.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.pill,.source{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:99px;padding:5px 9px;background:var(--surface);font-size:.82rem}.source{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}.card p:last-child{margin-bottom:0}.callout{border-left:5px solid var(--brand);background:var(--surface-2);padding:14px 16px;border-radius:0 12px 12px 0;margin:18px 0}.callout.warn{border-left-color:var(--warn)}.formula{font:600 1.16rem ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface-2);border:1px solid var(--line);padding:13px 15px;border-radius:12px;overflow:auto}.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:18px}.section-count{white-space:nowrap;color:var(--muted);font-size:.9rem}.theory{margin:15px 0 24px}.theory summary{font-weight:750;cursor:pointer}.task-list{display:grid;gap:18px}.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}.task.done{border-color:var(--good)}.task-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.task-kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--brand)}.task-title{font-weight:800;font-size:1.08rem;margin:3px 0 8px}.status{font-size:.82rem;font-weight:750;border-radius:99px;padding:4px 8px;background:var(--surface-2);white-space:nowrap}.status.good{color:var(--good)}.prompt{margin:13px 0}.options{display:grid;gap:9px;margin:14px 0}.option{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--surface)}.option:hover{background:var(--surface-2)}.option input{margin-top:4px;accent-color:var(--brand)}.answer-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:13px}.number-input{width:min(210px,100%);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text)}.hint-box{margin-top:12px}.hint-box button{background:transparent;border:0;color:var(--brand);font-weight:700;padding:4px 0}.hint{display:none;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:7px}.feedback{display:none;margin-top:14px;padding:13px 14px;border-radius:11px;border:1px solid var(--line)}.feedback.show{display:block}.feedback.good{border-color:var(--good);background:color-mix(in srgb,var(--good) 10%,var(--surface))}.feedback.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 8%,var(--surface))}.feedback strong{display:block;margin-bottom:4px}.misconception{font-size:.88rem;color:var(--muted);margin-top:7px}.order-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}.order-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:var(--surface-2)}.order-controls{display:flex;gap:5px}.order-controls button{width:36px;height:36px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text)}
+.mini-table,.matrix-table,.match-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.92rem}.mini-table caption,.matrix-table caption,.match-table caption{text-align:left;font-weight:750;margin-bottom:7px}.mini-table th,.mini-table td,.matrix-table th,.matrix-table td,.match-table th,.match-table td{border:1px solid var(--line);padding:8px 9px;text-align:center}.mini-table th:first-child,.mini-table td:first-child,.match-table th:first-child,.match-table td:first-child{text-align:left}.matrix-wrap{overflow:auto;margin:14px 0}.matrix-table{min-width:520px;font-variant-numeric:tabular-nums}.matrix-table th{background:var(--surface-2)}.matrix-table td.diag{font-weight:750;background:var(--surface-2)}.matrix-table td.mirror{color:var(--muted)}.matrix-cell{width:100%;min-width:66px;border:0;background:transparent;color:var(--text);padding:8px;border-radius:7px;font-variant-numeric:tabular-nums}.matrix-cell:hover{background:var(--surface-2)}.matrix-cell[aria-pressed="true"]{background:var(--brand);color:#fff;font-weight:800}.match-table select{width:100%;min-width:150px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text)}
+.code{font:500 .9rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;background:#101826;color:#ecf5ff;border-radius:12px;padding:14px;overflow:auto;white-space:pre-wrap}.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:20px 0}.metric{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:17px}.metric b{font-size:1.65rem;display:block}.error-list{display:grid;gap:8px}.error-item{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}.footer-nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px}.hidden{display:none!important}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:820px){.app{display:block}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}.tools{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding-top:22px}.section-head{display:block}.section-count{margin-top:5px}}
+@media(max-width:520px){.nav,.tools{grid-template-columns:1fr}.task{padding:16px}.task-head{display:block}.status{display:inline-block;margin-top:6px}.footer-nav{flex-direction:column}.footer-nav .btn{width:100%}.matrix-table{min-width:460px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{.sidebar,.footer-nav,.answer-row,.hint-box{display:none!important}.app{display:block}main{padding:0}.page{display:block!important;break-before:page}.task{box-shadow:none;break-inside:avoid}}
+
+.scree-figure{margin:16px 0}.scree-chart{display:block;width:100%;max-width:760px;height:auto;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:8px}.scree-chart .axis,.scree-chart line{stroke:var(--muted);stroke-width:1}.scree-chart polyline{fill:none;stroke:var(--brand);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}.scree-chart circle{fill:var(--surface);stroke:var(--brand);stroke-width:3}.scree-chart text{fill:var(--text);font:13px system-ui,sans-serif}.scree-figure figcaption{color:var(--muted);font-size:.86rem;margin-top:5px}.loading-table td{font-variant-numeric:tabular-nums}.loading-table .loading-high{font-weight:850;background:color-mix(in srgb,var(--brand) 14%,var(--surface))}.eig-table{min-width:580px}.prompt code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface-2);padding:.08em .3em;border-radius:5px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Zum Hauptinhalt springen</a>
+<div class="app">
+<aside class="sidebar" aria-label="Modulnavigation">
+  <div class="brand">M11a Anwendungstrainer 03</div>
+  <div class="subtitle">Faktorenanzahl, Rotation und Itemselektion</div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Gesamtfortschritt</span><strong id="progressText">0 / 0</strong></div>
+    <div class="progress" role="progressbar" aria-label="Gesamtfortschritt" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressBar"></span></div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+  <div class="tools">
+    <button class="btn" id="exportBtn">Lernstand exportieren</button>
+    <button class="btn" id="importBtn">Lernstand importieren</button>
+    <input class="hidden" id="importFile" type="file" accept="application/json">
+    <button class="btn btn-danger" id="resetBtn">Lernstand zurücksetzen</button>
+  </div>
+</aside>
+<main id="main" tabindex="-1">
+  <div id="pages"></div>
+  <div id="live" class="sr-only" aria-live="polite"></div>
+</main>
+</div>
+<script>
+'use strict';
+const MODULE = {"id": "m11a-apptrainer-03-v1", "title": "Faktorenanzahl, Rotation und Itemselektion", "version": "1.0.0", "sections": [{"id": "start", "nav": "Start", "title": "Von Eigenwerten zur begründeten Testendform", "intro": true}, {"id": "workflow", "nav": "1 · Analyseweg", "title": "Den Weg von der Extraktion zur Itemauswahl ordnen", "theory": "Nach bestandener Eignungsprüfung folgt nicht sofort die endgültige Itemauswahl. Zunächst wird die Faktorenzahl aus inhaltlichen und formalen Kriterien begründet. Danach wird eine Lösung extrahiert, rotiert und inhaltlich interpretiert. Erst auf dieser Grundlage werden Items mehrkriterial ausgewählt."}, {"id": "eigen", "nav": "2 · Eigenwerte", "title": "Eigenwerte und Kaiser-Guttman korrekt verwenden", "theory": "Ein Eigenwert beschreibt in der PCA, wie viel Varianz eine Hauptkomponente erklärt. Bei m standardisierten Variablen summieren sich alle m Eigenwerte zu m. Das Kaiser-Guttman-Kriterium behält Komponenten mit Eigenwerten über 1 bei, gilt aber nur als Minimalkriterium und kann zu viele Faktoren nahelegen."}, {"id": "scree", "nav": "3 · Scree-Test", "title": "Den Knick lesen – ohne ihn zu überinterpretieren", "theory": "Beim Scree-Test wird der Verlauf der Eigenwerte visuell untersucht. Beibehalten werden typischerweise die Faktoren vor dem Übergang in den flacheren Geröllbereich. Der Knick kann jedoch mehrdeutig sein; deshalb ist der Scree-Test kein rein mechanisches Verfahren."}, {"id": "parallel", "nav": "4 · Parallelanalyse", "title": "Empirische Eigenwerte mit Zufallsdaten vergleichen", "theory": "Die Parallelanalyse vergleicht die empirischen Eigenwerte mit kritischen Eigenwerten aus simulierten Zufallsdaten gleicher Größe. Ein Faktor wird beibehalten, solange sein empirischer Eigenwert über dem zugehörigen kritischen Wert liegt. Auch dieses Kriterium wird gemeinsam mit Theorie und Interpretierbarkeit beurteilt."}, {"id": "rotation", "nav": "5 · Rotation", "title": "Rotation als Interpretationshilfe verstehen", "theory": "Rotation verändert die Darstellung der Faktorstruktur, um eine Einfachstruktur zu erreichen: hohe Ladung auf einem Faktor, möglichst geringe Ladungen auf den übrigen. Die insgesamt erklärte Varianz und die finalen Kommunalitäten bleiben bei einer Rotation gleich; die Varianz verteilt sich lediglich anders auf die Faktoren."}, {"id": "loadings", "nav": "6 · Ladungen", "title": "Hauptladungen, Kreuzladungen und Einfachstruktur lesen", "theory": "Faktorladungen beschreiben bei orthogonaler Rotation die Zusammenhänge zwischen Items und Faktoren. Für eine klare Zuordnung sollte ein Item auf dem Ziel­faktor hoch positiv und auf anderen Faktoren möglichst niedrig laden. Ein bloß hoher Wert genügt nicht, wenn ähnlich hohe Kreuzladungen auftreten."}, {"id": "fuerntratt", "nav": "7 · Fürntratt", "title": "Das Fürntratt-Kriterium sicher anwenden", "theory": "Nach dem Fürntratt-Kriterium soll die quadrierte Hauptladung mindestens 50 % der Kommunalität des Items ausmachen. Formal: a² ≥ h²/2. Das Kriterium prüft, ob der zugeordnete Faktor einen hinreichend großen Anteil der durch alle extrahierten Faktoren erklärten Itemvarianz trägt."}, {"id": "selection", "nav": "8 · Selektion", "title": "Eine Testendform mehrkriterial zusammenstellen", "theory": "Itemselektion verbindet Ladungsmuster, Kommunalität, inhaltliche Passung, Facettenabdeckung, Polungsverteilung und eine ungefähr ausgeglichene Itemzahl pro Faktor. Statistische Kennwerte unterstützen die Entscheidung, ersetzen aber nicht die inhaltliche Prüfung."}, {"id": "mastery", "nav": "9 · Abschluss", "title": "Kompetenzcheck: Eine Faktorlösung vollständig beurteilen", "theory": "Im Abschluss werden Faktorenzahl, Rotation, Ladungsmuster, Fürntratt-Kriterium und Itemauswahl zusammengeführt. Gefordert ist eine begründete Entscheidung – nicht die automatische Anwendung eines einzelnen Grenzwerts."}, {"id": "result", "nav": "Ergebnis", "title": "Lernstand und Fehlkonzeptprofil", "result": true}]};
+const tasks = [
+  {
+    "id": "workflow-1",
+    "section": "workflow",
+    "type": "order",
+    "title": "Vom EFA-Gate zur Testendform",
+    "prompt": "Bringe die Arbeitsschritte in eine fachlich sinnvolle Reihenfolge.",
+    "items": [
+      "Eignung der Korrelationsmatrix bestätigen",
+      "Faktorenzahl aus Theorie und formalen Kriterien begründen",
+      "Lösung mit der gewählten Faktorenzahl extrahieren",
+      "Faktorlösung rotieren",
+      "Faktoren anhand der hoch ladenden Items inhaltlich deuten",
+      "Haupt- und Kreuzladungen sowie Kommunalitäten prüfen",
+      "Items unter statistischen und inhaltlichen Kriterien auswählen",
+      "Nach der Selektion die Skalen erneut prüfen"
+    ],
+    "start": [
+      4,
+      1,
+      6,
+      0,
+      3,
+      7,
+      2,
+      5
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "hints": [
+      "Beginne mit dem EFA-Gate: Nur eine geeignete Korrelationsmatrix darf in die Extraktion eingehen.",
+      "Begründe danach die Faktorenzahl aus Theorie, Eigenwertverlauf und formalen Kriterien; sie legt das Modell für den nächsten Schritt fest.",
+      "Extrahiere erst jetzt die Lösung mit der gewählten Faktorenzahl und rotiere anschließend diese bereits extrahierte Lösung.",
+      "Nutze nach der Rotation zunächst die hoch ladenden Items, um jedem Faktor eine inhaltliche Bedeutung zu geben.",
+      "Prüfe dann für jedes Item Hauptladung, Kreuzladungen und Kommunalität innerhalb der interpretierten Struktur.",
+      "Die statistische und inhaltliche Itemauswahl folgt erst aus dieser Gesamtprüfung.",
+      "Nach einer tatsächlichen Selektion müssen Struktur und Skalenkennwerte der verkürzten Endform erneut geprüft werden."
+    ],
+    "explanation": "1. Zuerst wird die Eignung der Korrelationsmatrix bestätigt, weil ohne gemeinsame Varianz keine sinnvolle Faktorenlösung zu erwarten ist. 2. Danach wird die Faktorenzahl aus Theorie und formalen Kriterien begründet; sie bestimmt das zu extrahierende Modell. 3. Mit dieser Zahl wird die Faktorlösung extrahiert. 4. Die extrahierte Lösung wird rotiert, damit das Ladungsmuster interpretierbarer wird. 5. Nun werden die Faktoren anhand ihrer hoch ladenden Items inhaltlich gedeutet. 6. Innerhalb dieser Deutung werden Hauptladungen, Kreuzladungen und Kommunalitäten jedes Items geprüft. 7. Erst daraus folgt die statistisch und inhaltlich begründete Itemauswahl. 8. Abschließend werden Faktorenstruktur und Skalenkennwerte der selektierten Endform erneut geprüft, weil die Entfernung von Items die Lösung verändern kann.",
+    "source": "PD04 EFA · Aufgabenblatt 3/4",
+    "misconception": "itemselektion_zu_frueh"
+  },
+  {
+    "id": "workflow-2",
+    "section": "workflow",
+    "type": "match",
+    "title": "Kriterium und Funktion zuordnen",
+    "prompt": "Ordne jedes Verfahren seiner primären Funktion zu.",
+    "rows": [
+      "Kaiser-Guttman-Kriterium",
+      "Scree-Test",
+      "Parallelanalyse",
+      "Rotation",
+      "Fürntratt-Kriterium"
+    ],
+    "options": [
+      "Faktorenzahl über Eigenwerte > 1 abschätzen",
+      "Knick im Eigenwerteverlauf visuell beurteilen",
+      "Empirische Eigenwerte mit simulierten Zufallswerten vergleichen",
+      "Ladungsmuster interpretierbarer machen",
+      "Anteil der Hauptladung an der Kommunalität prüfen"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hints": [
+      "Kaiser-Guttman arbeitet direkt mit der Schwelle Eigenwert > 1.",
+      "Der Scree-Test sucht einen Knick zwischen steilem Verlauf und flachem Geröllbereich.",
+      "Die Parallelanalyse benötigt simulierte Zufallsdaten als Vergleich für die empirischen Eigenwerte.",
+      "Rotation verändert die Darstellung des Ladungsmusters, bestimmt aber nicht die Faktorenzahl.",
+      "Fürntratt beurteilt ein einzelnes Item über Hauptladung und Kommunalität, nicht den Eigenwerteverlauf."
+    ],
+    "explanation": "Kaiser-Guttman wird der Abschätzung über Eigenwerte größer als 1 zugeordnet. Der Scree-Test gehört zur visuellen Suche nach dem Knick im Eigenwerteverlauf. Die Parallelanalyse vergleicht jeden empirischen Eigenwert mit einem positionsgleichen Zufallseigenwert. Rotation dient dazu, das Ladungsmuster einer bereits extrahierten Lösung interpretierbarer zu machen. Das Fürntratt-Kriterium prüft bei einem Item, ob seine Hauptladung einen hinreichend großen Anteil der Kommunalität trägt.",
+    "source": "PD04 EFA",
+    "misconception": "verfahren_vertauscht"
+  },
+  {
+    "id": "workflow-3",
+    "section": "workflow",
+    "type": "single",
+    "title": "Wozu dient die Faktorenanzahl?",
+    "prompt": "Warum muss die Faktorenzahl vor der endgültigen Itemselektion festgelegt werden?",
+    "options": [
+      "Weil Itemmittelwerte erst dann berechnet werden können.",
+      "Weil erst die gewählte Dimensionalität bestimmt, für welche Faktoren getrennt Items ausgewählt werden.",
+      "Weil eine Rotation ohne Cronbachs Alpha mathematisch unmöglich ist.",
+      "Weil danach keine inhaltliche Interpretation mehr erforderlich ist."
+    ],
+    "answer": 1,
+    "hints": [
+      "Die Testendform soll die angenommene oder empirisch gestützte Struktur abbilden."
+    ],
+    "explanation": "Die Zahl und Deutung der Faktoren legen fest, wie viele Skalen entstehen und welchem Zielbereich ein Item zugeordnet werden kann.",
+    "source": "PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "mittelwerte_mit_faktorzahl_verwechselt",
+      "2": "reliabilitaet_vor_rotation_verlangt",
+      "3": "inhaltliche_deutung_ignoriert"
+    }
+  },
+  {
+    "id": "workflow-4",
+    "section": "workflow",
+    "type": "order",
+    "title": "R-Arbeitsweg aus dem Projekt",
+    "prompt": "Ordne die Befehle entsprechend dem im Projekt verwendeten Analyseweg.",
+    "items": [
+      "fa.parallel(big5, fa = \"pc\")",
+      "principal(big5, nfactors = 5, rotate = \"varimax\")",
+      "print.psych(big5_efa, cut = .30, sort = TRUE)",
+      "Fürntratt-Kriterium für Zweifelsfälle prüfen",
+      "finale Items faktorweise festlegen"
+    ],
+    "start": [
+      2,
+      0,
+      4,
+      1,
+      3
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hints": [
+      "`fa.parallel(...)` steht am Anfang, weil dieser Aufruf die zu prüfende Faktorenzahl diagnostiziert.",
+      "Mit der begründeten Faktorenzahl wird anschließend `principal(..., nfactors = 5, rotate = \"varimax\")` gerechnet.",
+      "Erst die berechnete Lösung kann mit `print.psych(..., cut = .30, sort = TRUE)` übersichtlich ausgegeben und sortiert werden.",
+      "Nutze das Fürntratt-Kriterium danach nur für Items, deren Zuordnung im Ladungsmuster zweifelhaft bleibt.",
+      "Die finalen Items werden faktorweise erst nach Ausgabe und Prüfung der Zweifelsfälle festgelegt."
+    ],
+    "explanation": "Das Skript prüft zunächst die Faktorenzahl, berechnet anschließend die theoretisch erwartete Fünffaktorenlösung mit Varimax, macht die Ladungen lesbar und klärt Zweifelsfälle vor der finalen Auswahl.",
+    "source": "fa.R",
+    "misconception": "r_arbeitsweg_vertauscht"
+  },
+  {
+    "id": "eigen-1",
+    "section": "eigen",
+    "type": "number",
+    "title": "Kaiser-Guttman anwenden",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table eig-table\"><caption>Eigenwerte der unrotierten PCA</caption><thead><tr><th>Komponente</th><th scope=\"col\">1</th><th scope=\"col\">2</th><th scope=\"col\">3</th><th scope=\"col\">4</th><th scope=\"col\">5</th><th scope=\"col\">6</th><th scope=\"col\">7</th><th scope=\"col\">8</th></tr></thead><tbody><tr><th scope=\"row\">Eigenwert</th><td>4.10</td><td>2.20</td><td>1.15</td><td>0.86</td><td>0.71</td><td>0.55</td><td>0.27</td><td>0.16</td></tr></tbody></table></div><p>Wie viele Komponenten würden nach dem Kaiser-Guttman-Kriterium beibehalten?</p>",
+    "answer": 3,
+    "tolerance": 0,
+    "unit": "Komponenten",
+    "hints": [
+      "Gezählt werden ausschließlich Eigenwerte größer als 1."
+    ],
+    "explanation": "Die ersten drei Eigenwerte liegen über 1. Der vierte beträgt .86 und wird nach diesem Kriterium nicht beibehalten.",
+    "source": "Neu konstruierte Eigenwertfolge · PD04 EFA",
+    "misconception": "kaiser_grenze_falsch"
+  },
+  {
+    "id": "eigen-2",
+    "section": "eigen",
+    "type": "number",
+    "title": "Proportionale Varianz berechnen",
+    "prompt": "Eine PCA umfasst 8 standardisierte Items. Der erste Eigenwert beträgt 3.20. Wie viel Prozent der Gesamtvarianz erklärt die erste Komponente?",
+    "answer": 40,
+    "tolerance": 0.01,
+    "unit": "%",
+    "hints": [
+      "v = λ / m; anschließend mit 100 multiplizieren."
+    ],
+    "explanation": "3.20 / 8 = .40. Die erste Komponente erklärt somit 40 % der Gesamtvarianz.",
+    "source": "PD04 EFA",
+    "misconception": "eigenwert_varianz_falsch"
+  },
+  {
+    "id": "eigen-3",
+    "section": "eigen",
+    "type": "multi",
+    "title": "Aussagen zu Eigenwerten",
+    "prompt": "Welche Aussagen sind für eine PCA mit standardisierten Variablen richtig?",
+    "options": [
+      "Die Summe aller Eigenwerte entspricht der Anzahl der Variablen.",
+      "Ein Eigenwert beschreibt die durch eine Komponente erklärte Varianz.",
+      "Jeder Eigenwert über 0 muss als eigener Faktor behalten werden.",
+      "Das Kaiser-Guttman-Kriterium kann zu einer Überextraktion führen.",
+      "Ein Eigenwert von 2 erklärt bei 10 Variablen 50 % der Varianz."
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "hints": [
+      "Für die proportionale Varianz wird durch m geteilt."
+    ],
+    "explanation": "Option 1 ist richtig: Bei m standardisierten Variablen entspricht die Gesamtvarianz m, daher summieren sich alle Eigenwerte zu m. Option 2 ist richtig: Ein Eigenwert gibt die von einer Komponente erklärte Varianz an. Option 3 ist falsch: Ein positiver Eigenwert allein ist kein Behaltekriterium; nach Kaiser-Guttman gilt erst > 1, und auch dieses Kriterium wird ergänzt. Option 4 ist richtig, weil Kaiser-Guttman insbesondere bei vielen Variablen zu viele Faktoren nahe der Schwelle liefern kann. Option 5 ist falsch: Bei zehn standardisierten Variablen entsprechen 2/10 genau 20 % und nicht 50 % der Gesamtvarianz.",
+    "source": "PD04 EFA",
+    "misconception": "eigenwert_bedeutung_verwechselt"
+  },
+  {
+    "id": "eigen-4",
+    "section": "eigen",
+    "type": "single",
+    "title": "Grenze des Kaiser-Kriteriums",
+    "prompt": "Eine Lösung besitzt 12 Eigenwerte knapp über 1, obwohl nur wenige theoretisch sinnvolle Dimensionen erwartet werden. Welche Reaktion ist fachlich angemessen?",
+    "options": [
+      "Alle 12 Komponenten müssen zwingend übernommen werden.",
+      "Die Analyse ist sofort ungültig.",
+      "Kaiser-Guttman als Hinweis dokumentieren und Scree-Test, Parallelanalyse, Theorie und Interpretierbarkeit zusätzlich prüfen.",
+      "Alle Eigenwerte werden auf 1 gesetzt."
+    ],
+    "answer": 2,
+    "hints": [
+      "Das Kriterium ist kein alleiniger Entscheidungsautomat."
+    ],
+    "explanation": "Viele Eigenwerte knapp über 1 sind ein typischer Fall, in dem das Kaiser-Kriterium überextrahieren kann. Die Faktorenzahl wird mehrkriterial begründet.",
+    "source": "PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "kaiser_als_befehl",
+      "1": "abweichung_als_ungueltigkeit",
+      "3": "eigenwerte_manuell_veraendert"
+    }
+  },
+  {
+    "id": "scree-1",
+    "section": "scree",
+    "type": "number",
+    "title": "Klaren Knick identifizieren",
+    "promptHtml": "<figure class=\"scree-figure\"><svg class=\"scree-chart\" viewBox=\"0 0 660 285\" role=\"img\" aria-labelledby=\"scree-title\"><title id=\"scree-title\">Scree-Plot A: Eigenwerte 4.7, 2.55, 1.38, 0.82, 0.7, 0.61, 0.54, 0.47</title><line class=\"axis\" x1=\"54\" y1=\"20\" x2=\"54\" y2=\"243\"/><line class=\"axis\" x1=\"54\" y1=\"243\" x2=\"642\" y2=\"243\"/><g><line x1=\"49\" x2=\"54\" y1=\"243.0\" y2=\"243.0\"/><text x=\"45\" y=\"247.0\" text-anchor=\"end\">0</text></g><g><line x1=\"49\" x2=\"54\" y1=\"199.1\" y2=\"199.1\"/><text x=\"45\" y=\"203.1\" text-anchor=\"end\">1</text></g><g><line x1=\"49\" x2=\"54\" y1=\"155.1\" y2=\"155.1\"/><text x=\"45\" y=\"159.1\" text-anchor=\"end\">2</text></g><g><line x1=\"49\" x2=\"54\" y1=\"111.2\" y2=\"111.2\"/><text x=\"45\" y=\"115.2\" text-anchor=\"end\">3</text></g><g><line x1=\"49\" x2=\"54\" y1=\"67.3\" y2=\"67.3\"/><text x=\"45\" y=\"71.3\" text-anchor=\"end\">4</text></g><g><line x1=\"49\" x2=\"54\" y1=\"23.3\" y2=\"23.3\"/><text x=\"45\" y=\"27.3\" text-anchor=\"end\">5</text></g><g><line x1=\"49\" x2=\"54\" y1=\"-20.6\" y2=\"-20.6\"/><text x=\"45\" y=\"-16.6\" text-anchor=\"end\">6</text></g><polyline points=\"54.0,36.5 138.0,131.0 222.0,182.4 306.0,207.0 390.0,212.2 474.0,216.2 558.0,219.3 642.0,222.4\"/><circle cx=\"54.0\" cy=\"36.5\" r=\"5\"><title>Faktor 1: Eigenwert 4.70</title></circle><circle cx=\"138.0\" cy=\"131.0\" r=\"5\"><title>Faktor 2: Eigenwert 2.55</title></circle><circle cx=\"222.0\" cy=\"182.4\" r=\"5\"><title>Faktor 3: Eigenwert 1.38</title></circle><circle cx=\"306.0\" cy=\"207.0\" r=\"5\"><title>Faktor 4: Eigenwert 0.82</title></circle><circle cx=\"390.0\" cy=\"212.2\" r=\"5\"><title>Faktor 5: Eigenwert 0.70</title></circle><circle cx=\"474.0\" cy=\"216.2\" r=\"5\"><title>Faktor 6: Eigenwert 0.61</title></circle><circle cx=\"558.0\" cy=\"219.3\" r=\"5\"><title>Faktor 7: Eigenwert 0.54</title></circle><circle cx=\"642.0\" cy=\"222.4\" r=\"5\"><title>Faktor 8: Eigenwert 0.47</title></circle><text x=\"54.0\" y=\"272\" text-anchor=\"middle\">1</text><text x=\"138.0\" y=\"272\" text-anchor=\"middle\">2</text><text x=\"222.0\" y=\"272\" text-anchor=\"middle\">3</text><text x=\"306.0\" y=\"272\" text-anchor=\"middle\">4</text><text x=\"390.0\" y=\"272\" text-anchor=\"middle\">5</text><text x=\"474.0\" y=\"272\" text-anchor=\"middle\">6</text><text x=\"558.0\" y=\"272\" text-anchor=\"middle\">7</text><text x=\"642.0\" y=\"272\" text-anchor=\"middle\">8</text><text x=\"330.0\" y=\"284\" text-anchor=\"middle\">Faktor</text><text transform=\"translate(15 142.5) rotate(-90)\" text-anchor=\"middle\">Eigenwert</text></svg><figcaption>Scree-Plot A; die Werte sind zusätzlich als zugängliche Textbeschreibung im SVG hinterlegt.</figcaption></figure><p>Wie viele Faktoren legt der deutlich erkennbare Knick in diesem Plot am ehesten nahe?</p>",
+    "answer": 3,
+    "tolerance": 0,
+    "unit": "Faktoren",
+    "hints": [
+      "Nach dem dritten Wert geht die Kurve in einen deutlich flacheren Verlauf über."
+    ],
+    "explanation": "Die ersten drei Eigenwerte bilden den steilen Teil; danach beginnt der flache Geröllbereich. Der Scree-Test spricht daher für drei Faktoren.",
+    "source": "Neu konstruierter Scree-Plot · PD04 EFA",
+    "misconception": "scree_knick_falsch"
+  },
+  {
+    "id": "scree-2",
+    "section": "scree",
+    "type": "single",
+    "title": "Mehrdeutiger Scree-Plot",
+    "promptHtml": "<figure class=\"scree-figure\"><svg class=\"scree-chart\" viewBox=\"0 0 660 285\" role=\"img\" aria-labelledby=\"scree-title\"><title id=\"scree-title\">Scree-Plot B: Eigenwerte 3.2, 2.52, 2.02, 1.61, 1.31, 1.09, 0.93, 0.82</title><line class=\"axis\" x1=\"54\" y1=\"20\" x2=\"54\" y2=\"243\"/><line class=\"axis\" x1=\"54\" y1=\"243\" x2=\"642\" y2=\"243\"/><g><line x1=\"49\" x2=\"54\" y1=\"243.0\" y2=\"243.0\"/><text x=\"45\" y=\"247.0\" text-anchor=\"end\">0</text></g><g><line x1=\"49\" x2=\"54\" y1=\"178.5\" y2=\"178.5\"/><text x=\"45\" y=\"182.5\" text-anchor=\"end\">1</text></g><g><line x1=\"49\" x2=\"54\" y1=\"113.9\" y2=\"113.9\"/><text x=\"45\" y=\"117.9\" text-anchor=\"end\">2</text></g><g><line x1=\"49\" x2=\"54\" y1=\"49.4\" y2=\"49.4\"/><text x=\"45\" y=\"53.4\" text-anchor=\"end\">3</text></g><g><line x1=\"49\" x2=\"54\" y1=\"-15.1\" y2=\"-15.1\"/><text x=\"45\" y=\"-11.1\" text-anchor=\"end\">4</text></g><polyline points=\"54.0,36.5 138.0,80.4 222.0,112.7 306.0,139.1 390.0,158.5 474.0,172.7 558.0,183.0 642.0,190.1\"/><circle cx=\"54.0\" cy=\"36.5\" r=\"5\"><title>Faktor 1: Eigenwert 3.20</title></circle><circle cx=\"138.0\" cy=\"80.4\" r=\"5\"><title>Faktor 2: Eigenwert 2.52</title></circle><circle cx=\"222.0\" cy=\"112.7\" r=\"5\"><title>Faktor 3: Eigenwert 2.02</title></circle><circle cx=\"306.0\" cy=\"139.1\" r=\"5\"><title>Faktor 4: Eigenwert 1.61</title></circle><circle cx=\"390.0\" cy=\"158.5\" r=\"5\"><title>Faktor 5: Eigenwert 1.31</title></circle><circle cx=\"474.0\" cy=\"172.7\" r=\"5\"><title>Faktor 6: Eigenwert 1.09</title></circle><circle cx=\"558.0\" cy=\"183.0\" r=\"5\"><title>Faktor 7: Eigenwert 0.93</title></circle><circle cx=\"642.0\" cy=\"190.1\" r=\"5\"><title>Faktor 8: Eigenwert 0.82</title></circle><text x=\"54.0\" y=\"272\" text-anchor=\"middle\">1</text><text x=\"138.0\" y=\"272\" text-anchor=\"middle\">2</text><text x=\"222.0\" y=\"272\" text-anchor=\"middle\">3</text><text x=\"306.0\" y=\"272\" text-anchor=\"middle\">4</text><text x=\"390.0\" y=\"272\" text-anchor=\"middle\">5</text><text x=\"474.0\" y=\"272\" text-anchor=\"middle\">6</text><text x=\"558.0\" y=\"272\" text-anchor=\"middle\">7</text><text x=\"642.0\" y=\"272\" text-anchor=\"middle\">8</text><text x=\"330.0\" y=\"284\" text-anchor=\"middle\">Faktor</text><text transform=\"translate(15 142.5) rotate(-90)\" text-anchor=\"middle\">Eigenwert</text></svg><figcaption>Scree-Plot B; die Werte sind zusätzlich als zugängliche Textbeschreibung im SVG hinterlegt.</figcaption></figure><p>Welche Schlussfolgerung ist am besten?</p>",
+    "options": [
+      "Der Plot beweist exakt zwei Faktoren.",
+      "Der Plot besitzt keinen eindeutig scharfen Knick; weitere Kriterien und alternative Lösungen sollten verglichen werden.",
+      "Weil die Kurve fällt, muss nur ein Faktor behalten werden.",
+      "Alle acht Faktoren sind gleich gut."
+    ],
+    "answer": 1,
+    "hints": [
+      "Die Abnahme ist schrittweise und besitzt keinen klaren Übergang."
+    ],
+    "explanation": "Bei einem flachen, mehrdeutigen Verlauf ist eine rein visuelle Festlegung unsicher. Parallelanalyse, Theorie und Interpretierbarkeit werden ergänzend herangezogen.",
+    "source": "Neu konstruierter Scree-Plot · PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "scree_ueberinterpretiert",
+      "2": "fallende_kurve_einfaktor",
+      "3": "alle_faktoren_gleich"
+    }
+  },
+  {
+    "id": "scree-3",
+    "section": "scree",
+    "type": "order",
+    "title": "Scree-Test systematisch lesen",
+    "prompt": "Bringe die Prüfschritte in eine sinnvolle Reihenfolge.",
+    "items": [
+      "Eigenwerte der Reihenfolge nach darstellen",
+      "Steilen Anfangsbereich und flachen Geröllbereich suchen",
+      "Übergang beziehungsweise Knick lokalisieren",
+      "Faktoren vor dem Knick als Kandidaten betrachten",
+      "Mehrdeutigkeit dokumentieren und andere Kriterien hinzunehmen"
+    ],
+    "start": [
+      2,
+      4,
+      0,
+      3,
+      1
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "hints": [
+      "Stelle zuerst alle Eigenwerte in ihrer Komponentenreihenfolge dar; ohne Verlauf gibt es noch keinen Scree-Test.",
+      "Beschreibe dann, wo der anfangs steile Abfall in einen deutlich flacheren Geröllbereich übergeht.",
+      "Lokalisiere aus diesem Übergang den Knick, bevor du eine Faktorenzahl nennst.",
+      "Als Kandidaten gelten die Faktoren vor dem Knick; der Geröllbereich danach wird nicht mitgezählt.",
+      "Ist der Knick nicht eindeutig, dokumentiere die Mehrdeutigkeit und gleiche sie mit Parallelanalyse, Kaiser-Guttman und Theorie ab."
+    ],
+    "explanation": "1. Zuerst werden die Eigenwerte der Reihe nach dargestellt, damit ihr Verlauf sichtbar wird. 2. Danach werden der steile Anfangsbereich und der flache Geröllbereich beschrieben. 3. Der Übergang zwischen beiden Bereichen wird als möglicher Knick lokalisiert. 4. Die Faktoren vor diesem Knick bilden die Kandidaten für die Beibehaltung. 5. Bleibt der Knick mehrdeutig, wird diese Unsicherheit dokumentiert und mit Parallelanalyse, Kaiser-Guttman, Theorie und Interpretierbarkeit abgeglichen, statt eine scheinbar eindeutige Zahl zu behaupten.",
+    "source": "PD04 EFA",
+    "misconception": "scree_ohne_verlauf_gelesen"
+  },
+  {
+    "id": "scree-4",
+    "section": "scree",
+    "type": "single",
+    "title": "Warum ist der Scree-Test subjektiv?",
+    "prompt": "Welche Eigenschaft verursacht vor allem die Subjektivität des Scree-Tests?",
+    "options": [
+      "Eigenwerte können keine Dezimalstellen besitzen.",
+      "Die Lage eines bedeutsamen Knicks muss visuell beurteilt werden und kann bei weichen Übergängen unterschiedlich eingeschätzt werden.",
+      "Der Test verwendet ausschließlich Itemmittelwerte.",
+      "Der Scree-Test ist identisch mit dem Bartlett-Test."
+    ],
+    "answer": 1,
+    "hints": [
+      "Das Problem liegt nicht in der Berechnung, sondern in der visuellen Entscheidung."
+    ],
+    "explanation": "Besonders bei mehreren kleinen Richtungsänderungen kann der Knick unterschiedlich lokalisiert werden. Deshalb wird das Ergebnis nicht isoliert verwendet.",
+    "source": "PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "eigenwerte_ohne_dezimal",
+      "2": "scree_mit_mittelwerten",
+      "3": "scree_bartlett_verwechselt"
+    }
+  },
+  {
+    "id": "parallel-1",
+    "section": "parallel",
+    "type": "number",
+    "title": "Parallelanalyse auswerten",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table eig-table\"><caption>Parallelanalyse</caption><thead><tr><th>Faktor</th><th scope=\"col\">1</th><th scope=\"col\">2</th><th scope=\"col\">3</th><th scope=\"col\">4</th><th scope=\"col\">5</th><th scope=\"col\">6</th></tr></thead><tbody><tr><th scope=\"row\">empirisch</th><td>4.30</td><td>2.40</td><td>1.50</td><td>1.10</td><td>0.90</td><td>0.72</td></tr><tr><th scope=\"row\">kritisch zufällig</th><td>1.55</td><td>1.35</td><td>1.20</td><td>1.08</td><td>1.00</td><td>0.94</td></tr></tbody></table></div><p>Wie viele Faktoren werden nach der Parallelanalyse beibehalten?</p>",
+    "answer": 4,
+    "tolerance": 0,
+    "unit": "Faktoren",
+    "hints": [
+      "Vergleiche jeden empirischen Wert mit dem kritischen Wert derselben Position."
+    ],
+    "explanation": "Für die Faktoren 1 bis 4 liegen die empirischen Eigenwerte über den kritischen Zufallswerten. Beim fünften Faktor liegt .90 unter 1.00.",
+    "source": "Neu konstruierte Parallelanalyse · PD04 EFA",
+    "misconception": "parallelvergleich_falsch"
+  },
+  {
+    "id": "parallel-2",
+    "section": "parallel",
+    "type": "number",
+    "title": "Abbruchpunkt bestimmen",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table eig-table\"><caption>Parallelanalyse</caption><thead><tr><th>Faktor</th><th scope=\"col\">1</th><th scope=\"col\">2</th><th scope=\"col\">3</th><th scope=\"col\">4</th><th scope=\"col\">5</th></tr></thead><tbody><tr><th scope=\"row\">empirisch</th><td>3.80</td><td>1.90</td><td>1.22</td><td>1.03</td><td>0.87</td></tr><tr><th scope=\"row\">kritisch zufällig</th><td>1.45</td><td>1.25</td><td>1.12</td><td>1.05</td><td>0.96</td></tr></tbody></table></div><p>Wie viele Faktoren werden beibehalten?</p>",
+    "answer": 3,
+    "tolerance": 0,
+    "unit": "Faktoren",
+    "hints": [
+      "Der vierte empirische Eigenwert ist bereits kleiner als sein kritischer Vergleichswert."
+    ],
+    "explanation": "Die ersten drei empirischen Eigenwerte überschreiten die kritischen Werte; der vierte tut dies mit 1.03 < 1.05 nicht mehr.",
+    "source": "Neu konstruierte Parallelanalyse · PD04 EFA",
+    "misconception": "parallel_abbruch_falsch"
+  },
+  {
+    "id": "parallel-3",
+    "section": "parallel",
+    "type": "multi",
+    "title": "Prinzip der Parallelanalyse",
+    "prompt": "Welche Aussagen treffen zu?",
+    "options": [
+      "Die Zufallsdatensätze sollen dieselbe Größenordnung n × m wie die empirischen Daten besitzen.",
+      "Beibehalten werden Faktoren, deren empirische Eigenwerte die kritischen Zufallseigenwerte überschreiten.",
+      "Die Parallelanalyse prüft, ob alle Itemmittelwerte identisch sind.",
+      "Für eine PCA wird in psych::fa.parallel() fa = \"pc\" angegeben.",
+      "Die Parallelanalyse macht jede inhaltliche Überlegung überflüssig."
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "hints": [
+      "Sie ist ein formales Faktorzahlkriterium, keine Inhaltsanalyse."
+    ],
+    "explanation": "Option 1 ist richtig: Die Zufallsdaten müssen dieselbe Größenordnung von Personen n und Variablen m besitzen, damit die Eigenwerte vergleichbar sind. Option 2 ist richtig: Ein Faktor wird beibehalten, solange sein empirischer Eigenwert den kritischen positionsgleichen Zufallseigenwert übersteigt. Option 3 ist falsch: Die Parallelanalyse vergleicht Eigenwerte und prüft keine Gleichheit von Itemmittelwerten. Option 4 ist richtig: Für eine Hauptkomponentenanalyse wird in `psych::fa.parallel()` `fa = \"pc\"` verwendet. Option 5 ist falsch, weil die formale Simulation Theorie, Interpretierbarkeit und Stichprobenkritik nicht ersetzt.",
+    "source": "PD04 EFA · fa.R",
+    "misconception": "parallelprinzip_verwechselt"
+  },
+  {
+    "id": "parallel-4",
+    "section": "parallel",
+    "type": "single",
+    "title": "Der reale Big-Five-Konflikt",
+    "prompt": "Im Projektskript ergeben sich Kaiser-Guttman = 15, Scree-Test = 4 und Parallelanalyse = 4. Theoretisch werden fünf Big-Five-Dimensionen erwartet. Welche Entscheidung ist am besten begründet?",
+    "options": [
+      "Die Zahl 15 ist zwingend, weil Kaiser-Guttman immer Vorrang hat.",
+      "Nur vier Faktoren dürfen gerechnet werden; Theorie ist unzulässig.",
+      "Eine Fünffaktorenlösung kann gezielt geprüft werden, aber die Abweichung der formalen Kriterien und die begrenzte Stichprobe müssen transparent berücksichtigt werden.",
+      "Die Faktorenzahl kann beliebig gewählt werden."
+    ],
+    "answer": 2,
+    "hints": [
+      "Inhaltliche Erwartungen dürfen geprüft, aber nicht als unfehlbarer Beweis behandelt werden."
+    ],
+    "explanation": "Das Skript untersucht die theoretisch erwartete Fünffaktorenlösung trotz formaler Vierfaktorenhinweise. Fachlich korrekt ist eine transparente, vorsichtige Prüfung statt eines mechanischen Vorrangs einzelner Kriterien.",
+    "source": "fa.R · PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "kaiser_als_vorrang",
+      "1": "theorie_ausgeschlossen",
+      "3": "faktorzahl_beliebig"
+    }
+  },
+  {
+    "id": "rotation-1",
+    "section": "rotation",
+    "type": "single",
+    "title": "Ziel der Rotation",
+    "prompt": "Was ist das primäre Ziel einer Rotation?",
+    "options": [
+      "Die insgesamt erklärte Varianz beliebig zu erhöhen.",
+      "Ein interpretierbares Ladungsmuster mit möglichst klarer Einfachstruktur zu erzeugen.",
+      "Die Stichprobengröße nachträglich zu vergrößern.",
+      "Alle Kreuzladungen rechnerisch auf exakt null zu zwingen."
+    ],
+    "answer": 1,
+    "hints": [
+      "Rotation verändert die Darstellung, nicht die vorhandene Gesamtinformation."
+    ],
+    "explanation": "Rotation soll Items klarer den Faktoren zuordnen lassen. Sie erhöht nicht die insgesamt erklärte Varianz und garantiert keine exakt verschwindenden Kreuzladungen.",
+    "source": "PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "rotation_erhoeht_gesamtvarianz",
+      "2": "rotation_vergroessert_n",
+      "3": "rotation_nullt_alle_kreuzladungen"
+    }
+  },
+  {
+    "id": "rotation-2",
+    "section": "rotation",
+    "type": "single",
+    "title": "Welche Lösung besitzt mehr Einfachstruktur?",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Unrotierte Lösung</caption><thead><tr><th>Item</th><th scope=\"col\">PC1</th><th scope=\"col\">PC2</th><th scope=\"col\">PC3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">I1</th><td class=\"loading-high\">0.69</td><td class=\"\">-0.38</td><td class=\"\">-0.04</td><td>0.63</td></tr><tr><th scope=\"row\">I2</th><td class=\"\">0.47</td><td class=\"\">0.27</td><td class=\"\">0.48</td><td>0.52</td></tr><tr><th scope=\"row\">I3</th><td class=\"loading-high\">0.57</td><td class=\"\">0.34</td><td class=\"\">-0.47</td><td>0.66</td></tr><tr><th scope=\"row\">I4</th><td class=\"loading-high\">0.66</td><td class=\"\">-0.30</td><td class=\"\">-0.09</td><td>0.63</td></tr><tr><th scope=\"row\">I5</th><td class=\"\">0.44</td><td class=\"\">0.36</td><td class=\"loading-high\">-0.51</td><td>0.58</td></tr><tr><th scope=\"row\">I6</th><td class=\"\">0.41</td><td class=\"\">0.33</td><td class=\"loading-high\">0.51</td><td>0.54</td></tr></tbody></table></div><div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Rotierte Lösung</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">I1</th><td class=\"loading-high\">0.76</td><td class=\"\">0.10</td><td class=\"\">0.13</td><td>0.63</td></tr><tr><th scope=\"row\">I2</th><td class=\"\">0.12</td><td class=\"loading-high\">0.68</td><td class=\"\">0.20</td><td>0.52</td></tr><tr><th scope=\"row\">I3</th><td class=\"loading-high\">0.72</td><td class=\"\">0.04</td><td class=\"\">-0.37</td><td>0.66</td></tr><tr><th scope=\"row\">I4</th><td class=\"loading-high\">0.74</td><td class=\"\">0.17</td><td class=\"\">0.24</td><td>0.63</td></tr><tr><th scope=\"row\">I5</th><td class=\"\">0.08</td><td class=\"\">0.12</td><td class=\"loading-high\">-0.75</td><td>0.58</td></tr><tr><th scope=\"row\">I6</th><td class=\"\">0.18</td><td class=\"loading-high\">0.69</td><td class=\"\">0.17</td><td>0.54</td></tr></tbody></table></div><p>Welche Lösung ist für die inhaltliche Itemzuordnung klarer?</p>",
+    "options": [
+      "Die unrotierte Lösung",
+      "Die rotierte Lösung",
+      "Beide sind zwingend identisch",
+      "Keine, weil Faktorladungen grundsätzlich nicht interpretierbar sind"
+    ],
+    "answer": 1,
+    "hints": [
+      "Suche je Item eine dominante Ladung und kleinere Nebenladungen."
+    ],
+    "explanation": "In der rotierten Lösung treten deutlichere Hauptladungen auf. Die unrotierte Lösung verteilt mehrere Items unübersichtlich über mehrere Komponenten.",
+    "source": "An PD04 angelehnte, neu gesetzte Matrizen",
+    "misconception": "unrotierte_loesung_bevorzugt"
+  },
+  {
+    "id": "rotation-3",
+    "section": "rotation",
+    "type": "multi",
+    "title": "Was bleibt bei Rotation gleich?",
+    "prompt": "Welche Größen bleiben laut Vorlesung bei der Rotation gleich?",
+    "options": [
+      "Die insgesamt erklärte Varianz der gewählten Faktorlösung",
+      "Die finalen Kommunalitäten der Items",
+      "Die Verteilung der Varianz auf die einzelnen Faktoren",
+      "Jede einzelne Faktorladung",
+      "Die inhaltliche Benennung der Faktoren"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "hints": [
+      "Rotation verteilt die erklärte Varianz anders auf die Faktoren."
+    ],
+    "explanation": "Gesamtvarianzaufklärung und finale Kommunalitäten bleiben gleich. Faktorladungen und faktorbezogene Varianzanteile verändern sich; auch die inhaltliche Benennung entsteht erst aus der interpretierten Lösung.",
+    "source": "PD04 EFA",
+    "misconception": "rotationsinvarianz_falsch"
+  },
+  {
+    "id": "rotation-4",
+    "section": "rotation",
+    "type": "match",
+    "title": "Orthogonal oder oblique?",
+    "prompt": "Ordne die Aussagen zu.",
+    "rows": [
+      "Varimax",
+      "Oblimin",
+      "Faktoren werden als unkorreliert angenommen",
+      "Faktoren dürfen korrelieren",
+      "Mustermatrix und Strukturmatrix können sich unterscheiden"
+    ],
+    "options": [
+      "orthogonale Rotation",
+      "oblique Rotation"
+    ],
+    "answer": [
+      0,
+      1,
+      0,
+      1,
+      1
+    ],
+    "hints": [
+      "Ordne zuerst die benannten Verfahren zu: Varimax ist orthogonal, Oblimin ist oblique beziehungsweise schiefwinklig.",
+      "Orthogonal bedeutet, dass die Faktoren als unkorreliert angenommen werden.",
+      "Oblique bedeutet, dass Faktorinterkorrelationen ausdrücklich zugelassen sind.",
+      "Nur bei obliquer Rotation führt die Trennung von einzigartigen Ladungen und korrelationsbedingten Beziehungen zu unterschiedlichen Muster- und Strukturmatrizen."
+    ],
+    "explanation": "Varimax ist orthogonal; Oblimin ist oblique. Bei obliquer Rotation können korrelierte Faktoren sowie unterschiedliche Muster- und Strukturmatrizen auftreten.",
+    "source": "PD04 EFA",
+    "misconception": "rotationstypen_vertauscht"
+  },
+  {
+    "id": "loadings-1",
+    "section": "loadings",
+    "type": "single",
+    "title": "Eindeutige Hauptladung erkennen",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Rotierte Ladungsmatrix</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">A1</th><td class=\"loading-high\">0.72</td><td class=\"\">0.11</td><td class=\"\">0.08</td><td>0.55</td></tr><tr><th scope=\"row\">A2</th><td class=\"loading-high\">0.61</td><td class=\"\">0.42</td><td class=\"\">0.05</td><td>0.58</td></tr><tr><th scope=\"row\">A3</th><td class=\"\">0.09</td><td class=\"loading-high\">0.68</td><td class=\"\">0.16</td><td>0.50</td></tr><tr><th scope=\"row\">A4</th><td class=\"\">0.18</td><td class=\"loading-high\">0.54</td><td class=\"loading-high\">0.51</td><td>0.60</td></tr><tr><th scope=\"row\">A5</th><td class=\"\">0.04</td><td class=\"\">0.14</td><td class=\"loading-high\">0.73</td><td>0.57</td></tr><tr><th scope=\"row\">A6</th><td class=\"loading-high\">-0.58</td><td class=\"\">0.10</td><td class=\"\">0.12</td><td>0.37</td></tr></tbody></table></div><p>Welches Item zeigt die klarste positive Zuordnung zu Faktor 2?</p>",
+    "options": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A6"
+    ],
+    "answer": 2,
+    "hints": [
+      "Vergleiche die Ladung auf F2 mit den beiden Kreuzladungen."
+    ],
+    "explanation": "A3 lädt mit .68 auf F2 und nur .09 beziehungsweise .16 auf den übrigen Faktoren. Das ist die klarste Einfachstruktur für F2.",
+    "source": "Neu konstruierte Ladungsmatrix",
+    "misconception": "hauptladung_falsch_gelesen"
+  },
+  {
+    "id": "loadings-2",
+    "section": "loadings",
+    "type": "multi",
+    "title": "Kreuzladungen lokalisieren",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Rotierte Ladungsmatrix</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">A1</th><td class=\"loading-high\">0.72</td><td class=\"\">0.11</td><td class=\"\">0.08</td><td>0.55</td></tr><tr><th scope=\"row\">A2</th><td class=\"loading-high\">0.61</td><td class=\"\">0.42</td><td class=\"\">0.05</td><td>0.58</td></tr><tr><th scope=\"row\">A3</th><td class=\"\">0.09</td><td class=\"loading-high\">0.68</td><td class=\"\">0.16</td><td>0.50</td></tr><tr><th scope=\"row\">A4</th><td class=\"\">0.18</td><td class=\"loading-high\">0.54</td><td class=\"loading-high\">0.51</td><td>0.60</td></tr><tr><th scope=\"row\">A5</th><td class=\"\">0.04</td><td class=\"\">0.14</td><td class=\"loading-high\">0.73</td><td>0.57</td></tr><tr><th scope=\"row\">A6</th><td class=\"loading-high\">-0.58</td><td class=\"\">0.10</td><td class=\"\">0.12</td><td>0.37</td></tr></tbody></table></div><p>Welche Items besitzen mindestens zwei Ladungen mit |a| ≥ .40?</p>",
+    "options": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5",
+      "A6"
+    ],
+    "answer": [
+      1,
+      3
+    ],
+    "hints": [
+      "Berücksichtige Beträge; A2 und A4 haben jeweils zwei substanzielle Ladungen."
+    ],
+    "explanation": "A1 wird nicht gewählt, weil nur die F1-Ladung .72 den Betrag .40 erreicht. A2 wird gewählt, weil sowohl .61 auf F1 als auch .42 auf F2 substanziell sind. A3 wird nicht gewählt, weil nur .68 auf F2 die Schwelle erreicht. A4 wird gewählt, weil .54 auf F2 und .51 auf F3 zwei substanzielle Ladungen bilden. A5 wird nicht gewählt, weil nur .73 auf F3 hoch ist. A6 wird trotz der negativen Hauptladung nicht gewählt, weil nur ihr Betrag .58 auf F1 die Schwelle erreicht; .10 und .12 bleiben darunter.",
+    "source": "Neu konstruierte Ladungsmatrix",
+    "misconception": "kreuzladung_uebersehen"
+  },
+  {
+    "id": "loadings-3",
+    "section": "loadings",
+    "type": "single",
+    "title": "Negative Hauptladung nach vorheriger Invertierung",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Rotierte Ladungsmatrix</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">A1</th><td class=\"loading-high\">0.72</td><td class=\"\">0.11</td><td class=\"\">0.08</td><td>0.55</td></tr><tr><th scope=\"row\">A2</th><td class=\"loading-high\">0.61</td><td class=\"\">0.42</td><td class=\"\">0.05</td><td>0.58</td></tr><tr><th scope=\"row\">A3</th><td class=\"\">0.09</td><td class=\"loading-high\">0.68</td><td class=\"\">0.16</td><td>0.50</td></tr><tr><th scope=\"row\">A4</th><td class=\"\">0.18</td><td class=\"loading-high\">0.54</td><td class=\"loading-high\">0.51</td><td>0.60</td></tr><tr><th scope=\"row\">A5</th><td class=\"\">0.04</td><td class=\"\">0.14</td><td class=\"loading-high\">0.73</td><td>0.57</td></tr><tr><th scope=\"row\">A6</th><td class=\"loading-high\">-0.58</td><td class=\"\">0.10</td><td class=\"\">0.12</td><td>0.37</td></tr></tbody></table></div><p>A6 sollte nach der Datenaufbereitung positiv zum Zielkonstrukt ausgerichtet sein, lädt aber −.58 auf F1. Was ist der beste nächste Schritt?</p>",
+    "options": [
+      "Das Vorzeichen ignorieren und A6 automatisch F1 zuordnen.",
+      "Codierung, Polung und Iteminhalt erneut prüfen, bevor über Entfernung oder Zuordnung entschieden wird.",
+      "Den gesamten Faktor löschen.",
+      "Die Ladung durch ihren Betrag ersetzen und als Rohdatenwert speichern."
+    ],
+    "answer": 1,
+    "hints": [
+      "Eine negative Ladung kann nach beabsichtigter Ausrichtung auf ein Daten- oder Inhaltsproblem hinweisen."
+    ],
+    "explanation": "Vor einer Entscheidung wird geprüft, ob die Invertierung korrekt war und ob das Item inhaltlich gegenläufig oder fremddimensional ist. Das Vorzeichen darf nicht still entfernt werden.",
+    "source": "PD04 EFA · Transfer aus Modul 1",
+    "misconceptionByAnswer": {
+      "0": "vorzeichen_ignoriert",
+      "2": "ein_item_loescht_faktor",
+      "3": "ladung_als_rohwert_behandelt"
+    }
+  },
+  {
+    "id": "loadings-4",
+    "section": "loadings",
+    "type": "single",
+    "title": "Ausblenden ist nicht Auswählen",
+    "prompt": "print.psych(..., cut = .30, sort = TRUE) blendet kleinere Ladungen aus. Was folgt daraus?",
+    "options": [
+      "Jede angezeigte Ladung ist automatisch ausreichend für die finale Itemauswahl.",
+      "Der cut-Wert verbessert nur die Lesbarkeit; Auswahlkriterien wie Hauptladung, Kreuzladungen, Inhalt und Kommunalität müssen separat beurteilt werden.",
+      "Alle Ladungen unter .30 werden aus den Rohdaten gelöscht.",
+      "Die Faktorenzahl wird auf .30 gesetzt."
+    ],
+    "answer": 1,
+    "hints": [
+      "cut steuert die Ausgabe, nicht die Daten oder eine endgültige Selektionsregel."
+    ],
+    "explanation": "Die Ausgabegrenze macht eine Matrix übersichtlicher. Sie ist weder ein Löschbefehl noch automatisch identisch mit einer strengeren Auswahlregel, etwa einer gewünschten Hauptladung von .50.",
+    "source": "PD04 EFA · fa.R",
+    "misconceptionByAnswer": {
+      "0": "anzeigegrenze_als_selektionsgrenze",
+      "2": "cut_loescht_daten",
+      "3": "cut_mit_faktorzahl"
+    }
+  },
+  {
+    "id": "fuerntratt-1",
+    "section": "fuerntratt",
+    "type": "number",
+    "title": "Hauptladung quadrieren",
+    "prompt": "Ein Item lädt mit a = .62 auf seinem stärksten Faktor. Wie groß ist a²?",
+    "answer": 0.3844,
+    "tolerance": 0.0001,
+    "unit": "",
+    "hints": [
+      ".62 × .62"
+    ],
+    "explanation": ".62² = .3844. Dieser Wert wird mit der Hälfte der Kommunalität verglichen.",
+    "source": "Neu konstruierte Rechenaufgabe · PD04 EFA",
+    "misconception": "ladung_nicht_quadriert"
+  },
+  {
+    "id": "fuerntratt-2",
+    "section": "fuerntratt",
+    "type": "single",
+    "title": "Kriterium entscheiden",
+    "prompt": "Für ein Item gilt: Hauptladung a = .62, Kommunalität h² = .50. Erfüllt es das Fürntratt-Kriterium?",
+    "options": [
+      "Ja, denn .62² = .3844 und .50/2 = .25.",
+      "Nein, denn .62 ist kleiner als .50.",
+      "Nein, weil die Ladung exakt 1 sein müsste.",
+      "Das Kriterium vergleicht ausschließlich zwei Kreuzladungen."
+    ],
+    "answer": 0,
+    "hints": [
+      "Prüfe a² ≥ h²/2."
+    ],
+    "explanation": ".3844 ≥ .25. Der Hauptfaktor erklärt damit mehr als die Hälfte der insgesamt durch die Faktoren aufgeklärten Itemvarianz.",
+    "source": "PD04 EFA",
+    "misconceptionByAnswer": {
+      "1": "ladung_mit_kommunalitaet_direkt_verglichen",
+      "2": "ladung_muss_eins_sein",
+      "3": "fuerntratt_mit_kreuzladung_verwechselt"
+    }
+  },
+  {
+    "id": "fuerntratt-3",
+    "section": "fuerntratt",
+    "type": "single",
+    "title": "Projektfall c3 nachvollziehen",
+    "prompt": "Im Projektskript wird für c3 geprüft: .57² > .48/2. Welche Aussage ist richtig?",
+    "options": [
+      "c3 erfüllt das Kriterium, weil .3249 > .24.",
+      "c3 verfehlt es, weil .57 < .48.",
+      "Die Rechnung ist unmöglich, weil Kommunalitäten nicht geteilt werden dürfen.",
+      "Das Ergebnis bestimmt automatisch die Faktorenzahl."
+    ],
+    "answer": 0,
+    "hints": [
+      "Berechne beide Seiten getrennt."
+    ],
+    "explanation": ".57² = .3249 und .48/2 = .24. Der betrachtete Hauptfaktor trägt damit mehr als 50 % zur Kommunalität bei.",
+    "source": "fa.R",
+    "misconception": "fuerntratt_projektfall_falsch"
+  },
+  {
+    "id": "fuerntratt-4",
+    "section": "fuerntratt",
+    "type": "single",
+    "title": "Zwei Grenzfälle vergleichen",
+    "prompt": "Welches Item erfüllt das Fürntratt-Kriterium?",
+    "options": [
+      "Item X: a = .58, h² = .70",
+      "Item Y: a = .55, h² = .50",
+      "Beide",
+      "Keines"
+    ],
+    "answer": 1,
+    "hints": [
+      "X: .58² mit .35 vergleichen. Y: .55² mit .25 vergleichen."
+    ],
+    "explanation": "X: .3364 < .35, also knapp nicht erfüllt. Y: .3025 ≥ .25, also erfüllt.",
+    "source": "Neu konstruierte Rechenaufgabe",
+    "misconception": "fuerntratt_grenzfall_falsch"
+  },
+  {
+    "id": "selection-1",
+    "section": "selection",
+    "type": "multi",
+    "title": "Klare Kandidaten auswählen",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Kandidaten für eine Testendform</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">B1</th><td class=\"loading-high\">0.71</td><td class=\"\">0.09</td><td class=\"\">0.12</td><td>0.54</td></tr><tr><th scope=\"row\">B2</th><td class=\"loading-high\">0.66</td><td class=\"\">0.18</td><td class=\"\">0.11</td><td>0.48</td></tr><tr><th scope=\"row\">B3</th><td class=\"loading-high\">0.52</td><td class=\"\">0.34</td><td class=\"\">0.07</td><td>0.44</td></tr><tr><th scope=\"row\">B4</th><td class=\"\">0.12</td><td class=\"loading-high\">0.74</td><td class=\"\">0.09</td><td>0.58</td></tr><tr><th scope=\"row\">B5</th><td class=\"\">0.21</td><td class=\"loading-high\">0.63</td><td class=\"\">0.17</td><td>0.49</td></tr><tr><th scope=\"row\">B6</th><td class=\"\">0.10</td><td class=\"loading-high\">0.55</td><td class=\"loading-high\">0.51</td><td>0.57</td></tr><tr><th scope=\"row\">B7</th><td class=\"\">0.08</td><td class=\"\">0.13</td><td class=\"loading-high\">0.76</td><td>0.61</td></tr><tr><th scope=\"row\">B8</th><td class=\"\">0.18</td><td class=\"\">0.21</td><td class=\"loading-high\">0.67</td><td>0.54</td></tr><tr><th scope=\"row\">B9</th><td class=\"\">0.31</td><td class=\"\">0.10</td><td class=\"loading-high\">0.58</td><td>0.50</td></tr></tbody></table></div><p>Wähle alle Items, die folgende rein statistische Vorauswahl erfüllen: positive Hauptladung ≥ .50 und jede Kreuzladung &lt; .30.</p>",
+    "options": [
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+      "B8",
+      "B9"
+    ],
+    "answer": [
+      0,
+      1,
+      3,
+      4,
+      6,
+      7
+    ],
+    "hints": [
+      "B3 und B9 besitzen eine Kreuzladung über oder gleich .30; B6 lädt auf zwei Faktoren hoch."
+    ],
+    "explanation": "B1 erfüllt die Regel mit Hauptladung .71 und Kreuzladungen .09/.12. B2 erfüllt sie mit .66 und .18/.11. B3 scheitert, weil die Kreuzladung .34 nicht unter .30 liegt. B4 erfüllt sie mit .74 und .12/.09. B5 erfüllt sie mit .63 und .21/.17. B6 scheitert wegen der zweiten hohen Ladung .51. B7 erfüllt sie mit .76 und .08/.13. B8 erfüllt sie mit .67 und .18/.21. B9 scheitert, weil die Kreuzladung .31 nicht unter .30 liegt. Damit bilden B1, B2, B4, B5, B7 und B8 nur eine statistische Vorauswahl, die anschließend inhaltlich geprüft werden muss.",
+    "source": "Neu konstruierte Ladungsmatrix",
+    "misconception": "selektionskriterien_falsch_angewandt"
+  },
+  {
+    "id": "selection-2",
+    "section": "selection",
+    "type": "single",
+    "title": "Statistisch gut, inhaltlich redundant",
+    "prompt": "Zwei Items laden beide sehr klar auf F1, sind aber nahezu wortgleich. Zugleich fehlt ein anderer wichtiger Teilbereich der Facette. Was ist die beste Entscheidung?",
+    "options": [
+      "Beide behalten, weil nur die Ladung zählt.",
+      "Mindestens eines der redundanten Items zugunsten einer breiteren inhaltlichen Abdeckung kritisch prüfen.",
+      "Den ganzen Faktor entfernen.",
+      "Die beiden Itemtexte zu einem einzigen sehr langen Item verbinden."
+    ],
+    "answer": 1,
+    "hints": [
+      "Eine Testendform soll nicht nur statistisch homogen, sondern inhaltlich repräsentativ sein."
+    ],
+    "explanation": "Redundanz kann Alpha und Ladungen attraktiv erscheinen lassen, aber die Inhaltsvalidität und Facettenabdeckung verschlechtern. Die Auswahl ist mehrkriterial.",
+    "source": "PD02 Testkonstruktion · PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "ladung_als_einziges_kriterium",
+      "2": "redundanz_loescht_faktor",
+      "3": "items_ungeprueft_verschmolzen"
+    }
+  },
+  {
+    "id": "selection-3",
+    "section": "selection",
+    "type": "multi",
+    "title": "Kriterien einer finalen Auswahl",
+    "prompt": "Welche Aspekte sollten bei der finalen Itemselektion gemeinsam berücksichtigt werden?",
+    "options": [
+      "Hohe positive Hauptladung",
+      "Niedrige Kreuzladungen",
+      "Sinnvolle inhaltliche Faktorinterpretation",
+      "Ausreichende Heterogenität beziehungsweise Facettenabdeckung",
+      "Gegebenenfalls Erhalt negativer Polung",
+      "Ungefähr ausgeglichene Itemzahlen pro Faktor",
+      "Ausschließlich die alphabetische Reihenfolge der Itemnamen"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "hints": [
+      "Die Vorlesung nennt neben Ladungen ausdrücklich weitere Itemanalyse- und Inhaltskriterien."
+    ],
+    "explanation": "Option 1 ist relevant, weil eine hohe positive Hauptladung die Zuordnung zum vorgesehenen Faktor stützt. Option 2 ist relevant, weil niedrige Kreuzladungen eine klare Einfachstruktur anzeigen. Option 3 ist relevant, weil eine statistische Zuordnung auch inhaltlich sinnvoll benannt werden können muss. Option 4 ist relevant, damit die Endform nicht nur redundante Items, sondern die Breite der Facette abdeckt. Option 5 kann relevant sein, um die gewünschte Polungsverteilung zu erhalten und einseitige Antworttendenzen zu begrenzen. Option 6 ist relevant für einen ausgeglichenen und praktikablen Testaufbau, ohne eine universelle Pflichtzahl zu sein. Option 7 ist falsch: Die alphabetische Reihenfolge trägt weder statistische noch inhaltliche Information zur Itemqualität bei.",
+    "source": "PD04 EFA",
+    "misconception": "itemselektion_eindimensional_betrachtet"
+  },
+  {
+    "id": "selection-4",
+    "section": "selection",
+    "type": "single",
+    "title": "Warum sieben Items pro Faktor?",
+    "prompt": "Das Projektskript legt für jede Big-Five-Dimension sieben finale Items fest. Welche Interpretation ist angemessen?",
+    "options": [
+      "Sieben ist eine universelle psychometrische Pflichtzahl.",
+      "Die gleiche Itemzahl unterstützt im Projekt einen ausgeglichenen Aufbau; die konkrete Auswahl muss dennoch über Ladungen und Inhalt begründet sein.",
+      "Jeder Faktor besitzt naturgesetzlich genau sieben Facetten.",
+      "Die Zahl entsteht aus dem Bartlett-Test."
+    ],
+    "answer": 1,
+    "hints": [
+      "Das Skript dokumentiert eine Projektentscheidung, kein allgemeines Gesetz."
+    ],
+    "explanation": "Eine ungefähr gleiche Itemzahl je Faktor ist ein sinnvolles Designziel. Die Zahl sieben ist hier projektspezifisch und wird nicht als universelle Regel verallgemeinert.",
+    "source": "fa.R · PD04 EFA",
+    "misconceptionByAnswer": {
+      "0": "projektzahl_als_universalregel",
+      "2": "itemzahl_mit_facettenzahl",
+      "3": "itemzahl_aus_bartlett"
+    }
+  },
+  {
+    "id": "mastery-1",
+    "section": "mastery",
+    "type": "single",
+    "title": "Faktorenzahl im Abschlussfall",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table eig-table\"><caption>Abschlussfall: empirische Eigenwerte</caption><thead><tr><th>Komponente</th><th scope=\"col\">1</th><th scope=\"col\">2</th><th scope=\"col\">3</th><th scope=\"col\">4</th><th scope=\"col\">5</th><th scope=\"col\">6</th><th scope=\"col\">7</th><th scope=\"col\">8</th></tr></thead><tbody><tr><th scope=\"row\">Eigenwert</th><td>3.90</td><td>2.10</td><td>1.28</td><td>1.04</td><td>0.88</td><td>0.71</td><td>0.52</td><td>0.37</td></tr></tbody></table></div><div class=\"matrix-wrap\"><table class=\"mini-table eig-table\"><caption>Parallelanalyse</caption><thead><tr><th>Faktor</th><th scope=\"col\">1</th><th scope=\"col\">2</th><th scope=\"col\">3</th><th scope=\"col\">4</th><th scope=\"col\">5</th></tr></thead><tbody><tr><th scope=\"row\">empirisch</th><td>3.90</td><td>2.10</td><td>1.28</td><td>1.04</td><td>0.88</td></tr><tr><th scope=\"row\">kritisch zufällig</th><td>1.48</td><td>1.29</td><td>1.14</td><td>1.06</td><td>0.98</td></tr></tbody></table></div><p>Die Theorie erwartet drei klar unterscheidbare Facetten; der Scree-Plot zeigt einen Knick nach Faktor 3. Welche Entscheidung ist am besten?</p>",
+    "options": [
+      "Vier Faktoren, allein weil vier Eigenwerte über 1 liegen.",
+      "Drei Faktoren, weil Theorie, Scree-Test und Parallelanalyse übereinstimmen; Kaiser-Guttman wird als abweichender Hinweis dokumentiert.",
+      "Ein Faktor, weil der erste Eigenwert am größten ist.",
+      "Acht Faktoren, weil acht Items vorliegen."
+    ],
+    "answer": 1,
+    "hints": [
+      "In der Parallelanalyse überschreiten nur die ersten drei empirischen Eigenwerte die kritischen Werte."
+    ],
+    "explanation": "Kaiser-Guttman legt vier nahe, aber Parallelanalyse, Scree-Test und Theorie sprechen konsistent für drei. Die mehrkriteriale Entscheidung lautet daher drei Faktoren.",
+    "source": "Neu konstruierter Abschlussfall",
+    "misconception": "abschluss_faktorzahl_falsch"
+  },
+  {
+    "id": "mastery-2",
+    "section": "mastery",
+    "type": "multi",
+    "title": "Items des Abschlussfalls auswählen",
+    "promptHtml": "<div class=\"matrix-wrap\"><table class=\"mini-table loading-table\"><caption>Abschlussfall: rotierte Ladungsmatrix</caption><thead><tr><th>Item</th><th scope=\"col\">F1</th><th scope=\"col\">F2</th><th scope=\"col\">F3</th><th scope=\"col\">h²</th></tr></thead><tbody><tr><th scope=\"row\">M1</th><td class=\"loading-high\">0.69</td><td class=\"\">0.14</td><td class=\"\">0.09</td><td>0.52</td></tr><tr><th scope=\"row\">M2</th><td class=\"loading-high\">0.56</td><td class=\"\">0.39</td><td class=\"\">0.05</td><td>0.48</td></tr><tr><th scope=\"row\">M3</th><td class=\"\">0.10</td><td class=\"loading-high\">0.71</td><td class=\"\">0.08</td><td>0.52</td></tr><tr><th scope=\"row\">M4</th><td class=\"\">0.12</td><td class=\"loading-high\">0.53</td><td class=\"\">0.49</td><td>0.55</td></tr><tr><th scope=\"row\">M5</th><td class=\"\">0.06</td><td class=\"\">0.17</td><td class=\"loading-high\">0.74</td><td>0.58</td></tr><tr><th scope=\"row\">M6</th><td class=\"\">0.28</td><td class=\"\">0.08</td><td class=\"loading-high\">0.61</td><td>0.46</td></tr></tbody></table></div><p>Wähle die Items mit positiver Hauptladung ≥ .50 und allen Kreuzladungen &lt; .35.</p>",
+    "options": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6"
+    ],
+    "answer": [
+      0,
+      2,
+      4,
+      5
+    ],
+    "hints": [
+      "M2 besitzt .39 auf F2; M4 besitzt .49 auf F3."
+    ],
+    "explanation": "M1, M3, M5 und M6 erfüllen die Kriterien. M2 und M4 sind wegen substantieller Kreuzladungen weniger eindeutig.",
+    "source": "Neu konstruierte Ladungsmatrix",
+    "misconception": "abschluss_ladungsmatrix_falsch"
+  },
+  {
+    "id": "mastery-3",
+    "section": "mastery",
+    "type": "number",
+    "title": "Fürntratt im Abschlussfall",
+    "prompt": "Für M6 beträgt die Hauptladung .61 und die Kommunalität .46. Berechne a² − h²/2. Ein positives Ergebnis bedeutet, dass das Kriterium erfüllt ist.",
+    "answer": 0.1421,
+    "tolerance": 0.0001,
+    "unit": "",
+    "hints": [
+      ".61² = .3721; .46/2 = .23."
+    ],
+    "explanation": ".3721 − .23 = .1421. Das Ergebnis ist positiv; M6 erfüllt das Fürntratt-Kriterium.",
+    "source": "Neu konstruierter Abschlussfall",
+    "misconception": "abschluss_fuerntratt_falsch"
+  },
+  {
+    "id": "mastery-4",
+    "section": "mastery",
+    "type": "single",
+    "title": "Begründeten Ergebnistext wählen",
+    "prompt": "Welche Formulierung ist für einen Analysebericht fachlich am besten?",
+    "options": [
+      "„Die Parallelanalyse beweist, dass der Fragebogen exakt drei wahre Faktoren besitzt.“",
+      "„Wir wählten drei Faktoren, weil Parallelanalyse, Scree-Test und theoretische Erwartung übereinstimmten. Nach Rotation wurden Items mit klaren positiven Hauptladungen, geringen Kreuzladungen und inhaltlicher Passung bevorzugt; Grenzfälle wurden zusätzlich über Kommunalität und Fürntratt geprüft.“",
+      "„Alle Items mit einer sichtbaren Ladung wurden behalten.“",
+      "„Die Rotation erhöhte die Gesamtvarianz und machte daher jede weitere Prüfung überflüssig.“"
+    ],
+    "answer": 1,
+    "hints": [
+      "Ein guter Bericht benennt Evidenzen, Entscheidungskriterien und Grenzen, ohne Kausalität oder Gewissheit zu übertreiben."
+    ],
+    "explanation": "Die zweite Formulierung verbindet Faktorzahl, Rotation und mehrkriteriale Selektion transparent. Sie vermeidet Beweisbehauptungen und falsche Aussagen zur Rotation.",
+    "source": "Synthese aus PD04 EFA und fa.R",
+    "misconceptionByAnswer": {
+      "0": "parallel_als_beweis",
+      "2": "sichtbare_ladung_genuegt",
+      "3": "rotation_ersetzt_pruefung"
+    }
+  }
+];
+function sectionTasks(id){return tasks.filter(t=>t.section===id)}
+let state=loadState();let current=state.current||'start';
+function defaultState(){return {version:MODULE.version,current:'start',tasks:{},errors:{},startedAt:new Date().toISOString(),updatedAt:new Date().toISOString()}}
+function loadState(){try{const raw=localStorage.getItem(MODULE.id);if(!raw)return defaultState();const s=JSON.parse(raw);return s&&s.version===MODULE.version?s:defaultState()}catch(e){return defaultState()}}
+function saveState(){state.current=current;state.updatedAt=new Date().toISOString();try{localStorage.setItem(MODULE.id,JSON.stringify(state))}catch(e){}updateProgress()}
+function taskState(id){return state.tasks[id]||(state.tasks[id]={attempts:0,correct:false,hints:0,lastAnswer:null})}
+function esc(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function announce(msg){const live=document.getElementById('live');live.textContent='';setTimeout(()=>live.textContent=msg,20)}
+function renderNav(){const nav=document.getElementById('nav');nav.innerHTML='';MODULE.sections.forEach(s=>{const b=document.createElement('button');b.type='button';b.dataset.page=s.id;b.innerHTML=`${esc(s.nav)}<small>${sectionStatus(s.id)}</small>`;b.addEventListener('click',()=>showPage(s.id));nav.appendChild(b)})}
+function sectionStatus(id){const ts=sectionTasks(id);if(!ts.length)return id==='result'?'Auswertung':'Übersicht';const done=ts.filter(t=>taskState(t.id).correct).length;return `${done}/${ts.length} gelöst`}
+function renderPages(){const root=document.getElementById('pages');root.innerHTML='';MODULE.sections.forEach((s,idx)=>{const page=document.createElement('section');page.className='page';page.id=`page-${s.id}`;page.dataset.page=s.id;if(s.intro)page.innerHTML=renderStart();else if(s.result)page.innerHTML=renderResult();else page.innerHTML=renderSection(s,idx);root.appendChild(page)});bindTaskEvents();bindPageButtons()}
+function renderStart(){return `<div class="hero"><div class="eyebrow">Interaktives Faktorenanalyse-Labor</div><h1>Faktorenanzahl, Rotation und Itemselektion</h1><p class="lead">Du bestimmst Faktorenzahlen aus widersprüchlichen Evidenzen, liest Scree- und Parallelanalysen, vergleichst rotierte Ladungsmatrizen und stellst eine begründete Testendform zusammen. Alle Übungsdaten und Matrizen wurden neu konstruiert; reale Projektentscheidungen dienen nur als fachliche Referenz.</p><div class="pill-row"><span class="pill">${tasks.length} Aufgaben</span><span class="pill">9 Lernbereiche</span><span class="pill">Scree- und Ladungsanalysen</span><span class="pill">offline nutzbar</span></div><button class="btn btn-primary" data-goto="workflow">Training starten</button></div>
+<div class="grid" style="margin-top:18px"><div class="card"><h3>Du trainierst</h3><p>Eigenwerte, Kaiser-Guttman, Scree-Test, Parallelanalyse, Rotation, Haupt- und Kreuzladungen, Fürntratt und mehrkriteriale Itemselektion.</p></div><div class="card"><h3>Arbeitsweise</h3><p>Beginne mit geführten Entscheidungen. Nutze Hinweise nur bei Bedarf und bearbeite am Ende einen vollständigen integrierten Fall.</p></div><div class="card"><h3>Projektbezug</h3><p>Der Big-Five-Arbeitsweg aus <code>fa.R</code> wird transparent aufgegriffen, aber nicht als universelle Regel behandelt.</p></div></div>`}
+function renderSection(s,idx){const ts=sectionTasks(s.id);const done=ts.filter(t=>taskState(t.id).correct).length;return `<div class="section-head"><div><div class="eyebrow">Lernbereich ${idx}</div><h2>${esc(s.title)}</h2></div><div class="section-count">${done} von ${ts.length} gelöst</div></div><details class="card theory"><summary>Kompakte fachliche Grundlage</summary><p>${esc(s.theory)}</p></details><div class="task-list">${ts.map(renderTask).join('')}</div>${renderFooter(idx)}`}
+function renderTask(t){const st=taskState(t.id);const source=t.source?`<span class="source">${esc(t.source)}</span>`:'';const prompt=t.promptHtml||esc(t.prompt||'');return `<article class="task ${st.correct?'done':''}" id="task-${t.id}" data-task="${t.id}"><div class="task-head"><div><div class="task-kicker">${taskTypeLabel(t.type)}</div><div class="task-title">${esc(t.title)}</div>${source}</div><span class="status ${st.correct?'good':''}">${st.correct?'gelöst':st.attempts?`${st.attempts} Versuch${st.attempts===1?'':'e'}`:'offen'}</span></div><div class="prompt">${prompt}</div>${renderInput(t,st)}<div class="hint-box">${(t.hints||[]).map((h,i)=>`<button type="button" data-hint="${i}">Hinweis ${i+1} anzeigen</button><div class="hint" id="hint-${t.id}-${i}">${esc(h)}</div>`).join('')}</div><div class="feedback" role="status"></div></article>`}
+function taskTypeLabel(type){return ({single:'Einzelauswahl',multi:'Mehrfachauswahl',number:'Rechenaufgabe',order:'Reihenfolge',matrix:'Matrix markieren',match:'Zuordnung'})[type]||'Aufgabe'}
+function checkedAttr(st,i,type){if(st.lastAnswer==null)return '';if(type==='single')return st.lastAnswer===i?' checked':'';return Array.isArray(st.lastAnswer)&&st.lastAnswer.includes(i)?' checked':''}
+function renderInput(t,st){
+ if(t.type==='single'||t.type==='multi'){const inputType=t.type==='single'?'radio':'checkbox';return `<div class="options">${t.options.map((o,i)=>`<label class="option"><input type="${inputType}" name="${t.id}" value="${i}"${checkedAttr(st,i,t.type)}><span>${esc(o)}</span></label>`).join('')}</div><div class="answer-row"><button class="btn btn-primary" type="button" data-check>Antwort prüfen</button></div>`}
+ if(t.type==='number'){const val=typeof st.lastAnswer==='number'?String(st.lastAnswer):'';return `<div class="answer-row"><label><span class="sr-only">Numerische Antwort</span><input class="number-input" type="text" inputmode="decimal" autocomplete="off" aria-label="Numerische Antwort" value="${esc(val)}"></label>${t.unit?`<span>${esc(t.unit)}</span>`:''}<button class="btn btn-primary" type="button" data-check>Antwort prüfen</button></div>`}
+ if(t.type==='order'){const seq=Array.isArray(st.lastAnswer)?st.lastAnswer:(st.correct?t.answer:(t.start||t.items.map((_,i)=>i)));const arr=seq.map(orig=>({text:t.items[orig],orig}));return `<ol class="order-list">${arr.map((x,i)=>orderItem(t.id,x.text,x.orig,i)).join('')}</ol><div class="answer-row"><button class="btn btn-primary" type="button" data-check>Reihenfolge prüfen</button></div>`}
+ if(t.type==='matrix')return renderMatrix(t,st);
+ if(t.type==='match')return renderMatch(t,st);
+ return ''
+}
+function orderItem(id,text,orig,pos){return `<li class="order-item" data-orig="${orig}"><span><strong>${pos+1}.</strong> ${esc(text)}</span><span class="order-controls"><button type="button" data-move="up" aria-label="Schritt nach oben">↑</button><button type="button" data-move="down" aria-label="Schritt nach unten">↓</button></span></li>`}
+function fmtNum(v){if(v===1)return '1.00';const s=Number(v).toFixed(2);return s.replace(/^(-?)0\./,'$1.')}
+function renderMatrix(t,st){const selected=new Set(Array.isArray(st.lastAnswer)?st.lastAnswer:[]);let rows='';for(let i=0;i<t.labels.length;i++){let cells=`<th scope="row">${esc(t.labels[i])}</th>`;for(let j=0;j<t.labels.length;j++){const key=`${Math.min(i,j)}-${Math.max(i,j)}`;if(i===j)cells+=`<td class="diag">${fmtNum(t.values[i][j])}</td>`;else if(i<j)cells+=`<td><button type="button" class="matrix-cell" data-pair="${key}" aria-pressed="${selected.has(key)}" aria-label="${esc(t.labels[i])} mit ${esc(t.labels[j])}: ${fmtNum(t.values[i][j])}">${fmtNum(t.values[i][j])}</button></td>`;else cells+=`<td class="mirror">${fmtNum(t.values[i][j])}</td>`}rows+=`<tr>${cells}</tr>`}return `<div class="matrix-wrap"><table class="matrix-table"><caption>Symmetrische Matrix; auswählbar ist das obere Dreieck</caption><thead><tr><th></th>${t.labels.map(x=>`<th scope="col">${esc(x)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div><div class="answer-row"><button class="btn btn-primary" type="button" data-check>Markierung prüfen</button></div>`}
+function renderMatch(t,st){const ans=Array.isArray(st.lastAnswer)?st.lastAnswer:[];const rows=t.rows.map((r,i)=>`<tr><th scope="row">${esc(r)}</th><td><select data-match-row="${i}" aria-label="Kategorie für ${esc(r)}"><option value="">Bitte wählen</option>${t.options.map((o,j)=>`<option value="${j}"${ans[i]===j?' selected':''}>${esc(o)}</option>`).join('')}</select></td></tr>`).join('');return `<table class="match-table"><thead><tr><th>Wert</th><th>Kategorie</th></tr></thead><tbody>${rows}</tbody></table><div class="answer-row"><button class="btn btn-primary" type="button" data-check>Zuordnung prüfen</button></div>`}
+function renderFooter(idx){const prev=MODULE.sections[idx-1],next=MODULE.sections[idx+1];return `<div class="footer-nav">${prev?`<button class="btn" data-goto="${prev.id}">← ${esc(prev.nav)}</button>`:'<span></span>'}${next?`<button class="btn btn-primary" data-goto="${next.id}">${esc(next.nav)} →</button>`:''}</div>`}
+function renderResult(){const done=tasks.filter(t=>taskState(t.id).correct).length;const attempts=tasks.reduce((a,t)=>a+taskState(t.id).attempts,0);const hints=tasks.reduce((a,t)=>a+taskState(t.id).hints,0);const errs=Object.entries(state.errors).sort((a,b)=>b[1]-a[1]);return `<div class="section-head"><div><div class="eyebrow">Auswertung</div><h2>Lernstand und Fehlkonzeptprofil</h2></div></div><div class="dashboard"><div class="metric"><span>Gelöste Aufgaben</span><b>${done}/${tasks.length}</b></div><div class="metric"><span>Abgaben</span><b>${attempts}</b></div><div class="metric"><span>Genutzte Hinweise</span><b>${hints}</b></div><div class="metric"><span>Kompetenzabdeckung</span><b>${tasks.length?Math.round(done/tasks.length*100):0}%</b></div></div><div class="card"><h3>Bereiche</h3>${MODULE.sections.filter(s=>sectionTasks(s.id).length).map(s=>{const ts=sectionTasks(s.id),d=ts.filter(t=>taskState(t.id).correct).length;return `<div class="error-item"><span>${esc(s.nav)} – ${esc(s.title)}</span><strong>${d}/${ts.length}</strong></div>`}).join('')}</div><div class="card" style="margin-top:16px"><h3>Wiederkehrende Fehlkonzepte</h3>${errs.length?`<div class="error-list">${errs.map(([e,n])=>`<div class="error-item"><span>${esc(humanError(e))}</span><strong>${n}×</strong></div>`).join('')}</div>`:'<p>Noch keine Fehlversuche mit klassifizierbarem Fehlkonzept.</p>'}</div><div class="callout"><strong>Interpretation:</strong> Entscheidend ist, ob du Faktorzahlkriterien getrennt anwenden, widersprüchliche Evidenz transparent abwägen und statistische mit inhaltlichen Selektionskriterien verbinden kannst. Wiederhole besonders Bereiche, in denen ein einzelner Grenzwert als automatischer Befehl behandelt wurde.</div><div class="footer-nav"><button class="btn" data-goto="mastery">← Kompetenzcheck</button><button class="btn btn-primary" data-goto="workflow">Training wiederholen</button></div>`}
+function humanError(e){return ({"itemselektion_zu_frueh": "Itemselektion vor Festlegung und Interpretation der Faktorstruktur", "verfahren_vertauscht": "Faktorzahl-, Rotations- und Selektionsverfahren verwechselt", "mittelwerte_mit_faktorzahl_verwechselt": "Itemmittelwerte mit der Entscheidung über Dimensionalität verwechselt", "reliabilitaet_vor_rotation_verlangt": "Reliabilität fälschlich als Voraussetzung der Rotation behandelt", "inhaltliche_deutung_ignoriert": "Inhaltliche Faktorinterpretation übersprungen", "r_arbeitsweg_vertauscht": "R-Schritte von Parallelanalyse, Extraktion und Ausgabe vertauscht", "kaiser_grenze_falsch": "Eigenwerte nicht korrekt am Grenzwert 1 beurteilt", "eigenwert_varianz_falsch": "Proportionale Varianz aus Eigenwert und Variablenzahl falsch berechnet", "eigenwert_bedeutung_verwechselt": "Bedeutung oder Summe der Eigenwerte verwechselt", "kaiser_als_befehl": "Kaiser-Guttman als zwingenden Alleinentscheid behandelt", "abweichung_als_ungueltigkeit": "Abweichende Kriterien vorschnell als Ungültigkeit bewertet", "eigenwerte_manuell_veraendert": "Eigenwerte unzulässig als frei veränderbare Werte behandelt", "scree_knick_falsch": "Knick beziehungsweise Geröllbereich im Scree-Plot falsch lokalisiert", "scree_ueberinterpretiert": "Mehrdeutigen Scree-Plot als eindeutigen Beweis interpretiert", "fallende_kurve_einfaktor": "Fallenden Eigenwerteverlauf automatisch als Einfaktorlösung gedeutet", "alle_faktoren_gleich": "Alle dargestellten Komponenten ohne Kriterium beibehalten", "scree_ohne_verlauf_gelesen": "Scree-Entscheidung ohne systematische Verlaufsbeschreibung", "eigenwerte_ohne_dezimal": "Eigenwerte fälschlich als ganzzahlig vorausgesetzt", "scree_mit_mittelwerten": "Scree-Test mit Itemmittelwerten verwechselt", "scree_bartlett_verwechselt": "Scree-Test und Bartlett-Test verwechselt", "parallelvergleich_falsch": "Empirische und kritische Eigenwerte positionsweise falsch verglichen", "parallel_abbruch_falsch": "Abbruchpunkt der Parallelanalyse falsch bestimmt", "parallelprinzip_verwechselt": "Prinzip oder R-Aufruf der Parallelanalyse verwechselt", "kaiser_als_vorrang": "Kaiser-Guttman ungeprüft über andere Evidenzen gestellt", "theorie_ausgeschlossen": "Theoretische Struktur fälschlich aus der EFA-Entscheidung ausgeschlossen", "faktorzahl_beliebig": "Faktorenzahl ohne überprüfbare Begründung gewählt", "rotation_erhoeht_gesamtvarianz": "Rotation fälschlich als Erhöhung der Gesamtvarianz verstanden", "rotation_vergroessert_n": "Rotation mit einer Vergrößerung der Stichprobe verwechselt", "rotation_nullt_alle_kreuzladungen": "Rotation als Garantie exakt nuller Kreuzladungen behandelt", "unrotierte_loesung_bevorzugt": "Unrotierte, schwer interpretierbare Lösung trotz klarerer Rotation bevorzugt", "rotationsinvarianz_falsch": "Gleichbleibende und veränderte Größen bei Rotation verwechselt", "rotationstypen_vertauscht": "Orthogonale und oblique Rotation verwechselt", "hauptladung_falsch_gelesen": "Hauptladung oder Faktorzuordnung falsch gelesen", "kreuzladung_uebersehen": "Substantielle Kreuzladung übersehen", "vorzeichen_ignoriert": "Negatives Ladungsvorzeichen trotz erwarteter positiver Ausrichtung ignoriert", "ein_item_loescht_faktor": "Ein problematisches Item vorschnell als Grund zur Faktorentfernung genutzt", "ladung_als_rohwert_behandelt": "Faktorladung mit einem Rohdatenwert verwechselt", "anzeigegrenze_als_selektionsgrenze": "Ausgabegrenze cut als automatische Itemselektionsregel behandelt", "cut_loescht_daten": "Ausgeblendete Ladungen fälschlich als aus den Daten gelöscht verstanden", "cut_mit_faktorzahl": "cut-Argument mit der Anzahl der Faktoren verwechselt", "ladung_nicht_quadriert": "Fürntratt-Rechnung ohne Quadrierung der Hauptladung", "ladung_mit_kommunalitaet_direkt_verglichen": "Hauptladung direkt statt quadriert mit der Kommunalität verglichen", "ladung_muss_eins_sein": "Unrealistisch perfekte Ladung als Voraussetzung angenommen", "fuerntratt_mit_kreuzladung_verwechselt": "Fürntratt-Kriterium mit einem Kreuzladungsvergleich verwechselt", "fuerntratt_projektfall_falsch": "Fürntratt-Prüfung des Projektfalls c3 falsch bewertet", "fuerntratt_grenzfall_falsch": "Fürntratt-Grenzfälle rechnerisch falsch verglichen", "selektionskriterien_falsch_angewandt": "Haupt- und Kreuzladungsgrenzen bei der Vorauswahl falsch angewandt", "ladung_als_einziges_kriterium": "Faktorladung als einziges Auswahlkriterium verwendet", "redundanz_loescht_faktor": "Itemredundanz fälschlich als Grund zur Entfernung des gesamten Faktors", "items_ungeprueft_verschmolzen": "Redundante Items ohne neue Prüfung zu einem Item verschmolzen", "itemselektion_eindimensional_betrachtet": "Mehrkriteriale Itemselektion auf einen einzigen Kennwert reduziert", "projektzahl_als_universalregel": "Projektspezifische Itemzahl als universelle Pflichtzahl behandelt", "itemzahl_mit_facettenzahl": "Itemzahl mit einer angeblich festen Facettenzahl verwechselt", "itemzahl_aus_bartlett": "Finale Itemzahl aus dem Bartlett-Test abgeleitet", "abschluss_faktorzahl_falsch": "Faktorzahl im integrierten Fall nicht mehrkriterial begründet", "abschluss_ladungsmatrix_falsch": "Haupt- und Kreuzladungen im Abschlussfall falsch ausgewählt", "abschluss_fuerntratt_falsch": "Fürntratt-Rechnung im Abschlussfall fehlerhaft", "parallel_als_beweis": "Parallelanalyse als Beweis wahrer Faktoren überinterpretiert", "sichtbare_ladung_genuegt": "Bloße Sichtbarkeit einer Ladung als Auswahlkriterium verwendet", "rotation_ersetzt_pruefung": "Rotation fälschlich als Ersatz weiterer Prüfung behandelt"})[e]||String(e).replaceAll('_',' ')}
+function bindTaskEvents(){document.querySelectorAll('[data-task]').forEach(el=>{el.querySelectorAll('[data-check]').forEach(b=>b.addEventListener('click',()=>checkTask(el.dataset.task)));el.querySelectorAll('[data-hint]').forEach(b=>b.addEventListener('click',()=>showHint(el.dataset.task,Number(b.dataset.hint),b)));el.querySelectorAll('[data-move]').forEach(b=>b.addEventListener('click',()=>moveOrder(b)));el.querySelectorAll('.matrix-cell').forEach(b=>b.addEventListener('click',()=>{b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')}))})}
+function bindPageButtons(){document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)))}
+function moveOrder(btn){const li=btn.closest('li'),list=li.parentElement;if(btn.dataset.move==='up'&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);if(btn.dataset.move==='down'&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);[...list.children].forEach((x,i)=>x.querySelector('strong').textContent=`${i+1}.`)}
+function showHint(id,i,btn){const box=document.getElementById(`hint-${id}-${i}`);if(!box)return;const opening=box.style.display!=='block';box.style.display=opening?'block':'none';btn.textContent=opening?`Hinweis ${i+1} ausblenden`:`Hinweis ${i+1} anzeigen`;if(opening){const st=taskState(id);st.hints+=1;saveState()}}
+function selectedValues(article){return [...article.querySelectorAll('input:checked')].map(x=>Number(x.value)).sort((a,b)=>a-b)}
+function arraysEqual(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+function getMisconception(t,ans){if(t.misconceptionByAnswer&&t.type==='single'&&ans!=null)return t.misconceptionByAnswer[String(ans)]||t.misconception;return t.misconception}
+function retryText(t,attempts){const hints=t.hints||[];if(hints.length){const i=Math.min(Math.max(attempts-1,0),hints.length-1);return `Nächster Ansatz bei „${t.title}“: ${hints[i]}`}return `Prüfe bei „${t.title}“ jeden geforderten Teilschritt noch einmal.`}
+function checkTask(id){const t=tasks.find(x=>x.id===id),article=document.getElementById(`task-${id}`),st=taskState(id);let ans,ok=false;
+ if(t.type==='single'||t.type==='multi'){ans=selectedValues(article);if(t.type==='single')ans=ans.length?ans[0]:null;ok=t.type==='single'?ans===t.answer:arraysEqual(ans,[...t.answer].sort((a,b)=>a-b))}
+ else if(t.type==='number'){const raw=article.querySelector('.number-input').value.trim().replace(',','.');ans=Number(raw);ok=raw!==''&&Number.isFinite(ans)&&Math.abs(ans-t.answer)<=Number(t.tolerance||0)}
+ else if(t.type==='order'){ans=[...article.querySelectorAll('.order-item')].map(x=>Number(x.dataset.orig));ok=arraysEqual(ans,t.answer)}
+ else if(t.type==='matrix'){ans=[...article.querySelectorAll('.matrix-cell[aria-pressed="true"]')].map(x=>x.dataset.pair).sort();ok=arraysEqual(ans,[...t.answer].sort())}
+ else if(t.type==='match'){ans=[...article.querySelectorAll('[data-match-row]')].map(x=>x.value===''?null:Number(x.value));ok=arraysEqual(ans,t.answer)}
+ st.attempts+=1;st.lastAnswer=ans;if(ok)st.correct=true;const misconception=!ok?getMisconception(t,ans):null;if(misconception)state.errors[misconception]=(state.errors[misconception]||0)+1;const fb=article.querySelector('.feedback');fb.className=`feedback show ${ok?'good':'bad'}`;const body=ok?t.explanation:retryText(t,st.attempts);const reveal=(!ok&&st.attempts>=2)?`<div class="answer-row"><button type="button" class="btn" data-reveal>Erklärung anzeigen</button></div>`:'';fb.innerHTML=`<strong>${ok?'Richtig.':'Noch nicht richtig.'}</strong><div>${esc(body)}</div>${misconception?`<div class="misconception">Möglicher Denkfehler: ${esc(humanError(misconception))}</div>`:''}${reveal}`;const revealBtn=fb.querySelector('[data-reveal]');if(revealBtn)revealBtn.addEventListener('click',()=>revealExplanation(id,revealBtn));article.classList.toggle('done',st.correct);article.querySelector('.status').textContent=st.correct?'gelöst':`${st.attempts} Versuch${st.attempts===1?'':'e'}`;article.querySelector('.status').classList.toggle('good',st.correct);announce(`${t.title}: ${ok?'richtig':'noch nicht richtig'}`);saveState();renderNav();updateSectionCounts()}
+function revealExplanation(id,btn){const t=tasks.find(x=>x.id===id),st=taskState(id),fb=document.querySelector(`#task-${id} .feedback`);if(!t||!fb)return;st.hints+=1;fb.innerHTML+=`<div class="hint" style="display:block;margin-top:10px"><strong>Erklärung:</strong> ${esc(t.explanation)}</div>`;btn.remove();saveState()}
+function showPage(id,focus=true){if(!MODULE.sections.some(s=>s.id===id))id='start';current=id;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===id));document.querySelectorAll('.nav button').forEach(b=>{const active=b.dataset.page===id;b.setAttribute('aria-current',active?'page':'false')});if(id==='result'){const old=document.getElementById('page-result');old.innerHTML=renderResult();bindPageButtons()}saveState();if(focus){window.scrollTo({top:0,behavior:'smooth'});document.getElementById('main').focus()}}
+function updateSectionCounts(){MODULE.sections.forEach(s=>{const ts=sectionTasks(s.id);if(!ts.length)return;const page=document.getElementById(`page-${s.id}`);if(!page)return;const el=page.querySelector('.section-count');if(el){const d=ts.filter(t=>taskState(t.id).correct).length;el.textContent=`${d} von ${ts.length} gelöst`}})}
+function updateProgress(){const done=tasks.filter(t=>taskState(t.id).correct).length,pct=tasks.length?Math.round(done/tasks.length*100):0;document.getElementById('progressText').textContent=`${done} / ${tasks.length}`;document.getElementById('progressBar').style.width=`${pct}%`;document.querySelector('.progress').setAttribute('aria-valuenow',String(pct))}
+function exportState(){const blob=new Blob([JSON.stringify({schema:'m11a-application-trainer-progress',module:MODULE.id,exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='m11a_anwendungstrainer_03_lernstand.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importState(file){const reader=new FileReader();reader.onload=()=>{try{const obj=JSON.parse(reader.result);const incoming=obj.state||obj;if(!incoming.tasks)throw new Error('Ungültiges Format');state=incoming;state.version=MODULE.version;current=state.current||'start';saveState();renderNav();renderPages();showPage(current);announce('Lernstand importiert')}catch(e){alert('Die Datei konnte nicht als Lernstand importiert werden.')}};reader.readAsText(file)}
+function resetState(){if(!confirm('Soll der gesamte Lernstand dieses Moduls gelöscht werden?'))return;state=defaultState();current='start';try{localStorage.removeItem(MODULE.id)}catch(e){}renderNav();renderPages();showPage('start');announce('Lernstand zurückgesetzt')}
+document.getElementById('exportBtn').addEventListener('click',exportState);document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());document.getElementById('importFile').addEventListener('change',e=>{if(e.target.files[0])importState(e.target.files[0]);e.target.value=''});document.getElementById('resetBtn').addEventListener('click',resetState);
+window.__TRAINER__={MODULE,tasks,taskState,checkTask,showPage};
+renderNav();renderPages();updateProgress();showPage(current,false);
+</script>
+</body>
+</html>

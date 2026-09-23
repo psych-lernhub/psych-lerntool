@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M11b · VL01 AMDP-Grundlagen & Basisfunktionen</title>
+<!--
+  GERÜST von scaffold_lernmodul.py erzeugt — Engine (CSS+JS) ist fertig.
+  KI füllt nur die mit  FILL:  markierten Stellen + die JS-Daten-Stubs.
+  Storage-Key: lm-m11b-vl01
+  Generische Widgets verfügbar: revealEntry, checkCorr, revealBar,
+    revealStep, switchTab, revealMisi, toggleCheck.
+-->
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#334155;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--accent:#818cf8;--green:#34d399;
+  --red:#f87171;--yellow:#fbbf24;--cyan:#38bdf8;--orange:#fb923c
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+.wrap{max-width:740px;margin:0 auto;padding:24px 16px}
+.page-title{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{color:var(--text2);font-size:.82rem;margin-bottom:8px}
+.lf-bar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:20px;font-size:.78rem;color:var(--text2)}
+.lf-bar strong{color:var(--accent)}
+
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.nav-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;font-size:.8rem;cursor:pointer;color:var(--text2);transition:.15s}
+.nav-btn:hover,.nav-btn.active{border-color:var(--accent);color:var(--text)}
+
+.section{display:none}.section.active{display:block}
+.sec-head{margin-bottom:18px}
+.sec-title{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.sec-lz{font-size:.78rem;color:var(--text2);border-left:3px solid var(--accent);padding-left:10px;margin-bottom:4px}
+.sec-lf{font-size:.72rem;color:var(--text3);font-style:italic;padding-left:13px}
+
+.phase-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--text3);margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.phase-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.entry-q{background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(56,189,248,.05));
+  border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:18px;margin-bottom:4px}
+.entry-q p{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.entry-q-reveal{background:var(--surface2);border-radius:10px;padding:13px;font-size:.88rem;color:var(--text2);display:none;margin-top:10px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card p,.card li{font-size:.9rem;color:var(--text2);margin-bottom:6px}
+.card ul,.card ol{padding-left:18px}
+.card strong{color:var(--text)}
+.card table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:8px}
+.card td{padding:7px 6px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.card td:first-child{font-weight:700;color:var(--text);min-width:120px}
+.card tr:last-child td{border-bottom:none}
+.card th{padding:7px 6px;font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:left}
+.hinweis{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text2);margin-top:10px}
+.hinweis strong{color:var(--yellow)}
+
+/* Lehrbuchergänzung-Banner (Inhalt nicht auf Folien, aber Pflicht-LF) */
+.lbuch-banner{background:rgba(251,146,60,.12);border:2px solid var(--orange);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.85rem;color:var(--text)}
+.lbuch-banner strong{color:var(--orange)}
+
+.btn{display:inline-block;border:none;border-radius:10px;padding:9px 18px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
+.btn-ghost{background:var(--surface2);color:var(--text2)}.btn-ghost:hover{color:var(--text)}
+.btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{filter:brightness(1.1)}
+
+/* Zuordnung / Szenario (corr) */
+.corr-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.86rem;color:var(--text)}
+.corr-dialog{font-size:.82rem;color:var(--text2);font-style:italic;margin-top:4px}
+.corr-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.corr-btn{border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.corr-btn:hover{border-color:var(--accent);color:var(--text)}
+.corr-btn.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:var(--green)}
+.corr-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:var(--red)}
+.corr-fb{font-size:.74rem;color:var(--text3);margin-top:6px;display:none}
+
+/* Balken-Aufdeckung (Studien) */
+.bars{margin-top:12px}
+.bar-row{display:none;margin-bottom:11px}
+.bar-row.shown{display:block}
+.bar-lbl{font-size:.8rem;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px}
+.bar-lbl b{color:var(--text);white-space:nowrap}
+.bar-track{background:var(--bg);border:1px solid var(--border);border-radius:6px;height:20px;overflow:hidden}
+.bar-fill{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#38bdf8);border-radius:6px;transition:width .6s}
+.bar-fazit{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:11px 13px;font-size:.83rem;color:var(--text2);margin-top:12px;display:none}
+.bar-fazit strong{color:var(--cyan)}
+
+/* Schritt-für-Schritt-Aufdeckung (generisch) */
+.step-item{display:none;background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:.88rem;color:var(--text2)}
+.step-item.shown{display:block}
+.step-label{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step-item strong{color:var(--text)}
+
+/* Tab-Vergleich (generisch) */
+.tab-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{border:1.5px solid var(--border);border-radius:8px;padding:7px 16px;
+  font-size:.8rem;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text2);transition:.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border-color:var(--accent);color:var(--text);background:rgba(129,140,248,.1)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Schalter / Meter (bespoke-Widget) */
+.sw-list{margin-top:12px}
+.sw-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;gap:12px}
+.sw-item span{font-size:.84rem;color:var(--text)}
+.sw-btn{border:1.5px solid var(--border);border-radius:20px;width:46px;height:26px;background:var(--surface2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.sw-btn::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--text3);transition:.2s}
+.sw-btn.on{background:rgba(129,140,248,.3);border-color:var(--accent)}
+.sw-btn.on::after{left:22px;background:var(--accent)}
+.sw-meter-wrap{margin-top:16px}
+.sw-meter{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sw-meter-fill{height:100%;width:50%;background:var(--orange);transition:width .4s,background .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.74rem;font-weight:700;color:#fff}
+.sw-level{font-size:.84rem;font-weight:700;margin-top:7px;text-align:center;color:var(--orange)}
+
+/* Simulator / Regler (bespoke-Widget) */
+.sim-wrap{margin-top:12px}
+.sim-range{width:100%;accent-color:var(--accent);margin:6px 0}
+.sim-stage{font-size:.88rem;color:var(--text);font-weight:700;margin:8px 0 6px}
+.sim-track{background:var(--bg);border:1px solid var(--border);border-radius:8px;height:26px;overflow:hidden}
+.sim-fill{height:100%;width:67%;background:linear-gradient(90deg,#f87171,#fb923c);transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.75rem;font-weight:700;color:#fff}
+.sim-desc{font-size:.82rem;color:var(--text2);margin-top:8px}
+.sim-scale{display:flex;justify-content:space-between;font-size:.66rem;color:var(--text3);margin-top:4px}
+
+/* Mind-Map (Flip-Cards) */
+.misi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.misi-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:.2s;min-height:52px}
+.misi-card:hover{border-color:var(--accent)}
+.misi-card.revealed{border-color:rgba(129,140,248,.4);background:rgba(129,140,248,.05);cursor:default}
+.misi-card h4{font-size:.83rem;font-weight:700;color:var(--text);margin-bottom:0}
+.misi-card.revealed h4{color:var(--accent)}
+.misi-card p{font-size:.76rem;color:var(--text2);margin-top:5px;display:none}
+.misi-card.revealed p{display:block}
+
+/* Checkliste */
+.check-list{margin-top:12px}
+.check-item{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:6px;cursor:pointer;font-size:.84rem;color:var(--text2);transition:.15s}
+.check-item .box{width:18px;height:18px;border:1.5px solid var(--text3);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff}
+.check-item.checked{color:var(--text);border-color:var(--green)}
+.check-item.checked .box{background:var(--green);border-color:var(--green)}
+
+/* Duelle */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:14px 0}
+.duel-side{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+.duel-side h4{font-size:.82rem;font-weight:700;margin-bottom:8px}
+.duel-a h4{color:var(--accent)}.duel-b h4{color:var(--orange)}
+.duel-mid{font-weight:700;color:var(--text3);padding-top:38px;font-size:.9rem}
+.duel-side p{font-size:.82rem;color:var(--text2);margin-bottom:4px}
+.warn-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);
+  border-radius:10px;padding:11px;margin-bottom:14px;font-size:.82rem}
+.warn-box strong{color:var(--yellow)}
+
+/* MC */
+.mc-wrap{margin-bottom:12px}
+.mc-q-text{font-size:.93rem;font-weight:600;color:var(--text);margin-bottom:12px}
+.mc-opts{display:flex;flex-direction:column;gap:7px}
+.mc-opt{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:10px 14px;text-align:left;cursor:pointer;font-size:.87rem;color:var(--text2);
+  display:flex;gap:10px;align-items:flex-start;width:100%;transition:.15s}
+.mc-opt:hover:not([disabled]){border-color:var(--accent);color:var(--text)}
+.mc-opt .ltr{font-family:monospace;font-size:.72rem;font-weight:700;color:var(--text3);min-width:16px;flex-shrink:0;margin-top:2px}
+.mc-opt.correct{border-color:var(--green)!important;background:rgba(52,211,153,.07)!important;color:var(--green)!important}
+.mc-opt.correct .ltr{color:var(--green)}
+.mc-opt.wrong{border-color:var(--red)!important;background:rgba(248,113,113,.07)!important;color:var(--red)!important}
+.mc-opt.wrong .ltr{color:var(--red)}
+.mc-exp{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);
+  border-radius:9px;padding:12px;margin-top:8px;font-size:.84rem;color:var(--text2);display:none}
+.mc-exp .lbl{font-size:.63rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-rating{display:none;gap:7px;margin-top:8px}
+.mc-rate{flex:1;border:none;border-radius:9px;padding:8px 4px;font-size:.73rem;font-weight:700;cursor:pointer}
+.mc-rate.again{background:rgba(248,113,113,.18);color:var(--red)}
+.mc-rate.good{background:rgba(56,189,248,.13);color:var(--cyan)}
+.mc-rate.easy{background:rgba(52,211,153,.16);color:var(--green)}
+
+.quiz-phase{border-top:1px solid var(--border);margin-top:22px;padding-top:18px}
+.section-nav{display:flex;justify-content:flex-end;margin-top:18px;gap:8px}
+
+.prog-bar{background:var(--surface2);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.trainer-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.trainer-meta{font-size:.74rem;color:var(--text3);font-family:monospace}
+.done-box{text-align:center;padding:28px 14px}
+.done-icon{font-size:2.4rem;margin-bottom:8px}
+.done-title{font-size:1.15rem;font-weight:800;margin-bottom:4px}
+.done-sub{color:var(--text2);font-size:.86rem;margin-bottom:18px}
+.done-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;min-width:66px}
+.done-stat .dn{font-size:1.4rem;font-weight:800}
+.done-stat .dl{font-size:.63rem;color:var(--text3);text-transform:uppercase}
+
+@media(max-width:480px){
+  .duel{grid-template-columns:1fr}.duel-mid{display:none}
+  .misi-grid{grid-template-columns:1fr}
+  .corr-btns{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="page-title">M11b · VL01 AMDP-Grundlagen & Basisfunktionen</h1>
+<p class="page-sub">Psychologische Diagnostik II · 11b.1 Psychopathologischer Befund · OSCE Sept 2026</p>
+<div class="lf-bar">
+  <strong>Lernfragen:</strong> 1. Psychopath. Befund & deskriptive Psychopathologie · 2. AMDP-System · 3. Entscheidungsbaum & Datenquellen (S/F/SF) · 4. Diagnostik-Hierarchie & standardisierte Befunderhebung · 5. AMDP-Interview: Prinzipien & Aufbau · 6. Strukturierung & Präzisierung · 7. Bewusstsein & Orientierung · 8. Aufmerksamkeit & Gedächtnis
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goTo(0)" id="nb0">① Befund</button>
+  <button class="nav-btn" onclick="goTo(1)" id="nb1">② AMDP-System</button>
+  <button class="nav-btn" onclick="goTo(2)" id="nb2">③ Entscheidungsbaum</button>
+  <button class="nav-btn" onclick="goTo(3)" id="nb3">④ Hierarchie</button>
+  <button class="nav-btn" onclick="goTo(4)" id="nb4">⑤ Interview I</button>
+  <button class="nav-btn" onclick="goTo(5)" id="nb5">⑥ Interview II</button>
+  <button class="nav-btn" onclick="goTo(6)" id="nb6">⑦ Bewusstsein/Orient.</button>
+  <button class="nav-btn" onclick="goTo(7)" id="nb7">⑧ Aufm./Gedächtnis</button>
+  <button class="nav-btn" onclick="goTo(8)" id="nb8">🔴 Verwechslungen</button>
+  <button class="nav-btn" onclick="goTo(9)" id="nb9">🎯 Abschluss-Quiz</button>
+</nav>
+
+<!-- ═══════════ SEKTION 1 — ① Befund ═══════════ -->
+<section class="section active" id="s0">
+  <div class="sec-head">
+    <div class="sec-title">Psychopathologischer Befund & deskriptive Psychopathologie</div>
+    <div class="sec-lz">Befund = Angaben + Beobachtungen (aktueller Querschnitt); Anamnese = Angaben/Vorgeschichte. Deskriptive Symptom-/Syndromebene.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Eine Patientin erzählt von ihrer schweren Kindheit und ihrer aktuellen Niedergeschlagenheit. Was davon gehört in den <em>psychopathologischen Befund</em> — und was in die Anamnese?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq0')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq0">Der <strong>psychopathologische Befund</strong> erfasst den <strong>aktuellen Querschnitt</strong> (die jetzige Niedergeschlagenheit) aus <strong>Angaben + Beobachtungen</strong>. Die Kindheit gehört in die <strong>Anamnese</strong> (Angaben zur Vorgeschichte).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Psychopathologischer Befund</div>
+    Trägt die für das Störungsbild kennzeichnenden <strong>Symptome</strong> zusammen, fasst die psychiatrische Untersuchung zusammen, orientiert sich an den <strong>ICD-10-Kriterien</strong> und wird meist als <strong>Fließtext</strong> dokumentiert. Empfohlen: Orientierung an einem halbstrukturierten Interview (AMDP).
+  </div>
+  <div class="card">
+    <div class="card-title">Anamnese vs. Befund</div>
+    <strong>Anamnese</strong> = ANGABEN des Patienten (Lebens-/Vorgeschichte). <strong>Befund</strong> = aktueller Querschnitt aus ANGABEN <em>und</em> BEOBACHTUNGEN des Untersuchers. Mögliche <strong>Diskrepanzen</strong> zwischen beidem sind diagnostisch bedeutsam.
+  </div>
+  <div class="card">
+    <div class="card-title">Deskriptive Psychopathologie</div>
+    Erkennen, Beschreiben und Dokumentieren abweichenden Erlebens und Verhaltens auf der <strong>Symptom-</strong> und <strong>Syndromebene</strong> — ohne Ursachenerklärung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Anamnese oder Befund? — aufdecken</div>
+    <div id="step0">
+      <div class="step-item">„Mit 12 Jahren zog ich oft um." → <strong>Anamnese</strong> (Vorgeschichte/Angaben).</div>
+      <div class="step-item">„Die Patientin wirkt im Gespräch verlangsamt und weint." → <strong>Befund</strong> (Beobachtung, aktuell).</div>
+      <div class="step-item">„Ich fühle mich seit zwei Wochen wie gelähmt." → <strong>Befund</strong> (aktuelle Angabe, Querschnitt).</div>
+      <div class="step-item">→ Faustregel: Vorgeschichte = Anamnese; aktueller Zustand (Angaben + Beobachtungen) = Befund.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step0')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq0"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-accent" onclick="goTo(1)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 2 — ② AMDP-System ═══════════ -->
+<section class="section" id="s1">
+  <div class="sec-head">
+    <div class="sec-title">Das AMDP-System (Überblick)</div>
+    <div class="sec-lz">Fähndrich & Stieglitz; ~100 Symptome in Merkmalsbereichen; halbstrukturiert; Beobachtungszeitraum je nach Ziel.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Warum erhebt man den Befund mit einem System wie dem AMDP, statt einfach „frei" zu beschreiben?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq1')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq1">Standardisierung macht Befunde <strong>vergleichbar</strong> (über Untersucher und Zeit) und <strong>reliabel</strong>. Das AMDP erfasst die ca. <strong>100 wichtigsten Symptome</strong> in Merkmalsbereichen — als <strong>halbstrukturiertes</strong> Interview (Wortlaut bleibt anpassbar).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Das AMDP-System</div>
+    <strong>A</strong>rbeitsgemeinschaft für <strong>M</strong>ethodik und <strong>D</strong>okumentation in der <strong>P</strong>sychiatrie (Manual: Fähndrich &amp; Stieglitz). Erfasst die <strong>~100 wichtigsten psychopathologischen Symptome</strong>, ergänzbar um anamnestische/somatische Daten.
+  </div>
+  <div class="card">
+    <div class="card-title">Merkmalsbereiche</div>
+    Bewusstsein/Orientierung · Aufmerksamkeit/Gedächtnis · formale Denkstörungen · inhaltliche Denkstörungen (Befürchtungen/Zwänge; Wahn) · Sinnestäuschungen · Ich-Störungen · Affektivität · Antrieb/Psychomotorik · zirkadiane Besonderheiten · andere (Suizidalität, Aggressivität …).
+  </div>
+  <div class="card">
+    <div class="card-title">Beobachtungszeitraum (je nach Ziel)</div>
+    <strong>Aufnahmebefund</strong> ~14 Tage · <strong>Diagnose</strong> nach dem Zeitkriterium der Störung (Depression 2 Wochen, Manie 1 Woche, Demenz 6 Monate) · <strong>Verlauf</strong> 3–4 Tage (bzw. 7 Tage bei Vergleich mit Selbstbeurteilungsskalen).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Beobachtungszeitraum? — aufdecken</div>
+    <div id="step1">
+      <div class="step-item">Aufnahmebefund einer neuen Patientin → die letzten <strong>~14 Tage</strong>.</div>
+      <div class="step-item">Frage „Liegt eine depressive Episode vor?" → Zeitkriterium <strong>2 Wochen</strong>.</div>
+      <div class="step-item">Verdacht auf demenzielles Syndrom → <strong>6 Monate</strong>.</div>
+      <div class="step-item">Tägliche Verlaufsdokumentation auf Station → die letzten <strong>3–4 Tage</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step1')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq1"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(0)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(2)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 3 — ③ Entscheidungsbaum ═══════════ -->
+<section class="section" id="s2">
+  <div class="sec-head">
+    <div class="sec-title">Entscheidungsbaum & Datenquellen (S/F/SF)</div>
+    <div class="sec-lz">Beurteilbarkeit→Sicherheit→Vorhandensein→Quantifizierung; S/F/SF (51/20/29 der 100).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Manche Symptome kann der Patient selbst gar nicht bemerken (z. B. Wortneubildungen). Wie geht das AMDP mit der Frage um, <em>woher</em> die Information für jedes Merkmal kommt?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq2')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq2">Jedes Merkmal hat eine festgelegte <strong>Datenquelle</strong>: <strong>S</strong> (nur Selbstaussage), <strong>F</strong> (nur Fremdbeobachtung), <strong>SF</strong> (beides). Vor der Bewertung läuft der <strong>Entscheidungsbaum</strong>: beurteilbar? → sicher? → vorhanden? → wie stark?</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">AMDP-Entscheidungsbaum (je Merkmal)</div>
+    <strong>1. Beurteilbarkeit</strong> (beurteilbar vs. nicht untersuchbar → keine Aussage) → <strong>2. Entscheidungssicherheit</strong> (sicher vs. fraglich → keine Aussage) → <strong>3. Vorhandensein</strong> (vorhanden/nicht vorhanden) → <strong>4. Quantifizierung</strong> (leicht 1 / mittel 2 / schwer 3).
+  </div>
+  <div class="card">
+    <div class="card-title">Datenquellen S / F / SF</div>
+    <strong>S (Selbst):</strong> nur Selbstaussagen erlauben die Bewertung (z. B. Zwangsgedanken). <strong>F (Fremd):</strong> nur Fremdbeobachtung, weil dem Patienten als „Störung" nicht zugänglich (z. B. Neologismen). <strong>SF:</strong> beides möglich (z. B. Halluzinationen, Stimmung).
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Verteilung der 100 Items</div>
+    51 × S · 20 × F · 29 × SF. Die meisten Symptome werden also über die <strong>Selbstaussage</strong> erhoben — daher die Bedeutung guter Gesprächsführung.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Datenquelle (S / F / SF)?</div>
+    <div class="corr-item" id="ba">Zwangsgedanken — nur über die Selbstaussage des Patienten beurteilbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ba',this,'s')">S (Selbst)</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'f')">F (Fremd)</button>
+        <button class="corr-btn" onclick="checkCorr('ba',this,'sf')">SF (beides)</button>
+      </div><div class="corr-fb" id="ba-fb"></div>
+    </div>
+    <div class="corr-item" id="bb">Neologismen (Wortneubildungen) — dem Patienten als Störung nicht zugänglich.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bb',this,'s')">S (Selbst)</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'f')">F (Fremd)</button>
+        <button class="corr-btn" onclick="checkCorr('bb',this,'sf')">SF (beides)</button>
+      </div><div class="corr-fb" id="bb-fb"></div>
+    </div>
+    <div class="corr-item" id="bc">Halluzinationen / Stimmung — über Selbstaussage und Fremdbeobachtung beurteilbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bc',this,'s')">S (Selbst)</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'f')">F (Fremd)</button>
+        <button class="corr-btn" onclick="checkCorr('bc',this,'sf')">SF (beides)</button>
+      </div><div class="corr-fb" id="bc-fb"></div>
+    </div>
+    <div class="corr-item" id="bd">Orientierung — wird durch Fragen an den Patienten erhoben.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('bd',this,'s')">S (Selbst)</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'f')">F (Fremd)</button>
+        <button class="corr-btn" onclick="checkCorr('bd',this,'sf')">SF (beides)</button>
+      </div><div class="corr-fb" id="bd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq2"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(1)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(3)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 4 — ④ Hierarchie ═══════════ -->
+<section class="section" id="s3">
+  <div class="sec-head">
+    <div class="sec-title">Diagnostik-Hierarchie & standardisierte Befunderhebung</div>
+    <div class="sec-lz">explorativ→Symptom→Syndrom→nosologisch; Vor-/Nachteile der Standardisierung.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Vom Satz „Meine Stimmung ist im Keller" bis zur Diagnose „depressive Episode" — über welche Stufen läuft die psychiatrische Diagnostik?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq3')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq3">Über vier Ebenen: <strong>explorativ</strong> (Äußerung) → <strong>Symptom</strong> (deprimiert) → <strong>Syndrom</strong> (depressives Syndrom) → <strong>nosologisch</strong> (ICD-10 depressive Episode, mit Ausschluss- und Zeitkriterien).</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Hierarchie der psychiatrischen Diagnostik</div>
+    <strong>Explorative Ebene</strong> (Äußerungen) → <strong>Symptomebene</strong> (Einzelsymptom) → <strong>Syndromebene</strong> (Kombination/Muster) → <strong>nosologische/klassifikatorische Ebene</strong> (operationalisierte Diagnose, ICD-10/DSM-5).
+  </div>
+  <div class="card">
+    <div class="card-title">Symptomal / syndromal / nosologisch</div>
+    <strong>Symptomal</strong> = Einzelsymptom (z. B. Antriebsverlust). <strong>Syndromal</strong> = Symptommuster (z. B. depressives Syndrom). <strong>Nosologisch</strong> = Krankheitsdiagnose (operationalisiert nach ICD-10/DSM-5; berücksichtigt Ausschluss- & Zeitkriterien).
+  </div>
+  <div class="card">
+    <div class="card-title">Standardisierte Befunderhebung — Vor &amp; Nachteile</div>
+    <strong>Vorteile:</strong> Vergleichbarkeit (Quer-/Längsschnitt) · höhere Interrater-Reliabilität · Grundlage operationalisierter/evidenzbasierter Diagnostik · Schutz vor spekulativer Konstruktion.<br>
+    <strong>Nachteile:</strong> verringerte Plastizität · verringerte Individualität · Wegfall komplexer Phänomene · Verzicht auf Entstehungszusammenhang.
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Diagnostik-Ebene?</div>
+    <div class="corr-item" id="ca">„Meine Stimmung ist im Keller." (wörtliche Äußerung des Patienten)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ca',this,'explorativ')">Explorativ</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'symptom')">Symptom</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'syndrom')">Syndrom</button>
+        <button class="corr-btn" onclick="checkCorr('ca',this,'nosologisch')">Nosologisch</button>
+      </div><div class="corr-fb" id="ca-fb"></div>
+    </div>
+    <div class="corr-item" id="cb">„deprimiert" (ein einzelnes erfasstes Merkmal)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cb',this,'explorativ')">Explorativ</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'symptom')">Symptom</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'syndrom')">Syndrom</button>
+        <button class="corr-btn" onclick="checkCorr('cb',this,'nosologisch')">Nosologisch</button>
+      </div><div class="corr-fb" id="cb-fb"></div>
+    </div>
+    <div class="corr-item" id="cc">„depressives Syndrom" (Muster mehrerer Symptome)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cc',this,'explorativ')">Explorativ</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'symptom')">Symptom</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'syndrom')">Syndrom</button>
+        <button class="corr-btn" onclick="checkCorr('cc',this,'nosologisch')">Nosologisch</button>
+      </div><div class="corr-fb" id="cc-fb"></div>
+    </div>
+    <div class="corr-item" id="cd">„ICD-10: depressive Episode" (operationalisierte Diagnose)
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('cd',this,'explorativ')">Explorativ</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'symptom')">Symptom</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'syndrom')">Syndrom</button>
+        <button class="corr-btn" onclick="checkCorr('cd',this,'nosologisch')">Nosologisch</button>
+      </div><div class="corr-fb" id="cd-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq3"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(2)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(4)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 5 — ⑤ Interview I ═══════════ -->
+<section class="section" id="s4">
+  <div class="sec-head">
+    <div class="sec-title">AMDP-Interview: Prinzipien & Aufbau</div>
+    <div class="sec-lz">Gesprächsprinzipien (keine Interventionen); Aufbau Beginn→halbstrukturiert→Schluss; sensible Bereiche behutsam.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>In der OSCE wird die <em>Gesprächsführung</em> bewertet. Was ist im Befundgespräch ausdrücklich zu unterlassen — obwohl es gut gemeint wäre?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq4')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq4"><strong>Therapeutische Interventionen, Ratschläge oder Versprechen</strong> gehören nicht ins Befundgespräch — es dient der Erhebung, nicht der Behandlung. Aufbau: <strong>Beginn → halbstrukturierter Teil → Schluss</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Allgemeine Prinzipien der Gesprächsführung</div>
+    Platz zum Berichten lassen · zugewandte Haltung · Interesse zeigen (Kopfnicken) · Zeit zum Überlegen lassen · adäquate Sprache · Polarisierung/Konfrontation vermeiden · gemeinsames Interesse betonen · <strong>keine therapeutischen Interventionen/Versprechen</strong>.
+  </div>
+  <div class="card">
+    <div class="card-title">Aufbau &amp; Struktur</div>
+    <strong>Beginn:</strong> Ziel erläutern, Beziehung aufbauen, freie/spontane Schilderung. <strong>Halbstrukturierter Teil:</strong> systematische Erfassung der Merkmalsbereiche (keine Interventionen!). <strong>Schluss:</strong> Zusammenfassung; Raum für weitere Anliegen.
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Sensible Bereiche</div>
+    Orientierung, Suizidalität, Wahn, Halluzinationen <strong>behutsam und normalisierend</strong> einführen: „Manche Menschen berichten, dass … Kennen Sie so etwas auch?" Auch die Orientierungsfrage entlasten: „Diese Fragen muss ich allen Patienten stellen."
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Die drei Gesprächsphasen — aufdecken</div>
+    <div id="step4">
+      <div class="step-item"><strong>Beginn:</strong> sich vorstellen, Ziel/Funktion erläutern, Beziehung aufbauen, freie Schilderung ermöglichen.</div>
+      <div class="step-item"><strong>Halbstrukturierter Teil:</strong> die AMDP-Merkmalsbereiche systematisch abfragen — am vordergründigen Symptom beginnen, sensible Bereiche behutsam.</div>
+      <div class="step-item"><strong>Schluss:</strong> die Symptomatik zusammenfassen und dem Patienten Raum für weitere wichtige Beschwerden geben.</div>
+      <div class="step-item">→ Durchgehend: zugewandt, strukturiert, KEINE therapeutischen Interventionen.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step4')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq4"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(3)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(5)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 6 — ⑥ Interview II ═══════════ -->
+<section class="section" id="s5">
+  <div class="sec-head">
+    <div class="sec-title">AMDP-Interview: Strukturierung & Präzisierung</div>
+    <div class="sec-lz">Strukturieren (auf später verweisen, aufgreifen, Überleitungen) & präzisieren (nachfragen, zurückführen, Beispiele); Ziel: Präzisionsgrad.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du hast nur 10 Minuten und der Patient schweift ständig ab. Wie behältst du das Gespräch in der Hand, ohne unhöflich zu wirken?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq5')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq5">Mit aktiver <strong>Strukturierung</strong> (auf später verweisen, Angesprochenes aufgreifen, Überleitungen herbeiführen) und <strong>Präzisierung</strong> (nachfragen, zusammenfassen, zurückführen). Ziel: <strong>Zeit sparen + hoher Präzisionsgrad</strong>.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Strukturierung</div>
+    Nicht zu lange bei einem Thema bleiben · Unpassendes auf später verweisen („dafür komme ich später zurück") · bereits Angesprochenes aufgreifen (Geklärtes nicht erneut erfragen) · <strong>Überleitungen</strong>: zusammengehörige Bereiche gemeinsam explorieren (z. B. Schlafstörungen &amp; Grübeln) und explizit überleiten.
+  </div>
+  <div class="card">
+    <div class="card-title">Präzisierung</div>
+    <strong>Nachfragen</strong> (vage Angaben) · <strong>Zusammenfassen</strong> (Verständnis sichern) · <strong>Zurückführen</strong> (bei Ausweichen) · <strong>Erläutern lassen</strong> (unlogische Zusammenhänge) · <strong>Hilfestellung</strong> (Wiederholen / Beispiele) · nach Beispielen fragen (bei Suggestibilität).
+  </div>
+  <div class="card">
+    <div class="card-title">Leitprinzip</div>
+    Ein Symptom wird <strong>so lange exploriert, bis dem Interviewer eine Entscheidung möglich ist</strong> (Entscheidungsbaum: vorhanden/nicht vorhanden + Quantifizierung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Technik passt? — aufdecken</div>
+    <div id="step5">
+      <div class="step-item">Patient nennt nebenbei ein neues Symptom, das gerade nicht passt → <strong>auf später verweisen</strong> (Strukturierung).</div>
+      <div class="step-item">Patient weicht der Frage aus → <strong>Zurückführen</strong> („Ich komme noch einmal auf meine Frage zurück…").</div>
+      <div class="step-item">Angabe bleibt vage/unverständlich → <strong>Nachfragen</strong> („Können Sie mir das näher erklären?").</div>
+      <div class="step-item">Patient versteht die Frage nicht → <strong>Hilfestellung</strong>: in anderen Worten wiederholen oder ein Beispiel geben.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step5')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq5"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(4)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(6)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 7 — ⑦ Bewusstsein/Orient. ═══════════ -->
+<section class="section" id="s6">
+  <div class="sec-head">
+    <div class="sec-title">Bewusstseins- & Orientierungsstörungen</div>
+    <div class="sec-lz">Bewusstsein: Quantität (Verminderung) vs. Qualität (Trübung/Einengung/Verschiebung); Orientierung S: zeitlich/örtlich/situativ/Person.</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>„Bewusstseinsstörung" — meint das immer, dass jemand schläfrig/benommen ist? Und wie fragt man die Orientierung ab, ohne den Patienten zu kränken?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq6')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq6">Nein: nach <strong>Quantität</strong> (Verminderung der Wachheit: Benommenheit→Koma) UND nach <strong>Qualität</strong> (Trübung/Einengung/Verschiebung). Orientierung (zeitlich/örtlich/situativ/Person) <strong>behutsam und entlastend</strong> erfragen.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Bewusstseinsstörungen (meist Gesamteindruck)</div>
+    <strong>Nach Quantität — Bewusstseinsverminderung (F):</strong> Störung der Wachheit: Benommenheit → Somnolenz → Sopor → Koma.<br>
+    <strong>Nach Qualität:</strong> Bewusstseinstrübung (F, beeinträchtigte Klarheit) · Bewusstseinseinengung (SF, eingeengtes Erleben, verminderte Ansprechbarkeit) · Bewusstseinsverschiebung (S, erweitertes/intensiviertes Erleben).
+  </div>
+  <div class="card">
+    <div class="card-title">Orientierungsstörungen (S) — Bescheidwissen über …</div>
+    <strong>zeitlich:</strong> „Welches Datum haben wir heute?" · <strong>örtlich:</strong> „Wo sind wir? In welcher Stadt?" · <strong>situativ:</strong> „Was für eine Einrichtung ist das?" · <strong>zur Person:</strong> „Wie alt sind Sie? Welchen Beruf haben Sie?"
+  </div>
+  <div class="card">
+    <div class="card-title">⚠ Behutsam einführen</div>
+    Orientierungsfragen können kränken. Entlastend einleiten: „Ich möchte Ihnen einige Fragen stellen, die ich allen Patienten stelle — auch wenn manche selbstverständlich klingen."
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welche Orientierung wird geprüft? — aufdecken</div>
+    <div id="step6">
+      <div class="step-item">„Welche Jahreszeit haben wir gerade?" → <strong>zeitliche</strong> Orientierung.</div>
+      <div class="step-item">„In welcher Stadt befinden wir uns?" → <strong>örtliche</strong> Orientierung.</div>
+      <div class="step-item">„Was glauben Sie, welchen Beruf ich habe / was für eine Einrichtung das ist?" → <strong>situative</strong> Orientierung.</div>
+      <div class="step-item">„Wie alt sind Sie, und welchen Beruf haben/hatten Sie?" → Orientierung <strong>zur Person</strong>.</div>
+    </div>
+    <button class="btn btn-ghost" onclick="revealStep(this,'step6')">Nächster Schritt</button>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq6"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(5)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(7)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 8 — ⑧ Aufm./Gedächtnis ═══════════ -->
+<section class="section" id="s7">
+  <div class="sec-head">
+    <div class="sec-title">Aufmerksamkeits- & Gedächtnisstörungen</div>
+    <div class="sec-lz">Auffassung/Konzentration/Merkfähigkeit (KZG, 3-Begriffe-Test)/Gedächtnis (LZG)/Konfabulationen (F)/Paramnesien (S).</div>
+  </div>
+
+  <div class="phase-label">Phase 1 — Erst selbst überlegen</div>
+  <div class="entry-q">
+    <p>Du sollst Gedächtnis und Konzentration prüfen. Welche kleinen „Proben" baust du ins Gespräch ein — und was ist der häufigste Fehler beim 3-Begriffe-Test?</p>
+    <button class="btn btn-ghost" onclick="revealEntry(this,'eq7')">Auflösung zeigen</button>
+    <div class="entry-q-reveal" id="eq7">Konzentration: von 100 in 7er-Schritten / Monate rückwärts. Merkfähigkeit: <strong>3 Begriffe</strong> (z. B. 34, Oslo, Aschenbecher) — <strong>sofort wiederholen lassen</strong> (häufiger Fehler: das wird vergessen) und nach ~10 min erneut abfragen. Auffassung: Sprichwort/Gemeinsamkeiten.</div>
+  </div>
+
+  <div class="phase-label">Phase 2 — Theoretischer Lernteil</div>
+  <div class="card">
+    <div class="card-title">Aufmerksamkeit/Gedächtnis (meist SF) — Items &amp; Proben</div>
+    <strong>Auffassung:</strong> Sprichwort erklären / Gemeinsamkeit (Apfel–Banane). <strong>Konzentration:</strong> 100 minus 7 fortlaufend / Monate rückwärts. <strong>Merkfähigkeit (KZG ~10 min):</strong> 3 Begriffe — sofort wiederholen lassen, nach ~10 min erneut abfragen. <strong>Gedächtnis (LZG):</strong> „Was gab es heute zu Mittag?"
+  </div>
+  <div class="card">
+    <div class="card-title">Konfabulationen vs. Paramnesien</div>
+    <strong>Konfabulationen (F):</strong> Erinnerungslücken mit wechselnden Einfällen (Prüfung: identische Frage nach ~15 min). <strong>Paramnesien (S):</strong> Erinnerungsverfälschungen — déjà-vu / jamais-vu, Ekmnesie, Hypermnesie, Flashbacks/Intrusionen.
+  </div>
+  <div class="card">
+    <div class="card-title">Klinischer Bezug: Demenz</div>
+    Fortschreitender degenerativer Verlauf; zunehmende Verschlechterung von Gedächtnis/Aufmerksamkeit/Denken, Sprache und Motorik; emotionale/Persönlichkeitsveränderungen; häufig nur diffuses oder kein Störungsbewusstsein (Ratlosigkeit, Angst, Verwirrung).
+  </div>
+
+  <div class="phase-label">Phase 3 — Interaktiv</div>
+  <div class="card">
+    <div class="card-title">Welcher Merkmalsbereich?</div>
+    <div class="corr-item" id="aa">Der Patient weiß nicht, welches Datum heute ist und in welcher Stadt er sich befindet.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('aa',this,'bewusstsein')">Bewusstsein</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'orientierung')">Orientierung</button>
+        <button class="corr-btn" onclick="checkCorr('aa',this,'aufmgedaecht')">Aufmerksamkeit &amp; Gedächtnis</button>
+      </div><div class="corr-fb" id="aa-fb"></div>
+    </div>
+    <div class="corr-item" id="ab">Der Patient kann das Sprichwort „Der Apfel fällt nicht weit vom Stamm" nicht erklären.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ab',this,'bewusstsein')">Bewusstsein</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'orientierung')">Orientierung</button>
+        <button class="corr-btn" onclick="checkCorr('ab',this,'aufmgedaecht')">Aufmerksamkeit &amp; Gedächtnis</button>
+      </div><div class="corr-fb" id="ab-fb"></div>
+    </div>
+    <div class="corr-item" id="ac">Der Patient wirkt benommen, schläfrig und ist nur schwer erweckbar.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ac',this,'bewusstsein')">Bewusstsein</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'orientierung')">Orientierung</button>
+        <button class="corr-btn" onclick="checkCorr('ac',this,'aufmgedaecht')">Aufmerksamkeit &amp; Gedächtnis</button>
+      </div><div class="corr-fb" id="ac-fb"></div>
+    </div>
+    <div class="corr-item" id="ad">Der Patient kann sich die drei zuvor genannten Begriffe nach 10 Minuten nicht mehr merken.
+      <div class="corr-btns">
+        <button class="corr-btn" onclick="checkCorr('ad',this,'bewusstsein')">Bewusstsein</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'orientierung')">Orientierung</button>
+        <button class="corr-btn" onclick="checkCorr('ad',this,'aufmgedaecht')">Aufmerksamkeit &amp; Gedächtnis</button>
+      </div><div class="corr-fb" id="ad-fb"></div>
+    </div>
+  </div>
+
+  <div class="quiz-phase">
+    <div class="phase-label">Phase 4 — Sofort-Abfrage</div>
+    <div id="sq7"></div>
+  </div>
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(6)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(8)">Weiter →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 9 — Verwechslungs-Duelle ═══════════ -->
+<section class="section" id="s8">
+  <div class="sec-head">
+    <div class="sec-title">Häufige Verwechslungen</div>
+    <div class="sec-lz">Die fünf klausurkritischen Gegensatzpaare dieser VL sicher trennen.</div>
+  </div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Anamnese</h4>
+      <p>ANGABEN des Patienten</p>
+      <p>Vorgeschichte/Lebensgeschichte</p>
+      <p>subjektiver Bericht</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Psychopathologischer Befund</h4>
+      <p>Angaben + BEOBACHTUNGEN</p>
+      <p>aktueller Querschnitt</p>
+      <p>orientiert an ICD-10, meist Fließtext</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Anamnese ist der aktuelle Querschnitt aus Beobachtungen des Untersuchers, der Befund nur die Vorgeschichte.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Merkfähigkeit</h4>
+      <p>Kurzzeitgedächtnis (~10 min)</p>
+      <p>3-Begriffe-Test (sofort wiederholen lassen)</p>
+      <p>Aufnahme/kurzes Behalten</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Gedächtnis</h4>
+      <p>Speichern/Abruf > 10 min</p>
+      <p>Langzeitspeicher</p>
+      <p>'Was gab es heute zu Mittag?'</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Merkfähigkeit prüft den Langzeitspeicher über Jahre, das Gedächtnis nur die Aufnahme über wenige Minuten.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Bewusstseinsverminderung (Quantität)</h4>
+      <p>Störung der Wachheit/Vigilanz</p>
+      <p>Benommenheit→Somnolenz→Sopor→Koma</p>
+      <p>Datenquelle F</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Bewusstseinstrübung (Qualität)</h4>
+      <p>Beeinträchtigung der BewusstseinsKLARHEIT</p>
+      <p>Abkehr von der Außenwelt</p>
+      <p>qualitative Störung</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die Bewusstseinsverminderung ist eine rein qualitative Trübung der Klarheit ohne jede Beeinträchtigung der Wachheit.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>déjà-vu</h4>
+      <p>Neues wirkt vertraut</p>
+      <p>'schon einmal erlebt'</p>
+      <p>Paramnesie (S)</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>jamais-vu</h4>
+      <p>Vertrautes wirkt fremd/neu</p>
+      <p>vermeintliche Fremdheit</p>
+      <p>Paramnesie (S)</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Beim déjà-vu wirkt eine vertraute Situation plötzlich fremd, beim jamais-vu eine neue Situation vertraut.</div>
+
+  <div class="duel">
+    <div class="duel-side duel-a"><h4>Symptomale Diagnostik</h4>
+      <p>Einzelsymptom</p>
+      <p>z. B. Antriebsverlust</p>
+      <p>unterste Beschreibungsstufe</p>
+    </div>
+    <div class="duel-mid">vs.</div>
+    <div class="duel-side duel-b"><h4>Syndromale Diagnostik</h4>
+      <p>Muster mehrerer Symptome</p>
+      <p>z. B. depressives Syndrom</p>
+      <p>Kombination der Symptome</p>
+    </div>
+  </div>
+  <div class="warn-box"><strong>⚠ Fehlaussage:</strong> Die syndromale Diagnostik beschreibt ein einzelnes Symptom, die symptomale Diagnostik ein ganzes Symptommuster.</div>
+
+  <div class="section-nav">
+    <button class="btn btn-ghost" onclick="goTo(7)">← Zurück</button>
+    <button class="btn btn-accent" onclick="goTo(9)">Zum Abschluss-Quiz →</button>
+  </div>
+</section>
+
+<!-- ═══════════ SEKTION 10 — Abschluss-Quiz ═══════════ -->
+<section class="section" id="s9" data-quiz>
+  <div class="sec-head">
+    <div class="sec-title">🎯 Abschluss-Quiz — alle Themen gemischt</div>
+    <div class="sec-lz">Spaced Repetition · Lernstand wird gespeichert · lm-m11b-vl01</div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="finalProg" style="width:0%"></div></div>
+  <div class="trainer-top">
+    <span class="trainer-meta" id="finalMeta">0 / 0 gelernt</span>
+    <button class="btn btn-ghost" onclick="resetQuiz()" style="font-size:.7rem;padding:5px 9px">Reset</button>
+  </div>
+  <div id="finalScreen"></div>
+</section>
+
+</div>
+<script>
+var LS_KEY = 'lm-m11b-vl01';
+
+/* ═══════════════════════════════════════════════════════════════════
+   DATEN — von der KI zu füllen (sonst leeres Modul, läuft aber).
+   sofortFragen: Schlüssel = Sektionsindex (0,1,2,…); Wert = Array von Fragen.
+     Frage: {id:'s0q1', q:'…', opts:['a','b','c','d'], c:<0..3>, e:'Erklärung'}
+   bonusFragen: Array gleicher Frage-Objekte (fürs Abschluss-Quiz).
+   corrCorrect/corrExpl: für checkCorr-Zuordnungen (id → richtige Wahl / Feedback).
+═══════════════════════════════════════════════════════════════════ */
+var sofortFragen = {
+  "0": [
+    {
+      "id": "s0q1",
+      "q": "Was unterscheidet den psychopathologischen Befund von der Anamnese?",
+      "opts": [
+        "Der Befund ist der aktuelle Querschnitt aus Angaben UND Beobachtungen; die Anamnese sind die Angaben zur Vorgeschichte.",
+        "Befund und Anamnese sind dasselbe.",
+        "Die Anamnese enthält nur Beobachtungen des Untersuchers.",
+        "Der Befund wird ausschließlich aus standardisierten Fragebögen errechnet, während die Anamnese die einzige Quelle für jegliche Verhaltensbeobachtung des Untersuchers darstellt."
+      ],
+      "c": 0,
+      "e": "Anamnese = ANGABEN des Patienten (Vorgeschichte). Psychopathologischer Befund = aktueller Querschnitt aus Angaben PLUS Beobachtungen des Untersuchers (Diskrepanzen sind diagnostisch bedeutsam)."
+    },
+    {
+      "id": "s0q2",
+      "q": "Auf welcher Ebene bewegt sich der psychopathologische Befund?",
+      "opts": [
+        "Auf der Ebene der neurobiologischen Ursachenklärung.",
+        "Auf der deskriptiven (beschreibenden) Symptom-/Syndromebene.",
+        "Auf der Ebene der Therapieplanung.",
+        "Ausschließlich auf der nosologischen Ebene der endgültigen ICD-10-Diagnose, da Einzelsymptome im psychopathologischen Befund grundsätzlich nicht erfasst werden."
+      ],
+      "c": 1,
+      "e": "Der psychopathologische Befund ist deskriptive Psychopathologie: er beschreibt Symptome und Syndrome, ohne Ursachen zu erklären."
+    }
+  ],
+  "1": [
+    {
+      "id": "s1q1",
+      "q": "Was ist das AMDP-System?",
+      "opts": [
+        "Ein projektiver Persönlichkeitstest.",
+        "Ein Selbstbeurteilungsfragebogen für Depression.",
+        "Ein System zur standardisierten Dokumentation der ca. 100 wichtigsten psychopathologischen Symptome (als halbstrukturiertes Interview empfohlen).",
+        "Ein vollständig standardisiertes Interview mit fest vorgegebenem Wortlaut und Antwortformat, das ausschließlich apparativ-physiologische Messgrößen wie das EMG erfasst."
+      ],
+      "c": 2,
+      "e": "Das AMDP-System (Fähndrich & Stieglitz) dokumentiert die ~100 wichtigsten psychopathologischen Symptome; empfohlen wird die Erhebung als halbstrukturiertes Interview."
+    },
+    {
+      "id": "s1q2",
+      "q": "Wovon hängt der Beobachtungszeitraum eines AMDP-Befundes ab?",
+      "opts": [
+        "Ausschließlich von der Tageszeit der Untersuchung sowie von der persönlichen Tagesform und der momentanen Stimmungslage des jeweils anwesenden Untersuchers.",
+        "Er beträgt immer exakt 24 Stunden.",
+        "Er ist für alle Störungen einheitlich auf 6 Monate festgelegt.",
+        "Von der Zielsetzung (Aufnahme ~14 Tage; Diagnose nach dem Zeitkriterium der Störung; Verlauf 3–4 Tage)."
+      ],
+      "c": 3,
+      "e": "Der Beobachtungszeitraum richtet sich nach dem Ziel: Aufnahmebefund ~14 Tage, Diagnose nach Zeitkriterium (Depression 2 Wochen, Manie 1 Woche, Demenz 6 Monate), Verlauf 3–4 (bzw. 7) Tage."
+    }
+  ],
+  "2": [
+    {
+      "id": "s2q1",
+      "q": "In welcher Reihenfolge entscheidet der AMDP-Entscheidungsbaum je Merkmal?",
+      "opts": [
+        "Beurteilbarkeit → Entscheidungssicherheit → Vorhandensein → Quantifizierung.",
+        "Quantifizierung → Vorhandensein → Beurteilbarkeit.",
+        "Vorhandensein → Beurteilbarkeit → Sicherheit.",
+        "Zuerst die endgültige nosologische Diagnose, dann rückwärts die Einzelsymptome und zuletzt die Frage, ob das Merkmal überhaupt beurteilbar war."
+      ],
+      "c": 0,
+      "e": "Der Entscheidungsbaum prüft je Merkmal: (1) Beurteilbarkeit, (2) Entscheidungssicherheit (sicher/fraglich), (3) Vorhandensein, (4) Quantifizierung (leicht/mittel/schwer)."
+    },
+    {
+      "id": "s2q2",
+      "q": "Was bedeutet die Kennzeichnung 'F' (Fremd) bei einem AMDP-Item?",
+      "opts": [
+        "Das Symptom ist freiwillig zu erheben.",
+        "Es ist nur durch Fremdbeobachtung beurteilbar, weil es dem Patienten als Störung nicht zugänglich ist (z. B. Neologismen).",
+        "Es darf nur von Familienangehörigen bewertet werden.",
+        "Es kann ausschließlich über einen standardisierten Selbstbeurteilungsfragebogen erfasst werden, den der Patient ohne Beisein des Untersuchers ausfüllt."
+      ],
+      "c": 1,
+      "e": "F = nur über Fremdbeobachtung beurteilbar (das Phänomen ist dem Patienten selbst nicht als Störung zugänglich, z. B. Neologismen). S = nur Selbstaussage, SF = beides."
+    }
+  ],
+  "3": [
+    {
+      "id": "s3q1",
+      "q": "Welche Reihenfolge hat die Hierarchie der psychiatrischen Diagnostik?",
+      "opts": [
+        "Syndrom → Symptom → explorativ → nosologisch.",
+        "Nosologisch → explorativ → Symptom → Syndrom.",
+        "Explorativ (Äußerung) → Symptom → Syndrom → nosologisch (Diagnose).",
+        "Zuerst die operationalisierte ICD-10-Diagnose, die dann unmittelbar und ohne Zwischenschritte in einzelne beobachtbare Äußerungen des Patienten übersetzt wird."
+      ],
+      "c": 2,
+      "e": "Von unten nach oben: explorative Ebene (Äußerung) → Symptomebene → Syndromebene (Symptommuster) → nosologische/klassifikatorische Ebene (operationalisierte Diagnose)."
+    },
+    {
+      "id": "s3q2",
+      "q": "Was ist ein VORTEIL der standardisierten Befunderhebung?",
+      "opts": [
+        "Sie erhöht die Plastizität und Individualität der Beschreibung und bildet zugleich den individuellen Entstehungszusammenhang jedes einzelnen Symptoms vollständig ab.",
+        "Sie erfasst auch komplexe Phänomene wie Wertvorstellungen besonders gut.",
+        "Sie klärt den Entstehungszusammenhang der Symptome.",
+        "Sie erhöht die Vergleichbarkeit (Quer-/Längsschnitt) und die Interrater-Reliabilität."
+      ],
+      "c": 3,
+      "e": "Vorteile: Vergleichbarkeit, Interrater-Reliabilität, Grundlage operationalisierter/evidenzbasierter Diagnostik. Die anderen drei sind gerade die NACHTEILE."
+    }
+  ],
+  "4": [
+    {
+      "id": "s4q1",
+      "q": "Was gehört NICHT in ein AMDP-Befundgespräch?",
+      "opts": [
+        "Therapeutische Interventionen, Versprechen oder Ratschläge.",
+        "Eine zugewandte Haltung.",
+        "Dem Patienten Zeit zum Überlegen lassen.",
+        "Das Signalisieren von Interesse durch non- und paraverbale Äußerungen wie Kopfnicken sowie das Betonen des gemeinsamen Interesses an der Klärung der Probleme."
+      ],
+      "c": 0,
+      "e": "Das Befundgespräch dient der Erhebung, nicht der Behandlung — therapeutische Interventionen/Versprechen sind hier explizit zu unterlassen."
+    },
+    {
+      "id": "s4q2",
+      "q": "Wie ist das AMDP-Interview grob aufgebaut?",
+      "opts": [
+        "Nur ein einziger, vollständig durchstrukturierter Frageblock.",
+        "Beginn (Ziel/Beziehung, freie Schilderung) → halbstrukturierter Teil → Schluss (Zusammenfassung).",
+        "Schluss → Mitte → Beginn.",
+        "Ausschließlich eine offene, völlig unstrukturierte Erzählphase des Patienten ohne jede systematische Erfassung einzelner Merkmalsbereiche durch den Untersucher."
+      ],
+      "c": 1,
+      "e": "Beginn (Ziel erläutern, Beziehung, freie Schilderung) → halbstrukturierter Teil (systematische Erfassung der Merkmalsbereiche) → Schluss (Zusammenfassung, Raum für weitere Anliegen)."
+    }
+  ],
+  "5": [
+    {
+      "id": "s5q1",
+      "q": "Ein Patient weicht wiederholt von der gestellten Frage ab. Welche Präzisierungstechnik passt?",
+      "opts": [
+        "Das Symptom als 'nicht vorhanden' werten.",
+        "Das Thema ganz fallen lassen.",
+        "Zurückführen — gezielt auf die ursprüngliche Frage zurückkommen und genauer nachfragen.",
+        "Dem Patienten unmittelbar eine therapeutische Deutung seines Ausweichverhaltens anbieten und ihm konkrete Ratschläge zur Verbesserung seiner Mitarbeit geben."
+      ],
+      "c": 2,
+      "e": "Beim Ausweichen führt man durch gezieltes Zurückführen zur Frage zurück ('Ich möchte noch einmal auf meine Frage zurückkommen…'). Erst wenn eine Entscheidung möglich ist, ist das Symptom geklärt."
+    },
+    {
+      "id": "s5q2",
+      "q": "Warum strukturiert der Untersucher das Gespräch aktiv?",
+      "opts": [
+        "Um in der zur Verfügung stehenden Zeit möglichst viele therapeutische Interventionen, gut gemeinte Ratschläge und beruhigende Versprechen unterzubringen.",
+        "Um den Patienten zu verwirren.",
+        "Um die Reihenfolge des AMDP-Bogens strikt einzuhalten.",
+        "Um Zeit zu sparen und in der verfügbaren Zeit einen hohen Präzisionsgrad der Informationen zu erreichen."
+      ],
+      "c": 3,
+      "e": "Ziel der Strukturierung: Zeit sparen und einen möglichst hohen Präzisionsgrad erreichen. Die Reihenfolge ist gerade NICHT starr — am im Vordergrund stehenden Symptom beginnen."
+    }
+  ],
+  "6": [
+    {
+      "id": "s6q1",
+      "q": "Was beschreibt eine BewusstseinsVERMINDERUNG (nach Quantität)?",
+      "opts": [
+        "Eine Störung der Wachheit: Benommenheit → Somnolenz → Sopor → Koma.",
+        "Ein erweitertes, intensiviertes Erleben.",
+        "Eine Einengung des Erlebens auf wenige Themen.",
+        "Eine rein qualitative Veränderung der Bewusstseinsklarheit ohne jede Beeinträchtigung der Wachheit, bei der die Ansprechbarkeit auf Außenreize vollständig erhalten bleibt."
+      ],
+      "c": 0,
+      "e": "Bewusstseinsverminderung (F) = quantitative Störung der Wachheit (Vigilanz): Benommenheit → Somnolenz → Sopor → Koma. Verschiebung/Einengung/Trübung sind qualitative Störungen."
+    },
+    {
+      "id": "s6q2",
+      "q": "Mit welcher Frage prüft man die ÖRTLICHE Orientierung?",
+      "opts": [
+        "'Welches Datum haben wir heute?'",
+        "'Können Sie mir sagen, wo wir hier sind / in welcher Stadt?'",
+        "'Wie alt sind Sie?'",
+        "'Können Sie mir bitte das Sprichwort Der Apfel fällt nicht weit vom Stamm erklären und sagen, was es im übertragenen Sinne bedeutet?'"
+      ],
+      "c": 1,
+      "e": "Örtliche Orientierung = Wissen um den Aufenthaltsort ('Wo sind wir? In welcher Stadt?'). Datum = zeitlich, Alter = zur Person, Sprichwort = Auffassung."
+    }
+  ],
+  "7": [
+    {
+      "id": "s7q1",
+      "q": "Was prüft die Merkfähigkeit, und worauf ist beim 3-Begriffe-Test zu achten?",
+      "opts": [
+        "Das Langzeitgedächtnis; die Begriffe erst nach einer Woche abfragen.",
+        "Die Konzentration; den Patienten von 100 in 7er-Schritten rechnen lassen.",
+        "Das Kurzzeitgedächtnis (~10 min); die 3 Begriffe sofort wiederholen lassen und nach ~10 min erneut abfragen.",
+        "Die Auffassungsgabe; den Patienten ein Sprichwort erklären lassen und anschließend die Gemeinsamkeit zweier völlig unterschiedlicher Begriffe benennen lassen."
+      ],
+      "c": 2,
+      "e": "Merkfähigkeit = Kurzzeitgedächtnis (~10 min). Wichtig: die 3 Begriffe SOFORT wiederholen lassen (Aufnahme sichern) und nach ~10 min erneut abfragen. Gedächtnis = > 10 min."
+    },
+    {
+      "id": "s7q2",
+      "q": "Was ist eine Paramnesie?",
+      "opts": [
+        "Eine Störung der Wachheit.",
+        "Eine Erinnerungslücke, die fortlaufend mit wechselnden, einander widersprechenden Einfällen ausgefüllt wird, ohne dass der Patient die Unterschiedlichkeit seiner Angaben bemerkt (Konfabulation).",
+        "Die Unfähigkeit, sich neue Inhalte über 10 min zu merken.",
+        "Eine Erinnerungsverfälschung/-täuschung — z. B. déjà-vu, jamais-vu, Ekmnesie, Hypermnesie, Flashbacks."
+      ],
+      "c": 3,
+      "e": "Paramnesien (S) = Erinnerungsverfälschungen/-täuschungen: déjà-vu, jamais-vu, Ekmnesie (Vergangenheit als Gegenwart), Hypermnesie, Flashbacks/Intrusionen. Konfabulation (F) ist eine andere Kategorie."
+    }
+  ]
+};
+
+var bonusFragen = [
+  {
+    "id": "bq1",
+    "q": "Welche Aussage zum AMDP-System trifft zu?",
+    "opts": [
+      "Es erfasst etwa 100 Symptome und wird als halbstrukturiertes Interview empfohlen.",
+      "Es ist ein reiner Selbstbeurteilungsfragebogen.",
+      "Es erfasst ausschließlich somatische Symptome.",
+      "Es schreibt für jedes Merkmal einen exakt festgelegten Wortlaut samt vorgegebener Antwortkategorien vor, von dem der Untersucher unter keinen Umständen abweichen darf."
+    ],
+    "c": 0,
+    "e": "Das AMDP erfasst ~100 Symptome und wird als HALBstrukturiertes Interview empfohlen — der Wortlaut ist also gerade nicht starr vorgegeben (anders als bei vollstandardisierten Interviews)."
+  },
+  {
+    "id": "bq2",
+    "q": "Ein Patient berichtet, sein gesamtes Erleben sei in letzter Zeit intensiver/erweitert. Welche Bewusstseinsstörung?",
+    "opts": [
+      "Bewusstseinstrübung.",
+      "Bewusstseinsverschiebung (S).",
+      "Bewusstseinsverminderung.",
+      "Eine örtliche Orientierungsstörung, da der Patient den gegenwärtigen Aufenthaltsort und dessen Bedeutung offensichtlich nicht mehr korrekt einordnen kann."
+    ],
+    "c": 1,
+    "e": "Bewusstseinsverschiebung (S): der Patient erlebt sein gesamtes Erleben als erweitert/intensiviert — eine qualitative Bewusstseinsstörung."
+  },
+  {
+    "id": "bq3",
+    "q": "Wie führt man einen sensiblen Bereich (z. B. Halluzinationen) im Interview ein?",
+    "opts": [
+      "Direkt und konfrontativ: 'Hören Sie Stimmen?'",
+      "Gar nicht — sensible Bereiche werden ausgelassen.",
+      "Behutsam normalisierend: 'Manche Menschen berichten, dass … Kennen Sie so etwas auch?'",
+      "Indem man dem Patienten zunächst ausführlich die neurobiologischen Ursachen von Halluzinationen erklärt und ihm anschließend eine konkrete Therapie für den Fall ihres Vorliegens verspricht."
+    ],
+    "c": 2,
+    "e": "Sensible Bereiche (Orientierung, Suizidalität, Wahn, Halluzinationen) behutsam und normalisierend einführen ('Manche Menschen berichten … Kennen Sie so etwas?')."
+  },
+  {
+    "id": "bq4",
+    "q": "Welches AMDP-Item ist typischerweise NUR über Fremdbeobachtung (F) beurteilbar?",
+    "opts": [
+      "Zwangsgedanken.",
+      "Deprimierte Stimmung.",
+      "Phobien.",
+      "Neologismen."
+    ],
+    "c": 3,
+    "e": "Neologismen (Wortneubildungen) sind dem Patienten als 'Störung' nicht zugänglich → nur über Fremdbeobachtung (F). Zwangsgedanken/Phobien/Stimmung beruhen auf Selbstaussagen."
+  },
+  {
+    "id": "bq5",
+    "q": "Was ist die situative Orientierung?",
+    "opts": [
+      "Das Erfassen von Bedeutung/Sinn der gegenwärtigen Situation (z. B. dass man als Patient in einer Untersuchung ist).",
+      "Das Wissen um das aktuelle Datum.",
+      "Das Wissen um den eigenen Namen und das Alter.",
+      "Die Fähigkeit, drei zuvor genannte Begriffe nach einem Intervall von etwa zehn Minuten vollständig und in der richtigen Reihenfolge zu reproduzieren."
+    ],
+    "c": 0,
+    "e": "Situative Orientierung = Erfassen der Bedeutung der aktuellen Situation (z. B. 'in einer Untersuchung als Patient zu sein'). Datum = zeitlich, Name/Alter = zur Person."
+  },
+  {
+    "id": "bq6",
+    "q": "Wodurch unterscheidet sich die Konfabulation von der Paramnesie?",
+    "opts": [
+      "Beide sind identisch.",
+      "Konfabulation = Erinnerungslücken werden mit wechselnden Einfällen gefüllt (F); Paramnesie = Erinnerungsverfälschung/-täuschung (S).",
+      "Konfabulation betrifft nur das Kurzzeitgedächtnis, Paramnesie nur das Bewusstsein.",
+      "Die Konfabulation ist eine quantitative Bewusstseinsstörung im Sinne der Somnolenz, während die Paramnesie eine reine Störung der zeitlichen Orientierung über das aktuelle Datum darstellt."
+    ],
+    "c": 1,
+    "e": "Konfabulation (F): Erinnerungslücken werden mit wechselnden Einfällen gefüllt (Prüfung: identische Frage nach ~15 min). Paramnesie (S): Erinnerungsverfälschung (déjà-vu, Ekmnesie …)."
+  },
+  {
+    "id": "bq7",
+    "q": "Welche Aufgabe prüft die KONZENTRATION?",
+    "opts": [
+      "3 Begriffe nach 10 min abfragen.",
+      "Ein Sprichwort erklären lassen.",
+      "Von 100 in 7er-Schritten rückwärts rechnen / Monate rückwärts nennen.",
+      "Den Patienten bitten, eine völlig neue, ihm bislang unbekannte alltägliche Situation daraufhin zu beurteilen, ob sie ihm merkwürdig vertraut oder fremd vorkommt."
+    ],
+    "c": 2,
+    "e": "Konzentration: von 100 in 7er-Schritten rückwärts / Monate rückwärts. 3-Begriffe = Merkfähigkeit, Sprichwort = Auffassung, vertraut/fremd = Paramnesie (déjà/jamais-vu)."
+  },
+  {
+    "id": "bq8",
+    "q": "Ein VORTEIL standardisierter Befunderhebung ist die höhere Interrater-Reliabilität. Was ist ein NACHTEIL?",
+    "opts": [
+      "Geringere Vergleichbarkeit zwischen Untersuchern.",
+      "Sie ist keine Grundlage operationalisierter Diagnostik.",
+      "Sie schützt grundsätzlich nicht vor der spekulativen Konstruktion vermeintlicher Zusammenhänge zur Entstehung und Genese der Beschwerden.",
+      "Verringerte Plastizität/Individualität und Wegfall komplexer Phänomene."
+    ],
+    "c": 3,
+    "e": "Nachteile: verringerte Plastizität/Individualität, Wegfall komplexer Phänomene, Verzicht auf Entstehungszusammenhang. Die anderen drei sind gerade Vorteile."
+  }
+];
+
+var corrCorrect = {
+  "aa": "orientierung",
+  "ab": "aufmgedaecht",
+  "ac": "bewusstsein",
+  "ad": "aufmgedaecht",
+  "ba": "s",
+  "bb": "f",
+  "bc": "sf",
+  "bd": "s",
+  "ca": "explorativ",
+  "cb": "symptom",
+  "cc": "syndrom",
+  "cd": "nosologisch"
+};
+var corrExpl = {
+  "aa": "Datum/Ort/Person/Situation nicht gewusst → Orientierungsstörung.",
+  "ab": "Sprichwort/Gemeinsamkeiten nicht erklären können → Auffassungsstörung (Aufmerksamkeit/Gedächtnis).",
+  "ac": "Benommen/schläfrig/schwer erweckbar → Bewusstseinsverminderung (Bewusstseinsstörung).",
+  "ad": "3 Begriffe nach 10 min nicht erinnern → Merkfähigkeitsstörung (Aufmerksamkeit/Gedächtnis).",
+  "ba": "Zwangsgedanken sind nur über die Selbstaussage des Patienten beurteilbar → S.",
+  "bb": "Neologismen sind dem Patienten nicht als Störung zugänglich → nur Fremdbeobachtung → F.",
+  "bc": "Halluzinationen/Stimmung sind über Selbstaussage UND Fremdbeobachtung beurteilbar → SF.",
+  "bd": "Die Orientierung wird durch Fragen an den Patienten erhoben (Selbstaussage) → S.",
+  "ca": "Wörtliche Äußerung des Patienten ('Meine Stimmung ist im Keller') → explorative Ebene.",
+  "cb": "'deprimiert' als einzelnes Merkmal → Symptomebene.",
+  "cc": "'depressives Syndrom' = Muster mehrerer Symptome → Syndromebene.",
+  "cd": "'ICD-10 depressive Episode' = operationalisierte Diagnose → nosologische Ebene."
+};
+
+/* ─── abgeleitet (nicht anfassen) ─────────────────────────────────── */
+var alleFragen = [];
+Object.keys(sofortFragen).forEach(function(k){
+  sofortFragen[k].forEach(function(q){ alleFragen.push(q); });
+});
+alleFragen = alleFragen.concat(bonusFragen);
+
+/* ─── Navigation ──────────────────────────────────────────────────── */
+function goTo(idx) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var sec = document.getElementById('s'+idx);
+  var nb  = document.getElementById('nb'+idx);
+  if(sec) sec.classList.add('active');
+  if(nb)  nb.classList.add('active');
+  if(sec && sec.dataset.quiz !== undefined) renderFinal();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ─── D1-Toggle (Einstiegsfrage) ──────────────────────────────────── */
+function revealEntry(btn, id) {
+  var el = document.getElementById(id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Auflösung zeigen' : 'Verbergen';
+}
+
+/* ─── Zuordnung / Szenario ────────────────────────────────────────── */
+var corrDone = {};
+function checkCorr(id, btn, choice) {
+  if(corrDone[id]) return; corrDone[id]=true;
+  var ok = corrCorrect[id]===choice;
+  btn.classList.add(ok?'correct':'wrong');
+  var fb = document.getElementById(id+'-fb');
+  if(fb){ fb.style.display='block'; fb.textContent=(ok?'✓ ':'✗ ')+(corrExpl[id]||''); }
+}
+
+/* ─── Balken-Aufdeckung (Studien) ─────────────────────────────────── */
+var barState = {};
+function revealBar(key, total) {
+  var i = barState[key]||0;
+  if(i>=total) return;
+  var row = document.getElementById(key+'-row-'+i);
+  if(row){ row.classList.add('shown'); var f=row.querySelector('.bar-fill'); if(f && f.dataset.w) f.style.width=f.dataset.w; }
+  barState[key]=i+1;
+  if(barState[key]>=total){
+    var fz=document.getElementById(key+'-fazit'); if(fz) fz.style.display='block';
+    var btn=document.getElementById(key+'-btn'); if(btn) btn.style.display='none';
+  }
+}
+
+/* ─── Schritt-für-Schritt-Aufdeckung (generisch) ──────────────────── */
+function revealStep(btn, key) {
+  var wrap = document.getElementById(key);
+  if(!wrap) return;
+  var next = wrap.querySelector('.step-item:not(.shown)');
+  if(next) next.classList.add('shown');
+  if(!wrap.querySelector('.step-item:not(.shown)')) btn.style.display='none';
+}
+
+/* ─── Tab-Vergleich (generisch) ───────────────────────────────────── */
+function switchTab(btn, group) {
+  var which = btn.dataset.tab;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.toggle('active', b===btn); });
+  var g = document.querySelector('.tab-group[data-group="'+group+'"]');
+  if(g) g.querySelectorAll('.tab-content').forEach(function(c){ c.classList.toggle('active', c.dataset.tab===which); });
+}
+
+/* ─── Mind-Map Flip-Cards ─────────────────────────────────────────── */
+function revealMisi(el) {
+  if(el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  var p=el.querySelector('p'); if(p) p.style.display='block';
+}
+
+/* ─── Checkliste ──────────────────────────────────────────────────── */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.querySelector('.box').textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIDGET-ZONE — bespoke Module-Widgets (Slider/Meter o.ä.) hier rein.
+   Standard-Widgets oben sind generisch; meist bleibt diese Zone leer.
+═══════════════════════════════════════════════════════════════════ */
+/* FILL (optional): modul-spezifische Widget-Funktionen + ihre Init-Aufrufe */
+
+/* ─── MC / SRS-Engine (nicht anfassen) ────────────────────────────── */
+function renderMC(q, isFinal) {
+  var ltrs=['a','b','c','d'];
+  var h='<div class="mc-wrap" id="mcq-'+q.id+'"><div class="mc-q-text">'+q.q+'</div><div class="mc-opts">';
+  q.opts.forEach(function(o,i){
+    h+='<button class="mc-opt" id="opt-'+q.id+'-'+i+'" onclick="answerMC(\''+q.id+'\','+i+','+q.c+','+isFinal+')">';
+    h+='<span class="ltr">'+ltrs[i]+'.</span><span>'+o+'</span></button>';
+  });
+  h+='</div><div class="mc-exp" id="exp-'+q.id+'"><div class="lbl">Erklärung</div>'+q.e+'</div>';
+  h+='<div class="mc-rating" id="rat-'+q.id+'">';
+  h+='<button class="mc-rate again" onclick="rateMC(\''+q.id+'\',0,'+isFinal+')">✕ Nochmal</button>';
+  h+='<button class="mc-rate good" onclick="rateMC(\''+q.id+'\',2,'+isFinal+')">✓ Gut</button>';
+  h+='<button class="mc-rate easy" onclick="rateMC(\''+q.id+'\',3,'+isFinal+')">★ Leicht</button>';
+  return h+'</div></div>';
+}
+function answerMC(qId, chosen, correct, isFinal) {
+  document.querySelectorAll('[id^="opt-'+qId+'-"]').forEach(function(o){o.setAttribute('disabled','');});
+  document.getElementById('opt-'+qId+'-'+correct).classList.add('correct');
+  if(chosen!==correct) document.getElementById('opt-'+qId+'-'+chosen).classList.add('wrong');
+  document.getElementById('exp-'+qId).style.display='block';
+  document.getElementById('rat-'+qId).style.display='flex';
+}
+function rateMC(qId, rating, isFinal) {
+  var p=load(), c=p[qId]||{reps:0,lapses:0,stability:1,due:0,state:'new'};
+  var now=Date.now(), DAY=86400000;
+  if(rating===0){c.lapses++;c.stability=Math.max(1,c.stability*.5);c.due=now+600000;c.state='learning';}
+  else{c.stability*=(rating===3?3.5:2.5);c.due=now+Math.max(DAY,c.stability*DAY);c.state='review';}
+  c.reps++;p[qId]=c;save(p);
+  var box=document.getElementById('mcq-'+qId);
+  if(box){box.style.opacity='.5';box.style.pointerEvents='none';
+    box.querySelector('.mc-rating').style.display='none';
+    var l=document.createElement('div');l.style.cssText='font-size:.7rem;color:var(--text3);text-align:right;margin-top:6px';
+    l.textContent=rating===0?'↩ bald wieder fällig':'✓ ~'+Math.round(c.stability)+' Tag(e)';
+    box.appendChild(l);}
+  if(isFinal) renderFinal();
+}
+function renderSofort(id, fragen) {
+  var c=document.getElementById(id); if(!c) return;
+  c.innerHTML=fragen.map(function(q){return renderMC(q,false);}).join('');
+}
+function buildQueue() {
+  var p=load(), now=Date.now(), due=[], nw=[];
+  alleFragen.forEach(function(q){
+    var c=p[q.id]||{state:'new',due:0};
+    if(c.state==='new') nw.push(q); else if(c.due<=now) due.push(q);
+  });
+  return due.concat(nw.sort(function(){return Math.random()-.5;}).slice(0,20));
+}
+function renderFinal() {
+  var q=buildQueue(), p=load(), total=alleFragen.length;
+  var learned=alleFragen.filter(function(f){return p[f.id]&&p[f.id].state!=='new';}).length;
+  var due=alleFragen.filter(function(f){var c=p[f.id];return c&&c.state!=='new'&&c.due<=Date.now();}).length;
+  var fp=document.getElementById('finalProg'); if(fp) fp.style.width=(total?Math.round(learned/total*100):0)+'%';
+  var fm=document.getElementById('finalMeta'); if(fm) fm.textContent=learned+' / '+total+' gelernt · '+due+' fällig';
+  var fs=document.getElementById('finalScreen'); if(!fs) return;
+  if(q.length===0){
+    fs.innerHTML='<div class="done-box"><div class="done-icon">🎉</div>'+
+      '<div class="done-title">Alles gelernt!</div><div class="done-sub">'+total+' Fragen auf dem aktuellen Stand.</div>'+
+      '<div class="done-stats"><div class="done-stat"><div class="dn" style="color:var(--green)">'+learned+'</div><div class="dl">Gelernt</div></div>'+
+      '<div class="done-stat"><div class="dn" style="color:var(--accent)">'+total+'</div><div class="dl">Gesamt</div></div></div></div>';
+    return;
+  }
+  var html=q.slice(0,3).map(function(f){return renderMC(f,true);}).join('');
+  if(q.length>3) html+='<p style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:8px">+ '+(q.length-3)+' weitere</p>';
+  fs.innerHTML=html;
+}
+function resetQuiz(){var p=load();alleFragen.forEach(function(q){delete p[q.id];});save(p);renderFinal();}
+function load(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){return {}}}
+function save(p){try{localStorage.setItem(LS_KEY,JSON.stringify(p))}catch(e){}}
+
+(function(){
+  Object.keys(sofortFragen).forEach(function(k){ renderSofort('sq'+k, sofortFragen[k]); });
+  /* FILL (optional): Init-Aufrufe für bespoke-Widgets aus der WIDGET-ZONE */
+  renderFinal();
+})();
+</script>
+<!-- FEHLER-WIDGET -->
+<style>
+#fr-fab{position:fixed;left:14px;bottom:14px;z-index:99998;background:#7f1d1d;color:#fff;border:1px solid #b91c1c;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.45);opacity:.85;font-family:system-ui,sans-serif}
+#fr-fab:hover{opacity:1}
+.fr-dot{margin-left:6px;background:transparent;border:none;cursor:pointer;font-size:.8rem;line-height:1;opacity:.4;vertical-align:middle;padding:0 3px}
+.fr-dot:hover{opacity:1}
+#fr-ov{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;font-family:system-ui,sans-serif}
+#fr-ov.on{display:flex}
+.fr-box{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:14px;max-width:520px;width:100%;padding:18px}
+.fr-box h3{font-size:1.02rem;margin:0 0 8px}
+.fr-ort{font-size:.78rem;color:#94a3b8;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:8px 10px;margin-bottom:10px;word-break:break-word;line-height:1.4}
+#fr-text{width:100%;min-height:110px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;font-family:inherit;resize:vertical}
+.fr-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+.fr-btn{border:1px solid #334155;background:#0f172a;color:#e2e8f0;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.85rem}
+.fr-btn.prim{background:#b91c1c;border-color:#b91c1c;color:#fff;font-weight:700}
+#fr-toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:99999;background:#166534;color:#fff;padding:9px 14px;border-radius:8px;font-size:.85rem;display:none;font-family:system-ui,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+#fr-toast.on{display:block}
+@media print{#fr-fab,.fr-dot,#fr-ov,#fr-toast{display:none!important}}
+</style>
+<button id="fr-fab" type="button" onclick="frReport.openPage()" title="Fehler auf dieser Seite melden">🐞 Fehler</button>
+<div id="fr-ov">
+  <div class="fr-box">
+    <h3>🐞 Fehler melden</h3>
+    <div class="fr-ort" id="fr-ort"></div>
+    <textarea id="fr-text" placeholder="Was stimmt nicht? (z. B. falsche Antwort, Tippfehler, unklare/fragliche Erklärung …)"></textarea>
+    <input id="fr-hp" type="text" name="botcheck_alt" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;border:0;padding:0">
+    <input id="fr-hp2" type="checkbox" name="botcheck" tabindex="-1" style="display:none" aria-hidden="true">
+    <div class="fr-row">
+      <button class="fr-btn" type="button" onclick="frReport.close()">Abbrechen</button>
+      <button class="fr-btn prim" type="button" onclick="frReport.submit()">Senden &amp; speichern</button>
+    </div>
+  </div>
+</div>
+<div id="fr-toast"></div>
+<script>
+window.frReport=(function(){
+  var LSK='lm-fehlerberichte', curOrt='', W3F_KEY='458d35ab-6462-464b-a5ca-bb35047192f4';
+  function q(s,r){return (r||document).querySelector(s);}
+  function txt(el){return el?(el.textContent||'').replace(/\s+/g,' ').trim():'';}
+  function short(el){return txt(el).slice(0,140);}
+  function modul(){return txt(q('.page-title'))||(document.title||'').trim();}
+  function pageKey(){try{if(typeof LS_KEY!=='undefined'&&LS_KEY)return LS_KEY;}catch(e){} var m=document.documentElement.innerHTML.match(/lm-[a-z0-9]+-vl[0-9]+/);return m?m[0]:'';}
+  function load(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function save(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function secOf(el){var ts=document.querySelectorAll('.sec-title'),best='';for(var i=0;i<ts.length;i++){if(ts[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING)best=txt(ts[i]);}return best;}
+  function ortOf(el){
+    if(!el) return 'Seite allgemein';
+    if(el.classList.contains('mc-wrap')) return 'Frage '+(el.id||'?')+': '+short(q('.mc-q-text',el));
+    if(el.classList.contains('st-card')) return 'Modell: '+(short(q('.st-q',el))||short(q('.card-title',el))||short(q('.st-chip',el)));
+    if(el.classList.contains('ft-card')) return 'Selbsttest-Frage: '+short(q('.ft-q',el));
+    if(el.classList.contains('corr-item')) return 'Zuordnung: '+short(el)+'  [Sektion: '+secOf(el)+']';
+    if(el.classList.contains('duel')) return 'Duell: '+short(q('.duel-a',el))+' vs. '+short(q('.duel-b',el));
+    if(el.classList.contains('sec-head')) return 'Sektion: '+short(q('.sec-title',el));
+    return short(el)||'Seite allgemein';
+  }
+  var SEL='.mc-wrap,.st-card,.ft-card,.corr-item,.duel,.sec-head';
+  function attach(){
+    var els=document.querySelectorAll(SEL);
+    for(var i=0;i<els.length;i++){var el=els[i];
+      if(el.getAttribute('data-fr'))continue; el.setAttribute('data-fr','1');
+      try{if(getComputedStyle(el).position==='static')el.style.position='relative';}catch(e){}
+      var b=document.createElement('button'); b.className='fr-dot'; b.type='button'; b.title='Fehler hier melden'; b.textContent='🐞';
+      (function(node){b.addEventListener('click',function(ev){ev.stopPropagation();open(ortOf(node));});})(el);
+      el.appendChild(b);
+    }
+  }
+  function open(ort){curOrt=ort||'Seite allgemein';var o=q('#fr-ort');if(o)o.textContent=curOrt;var t=q('#fr-text');if(t)t.value='';var ov=q('#fr-ov');if(ov)ov.classList.add('on');setTimeout(function(){if(t)t.focus();},50);}
+  function openPage(){
+    var heads=document.querySelectorAll('.sec-head,.sec-title'),best=null,bestTop=-100000;
+    for(var i=0;i<heads.length;i++){var r=heads[i].getBoundingClientRect();if(r.top<=140&&r.top>bestTop){bestTop=r.top;best=heads[i];}}
+    open(best?('Sektion: '+short(best)):'Seite allgemein');
+  }
+  function close(){var ov=q('#fr-ov');if(ov)ov.classList.remove('on');}
+  function toast(m){var t=q('#fr-toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},2400);}
+  function pad(n){return (n<10?'0':'')+n;}
+  function slug(s){return (s||'seite').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40);}
+  function dl(name,text){try{var b=new Blob([text],{type:'text/markdown;charset=utf-8'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},150);}catch(e){}}
+  function submit(){
+    var t=q('#fr-text'),text=t?t.value.trim():'';
+    if(!text){if(t)t.focus();return;}
+    var hp=q('#fr-hp'),hp2=q('#fr-hp2');
+    if((hp&&hp.value)||(hp2&&hp2.checked)){close();return;}   // Honeypot: Bot -> still verwerfen
+    var d=new Date(),ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'_'+pad(d.getHours())+'-'+pad(d.getMinutes());
+    var key=pageKey(),mod=modul();
+    var rep={id:Date.now()+'-'+Math.floor(Math.random()*1000),ts:d.toISOString(),modul:mod,key:key,ort:curOrt,text:text,url:location.href};
+    var a=load();a.push(rep);save(a);                          // immer lokal sichern (Hub-Übersicht)
+    var md='# Fehlerbericht\n\n- Modul: '+mod+'\n- Key: '+key+'\n- Ort: '+curOrt+'\n- Zeit: '+rep.ts+'\n- URL: '+location.href+'\n\n## Beschreibung\n'+text+'\n';
+    function fallback(m){dl('fehler_'+(key||slug(mod))+'_'+ts+'.md',md);toast(m);}
+    close();
+    var payload={access_key:W3F_KEY,subject:'🐞 Fehlerbericht: '+mod,from_name:'Lerntool',botcheck:'',
+      Modul:mod,Ort:curOrt,Frage_Key:key,Zeit:rep.ts,URL:location.href,Beschreibung:text};
+    if(window.fetch){
+      fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)})
+        .then(function(r){return r.json();})
+        .then(function(j){if(j&&j.success)toast('Danke! Meldung gesendet ✓');else fallback('Gespeichert & heruntergeladen (Versand fehlgeschlagen).');})
+        .catch(function(){fallback('Offline — gespeichert & heruntergeladen.');});
+    }else fallback('Gespeichert & heruntergeladen.');
+  }
+  function init(){
+    attach();
+    var ov=q('#fr-ov');if(ov)ov.addEventListener('click',function(e){if(e.target===ov)close();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    try{var mo=new MutationObserver(function(){if(window.__frT)return;window.__frT=setTimeout(function(){window.__frT=null;attach();},300);});mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
+  }
+  if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init);
+  return {openPage:openPage,openBlock:function(el){open(ortOf(el));},open:open,close:close,submit:submit,_load:load,_save:save,_dl:dl};
+})();
+</script>
+<!-- /FEHLER-WIDGET -->
+</body>
+</html>
